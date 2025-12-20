@@ -54,7 +54,7 @@ class ReturnValueBeanBuilder {
     }
 
     public String buildBeanClass() throws IOException {
-        @NonNls final StringBuffer out = new StringBuffer(1024);
+        @NonNls StringBuffer out = new StringBuffer(1024);
        
         if (packageName.length() > 0) out.append("package " + packageName + ';');
         out.append('\n');
@@ -68,7 +68,7 @@ class ReturnValueBeanBuilder {
                 if (!first) {
                     out.append(',');
                 }
-                final String parameterText = typeParam.getText();
+                String parameterText = typeParam.getText();
                 out.append(parameterText);
                 first = false;
             }
@@ -87,33 +87,33 @@ class ReturnValueBeanBuilder {
     }
 
     private void outputGetter(@NonNls StringBuffer out) {
-        final String typeText = valueType.getCanonicalText();
-        @NonNls final String name = "value";
-        final String capitalizedName = StringUtil.capitalize(name);
+        String typeText = valueType.getCanonicalText();
+        @NonNls String name = "value";
+        String capitalizedName = StringUtil.capitalize(name);
         out.append("\tpublic " + typeText + " get" + capitalizedName + "()\n");
         out.append("\t{\n");
-      final String fieldName = getFieldName(name);
+      String fieldName = getFieldName(name);
       out.append("\t\treturn " + fieldName + ";\n");
         out.append("\t}\n");
         out.append('\n');
     }
 
     private void outputField(@NonNls StringBuffer out) {
-        final String typeText = valueType.getCanonicalText();
+        String typeText = valueType.getCanonicalText();
       out.append('\t' + "private final " + typeText + ' ' + getFieldName("value") + ";\n");
     }
 
     private void outputConstructor(@NonNls StringBuffer out) {
         out.append("\tpublic " + className + '(');
-        final String typeText = valueType.getCanonicalText();
-        @NonNls final String name = "value";
-        final String parameterName =
+        String typeText = valueType.getCanonicalText();
+        @NonNls String name = "value";
+        String parameterName =
                 JavaCodeStyleManager.getInstance(myProject).propertyNameToVariableName(name, VariableKind.PARAMETER);
         out.append(CodeStyleSettingsManager.getSettings(myProject).GENERATE_FINAL_PARAMETERS ? "final " : "");
         out.append(typeText + ' ' + parameterName);
         out.append(")\n");
         out.append("\t{\n");
-      final String fieldName = getFieldName(name);
+      String fieldName = getFieldName(name);
       if (fieldName.equals(parameterName)) {
             out.append("\t\tthis." + fieldName + " = " + parameterName + ";\n");
         } else {
@@ -123,7 +123,7 @@ class ReturnValueBeanBuilder {
         out.append('\n');
     }
 
-  private String getFieldName(final String name) {
+  private String getFieldName(String name) {
     return JavaCodeStyleManager.getInstance(myProject).propertyNameToVariableName(name, VariableKind.FIELD);
   }
 
@@ -131,7 +131,7 @@ class ReturnValueBeanBuilder {
         this.valueType = valueType;
     }
 
-  public void setStatic(final boolean isStatic) {
+  public void setStatic(boolean isStatic) {
     myStatic = isStatic;
   }
 }

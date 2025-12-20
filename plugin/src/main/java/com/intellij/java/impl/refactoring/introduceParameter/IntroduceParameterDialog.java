@@ -80,7 +80,7 @@ public class IntroduceParameterDialog extends RefactoringDialog {
                            @Nonnull PsiMethod methodToSearchFor,
                            @Nonnull PsiMethod methodToReplaceIn,
                            @Nonnull IntList parametersToRemove,
-                           final boolean mustBeFinal) {
+                           boolean mustBeFinal) {
     super(project, true);
     myPanel = new IntroduceParameterSettingsPanel(onLocalVariable, onExpression, methodToReplaceIn, parametersToRemove);
     myProject = project;
@@ -163,7 +163,7 @@ public class IntroduceParameterDialog extends RefactoringDialog {
     gbConstraints.fill = GridBagConstraints.NONE;
 
     myParameterNameField = new NameSuggestionsField(myProject);
-    final JLabel nameLabel = new JLabel(RefactoringLocalize.namePrompt().get());
+    JLabel nameLabel = new JLabel(RefactoringLocalize.namePrompt().get());
     nameLabel.setLabelFor(myParameterNameField.getComponent());
     panel.add(nameLabel, gbConstraints);
 
@@ -210,7 +210,7 @@ public class IntroduceParameterDialog extends RefactoringDialog {
     gbConstraints.gridy++;
     myCbDeclareFinal = new NonFocusableCheckBox(RefactoringLocalize.declareFinal().get());
 
-    final Boolean settingsFinals = settings.INTRODUCE_PARAMETER_CREATE_FINALS;
+    Boolean settingsFinals = settings.INTRODUCE_PARAMETER_CREATE_FINALS;
     myCbDeclareFinal.setSelected(settingsFinals == null ?
                                  CodeStyleSettingsManager.getSettings(myProject).GENERATE_FINAL_PARAMETERS :
                                  settingsFinals.booleanValue());
@@ -239,7 +239,7 @@ public class IntroduceParameterDialog extends RefactoringDialog {
   }
 
   protected void doAction() {
-    final JavaRefactoringSettings settings = JavaRefactoringSettings.getInstance();
+    JavaRefactoringSettings settings = JavaRefactoringSettings.getInstance();
     settings.INTRODUCE_PARAMETER_REPLACE_FIELDS_WITH_GETTERS =
             myPanel.getReplaceFieldsWithGetters();
     if (myCbDeclareFinal != null && myCbDeclareFinal.isEnabled()) {
@@ -259,7 +259,7 @@ public class IntroduceParameterDialog extends RefactoringDialog {
       isDeleteLocalVariable = myPanel.isDeleteLocalVariable();
     }
 
-    final IntroduceParameterProcessor processor = new IntroduceParameterProcessor(
+    IntroduceParameterProcessor processor = new IntroduceParameterProcessor(
       myProject, myMethodToReplaceIn, myMethodToSearchFor,
       parameterInitializer, myExpression,
       myLocalVar, isDeleteLocalVariable,

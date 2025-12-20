@@ -49,7 +49,7 @@ public class EnumeratedConstantNamingConventionInspection extends ConventionInsp
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final String fieldName = (String)infos[0];
+    String fieldName = (String)infos[0];
     if (fieldName.length() < getMinLength()) {
       return InspectionGadgetsLocalize.enumeratedConstantNamingConventionProblemDescriptorShort().get();
     }
@@ -84,7 +84,7 @@ public class EnumeratedConstantNamingConventionInspection extends ConventionInsp
     @Override
     public void visitEnumConstant(PsiEnumConstant constant) {
       super.visitEnumConstant(constant);
-      final String name = constant.getName();
+      String name = constant.getName();
       if (name == null) {
         return;
       }

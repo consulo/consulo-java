@@ -58,13 +58,13 @@ public class NonSerializableObjectPassedToObjectStreamInspection extends BaseIns
             )) {
                 return;
             }
-            final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length != 1) {
                 return;
             }
-            final PsiExpression argument = arguments[0];
-            final PsiType argumentType = argument.getType();
+            PsiExpression argument = arguments[0];
+            PsiType argumentType = argument.getType();
             if (argumentType == null) {
                 return;
             }

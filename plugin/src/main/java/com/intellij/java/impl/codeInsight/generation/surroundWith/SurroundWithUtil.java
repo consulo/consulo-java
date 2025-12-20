@@ -187,7 +187,7 @@ public class SurroundWithUtil {
     PsiElement codeBlockWsElement = null;
     ASTNode codeBlockWsNode = null;
     boolean lbraceFound = false;
-    final PsiParserFacade parserFacade = PsiParserFacade.SERVICE.getInstance(container.getProject());
+    PsiParserFacade parserFacade = PsiParserFacade.SERVICE.getInstance(container.getProject());
     for (PsiElement codeBlockChild = container.getFirstChild(); codeBlockChild != null; codeBlockChild = codeBlockChild.getNextSibling()) {
       ASTNode childNode = codeBlockChild.getNode();
       if (childNode == null) {

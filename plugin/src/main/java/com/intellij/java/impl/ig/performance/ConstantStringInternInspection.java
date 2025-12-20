@@ -65,17 +65,17 @@ public class ConstantStringInternInspection extends BaseInspection {
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiElement parent = element.getParent();
-      final PsiMethodCallExpression call =
+      PsiElement element = descriptor.getPsiElement();
+      PsiElement parent = element.getParent();
+      PsiMethodCallExpression call =
         (PsiMethodCallExpression)parent.getParent();
-      final PsiReferenceExpression expression =
+      PsiReferenceExpression expression =
         call.getMethodExpression();
-      final PsiExpression qualifier = expression.getQualifierExpression();
+      PsiExpression qualifier = expression.getQualifierExpression();
       if (qualifier == null) {
         return;
       }
-      final String qualifierText = qualifier.getText();
+      String qualifierText = qualifier.getText();
       replaceExpression(call, qualifierText);
     }
   }
@@ -87,19 +87,19 @@ public class ConstantStringInternInspection extends BaseInspection {
     public void visitMethodCallExpression(
       @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      @NonNls final String methodName =
+      @NonNls String methodName =
         methodExpression.getReferenceName();
       if (!"intern".equals(methodName)) {
         return;
       }
-      final PsiExpressionList argList = expression.getArgumentList();
-      final PsiExpression[] args = argList.getExpressions();
+      PsiExpressionList argList = expression.getArgumentList();
+      PsiExpression[] args = argList.getExpressions();
       if (args.length != 0) {
         return;
       }
-      final PsiExpression qualifier =
+      PsiExpression qualifier =
         methodExpression.getQualifierExpression();
       if (qualifier == null) {
         return;
@@ -107,15 +107,15 @@ public class ConstantStringInternInspection extends BaseInspection {
       if (!PsiUtil.isConstantExpression(qualifier)) {
         return;
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return;
       }
-      final PsiClass aClass = method.getContainingClass();
+      PsiClass aClass = method.getContainingClass();
       if (aClass == null) {
         return;
       }
-      final String className = aClass.getQualifiedName();
+      String className = aClass.getQualifiedName();
       if (!CommonClassNames.JAVA_LANG_STRING.equals(className)) {
         return;
       }

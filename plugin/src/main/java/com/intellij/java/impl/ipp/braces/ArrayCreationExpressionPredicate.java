@@ -28,12 +28,12 @@ class ArrayCreationExpressionPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiArrayInitializerExpression)) {
       return false;
     }
-    final PsiArrayInitializerExpression arrayInitializerExpression =
+    PsiArrayInitializerExpression arrayInitializerExpression =
       (PsiArrayInitializerExpression)element;
     if (arrayInitializerExpression.getType() == null) {
       return false;
     }
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     return !(parent instanceof PsiNewExpression);
   }
 }

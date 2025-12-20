@@ -82,7 +82,7 @@ public class QuestionableNameInspection extends BaseInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final ListTable table = new ListTable(new ListWrappingTableModel(nameList, InspectionGadgetsLocalize.questionableNameColumnTitle().get()));
+        ListTable table = new ListTable(new ListWrappingTableModel(nameList, InspectionGadgetsLocalize.questionableNameColumnTitle().get()));
         return UiUtils.createAddRemovePanel(table);
     }
 
@@ -106,7 +106,7 @@ public class QuestionableNameInspection extends BaseInspection {
 
         @Override
         public void visitVariable(@Nonnull PsiVariable variable) {
-            final String name = variable.getName();
+            String name = variable.getName();
             if (nameSet.contains(name)) {
                 registerVariableError(variable);
             }
@@ -114,7 +114,7 @@ public class QuestionableNameInspection extends BaseInspection {
 
         @Override
         public void visitMethod(@Nonnull PsiMethod method) {
-            final String name = method.getName();
+            String name = method.getName();
             if (nameSet.contains(name)) {
                 registerMethodError(method);
             }
@@ -122,7 +122,7 @@ public class QuestionableNameInspection extends BaseInspection {
 
         @Override
         public void visitClass(@Nonnull PsiClass aClass) {
-            final String name = aClass.getName();
+            String name = aClass.getName();
             if (nameSet.contains(name)) {
                 registerClassError(aClass);
             }

@@ -75,7 +75,7 @@ public abstract class SCR20733Test extends PsiTestCase
 				PsiClass psiClass = myJavaFacade.findClass("p.A");
 				assertEquals("p.A", psiClass.getQualifiedName());
 
-				final PsiFile psiFile = myPsiManager.findFile(myPackDir.findChild("A.java"));
+				PsiFile psiFile = myPsiManager.findFile(myPackDir.findChild("A.java"));
 				psiFile.getChildren();
 				assertEquals(psiFile, psiClass.getContainingFile());
 

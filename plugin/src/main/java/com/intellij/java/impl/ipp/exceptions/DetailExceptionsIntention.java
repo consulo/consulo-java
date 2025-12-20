@@ -46,7 +46,7 @@ public class DetailExceptionsIntention extends Intention {
 
     @Override
     public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-        final PsiJavaToken token = (PsiJavaToken) element;
+        PsiJavaToken token = (PsiJavaToken) element;
         PsiElement parent = token.getParent();
         if (parent instanceof PsiCatchSection) {
             parent = parent.getParent();
@@ -54,32 +54,32 @@ public class DetailExceptionsIntention extends Intention {
         if (!(parent instanceof PsiTryStatement)) {
             return;
         }
-        final PsiTryStatement tryStatement = (PsiTryStatement) parent;
-        @NonNls final StringBuilder newTryStatement = new StringBuilder("try");
-        final Set<PsiType> exceptionsThrown = new HashSet<PsiType>();
-        final PsiResourceList resourceList = tryStatement.getResourceList();
+        PsiTryStatement tryStatement = (PsiTryStatement) parent;
+        @NonNls StringBuilder newTryStatement = new StringBuilder("try");
+        Set<PsiType> exceptionsThrown = new HashSet<PsiType>();
+        PsiResourceList resourceList = tryStatement.getResourceList();
         if (resourceList != null) {
             newTryStatement.append(resourceList.getText());
             ExceptionUtils.calculateExceptionsThrownForResourceList(resourceList, exceptionsThrown);
         }
-        final PsiCodeBlock tryBlock = tryStatement.getTryBlock();
+        PsiCodeBlock tryBlock = tryStatement.getTryBlock();
         if (tryBlock == null) {
             return;
         }
-        final String tryBlockText = tryBlock.getText();
+        String tryBlockText = tryBlock.getText();
         newTryStatement.append(tryBlockText);
         ExceptionUtils.calculateExceptionsThrownForCodeBlock(tryBlock, exceptionsThrown);
-        final Comparator<PsiType> comparator = new HierarchicalTypeComparator();
-        final List<PsiType> exceptionsAlreadyEmitted = new ArrayList<PsiType>();
-        final PsiCatchSection[] catchSections = tryStatement.getCatchSections();
+        Comparator<PsiType> comparator = new HierarchicalTypeComparator();
+        List<PsiType> exceptionsAlreadyEmitted = new ArrayList<PsiType>();
+        PsiCatchSection[] catchSections = tryStatement.getCatchSections();
         for (PsiCatchSection catchSection : catchSections) {
-            final PsiParameter parameter = catchSection.getParameter();
-            final PsiCodeBlock block = catchSection.getCatchBlock();
+            PsiParameter parameter = catchSection.getParameter();
+            PsiCodeBlock block = catchSection.getCatchBlock();
             if (parameter != null && block != null) {
-                final PsiType caughtType = parameter.getType();
-                final List<PsiType> exceptionsToExpand = new ArrayList<PsiType>(10);
+                PsiType caughtType = parameter.getType();
+                List<PsiType> exceptionsToExpand = new ArrayList<PsiType>(10);
                 for (Object aExceptionsThrown : exceptionsThrown) {
-                    final PsiType thrownType = (PsiType) aExceptionsThrown;
+                    PsiType thrownType = (PsiType) aExceptionsThrown;
                     if (caughtType.isAssignableFrom(thrownType)) {
                         exceptionsToExpand.add(thrownType);
                     }
@@ -93,11 +93,11 @@ public class DetailExceptionsIntention extends Intention {
                 }
             }
         }
-        final PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
+        PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
         if (finallyBlock != null) {
             newTryStatement.append("finally").append(finallyBlock.getText());
         }
-        final String newStatement = newTryStatement.toString();
+        String newStatement = newTryStatement.toString();
         replaceStatementAndShorten(newStatement, tryStatement);
     }
 }

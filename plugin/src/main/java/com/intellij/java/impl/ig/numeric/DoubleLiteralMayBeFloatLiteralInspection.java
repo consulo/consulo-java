@@ -40,15 +40,15 @@ public class DoubleLiteralMayBeFloatLiteralInspection extends BaseInspection {
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    final PsiTypeCastExpression typeCastExpression = (PsiTypeCastExpression)infos[0];
-    final StringBuilder replacementText = buildReplacementText(typeCastExpression, new StringBuilder());
+    PsiTypeCastExpression typeCastExpression = (PsiTypeCastExpression)infos[0];
+    StringBuilder replacementText = buildReplacementText(typeCastExpression, new StringBuilder());
     return InspectionGadgetsLocalize.doubleLiteralMayBeFloatLiteralProblemDescriptor(replacementText).get();
   }
 
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiTypeCastExpression typeCastExpression = (PsiTypeCastExpression)infos[0];
-    final StringBuilder replacementText = buildReplacementText(typeCastExpression, new StringBuilder());
+    PsiTypeCastExpression typeCastExpression = (PsiTypeCastExpression)infos[0];
+    StringBuilder replacementText = buildReplacementText(typeCastExpression, new StringBuilder());
     return new DoubleLiteralMayBeFloatLiteralFix(replacementText.toString());
   }
 
@@ -59,14 +59,14 @@ public class DoubleLiteralMayBeFloatLiteralInspection extends BaseInspection {
       out.append('f');
     }
     else if (expression instanceof PsiPrefixExpression) {
-      final PsiPrefixExpression prefixExpression =
+      PsiPrefixExpression prefixExpression =
         (PsiPrefixExpression)expression;
-      final PsiJavaToken sign = prefixExpression.getOperationSign();
+      PsiJavaToken sign = prefixExpression.getOperationSign();
       out.append(sign.getText());
       return buildReplacementText(prefixExpression.getOperand(), out);
     }
     else if (expression instanceof PsiParenthesizedExpression) {
-      final PsiParenthesizedExpression parenthesizedExpression =
+      PsiParenthesizedExpression parenthesizedExpression =
         (PsiParenthesizedExpression)expression;
       out.append('(');
       buildReplacementText(parenthesizedExpression.getExpression(),
@@ -74,9 +74,9 @@ public class DoubleLiteralMayBeFloatLiteralInspection extends BaseInspection {
       out.append(')');
     }
     else if (expression instanceof PsiTypeCastExpression) {
-      final PsiTypeCastExpression typeCastExpression =
+      PsiTypeCastExpression typeCastExpression =
         (PsiTypeCastExpression)expression;
-      final PsiExpression operand = typeCastExpression.getOperand();
+      PsiExpression operand = typeCastExpression.getOperand();
       buildReplacementText(operand, out);
     }
     else {
@@ -102,11 +102,11 @@ public class DoubleLiteralMayBeFloatLiteralInspection extends BaseInspection {
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
+      PsiElement element = descriptor.getPsiElement();
       if (!(element instanceof PsiTypeCastExpression)) {
         return;
       }
-      final PsiTypeCastExpression typeCastExpression =
+      PsiTypeCastExpression typeCastExpression =
         (PsiTypeCastExpression)element;
       replaceExpression(typeCastExpression, replacementString);
     }
@@ -123,7 +123,7 @@ public class DoubleLiteralMayBeFloatLiteralInspection extends BaseInspection {
     @Override
     public void visitLiteralExpression(PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
-      final PsiType type = expression.getType();
+      PsiType type = expression.getType();
       if (!PsiType.DOUBLE.equals(type)) {
         return;
       }
@@ -135,9 +135,9 @@ public class DoubleLiteralMayBeFloatLiteralInspection extends BaseInspection {
       if (!(parent instanceof PsiTypeCastExpression)) {
         return;
       }
-      final PsiTypeCastExpression typeCastExpression =
+      PsiTypeCastExpression typeCastExpression =
         (PsiTypeCastExpression)parent;
-      final PsiType castType = typeCastExpression.getType();
+      PsiType castType = typeCastExpression.getType();
       if (!PsiType.FLOAT.equals(castType)) {
         return;
       }

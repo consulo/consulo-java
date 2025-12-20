@@ -80,16 +80,16 @@ public class CreateClassFromNewFix extends CreateFromUsageBaseFix {
         });
     }
 
-    protected void setupClassFromNewExpression(final PsiClass psiClass, final PsiNewExpression newExpression) {
+    protected void setupClassFromNewExpression(PsiClass psiClass, PsiNewExpression newExpression) {
         assert ApplicationManager.getApplication().isWriteAccessAllowed();
 
-        final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(newExpression.getProject()).getElementFactory();
+        PsiElementFactory elementFactory = JavaPsiFacade.getInstance(newExpression.getProject()).getElementFactory();
         PsiClass aClass = psiClass;
         if (aClass == null) {
             return;
         }
 
-        final PsiJavaCodeReferenceElement classReference = newExpression.getClassReference();
+        PsiJavaCodeReferenceElement classReference = newExpression.getClassReference();
         if (classReference != null) {
             classReference.bindToElement(aClass);
         }
@@ -116,7 +116,7 @@ public class CreateClassFromNewFix extends CreateFromUsageBaseFix {
                 return;
             }
             final RangeMarker textRange = editor.getDocument().createRangeMarker(aClass.getTextRange());
-            final Runnable runnable = new Runnable() {
+            Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
                     new WriteCommandAction(project, getText().get(), getText().get()) {
@@ -195,7 +195,7 @@ public class CreateClassFromNewFix extends CreateFromUsageBaseFix {
             if (!(type instanceof PsiClassType)) {
                 continue;
             }
-            final PsiClassType classType = (PsiClassType) type;
+            PsiClassType classType = (PsiClassType) type;
             PsiClass aClass = classType.resolve();
             if (aClass == null) {
                 continue;
@@ -238,7 +238,7 @@ public class CreateClassFromNewFix extends CreateFromUsageBaseFix {
 
     @Override
     protected PsiElement getElement() {
-        final PsiNewExpression expression = getNewExpression();
+        PsiNewExpression expression = getNewExpression();
         if (expression == null || !expression.getManager().isInProject(expression)) {
             return null;
         }
@@ -286,7 +286,7 @@ public class CreateClassFromNewFix extends CreateFromUsageBaseFix {
         return false;
     }
 
-    protected LocalizeValue getText(final String varName) {
+    protected LocalizeValue getText(String varName) {
         return JavaQuickFixLocalize.createClassFromNewText(varName);
     }
 

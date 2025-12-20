@@ -112,12 +112,12 @@ public abstract class IntroduceFieldCentralPanel {
 
   private boolean initializedInSetUp(PsiElement refElement) {
     if (refElement instanceof PsiField && hasSetUpChoice()) {
-      final PsiMethod setUpMethod = TestFrameworks.getInstance().findSetUpMethod(((PsiField)refElement).getContainingClass());
+      PsiMethod setUpMethod = TestFrameworks.getInstance().findSetUpMethod(((PsiField)refElement).getContainingClass());
       if (setUpMethod != null) {
-        final Processor<PsiReference> initializerSearcher = new Processor<PsiReference>() {
+        Processor<PsiReference> initializerSearcher = new Processor<PsiReference>() {
           @Override
           public boolean process(PsiReference reference) {
-            final PsiElement referenceElement = reference.getElement();
+            PsiElement referenceElement = reference.getElement();
             if (referenceElement instanceof PsiExpression) {
               return !PsiUtil.isAccessedForWriting((PsiExpression)referenceElement);
             }
@@ -180,8 +180,8 @@ public abstract class IntroduceFieldCentralPanel {
         updateCbFinal();
       }
     };
-    final JComponent initializerPlacePanel = createInitializerPlacePanel(itemListener, finalUpdater);
-    final JPanel checkboxes = appendCheckboxes(itemListener);
+    JComponent initializerPlacePanel = createInitializerPlacePanel(itemListener, finalUpdater);
+    JPanel checkboxes = appendCheckboxes(itemListener);
     JPanel panel = composeWholePanel(initializerPlacePanel, checkboxes);
 
     updateTypeSelector();

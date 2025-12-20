@@ -35,8 +35,8 @@ public class EqualsBetweenInconvertibleTypesInspection extends BaseInspection {
 
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiType comparedType = (PsiType) infos[0];
-        final PsiType comparisonType = (PsiType) infos[1];
+        PsiType comparedType = (PsiType) infos[0];
+        PsiType comparisonType = (PsiType) infos[1];
         return InspectionGadgetsLocalize.equalsBetweenInconvertibleTypesProblemDescriptor(
             comparedType.getPresentableText(),
             comparisonType.getPresentableText()
@@ -62,29 +62,29 @@ public class EqualsBetweenInconvertibleTypesInspection extends BaseInspection {
             if (!MethodCallUtils.isEqualsCall(expression)) {
                 return;
             }
-            final PsiReferenceExpression methodExpression =
+            PsiReferenceExpression methodExpression =
                 expression.getMethodExpression();
-            final PsiExpressionList argumentList = expression.getArgumentList();
-            final PsiExpression[] args = argumentList.getExpressions();
+            PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpression[] args = argumentList.getExpressions();
             if (args.length != 1) {
                 return;
             }
-            final PsiExpression expression1 = args[0];
-            final PsiExpression expression2 =
+            PsiExpression expression1 = args[0];
+            PsiExpression expression2 =
                 methodExpression.getQualifierExpression();
             if (expression2 == null) {
                 return;
             }
-            final PsiType comparedType = expression1.getType();
+            PsiType comparedType = expression1.getType();
             if (comparedType == null) {
                 return;
             }
-            final PsiType comparisonType = expression2.getType();
+            PsiType comparisonType = expression2.getType();
             if (comparisonType == null) {
                 return;
             }
-            final PsiType comparedTypeErasure = TypeConversionUtil.erasure(comparedType);
-            final PsiType comparisonTypeErasure = TypeConversionUtil.erasure(comparisonType);
+            PsiType comparedTypeErasure = TypeConversionUtil.erasure(comparedType);
+            PsiType comparisonTypeErasure = TypeConversionUtil.erasure(comparisonType);
             if (comparedTypeErasure == null ||
                 comparisonTypeErasure == null ||
                 TypeConversionUtil.areTypesConvertible(comparedTypeErasure, comparisonTypeErasure)) {

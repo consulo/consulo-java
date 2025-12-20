@@ -61,7 +61,7 @@ public class FindThrowUsagesDialog extends JavaFindUsagesDialog<JavaThrowFindUsa
 
     @Override
     protected JComponent createNorthPanel() {
-        final JComponent panel = new JPanel(new GridBagLayout());
+        JComponent panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbConstraints = new GridBagConstraints();
 
         gbConstraints.insets = new Insets(0, 0, UIUtil.DEFAULT_VGAP, 0);
@@ -76,14 +76,14 @@ public class FindThrowUsagesDialog extends JavaFindUsagesDialog<JavaThrowFindUsa
     }
 
     @Override
-    public void calcFindUsagesOptions(final JavaThrowFindUsagesOptions options) {
+    public void calcFindUsagesOptions(JavaThrowFindUsagesOptions options) {
         super.calcFindUsagesOptions(options);
         options.isUsages = isSelected(myCbUsages) || !myHasFindWhatPanel;
     }
 
     @Override
     protected JPanel createFindWhatPanel() {
-        final JPanel findWhatPanel = new JPanel();
+        JPanel findWhatPanel = new JPanel();
         findWhatPanel.setBorder(IdeBorderFactory.createTitledBorder(FindBundle.message("find.what.group"), true));
         findWhatPanel.setLayout(new BoxLayout(findWhatPanel, BoxLayout.Y_AXIS));
 
@@ -112,7 +112,7 @@ public class FindThrowUsagesDialog extends JavaFindUsagesDialog<JavaThrowFindUsa
         }
         else {
             getFindUsagesOptions().setRoot((ThrowSearchUtil.Root) myCbExns.getSelectedItem());
-            final boolean hasSelected = isSelected(myCbUsages);
+            boolean hasSelected = isSelected(myCbUsages);
             setOKActionEnabled(hasSelected);
         }
     }

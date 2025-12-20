@@ -49,7 +49,7 @@ public abstract class StaticMemberProcessor {
   private boolean myHintShown = false;
   private final boolean myPackagedContext;
 
-  public StaticMemberProcessor(final PsiElement position) {
+  public StaticMemberProcessor(PsiElement position) {
     myPosition = position;
     myProject = myPosition.getProject();
     myResolveHelper = JavaPsiFacade.getInstance(myProject).getResolveHelper();
@@ -60,22 +60,22 @@ public abstract class StaticMemberProcessor {
     addIfNotNull(myStaticImportedClasses, psiClass);
   }
 
-  public void processStaticMethodsGlobally(final PrefixMatcher matcher, Consumer<LookupElement> consumer) {
-    final GlobalSearchScope scope = myPosition.getResolveScope();
+  public void processStaticMethodsGlobally(PrefixMatcher matcher, Consumer<LookupElement> consumer) {
+    GlobalSearchScope scope = myPosition.getResolveScope();
     Collection<String> memberNames = JavaStaticMemberNameIndex.getInstance().getAllKeys(myProject);
     for (final String memberName : matcher.sortMatching(memberNames)) {
       Set<PsiClass> classes = new HashSet<PsiClass>();
-      for (final PsiMember member : JavaStaticMemberNameIndex.getInstance().getStaticMembers(memberName, myProject, scope)) {
+      for (PsiMember member : JavaStaticMemberNameIndex.getInstance().getStaticMembers(memberName, myProject, scope)) {
         if (isStaticallyImportable(member)) {
-          final PsiClass containingClass = member.getContainingClass();
+          PsiClass containingClass = member.getContainingClass();
           assert containingClass != null : member.getName() + "; " + member + "; " + member.getClass();
 
           if (JavaCompletionUtil.isSourceLevelAccessible(myPosition, containingClass, myPackagedContext)) {
-            final boolean shouldImport = myStaticImportedClasses.contains(containingClass);
+            boolean shouldImport = myStaticImportedClasses.contains(containingClass);
             showHint(shouldImport);
             if (member instanceof PsiMethod && classes.add(containingClass)) {
-              final PsiMethod[] allMethods = containingClass.getAllMethods();
-              final List<PsiMethod> overloads = ContainerUtil.findAll(allMethods, new Condition<PsiMethod>() {
+              PsiMethod[] allMethods = containingClass.getAllMethods();
+              List<PsiMethod> overloads = ContainerUtil.findAll(allMethods, new Condition<PsiMethod>() {
                 @Override
                 public boolean value(PsiMethod psiMethod) {
                   return memberName.equals(psiMethod.getName()) && isStaticallyImportable(psiMethod);
@@ -103,7 +103,7 @@ public abstract class StaticMemberProcessor {
 
   private void showHint(boolean shouldImport) {
     if (!myHintShown && !shouldImport) {
-      final String shortcut = CompletionContributor.getActionShortcut(IdeActions.ACTION_SHOW_INTENTION_ACTIONS);
+      String shortcut = CompletionContributor.getActionShortcut(IdeActions.ACTION_SHOW_INTENTION_ACTIONS);
       if (shortcut != null) {
         CompletionService.getCompletionService().setAdvertisementText("To import a method statically, press " + shortcut);
       }
@@ -111,17 +111,17 @@ public abstract class StaticMemberProcessor {
     }
   }
 
-  public List<PsiMember> processMembersOfRegisteredClasses(final PrefixMatcher matcher, PairConsumer<PsiMember, PsiClass> consumer) {
-    final ArrayList<PsiMember> result = ContainerUtil.newArrayList();
-    for (final PsiClass psiClass : myStaticImportedClasses) {
-      for (final PsiMethod method : psiClass.getAllMethods()) {
+  public List<PsiMember> processMembersOfRegisteredClasses(PrefixMatcher matcher, PairConsumer<PsiMember, PsiClass> consumer) {
+    ArrayList<PsiMember> result = ContainerUtil.newArrayList();
+    for (PsiClass psiClass : myStaticImportedClasses) {
+      for (PsiMethod method : psiClass.getAllMethods()) {
         if (matcher.prefixMatches(method.getName())) {
           if (isStaticallyImportable(method)) {
             consumer.consume(method, psiClass);
           }
         }
       }
-      for (final PsiField field : psiClass.getAllFields()) {
+      for (PsiField field : psiClass.getAllFields()) {
         if (matcher.prefixMatches(field.getName())) {
           if (isStaticallyImportable(field)) {
             consumer.consume(field, psiClass);
@@ -133,7 +133,7 @@ public abstract class StaticMemberProcessor {
   }
 
 
-  private boolean isStaticallyImportable(final PsiMember member) {
+  private boolean isStaticallyImportable(PsiMember member) {
     return member.hasModifierProperty(PsiModifier.STATIC) && isAccessible(member) && !StaticImportMethodFix.isExcluded(member);
   }
 

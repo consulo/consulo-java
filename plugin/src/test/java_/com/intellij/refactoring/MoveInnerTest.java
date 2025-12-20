@@ -93,22 +93,22 @@ public abstract class MoveInnerTest extends MultiFileTestCase {
                                false, false, null) {
       @Override
       protected boolean isPassOuterClass() {
-        final PsiClass outerClass = getJavaFacade().findClass("pack1.DImpl", GlobalSearchScope.moduleScope(myModule));
+        PsiClass outerClass = getJavaFacade().findClass("pack1.DImpl", GlobalSearchScope.moduleScope(myModule));
         assertNotNull(outerClass);
-        final PsiClass innerClass = getJavaFacade().findClass(innerClassName, GlobalSearchScope.moduleScope(myModule));
+        PsiClass innerClass = getJavaFacade().findClass(innerClassName, GlobalSearchScope.moduleScope(myModule));
         assertNotNull(innerClass);
         return MoveInnerDialog.isThisNeeded(innerClass, outerClass);
       }
     });
   }
 
-  private PerformAction createAction(@NonNls final String innerClassName,
-                                     @NonNls final String newClassName,
-                                     final boolean passOuterClass,
-                                     @NonNls final String parameterName,
-                                     final boolean searchInComments,
-                                     final boolean searchInNonJava,
-                                     @NonNls @Nullable final String packageName) {
+  private PerformAction createAction(@NonNls String innerClassName,
+                                     @NonNls String newClassName,
+                                     boolean passOuterClass,
+                                     @NonNls String parameterName,
+                                     boolean searchInComments,
+                                     boolean searchInNonJava,
+                                     @NonNls @Nullable String packageName) {
     return new MyPerformAction(innerClassName, newClassName, passOuterClass, parameterName, searchInComments, searchInNonJava, packageName);
   }
 
@@ -135,10 +135,10 @@ public abstract class MoveInnerTest extends MultiFileTestCase {
 
     @Override
     public void performAction(VirtualFile rootDir, VirtualFile rootAfter) throws Exception {
-      final JavaPsiFacade manager = getJavaFacade();
-      final PsiClass aClass = manager.findClass(myInnerClassName, GlobalSearchScope.moduleScope(myModule));
-      final MoveInnerProcessor moveInnerProcessor = new MoveInnerProcessor(myProject, null);
-      final PsiElement targetContainer = myPackageName != null ? findDirectory(myPackageName) : MoveInnerImpl.getTargetContainer(aClass, false);
+      JavaPsiFacade manager = getJavaFacade();
+      PsiClass aClass = manager.findClass(myInnerClassName, GlobalSearchScope.moduleScope(myModule));
+      MoveInnerProcessor moveInnerProcessor = new MoveInnerProcessor(myProject, null);
+      PsiElement targetContainer = myPackageName != null ? findDirectory(myPackageName) : MoveInnerImpl.getTargetContainer(aClass, false);
       assertNotNull(targetContainer);
       moveInnerProcessor.setup(aClass, myNewClassName, isPassOuterClass(), myParameterName, mySearchInComments, mySearchInNonJava, targetContainer);
       moveInnerProcessor.run();
@@ -151,10 +151,10 @@ public abstract class MoveInnerTest extends MultiFileTestCase {
       return myPassOuterClass;
     }
 
-    private PsiElement findDirectory(final String packageName) {
-      final PsiJavaPackage aPackage = JavaPsiFacade.getInstance(myPsiManager.getProject()).findPackage(packageName);
+    private PsiElement findDirectory(String packageName) {
+      PsiJavaPackage aPackage = JavaPsiFacade.getInstance(myPsiManager.getProject()).findPackage(packageName);
       assert aPackage != null;
-      final PsiDirectory[] directories = aPackage.getDirectories();
+      PsiDirectory[] directories = aPackage.getDirectories();
       return directories [0];
     }
   }

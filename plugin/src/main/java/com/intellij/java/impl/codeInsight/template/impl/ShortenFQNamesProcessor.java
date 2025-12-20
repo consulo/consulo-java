@@ -54,7 +54,7 @@ public class ShortenFQNamesProcessor implements TemplateOptionalProcessor {
         try {
             PsiDocumentManager.getInstance(project).commitDocument(document);
             JavaCodeStyleManager javaStyle = JavaCodeStyleManager.getInstance(project);
-            final PsiFile file = PsiUtilBase.getPsiFileInEditor(editor, project);
+            PsiFile file = PsiUtilBase.getPsiFileInEditor(editor, project);
             assert file != null;
             javaStyle.shortenClassReferences(file, templateRange.getStartOffset(), templateRange.getEndOffset());
             PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(document);

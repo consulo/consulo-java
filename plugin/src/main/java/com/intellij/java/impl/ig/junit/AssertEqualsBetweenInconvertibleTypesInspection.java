@@ -39,10 +39,10 @@ public class AssertEqualsBetweenInconvertibleTypesInspection extends BaseInspect
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final PsiType comparedType = (PsiType)infos[0];
-    final PsiType comparisonType = (PsiType)infos[1];
-    final String comparedTypeText = comparedType.getPresentableText();
-    final String comparisonTypeText = comparisonType.getPresentableText();
+    PsiType comparedType = (PsiType)infos[0];
+    PsiType comparisonType = (PsiType)infos[1];
+    String comparedTypeText = comparedType.getPresentableText();
+    String comparisonTypeText = comparisonType.getPresentableText();
     return InspectionGadgetsLocalize.assertequalsBetweenInconvertibleTypesProblemDescriptor(
       StringUtil.escapeXml(comparedTypeText),
       StringUtil.escapeXml(comparisonTypeText)
@@ -64,29 +64,29 @@ public class AssertEqualsBetweenInconvertibleTypesInspection extends BaseInspect
     @Override
     public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      @NonNls final String methodName = methodExpression.getReferenceName();
+      PsiReferenceExpression methodExpression = expression.getMethodExpression();
+      @NonNls String methodName = methodExpression.getReferenceName();
       if (!"assertEquals".equals(methodName)) {
         return;
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return;
       }
-      final PsiClass containingClass = method.getContainingClass();
+      PsiClass containingClass = method.getContainingClass();
       if (!InheritanceUtil.isInheritor(containingClass, "junit.framework.Assert") &&
           !InheritanceUtil.isInheritor(containingClass, "org.junit.Assert")) {
         return;
       }
-      final PsiParameterList parameterList = method.getParameterList();
-      final PsiParameter[] parameters = parameterList.getParameters();
+      PsiParameterList parameterList = method.getParameterList();
+      PsiParameter[] parameters = parameterList.getParameters();
       if (parameters.length < 2) {
         return;
       }
-      final PsiType firstParameterType = parameters[0].getType();
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
-      final int argumentIndex;
+      PsiType firstParameterType = parameters[0].getType();
+      PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpression[] arguments = argumentList.getExpressions();
+      int argumentIndex;
       if (firstParameterType.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
         if (arguments.length < 3) {
           return;
@@ -99,19 +99,19 @@ public class AssertEqualsBetweenInconvertibleTypesInspection extends BaseInspect
         }
         argumentIndex = 0;
       }
-      final PsiExpression expression1 = arguments[argumentIndex];
-      final PsiExpression expression2 = arguments[argumentIndex + 1];
-      final PsiType type1 = expression1.getType();
+      PsiExpression expression1 = arguments[argumentIndex];
+      PsiExpression expression2 = arguments[argumentIndex + 1];
+      PsiType type1 = expression1.getType();
       if (type1 == null) {
         return;
       }
-      final PsiType type2 = expression2.getType();
+      PsiType type2 = expression2.getType();
       if (type2 == null) {
         return;
       }
-      final PsiType parameterType1 = parameters[argumentIndex].getType();
-      final PsiType parameterType2 = parameters[argumentIndex + 1].getType();
-      final PsiClassType objectType = TypeUtils.getObjectType(expression);
+      PsiType parameterType1 = parameters[argumentIndex].getType();
+      PsiType parameterType2 = parameters[argumentIndex + 1].getType();
+      PsiClassType objectType = TypeUtils.getObjectType(expression);
       if (!objectType.equals(parameterType1) || !objectType.equals(parameterType2)) {
         return;
       }

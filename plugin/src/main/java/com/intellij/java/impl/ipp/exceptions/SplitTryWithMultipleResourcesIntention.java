@@ -49,13 +49,13 @@ public class SplitTryWithMultipleResourcesIntention extends Intention {
 
     @Override
     protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-        final PsiTryStatement tryStatement = (PsiTryStatement) element.getParent();
-        final PsiResourceList resourceList = tryStatement.getResourceList();
+        PsiTryStatement tryStatement = (PsiTryStatement) element.getParent();
+        PsiResourceList resourceList = tryStatement.getResourceList();
         if (resourceList == null) {
             return;
         }
-        @NonNls final StringBuilder newTryStatementText = new StringBuilder();
-        final List<PsiResourceVariable> variables = resourceList.getResourceVariables();
+        @NonNls StringBuilder newTryStatementText = new StringBuilder();
+        List<PsiResourceVariable> variables = resourceList.getResourceVariables();
         boolean braces = false;
         for (PsiResourceVariable variable : variables) {
             if (braces) {
@@ -66,7 +66,7 @@ public class SplitTryWithMultipleResourcesIntention extends Intention {
             }
             newTryStatementText.append("try (").append(variable.getText()).append(")");
         }
-        final PsiCodeBlock tryBlock = tryStatement.getTryBlock();
+        PsiCodeBlock tryBlock = tryStatement.getTryBlock();
         if (tryBlock == null) {
             return;
         }
@@ -74,7 +74,7 @@ public class SplitTryWithMultipleResourcesIntention extends Intention {
         for (int i = 1; i < variables.size(); i++) {
             newTryStatementText.append("\n}");
         }
-        final PsiCatchSection[] catchSections = tryStatement.getCatchSections();
+        PsiCatchSection[] catchSections = tryStatement.getCatchSections();
         for (PsiCatchSection catchSection : catchSections) {
             newTryStatementText.append(catchSection.getText());
         }

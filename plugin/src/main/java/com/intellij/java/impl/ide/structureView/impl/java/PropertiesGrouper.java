@@ -29,7 +29,7 @@ public class PropertiesGrouper implements Grouper {
   @NonNls public static final String ID = "SHOW_PROPERTIES";
 
   @Nonnull
-  public Collection<Group> group(final Object parent, Collection<TreeElement> children) {
+  public Collection<Group> group(Object parent, Collection<TreeElement> children) {
     if (((AbstractTreeNode) parent).getValue() instanceof PropertyGroup) {
       return Collections.emptyList();
     }

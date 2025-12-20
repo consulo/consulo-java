@@ -57,7 +57,7 @@ public class CreateCastExpressionFromInstanceofAction extends CreateLocalVarFrom
 
   @Override
   @RequiredUIAccess
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
 
     PsiInstanceOfExpression instanceOfExpression = getInstanceOfExpressionAtCaret(editor, file);
@@ -69,7 +69,7 @@ public class CreateCastExpressionFromInstanceofAction extends CreateLocalVarFrom
   }
 
   @Nullable
-  private static PsiElement createAndInsertCast(final PsiInstanceOfExpression instanceOfExpression, Editor editor, PsiFile file) throws IncorrectOperationException {
+  private static PsiElement createAndInsertCast(PsiInstanceOfExpression instanceOfExpression, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiElementFactory factory = JavaPsiFacade.getInstance(instanceOfExpression.getProject()).getElementFactory();
     PsiExpressionStatement statement = (PsiExpressionStatement)factory.createStatementFromText("((a)b)", instanceOfExpression);
 
@@ -79,7 +79,7 @@ public class CreateCastExpressionFromInstanceofAction extends CreateLocalVarFrom
     cast.getCastType().replace(factory.createTypeElement(castType));
     cast.getOperand().replace(instanceOfExpression.getOperand());
 
-    final PsiStatement statementInside = isNegated(instanceOfExpression) ? null : getExpressionStatementInside(file, editor, instanceOfExpression.getOperand());
+    PsiStatement statementInside = isNegated(instanceOfExpression) ? null : getExpressionStatementInside(file, editor, instanceOfExpression.getOperand());
     if (statementInside != null) {
       return statementInside.replace(statement);
     }

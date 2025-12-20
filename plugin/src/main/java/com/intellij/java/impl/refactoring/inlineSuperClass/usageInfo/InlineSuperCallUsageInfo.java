@@ -52,17 +52,17 @@ public class InlineSuperCallUsageInfo extends FixableUsageInfo {
         PsiElement element = getElement();
         if (element != null && myConstrBody != null) {
             assert !element.isPhysical();
-            final PsiStatement statement = JavaPsiFacade.getElementFactory(getProject()).createStatementFromText("super();", myConstrBody);
+            PsiStatement statement = JavaPsiFacade.getElementFactory(getProject()).createStatementFromText("super();", myConstrBody);
             element = ((PsiExpressionStatement) myConstrBody.addBefore(statement, myConstrBody.getFirstBodyElement())).getExpression();
         }
         if (element instanceof PsiMethodCallExpression) {
             PsiReferenceExpression methodExpression = ((PsiMethodCallExpression) element).getMethodExpression();
-            final PsiMethod superConstructor = (PsiMethod) methodExpression.resolve();
+            PsiMethod superConstructor = (PsiMethod) methodExpression.resolve();
             if (superConstructor != null) {
                 PsiMethod methodCopy = JavaPsiFacade.getElementFactory(getProject()).createMethod("toInline", PsiType.VOID);
-                final PsiCodeBlock constructorBody = superConstructor.getBody();
+                PsiCodeBlock constructorBody = superConstructor.getBody();
                 if (constructorBody != null) {
-                    final PsiCodeBlock methodBody = methodCopy.getBody();
+                    PsiCodeBlock methodBody = methodCopy.getBody();
                     assert methodBody != null;
                     methodBody.replace(constructorBody);
 
@@ -71,10 +71,10 @@ public class InlineSuperCallUsageInfo extends FixableUsageInfo {
 
                     methodExpression = (PsiReferenceExpression) methodExpression.replace(JavaPsiFacade.getElementFactory(getProject())
                         .createExpressionFromText(methodCopy.getName(), methodExpression));
-                    final PsiClass inliningClass = superConstructor.getContainingClass();
+                    PsiClass inliningClass = superConstructor.getContainingClass();
                     assert inliningClass != null;
                     methodCopy = (PsiMethod) inliningClass.add(methodCopy);
-                    final InlineMethodProcessor inlineMethodProcessor =
+                    InlineMethodProcessor inlineMethodProcessor =
                         new InlineMethodProcessor(getProject(), methodCopy, methodExpression, null, true);
                     inlineMethodProcessor.inlineMethodCall(methodExpression);
                     methodCopy.delete();
@@ -86,7 +86,7 @@ public class InlineSuperCallUsageInfo extends FixableUsageInfo {
     @Override
     public LocalizeValue getConflictMessage() {
         MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
-        final PsiElement element = getElement();
+        PsiElement element = getElement();
         if (element instanceof PsiMethodCallExpression) {
             PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) element;
             final PsiMethod superConstructor = methodCallExpression.resolveMethod();

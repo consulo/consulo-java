@@ -58,9 +58,9 @@ public class ReassignVariableUtil {
   }
 
   static boolean reassign(final Editor editor) {
-    final SmartPsiElementPointer<PsiDeclarationStatement> pointer = editor.getUserData(DECLARATION_KEY);
+    SmartPsiElementPointer<PsiDeclarationStatement> pointer = editor.getUserData(DECLARATION_KEY);
     final PsiDeclarationStatement declaration = pointer != null ? pointer.getElement() : null;
-    final PsiType type = getVariableType(declaration);
+    PsiType type = getVariableType(declaration);
     if (type != null) {
       VariablesProcessor proc = findVariablesOfType(declaration, type);
       if (proc.size() > 0) {
@@ -70,7 +70,7 @@ public class ReassignVariableUtil {
           return true;
         }
 
-        final DefaultListModel model = new DefaultListModel();
+        DefaultListModel model = new DefaultListModel();
         for (int i = 0; i < proc.size(); i++) {
           model.addElement(proc.getResult(i));
         }
@@ -86,8 +86,8 @@ public class ReassignVariableUtil {
         });
 
 
-        final VisualPosition visualPosition = editor.getCaretModel().getVisualPosition();
-        final Point point = editor.visualPositionToXY(new VisualPosition(visualPosition.line + 1, visualPosition.column));
+        VisualPosition visualPosition = editor.getCaretModel().getVisualPosition();
+        Point point = editor.visualPositionToXY(new VisualPosition(visualPosition.line + 1, visualPosition.column));
         ((AWTPopupFactory) JBPopupFactory.getInstance()).createListPopupBuilder(list)
             .setItemChoosenCallback(new Runnable() {
               public void run() {
@@ -107,7 +107,7 @@ public class ReassignVariableUtil {
   @Nullable
   static PsiType getVariableType(@Nullable PsiDeclarationStatement declaration) {
     if (declaration != null) {
-      final PsiElement[] declaredElements = declaration.getDeclaredElements();
+      PsiElement[] declaredElements = declaration.getDeclaredElements();
       if (declaredElements.length > 0 && declaredElements[0] instanceof PsiVariable) {
         return ((PsiVariable) declaredElements[0]).getType();
       }
@@ -136,23 +136,23 @@ public class ReassignVariableUtil {
   }
 
   static void replaceWithAssignment(final PsiDeclarationStatement declaration, final PsiVariable variable, final Editor editor) {
-    final PsiVariable var = (PsiVariable) declaration.getDeclaredElements()[0];
+    PsiVariable var = (PsiVariable) declaration.getDeclaredElements()[0];
     final PsiExpression initializer = var.getInitializer();
     new WriteCommandAction(declaration.getProject()) {
       @Override
       protected void run(Result result) throws Throwable {
-        final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(variable.getProject());
-        final String chosenVariableName = variable.getName();
+        PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(variable.getProject());
+        String chosenVariableName = variable.getName();
         //would generate red code for final variables
         PsiElement newDeclaration = elementFactory.createStatementFromText(chosenVariableName + " = " + initializer.getText() + ";",
             declaration);
         newDeclaration = declaration.replace(newDeclaration);
-        final PsiFile containingFile = newDeclaration.getContainingFile();
-        final RangeMarker[] occurrenceMarkers = editor.getUserData(OCCURRENCES_KEY);
+        PsiFile containingFile = newDeclaration.getContainingFile();
+        RangeMarker[] occurrenceMarkers = editor.getUserData(OCCURRENCES_KEY);
         if (occurrenceMarkers != null) {
           for (RangeMarker marker : occurrenceMarkers) {
-            final PsiElement refVariableElement = containingFile.findElementAt(marker.getStartOffset());
-            final PsiExpression expression = PsiTreeUtil.getParentOfType(refVariableElement, PsiReferenceExpression.class);
+            PsiElement refVariableElement = containingFile.findElementAt(marker.getStartOffset());
+            PsiExpression expression = PsiTreeUtil.getParentOfType(refVariableElement, PsiReferenceExpression.class);
             if (expression != null) {
               expression.replace(elementFactory.createExpressionFromText(chosenVariableName, newDeclaration));
             }
@@ -164,8 +164,8 @@ public class ReassignVariableUtil {
   }
 
   private static void finishTemplate(Project project, Editor editor) {
-    final TemplateState templateState = TemplateManager.getInstance(project).getTemplateState(editor);
-    final InplaceRefactoring renamer = editor.getUserData(InplaceRefactoring.INPLACE_RENAMER);
+    TemplateState templateState = TemplateManager.getInstance(project).getTemplateState(editor);
+    InplaceRefactoring renamer = editor.getUserData(InplaceRefactoring.INPLACE_RENAMER);
     if (templateState != null && renamer != null) {
       templateState.gotoEnd(true);
       editor.putUserData(InplaceRefactoring.INPLACE_RENAMER, null);

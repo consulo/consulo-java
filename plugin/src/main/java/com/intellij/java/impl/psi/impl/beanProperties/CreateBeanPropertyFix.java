@@ -52,11 +52,11 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
     @Nonnull
     protected final PsiType myType;
 
-    public static LocalQuickFix[] createFixes(String propertyName, @Nonnull PsiClass psiClass, @Nullable PsiType type, final boolean createSetter) {
+    public static LocalQuickFix[] createFixes(String propertyName, @Nonnull PsiClass psiClass, @Nullable PsiType type, boolean createSetter) {
         return (LocalQuickFix[]) create(propertyName, psiClass, type, createSetter);
     }
 
-    public static IntentionAction[] createActions(String propertyName, @Nonnull PsiClass psiClass, @Nullable PsiType type, final boolean createSetter) {
+    public static IntentionAction[] createActions(String propertyName, @Nonnull PsiClass psiClass, @Nullable PsiType type, boolean createSetter) {
         return (IntentionAction[]) create(propertyName, psiClass, type, createSetter);
     }
 
@@ -65,9 +65,9 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
             return NO_FIXES;
         }
         if (type == null) {
-            final Project project = psiClass.getProject();
-            final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-            final PsiClass aClass = facade.findClass(CommonClassNames.JAVA_LANG_STRING, GlobalSearchScope.allScope(project));
+            Project project = psiClass.getProject();
+            JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
+            PsiClass aClass = facade.findClass(CommonClassNames.JAVA_LANG_STRING, GlobalSearchScope.allScope(project));
             if (aClass == null) {
                 return NO_FIXES;
             }
@@ -126,7 +126,7 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
     }
 
     @Override
-    public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
         applyFix(project);
     }
 
@@ -151,12 +151,12 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
     }
 
     @Override
-    public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
+    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
         return true;
     }
 
     @Override
-    public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         applyFix(project);
     }
 
@@ -168,16 +168,16 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
     protected abstract void doFix() throws IncorrectOperationException;
 
     private String getFieldName() {
-        final JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(myPsiClass.getProject());
+        JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(myPsiClass.getProject());
         return styleManager.suggestVariableName(VariableKind.FIELD, myPropertyName, null, myType).names[0];
     }
 
-    protected PsiElement createSetter(final boolean createField) throws IncorrectOperationException {
-        final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(myPsiClass.getProject()).getElementFactory();
-        final String methodName = PropertyUtil.suggestSetterName(myPropertyName);
-        final String typeName = myType.getCanonicalText();
+    protected PsiElement createSetter(boolean createField) throws IncorrectOperationException {
+        PsiElementFactory elementFactory = JavaPsiFacade.getInstance(myPsiClass.getProject()).getElementFactory();
+        String methodName = PropertyUtil.suggestSetterName(myPropertyName);
+        String typeName = myType.getCanonicalText();
 
-        @NonNls final String text;
+        @NonNls String text;
         boolean isInterface = myPsiClass.isInterface();
         if (isInterface) {
             text = "public void " + methodName + "(" + typeName + " " + myPropertyName + ");";
@@ -192,22 +192,22 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
         else {
             text = "public void " + methodName + "(" + typeName + " " + myPropertyName + ") {}";
         }
-        final PsiMethod method = elementFactory.createMethodFromText(text, null);
-        final PsiMethod psiElement = (PsiMethod) myPsiClass.add(method);
+        PsiMethod method = elementFactory.createMethodFromText(text, null);
+        PsiMethod psiElement = (PsiMethod) myPsiClass.add(method);
         if (!isInterface && !createField) {
             CreateFromUsageUtils.setupMethodBody(psiElement, myPsiClass);
         }
         return psiElement;
     }
 
-    protected PsiElement createGetter(final boolean createField) throws IncorrectOperationException {
-        final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(myPsiClass.getProject()).getElementFactory();
-        final String methodName = PropertyUtil.suggestGetterName(myPropertyName, myType);
-        final String typeName = myType.getCanonicalText();
-        @NonNls final String text;
+    protected PsiElement createGetter(boolean createField) throws IncorrectOperationException {
+        PsiElementFactory elementFactory = JavaPsiFacade.getInstance(myPsiClass.getProject()).getElementFactory();
+        String methodName = PropertyUtil.suggestGetterName(myPropertyName, myType);
+        String typeName = myType.getCanonicalText();
+        @NonNls String text;
         boolean isInterface = myPsiClass.isInterface();
         if (createField) {
-            final String fieldName = getFieldName();
+            String fieldName = getFieldName();
             text = "public " + typeName + " " + methodName + "() { return " + fieldName + "; }";
         }
         else {
@@ -218,8 +218,8 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
                 text = "public " + typeName + " " + methodName + "() { return null; }";
             }
         }
-        final PsiMethod method = elementFactory.createMethodFromText(text, null);
-        final PsiMethod psiElement = (PsiMethod) myPsiClass.add(method);
+        PsiMethod method = elementFactory.createMethodFromText(text, null);
+        PsiMethod psiElement = (PsiMethod) myPsiClass.add(method);
         if (!createField && !isInterface) {
             CreateFromUsageUtils.setupMethodBody(psiElement);
         }
@@ -227,9 +227,9 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
     }
 
     protected PsiElement createField() throws IncorrectOperationException {
-        final String fieldName = getFieldName();
-        final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(myPsiClass.getProject()).getElementFactory();
-        final PsiField psiField = elementFactory.createField(fieldName, myType);
+        String fieldName = getFieldName();
+        PsiElementFactory elementFactory = JavaPsiFacade.getInstance(myPsiClass.getProject()).getElementFactory();
+        PsiField psiField = elementFactory.createField(fieldName, myType);
         return myPsiClass.add(psiField);
     }
 

@@ -110,8 +110,8 @@ public class CreateConstructorParameterFromFieldFix implements SyntheticIntentio
     Arrays.sort(constructors, new Comparator<PsiMethod>() {
       @Override
       public int compare(PsiMethod c1, PsiMethod c2) {
-        final PsiMethod cc1 = RefactoringUtil.getChainedConstructor(c1);
-        final PsiMethod cc2 = RefactoringUtil.getChainedConstructor(c2);
+        PsiMethod cc1 = RefactoringUtil.getChainedConstructor(c1);
+        PsiMethod cc2 = RefactoringUtil.getChainedConstructor(c2);
         if (cc1 == c2) {
           return 1;
         }
@@ -125,18 +125,18 @@ public class CreateConstructorParameterFromFieldFix implements SyntheticIntentio
         }
       }
     });
-    final ArrayList<PsiMethod> constrs = filterConstructorsIfFieldAlreadyAssigned(constructors, getField());
+    ArrayList<PsiMethod> constrs = filterConstructorsIfFieldAlreadyAssigned(constructors, getField());
     if (constrs.size() > 1) {
-      final PsiMethodMember[] members = new PsiMethodMember[constrs.size()];
+      PsiMethodMember[] members = new PsiMethodMember[constrs.size()];
       int i = 0;
       for (PsiMethod constructor : constrs) {
         members[i++] = new PsiMethodMember(constructor);
       }
-      final List<PsiMethodMember> elements;
+      List<PsiMethodMember> elements;
       if (ApplicationManager.getApplication().isUnitTestMode()) {
         elements = Arrays.asList(members);
       } else {
-        final MemberChooser<PsiMethodMember> chooser = new MemberChooser<PsiMethodMember>(members, false, true, project);
+        MemberChooser<PsiMethodMember> chooser = new MemberChooser<PsiMethodMember>(members, false, true, project);
         chooser.setTitle("Choose constructors to add parameter to");
         chooser.show();
         elements = chooser.getSelectedElements();
@@ -152,13 +152,13 @@ public class CreateConstructorParameterFromFieldFix implements SyntheticIntentio
       }
 
     } else if (!constrs.isEmpty()) {
-      final Collection<SmartPsiElementPointer<PsiField>> fieldsToFix = getFieldsToFix();
+      Collection<SmartPsiElementPointer<PsiField>> fieldsToFix = getFieldsToFix();
       try {
-        final PsiMethod constructor = constrs.get(0);
-        final LinkedHashSet<PsiField> fields = new LinkedHashSet<PsiField>();
+        PsiMethod constructor = constrs.get(0);
+        LinkedHashSet<PsiField> fields = new LinkedHashSet<PsiField>();
         getFieldsToFix().add(myField);
         for (SmartPsiElementPointer<PsiField> elementPointer : fieldsToFix) {
-          final PsiField field = elementPointer.getElement();
+          PsiField field = elementPointer.getElement();
           if (field != null && isAvailable(field) && filterConstructorsIfFieldAlreadyAssigned(new PsiMethod[]{constructor}, field).contains(constructor)) {
             fields.add(field);
           }
@@ -175,7 +175,7 @@ public class CreateConstructorParameterFromFieldFix implements SyntheticIntentio
           if (chooser.getExitCode() != DialogWrapper.OK_EXIT_CODE) {
             return;
           }
-          final List<PsiElementClassMember> selectedElements = chooser.getSelectedElements();
+          List<PsiElementClassMember> selectedElements = chooser.getSelectedElements();
           if (selectedElements == null) {
             return;
           }
@@ -229,9 +229,9 @@ public class CreateConstructorParameterFromFieldFix implements SyntheticIntentio
   }
 
   private static ArrayList<PsiMethod> filterConstructorsIfFieldAlreadyAssigned(PsiMethod[] constructors, PsiField field) {
-    final ArrayList<PsiMethod> result = new ArrayList<PsiMethod>(Arrays.asList(constructors));
+    ArrayList<PsiMethod> result = new ArrayList<PsiMethod>(Arrays.asList(constructors));
     for (PsiReference reference : ReferencesSearch.search(field, new LocalSearchScope(constructors))) {
-      final PsiElement element = reference.getElement();
+      PsiElement element = reference.getElement();
       if (element instanceof PsiReferenceExpression && PsiUtil.isOnAssignmentLeftHand((PsiExpression) element)) {
         result.remove(PsiTreeUtil.getParentOfType(element, PsiMethod.class));
       }
@@ -239,42 +239,42 @@ public class CreateConstructorParameterFromFieldFix implements SyntheticIntentio
     return result;
   }
 
-  private static boolean addParameterToConstructor(final Project project,
-                                                   final PsiFile file,
-                                                   final Editor editor,
-                                                   final PsiMethod constructor,
-                                                   final PsiField[] fields) throws IncorrectOperationException {
-    final PsiParameterList parameterList = constructor.getParameterList();
-    final PsiParameter[] parameters = parameterList.getParameters();
+  private static boolean addParameterToConstructor(Project project,
+                                                   PsiFile file,
+                                                   Editor editor,
+                                                   PsiMethod constructor,
+                                                   PsiField[] fields) throws IncorrectOperationException {
+    PsiParameterList parameterList = constructor.getParameterList();
+    PsiParameter[] parameters = parameterList.getParameters();
     ParameterInfoImpl[] newParamInfos = new ParameterInfoImpl[parameters.length + fields.length];
-    final List<PsiVariable> params = new ArrayList<PsiVariable>(Arrays.asList(parameters));
+    List<PsiVariable> params = new ArrayList<PsiVariable>(Arrays.asList(parameters));
     Collections.addAll(params, fields);
     Collections.sort(params, new FieldParameterComparator(parameterList));
 
     int i = 0;
-    final HashMap<PsiField, String> usedFields = new HashMap<PsiField, String>();
+    HashMap<PsiField, String> usedFields = new HashMap<PsiField, String>();
     for (PsiVariable param : params) {
-      final PsiType paramType = param.getType();
+      PsiType paramType = param.getType();
       if (param instanceof PsiParameter) {
         newParamInfos[i++] = new ParameterInfoImpl(parameterList.getParameterIndex((PsiParameter) param), param.getName(), paramType, param.getName());
       } else {
-        final String uniqueParameterName = getUniqueParameterName(parameters, param, usedFields);
+        String uniqueParameterName = getUniqueParameterName(parameters, param, usedFields);
         usedFields.put((PsiField) param, uniqueParameterName);
         newParamInfos[i++] = new ParameterInfoImpl(-1, uniqueParameterName, paramType, uniqueParameterName);
       }
     }
-    final SmartPointerManager manager = SmartPointerManager.getInstance(project);
-    final SmartPsiElementPointer constructorPointer = manager.createSmartPsiElementPointer(constructor);
+    SmartPointerManager manager = SmartPointerManager.getInstance(project);
+    SmartPsiElementPointer constructorPointer = manager.createSmartPsiElementPointer(constructor);
 
-    final PsiMethod fromText = JavaPsiFacade.getElementFactory(project).createMethodFromText(createDummyMethod(constructor, newParamInfos),
+    PsiMethod fromText = JavaPsiFacade.getElementFactory(project).createMethodFromText(createDummyMethod(constructor, newParamInfos),
         constructor);
-    final PsiClass containingClass = constructor.getContainingClass();
+    PsiClass containingClass = constructor.getContainingClass();
     if (containingClass == null) {
       return false;
     }
-    final int minUsagesNumber = containingClass.findMethodsBySignature(fromText, false).length > 0 ? 0 : 1;
-    final List<ParameterInfoImpl> parameterInfos = ChangeMethodSignatureFromUsageFix.performChange(project, editor, file, constructor, minUsagesNumber, newParamInfos, true, true, p -> {
-      final ParameterInfoImpl[] resultParams = p.toArray(new ParameterInfoImpl[0]);
+    int minUsagesNumber = containingClass.findMethodsBySignature(fromText, false).length > 0 ? 0 : 1;
+    List<ParameterInfoImpl> parameterInfos = ChangeMethodSignatureFromUsageFix.performChange(project, editor, file, constructor, minUsagesNumber, newParamInfos, true, true, p -> {
+      ParameterInfoImpl[] resultParams = p.toArray(new ParameterInfoImpl[0]);
 
       doCreate(project, editor, parameters, constructorPointer, resultParams, usedFields);
     });
@@ -287,8 +287,8 @@ public class CreateConstructorParameterFromFieldFix implements SyntheticIntentio
   }
 
   private static String getUniqueParameterName(PsiParameter[] parameters, PsiVariable variable, HashMap<PsiField, String> usedNames) {
-    final JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(variable.getProject());
-    final SuggestedNameInfo nameInfo = styleManager
+    JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(variable.getProject());
+    SuggestedNameInfo nameInfo = styleManager
         .suggestVariableName(VariableKind.PARAMETER,
             styleManager.variableNameToPropertyName(variable.getName(), VariableKind.FIELD),
             null, variable.getType());
@@ -327,7 +327,7 @@ public class CreateConstructorParameterFromFieldFix implements SyntheticIntentio
     // do not introduce assignment in chanined constructor
     if (JavaHighlightUtil.getChainedConstructors(constructor).isEmpty()) {
       for (PsiField field : fields.keySet()) {
-        final String defaultParamName = fields.get(field);
+        String defaultParamName = fields.get(field);
         PsiParameter parameter = findParamByName(defaultParamName, field.getType(), newParameters, parameterInfos);
         if (parameter == null) {
           continue;
@@ -352,8 +352,8 @@ public class CreateConstructorParameterFromFieldFix implements SyntheticIntentio
     }
     for (int i = 0; i < newParameters.length; i++) {
       if (parameterInfos[i].getOldIndex() == -1) {
-        final PsiParameter parameter = newParameters[i];
-        final PsiType paramType = parameterInfos[i].getTypeWrapper().getType(parameter, parameter.getManager());
+        PsiParameter parameter = newParameters[i];
+        PsiType paramType = parameterInfos[i].getTypeWrapper().getType(parameter, parameter.getManager());
         if (type.isAssignableFrom(paramType)) {
           return parameter;
         }
@@ -396,14 +396,14 @@ public class CreateConstructorParameterFromFieldFix implements SyntheticIntentio
       }
 
       if (o1 instanceof PsiField && o2 instanceof PsiParameter) {
-        final PsiField field = FieldFromParameterUtils.getParameterAssignedToField((PsiParameter) o2);
+        PsiField field = FieldFromParameterUtils.getParameterAssignedToField((PsiParameter) o2);
         if (field == null) {
           return 1;
         }
         return o1.getTextOffset() - field.getTextOffset();
       }
       if (o1 instanceof PsiParameter && o2 instanceof PsiField) {
-        final PsiField field = FieldFromParameterUtils.getParameterAssignedToField((PsiParameter) o1);
+        PsiField field = FieldFromParameterUtils.getParameterAssignedToField((PsiParameter) o1);
         if (field == null) {
           return -1;
         }

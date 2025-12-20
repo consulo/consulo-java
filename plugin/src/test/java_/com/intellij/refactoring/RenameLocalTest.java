@@ -67,12 +67,12 @@ public abstract class RenameLocalTest extends LightRefactoringTestCase {
     PsiElement element = TargetElementUtil
       .findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED,TargetElementUtilEx.REFERENCED_ELEMENT_ACCEPTED));
     assertNotNull(element);
-    final HashSet<String> result = new HashSet<String>();
+    HashSet<String> result = new HashSet<String>();
     new JavaNameSuggestionProvider().getSuggestedNames(element, getFile(), result);
     assertTrue(result.toString(), result.contains("window"));
   }
 
-  private void doTest(final String newName) throws Exception {
+  private void doTest(String newName) throws Exception {
     configureByFile(BASE_PATH + getTestName(false) + ".java");
     PsiElement element = TargetElementUtil
       .findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED , TargetElementUtilEx.REFERENCED_ELEMENT_ACCEPTED));
@@ -125,10 +125,10 @@ public abstract class RenameLocalTest extends LightRefactoringTestCase {
     doTestInplaceRename("s");
   }
 
-  private void doTestInplaceRename(final String newName) throws Exception {
+  private void doTestInplaceRename(String newName) throws Exception {
     configureByFile(BASE_PATH + "/" + getTestName(false) + ".java");
 
-    final PsiElement element = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED, TargetElementUtilEx.REFERENCED_ELEMENT_ACCEPTED));
+    PsiElement element = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED, TargetElementUtilEx.REFERENCED_ELEMENT_ACCEPTED));
     assertNotNull(element);
     assertTrue("In-place rename not allowed for " + element,
                JavaRefactoringSupportProvider.mayRenameInplace(element, null));
@@ -143,14 +143,14 @@ public abstract class RenameLocalTest extends LightRefactoringTestCase {
   }
 
   private void doRenameWrongRef(final String newName) throws Exception {
-    final String name = getTestName(false);
+    String name = getTestName(false);
     configureByFile(BASE_PATH + name + ".java");
 
     TemplateManagerImpl.setTemplateTesting(getProject(), getTestRootDisposable());
 
     new RenameWrongRefHandler().invoke(getProject(), getEditor(), getFile(), null);
 
-    final TemplateState state = TemplateManagerImpl.getTemplateState(getEditor());
+    TemplateState state = TemplateManagerImpl.getTemplateState(getEditor());
     assert state != null;
     final TextRange range = state.getCurrentVariableRange();
     assert range != null;

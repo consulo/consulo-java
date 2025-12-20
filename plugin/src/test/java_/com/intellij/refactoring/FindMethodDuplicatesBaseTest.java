@@ -31,12 +31,12 @@ public abstract class FindMethodDuplicatesBaseTest extends LightCodeInsightTestC
     doTest(true);
   }
 
-  protected void doTest(final boolean shouldSucceed) throws Exception {
-    final String filePath = getTestFilePath();
+  protected void doTest(boolean shouldSucceed) throws Exception {
+    String filePath = getTestFilePath();
     configureByFile(filePath);
-    final PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
+    PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue("<caret> is not on method name", targetElement instanceof PsiMember);
-    final PsiMember psiMethod = (PsiMember)targetElement;
+    PsiMember psiMethod = (PsiMember)targetElement;
 
     try {
       MethodDuplicatesHandler.invokeOnScope(getProject(), psiMethod, new AnalysisScope(getFile()));

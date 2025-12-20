@@ -63,30 +63,30 @@ public abstract class TooBroadThrowsInspection extends BaseInspection {
     @Override
     @Nonnull
     protected String buildErrorString(Object... infos) {
-        final List<SmartTypePointer> typesMasked = (List<SmartTypePointer>) infos[0];
-        final PsiType type = typesMasked.get(0).getType();
+        List<SmartTypePointer> typesMasked = (List<SmartTypePointer>) infos[0];
+        PsiType type = typesMasked.get(0).getType();
         String typesMaskedString = type != null ? type.getPresentableText() : "";
         if (typesMasked.size() == 1) {
             return InspectionGadgetsLocalize.overlyBroadThrowsClauseProblemDescriptor1(typesMaskedString).get();
         }
         else {
-            final int lastTypeIndex = typesMasked.size() - 1;
+            int lastTypeIndex = typesMasked.size() - 1;
             for (int i = 1; i < lastTypeIndex; i++) {
-                final PsiType psiType = typesMasked.get(i).getType();
+                PsiType psiType = typesMasked.get(i).getType();
                 if (psiType != null) {
                     typesMaskedString += ", ";
                     typesMaskedString += psiType.getPresentableText();
                 }
             }
-            final PsiType psiType = typesMasked.get(lastTypeIndex).getType();
-            final String lastTypeString = psiType != null ? psiType.getPresentableText() : "";
+            PsiType psiType = typesMasked.get(lastTypeIndex).getType();
+            String lastTypeString = psiType != null ? psiType.getPresentableText() : "";
             return InspectionGadgetsLocalize.overlyBroadThrowsClauseProblemDescriptor2(typesMaskedString, lastTypeString).get();
         }
     }
 
     @Override
     public JComponent createOptionsPanel() {
-        final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+        MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
         panel.addCheckbox(InspectionGadgetsLocalize.tooBroadCatchOption().get(), "onlyWarnOnRootExceptions");
         panel.addCheckbox(InspectionGadgetsLocalize.ignoreExceptionsDeclaredInTestsOption().get(), "ignoreInTestCode");
         panel.addCheckbox(InspectionGadgetsLocalize.ignoreExceptionsDeclaredOnLibraryOverrideOption().get(), "ignoreLibraryOverrides");
@@ -97,8 +97,8 @@ public abstract class TooBroadThrowsInspection extends BaseInspection {
     @Nonnull
     @Override
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final Collection<SmartTypePointer> maskedExceptions = (Collection<SmartTypePointer>) infos[0];
-        final Boolean originalNeeded = (Boolean) infos[1];
+        Collection<SmartTypePointer> maskedExceptions = (Collection<SmartTypePointer>) infos[0];
+        Boolean originalNeeded = (Boolean) infos[1];
         return new AddThrowsClauseFix(maskedExceptions, originalNeeded.booleanValue());
     }
 
@@ -122,20 +122,20 @@ public abstract class TooBroadThrowsInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = element.getParent();
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement parent = element.getParent();
             if (!(parent instanceof PsiReferenceList)) {
                 return;
             }
-            final PsiReferenceList referenceList = (PsiReferenceList) parent;
-            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+            PsiReferenceList referenceList = (PsiReferenceList) parent;
+            PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
             if (!originalNeeded) {
                 element.delete();
             }
             for (SmartTypePointer type : types) {
-                final PsiType psiType = type.getType();
+                PsiType psiType = type.getType();
                 if (psiType instanceof PsiClassType) {
-                    final PsiJavaCodeReferenceElement referenceElement = factory.createReferenceElementByType((PsiClassType) psiType);
+                    PsiJavaCodeReferenceElement referenceElement = factory.createReferenceElementByType((PsiClassType) psiType);
                     referenceList.add(referenceElement);
                 }
             }
@@ -152,15 +152,15 @@ public abstract class TooBroadThrowsInspection extends BaseInspection {
         @Override
         public void visitMethod(PsiMethod method) {
             super.visitMethod(method);
-            final PsiReferenceList throwsList = method.getThrowsList();
+            PsiReferenceList throwsList = method.getThrowsList();
             if (!throwsList.isPhysical()) {
                 return;
             }
-            final PsiJavaCodeReferenceElement[] throwsReferences = throwsList.getReferenceElements();
+            PsiJavaCodeReferenceElement[] throwsReferences = throwsList.getReferenceElements();
             if (throwsReferences.length == 0) {
                 return;
             }
-            final PsiCodeBlock body = method.getBody();
+            PsiCodeBlock body = method.getBody();
             if (body == null) {
                 return;
             }
@@ -170,29 +170,29 @@ public abstract class TooBroadThrowsInspection extends BaseInspection {
             if (ignoreLibraryOverrides && LibraryUtil.isOverrideOfLibraryMethod(method)) {
                 return;
             }
-            final Set<PsiClassType> exceptionsThrown = ExceptionUtils.calculateExceptionsThrown(body);
-            final PsiClassType[] referencedExceptions = throwsList.getReferencedTypes();
-            final Set<PsiClassType> exceptionsDeclared = new HashSet(referencedExceptions.length);
+            Set<PsiClassType> exceptionsThrown = ExceptionUtils.calculateExceptionsThrown(body);
+            PsiClassType[] referencedExceptions = throwsList.getReferencedTypes();
+            Set<PsiClassType> exceptionsDeclared = new HashSet(referencedExceptions.length);
             ContainerUtil.addAll(exceptionsDeclared, referencedExceptions);
-            final int referencedExceptionsLength = referencedExceptions.length;
+            int referencedExceptionsLength = referencedExceptions.length;
             for (int i = 0; i < referencedExceptionsLength; i++) {
-                final PsiClassType referencedException = referencedExceptions[i];
+                PsiClassType referencedException = referencedExceptions[i];
                 if (onlyWarnOnRootExceptions) {
                     if (!ExceptionUtils.isGenericExceptionClass(
                         referencedException)) {
                         continue;
                     }
                 }
-                final List<SmartTypePointer> exceptionsMasked = new ArrayList();
-                final SmartTypePointerManager pointerManager = SmartTypePointerManager.getInstance(body.getProject());
+                List<SmartTypePointer> exceptionsMasked = new ArrayList();
+                SmartTypePointerManager pointerManager = SmartTypePointerManager.getInstance(body.getProject());
                 for (PsiClassType exceptionThrown : exceptionsThrown) {
                     if (referencedException.isAssignableFrom(exceptionThrown) && !exceptionsDeclared.contains(exceptionThrown)) {
                         exceptionsMasked.add(pointerManager.createSmartTypePointer(exceptionThrown));
                     }
                 }
                 if (!exceptionsMasked.isEmpty()) {
-                    final PsiJavaCodeReferenceElement throwsReference = throwsReferences[i];
-                    final boolean originalNeeded = exceptionsThrown.contains(referencedException);
+                    PsiJavaCodeReferenceElement throwsReference = throwsReferences[i];
+                    boolean originalNeeded = exceptionsThrown.contains(referencedException);
                     if (ignoreThrown && originalNeeded) {
                         continue;
                     }

@@ -70,7 +70,7 @@ public class JavaPostfixTemplateProvider extends PostfixTemplateProvider {
 
     @Override
     @RequiredUIAccess
-    public void preExpand(@Nonnull final PsiFile file, @Nonnull final Editor editor) {
+    public void preExpand(@Nonnull PsiFile file, @Nonnull Editor editor) {
         UIAccess.assertIsUIThread();
 
         file.putUserData(ADDED_SEMICOLON, null);
@@ -90,10 +90,10 @@ public class JavaPostfixTemplateProvider extends PostfixTemplateProvider {
     }
 
     @Override
-    public void afterExpand(@Nonnull final PsiFile file, @Nonnull final Editor editor) {
-        final SmartPsiElementPointer<PsiElement> pointer = file.getUserData(ADDED_SEMICOLON);
+    public void afterExpand(@Nonnull PsiFile file, @Nonnull Editor editor) {
+        SmartPsiElementPointer<PsiElement> pointer = file.getUserData(ADDED_SEMICOLON);
         if (pointer != null) {
-            final PsiElement addedSemicolon = pointer.getElement();
+            PsiElement addedSemicolon = pointer.getElement();
             file.putUserData(ADDED_SEMICOLON, null);
             if (addedSemicolon != null && addedSemicolon.isValid()) {
                 CommandProcessor.getInstance().runUndoTransparentAction(() ->
@@ -104,7 +104,7 @@ public class JavaPostfixTemplateProvider extends PostfixTemplateProvider {
 
     @Nonnull
     @Override
-    public PsiFile preCheck(final @Nonnull PsiFile copyFile, final @Nonnull Editor realEditor, final int currentOffset) {
+    public PsiFile preCheck(@Nonnull PsiFile copyFile, @Nonnull Editor realEditor, int currentOffset) {
         return myApplication.runReadAction((Supplier<PsiFile>) () -> {
             Document document = copyFile.getViewProvider().getDocument();
             assert document != null;

@@ -18,7 +18,7 @@ public class MockIntroduceFieldHandler extends IntroduceFieldHandler {
   private final InitializationPlace myInitializationPlace;
   private final boolean myDeclareStatic;
 
-  public MockIntroduceFieldHandler(final InitializationPlace initializationPlace, final boolean declareStatic) {
+  public MockIntroduceFieldHandler(InitializationPlace initializationPlace, boolean declareStatic) {
     myInitializationPlace = initializationPlace;
     myDeclareStatic = declareStatic;
   }

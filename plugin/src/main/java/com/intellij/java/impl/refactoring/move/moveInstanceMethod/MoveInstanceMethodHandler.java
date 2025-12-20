@@ -90,13 +90,13 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 	}
 
 	@RequiredUIAccess
-	public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, final DataContext dataContext)
+	public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext)
 	{
 		if (elements.length != 1 || !(elements[0] instanceof PsiMethod))
 		{
 			return;
 		}
-		final PsiMethod method = (PsiMethod) elements[0];
+		PsiMethod method = (PsiMethod) elements[0];
 		String message = null;
 		if (!method.getManager().isInProject(method))
 		{
@@ -112,7 +112,7 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 		}
 		else
 		{
-			final PsiClass containingClass = method.getContainingClass();
+			PsiClass containingClass = method.getContainingClass();
 			if (containingClass != null && PsiUtil.typeParametersIterator(containingClass).hasNext()
 				&& TypeParametersSearcher.hasTypeParameters(method))
 			{
@@ -125,7 +125,7 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 			}
 			else
 			{
-				final Set<PsiClass> classes = MoveInstanceMembersUtil.getThisClassesToMembers(method).keySet();
+				Set<PsiClass> classes = MoveInstanceMembersUtil.getThisClassesToMembers(method).keySet();
 				for (PsiClass aClass : classes)
 				{
 		 /* if (aClass instanceof JspClass) {
@@ -143,18 +143,18 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 			return;
 		}
 
-		final List<PsiVariable> suitableVariables = new ArrayList<>();
+		List<PsiVariable> suitableVariables = new ArrayList<>();
 		message = collectSuitableVariables(method, suitableVariables);
 		if (message != null)
 		{
-			final String unableToMakeStaticMessage = MakeStaticHandler.validateTarget(method);
+			String unableToMakeStaticMessage = MakeStaticHandler.validateTarget(method);
 			if (unableToMakeStaticMessage != null)
 			{
 				showErrorHint(project, dataContext, message);
 			}
 			else
 			{
-				final String suggestToMakeStaticMessage = "Would you like to make method \'" + method.getName() + "\' static and then move?";
+				String suggestToMakeStaticMessage = "Would you like to make method \'" + method.getName() + "\' static and then move?";
 				if (Messages.showYesNoCancelDialog(
 					project,
 					message + ". " + suggestToMakeStaticMessage,
@@ -184,9 +184,9 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 	}
 
 	@Nullable
-	private static String collectSuitableVariables(final PsiMethod method, final List<PsiVariable> suitableVariables)
+	private static String collectSuitableVariables(PsiMethod method, List<PsiVariable> suitableVariables)
 	{
-		final List<PsiVariable> allVariables = new ArrayList<>();
+		List<PsiVariable> allVariables = new ArrayList<>();
 		ContainerUtil.addAll(allVariables, method.getParameterList().getParameters());
 		ContainerUtil.addAll(allVariables, method.getContainingClass().getFields());
 		boolean classTypesFound = false;
@@ -194,15 +194,15 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 		boolean classesInProjectFound = false;
 		for (PsiVariable variable : allVariables)
 		{
-			final PsiType type = variable.getType();
+			PsiType type = variable.getType();
 			if (type instanceof PsiClassType classType && !classType.hasParameters())
 			{
 				classTypesFound = true;
-				final PsiClass psiClass = classType.resolve();
+				PsiClass psiClass = classType.resolve();
 				if (psiClass != null && !(psiClass instanceof PsiTypeParameter))
 				{
 					resolvableClassesFound = true;
-					final boolean inProject = method.getManager().isInProject(psiClass);
+					boolean inProject = method.getManager().isInProject(psiClass);
 					if (inProject)
 					{
 						classesInProjectFound = true;
@@ -230,23 +230,23 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 		return null;
 	}
 
-	public static String suggestParameterNameForThisClass(final PsiClass thisClass)
+	public static String suggestParameterNameForThisClass(PsiClass thisClass)
 	{
 		PsiManager manager = thisClass.getManager();
 		PsiType type = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory().createType(thisClass);
-		final SuggestedNameInfo suggestedNameInfo =
+		SuggestedNameInfo suggestedNameInfo =
 			JavaCodeStyleManager.getInstance(manager.getProject()).suggestVariableName(VariableKind.PARAMETER, null, null, type);
 		return suggestedNameInfo.names.length > 0 ? suggestedNameInfo.names[0] : "";
 	}
 
-	public static Map<PsiClass, String> suggestParameterNames(final PsiMethod method, final PsiVariable targetVariable)
+	public static Map<PsiClass, String> suggestParameterNames(PsiMethod method, PsiVariable targetVariable)
 	{
-		final Map<PsiClass, Set<PsiMember>> classesToMembers = MoveInstanceMembersUtil.getThisClassesToMembers(method);
+		Map<PsiClass, Set<PsiMember>> classesToMembers = MoveInstanceMembersUtil.getThisClassesToMembers(method);
 		Map<PsiClass, String> result = new LinkedHashMap<>();
 		for (Map.Entry<PsiClass, Set<PsiMember>> entry : classesToMembers.entrySet())
 		{
 			PsiClass aClass = entry.getKey();
-			final Set<PsiMember> members = entry.getValue();
+			Set<PsiMember> members = entry.getValue();
 			if (members.size() == 1 && members.contains(targetVariable))
 			{
 				continue;
@@ -277,14 +277,14 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 		@Override
 		public Boolean visitClassType(PsiClassType classType)
 		{
-			final PsiClass psiClass = PsiUtil.resolveClassInType(classType);
+			PsiClass psiClass = PsiUtil.resolveClassInType(classType);
 			return psiClass instanceof PsiTypeParameter ? Boolean.TRUE : super.visitClassType(classType);
 		}
 
 		@Override
 		public Boolean visitWildcardType(PsiWildcardType wildcardType)
 		{
-			final PsiType bound = wildcardType.getBound();
+			PsiType bound = wildcardType.getBound();
 			return PsiUtil.resolveClassInType(bound) instanceof PsiTypeParameter ? Boolean.TRUE : super.visitWildcardType(wildcardType);
 		}
 

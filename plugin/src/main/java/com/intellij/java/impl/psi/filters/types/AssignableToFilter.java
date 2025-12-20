@@ -59,7 +59,7 @@ public class AssignableToFilter implements ElementFilter
 		PsiSubstitutor substitutor = null;
 		if(element instanceof CandidateInfo)
 		{
-			final CandidateInfo info = (CandidateInfo) element;
+			CandidateInfo info = (CandidateInfo) element;
 			substitutor = info.getSubstitutor();
 			element = info.getElement();
 		}

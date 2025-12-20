@@ -55,13 +55,13 @@ public class RecursiveCallLineMarkerProvider extends LineMarkerProviderDescripto
   @RequiredReadAction
   @Override
   public void collectSlowLineMarkers(@Nonnull List<PsiElement> elements, @Nonnull Collection<LineMarkerInfo> result) {
-    final Set<PsiStatement> statements = new HashSet<>();
+    Set<PsiStatement> statements = new HashSet<>();
 
     for (PsiElement element : elements) {
       ProgressManager.checkCanceled();
       if (element instanceof PsiMethodCallExpression) {
-        final PsiMethodCallExpression methodCall = (PsiMethodCallExpression) element;
-        final PsiStatement statement = PsiTreeUtil.getParentOfType(methodCall, PsiStatement.class, true, PsiMethod.class);
+        PsiMethodCallExpression methodCall = (PsiMethodCallExpression) element;
+        PsiStatement statement = PsiTreeUtil.getParentOfType(methodCall, PsiStatement.class, true, PsiMethod.class);
         if (!statements.contains(statement) && isRecursiveMethodCall(methodCall)) {
           statements.add(statement);
           result.add(new RecursiveMethodCallMarkerInfo(methodCall));
@@ -71,12 +71,12 @@ public class RecursiveCallLineMarkerProvider extends LineMarkerProviderDescripto
   }
 
   public static boolean isRecursiveMethodCall(@Nonnull PsiMethodCallExpression methodCall) {
-    final PsiExpression qualifier = methodCall.getMethodExpression().getQualifierExpression();
+    PsiExpression qualifier = methodCall.getMethodExpression().getQualifierExpression();
     if (qualifier != null && !(qualifier instanceof PsiThisExpression)) {
       return false;
     }
 
-    final PsiMethod method = PsiTreeUtil.getParentOfType(methodCall, PsiMethod.class, true, PsiLambdaExpression.class, PsiClass.class);
+    PsiMethod method = PsiTreeUtil.getParentOfType(methodCall, PsiMethod.class, true, PsiLambdaExpression.class, PsiClass.class);
     if (method == null || !method.getName().equals(methodCall.getMethodExpression().getReferenceName())) {
       return false;
     }

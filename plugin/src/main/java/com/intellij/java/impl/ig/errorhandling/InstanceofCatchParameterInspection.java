@@ -49,16 +49,16 @@ public class InstanceofCatchParameterInspection extends BaseInspection {
             if (!ControlFlowUtils.isInCatchBlock(exp)) {
                 return;
             }
-            final PsiExpression operand = exp.getOperand();
+            PsiExpression operand = exp.getOperand();
             if (!(operand instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiReferenceExpression ref = (PsiReferenceExpression) operand;
-            final PsiElement referent = ref.resolve();
+            PsiReferenceExpression ref = (PsiReferenceExpression) operand;
+            PsiElement referent = ref.resolve();
             if (!(referent instanceof PsiParameter)) {
                 return;
             }
-            final PsiParameter parameter = (PsiParameter) referent;
+            PsiParameter parameter = (PsiParameter) referent;
             if (!(parameter.getDeclarationScope() instanceof PsiCatchSection)) {
                 return;
             }

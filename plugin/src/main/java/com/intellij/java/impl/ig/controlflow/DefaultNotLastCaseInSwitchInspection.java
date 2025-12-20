@@ -51,16 +51,16 @@ public class DefaultNotLastCaseInSwitchInspection extends BaseInspection {
             @Nonnull PsiSwitchStatement statement
         ) {
             super.visitSwitchStatement(statement);
-            final PsiCodeBlock body = statement.getBody();
+            PsiCodeBlock body = statement.getBody();
             if (body == null) {
                 return;
             }
-            final PsiStatement[] statements = body.getStatements();
+            PsiStatement[] statements = body.getStatements();
             boolean labelSeen = false;
             for (int i = statements.length - 1; i >= 0; i--) {
-                final PsiStatement child = statements[i];
+                PsiStatement child = statements[i];
                 if (child instanceof PsiSwitchLabelStatement) {
-                    final PsiSwitchLabelStatement label =
+                    PsiSwitchLabelStatement label =
                         (PsiSwitchLabelStatement) child;
                     if (label.isDefaultCase()) {
                         if (labelSeen) {

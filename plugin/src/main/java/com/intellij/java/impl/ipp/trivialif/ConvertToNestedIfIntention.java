@@ -54,13 +54,13 @@ public class ConvertToNestedIfIntention extends Intention {
                 if (!(element instanceof PsiReturnStatement)) {
                     return false;
                 }
-                final PsiReturnStatement returnStatement = (PsiReturnStatement) element;
-                final PsiExpression returnValue = ParenthesesUtils.stripParentheses(returnStatement.getReturnValue());
+                PsiReturnStatement returnStatement = (PsiReturnStatement) element;
+                PsiExpression returnValue = ParenthesesUtils.stripParentheses(returnStatement.getReturnValue());
                 if (!(returnValue instanceof PsiPolyadicExpression)) {
                     return false;
                 }
-                final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) returnValue;
-                final IElementType tokenType = polyadicExpression.getOperationTokenType();
+                PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) returnValue;
+                IElementType tokenType = polyadicExpression.getOperationTokenType();
                 return tokenType == JavaTokenType.ANDAND || tokenType == JavaTokenType.OROR;
             }
         };
@@ -68,16 +68,16 @@ public class ConvertToNestedIfIntention extends Intention {
 
     @Override
     public void processIntention(@Nonnull PsiElement element) {
-        final PsiReturnStatement returnStatement = (PsiReturnStatement) element;
-        final PsiExpression returnValue = returnStatement.getReturnValue();
+        PsiReturnStatement returnStatement = (PsiReturnStatement) element;
+        PsiExpression returnValue = returnStatement.getReturnValue();
         if (returnValue == null || ErrorUtil.containsDeepError(returnValue)) {
             return;
         }
-        final String newStatementText = buildIf(returnValue, new StringBuilder()).toString();
-        final Project project = returnStatement.getProject();
-        final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
-        final PsiBlockStatement blockStatement = (PsiBlockStatement) elementFactory.createStatementFromText("{" + newStatementText + "}", returnStatement);
-        final PsiElement parent = returnStatement.getParent();
+        String newStatementText = buildIf(returnValue, new StringBuilder()).toString();
+        Project project = returnStatement.getProject();
+        PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
+        PsiBlockStatement blockStatement = (PsiBlockStatement) elementFactory.createStatementFromText("{" + newStatementText + "}", returnStatement);
+        PsiElement parent = returnStatement.getParent();
         for (PsiStatement st : blockStatement.getCodeBlock().getStatements()) {
             CodeStyleManager.getInstance(project).reformat(parent.addBefore(st, returnStatement));
         }
@@ -86,9 +86,9 @@ public class ConvertToNestedIfIntention extends Intention {
 
     private static StringBuilder buildIf(@Nullable PsiExpression expression, StringBuilder out) {
         if (expression instanceof PsiPolyadicExpression) {
-            final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
-            final PsiExpression[] operands = polyadicExpression.getOperands();
-            final IElementType tokenType = polyadicExpression.getOperationTokenType();
+            PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
+            PsiExpression[] operands = polyadicExpression.getOperands();
+            IElementType tokenType = polyadicExpression.getOperationTokenType();
             if (JavaTokenType.ANDAND.equals(tokenType)) {
                 for (PsiExpression operand : operands) {
                     buildIf(operand, out);
@@ -109,7 +109,7 @@ public class ConvertToNestedIfIntention extends Intention {
             }
         }
         else if (expression instanceof PsiParenthesizedExpression) {
-            final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) expression;
+            PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) expression;
             buildIf(parenthesizedExpression.getExpression(), out);
             return out;
         }

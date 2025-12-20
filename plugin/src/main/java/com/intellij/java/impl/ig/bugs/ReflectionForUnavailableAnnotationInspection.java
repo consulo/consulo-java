@@ -54,56 +54,56 @@ public class ReflectionForUnavailableAnnotationInspection extends BaseInspection
         @Override
         public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            @NonNls final String methodName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            @NonNls String methodName = methodExpression.getReferenceName();
             if (!"isAnnotationPresent".equals(methodName) && !"getAnnotation".equals(methodName)) {
                 return;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
-            final PsiExpression[] args = argumentList.getExpressions();
+            PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpression[] args = argumentList.getExpressions();
             if (args.length != 1) {
                 return;
             }
-            final PsiExpression arg = args[0];
+            PsiExpression arg = args[0];
             if (arg == null) {
                 return;
             }
             if (!(arg instanceof PsiClassObjectAccessExpression)) {
                 return;
             }
-            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
             if (!TypeUtils.expressionHasTypeOrSubtype(qualifier, "java.lang.reflect.AnnotatedElement")) {
                 return;
             }
-            final PsiClassObjectAccessExpression classObjectAccessExpression = (PsiClassObjectAccessExpression) arg;
-            final PsiTypeElement operand = classObjectAccessExpression.getOperand();
+            PsiClassObjectAccessExpression classObjectAccessExpression = (PsiClassObjectAccessExpression) arg;
+            PsiTypeElement operand = classObjectAccessExpression.getOperand();
 
-            final PsiClassType annotationClassType = (PsiClassType) operand.getType();
-            final PsiClass annotationClass = annotationClassType.resolve();
+            PsiClassType annotationClassType = (PsiClassType) operand.getType();
+            PsiClass annotationClass = annotationClassType.resolve();
             if (annotationClass == null) {
                 return;
             }
-            final PsiModifierList modifierList = annotationClass.getModifierList();
+            PsiModifierList modifierList = annotationClass.getModifierList();
             if (modifierList == null) {
                 return;
             }
-            final PsiAnnotation retentionAnnotation = modifierList.findAnnotation(CommonClassNames.JAVA_LANG_ANNOTATION_RETENTION);
+            PsiAnnotation retentionAnnotation = modifierList.findAnnotation(CommonClassNames.JAVA_LANG_ANNOTATION_RETENTION);
             if (retentionAnnotation == null) {
                 registerError(arg);
                 return;
             }
-            final PsiAnnotationParameterList parameters = retentionAnnotation.getParameterList();
-            final PsiNameValuePair[] attributes = parameters.getAttributes();
+            PsiAnnotationParameterList parameters = retentionAnnotation.getParameterList();
+            PsiNameValuePair[] attributes = parameters.getAttributes();
             for (PsiNameValuePair attribute : attributes) {
-                @NonNls final String name = attribute.getName();
+                @NonNls String name = attribute.getName();
                 if (name != null && !"value".equals(name)) {
                     continue;
                 }
-                final PsiAnnotationMemberValue value = attribute.getValue();
+                PsiAnnotationMemberValue value = attribute.getValue();
                 if (value == null) {
                     continue;
                 }
-                @NonNls final String text = value.getText();
+                @NonNls String text = value.getText();
                 if (!text.contains("RUNTIME")) {
                     registerError(arg);
                     return;

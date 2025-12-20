@@ -57,7 +57,7 @@ public class PackagePanel {
         }
     }
 
-    public static JPanel createPackagesPanel(final JBTable packageTable, final PackageEntryTable packageList) {
+    public static JPanel createPackagesPanel(JBTable packageTable, PackageEntryTable packageList) {
         JPanel panel = ToolbarDecorator.createDecorator(packageTable)
             .setAddAction(button -> addPackageToPackages(packageTable, packageList))
             .setRemoveAction(button -> removeEntryFromPackages(packageTable, packageList))

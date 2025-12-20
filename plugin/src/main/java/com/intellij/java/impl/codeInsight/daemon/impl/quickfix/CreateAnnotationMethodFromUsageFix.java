@@ -44,7 +44,7 @@ public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix {
 
     @Override
     protected boolean isAvailableImpl(int offset) {
-        final PsiNameValuePair call = getNameValuePair();
+        PsiNameValuePair call = getNameValuePair();
         if (call == null || !call.isValid()) {
             return false;
         }
@@ -62,7 +62,7 @@ public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix {
 
     @Override
     protected PsiElement getElement() {
-        final PsiNameValuePair call = getNameValuePair();
+        PsiNameValuePair call = getNameValuePair();
         if (call == null || !call.getManager().isInProject(call)) {
             return null;
         }
@@ -70,7 +70,7 @@ public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix {
     }
 
     @Override
-    protected void invokeImpl(final PsiClass targetClass) {
+    protected void invokeImpl(PsiClass targetClass) {
         if (targetClass == null) {
             return;
         }
@@ -80,9 +80,9 @@ public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix {
             return;
         }
 
-        final PsiElementFactory factory = JavaPsiFacade.getInstance(nameValuePair.getProject()).getElementFactory();
+        PsiElementFactory factory = JavaPsiFacade.getInstance(nameValuePair.getProject()).getElementFactory();
 
-        final String methodName = nameValuePair.getName();
+        String methodName = nameValuePair.getName();
         LOG.assertTrue(methodName != null);
 
         PsiMethod method = factory.createMethod(methodName, PsiType.VOID);
@@ -93,11 +93,11 @@ public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix {
         assert body != null;
         body.delete();
 
-        final PsiElement context = PsiTreeUtil.getParentOfType(nameValuePair, PsiClass.class, PsiMethod.class);
+        PsiElement context = PsiTreeUtil.getParentOfType(nameValuePair, PsiClass.class, PsiMethod.class);
 
-        final PsiType type = getAnnotationValueType(nameValuePair.getValue());
+        PsiType type = getAnnotationValueType(nameValuePair.getValue());
         LOG.assertTrue(type != null);
-        final ExpectedTypeInfo[] expectedTypes = new ExpectedTypeInfo[]{ExpectedTypesProvider.createInfo(type, ExpectedTypeInfo.TYPE_OR_SUBTYPE, type, TailType.NONE)};
+        ExpectedTypeInfo[] expectedTypes = new ExpectedTypeInfo[]{ExpectedTypesProvider.createInfo(type, ExpectedTypeInfo.TYPE_OR_SUBTYPE, type, TailType.NONE)};
         CreateMethodFromUsageFix.doCreate(targetClass, method, true, ContainerUtil.map2List(PsiExpression.EMPTY_ARRAY, Pair.<PsiExpression, PsiType>createFunction(null)), getTargetSubstitutor
             (nameValuePair), expectedTypes, context);
     }
@@ -109,7 +109,7 @@ public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix {
             type = ((PsiExpression) value).getType();
         }
         else if (value instanceof PsiArrayInitializerMemberValue) {
-            final PsiAnnotationMemberValue[] initializers = ((PsiArrayInitializerMemberValue) value).getInitializers();
+            PsiAnnotationMemberValue[] initializers = ((PsiArrayInitializerMemberValue) value).getInitializers();
             PsiType currentType = null;
             for (PsiAnnotationMemberValue initializer : initializers) {
                 if (initializer instanceof PsiArrayInitializerMemberValue) {
@@ -118,7 +118,7 @@ public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix {
                 if (!(initializer instanceof PsiExpression)) {
                     return null;
                 }
-                final PsiType psiType = ((PsiExpression) initializer).getType();
+                PsiType psiType = ((PsiExpression) initializer).getType();
                 if (psiType != null) {
                     if (currentType == null) {
                         currentType = psiType;
@@ -148,7 +148,7 @@ public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix {
 
     @Override
     protected boolean isValidElement(PsiElement element) {
-        final PsiReference reference = element.getReference();
+        PsiReference reference = element.getReference();
         return reference != null && reference.resolve() != null;
     }
 

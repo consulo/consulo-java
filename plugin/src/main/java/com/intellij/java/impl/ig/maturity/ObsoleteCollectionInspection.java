@@ -80,14 +80,14 @@ public class ObsoleteCollectionInspection extends BaseInspection {
         @Override
         public void visitVariable(@Nonnull PsiVariable variable) {
             super.visitVariable(variable);
-            final PsiType type = variable.getType();
+            PsiType type = variable.getType();
             if (!isObsoleteCollectionType(type)) {
                 return;
             }
             if (LibraryUtil.isOverrideOfLibraryMethodParameter(variable)) {
                 return;
             }
-            final PsiTypeElement typeElement = variable.getTypeElement();
+            PsiTypeElement typeElement = variable.getTypeElement();
             if (typeElement == null) {
                 return;
             }
@@ -101,14 +101,14 @@ public class ObsoleteCollectionInspection extends BaseInspection {
         @Override
         public void visitMethod(PsiMethod method) {
             super.visitMethod(method);
-            final PsiType returnType = method.getReturnType();
+            PsiType returnType = method.getReturnType();
             if (!isObsoleteCollectionType(returnType)) {
                 return;
             }
             if (LibraryUtil.isOverrideOfLibraryMethod(method)) {
                 return;
             }
-            final PsiTypeElement typeElement = method.getReturnTypeElement();
+            PsiTypeElement typeElement = method.getReturnTypeElement();
             if (typeElement == null) {
                 return;
             }
@@ -124,7 +124,7 @@ public class ObsoleteCollectionInspection extends BaseInspection {
             @Nonnull PsiNewExpression newExpression
         ) {
             super.visitNewExpression(newExpression);
-            final PsiType type = newExpression.getType();
+            PsiType type = newExpression.getType();
             if (!isObsoleteCollectionType(type)) {
                 return;
             }
@@ -139,20 +139,20 @@ public class ObsoleteCollectionInspection extends BaseInspection {
             if (type == null) {
                 return false;
             }
-            final PsiType deepComponentType = type.getDeepComponentType();
+            PsiType deepComponentType = type.getDeepComponentType();
             if (!(deepComponentType instanceof PsiClassType)) {
                 return false;
             }
-            final PsiClassType classType = (PsiClassType) deepComponentType;
-            @NonNls final String className = classType.getClassName();
+            PsiClassType classType = (PsiClassType) deepComponentType;
+            @NonNls String className = classType.getClassName();
             if (!"Vector".equals(className) && !"Hashtable".equals(className)) {
                 return false;
             }
-            final PsiClass aClass = classType.resolve();
+            PsiClass aClass = classType.resolve();
             if (aClass == null) {
                 return false;
             }
-            final String name = aClass.getQualifiedName();
+            String name = aClass.getQualifiedName();
             return "java.util.Vector".equals(name) ||
                 "java.util.Hashtable".equals(name);
         }
@@ -160,14 +160,14 @@ public class ObsoleteCollectionInspection extends BaseInspection {
         private boolean isUsedAsParameterForLibraryMethod(
             PsiNamedElement namedElement
         ) {
-            final PsiFile containingFile = namedElement.getContainingFile();
-            final Query<PsiReference> query =
+            PsiFile containingFile = namedElement.getContainingFile();
+            Query<PsiReference> query =
                 ReferencesSearch.search(
                     namedElement,
                     GlobalSearchScope.fileScope(containingFile)
                 );
             for (PsiReference reference : query) {
-                final PsiElement element = reference.getElement();
+                PsiElement element = reference.getElement();
                 if (isRequiredObsoleteCollectionElement(element)) {
                     return true;
                 }
@@ -178,31 +178,31 @@ public class ObsoleteCollectionInspection extends BaseInspection {
         private boolean isRequiredObsoleteCollectionElement(
             PsiElement element
         ) {
-            final PsiElement parent = element.getParent();
+            PsiElement parent = element.getParent();
             if (parent instanceof PsiVariable) {
-                final PsiVariable variable = (PsiVariable) parent;
-                final PsiType variableType = variable.getType();
+                PsiVariable variable = (PsiVariable) parent;
+                PsiType variableType = variable.getType();
                 if (isObsoleteCollectionType(variableType)) {
                     return true;
                 }
             }
             else if (parent instanceof PsiReturnStatement) {
-                final PsiMethod method = PsiTreeUtil.getParentOfType(
+                PsiMethod method = PsiTreeUtil.getParentOfType(
                     parent,
                     PsiMethod.class
                 );
                 if (method != null) {
-                    final PsiType returnType = method.getReturnType();
+                    PsiType returnType = method.getReturnType();
                     if (isObsoleteCollectionType(returnType)) {
                         return true;
                     }
                 }
             }
             else if (parent instanceof PsiAssignmentExpression) {
-                final PsiAssignmentExpression assignmentExpression =
+                PsiAssignmentExpression assignmentExpression =
                     (PsiAssignmentExpression) parent;
-                final PsiExpression lhs = assignmentExpression.getLExpression();
-                final PsiType lhsType = lhs.getType();
+                PsiExpression lhs = assignmentExpression.getLExpression();
+                PsiType lhsType = lhs.getType();
                 if (isObsoleteCollectionType(lhsType)) {
                     return true;
                 }
@@ -210,37 +210,37 @@ public class ObsoleteCollectionInspection extends BaseInspection {
             if (!(parent instanceof PsiExpressionList)) {
                 return false;
             }
-            final PsiExpressionList argumentList = (PsiExpressionList) parent;
-            final PsiElement grandParent = parent.getParent();
+            PsiExpressionList argumentList = (PsiExpressionList) parent;
+            PsiElement grandParent = parent.getParent();
             if (!(grandParent instanceof PsiCallExpression)) {
                 return false;
             }
-            final PsiCallExpression callExpression =
+            PsiCallExpression callExpression =
                 (PsiCallExpression) grandParent;
-            final int index = getIndexOfArgument(argumentList, element);
-            final PsiMethod method = callExpression.resolveMethod();
+            int index = getIndexOfArgument(argumentList, element);
+            PsiMethod method = callExpression.resolveMethod();
             if (method == null) {
                 return false;
             }
-            final PsiParameterList parameterList =
+            PsiParameterList parameterList =
                 method.getParameterList();
-            final PsiParameter[] parameters = parameterList.getParameters();
+            PsiParameter[] parameters = parameterList.getParameters();
             if (index >= parameters.length) {
-                final PsiParameter lastParameter =
+                PsiParameter lastParameter =
                     parameters[parameters.length - 1];
                 if (!lastParameter.isVarArgs()) {
                     return false;
                 }
-                final PsiType type = lastParameter.getType();
+                PsiType type = lastParameter.getType();
                 if (!(type instanceof PsiEllipsisType)) {
                     return false;
                 }
-                final PsiEllipsisType ellipsisType = (PsiEllipsisType) type;
-                final PsiType componentType = ellipsisType.getComponentType();
+                PsiEllipsisType ellipsisType = (PsiEllipsisType) type;
+                PsiType componentType = ellipsisType.getComponentType();
                 return isObsoleteCollectionType(componentType);
             }
-            final PsiParameter parameter = parameters[index];
-            final PsiType type = parameter.getType();
+            PsiParameter parameter = parameters[index];
+            PsiType type = parameter.getType();
             return isObsoleteCollectionType(type);
         }
 
@@ -248,7 +248,7 @@ public class ObsoleteCollectionInspection extends BaseInspection {
             PsiExpressionList argumentList,
             PsiElement argument
         ) {
-            final PsiExpression[] expressions =
+            PsiExpression[] expressions =
                 argumentList.getExpressions();
             int index = -1;
             for (PsiExpression expression : expressions) {

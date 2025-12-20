@@ -29,11 +29,11 @@ import jakarta.annotation.Nonnull;
 public class JavadocErrorFilter extends HighlightErrorFilter {
 
   @Override
-  public boolean shouldHighlightErrorElement(@Nonnull final PsiErrorElement element) {
+  public boolean shouldHighlightErrorElement(@Nonnull PsiErrorElement element) {
     return !value(element);
   }
 
-  public static boolean value(final PsiErrorElement element) {
+  public static boolean value(PsiErrorElement element) {
     return PsiTreeUtil.getParentOfType(element, PsiDocComment.class) != null;
   }
 }

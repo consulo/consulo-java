@@ -47,8 +47,8 @@ public class UnaryPlusInspection extends BaseInspection {
         @Override
         public void visitPrefixExpression(PsiPrefixExpression prefixExpression) {
             super.visitPrefixExpression(prefixExpression);
-            final PsiJavaToken token = prefixExpression.getOperationSign();
-            final IElementType tokenType = token.getTokenType();
+            PsiJavaToken token = prefixExpression.getOperationSign();
+            IElementType tokenType = token.getTokenType();
             if (!tokenType.equals(JavaTokenType.PLUS)) {
                 return;
             }

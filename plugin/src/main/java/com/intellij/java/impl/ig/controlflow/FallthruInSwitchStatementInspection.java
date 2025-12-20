@@ -69,11 +69,11 @@ public class FallthruInSwitchStatementInspection extends BaseInspection {
         }
 
         protected void doFix(Project project, ProblemDescriptor descriptor) {
-            final PsiSwitchLabelStatement labelStatement = (PsiSwitchLabelStatement) descriptor.getPsiElement();
-            final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-            final PsiElementFactory factory = psiFacade.getElementFactory();
-            final PsiStatement breakStatement = factory.createStatementFromText("break;", labelStatement);
-            final PsiElement parent = labelStatement.getParent();
+            PsiSwitchLabelStatement labelStatement = (PsiSwitchLabelStatement) descriptor.getPsiElement();
+            JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+            PsiElementFactory factory = psiFacade.getElementFactory();
+            PsiStatement breakStatement = factory.createStatementFromText("break;", labelStatement);
+            PsiElement parent = labelStatement.getParent();
             parent.addBefore(breakStatement, labelStatement);
         }
     }
@@ -85,25 +85,25 @@ public class FallthruInSwitchStatementInspection extends BaseInspection {
         @Override
         public void visitSwitchStatement(@Nonnull PsiSwitchStatement switchStatement) {
             super.visitSwitchStatement(switchStatement);
-            final PsiCodeBlock body = switchStatement.getBody();
+            PsiCodeBlock body = switchStatement.getBody();
             if (body == null) {
                 return;
             }
-            final PsiStatement[] statements = body.getStatements();
+            PsiStatement[] statements = body.getStatements();
             for (int i = 1; i < statements.length; i++) {
-                final PsiStatement statement = statements[i];
+                PsiStatement statement = statements[i];
                 if (!(statement instanceof PsiSwitchLabelStatement)) {
                     continue;
                 }
-                final PsiElement previousSibling = PsiTreeUtil.skipSiblingsBackward(statement, PsiWhiteSpace.class);
+                PsiElement previousSibling = PsiTreeUtil.skipSiblingsBackward(statement, PsiWhiteSpace.class);
                 if (previousSibling instanceof PsiComment) {
-                    final PsiComment comment = (PsiComment) previousSibling;
-                    final String commentText = comment.getText();
+                    PsiComment comment = (PsiComment) previousSibling;
+                    String commentText = comment.getText();
                     if (commentPattern.matcher(commentText).find()) {
                         continue;
                     }
                 }
-                final PsiStatement previousStatement = PsiTreeUtil.getPrevSiblingOfType(statement, PsiStatement.class);
+                PsiStatement previousStatement = PsiTreeUtil.getPrevSiblingOfType(statement, PsiStatement.class);
                 if (previousStatement instanceof PsiSwitchLabelStatement) {
                     // don't warn if there are no regular statements after the switch label
                     continue;

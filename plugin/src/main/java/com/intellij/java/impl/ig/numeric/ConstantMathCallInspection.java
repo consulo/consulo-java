@@ -92,35 +92,35 @@ public class ConstantMathCallInspection extends BaseInspection {
 
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiIdentifier nameIdentifier = (PsiIdentifier)descriptor.getPsiElement();
-      final PsiReferenceExpression reference = (PsiReferenceExpression)nameIdentifier.getParent();
+      PsiIdentifier nameIdentifier = (PsiIdentifier)descriptor.getPsiElement();
+      PsiReferenceExpression reference = (PsiReferenceExpression)nameIdentifier.getParent();
       assert reference != null;
-      final PsiMethodCallExpression call = (PsiMethodCallExpression)reference.getParent();
+      PsiMethodCallExpression call = (PsiMethodCallExpression)reference.getParent();
       assert call != null;
-      final PsiExpressionList argumentList = call.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
-      final String methodName = reference.getReferenceName();
-      final PsiExpression argument = arguments[0];
-      final PsiMethod method = call.resolveMethod();
+      PsiExpressionList argumentList = call.getArgumentList();
+      PsiExpression[] arguments = argumentList.getExpressions();
+      String methodName = reference.getReferenceName();
+      PsiExpression argument = arguments[0];
+      PsiMethod method = call.resolveMethod();
       if (method == null) {
         return;
       }
-      final PsiParameterList parameterList = method.getParameterList();
-      final PsiParameter[] parameters = parameterList.getParameters();
+      PsiParameterList parameterList = method.getParameterList();
+      PsiParameter[] parameters = parameterList.getParameters();
       if (parameters.length != 1) {
         return;
       }
-      final PsiType type = parameters[0].getType();
-      final Object argumentValue =
+      PsiType type = parameters[0].getType();
+      Object argumentValue =
         ConstantExpressionUtil.computeCastTo(argument, type);
-      final String newExpression;
+      String newExpression;
       if (argumentValue instanceof Float ||
           argumentValue instanceof Double) {
-        final Number number = (Number)argumentValue;
+        Number number = (Number)argumentValue;
         newExpression = createValueString(methodName, number.doubleValue());
       }
       else {
-        final Number number = (Number)argumentValue;
+        Number number = (Number)argumentValue;
         newExpression = createValueString(methodName, number.longValue());
       }
       if (newExpression == null) {
@@ -313,38 +313,38 @@ public class ConstantMathCallInspection extends BaseInspection {
     public void visitMethodCallExpression(
       @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
+      String methodName = methodExpression.getReferenceName();
       if (!constantMathCall.contains(methodName)) {
         return;
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
+      PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpression[] arguments = argumentList.getExpressions();
       if (arguments.length == 0) {
         return;
       }
-      final PsiExpression argument = arguments[0];
-      final Object argumentValue =
+      PsiExpression argument = arguments[0];
+      Object argumentValue =
         ConstantExpressionUtil.computeCastTo(argument, PsiType.DOUBLE);
       if (!(argumentValue instanceof Double)) {
         return;
       }
-      final double doubleValue = ((Double)argumentValue).doubleValue();
-      final String valueString = createValueString(methodName,
+      double doubleValue = ((Double)argumentValue).doubleValue();
+      String valueString = createValueString(methodName,
                                                    doubleValue);
       if (valueString == null) {
         return;
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return;
       }
-      final PsiClass referencedClass = method.getContainingClass();
+      PsiClass referencedClass = method.getContainingClass();
       if (referencedClass == null) {
         return;
       }
-      final String className = referencedClass.getQualifiedName();
+      String className = referencedClass.getQualifiedName();
       if (!CommonClassNames.JAVA_LANG_MATH.equals(className)
           && !CommonClassNames.JAVA_LANG_STRICT_MATH.equals(className)) {
         return;

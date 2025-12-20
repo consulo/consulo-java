@@ -75,7 +75,7 @@ public class CreateGetterOrSetterFix implements SyntheticIntentionAction, LowPri
             return false;
         }
 
-        final PsiClass aClass = myField.getContainingClass();
+        PsiClass aClass = myField.getContainingClass();
         if (aClass == null) {
             return false;
         }
@@ -113,7 +113,7 @@ public class CreateGetterOrSetterFix implements SyntheticIntentionAction, LowPri
             return;
         }
         PsiClass aClass = myField.getContainingClass();
-        final List<PsiMethod> methods = new ArrayList<PsiMethod>();
+        List<PsiMethod> methods = new ArrayList<PsiMethod>();
         if (myCreateGetter) {
             Collections.addAll(methods, GetterSetterPrototypeProvider.generateGetterSetters(myField, true));
         }

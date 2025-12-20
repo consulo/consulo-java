@@ -99,7 +99,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
     Project project,
     boolean searchTextOccurences,
     PsiElement[] elementsToMove,
-    final PsiElement initialTargetElement,
+    PsiElement initialTargetElement,
     MoveCallback moveCallback
   ) {
     super(project, true);
@@ -165,7 +165,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
   }
 
   protected JComponent createCenterPanel() {
-    final VirtualFile[] sourceRoots = getSourceRoots();
+    VirtualFile[] sourceRoots = getSourceRoots();
     boolean isDestinationVisible = sourceRoots.length > 1;
     myDestinationFolderCB.setVisible(isDestinationVisible);
     myTargetDestinationLabel.setVisible(isDestinationVisible);
@@ -205,9 +205,9 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
   }
 
   private ReferenceEditorComboWithBrowseButton createPackageChooser() {
-    final ReferenceEditorComboWithBrowseButton packageChooser =
+    ReferenceEditorComboWithBrowseButton packageChooser =
       new PackageNameReferenceEditorCombo("", myProject, RECENTS_KEY, RefactoringLocalize.chooseDestinationPackage().get());
-    final Document document = packageChooser.getChildComponent().getDocument();
+    Document document = packageChooser.getChildComponent().getDocument();
     document.addDocumentListener(new DocumentAdapter() {
       public void documentChanged(DocumentEvent e) {
         validateButtons();
@@ -312,7 +312,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
       }
     } else {
       if (findTargetClass() == null) throw new ConfigurationException("Destination class not found");
-      final String validationError = getValidationError();
+      String validationError = getValidationError();
       if (validationError != null) throw new ConfigurationException(validationError);
     }
   }
@@ -345,8 +345,8 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
   }
 
   @Nullable
-  private static String verifyDestinationForElement(final PsiElement element, final MoveDestination moveDestination) {
-    final String message;
+  private static String verifyDestinationForElement(PsiElement element, MoveDestination moveDestination) {
+    String message;
     if (element instanceof PsiDirectory directory) {
       message = moveDestination.verify(directory);
     } else if (element instanceof PsiJavaPackage javaPackage) {
@@ -367,11 +367,11 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
 
   @RequiredUIAccess
   private void invokeMoveToPackage() {
-    final MoveDestination destination = selectDestination();
+    MoveDestination destination = selectDestination();
     if (destination == null) return;
 
     saveRefactoringSettings();
-    for (final PsiElement element : myElementsToMove) {
+    for (PsiElement element : myElementsToMove) {
       String message = verifyDestinationForElement(element, destination);
       if (message != null) {
         String helpId = HelpID.getMoveHelpID(myElementsToMove[0]);
@@ -391,7 +391,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
             toAdd = aClass.getContainingFile();
           }*/
 
-          final PsiDirectory targetDirectory = destination.getTargetIfExists(element.getContainingFile());
+          PsiDirectory targetDirectory = destination.getTargetIfExists(element.getContainingFile());
           if (targetDirectory != null) {
             MoveFilesOrDirectoriesUtil.checkMove(aClass, targetDirectory);
           }
@@ -410,16 +410,16 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
 
   //for scala plugin
   protected MoveClassesOrPackagesProcessor createMoveToPackageProcessor(
-    MoveDestination destination, final PsiElement[] elementsToMove,
-    final MoveCallback callback
+    MoveDestination destination, PsiElement[] elementsToMove,
+    MoveCallback callback
   ) {
     return new MoveClassesOrPackagesProcessor(getProject(), elementsToMove, destination, isSearchInComments(), isSearchInNonJavaFiles(), callback);
   }
 
   private void saveRefactoringSettings() {
-    final JavaRefactoringSettings refactoringSettings = JavaRefactoringSettings.getInstance();
-    final boolean searchInComments = isSearchInComments();
-    final boolean searchForTextOccurences = isSearchInNonJavaFiles();
+    JavaRefactoringSettings refactoringSettings = JavaRefactoringSettings.getInstance();
+    boolean searchInComments = isSearchInComments();
+    boolean searchForTextOccurences = isSearchInNonJavaFiles();
     refactoringSettings.MOVE_SEARCH_IN_COMMENTS = searchInComments;
     refactoringSettings.MOVE_SEARCH_FOR_TEXT = searchForTextOccurences;
     refactoringSettings.MOVE_PREVIEW_USAGES = isPreviewUsages();
@@ -435,7 +435,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
       if (PsiTreeUtil.isAncestor(element, targetClass, false)) {
         return RefactoringLocalize.moveClassToInnerMoveToSelfError().get();
       }
-      final Language targetClassLanguage = targetClass.getLanguage();
+      Language targetClassLanguage = targetClass.getLanguage();
       if (!element.getLanguage().equals(targetClassLanguage)) {
         return RefactoringLocalize.moveToDifferentLanguage(
           UsageViewUtil.getType(element),
@@ -457,8 +457,8 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
 
   private void invokeMoveToInner() {
     saveRefactoringSettings();
-    final PsiClass targetClass = findTargetClass();
-    final PsiClass[] classesToMove = new PsiClass[myElementsToMove.length];
+    PsiClass targetClass = findTargetClass();
+    PsiClass[] classesToMove = new PsiClass[myElementsToMove.length];
     for (int i = 0; i < myElementsToMove.length; i++) {
       classesToMove[i] = (PsiClass) myElementsToMove[i];
     }
@@ -466,7 +466,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
   }
 
   //for scala plugin
-  protected MoveClassToInnerProcessor createMoveToInnerProcessor(PsiClass destination, @Nonnull PsiClass[] classesToMove, @Nullable final MoveCallback callback) {
+  protected MoveClassToInnerProcessor createMoveToInnerProcessor(PsiClass destination, @Nonnull PsiClass[] classesToMove, @Nullable MoveCallback callback) {
     return new MoveClassToInnerProcessor(getProject(), classesToMove, destination, isSearchInComments(), isSearchInNonJavaFiles(), callback);
   }
 
@@ -477,7 +477,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
   @Nullable
   @RequiredUIAccess
   private MoveDestination selectDestination() {
-    final String packageName = getTargetPackage().trim();
+    String packageName = getTargetPackage().trim();
     if (packageName.length() > 0 && !PsiNameHelper.getInstance(myManager.getProject()).isQualifiedName(packageName)) {
       Messages.showErrorDialog(
         myProject,
@@ -489,7 +489,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
     RecentsManager.getInstance(myProject).registerRecentEntry(RECENTS_KEY, packageName);
     PackageWrapper targetPackage = new PackageWrapper(myManager, packageName);
     if (!targetPackage.exists()) {
-      final int ret = Messages.showYesNoDialog(
+      int ret = Messages.showYesNoDialog(
         myProject,
         RefactoringLocalize.packageDoesNotExist(packageName).get(),
         RefactoringLocalize.moveTitle().get(),

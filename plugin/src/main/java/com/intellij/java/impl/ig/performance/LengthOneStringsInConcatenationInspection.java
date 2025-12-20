@@ -51,8 +51,8 @@ public class LengthOneStringsInConcatenationInspection
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final String string = (String)infos[0];
-    final String escapedString = StringUtil.escapeStringCharacters(string);
+    String string = (String)infos[0];
+    String escapedString = StringUtil.escapeStringCharacters(string);
     return InspectionGadgetsLocalize.expressionCanBeReplacedProblemDescriptor(escapedString).get();
   }
 
@@ -72,11 +72,11 @@ public class LengthOneStringsInConcatenationInspection
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiExpression expression = (PsiExpression)descriptor.getPsiElement();
-      final String text = expression.getText();
-      final int length = text.length();
-      final String character = text.substring(1, length - 1);
-      final String charLiteral;
+      PsiExpression expression = (PsiExpression)descriptor.getPsiElement();
+      String text = expression.getText();
+      int length = text.length();
+      String character = text.substring(1, length - 1);
+      String charLiteral;
       if ("\'".equals(character)) {
         charLiteral = "'\\''";
       }
@@ -99,11 +99,11 @@ public class LengthOneStringsInConcatenationInspection
     @Override
     public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
-      final PsiType type = expression.getType();
+      PsiType type = expression.getType();
       if (!TypeUtils.isJavaLangString(type)) {
         return;
       }
-      final String value = (String)expression.getValue();
+      String value = (String)expression.getValue();
       if (value == null || value.length() != 1) {
         return;
       }
@@ -114,32 +114,32 @@ public class LengthOneStringsInConcatenationInspection
     }
 
     static boolean isArgumentOfStringAppend(PsiExpression expression) {
-      final PsiElement parent = expression.getParent();
+      PsiElement parent = expression.getParent();
       if (parent == null) {
         return false;
       }
       if (!(parent instanceof PsiExpressionList)) {
         return false;
       }
-      final PsiElement grandparent = parent.getParent();
+      PsiElement grandparent = parent.getParent();
       if (!(grandparent instanceof PsiMethodCallExpression)) {
         return false;
       }
-      final PsiMethodCallExpression call = (PsiMethodCallExpression)grandparent;
-      final PsiReferenceExpression methodExpression = call.getMethodExpression();
-      @NonNls final String name = methodExpression.getReferenceName();
+      PsiMethodCallExpression call = (PsiMethodCallExpression)grandparent;
+      PsiReferenceExpression methodExpression = call.getMethodExpression();
+      @NonNls String name = methodExpression.getReferenceName();
       if (!"append".equals(name) && !"insert".equals(name)) {
         return false;
       }
-      final PsiMethod method = call.resolveMethod();
+      PsiMethod method = call.resolveMethod();
       if (method == null) {
         return false;
       }
-      final PsiClass methodClass = method.getContainingClass();
+      PsiClass methodClass = method.getContainingClass();
       if (methodClass == null) {
         return false;
       }
-      final String className = methodClass.getQualifiedName();
+      String className = methodClass.getQualifiedName();
       return CommonClassNames.JAVA_LANG_STRING_BUFFER.equals(className)
           || CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(className);
     }

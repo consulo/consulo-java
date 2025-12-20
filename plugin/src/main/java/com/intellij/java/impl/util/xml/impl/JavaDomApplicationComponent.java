@@ -41,9 +41,9 @@ public class JavaDomApplicationComponent {
     converterManager.registerConverterImplementation(JvmPsiTypeConverter.class, new JvmPsiTypeConverterImpl());
     converterManager.registerConverterImplementation(CanonicalPsiTypeConverter.class, new CanonicalPsiTypeConverterImpl());
 
-    final ClassValueConverter classValueConverter = ClassValueConverter.getClassValueConverter();
+    ClassValueConverter classValueConverter = ClassValueConverter.getClassValueConverter();
     converterManager.registerConverterImplementation(ClassValueConverter.class, classValueConverter);
-    final ClassArrayConverter classArrayConverter = ClassArrayConverter.getClassArrayConverter();
+    ClassArrayConverter classArrayConverter = ClassArrayConverter.getClassArrayConverter();
     converterManager.registerConverterImplementation(ClassArrayConverter.class, classArrayConverter);
   }
 }

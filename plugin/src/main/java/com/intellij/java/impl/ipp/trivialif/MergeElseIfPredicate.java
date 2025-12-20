@@ -27,30 +27,30 @@ class MergeElseIfPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiJavaToken)) {
       return false;
     }
-    @NonNls final String text = element.getText();
+    @NonNls String text = element.getText();
     if (!PsiKeyword.ELSE.equals(text)) {
       return false;
     }
-    final PsiJavaToken token = (PsiJavaToken)element;
-    final PsiElement parent = token.getParent();
+    PsiJavaToken token = (PsiJavaToken)element;
+    PsiElement parent = token.getParent();
     if (!(parent instanceof PsiIfStatement)) {
       return false;
     }
-    final PsiIfStatement ifStatement = (PsiIfStatement)parent;
+    PsiIfStatement ifStatement = (PsiIfStatement)parent;
     if (ErrorUtil.containsError(ifStatement)) {
       return false;
     }
-    final PsiStatement thenBranch = ifStatement.getThenBranch();
-    final PsiStatement elseBranch = ifStatement.getElseBranch();
+    PsiStatement thenBranch = ifStatement.getThenBranch();
+    PsiStatement elseBranch = ifStatement.getElseBranch();
     if (thenBranch == null) {
       return false;
     }
     if (!(elseBranch instanceof PsiBlockStatement)) {
       return false;
     }
-    final PsiCodeBlock block =
+    PsiCodeBlock block =
       ((PsiBlockStatement)elseBranch).getCodeBlock();
-    final PsiStatement[] statements = block.getStatements();
+    PsiStatement[] statements = block.getStatements();
     return statements.length == 1 &&
            statements[0] instanceof PsiIfStatement;
   }

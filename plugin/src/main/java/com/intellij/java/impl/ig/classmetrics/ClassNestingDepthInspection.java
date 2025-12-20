@@ -52,7 +52,7 @@ public class ClassNestingDepthInspection extends ClassMetricInspection {
 
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final Integer nestingLevel = (Integer) infos[0];
+        Integer nestingLevel = (Integer) infos[0];
         return InspectionGadgetsLocalize.innerClassTooDeeplyNestedProblemDescriptor(nestingLevel).get();
     }
 
@@ -68,7 +68,7 @@ public class ClassNestingDepthInspection extends ClassMetricInspection {
             if (aClass instanceof PsiTypeParameter) {
                 return;
             }
-            final int nestingLevel = getNestingLevel(aClass);
+            int nestingLevel = getNestingLevel(aClass);
             if (nestingLevel <= getLimit()) {
                 return;
             }

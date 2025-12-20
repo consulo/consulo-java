@@ -54,7 +54,7 @@ public class ImplementAbstractMethodAction extends BaseIntentionAction {
   @RequiredReadAction
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     int offset = editor.getCaretModel().getOffset();
-    final PsiMethod method = findMethod(file, offset);
+    PsiMethod method = findMethod(file, offset);
 
     if (method == null || !method.isValid()) return false;
     setText(getIntentionName(method));
@@ -63,14 +63,14 @@ public class ImplementAbstractMethodAction extends BaseIntentionAction {
 
     PsiClass containingClass = method.getContainingClass();
     if (containingClass == null) return false;
-    final boolean isAbstract = method.hasModifierProperty(PsiModifier.ABSTRACT);
+    boolean isAbstract = method.hasModifierProperty(PsiModifier.ABSTRACT);
     if (isAbstract || !method.hasModifierProperty(PsiModifier.PRIVATE) && !method.hasModifierProperty(PsiModifier.STATIC)) {
       if (!isAbstract && !isOnIdentifier(file, offset)) return false;
       MyElementProcessor processor = new MyElementProcessor(method);
       if (containingClass.isEnum()) {
         for (PsiField field : containingClass.getFields()) {
           if (field instanceof PsiEnumConstant enumConstant) {
-            final PsiEnumConstantInitializer initializingClass = enumConstant.getInitializingClass();
+            PsiEnumConstantInitializer initializingClass = enumConstant.getInitializingClass();
             if (initializingClass == null) {
               processor.myHasMissingImplementations = true;
             }
@@ -91,11 +91,11 @@ public class ImplementAbstractMethodAction extends BaseIntentionAction {
 
   @RequiredReadAction
   private static boolean isOnIdentifier(PsiFile file, int offset) {
-    final PsiElement psiElement = file.findElementAt(offset);
+    PsiElement psiElement = file.findElementAt(offset);
     return psiElement instanceof PsiIdentifier && psiElement.getParent() instanceof PsiMethod;
   }
 
-  protected LocalizeValue getIntentionName(final PsiMethod method) {
+  protected LocalizeValue getIntentionName(PsiMethod method) {
     return method.hasModifierProperty(PsiModifier.ABSTRACT)
       ? CodeInsightLocalize.intentionImplementAbstractMethodText(method.getName())
       : CodeInsightLocalize.intentionOverrideMethodText(method.getName());
@@ -106,7 +106,7 @@ public class ImplementAbstractMethodAction extends BaseIntentionAction {
     private boolean myHasExistingImplementations;
     private final PsiMethod myMethod;
 
-    MyElementProcessor(final PsiMethod method) {
+    MyElementProcessor(PsiMethod method) {
       myMethod = method;
     }
 
@@ -123,7 +123,7 @@ public class ImplementAbstractMethodAction extends BaseIntentionAction {
       if (element instanceof PsiClass) {
         PsiClass aClass = (PsiClass)element;
         if (aClass.isInterface()) return true;
-        final PsiMethod existingImplementation = findExistingImplementation(aClass, myMethod);
+        PsiMethod existingImplementation = findExistingImplementation(aClass, myMethod);
         if (existingImplementation != null && !existingImplementation.hasModifierProperty(PsiModifier.ABSTRACT)) {
           myHasExistingImplementations = true;
         }
@@ -136,15 +136,15 @@ public class ImplementAbstractMethodAction extends BaseIntentionAction {
     }
   }
 
-  protected boolean isAvailable(final MyElementProcessor processor) {
+  protected boolean isAvailable(MyElementProcessor processor) {
     return processor.hasMissingImplementations();
   }
 
   @Nullable
-  static PsiMethod findExistingImplementation(final PsiClass aClass, PsiMethod method) {
-    final PsiMethod[] methods = aClass.findMethodsByName(method.getName(), false);
+  static PsiMethod findExistingImplementation(PsiClass aClass, PsiMethod method) {
+    PsiMethod[] methods = aClass.findMethodsByName(method.getName(), false);
     for (PsiMethod candidate : methods) {
-      final PsiMethod[] superMethods = candidate.findSuperMethods(false);
+      PsiMethod[] superMethods = candidate.findSuperMethods(false);
       for (PsiMethod superMethod : superMethods) {
         if (superMethod.equals(method)) {
           return candidate;
@@ -177,7 +177,7 @@ public class ImplementAbstractMethodAction extends BaseIntentionAction {
     invokeHandler(project, editor, method);
   }
 
-  protected void invokeHandler(final Project project, final Editor editor, final PsiMethod method) {
+  protected void invokeHandler(Project project, Editor editor, PsiMethod method) {
     new ImplementAbstractMethodHandler(project, editor, method).invoke();
   }
 

@@ -30,7 +30,7 @@ public class RegExpValidator implements Condition<String> {
     myPattern = pattern;
   }
 
-  public boolean value(final String object) {
+  public boolean value(String object) {
     return object.matches(myPattern);
   }
 }

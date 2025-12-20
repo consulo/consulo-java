@@ -39,35 +39,35 @@ import jakarta.annotation.Nonnull;
 public class InsertLiteralUnderscoresAction extends PsiElementBaseIntentionAction {
   @Override
   @RequiredReadAction
-  public boolean isAvailable(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (!PsiUtil.isLanguageLevel7OrHigher(element)) return false;
 
-    final PsiLiteralExpression literalExpression = PsiTreeUtil.getParentOfType(element, PsiLiteralExpression.class, false);
+    PsiLiteralExpression literalExpression = PsiTreeUtil.getParentOfType(element, PsiLiteralExpression.class, false);
     if (literalExpression == null) return false;
 
-    final PsiType type = literalExpression.getType();
+    PsiType type = literalExpression.getType();
     if (!PsiType.INT.equals(type) && !PsiType.LONG.equals(type) &&
         !PsiType.FLOAT.equals(type) && !PsiType.DOUBLE.equals(type)) return false;
 
-    final String text = literalExpression.getText();
+    String text = literalExpression.getText();
     if (text == null || text.contains("_")) return false;
 
-    final String converted = LiteralFormatUtil.format(text, type);
+    String converted = LiteralFormatUtil.format(text, type);
     return converted.length() != text.length();
   }
 
   @Override
   @RequiredReadAction
-  public void invoke(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) throws IncorrectOperationException {
-    final PsiLiteralExpression literalExpression = PsiTreeUtil.getParentOfType(element, PsiLiteralExpression.class, false);
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+    PsiLiteralExpression literalExpression = PsiTreeUtil.getParentOfType(element, PsiLiteralExpression.class, false);
     if (literalExpression == null) return;
 
-    final String text = literalExpression.getText();
-    final PsiType type = literalExpression.getType();
-    final String converted = LiteralFormatUtil.format(text, type);
+    String text = literalExpression.getText();
+    PsiType type = literalExpression.getType();
+    String converted = LiteralFormatUtil.format(text, type);
     if (converted.length() == text.length()) return;
 
-    final PsiExpression replacement = JavaPsiFacade.getElementFactory(project).createExpressionFromText(converted, null);
+    PsiExpression replacement = JavaPsiFacade.getElementFactory(project).createExpressionFromText(converted, null);
     literalExpression.replace(replacement);
   }
 

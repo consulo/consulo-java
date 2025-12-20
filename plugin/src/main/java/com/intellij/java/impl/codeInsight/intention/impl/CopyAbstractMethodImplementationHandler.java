@@ -61,7 +61,7 @@ public class CopyAbstractMethodImplementationHandler {
   private final List<PsiEnumConstant> myTargetEnumConstants = new ArrayList<>();
   private final List<PsiMethod> mySourceMethods = new ArrayList<>();
 
-  public CopyAbstractMethodImplementationHandler(final Project project, final Editor editor, final PsiMethod method) {
+  public CopyAbstractMethodImplementationHandler(Project project, Editor editor, PsiMethod method) {
     myProject = project;
     myEditor = editor;
     myMethod = method;
@@ -91,10 +91,10 @@ public class CopyAbstractMethodImplementationHandler {
         PsiClass c2 = o2.getContainingClass();
         return Comparing.compare(c1.getName(), c2.getName());
       });
-      final PsiMethod[] methodArray = mySourceMethods.toArray(new PsiMethod[mySourceMethods.size()]);
-      final JList<PsiMethod> list = new JBList<>(methodArray);
+      PsiMethod[] methodArray = mySourceMethods.toArray(new PsiMethod[mySourceMethods.size()]);
+      JList<PsiMethod> list = new JBList<>(methodArray);
       list.setCellRenderer(new MethodCellRenderer(true));
-      final Runnable runnable = () -> {
+      Runnable runnable = () -> {
         int index = list.getSelectedIndex();
         if (index < 0) return;
         PsiMethod element = list.getSelectedValue();
@@ -132,7 +132,7 @@ public class CopyAbstractMethodImplementationHandler {
     if (mySourceClass.isEnum()) {
       for (PsiField field : mySourceClass.getFields()) {
         if (field instanceof PsiEnumConstant enumConstant) {
-          final PsiEnumConstantInitializer initializingClass = enumConstant.getInitializingClass();
+          PsiEnumConstantInitializer initializingClass = enumConstant.getInitializingClass();
           if (initializingClass == null) {
             myTargetEnumConstants.add(enumConstant);
           }
@@ -141,7 +141,7 @@ public class CopyAbstractMethodImplementationHandler {
     }
   }
 
-  private boolean containsAnySuperClass(final PsiClass targetClass) {
+  private boolean containsAnySuperClass(PsiClass targetClass) {
     PsiClass superClass = targetClass.getSuperClass();
     while (superClass != null) {
       if (myTargetClasses.contains(superClass)) return true;
@@ -155,21 +155,21 @@ public class CopyAbstractMethodImplementationHandler {
     new WriteCommandAction(myProject, getTargetFiles()) {
       @Override
       @RequiredReadAction
-      protected void run(final Result result) throws Throwable {
+      protected void run(Result result) throws Throwable {
         for (PsiEnumConstant enumConstant : myTargetEnumConstants) {
           PsiClass initializingClass = enumConstant.getOrCreateInitializingClass();
           myTargetClasses.add(initializingClass);
         }
         for (PsiClass psiClass: myTargetClasses) {
-          final Collection<PsiMethod> methods = OverrideImplementUtil.overrideOrImplementMethod(psiClass, myMethod, true);
-          final Iterator<PsiMethod> iterator = methods.iterator();
+          Collection<PsiMethod> methods = OverrideImplementUtil.overrideOrImplementMethod(psiClass, myMethod, true);
+          Iterator<PsiMethod> iterator = methods.iterator();
           if (!iterator.hasNext()) continue;
           PsiMethod overriddenMethod = iterator.next();
-          final PsiCodeBlock body = overriddenMethod.getBody();
-          final PsiCodeBlock sourceBody = sourceMethod.getBody();
+          PsiCodeBlock body = overriddenMethod.getBody();
+          PsiCodeBlock sourceBody = sourceMethod.getBody();
           assert body != null && sourceBody != null;
           ChangeContextUtil.encodeContextInfo(sourceBody, true);
-          final PsiElement newBody = body.replace(sourceBody.copy());
+          PsiElement newBody = body.replace(sourceBody.copy());
           ChangeContextUtil.decodeContextInfo(newBody, psiClass, null);
 
           PsiSubstitutor substitutor = TypeConversionUtil.getSuperClassSubstitutor(mySourceClass, psiClass, PsiSubstitutor.EMPTY);

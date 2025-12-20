@@ -41,7 +41,7 @@ public class MissingWhileBodyFixer implements Fixer
 		}
 		PsiWhileStatement whileStatement = (PsiWhileStatement) psiElement;
 
-		final Document doc = editor.getDocument();
+		Document doc = editor.getDocument();
 
 		PsiElement body = whileStatement.getBody();
 		if(body instanceof PsiBlockStatement)
@@ -53,7 +53,7 @@ public class MissingWhileBodyFixer implements Fixer
 			return;
 		}
 
-		final PsiJavaToken rParenth = whileStatement.getRParenth();
+		PsiJavaToken rParenth = whileStatement.getRParenth();
 		assert rParenth != null;
 
 		doc.insertString(rParenth.getTextRange().getEndOffset(), "{}");

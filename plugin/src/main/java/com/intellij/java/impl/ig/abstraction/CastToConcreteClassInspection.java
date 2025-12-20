@@ -47,13 +47,13 @@ public class CastToConcreteClassInspection extends BaseInspection {
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    final PsiType type= (PsiType)infos[0];
+    PsiType type= (PsiType)infos[0];
     return InspectionGadgetsLocalize.castToConcreteClassProblemDescriptor(type.getPresentableText()).get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+    MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
     panel.addCheckbox(InspectionGadgetsLocalize.castToConcreteClassOption().get(), "ignoreAbstractClasses");
     panel.addCheckbox(InspectionGadgetsLocalize.castToConcreteClassIgnoreEqualsOption().get(), "ignoreInEquals");
     return panel;
@@ -69,7 +69,7 @@ public class CastToConcreteClassInspection extends BaseInspection {
     @Override
     public void visitTypeCastExpression(@Nonnull PsiTypeCastExpression expression) {
       super.visitTypeCastExpression(expression);
-      final PsiTypeElement typeElement = expression.getCastType();
+      PsiTypeElement typeElement = expression.getCastType();
       if (typeElement == null) {
         return;
       }
@@ -77,7 +77,7 @@ public class CastToConcreteClassInspection extends BaseInspection {
         return;
       }
       if (ignoreInEquals) {
-        final PsiMethod method = PsiTreeUtil.getParentOfType(expression, PsiMethod.class, true, PsiClass.class);
+        PsiMethod method = PsiTreeUtil.getParentOfType(expression, PsiMethod.class, true, PsiClass.class);
         if (MethodUtils.isEquals(method)) {
           return;
         }
@@ -88,39 +88,38 @@ public class CastToConcreteClassInspection extends BaseInspection {
     @Override
     public void visitMethodCallExpression(PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      @NonNls
-      final String referenceName = methodExpression.getReferenceName();
+      PsiReferenceExpression methodExpression = expression.getMethodExpression();
+      @NonNls String referenceName = methodExpression.getReferenceName();
       if (!"cast".equals(referenceName)) {
         return;
       }
-      final PsiExpression qualifier = methodExpression.getQualifierExpression();
+      PsiExpression qualifier = methodExpression.getQualifierExpression();
       if (qualifier == null) {
         return;
       }
-      final PsiType type = qualifier.getType();
+      PsiType type = qualifier.getType();
       if (!(type instanceof PsiClassType)) {
         return;
       }
-      final PsiClassType classType = (PsiClassType)type;
-      final PsiClass aClass = classType.resolve();
+      PsiClassType classType = (PsiClassType)type;
+      PsiClass aClass = classType.resolve();
       if (aClass == null) {
         return;
       }
-      final String className = aClass.getQualifiedName();
+      String className = aClass.getQualifiedName();
       if (!CommonClassNames.JAVA_LANG_CLASS.equals(className)) {
         return;
       }
-      final PsiType[] parameters = classType.getParameters();
+      PsiType[] parameters = classType.getParameters();
       if (parameters.length != 1) {
         return;
       }
-      final PsiType parameter = parameters[0];
+      PsiType parameter = parameters[0];
       if (!ConcreteClassUtil.typeIsConcreteClass(parameter, ignoreAbstractClasses)) {
         return;
       }
       if (ignoreInEquals) {
-        final PsiMethod method = PsiTreeUtil.getParentOfType(expression, PsiMethod.class, true, PsiClass.class);
+        PsiMethod method = PsiTreeUtil.getParentOfType(expression, PsiMethod.class, true, PsiClass.class);
         if (MethodUtils.isEquals(method)) {
           return;
         }

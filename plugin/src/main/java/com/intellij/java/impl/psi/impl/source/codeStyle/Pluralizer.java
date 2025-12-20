@@ -181,7 +181,7 @@ public final class Pluralizer {
   }
 
   static {
-    final Pluralizer pluralizer = new Pluralizer();
+    Pluralizer pluralizer = new Pluralizer();
 
     /*
      * Irregular rules.

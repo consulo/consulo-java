@@ -62,7 +62,7 @@ public class FinalizeCallsSuperFinalizeInspection extends BaseInspection {
 
   @Override
   public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel optionsPanel =
+    MultipleCheckboxOptionsPanel optionsPanel =
       new MultipleCheckboxOptionsPanel(this);
     optionsPanel.addCheckbox(InspectionGadgetsLocalize.finalizeDoesntCallSuperIgnoreOption().get(), "ignoreObjectSubclasses");
     optionsPanel.addCheckbox(InspectionGadgetsLocalize.ignoreTrivialFinalizersOption().get(), "ignoreTrivialFinalizers");
@@ -79,7 +79,7 @@ public class FinalizeCallsSuperFinalizeInspection extends BaseInspection {
     @Override
     public void visitMethod(@Nonnull PsiMethod method) {
       //note: no call to super;
-      final String methodName = method.getName();
+      String methodName = method.getName();
       if (!HardcodedMethodConstants.FINALIZE.equals(methodName)) {
         return;
       }
@@ -87,24 +87,24 @@ public class FinalizeCallsSuperFinalizeInspection extends BaseInspection {
           method.hasModifierProperty(PsiModifier.ABSTRACT)) {
         return;
       }
-      final PsiClass containingClass = method.getContainingClass();
+      PsiClass containingClass = method.getContainingClass();
       if (containingClass == null) {
         return;
       }
       if (ignoreObjectSubclasses) {
-        final PsiClass superClass = containingClass.getSuperClass();
+        PsiClass superClass = containingClass.getSuperClass();
         if (superClass != null) {
-          final String superClassName = superClass.getQualifiedName();
+          String superClassName = superClass.getQualifiedName();
           if (CommonClassNames.JAVA_LANG_OBJECT.equals(superClassName)) {
             return;
           }
         }
       }
-      final PsiParameterList parameterList = method.getParameterList();
+      PsiParameterList parameterList = method.getParameterList();
       if (parameterList.getParametersCount() != 0) {
         return;
       }
-      final CallToSuperFinalizeVisitor visitor =
+      CallToSuperFinalizeVisitor visitor =
         new CallToSuperFinalizeVisitor();
       method.accept(visitor);
       if (visitor.isCallToSuperFinalizeFound()) {
@@ -117,27 +117,27 @@ public class FinalizeCallsSuperFinalizeInspection extends BaseInspection {
     }
 
     private boolean isTrivial(PsiMethod method) {
-      final PsiCodeBlock body = method.getBody();
+      PsiCodeBlock body = method.getBody();
       if (body == null) {
         return true;
       }
-      final PsiStatement[] statements = body.getStatements();
+      PsiStatement[] statements = body.getStatements();
       if (statements.length == 0) {
         return true;
       }
-      final Project project = method.getProject();
-      final JavaPsiFacade psiFacade =
+      Project project = method.getProject();
+      JavaPsiFacade psiFacade =
         JavaPsiFacade.getInstance(project);
-      final PsiConstantEvaluationHelper evaluationHelper =
+      PsiConstantEvaluationHelper evaluationHelper =
         psiFacade.getConstantEvaluationHelper();
       for (PsiStatement statement : statements) {
         if (!(statement instanceof PsiIfStatement)) {
           return false;
         }
-        final PsiIfStatement ifStatement =
+        PsiIfStatement ifStatement =
           (PsiIfStatement)statement;
-        final PsiExpression condition = ifStatement.getCondition();
-        final Object result =
+        PsiExpression condition = ifStatement.getCondition();
+        Object result =
           evaluationHelper.computeConstantExpression(condition);
         if (result == null || !result.equals(Boolean.FALSE)) {
           return false;

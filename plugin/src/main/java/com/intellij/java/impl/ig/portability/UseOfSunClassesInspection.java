@@ -47,17 +47,17 @@ public class UseOfSunClassesInspection extends BaseInspection {
     @Override
     public void visitVariable(@Nonnull PsiVariable variable) {
       super.visitVariable(variable);
-      final PsiType type = variable.getType();
-      final PsiType deepComponentType = type.getDeepComponentType();
+      PsiType type = variable.getType();
+      PsiType deepComponentType = type.getDeepComponentType();
       if (!(deepComponentType instanceof PsiClassType)) {
         return;
       }
-      final PsiClassType classType = (PsiClassType)deepComponentType;
-      @NonNls final String className = classType.getCanonicalText();
+      PsiClassType classType = (PsiClassType)deepComponentType;
+      @NonNls String className = classType.getCanonicalText();
       if (className == null || !className.startsWith("sun.")) {
         return;
       }
-      final PsiTypeElement typeElement = variable.getTypeElement();
+      PsiTypeElement typeElement = variable.getTypeElement();
       if (typeElement == null) {
         return;
       }
@@ -68,15 +68,15 @@ public class UseOfSunClassesInspection extends BaseInspection {
     public void visitNewExpression(
       @Nonnull PsiNewExpression newExpression) {
       super.visitNewExpression(newExpression);
-      final PsiType type = newExpression.getType();
+      PsiType type = newExpression.getType();
       if (type == null) {
         return;
       }
       if (!(type instanceof PsiClassType)) {
         return;
       }
-      final PsiClassType classType = (PsiClassType)type;
-      @NonNls final String className = classType.getCanonicalText();
+      PsiClassType classType = (PsiClassType)type;
+      @NonNls String className = classType.getCanonicalText();
       if (className == null || !className.startsWith("sun.")) {
         return;
       }

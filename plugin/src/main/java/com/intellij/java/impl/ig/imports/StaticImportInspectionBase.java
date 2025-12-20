@@ -89,28 +89,28 @@ public class StaticImportInspectionBase extends BaseInspection {
 
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiImportStaticStatement importStatement = (PsiImportStaticStatement) descriptor.getPsiElement();
-      final PsiJavaCodeReferenceElement importReference = importStatement.getImportReference();
+      PsiImportStaticStatement importStatement = (PsiImportStaticStatement) descriptor.getPsiElement();
+      PsiJavaCodeReferenceElement importReference = importStatement.getImportReference();
       if (importReference == null) {
         return;
       }
-      final JavaResolveResult[] importTargets = importReference.multiResolve(false);
+      JavaResolveResult[] importTargets = importReference.multiResolve(false);
       if (importTargets.length == 0) {
         return;
       }
-      final boolean onDemand = importStatement.isOnDemand();
-      final StaticImportFix.StaticImportReferenceCollector referenceCollector = new StaticImportFix.StaticImportReferenceCollector(importTargets, onDemand);
-      final PsiJavaFile file = (PsiJavaFile) importStatement.getContainingFile();
+      boolean onDemand = importStatement.isOnDemand();
+      StaticImportFix.StaticImportReferenceCollector referenceCollector = new StaticImportFix.StaticImportReferenceCollector(importTargets, onDemand);
+      PsiJavaFile file = (PsiJavaFile) importStatement.getContainingFile();
       file.accept(referenceCollector);
-      final List<PsiJavaCodeReferenceElement> references = referenceCollector.getReferences();
-      final Map<PsiJavaCodeReferenceElement, PsiMember> referenceTargetMap = new HashMap<>();
+      List<PsiJavaCodeReferenceElement> references = referenceCollector.getReferences();
+      Map<PsiJavaCodeReferenceElement, PsiMember> referenceTargetMap = new HashMap<>();
       for (PsiJavaCodeReferenceElement reference : references) {
-        final PsiElement target = reference.resolve();
+        PsiElement target = reference.resolve();
         if (target instanceof PsiEnumConstant && reference.getParent() instanceof PsiSwitchLabelStatement) {
           continue;
         }
         if (target instanceof PsiMember) {
-          final PsiMember member = (PsiMember) target;
+          PsiMember member = (PsiMember) target;
           referenceTargetMap.put(reference, member);
         }
       }
@@ -121,24 +121,24 @@ public class StaticImportInspectionBase extends BaseInspection {
     }
 
     private static void removeReference(PsiJavaCodeReferenceElement reference, PsiMember target) {
-      final PsiManager manager = reference.getManager();
-      final Project project = manager.getProject();
-      final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-      final PsiElementFactory factory = psiFacade.getElementFactory();
-      final PsiClass aClass = target.getContainingClass();
+      PsiManager manager = reference.getManager();
+      Project project = manager.getProject();
+      JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+      PsiElementFactory factory = psiFacade.getElementFactory();
+      PsiClass aClass = target.getContainingClass();
       if (aClass == null) {
         return;
       }
       CommentTracker tracker = new CommentTracker();
-      final String qualifiedName = aClass.getQualifiedName();
-      final String text = tracker.markUnchanged(reference).getText();
-      final String referenceText = qualifiedName + '.' + text;
+      String qualifiedName = aClass.getQualifiedName();
+      String text = tracker.markUnchanged(reference).getText();
+      String referenceText = qualifiedName + '.' + text;
       if (reference instanceof PsiReferenceExpression) {
-        final PsiElement insertedElement = tracker.replaceAndRestoreComments(reference, referenceText);
+        PsiElement insertedElement = tracker.replaceAndRestoreComments(reference, referenceText);
         JavaCodeStyleManager.getInstance(project).shortenClassReferences(insertedElement);
       } else {
-        final PsiJavaCodeReferenceElement referenceElement = factory.createReferenceElementByFQClassName(referenceText, reference.getResolveScope());
-        final PsiElement insertedElement = tracker.replaceAndRestoreComments(reference, referenceElement);
+        PsiJavaCodeReferenceElement referenceElement = factory.createReferenceElementByFQClassName(referenceText, reference.getResolveScope());
+        PsiElement insertedElement = tracker.replaceAndRestoreComments(reference, referenceElement);
         JavaCodeStyleManager.getInstance(project).shortenClassReferences(insertedElement);
       }
     }
@@ -177,23 +177,23 @@ public class StaticImportInspectionBase extends BaseInspection {
         if (reference.isQualified()) {
           return;
         }
-        final PsiElement target = reference.resolve();
+        PsiElement target = reference.resolve();
         if (!(target instanceof PsiMethod) && !(target instanceof PsiClass) && !(target instanceof PsiField)) {
           return;
         }
-        final PsiMember member = (PsiMember) target;
+        PsiMember member = (PsiMember) target;
         if (!member.hasModifierProperty(PsiModifier.STATIC)) {
           return;
         }
         for (JavaResolveResult importTarget : importTargets) {
-          final PsiElement targetElement = importTarget.getElement();
+          PsiElement targetElement = importTarget.getElement();
           if (targetElement instanceof PsiMethod || targetElement instanceof PsiField) {
             if (member.equals(targetElement)) {
               addReference(reference);
             }
           } else if (targetElement instanceof PsiClass) {
             if (onDemand) {
-              final PsiClass containingClass = member.getContainingClass();
+              PsiClass containingClass = member.getContainingClass();
               if (InheritanceUtil.isInheritorOrSelf((PsiClass) targetElement, containingClass, true)) {
                 addReference(reference);
               }
@@ -218,24 +218,24 @@ public class StaticImportInspectionBase extends BaseInspection {
         if (!reference.isQualified()) {
           return false;
         }
-        final PsiElement directParent = reference.getParent();
+        PsiElement directParent = reference.getParent();
         if (directParent instanceof PsiMethodCallExpression || directParent instanceof PsiAssignmentExpression || directParent instanceof PsiVariable) {
           return false;
         }
-        final PsiElement parent = PsiTreeUtil.getParentOfType(reference, PsiImportStatementBase.class, PsiPackageStatement.class, JavaCodeFragment.class);
+        PsiElement parent = PsiTreeUtil.getParentOfType(reference, PsiImportStatementBase.class, PsiPackageStatement.class, JavaCodeFragment.class);
         if (parent != null) {
           return false;
         }
-        final PsiElement target = reference.resolve();
+        PsiElement target = reference.resolve();
         if (!(target instanceof PsiClass)) {
           return false;
         }
-        final PsiClass aClass = (PsiClass) target;
-        final String fqName = aClass.getQualifiedName();
+        PsiClass aClass = (PsiClass) target;
+        String fqName = aClass.getQualifiedName();
         if (fqName == null) {
           return false;
         }
-        final String text = StringUtils.stripAngleBrackets(reference.getText());
+        String text = StringUtils.stripAngleBrackets(reference.getText());
         return text.equals(fqName);
       }
     }
@@ -245,19 +245,19 @@ public class StaticImportInspectionBase extends BaseInspection {
 
     @Override
     public void visitClass(@Nonnull PsiClass aClass) {
-      final PsiElement parent = aClass.getParent();
+      PsiElement parent = aClass.getParent();
       if (!(parent instanceof PsiJavaFile)) {
         return;
       }
-      final PsiJavaFile file = (PsiJavaFile) parent;
+      PsiJavaFile file = (PsiJavaFile) parent;
       if (!file.getClasses()[0].equals(aClass)) {
         return;
       }
-      final PsiImportList importList = file.getImportList();
+      PsiImportList importList = file.getImportList();
       if (importList == null) {
         return;
       }
-      final PsiImportStaticStatement[] importStatements = importList.getImportStaticStatements();
+      PsiImportStaticStatement[] importStatements = importList.getImportStaticStatements();
       for (PsiImportStaticStatement importStatement : importStatements) {
         if (shouldReportImportStatement(importStatement)) {
           registerError(importStatement, importStatement);
@@ -266,14 +266,14 @@ public class StaticImportInspectionBase extends BaseInspection {
     }
 
     private boolean shouldReportImportStatement(PsiImportStaticStatement importStatement) {
-      final PsiJavaCodeReferenceElement importReference = importStatement.getImportReference();
+      PsiJavaCodeReferenceElement importReference = importStatement.getImportReference();
       if (importReference == null) {
         return false;
       }
       PsiClass targetClass = importStatement.resolveTargetClass();
       boolean checked = false;
       while (targetClass != null) {
-        final String qualifiedName = targetClass.getQualifiedName();
+        String qualifiedName = targetClass.getQualifiedName();
         if (allowedClasses.contains(qualifiedName)) {
           return false;
         }
@@ -290,9 +290,9 @@ public class StaticImportInspectionBase extends BaseInspection {
         boolean field = false;
         boolean method = false;
         // in the presence of method overloading the plain resolve() method returns null
-        final JavaResolveResult[] results = importReference.multiResolve(false);
+        JavaResolveResult[] results = importReference.multiResolve(false);
         for (JavaResolveResult result : results) {
-          final PsiElement element = result.getElement();
+          PsiElement element = result.getElement();
           if (element instanceof PsiField) {
             field = true;
           } else if (element instanceof PsiMethod) {

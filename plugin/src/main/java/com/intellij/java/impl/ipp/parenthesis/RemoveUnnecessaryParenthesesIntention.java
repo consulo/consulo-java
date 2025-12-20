@@ -53,9 +53,9 @@ public class RemoveUnnecessaryParenthesesIntention extends Intention {
     }
 
     public static void stripLambdaParameterParentheses(PsiParameterList element) {
-        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
-        final String text = element.getParameters()[0].getName() + "->{}";
-        final PsiLambdaExpression expression = (PsiLambdaExpression) factory.createExpressionFromText(text, element);
+        PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
+        String text = element.getParameters()[0].getName() + "->{}";
+        PsiLambdaExpression expression = (PsiLambdaExpression) factory.createExpressionFromText(text, element);
         element.replace(expression.getParameterList());
     }
 }

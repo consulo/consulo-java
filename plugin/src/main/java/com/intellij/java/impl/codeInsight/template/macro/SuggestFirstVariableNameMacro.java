@@ -45,10 +45,10 @@ public class SuggestFirstVariableNameMacro extends VariableOfTypeMacro {
   @Override
   @RequiredReadAction
   protected PsiElement[] getVariables(Expression[] params, ExpressionContext context) {
-    final PsiElement[] variables = super.getVariables(params, context);
+    PsiElement[] variables = super.getVariables(params, context);
     if (variables == null) return null;
-    final List<PsiElement> result = new ArrayList<>();
-    final List<String> skip = Arrays.asList("true", "false", "this", "super");
+    List<PsiElement> result = new ArrayList<>();
+    List<String> skip = Arrays.asList("true", "false", "this", "super");
     for (PsiElement variable : variables) {
       if (!skip.contains(variable.getText())) {
         result.add(variable);

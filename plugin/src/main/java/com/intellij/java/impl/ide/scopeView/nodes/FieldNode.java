@@ -27,12 +27,12 @@ import com.intellij.java.language.psi.util.PsiFormatUtil;
  */
 public class FieldNode extends BasePsiNode<PsiField> {
 
-  public FieldNode(final PsiField field) {
+  public FieldNode(PsiField field) {
     super(field);
   }
 
   public String toString() {
-    final PsiField field = (PsiField) getPsiElement();
+    PsiField field = (PsiField) getPsiElement();
     if (field == null || !field.isValid()) return "";
     String name = PsiFormatUtil.formatVariable(
         field,
@@ -51,7 +51,7 @@ public class FieldNode extends BasePsiNode<PsiField> {
 
   @Override
   public boolean isDeprecated() {
-    final PsiField psiField = (PsiField) getPsiElement();
+    PsiField psiField = (PsiField) getPsiElement();
     return psiField != null && psiField.isDeprecated();
   }
 }

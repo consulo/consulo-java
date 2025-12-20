@@ -49,10 +49,10 @@ public class HibernateResourceInspection extends ResourceInspection {
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final PsiExpression expression = (PsiExpression)infos[0];
-    final PsiType type = expression.getType();
+    PsiExpression expression = (PsiExpression)infos[0];
+    PsiType type = expression.getType();
     assert type != null;
-    final String text = type.getPresentableText();
+    String text = type.getPresentableText();
     return InspectionGadgetsLocalize.hibernateResourceOpenedNotClosedProblemDescriptor(text).get();
   }
 
@@ -76,11 +76,11 @@ public class HibernateResourceInspection extends ResourceInspection {
       if (!isHibernateFactoryMethod(expression)) {
         return;
       }
-      final PsiElement parent = getExpressionParent(expression);
+      PsiElement parent = getExpressionParent(expression);
       if (parent instanceof PsiReturnStatement) {
         return;
       }
-      final PsiVariable boundVariable = getVariable(parent);
+      PsiVariable boundVariable = getVariable(parent);
       if (isSafelyClosed(boundVariable, expression, insideTryAllowed)) {
         return;
       }
@@ -92,13 +92,13 @@ public class HibernateResourceInspection extends ResourceInspection {
 
     private boolean isHibernateFactoryMethod(
       PsiMethodCallExpression expression) {
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
+      String methodName = methodExpression.getReferenceName();
       if (!HardcodedMethodConstants.OPEN_SESSION.equals(methodName)) {
         return false;
       }
-      final PsiExpression qualifier =
+      PsiExpression qualifier =
         methodExpression.getQualifierExpression();
       if (qualifier == null) {
         return false;

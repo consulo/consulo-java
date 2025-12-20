@@ -81,15 +81,15 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
         myVisibilityPanel = new JavaVisibilityPanel(true, true);
         myVisibilityPanel.setVisibility(null);
         this.sourceClass = sourceClass;
-        final DocumentListener docListener = new DocumentAdapter() {
+        DocumentListener docListener = new DocumentAdapter() {
             @Override
-            protected void textChanged(final DocumentEvent e) {
+            protected void textChanged(DocumentEvent e) {
                 validateButtons();
             }
         };
         classNameField = new JTextField();
-        final PsiFile file = sourceClass.getContainingFile();
-        final String text = file instanceof PsiJavaFile javaFile ? javaFile.getPackageName() : "";
+        PsiFile file = sourceClass.getContainingFile();
+        String text = file instanceof PsiJavaFile javaFile ? javaFile.getPackageName() : "";
         packageTextField = new PackageNameReferenceEditorCombo(
             text,
             myProject,
@@ -112,7 +112,7 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
             packageTextField.getChildComponent()
         );
         classNameField.getDocument().addDocumentListener(docListener);
-        final MemberInfo.Filter<PsiMember> filter = element -> {
+        MemberInfo.Filter<PsiMember> filter = element -> {
             if (element instanceof PsiMethod method) {
                 return !method.isConstructor() && method.getBody() != null;
             }
@@ -128,7 +128,7 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
         extractAsEnum = CheckBox.create(JavaRefactoringLocalize.extractDelegateAsEnumCheckbox());
         boolean hasConstants = false;
         for (MemberInfo info : memberInfo) {
-            final PsiMember member = info.getMember();
+            PsiMember member = info.getMember();
             if (member.equals(selectedMember)) {
                 info.setChecked(true);
             }
@@ -146,14 +146,14 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
     @Override
     @RequiredUIAccess
     protected void doAction() {
-        final List<PsiField> fields = getFieldsToExtract();
-        final List<PsiMethod> methods = getMethodsToExtract();
-        final List<PsiClass> classes = getClassesToExtract();
-        final String newClassName = getClassName();
-        final String packageName = getPackageName();
+        List<PsiField> fields = getFieldsToExtract();
+        List<PsiMethod> methods = getMethodsToExtract();
+        List<PsiClass> classes = getClassesToExtract();
+        String newClassName = getClassName();
+        String packageName = getPackageName();
 
         Collections.sort(enumConstants, (o1, o2) -> o1.getMember().getTextOffset() - o2.getMember().getTextOffset());
-        final ExtractClassProcessor processor = new ExtractClassProcessor(sourceClass, fields, methods, classes, packageName,
+        ExtractClassProcessor processor = new ExtractClassProcessor(sourceClass, fields, methods, classes, packageName,
             myDestinationFolderComboBox.selectDirectory(new PackageWrapper(PsiManager.getInstance(myProject), packageName), false),
             newClassName,
             myVisibilityPanel.getVisibility(),
@@ -176,16 +176,16 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
     @Override
     @RequiredReadAction
     protected void canRun() throws ConfigurationException {
-        final Project project = sourceClass.getProject();
-        final PsiNameHelper nameHelper = PsiNameHelper.getInstance(project);
-        final List<PsiMethod> methods = getMethodsToExtract();
-        final List<PsiField> fields = getFieldsToExtract();
-        final List<PsiClass> innerClasses = getClassesToExtract();
+        Project project = sourceClass.getProject();
+        PsiNameHelper nameHelper = PsiNameHelper.getInstance(project);
+        List<PsiMethod> methods = getMethodsToExtract();
+        List<PsiField> fields = getFieldsToExtract();
+        List<PsiClass> innerClasses = getClassesToExtract();
         if (methods.isEmpty() && fields.isEmpty() && innerClasses.isEmpty()) {
             throw new ConfigurationException(JavaRefactoringLocalize.dialogMessageNothingFoundToExtract());
         }
 
-        final String className = getClassName();
+        String className = getClassName();
         if (className.length() == 0 || !nameHelper.isIdentifier(className)) {
             throw new ConfigurationException(JavaRefactoringLocalize.invalidExtractedClassName(className));
         }
@@ -216,8 +216,8 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
     }
 
     @SuppressWarnings("unchecked")
-    public <T> List<T> getMembersToExtract(final boolean checked, Class<T> memberClass) {
-        final List<T> out = new ArrayList<>();
+    public <T> List<T> getMembersToExtract(boolean checked, Class<T> memberClass) {
+        List<T> out = new ArrayList<>();
         for (MemberInfo info : memberInfo) {
             if (checked && !info.isChecked()) {
                 continue;
@@ -225,7 +225,7 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
             if (!checked && info.isChecked()) {
                 continue;
             }
-            final PsiMember member = info.getMember();
+            PsiMember member = info.getMember();
             if (memberClass.isAssignableFrom(member.getClass())) {
                 out.add((T)member);
             }
@@ -279,8 +279,8 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
     @Override
     @RequiredUIAccess
     protected JComponent createCenterPanel() {
-        final JPanel panel = new JPanel(new BorderLayout());
-        final MemberSelectionPanel memberSelectionPanel =
+        JPanel panel = new JPanel(new BorderLayout());
+        MemberSelectionPanel memberSelectionPanel =
             new MemberSelectionPanel(JavaRefactoringLocalize.membersToExtractLabel().get(), memberInfo, "As enum") {
                 @Override
                 protected MemberSelectionTable createMemberSelectionTable(final List<MemberInfo> memberInfo, String abstractColumnHeader) {
@@ -289,7 +289,7 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
                         @Override
                         protected Object getAbstractColumnValue(MemberInfo memberInfo) {
                             if (isExtractAsEnum()) {
-                                final PsiMember member = memberInfo.getMember();
+                                PsiMember member = memberInfo.getMember();
                                 if (isConstantField(member)) {
                                     return enumConstants.contains(memberInfo);
                                 }
@@ -299,14 +299,14 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
 
                         @Override
                         protected boolean isAbstractColumnEditable(int rowIndex) {
-                            final MemberInfo info = memberInfo.get(rowIndex);
+                            MemberInfo info = memberInfo.get(rowIndex);
                             if (info.isChecked()) {
-                                final PsiMember member = info.getMember();
+                                PsiMember member = info.getMember();
                                 if (isConstantField(member)) {
                                     if (enumConstants.isEmpty()) {
                                         return true;
                                     }
-                                    final MemberInfo currentEnumConstant = enumConstants.get(0);
+                                    MemberInfo currentEnumConstant = enumConstants.get(0);
                                     if (((PsiField)currentEnumConstant.getMember()).getType().equals(((PsiField)member).getType())) {
                                         return true;
                                     }
@@ -321,8 +321,8 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
         table.setMemberInfoModel(new DelegatingMemberInfoModel<>(table.getMemberInfoModel()) {
 
             @Override
-            public int checkForProblems(@Nonnull final MemberInfo member) {
-                final PsiMember cause = getCause(member);
+            public int checkForProblems(@Nonnull MemberInfo member) {
+                PsiMember cause = getCause(member);
                 if (member.isChecked() && cause != null) {
                     return ERROR;
                 }
@@ -334,29 +334,29 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
 
             @Override
             @RequiredReadAction
-            public String getTooltipText(final MemberInfo member) {
-                final PsiMember cause = getCause(member);
+            public String getTooltipText(MemberInfo member) {
+                PsiMember cause = getCause(member);
                 if (cause != null) {
-                    final String presentation = SymbolPresentationUtil.getSymbolPresentableText(cause);
+                    String presentation = SymbolPresentationUtil.getSymbolPresentableText(cause);
                     if (member.isChecked()) {
                         return JavaRefactoringLocalize.extractClassDependsOn0From1Tooltip(presentation, sourceClass.getName()).get();
                     }
                     else {
-                        final String className = getClassName();
+                        String className = getClassName();
                         return JavaRefactoringLocalize.extractClassDependsOn0FromNewClass(presentation, className).get();
                     }
                 }
                 return null;
             }
 
-            private PsiMember getCause(final MemberInfo member) {
+            private PsiMember getCause(MemberInfo member) {
                 PsiMember cause = myMember2CauseMap.get(member);
 
                 if (cause != null) {
                     return cause;
                 }
 
-                final BackpointerUsageVisitor visitor;
+                BackpointerUsageVisitor visitor;
                 if (member.isChecked()) {
                     visitor = new BackpointerUsageVisitor(getFieldsToExtract(), getClassesToExtract(), getMethodsToExtract(), sourceClass);
                 }
@@ -407,7 +407,7 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
             }
         }
         for (MemberInfo info : memberInfo) {
-            final PsiMember member = info.getMember();
+            PsiMember member = info.getMember();
             if (isConstantField(member)) {
                 if (enumConstants.isEmpty()
                     || ((PsiField)enumConstants.get(0).getMember()).getType().equals(((PsiField)member).getType())) {
@@ -436,7 +436,7 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
     @Override
     @RequiredUIAccess
     protected void doHelpAction() {
-        final HelpManager helpManager = HelpManager.getInstance();
+        HelpManager helpManager = HelpManager.getInstance();
         helpManager.invokeHelp(HelpID.ExtractClass);
     }
 
@@ -461,12 +461,12 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
     }
 
     private boolean canExtractEnum() {
-        final List<PsiField> fields = new ArrayList<>();
-        final List<PsiClass> innerClasses = new ArrayList<>();
-        final List<PsiMethod> methods = new ArrayList<>();
+        List<PsiField> fields = new ArrayList<>();
+        List<PsiClass> innerClasses = new ArrayList<>();
+        List<PsiMethod> methods = new ArrayList<>();
         for (MemberInfo info : memberInfo) {
             if (info.isChecked()) {
-                final PsiMember member = info.getMember();
+                PsiMember member = info.getMember();
                 if (member instanceof PsiField field) {
                     fields.add(field);
                 }

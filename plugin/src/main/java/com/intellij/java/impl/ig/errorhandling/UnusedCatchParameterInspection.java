@@ -55,7 +55,7 @@ public class UnusedCatchParameterInspection extends BaseInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
+        MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
         optionsPanel.addCheckbox(
             InspectionGadgetsLocalize.unusedCatchParameterIgnoreCatchOption().get(),
             "m_ignoreCatchBlocksWithComments"
@@ -70,7 +70,7 @@ public class UnusedCatchParameterInspection extends BaseInspection {
     @Override
     @Nonnull
     protected String buildErrorString(Object... infos) {
-        final boolean namedIgnoreButUsed = (Boolean) infos[0];
+        boolean namedIgnoreButUsed = (Boolean) infos[0];
         return namedIgnoreButUsed
             ? InspectionGadgetsLocalize.usedCatchParameterNamedIgnoreProblemDescriptor().get()
             : InspectionGadgetsLocalize.unusedCatchParameterProblemDescriptor().get();
@@ -79,7 +79,7 @@ public class UnusedCatchParameterInspection extends BaseInspection {
     @Override
     @Nullable
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final boolean namedIgnoreButUsed = (Boolean) infos[0];
+        boolean namedIgnoreButUsed = (Boolean) infos[0];
         if (namedIgnoreButUsed) {
             return null;
         }
@@ -99,32 +99,32 @@ public class UnusedCatchParameterInspection extends BaseInspection {
             if (m_ignoreTestCases && TestUtils.isInTestCode(statement)) {
                 return;
             }
-            final PsiCatchSection[] catchSections = statement.getCatchSections();
+            PsiCatchSection[] catchSections = statement.getCatchSections();
             for (PsiCatchSection catchSection : catchSections) {
                 checkCatchSection(catchSection);
             }
         }
 
         private void checkCatchSection(PsiCatchSection section) {
-            final PsiParameter parameter = section.getParameter();
+            PsiParameter parameter = section.getParameter();
             if (parameter == null) {
                 return;
             }
-            @NonNls final String parameterName = parameter.getName();
-            final boolean namedIgnore = parameterName.contains("ignore");
-            final PsiCodeBlock block = section.getCatchBlock();
+            @NonNls String parameterName = parameter.getName();
+            boolean namedIgnore = parameterName.contains("ignore");
+            PsiCodeBlock block = section.getCatchBlock();
             if (block == null) {
                 return;
             }
             if (m_ignoreCatchBlocksWithComments) {
-                final PsiElement[] children = block.getChildren();
-                for (final PsiElement child : children) {
+                PsiElement[] children = block.getChildren();
+                for (PsiElement child : children) {
                     if (child instanceof PsiComment) {
                         return;
                     }
                 }
             }
-            final CatchParameterUsedVisitor visitor =
+            CatchParameterUsedVisitor visitor =
                 new CatchParameterUsedVisitor(parameter);
             block.accept(visitor);
             if (visitor.isUsed()) {

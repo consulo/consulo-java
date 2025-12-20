@@ -64,7 +64,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
 
     @Override
     protected boolean isAvailableImpl(int offset) {
-        final PsiMethodCallExpression call = getMethodCall();
+        PsiMethodCallExpression call = getMethodCall();
         if (call == null || !call.isValid()) {
             return false;
         }
@@ -87,7 +87,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
 
     private static boolean isMethodSignatureExists(PsiMethodCallExpression call, PsiClass target) {
         String name = call.getMethodExpression().getReferenceName();
-        final JavaResolveResult resolveResult = call.getMethodExpression().advancedResolve(false);
+        JavaResolveResult resolveResult = call.getMethodExpression().advancedResolve(false);
         PsiExpressionList list = call.getArgumentList();
         PsiMethod[] methods = target.findMethodsByName(name, false);
         for (PsiMethod method : methods) {
@@ -98,7 +98,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
         return false;
     }
 
-    static boolean hasErrorsInArgumentList(final PsiMethodCallExpression call) {
+    static boolean hasErrorsInArgumentList(PsiMethodCallExpression call) {
         Project project = call.getProject();
         Document document = PsiDocumentManager.getInstance(project).getDocument(call.getContainingFile());
         if (document == null) {
@@ -120,7 +120,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
 
     @Override
     protected PsiElement getElement() {
-        final PsiMethodCallExpression call = getMethodCall();
+        PsiMethodCallExpression call = getMethodCall();
         if (call == null || !call.getManager().isInProject(call)) {
             return null;
         }
@@ -148,7 +148,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
     }
 
     @Override
-    protected void invokeImpl(final PsiClass targetClass) {
+    protected void invokeImpl(PsiClass targetClass) {
         if (targetClass == null) {
             return;
         }
@@ -180,7 +180,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
 
         PsiCodeBlock body = method.getBody();
         assert body != null;
-        final boolean shouldBeAbstract = shouldBeAbstract(expression.getMethodExpression(), targetClass);
+        boolean shouldBeAbstract = shouldBeAbstract(expression.getMethodExpression(), targetClass);
         if (shouldBeAbstract) {
             body.delete();
             if (!targetClass.isInterface()) {
@@ -197,7 +197,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
             PsiUtil.setModifierProperty(method, PsiModifier.STATIC, true);
         }
 
-        final PsiElement context = PsiTreeUtil.getParentOfType(expression, PsiClass.class, PsiMethod.class);
+        PsiElement context = PsiTreeUtil.getParentOfType(expression, PsiClass.class, PsiMethod.class);
 
         PsiExpression[] arguments = expression.getArgumentList().getExpressions();
         doCreate(targetClass, method, shouldBeAbstract,
@@ -250,7 +250,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
                                 List<Pair<PsiExpression, PsiType>> arguments,
                                 PsiSubstitutor substitutor,
                                 ExpectedTypeInfo[] expectedTypes,
-                                @Nullable final PsiElement context) {
+                                @Nullable PsiElement context) {
 
         method = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(method);
 
@@ -267,7 +267,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
         TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(method);
 
         CreateFromUsageUtils.setupMethodParameters(method, builder, context, substitutor, arguments);
-        final PsiTypeElement returnTypeElement = method.getReturnTypeElement();
+        PsiTypeElement returnTypeElement = method.getReturnTypeElement();
         if (returnTypeElement != null) {
             new GuessTypeParameters(JavaPsiFacade.getInstance(project).getElementFactory())
                 .setupTypeElement(returnTypeElement, expectedTypes, substitutor, builder, context, targetClass);
@@ -297,7 +297,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
                         @Override
                         public void run() {
                             PsiDocumentManager.getInstance(project).commitDocument(newEditor.getDocument());
-                            final int offset = newEditor.getCaretModel().getOffset();
+                            int offset = newEditor.getCaretModel().getOffset();
                             PsiMethod method = PsiTreeUtil.findElementOfClassAtOffset(targetFile, offset - 1, PsiMethod.class, false);
                             if (method != null) {
                                 try {
@@ -319,13 +319,13 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
         }
     }
 
-    public static boolean checkTypeParam(final PsiMethod method, final PsiTypeParameter typeParameter) {
+    public static boolean checkTypeParam(final PsiMethod method, PsiTypeParameter typeParameter) {
         final String typeParameterName = typeParameter.getName();
 
-        final PsiTypeVisitor<Boolean> visitor = new PsiTypeVisitor<Boolean>() {
+        PsiTypeVisitor<Boolean> visitor = new PsiTypeVisitor<Boolean>() {
             @Override
             public Boolean visitClassType(PsiClassType classType) {
-                final PsiClass psiClass = classType.resolve();
+                PsiClass psiClass = classType.resolve();
                 if (psiClass instanceof PsiTypeParameter &&
                     PsiTreeUtil.isAncestor(((PsiTypeParameter) psiClass).getOwner(), method, true)) {
                     return false;
@@ -353,7 +353,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
 
             @Override
             public Boolean visitWildcardType(PsiWildcardType wildcardType) {
-                final PsiType bound = wildcardType.getBound();
+                PsiType bound = wildcardType.getBound();
                 if (bound != null) {
                     return bound.accept(this);
                 }
@@ -361,7 +361,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
             }
         };
 
-        final PsiTypeElement rElement = method.getReturnTypeElement();
+        PsiTypeElement rElement = method.getReturnTypeElement();
         if (rElement != null) {
             if (rElement.getType().accept(visitor)) {
                 return true;
@@ -370,7 +370,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
 
 
         for (PsiParameter parameter : method.getParameterList().getParameters()) {
-            final PsiTypeElement element = parameter.getTypeElement();
+            PsiTypeElement element = parameter.getTypeElement();
             if (element != null) {
                 if (element.getType().accept(visitor)) {
                     return true;

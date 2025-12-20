@@ -67,17 +67,17 @@ public class ThreadRunInspection extends BaseInspection {
     @Override
     public void doFix(@Nonnull Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement methodNameIdentifier = descriptor.getPsiElement();
-      final PsiReferenceExpression methodExpression =
+      PsiElement methodNameIdentifier = descriptor.getPsiElement();
+      PsiReferenceExpression methodExpression =
         (PsiReferenceExpression)methodNameIdentifier.getParent();
       assert methodExpression != null;
-      final PsiExpression qualifier =
+      PsiExpression qualifier =
         methodExpression.getQualifierExpression();
       if (qualifier == null) {
         replaceExpression(methodExpression, "start");
       }
       else {
-        final String qualifierText = qualifier.getText();
+        String qualifierText = qualifier.getText();
         replaceExpression(methodExpression, qualifierText + ".start");
       }
     }
@@ -93,21 +93,21 @@ public class ThreadRunInspection extends BaseInspection {
     public void visitMethodCallExpression(
       @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
+      String methodName = methodExpression.getReferenceName();
       if (!HardcodedMethodConstants.RUN.equals(methodName)) {
         return;
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return;
       }
-      final PsiParameterList parameterList = method.getParameterList();
+      PsiParameterList parameterList = method.getParameterList();
       if (parameterList.getParametersCount() != 0) {
         return;
       }
-      final PsiClass methodClass = method.getContainingClass();
+      PsiClass methodClass = method.getContainingClass();
       if (methodClass == null) {
         return;
       }
@@ -122,16 +122,16 @@ public class ThreadRunInspection extends BaseInspection {
 
     private static boolean isInsideThreadRun(
       PsiElement element) {
-      final PsiMethod method =
+      PsiMethod method =
         PsiTreeUtil.getParentOfType(element, PsiMethod.class);
       if (method == null) {
         return false;
       }
-      final String methodName = method.getName();
+      String methodName = method.getName();
       if (!HardcodedMethodConstants.RUN.equals(methodName)) {
         return false;
       }
-      final PsiClass methodClass = method.getContainingClass();
+      PsiClass methodClass = method.getContainingClass();
       if (methodClass == null) {
         return false;
       }

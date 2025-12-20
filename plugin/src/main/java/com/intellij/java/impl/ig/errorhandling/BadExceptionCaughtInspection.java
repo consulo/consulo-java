@@ -52,7 +52,7 @@ public class BadExceptionCaughtInspection extends BaseInspection {
     public BadExceptionCaughtInspection() {
         if (exceptionsString.length() != 0) {
             exceptions.clear();
-            final List<String> strings = StringUtil.split(exceptionsString, ",");
+            List<String> strings = StringUtil.split(exceptionsString, ",");
             for (String string : strings) {
                 exceptions.add(string);
             }
@@ -81,7 +81,7 @@ public class BadExceptionCaughtInspection extends BaseInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final ListTable table =
+        ListTable table =
             new ListTable(new ListWrappingTableModel(exceptions, InspectionGadgetsLocalize.exceptionClassColumnName().get()));
         return UiUtils.createAddRemoveTreeClassChooserPanel(
             table,
@@ -100,15 +100,15 @@ public class BadExceptionCaughtInspection extends BaseInspection {
         @Override
         public void visitCatchSection(PsiCatchSection section) {
             super.visitCatchSection(section);
-            final PsiParameter parameter = section.getParameter();
+            PsiParameter parameter = section.getParameter();
             if (parameter == null) {
                 return;
             }
-            final PsiTypeElement typeElement = parameter.getTypeElement();
+            PsiTypeElement typeElement = parameter.getTypeElement();
             if (typeElement == null) {
                 return;
             }
-            final PsiTypeElement[] childTypeElements = PsiTreeUtil.getChildrenOfType(typeElement, PsiTypeElement.class);
+            PsiTypeElement[] childTypeElements = PsiTreeUtil.getChildrenOfType(typeElement, PsiTypeElement.class);
             if (childTypeElements != null) {
                 for (PsiTypeElement childTypeElement : childTypeElements) {
                     checkTypeElement(childTypeElement);
@@ -120,7 +120,7 @@ public class BadExceptionCaughtInspection extends BaseInspection {
         }
 
         private void checkTypeElement(PsiTypeElement typeElement) {
-            final PsiType type = typeElement.getType();
+            PsiType type = typeElement.getType();
             if (exceptions.contains(type.getCanonicalText())) {
                 registerError(typeElement);
             }

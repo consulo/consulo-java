@@ -114,15 +114,15 @@ public class ExceptionsTableModel extends AbstractTableModel implements Editable
     myExceptionInfos = new ArrayList<ThrownExceptionInfo>(referencedTypes.length);
     for (int i = 0; i < referencedTypes.length; i++) {
       CanonicalTypes.Type typeWrapper = CanonicalTypes.createTypeWrapper(referencedTypes[i]);
-      final PsiTypeCodeFragment typeCodeFragment = createParameterTypeCodeFragment(typeWrapper.getTypeText(), method.getThrowsList());
+      PsiTypeCodeFragment typeCodeFragment = createParameterTypeCodeFragment(typeWrapper.getTypeText(), method.getThrowsList());
       typeWrapper.addImportsTo(typeCodeFragment);
       myTypeCodeFragments.add(typeCodeFragment);
       myExceptionInfos.add(new JavaThrownExceptionInfo(i, referencedTypes[i]));
     }
   }
 
-  public PsiTypeCodeFragment createParameterTypeCodeFragment(final String typeText, PsiElement context) {
-    final JavaCodeFragmentFactory factory = JavaCodeFragmentFactory.getInstance(myContext.getProject());
+  public PsiTypeCodeFragment createParameterTypeCodeFragment(String typeText, PsiElement context) {
+    JavaCodeFragmentFactory factory = JavaCodeFragmentFactory.getInstance(myContext.getProject());
     return factory.createTypeCodeFragment(typeText, context, true, JavaCodeFragmentFactory.ALLOW_ELLIPSIS);
   }
 

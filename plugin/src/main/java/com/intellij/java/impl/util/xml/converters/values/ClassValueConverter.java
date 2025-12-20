@@ -46,15 +46,15 @@ public abstract class ClassValueConverter extends Converter<PsiClass> implements
     return ServiceManager.getService(ClassValueConverter.class);
   }
 
-  public PsiClass fromString(@Nullable @NonNls String s, final ConvertContext context) {
+  public PsiClass fromString(@Nullable @NonNls String s, ConvertContext context) {
     if (s == null) return null;
-    final Module module = context.getModule();
-    final PsiFile psiFile = context.getFile();
-    final Project project = psiFile.getProject();
+    Module module = context.getModule();
+    PsiFile psiFile = context.getFile();
+    Project project = psiFile.getProject();
     return DomJavaUtil.findClass(s, context.getFile(), context.getModule(), getScope(project, module, psiFile));
   }
 
-  public String toString(@Nullable PsiClass psiClass, final ConvertContext context) {
+  public String toString(@Nullable PsiClass psiClass, ConvertContext context) {
     return psiClass == null ? null : psiClass.getQualifiedName();
   }
 
@@ -69,7 +69,7 @@ public abstract class ClassValueConverter extends Converter<PsiClass> implements
     if (file == null) {
       return (GlobalSearchScope) ProjectScopes.getAllScope(project);
     }
-    final boolean inTests = ProjectRootManager.getInstance(project).getFileIndex().isInTestSourceContent(file);
+    boolean inTests = ProjectRootManager.getInstance(project).getFileIndex().isInTestSourceContent(file);
 
     return GlobalSearchScope.moduleRuntimeScope(module, inTests);
   }

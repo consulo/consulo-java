@@ -71,18 +71,18 @@ public class ConditionSignalInspection extends BaseInspection {
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement methodNameElement = descriptor.getPsiElement();
-      final PsiReferenceExpression methodExpression =
+      PsiElement methodNameElement = descriptor.getPsiElement();
+      PsiReferenceExpression methodExpression =
         (PsiReferenceExpression)methodNameElement.getParent();
       assert methodExpression != null;
-      final PsiExpression qualifier = methodExpression
+      PsiExpression qualifier = methodExpression
         .getQualifierExpression();
-      @NonNls final String signalAll = "signalAll";
+      @NonNls String signalAll = "signalAll";
       if (qualifier == null) {
         replaceExpression(methodExpression, signalAll);
       }
       else {
-        final String qualifierText = qualifier.getText();
+        String qualifierText = qualifier.getText();
         replaceExpression(methodExpression,
                           qualifierText + '.' + signalAll);
       }
@@ -95,22 +95,22 @@ public class ConditionSignalInspection extends BaseInspection {
     public void visitMethodCallExpression(
       @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
-      @NonNls final String signal = "signal";
+      String methodName = methodExpression.getReferenceName();
+      @NonNls String signal = "signal";
       if (!signal.equals(methodName)) {
         return;
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpressionList argumentList = expression.getArgumentList();
       if (argumentList.getExpressions().length != 0) {
         return;
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return;
       }
-      final PsiClass containingClass = method.getContainingClass();
+      PsiClass containingClass = method.getContainingClass();
       if (containingClass == null) {
         return;
       }

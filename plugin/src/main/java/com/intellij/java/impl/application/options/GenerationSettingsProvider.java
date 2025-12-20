@@ -32,7 +32,7 @@ import jakarta.annotation.Nonnull;
 public class GenerationSettingsProvider extends CodeStyleSettingsProvider {
     @Override
     @Nonnull
-    public Configurable createSettingsPage(final CodeStyleSettings settings, final CodeStyleSettings originalSettings) {
+    public Configurable createSettingsPage(CodeStyleSettings settings, CodeStyleSettings originalSettings) {
         return new CodeStyleGenerationConfigurable(settings);
     }
 

@@ -51,10 +51,10 @@ class ConstantMatchProvider implements MatchProvider
 	@Override
 	public PsiElement processMatch(Match match) throws IncorrectOperationException
 	{
-		final PsiClass containingClass = myField.getContainingClass();
+		PsiClass containingClass = myField.getContainingClass();
 		LOG.assertTrue(containingClass != null, myField);
 		String fieldReference = myField.getName();
-		final PsiElement start = match.getMatchStart();
+		PsiElement start = match.getMatchStart();
 		if(!PsiTreeUtil.isAncestor(containingClass, start, false))
 		{
 			fieldReference = containingClass.getQualifiedName() + "." + fieldReference;

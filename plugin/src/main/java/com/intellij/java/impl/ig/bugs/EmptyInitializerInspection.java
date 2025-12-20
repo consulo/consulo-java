@@ -64,10 +64,10 @@ public class EmptyInitializerInspection extends BaseInspection {
 
         public void doFix(Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement codeBlock = element.getParent();
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement codeBlock = element.getParent();
             assert codeBlock != null;
-            final PsiElement classInitializer = codeBlock.getParent();
+            PsiElement classInitializer = codeBlock.getParent();
             assert classInitializer != null;
             deleteElement(classInitializer);
         }
@@ -84,7 +84,7 @@ public class EmptyInitializerInspection extends BaseInspection {
             @Nonnull PsiClassInitializer initializer
         ) {
             super.visitClassInitializer(initializer);
-            final PsiCodeBlock body = initializer.getBody();
+            PsiCodeBlock body = initializer.getBody();
             if (!codeBlockIsEmpty(body)) {
                 return;
             }
@@ -92,7 +92,7 @@ public class EmptyInitializerInspection extends BaseInspection {
         }
 
         private static boolean codeBlockIsEmpty(PsiCodeBlock codeBlock) {
-            final PsiStatement[] statements = codeBlock.getStatements();
+            PsiStatement[] statements = codeBlock.getStatements();
             return statements.length == 0;
         }
     }

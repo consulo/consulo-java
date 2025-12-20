@@ -50,22 +50,22 @@ public class AbstractMethodCallInConstructorInspection extends BaseInspection {
             if (!MethodCallUtils.isCallDuringObjectConstruction(expression)) {
                 return;
             }
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
             if (qualifier != null) {
                 if (!(qualifier instanceof PsiThisExpression) && !(qualifier instanceof PsiSuperExpression)) {
                     return;
                 }
             }
-            final PsiMethod calledMethod = (PsiMethod) methodExpression.resolve();
+            PsiMethod calledMethod = (PsiMethod) methodExpression.resolve();
             if (calledMethod == null || calledMethod.isConstructor() || !calledMethod.hasModifierProperty(PsiModifier.ABSTRACT)) {
                 return;
             }
-            final PsiClass calledMethodClass = calledMethod.getContainingClass();
+            PsiClass calledMethodClass = calledMethod.getContainingClass();
             if (calledMethodClass == null) {
                 return;
             }
-            final PsiClass containingClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
+            PsiClass containingClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
             if (!calledMethodClass.equals(containingClass)) {
                 return;
             }

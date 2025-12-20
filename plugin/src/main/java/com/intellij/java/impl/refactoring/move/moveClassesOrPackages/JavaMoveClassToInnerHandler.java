@@ -59,7 +59,7 @@ public class JavaMoveClassToInnerHandler implements MoveClassToInnerHandler {
 
   @Override
   public List<PsiElement> filterImports(@Nonnull List<UsageInfo> usageInfos, @Nonnull Project project) {
-    final List<PsiElement> importStatements = new ArrayList<PsiElement>();
+    List<PsiElement> importStatements = new ArrayList<PsiElement>();
     if (!CodeStyleSettingsManager.getSettings(project).INSERT_INNER_CLASS_IMPORTS) {
       filterUsagesInImportStatements(usageInfos, importStatements);
     }
@@ -74,7 +74,7 @@ public class JavaMoveClassToInnerHandler implements MoveClassToInnerHandler {
     return importStatements;
   }
 
-  private static void filterUsagesInImportStatements(final List<UsageInfo> usages, final List<PsiElement> importStatements) {
+  private static void filterUsagesInImportStatements(List<UsageInfo> usages, List<PsiElement> importStatements) {
     for (Iterator<UsageInfo> iterator = usages.iterator(); iterator.hasNext(); ) {
       UsageInfo usage = iterator.next();
       PsiElement element = usage.getElement();
@@ -88,11 +88,11 @@ public class JavaMoveClassToInnerHandler implements MoveClassToInnerHandler {
   }
 
   public void retargetClassRefsInMoved(@Nonnull final Map<PsiElement, PsiElement> oldToNewElementsMapping) {
-    for (final PsiElement newClass : oldToNewElementsMapping.values()) {
+    for (PsiElement newClass : oldToNewElementsMapping.values()) {
       if (newClass.getLanguage() != JavaLanguage.INSTANCE) continue;
       newClass.accept(new JavaRecursiveElementVisitor() {
         @Override
-        public void visitReferenceElement(final PsiJavaCodeReferenceElement reference) {
+        public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
           PsiElement element = reference.resolve();
           if (element instanceof PsiClass) {
             for (PsiElement oldClass : oldToNewElementsMapping.keySet()) {
@@ -116,7 +116,7 @@ public class JavaMoveClassToInnerHandler implements MoveClassToInnerHandler {
   }
 
 
-  private static PsiClass findMatchingClass(final PsiClass classToMove, final PsiClass newClass, final PsiClass innerClass) {
+  private static PsiClass findMatchingClass(PsiClass classToMove, PsiClass newClass, PsiClass innerClass) {
     if (classToMove == innerClass) {
       return newClass;
     }
@@ -126,13 +126,13 @@ public class JavaMoveClassToInnerHandler implements MoveClassToInnerHandler {
     return newInnerClass;
   }
 
-  public void retargetNonCodeUsages(@Nonnull final Map<PsiElement, PsiElement> oldToNewElementMap,
+  public void retargetNonCodeUsages(@Nonnull Map<PsiElement, PsiElement> oldToNewElementMap,
                                     @Nonnull final NonCodeUsageInfo[] nonCodeUsages) {
     for (PsiElement newClass : oldToNewElementMap.values()) {
       if (newClass.getLanguage() != JavaLanguage.INSTANCE) continue;
       newClass.accept(new PsiRecursiveElementVisitor() {
         @Override
-        public void visitElement(final PsiElement element) {
+        public void visitElement(PsiElement element) {
           super.visitElement(element);
           List<NonCodeUsageInfo> list = element.getCopyableUserData(MoveClassToInnerProcessor.ourNonCodeUsageKey);
           if (list != null) {

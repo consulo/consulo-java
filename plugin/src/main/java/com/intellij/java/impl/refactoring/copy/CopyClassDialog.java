@@ -125,7 +125,7 @@ class CopyClassDialog extends DialogWrapper {
         }
 
         Label label = Label.create(RefactoringLocalize.targetDestinationFolder());
-        final boolean isMultipleSourceRoots = ProjectRootManager.getInstance(myProject).getContentSourceRoots().length > 1;
+        boolean isMultipleSourceRoots = ProjectRootManager.getInstance(myProject).getContentSourceRoots().length > 1;
         myDestinationCB.setVisible(!myDoClone && isMultipleSourceRoots);
         label.setVisible(!myDoClone && isMultipleSourceRoots);
         label.setTarget(TargetAWT.wrap(myDestinationCB));
@@ -141,7 +141,7 @@ class CopyClassDialog extends DialogWrapper {
     protected String getQualifiedName() {
         String qualifiedName = "";
         if (myDefaultTargetDirectory != null) {
-            final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(myDefaultTargetDirectory);
+            PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(myDefaultTargetDirectory);
             if (aPackage != null) {
                 qualifiedName = aPackage.getQualifiedName();
             }
@@ -160,12 +160,12 @@ class CopyClassDialog extends DialogWrapper {
     @Override
     @RequiredUIAccess
     protected void doOKAction() {
-        final String packageName = myTfPackage.getText();
-        final String className = getClassName();
+        String packageName = myTfPackage.getText();
+        String className = getClassName();
 
-        final String[] errorString = new String[1];
-        final PsiManager manager = PsiManager.getInstance(myProject);
-        final PsiNameHelper nameHelper = PsiNameHelper.getInstance(manager.getProject());
+        String[] errorString = new String[1];
+        PsiManager manager = PsiManager.getInstance(myProject);
+        PsiNameHelper nameHelper = PsiNameHelper.getInstance(manager.getProject());
         if (packageName.length() > 0 && !nameHelper.isQualifiedName(packageName)) {
             errorString[0] = RefactoringLocalize.invalidTargetPackageNameSpecified().get();
         }
@@ -178,7 +178,7 @@ class CopyClassDialog extends DialogWrapper {
             }
             else if (!myDoClone) {
                 try {
-                    final PackageWrapper targetPackage = new PackageWrapper(manager, packageName);
+                    PackageWrapper targetPackage = new PackageWrapper(manager, packageName);
                     myDestination = myDestinationCB.selectDirectory(targetPackage, false);
                     if (myDestination == null) {
                         return;

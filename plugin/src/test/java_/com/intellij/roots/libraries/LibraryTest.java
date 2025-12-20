@@ -48,7 +48,7 @@ public abstract class LibraryTest extends IdeaTestCase {
     });
     assertFalse(listenerNotifiedOnChange[0]);
 
-    final Element element = new Element("root");
+    Element element = new Element("root");
     library.writeExternal(element);
     assertEquals("<root><library name=\"library\"><CLASSES><root url=\"file://x.jar\" /></CLASSES><JAVADOC /><SOURCES><root url=\"file://x-src.jar\" /></SOURCES></library></root>",
             new XMLOutputter().outputString(element));

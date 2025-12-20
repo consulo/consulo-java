@@ -64,11 +64,11 @@ public class ThrowCaughtLocallyInspection extends BaseInspection {
         @Override
         public void visitThrowStatement(PsiThrowStatement statement) {
             super.visitThrowStatement(statement);
-            final PsiExpression exception = statement.getException();
+            PsiExpression exception = statement.getException();
             if (exception == null) {
                 return;
             }
-            final PsiType exceptionType = exception.getType();
+            PsiType exceptionType = exception.getType();
             if (exceptionType == null) {
                 return;
             }
@@ -78,29 +78,29 @@ public class ThrowCaughtLocallyInspection extends BaseInspection {
                     PsiTryStatement.class
                 );
             while (containingTryStatement != null) {
-                final PsiCodeBlock tryBlock =
+                PsiCodeBlock tryBlock =
                     containingTryStatement.getTryBlock();
                 if (tryBlock == null) {
                     return;
                 }
                 if (PsiTreeUtil.isAncestor(tryBlock, statement, true)) {
-                    final PsiParameter[] catchBlockParameters =
+                    PsiParameter[] catchBlockParameters =
                         containingTryStatement.getCatchBlockParameters();
                     for (PsiParameter parameter : catchBlockParameters) {
-                        final PsiType parameterType = parameter.getType();
+                        PsiType parameterType = parameter.getType();
                         if (!parameterType.isAssignableFrom(exceptionType)) {
                             continue;
                         }
                         if (ignoreRethrownExceptions) {
-                            final PsiCatchSection section =
+                            PsiCatchSection section =
                                 (PsiCatchSection) parameter.getParent();
-                            final PsiCodeBlock catchBlock =
+                            PsiCodeBlock catchBlock =
                                 section.getCatchBlock();
                             if (isExceptionRethrown(parameter, catchBlock)) {
                                 return;
                             }
                         }
-                        final PsiClass containingClass =
+                        PsiClass containingClass =
                             ClassUtils.getContainingClass(statement);
                         if (PsiTreeUtil.isAncestor(containingClass,
                             containingTryStatement, true
@@ -122,24 +122,24 @@ public class ThrowCaughtLocallyInspection extends BaseInspection {
             PsiParameter parameter,
             PsiCodeBlock catchBlock
         ) {
-            final PsiStatement[] statements = catchBlock.getStatements();
+            PsiStatement[] statements = catchBlock.getStatements();
             if (statements.length <= 0) {
                 return false;
             }
-            final PsiStatement lastStatement =
+            PsiStatement lastStatement =
                 statements[statements.length - 1];
             if (!(lastStatement instanceof PsiThrowStatement)) {
                 return false;
             }
-            final PsiThrowStatement throwStatement =
+            PsiThrowStatement throwStatement =
                 (PsiThrowStatement) lastStatement;
-            final PsiExpression expression = throwStatement.getException();
+            PsiExpression expression = throwStatement.getException();
             if (!(expression instanceof PsiReferenceExpression)) {
                 return false;
             }
-            final PsiReferenceExpression referenceExpression =
+            PsiReferenceExpression referenceExpression =
                 (PsiReferenceExpression) expression;
-            final PsiElement element = referenceExpression.resolve();
+            PsiElement element = referenceExpression.resolve();
             return parameter.equals(element);
         }
     }

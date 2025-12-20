@@ -44,24 +44,24 @@ public class ParameterData {
     myType = type;
   }
 
-  public static void createFromConstructor(final PsiMethod constructor, final Map<String, ParameterData> result) {
+  public static void createFromConstructor(PsiMethod constructor, Map<String, ParameterData> result) {
 
     for (PsiParameter parameter : constructor.getParameterList().getParameters()) {
       initParameterData(parameter, result);
     }
 
-    final PsiMethod chainedConstructor = RefactoringUtil.getChainedConstructor(constructor);
+    PsiMethod chainedConstructor = RefactoringUtil.getChainedConstructor(constructor);
     if (chainedConstructor != null) {
-      final PsiCodeBlock constructorBody = constructor.getBody();
+      PsiCodeBlock constructorBody = constructor.getBody();
       LOG.assertTrue(constructorBody != null);
-      final PsiStatement thisStatement = constructorBody.getStatements()[0];
-      final PsiExpression thisExpression = ((PsiExpressionStatement)thisStatement).getExpression();
-      final PsiExpression[] args = ((PsiMethodCallExpression)thisExpression).getArgumentList().getExpressions();
+      PsiStatement thisStatement = constructorBody.getStatements()[0];
+      PsiExpression thisExpression = ((PsiExpressionStatement)thisStatement).getExpression();
+      PsiExpression[] args = ((PsiMethodCallExpression)thisExpression).getArgumentList().getExpressions();
       int i = 0;
-      for (final PsiParameter parameter : chainedConstructor.getParameterList().getParameters()) {
+      for (PsiParameter parameter : chainedConstructor.getParameterList().getParameters()) {
         if (!parameter.isVarArgs()) {
-          final PsiExpression arg = args[i];
-          final ParameterData parameterData = initParameterData(parameter, result);
+          PsiExpression arg = args[i];
+          ParameterData parameterData = initParameterData(parameter, result);
           if (!(arg instanceof PsiReferenceExpression && ((PsiReferenceExpression)arg).resolve() instanceof PsiParameter)) {
             parameterData.setDefaultValue(arg.getText());
           }
@@ -73,8 +73,8 @@ public class ParameterData {
 
   private static ParameterData initParameterData(PsiParameter parameter, Map<String, ParameterData> result) {
     JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(parameter.getProject());
-    final String paramName = parameter.getName();
-    final String pureParamName = styleManager.variableNameToPropertyName(paramName, VariableKind.PARAMETER);
+    String paramName = parameter.getName();
+    String pureParamName = styleManager.variableNameToPropertyName(paramName, VariableKind.PARAMETER);
 
     String uniqueParamName = pureParamName;
     ParameterData parameterData = result.get(uniqueParamName);

@@ -48,29 +48,29 @@ public class InstanceofIncompatibleInterfaceInspection extends BaseInspection {
     public void visitInstanceOfExpression(
       @Nonnull PsiInstanceOfExpression expression) {
       super.visitInstanceOfExpression(expression);
-      final PsiTypeElement castTypeElement = expression.getCheckType();
+      PsiTypeElement castTypeElement = expression.getCheckType();
       if (castTypeElement == null) {
         return;
       }
-      final PsiType castType = castTypeElement.getType();
+      PsiType castType = castTypeElement.getType();
       if (!(castType instanceof PsiClassType)) {
         return;
       }
-      final PsiClassType castClassType = (PsiClassType)castType;
-      final PsiExpression operand = expression.getOperand();
-      final PsiType operandType = operand.getType();
+      PsiClassType castClassType = (PsiClassType)castType;
+      PsiExpression operand = expression.getOperand();
+      PsiType operandType = operand.getType();
       if (!(operandType instanceof PsiClassType)) {
         return;
       }
-      final PsiClassType operandClassType = (PsiClassType)operandType;
-      final PsiClass castClass = castClassType.resolve();
+      PsiClassType operandClassType = (PsiClassType)operandType;
+      PsiClass castClass = castClassType.resolve();
       if (castClass == null) {
         return;
       }
       if (!castClass.isInterface()) {
         return;
       }
-      final PsiClass operandClass = operandClassType.resolve();
+      PsiClass operandClass = operandClassType.resolve();
       if (operandClass == null) {
         return;
       }

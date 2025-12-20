@@ -52,9 +52,9 @@ public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseI
 
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiMethod constructor = (PsiMethod)infos[1];
+    PsiMethod constructor = (PsiMethod)infos[1];
     if (constructor == null) {
-      final PsiClass aClass = (PsiClass)infos[0];
+      PsiClass aClass = (PsiClass)infos[0];
       if (aClass instanceof PsiAnonymousClass) {
         // can't create constructor for anonymous class
         return null;
@@ -68,9 +68,9 @@ public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseI
 
   @Nullable
   private static PsiMethod getNoArgConstructor(PsiClass aClass) {
-    final PsiMethod[] constructors = aClass.getConstructors();
+    PsiMethod[] constructors = aClass.getConstructors();
     for (PsiMethod constructor : constructors) {
-      final PsiParameterList parameterList = constructor.getParameterList();
+      PsiParameterList parameterList = constructor.getParameterList();
       if (parameterList.getParametersCount() == 0) {
         return constructor;
       }
@@ -88,12 +88,12 @@ public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseI
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement classNameIdentifier = descriptor.getPsiElement();
-      final PsiClass aClass = (PsiClass)classNameIdentifier.getParent();
+      PsiElement classNameIdentifier = descriptor.getPsiElement();
+      PsiClass aClass = (PsiClass)classNameIdentifier.getParent();
       if (aClass == null) {
         return;
       }
-      final PsiMethod constructor = getNoArgConstructor(aClass);
+      PsiMethod constructor = getNoArgConstructor(aClass);
       if (constructor == null) {
         return;
       }
@@ -119,7 +119,7 @@ public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseI
       if (!isExternalizable(aClass)) {
         return;
       }
-      final PsiMethod constructor = getNoArgConstructor(aClass);
+      PsiMethod constructor = getNoArgConstructor(aClass);
       if (constructor == null) {
         if (aClass.hasModifierProperty(PsiModifier.PUBLIC)) {
           return;
@@ -133,7 +133,7 @@ public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseI
     }
 
     private static boolean isExternalizable(PsiClass aClass) {
-      final PsiClass externalizableClass = ClassUtils.findClass(CommonClassNames.JAVA_IO_EXTERNALIZABLE, aClass);
+      PsiClass externalizableClass = ClassUtils.findClass(CommonClassNames.JAVA_IO_EXTERNALIZABLE, aClass);
       return externalizableClass != null && aClass.isInheritor(externalizableClass, true);
     }
   }

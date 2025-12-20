@@ -115,9 +115,9 @@ public class PullUpDialog extends PullUpDialogBase<MemberInfoStorage, MemberInfo
     protected PsiClass getPreselection() {
         PsiClass preselection = RefactoringHierarchyUtil.getNearestBaseClass(myClass, false);
 
-        final String statKey = PULL_UP_STATISTICS_KEY + myClass.getQualifiedName();
+        String statKey = PULL_UP_STATISTICS_KEY + myClass.getQualifiedName();
         for (StatisticsInfo info : StatisticsManager.getInstance().getAllValues(statKey)) {
-            final String superClassName = info.getValue();
+            String superClassName = info.getValue();
             PsiClass superClass = null;
             for (PsiClass aClass : mySuperClasses) {
                 if (Comparing.strEqual(superClassName, aClass.getQualifiedName())) {
@@ -142,7 +142,7 @@ public class PullUpDialog extends PullUpDialogBase<MemberInfoStorage, MemberInfo
             return;
         }
         JavaRefactoringSettings.getInstance().PULL_UP_MEMBERS_JAVADOC = myJavaDocPanel.getPolicy();
-        final PsiClass superClass = getSuperClass();
+        PsiClass superClass = getSuperClass();
         String name = superClass.getQualifiedName();
         if (name != null) {
             StatisticsManager.getInstance().incUseCount(new StatisticsInfo(PULL_UP_STATISTICS_KEY + myClass
@@ -162,7 +162,7 @@ public class PullUpDialog extends PullUpDialogBase<MemberInfoStorage, MemberInfo
         myJavaDocPanel.setPolicy(JavaRefactoringSettings.getInstance().PULL_UP_MEMBERS_JAVADOC);
         boolean hasJavadoc = false;
         for (MemberInfo info : myMemberInfos) {
-            final PsiMember member = info.getMember();
+            PsiMember member = info.getMember();
             if (myMemberInfoModel.isAbstractEnabled(info)) {
                 info.setToAbstract(myMemberInfoModel.isAbstractWhenDisabled(info));
                 if (!hasJavadoc &&
@@ -195,7 +195,7 @@ public class PullUpDialog extends PullUpDialogBase<MemberInfoStorage, MemberInfo
 
         @Override
         public boolean isMemberEnabled(MemberInfo member) {
-            final PsiClass currentSuperClass = getSuperClass();
+            PsiClass currentSuperClass = getSuperClass();
             if (currentSuperClass == null) {
                 return true;
             }
@@ -205,7 +205,7 @@ public class PullUpDialog extends PullUpDialogBase<MemberInfoStorage, MemberInfo
             if (myMemberInfoStorage.getExtending(currentSuperClass).contains(member.getMember())) {
                 return false;
             }
-            final boolean isInterface = currentSuperClass.isInterface();
+            boolean isInterface = currentSuperClass.isInterface();
             if (!isInterface) {
                 return true;
             }
@@ -218,11 +218,11 @@ public class PullUpDialog extends PullUpDialogBase<MemberInfoStorage, MemberInfo
                 return ((PsiModifierListOwner) element).hasModifierProperty(PsiModifier.STATIC);
             }
             if (element instanceof PsiMethod) {
-                final PsiSubstitutor superSubstitutor = TypeConversionUtil.getSuperClassSubstitutor(currentSuperClass,
+                PsiSubstitutor superSubstitutor = TypeConversionUtil.getSuperClassSubstitutor(currentSuperClass,
                     myClass, PsiSubstitutor.EMPTY
                 );
-                final MethodSignature signature = ((PsiMethod) element).getSignature(superSubstitutor);
-                final PsiMethod superClassMethod = MethodSignatureUtil.findMethodBySignature(currentSuperClass,
+                MethodSignature signature = ((PsiMethod) element).getSignature(superSubstitutor);
+                PsiMethod superClassMethod = MethodSignatureUtil.findMethodBySignature(currentSuperClass,
                     signature, false
                 );
                 if (superClassMethod != null && !PsiUtil.isLanguageLevel8OrHigher(currentSuperClass)) {
@@ -253,7 +253,7 @@ public class PullUpDialog extends PullUpDialogBase<MemberInfoStorage, MemberInfo
                 return false;
             }
             if (currentSuperClass.isInterface()) {
-                final PsiMember psiMember = member.getMember();
+                PsiMember psiMember = member.getMember();
                 if (psiMember instanceof PsiMethod) {
                     return !psiMember.hasModifierProperty(PsiModifier.STATIC);
                 }

@@ -34,15 +34,15 @@ public abstract class SCR17094Test extends PsiTestCase {
 
   public void testSRC() throws Exception {
     setUpClasses("classes");
-    final JavaPsiFacade psiManager = getJavaFacade();
-    final PsiClass classA = psiManager.findClass("a.a.a.a.e.f.i", GlobalSearchScope.moduleWithLibrariesScope(myModule));
+    JavaPsiFacade psiManager = getJavaFacade();
+    PsiClass classA = psiManager.findClass("a.a.a.a.e.f.i", GlobalSearchScope.moduleWithLibrariesScope(myModule));
     assertNotNull(classA);
   }
 
   public void test3() throws Exception {
     setUpClasses("classes2");
-    final JavaPsiFacade psiManager = getJavaFacade();
-    final PsiClass classA = psiManager.findClass("com.intellij.internal.f.a.b.a.i", GlobalSearchScope.moduleWithLibrariesScope(myModule));
+    JavaPsiFacade psiManager = getJavaFacade();
+    PsiClass classA = psiManager.findClass("com.intellij.internal.f.a.b.a.i", GlobalSearchScope.moduleWithLibrariesScope(myModule));
     assertNotNull(classA);
   }
 }

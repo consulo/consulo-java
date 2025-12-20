@@ -39,7 +39,7 @@ public class LanguageLevelModuleInheritableNamedPointerImpl extends ModuleInheri
 
   @Override
   public String getItemNameFromModule(@Nonnull Module module) {
-    final JavaModuleExtension extension = (JavaModuleExtension) ModuleUtilCore.getExtension(module, myExtensionId);
+    JavaModuleExtension extension = (JavaModuleExtension) ModuleUtilCore.getExtension(module, myExtensionId);
     if (extension != null) {
       return extension.getLanguageLevel().getName();
     }
@@ -48,7 +48,7 @@ public class LanguageLevelModuleInheritableNamedPointerImpl extends ModuleInheri
 
   @Override
   public LanguageLevel getItemFromModule(@Nonnull Module module) {
-    final JavaModuleExtension extension = (JavaModuleExtension) ModuleUtilCore.getExtension(module, myExtensionId);
+    JavaModuleExtension extension = (JavaModuleExtension) ModuleUtilCore.getExtension(module, myExtensionId);
     if (extension != null) {
       return extension.getLanguageLevel();
     }

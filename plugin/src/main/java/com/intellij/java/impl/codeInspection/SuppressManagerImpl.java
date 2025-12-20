@@ -37,7 +37,7 @@ import jakarta.annotation.Nonnull;
 public class SuppressManagerImpl extends SuppressManager {
   @Override
   @Nonnull
-  public SuppressIntentionAction[] createSuppressActions(@Nonnull final HighlightDisplayKey displayKey) {
+  public SuppressIntentionAction[] createSuppressActions(@Nonnull HighlightDisplayKey displayKey) {
     SuppressQuickFix[] batchSuppressActions = createBatchSuppressActions(displayKey);
     return SuppressIntentionActionFromFix.convertBatchToSuppressIntentionActions(batchSuppressActions);
   }
@@ -48,7 +48,7 @@ public class SuppressManagerImpl extends SuppressManager {
 //  }
 //
   @Override
-  public boolean isSuppressedFor(@Nonnull final PsiElement element, final String toolId) {
+  public boolean isSuppressedFor(@Nonnull PsiElement element, String toolId) {
     return JavaSuppressionUtil.getElementToolSuppressedIn(element, toolId) != null;
   }
 //

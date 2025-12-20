@@ -57,11 +57,11 @@ public class SuggestIndexNameMacro extends Macro {
 
   @Override
   @RequiredReadAction
-  public Result calculateResult(@Nonnull Expression[] params, final ExpressionContext context) {
+  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
     if (params.length != 0) return null;
 
-    final Project project = context.getProject();
-    final int offset = context.getStartOffset();
+    Project project = context.getProject();
+    int offset = context.getStartOffset();
 
     PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
     PsiElement place = file.findElementAt(offset);

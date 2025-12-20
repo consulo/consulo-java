@@ -56,7 +56,7 @@ public abstract class MakeClassStaticTest extends LightRefactoringTestCase {
   }
 
   public void testFieldWithMyPrefix() throws Exception {
-    final CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(getProject());
+    CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(getProject());
     String oldPrefix = settings.FIELD_NAME_PREFIX;
     settings.FIELD_NAME_PREFIX = "my";
     try {
@@ -87,8 +87,8 @@ public abstract class MakeClassStaticTest extends LightRefactoringTestCase {
     PsiElement element = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue(element instanceof PsiClass);
     PsiClass aClass = (PsiClass)element;
-    final ArrayList<VariableData> parametersForFields = new ArrayList<VariableData>();
-    final boolean addClassParameter = MakeStaticUtil.buildVariableData(aClass, parametersForFields);
+    ArrayList<VariableData> parametersForFields = new ArrayList<VariableData>();
+    boolean addClassParameter = MakeStaticUtil.buildVariableData(aClass, parametersForFields);
 
     new MakeClassStaticProcessor(
             getProject(),

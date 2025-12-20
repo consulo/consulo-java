@@ -26,26 +26,26 @@ class ReplaceConditionalWithIfPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiConditionalExpression)) {
       return false;
     }
-    final PsiConditionalExpression conditionalExpression = (PsiConditionalExpression)element;
-    final PsiElement parent = conditionalExpression.getParent();
+    PsiConditionalExpression conditionalExpression = (PsiConditionalExpression)element;
+    PsiElement parent = conditionalExpression.getParent();
     if (parent instanceof PsiExpressionStatement) {
       return false;
     }
     /*if (JspPsiUtil.isInJspFile(element)) {
       return false;
     }    */
-    final PsiMember member = PsiTreeUtil.getParentOfType(element, PsiMember.class);
+    PsiMember member = PsiTreeUtil.getParentOfType(element, PsiMember.class);
     if (member instanceof PsiMethod) {
-      final PsiMethod method = (PsiMethod)member;
+      PsiMethod method = (PsiMethod)member;
       if (!method.isConstructor()) {
         return true;
       }
-      final PsiMethodCallExpression methodCallExpression = PsiTreeUtil.getParentOfType(element, PsiMethodCallExpression.class);
+      PsiMethodCallExpression methodCallExpression = PsiTreeUtil.getParentOfType(element, PsiMethodCallExpression.class);
       if (methodCallExpression == null) {
         return true;
       }
-      final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
+      PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+      String methodName = methodExpression.getReferenceName();
       return !"super".equals(methodName);
     }
     else if (member instanceof PsiField) {

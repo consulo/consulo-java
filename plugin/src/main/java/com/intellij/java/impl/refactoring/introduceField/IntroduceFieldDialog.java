@@ -249,7 +249,7 @@ class IntroduceFieldDialog extends DialogWrapper {
                 if (isInvokedOnDeclaration) {
                     propertyName = myCodeStyleManager.variableNameToPropertyName(localVariable.getName(), VariableKind.LOCAL_VARIABLE);
                 }
-                final SuggestedNameInfo nameInfo =
+                SuggestedNameInfo nameInfo =
                     myCodeStyleManager.suggestVariableName(variableKind, propertyName, initializerExpression, type);
                 if (initializerExpression != null) {
                     String[] names = nameInfo.names;
@@ -260,7 +260,7 @@ class IntroduceFieldDialog extends DialogWrapper {
                         }
                     }
                 }
-                final String[] strings =
+                String[] strings =
                     AbstractJavaInplaceIntroducer.appendUnresolvedExprName(JavaCompletionUtil.completeVariableNameForRefactoring(
                         myCodeStyleManager,
                         type,

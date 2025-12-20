@@ -66,11 +66,11 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
     @Override
     @Nullable
     public JComponent createOptionsPanel() {
-        final JComponent panel = new JPanel(new BorderLayout());
-        final ListTable table =
+        JComponent panel = new JPanel(new BorderLayout());
+        ListTable table =
             new ListTable(new ListWrappingTableModel(ignoredTypes, InspectionGadgetsLocalize.ignoredClassesTable().get()));
         JPanel tablePanel = UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsLocalize.chooseClassTypeToIgnore().get());
-        final CheckBox checkBox =
+        CheckBox checkBox =
             new CheckBox(InspectionGadgetsLocalize.sizeReplaceableByIsemptyNegationIgnoreOption().get(), this, "ignoreNegations");
         panel.add(tablePanel, BorderLayout.CENTER);
         panel.add(checkBox, BorderLayout.SOUTH);
@@ -92,7 +92,7 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) descriptor.getPsiElement();
+            PsiBinaryExpression binaryExpression = (PsiBinaryExpression) descriptor.getPsiElement();
             PsiExpression operand = binaryExpression.getLOperand();
             if (!(operand instanceof PsiMethodCallExpression)) {
                 operand = binaryExpression.getROperand();
@@ -100,14 +100,14 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
             if (!(operand instanceof PsiMethodCallExpression)) {
                 return;
             }
-            final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) operand;
-            final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-            final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
+            PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) operand;
+            PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+            PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
             if (qualifierExpression == null) {
                 return;
             }
             @NonNls String newExpression = qualifierExpression.getText();
-            final IElementType tokenType = binaryExpression.getOperationTokenType();
+            IElementType tokenType = binaryExpression.getOperationTokenType();
             if (!JavaTokenType.EQEQ.equals(tokenType)) {
                 newExpression = '!' + newExpression;
             }
@@ -126,22 +126,22 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
         @Override
         public void visitBinaryExpression(PsiBinaryExpression expression) {
             super.visitBinaryExpression(expression);
-            final PsiExpression rhs = expression.getROperand();
+            PsiExpression rhs = expression.getROperand();
             if (rhs == null) {
                 return;
             }
             if (!ComparisonUtils.isComparison(expression)) {
                 return;
             }
-            final PsiExpression lhs = expression.getLOperand();
+            PsiExpression lhs = expression.getLOperand();
             if (lhs instanceof PsiMethodCallExpression) {
-                final String replacementIsEmptyCall = getReplacementIsEmptyCall(lhs, rhs, false, expression.getOperationTokenType());
+                String replacementIsEmptyCall = getReplacementIsEmptyCall(lhs, rhs, false, expression.getOperationTokenType());
                 if (replacementIsEmptyCall != null) {
                     registerError(expression, replacementIsEmptyCall);
                 }
             }
             else if (rhs instanceof PsiMethodCallExpression) {
-                final String replacementIsEmptyCall = getReplacementIsEmptyCall(rhs, lhs, true, expression.getOperationTokenType());
+                String replacementIsEmptyCall = getReplacementIsEmptyCall(rhs, lhs, true, expression.getOperationTokenType());
                 if (replacementIsEmptyCall != null) {
                     registerError(expression, replacementIsEmptyCall);
                 }
@@ -150,17 +150,17 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
 
         @Nullable
         private String getReplacementIsEmptyCall(PsiExpression lhs, PsiExpression rhs, boolean flipped, IElementType tokenType) {
-            final PsiMethodCallExpression callExpression = (PsiMethodCallExpression) lhs;
-            final String isEmptyCall = getIsEmptyCall(callExpression);
+            PsiMethodCallExpression callExpression = (PsiMethodCallExpression) lhs;
+            String isEmptyCall = getIsEmptyCall(callExpression);
             if (isEmptyCall == null) {
                 return null;
             }
-            final Object object = ExpressionUtils.computeConstantExpression(rhs);
+            Object object = ExpressionUtils.computeConstantExpression(rhs);
             if (!(object instanceof Integer)) {
                 return null;
             }
-            final Integer integer = (Integer) object;
-            final int constant = integer.intValue();
+            Integer integer = (Integer) object;
+            int constant = integer.intValue();
             if (constant != 0) {
                 return null;
             }
@@ -186,27 +186,27 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
 
         @Nullable
         private String getIsEmptyCall(PsiMethodCallExpression callExpression) {
-            final PsiReferenceExpression methodExpression = callExpression.getMethodExpression();
-            final String referenceName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = callExpression.getMethodExpression();
+            String referenceName = methodExpression.getReferenceName();
             if (!HardcodedMethodConstants.SIZE.equals(referenceName) &&
                 !HardcodedMethodConstants.LENGTH.equals(referenceName)) {
                 return null;
             }
-            final PsiExpressionList argumentList = callExpression.getArgumentList();
-            final PsiExpression[] expressions = argumentList.getExpressions();
+            PsiExpressionList argumentList = callExpression.getArgumentList();
+            PsiExpression[] expressions = argumentList.getExpressions();
             if (expressions.length != 0) {
                 return null;
             }
-            final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
+            PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
             if (qualifierExpression == null) {
                 return null;
             }
-            final PsiType type = qualifierExpression.getType();
+            PsiType type = qualifierExpression.getType();
             if (!(type instanceof PsiClassType)) {
                 return null;
             }
-            final PsiClassType classType = (PsiClassType) type;
-            final PsiClass aClass = classType.resolve();
+            PsiClassType classType = (PsiClassType) type;
+            PsiClass aClass = classType.resolve();
             if (aClass == null) {
                 return null;
             }
@@ -218,9 +218,9 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
                     return null;
                 }
             }
-            final PsiMethod[] methods = aClass.findMethodsByName("isEmpty", true);
+            PsiMethod[] methods = aClass.findMethodsByName("isEmpty", true);
             for (PsiMethod method : methods) {
-                final PsiParameterList parameterList = method.getParameterList();
+                PsiParameterList parameterList = method.getParameterList();
                 if (parameterList.getParametersCount() == 0) {
                     return qualifierExpression.getText() + ".isEmpty()";
                 }

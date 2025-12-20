@@ -46,20 +46,20 @@ import java.util.Collection;
 @ExtensionImpl
 public class PsiMethodFavoriteNodeProvider implements BookmarkNodeProvider {
   @Override
-  public Collection<AbstractTreeNode> getFavoriteNodes(final DataContext context, final ViewSettings viewSettings) {
-    final Project project = context.getData(Project.KEY);
+  public Collection<AbstractTreeNode> getFavoriteNodes(DataContext context, ViewSettings viewSettings) {
+    Project project = context.getData(Project.KEY);
     if (project == null) {
       return null;
     }
     PsiElement[] elements = context.getData(PsiElement.KEY_OF_ARRAY);
     if (elements == null) {
-      final PsiElement element = context.getData(PsiElement.KEY);
+      PsiElement element = context.getData(PsiElement.KEY);
       if (element != null) {
         elements = new PsiElement[]{element};
       }
     }
     if (elements != null) {
-      final Collection<AbstractTreeNode> result = new ArrayList<>();
+      Collection<AbstractTreeNode> result = new ArrayList<>();
       for (PsiElement element : elements) {
         if (element instanceof PsiMethod) {
           result.add(new MethodSmartPointerNode(project, element, viewSettings));
@@ -71,19 +71,19 @@ public class PsiMethodFavoriteNodeProvider implements BookmarkNodeProvider {
   }
 
   @Override
-  public AbstractTreeNode createNode(final Project project, final Object element, final ViewSettings viewSettings) {
+  public AbstractTreeNode createNode(Project project, Object element, ViewSettings viewSettings) {
     return element instanceof PsiMethod
       ? new MethodSmartPointerNode(project, element, viewSettings)
       : BookmarkNodeProvider.super.createNode(project, element, viewSettings);
   }
 
   @Override
-  public boolean elementContainsFile(final Object element, final VirtualFile vFile) {
+  public boolean elementContainsFile(Object element, VirtualFile vFile) {
     return false;
   }
 
   @Override
-  public int getElementWeight(final Object value, final boolean isSortByType) {
+  public int getElementWeight(Object value, boolean isSortByType) {
     if (value instanceof PsiMethod) {
       return 5;
     }
@@ -91,9 +91,9 @@ public class PsiMethodFavoriteNodeProvider implements BookmarkNodeProvider {
   }
 
   @Override
-  public String getElementLocation(final Object element) {
+  public String getElementLocation(Object element) {
     if (element instanceof PsiMethod method) {
-      final PsiClass parent = method.getContainingClass();
+      PsiClass parent = method.getContainingClass();
       if (parent != null) {
         return ClassPresentationUtil.getNameForClass(parent, true);
       }
@@ -102,7 +102,7 @@ public class PsiMethodFavoriteNodeProvider implements BookmarkNodeProvider {
   }
 
   @Override
-  public boolean isInvalidElement(final Object element) {
+  public boolean isInvalidElement(Object element) {
     return element instanceof PsiMethod method && !method.isValid();
   }
 
@@ -113,13 +113,13 @@ public class PsiMethodFavoriteNodeProvider implements BookmarkNodeProvider {
   }
 
   @Override
-  public String getElementUrl(final Object element) {
+  public String getElementUrl(Object element) {
     return element instanceof PsiMethod method ? PsiFormatUtil.getExternalName(method) : null;
   }
 
   @Override
   @RequiredReadAction
-  public String getElementModuleName(final Object element) {
+  public String getElementModuleName(Object element) {
     if (element instanceof PsiMethod aMethod) {
       Module module = ModuleUtilCore.findModuleForPsiElement(aMethod);
       return module != null ? module.getName() : null;
@@ -128,8 +128,8 @@ public class PsiMethodFavoriteNodeProvider implements BookmarkNodeProvider {
   }
 
   @Override
-  public Object[] createPathFromUrl(final Project project, final String url, final String moduleName) {
-    final PsiMethod method = RefMethodImpl.findPsiMethod(PsiManager.getInstance(project), url);
+  public Object[] createPathFromUrl(Project project, String url, String moduleName) {
+    PsiMethod method = RefMethodImpl.findPsiMethod(PsiManager.getInstance(project), url);
     if (method == null) {
       return null;
     }

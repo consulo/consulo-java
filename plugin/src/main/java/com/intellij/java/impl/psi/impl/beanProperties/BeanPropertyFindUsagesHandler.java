@@ -30,7 +30,7 @@ public class BeanPropertyFindUsagesHandler extends FindUsagesHandler {
 
   private final BeanProperty myProperty;
 
-  public BeanPropertyFindUsagesHandler(final BeanProperty property) {
+  public BeanPropertyFindUsagesHandler(BeanProperty property) {
     super(property.getPsiElement());
     myProperty = property;
   }
@@ -39,13 +39,13 @@ public class BeanPropertyFindUsagesHandler extends FindUsagesHandler {
   @Override
   @Nonnull
   public PsiElement[] getPrimaryElements() {
-    final ArrayList<PsiElement> elements = new ArrayList<PsiElement>(3);
+    ArrayList<PsiElement> elements = new ArrayList<PsiElement>(3);
     elements.add(myProperty.getPsiElement());
-    final PsiMethod getter = myProperty.getGetter();
+    PsiMethod getter = myProperty.getGetter();
     if (getter != null) {
       elements.add(getter);
     }
-    final PsiMethod setter = myProperty.getSetter();
+    PsiMethod setter = myProperty.getSetter();
     if (setter != null) {
       elements.add(setter);
     }

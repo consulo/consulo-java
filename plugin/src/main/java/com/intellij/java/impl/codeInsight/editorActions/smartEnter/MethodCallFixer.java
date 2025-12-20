@@ -68,7 +68,7 @@ public class MethodCallFixer implements Fixer
 			{
 				if(child instanceof PsiErrorElement)
 				{
-					final PsiErrorElement errorElement = (PsiErrorElement) child;
+					PsiErrorElement errorElement = (PsiErrorElement) child;
 					if(errorElement.getErrorDescription().contains("')'"))
 					{
 						endOffset = errorElement.getTextRange().getStartOffset();
@@ -83,7 +83,7 @@ public class MethodCallFixer implements Fixer
 				endOffset = args.getTextRange().getEndOffset();
 			}
 
-			final PsiExpression[] params = args.getExpressions();
+			PsiExpression[] params = args.getExpressions();
 			if(params.length > 0 && startLine(editor, args) != startLine(editor, params[0]) && caret < params[0].getTextRange().getStartOffset())
 			{
 				endOffset = args.getTextRange().getStartOffset() + 1;

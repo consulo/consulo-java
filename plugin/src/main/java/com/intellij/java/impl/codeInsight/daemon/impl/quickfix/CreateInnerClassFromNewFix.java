@@ -31,7 +31,7 @@ import consulo.util.lang.StringUtil;
 public class CreateInnerClassFromNewFix extends CreateClassFromNewFix {
   private static final Logger LOG = Logger.getInstance(CreateInnerClassFromNewFix.class);
 
-  public CreateInnerClassFromNewFix(final PsiNewExpression expr) {
+  public CreateInnerClassFromNewFix(PsiNewExpression expr) {
     super(expr);
   }
 
@@ -46,7 +46,7 @@ public class CreateInnerClassFromNewFix extends CreateClassFromNewFix {
   }
 
   @Override
-  protected void invokeImpl(final PsiClass targetClass) {
+  protected void invokeImpl(PsiClass targetClass) {
     PsiNewExpression newExpression = getNewExpression();
     PsiJavaCodeReferenceElement ref = newExpression.getClassOrAnonymousClassReference();
     assert ref != null;
@@ -54,7 +54,7 @@ public class CreateInnerClassFromNewFix extends CreateClassFromNewFix {
     LOG.assertTrue(refName != null);
     PsiElementFactory elementFactory = JavaPsiFacade.getInstance(newExpression.getProject()).getElementFactory();
     PsiClass created = elementFactory.createClass(refName);
-    final PsiModifierList modifierList = created.getModifierList();
+    PsiModifierList modifierList = created.getModifierList();
     LOG.assertTrue(modifierList != null);
     modifierList.setModifierProperty(PsiModifier.PRIVATE, true);
     if (PsiUtil.getEnclosingStaticElement(newExpression, targetClass) != null || isInThisOrSuperCall(newExpression)) {
@@ -69,14 +69,14 @@ public class CreateInnerClassFromNewFix extends CreateClassFromNewFix {
 
   private static boolean isInThisOrSuperCall(PsiNewExpression newExpression) {
     boolean inFirstConstructorLine = false;
-    final PsiExpressionStatement expressionStatement = PsiTreeUtil.getParentOfType(newExpression, PsiExpressionStatement.class);
+    PsiExpressionStatement expressionStatement = PsiTreeUtil.getParentOfType(newExpression, PsiExpressionStatement.class);
     if (expressionStatement != null) {
-      final PsiExpression expression = expressionStatement.getExpression();
+      PsiExpression expression = expressionStatement.getExpression();
       if (expression instanceof PsiMethodCallExpression) {
-        final PsiReferenceExpression methodExpression = ((PsiMethodCallExpression)expression).getMethodExpression();
-        final PsiElement resolve = methodExpression.resolve();
+        PsiReferenceExpression methodExpression = ((PsiMethodCallExpression)expression).getMethodExpression();
+        PsiElement resolve = methodExpression.resolve();
         if (resolve instanceof PsiMethod && ((PsiMethod)resolve).isConstructor()) {
-          final PsiElement referenceNameElement = methodExpression.getReferenceNameElement();
+          PsiElement referenceNameElement = methodExpression.getReferenceNameElement();
           if (referenceNameElement != null) {
             if (Comparing.strEqual(referenceNameElement.getText(), PsiKeyword.THIS) ||
                 Comparing.strEqual(referenceNameElement.getText(), PsiKeyword.SUPER)) {

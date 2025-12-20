@@ -39,8 +39,8 @@ class ThisPassedAsArgumentVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     super.visitMethodCallExpression(call);
-    final PsiExpressionList argumentList = call.getArgumentList();
-    final PsiExpression[] arguments = argumentList.getExpressions();
+    PsiExpressionList argumentList = call.getArgumentList();
+    PsiExpression[] arguments = argumentList.getExpressions();
     for (PsiExpression argument : arguments) {
       if (isThisExpression(argument)) {
         passed = true;
@@ -55,11 +55,11 @@ class ThisPassedAsArgumentVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     super.visitNewExpression(newExpression);
-    final PsiExpressionList argumentList = newExpression.getArgumentList();
+    PsiExpressionList argumentList = newExpression.getArgumentList();
     if (argumentList == null) {
       return;
     }
-    final PsiExpression[] arguments = argumentList.getExpressions();
+    PsiExpression[] arguments = argumentList.getExpressions();
     for (PsiExpression argument : arguments) {
       if (isThisExpression(argument)) {
         passed = true;
@@ -70,7 +70,7 @@ class ThisPassedAsArgumentVisitor extends JavaRecursiveElementVisitor {
 
   private static boolean isThisExpression(PsiExpression expression) {
     if (expression instanceof PsiParenthesizedExpression) {
-      final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression)expression;
+      PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression)expression;
       return isThisExpression(parenthesizedExpression.getExpression());
     }
     return expression instanceof PsiThisExpression;

@@ -24,11 +24,11 @@ class MultiplyByPowerOfTwoPredicate implements PsiElementPredicate {
 
   public boolean satisfiedBy(PsiElement element) {
     if (element instanceof PsiBinaryExpression) {
-      final PsiBinaryExpression expression = (PsiBinaryExpression)element;
+      PsiBinaryExpression expression = (PsiBinaryExpression)element;
       return binaryExpressionIsMultiplyByPowerOfTwo(expression);
     }
     else if (element instanceof PsiAssignmentExpression) {
-      final PsiAssignmentExpression expression =
+      PsiAssignmentExpression expression =
         (PsiAssignmentExpression)element;
       return assignmentExpressionIsMultiplyByPowerOfTwo(expression);
     }
@@ -39,20 +39,20 @@ class MultiplyByPowerOfTwoPredicate implements PsiElementPredicate {
 
   private static boolean assignmentExpressionIsMultiplyByPowerOfTwo(
     PsiAssignmentExpression expression) {
-    final IElementType tokenType = expression.getOperationTokenType();
+    IElementType tokenType = expression.getOperationTokenType();
     if (!tokenType.equals(JavaTokenType.ASTERISKEQ) &&
         !tokenType.equals(JavaTokenType.DIVEQ)) {
       return false;
     }
-    final PsiExpression lhs = expression.getLExpression();
-    final PsiType lhsType = lhs.getType();
+    PsiExpression lhs = expression.getLExpression();
+    PsiType lhsType = lhs.getType();
     if (lhsType == null) {
       return false;
     }
     if (!ShiftUtils.isIntegral(lhsType)) {
       return false;
     }
-    final PsiExpression rhs = expression.getRExpression();
+    PsiExpression rhs = expression.getRExpression();
     if (rhs == null) {
       return false;
     }
@@ -61,20 +61,20 @@ class MultiplyByPowerOfTwoPredicate implements PsiElementPredicate {
 
   private static boolean binaryExpressionIsMultiplyByPowerOfTwo(
     PsiBinaryExpression expression) {
-    final IElementType tokenType = expression.getOperationTokenType();
+    IElementType tokenType = expression.getOperationTokenType();
     if (!tokenType.equals(JavaTokenType.ASTERISK) &&
         !tokenType.equals(JavaTokenType.DIV)) {
       return false;
     }
-    final PsiExpression lhs = expression.getLOperand();
-    final PsiType lhsType = lhs.getType();
+    PsiExpression lhs = expression.getLOperand();
+    PsiType lhsType = lhs.getType();
     if (lhsType == null) {
       return false;
     }
     if (!ShiftUtils.isIntegral(lhsType)) {
       return false;
     }
-    final PsiExpression rhs = expression.getROperand();
+    PsiExpression rhs = expression.getROperand();
     if (rhs == null) {
       return false;
     }

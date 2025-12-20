@@ -33,15 +33,15 @@ public abstract class ResourceInspection extends BaseInspection {
   protected static PsiVariable getVariable(
     @Nonnull PsiElement element) {
     if (element instanceof PsiAssignmentExpression) {
-      final PsiAssignmentExpression assignment =
+      PsiAssignmentExpression assignment =
         (PsiAssignmentExpression)element;
-      final PsiExpression lhs = assignment.getLExpression();
+      PsiExpression lhs = assignment.getLExpression();
       if (!(lhs instanceof PsiReferenceExpression)) {
         return null;
       }
-      final PsiReferenceExpression referenceExpression =
+      PsiReferenceExpression referenceExpression =
         (PsiReferenceExpression)lhs;
-      final PsiElement referent = referenceExpression.resolve();
+      PsiElement referent = referenceExpression.resolve();
       if (!(referent instanceof PsiVariable)) {
         return null;
       }
@@ -79,7 +79,7 @@ public abstract class ResourceInspection extends BaseInspection {
         parentStatement = PsiTreeUtil.getParentOfType(parentStatement, PsiStatement.class);
       }
       if (parentStatement != null) {
-        final PsiTryStatement tryStatement = (PsiTryStatement)parentStatement;
+        PsiTryStatement tryStatement = (PsiTryStatement)parentStatement;
         if (isResourceClosedInFinally(tryStatement, variable)) {
           return true;
         }
@@ -90,7 +90,7 @@ public abstract class ResourceInspection extends BaseInspection {
       if (statement == null) {
         return false;
       }
-      final PsiElement parent = statement.getParent();
+      PsiElement parent = statement.getParent();
       if (parent instanceof PsiIfStatement) {
         statement = (PsiStatement)parent;
       }
@@ -100,7 +100,7 @@ public abstract class ResourceInspection extends BaseInspection {
       // exception in next statement can prevent closing of the resource
       return isResourceClose(nextStatement, variable);
     }
-    final PsiTryStatement tryStatement = (PsiTryStatement)nextStatement;
+    PsiTryStatement tryStatement = (PsiTryStatement)nextStatement;
     if (isResourceClosedInFinally(tryStatement, variable)) {
       return true;
     }
@@ -110,15 +110,15 @@ public abstract class ResourceInspection extends BaseInspection {
   protected static boolean isResourceClosedInFinally(
     @Nonnull PsiTryStatement tryStatement,
     @Nonnull PsiVariable variable) {
-    final PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
+    PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
     if (finallyBlock == null) {
       return false;
     }
-    final PsiCodeBlock tryBlock = tryStatement.getTryBlock();
+    PsiCodeBlock tryBlock = tryStatement.getTryBlock();
     if (tryBlock == null) {
       return false;
     }
-    final CloseVisitor visitor = new CloseVisitor(variable);
+    CloseVisitor visitor = new CloseVisitor(variable);
     finallyBlock.accept(visitor);
     return visitor.containsClose();
   }
@@ -126,24 +126,24 @@ public abstract class ResourceInspection extends BaseInspection {
   private static boolean isResourceClose(PsiStatement statement,
                                          PsiVariable variable) {
     if (statement instanceof PsiExpressionStatement) {
-      final PsiExpressionStatement expressionStatement =
+      PsiExpressionStatement expressionStatement =
         (PsiExpressionStatement)statement;
-      final PsiExpression expression =
+      PsiExpression expression =
         expressionStatement.getExpression();
       if (!(expression instanceof PsiMethodCallExpression)) {
         return false;
       }
-      final PsiMethodCallExpression methodCallExpression =
+      PsiMethodCallExpression methodCallExpression =
         (PsiMethodCallExpression)expression;
       return isResourceClose(methodCallExpression, variable);
     }
     else if (statement instanceof PsiTryStatement) {
-      final PsiTryStatement tryStatement = (PsiTryStatement)statement;
-      final PsiCodeBlock tryBlock = tryStatement.getTryBlock();
+      PsiTryStatement tryStatement = (PsiTryStatement)statement;
+      PsiCodeBlock tryBlock = tryStatement.getTryBlock();
       if (tryBlock == null) {
         return false;
       }
-      final PsiStatement[] innerStatements = tryBlock.getStatements();
+      PsiStatement[] innerStatements = tryBlock.getStatements();
       if (innerStatements.length == 0) {
         return false;
       }
@@ -152,20 +152,20 @@ public abstract class ResourceInspection extends BaseInspection {
       }
     }
     else if (statement instanceof PsiIfStatement) {
-      final PsiIfStatement ifStatement = (PsiIfStatement)statement;
-      final PsiExpression condition = ifStatement.getCondition();
+      PsiIfStatement ifStatement = (PsiIfStatement)statement;
+      PsiExpression condition = ifStatement.getCondition();
       if (!(condition instanceof PsiBinaryExpression)) {
         return false;
       }
-      final PsiBinaryExpression binaryExpression =
+      PsiBinaryExpression binaryExpression =
         (PsiBinaryExpression)condition;
-      final IElementType tokenType =
+      IElementType tokenType =
         binaryExpression.getOperationTokenType();
       if (JavaTokenType.NE != tokenType) {
         return false;
       }
-      final PsiExpression lhs = binaryExpression.getLOperand();
-      final PsiExpression rhs = binaryExpression.getROperand();
+      PsiExpression lhs = binaryExpression.getLOperand();
+      PsiExpression rhs = binaryExpression.getROperand();
       if (rhs == null) {
         return false;
       }
@@ -173,9 +173,9 @@ public abstract class ResourceInspection extends BaseInspection {
         if (!(rhs instanceof PsiReferenceExpression)) {
           return false;
         }
-        final PsiReferenceExpression referenceExpression =
+        PsiReferenceExpression referenceExpression =
           (PsiReferenceExpression)rhs;
-        final PsiElement target = referenceExpression.resolve();
+        PsiElement target = referenceExpression.resolve();
         if (!variable.equals(target)) {
           return false;
         }
@@ -184,21 +184,21 @@ public abstract class ResourceInspection extends BaseInspection {
         if (!(lhs instanceof PsiReferenceExpression)) {
           return false;
         }
-        final PsiReferenceExpression referenceExpression =
+        PsiReferenceExpression referenceExpression =
           (PsiReferenceExpression)lhs;
-        final PsiElement target = referenceExpression.resolve();
+        PsiElement target = referenceExpression.resolve();
         if (!variable.equals(target)) {
           return false;
         }
       }
-      final PsiStatement thenBranch = ifStatement.getThenBranch();
+      PsiStatement thenBranch = ifStatement.getThenBranch();
       return isResourceClose(thenBranch, variable);
     }
     else if (statement instanceof PsiBlockStatement) {
-      final PsiBlockStatement blockStatement =
+      PsiBlockStatement blockStatement =
         (PsiBlockStatement)statement;
-      final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
-      final PsiStatement[] statements = codeBlock.getStatements();
+      PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
+      PsiStatement[] statements = codeBlock.getStatements();
       return statements.length != 0 &&
              isResourceClose(statements[0], variable);
     }
@@ -208,36 +208,36 @@ public abstract class ResourceInspection extends BaseInspection {
   protected static boolean isResourceEscapedFromMethod(
     PsiVariable boundVariable, PsiElement context) {
     // poor man dataflow
-    final PsiMethod method =
+    PsiMethod method =
       PsiTreeUtil.getParentOfType(context, PsiMethod.class, true,
                                   PsiMember.class);
     if (method == null) {
       return false;
     }
-    final PsiCodeBlock body = method.getBody();
+    PsiCodeBlock body = method.getBody();
     if (body == null) {
       return false;
     }
-    final EscapeVisitor visitor = new EscapeVisitor(boundVariable);
+    EscapeVisitor visitor = new EscapeVisitor(boundVariable);
     body.accept(visitor);
     return visitor.isEscaped();
   }
 
   protected static boolean isResourceClose(PsiMethodCallExpression call,
                                            PsiVariable resource) {
-    final PsiReferenceExpression methodExpression =
+    PsiReferenceExpression methodExpression =
       call.getMethodExpression();
-    final String methodName = methodExpression.getReferenceName();
+    String methodName = methodExpression.getReferenceName();
     if (!HardcodedMethodConstants.CLOSE.equals(methodName)) {
       return false;
     }
-    final PsiExpression qualifier =
+    PsiExpression qualifier =
       methodExpression.getQualifierExpression();
     if (!(qualifier instanceof PsiReferenceExpression)) {
       return false;
     }
-    final PsiReference reference = (PsiReference)qualifier;
-    final PsiElement referent = reference.resolve();
+    PsiReference reference = (PsiReference)qualifier;
+    PsiElement referent = reference.resolve();
     return referent != null && referent.equals(resource);
   }
 
@@ -280,44 +280,44 @@ public abstract class ResourceInspection extends BaseInspection {
       if (containsClose) {
         return;
       }
-      final String text = referenceExpression.getText();
+      String text = referenceExpression.getText();
       if (text == null || !text.equals(resourceName)) {
         return;
       }
-      final PsiElement parent = referenceExpression.getParent();
+      PsiElement parent = referenceExpression.getParent();
       if (!(parent instanceof PsiExpressionList)) {
         return;
       }
-      final PsiExpressionList argumentList = (PsiExpressionList)parent;
-      final PsiExpression[] arguments = argumentList.getExpressions();
+      PsiExpressionList argumentList = (PsiExpressionList)parent;
+      PsiExpression[] arguments = argumentList.getExpressions();
       if (arguments.length != 1) {
         return;
       }
-      final PsiElement grandParent = parent.getParent();
+      PsiElement grandParent = parent.getParent();
       if (!(grandParent instanceof PsiMethodCallExpression)) {
         return;
       }
-      final PsiMethodCallExpression methodCallExpression =
+      PsiMethodCallExpression methodCallExpression =
         (PsiMethodCallExpression)grandParent;
-      final PsiElement target = referenceExpression.resolve();
+      PsiElement target = referenceExpression.resolve();
       if (target == null || !target.equals(resource)) {
         return;
       }
-      final PsiMethod method = methodCallExpression.resolveMethod();
+      PsiMethod method = methodCallExpression.resolveMethod();
       if (method == null) {
         return;
       }
-      final PsiCodeBlock codeBlock = method.getBody();
+      PsiCodeBlock codeBlock = method.getBody();
       if (codeBlock == null) {
         return;
       }
-      final PsiParameterList parameterList = method.getParameterList();
-      final PsiParameter[] parameters = parameterList.getParameters();
+      PsiParameterList parameterList = method.getParameterList();
+      PsiParameter[] parameters = parameterList.getParameters();
       if (parameters.length != 1) {
         return;
       }
-      final PsiParameter parameter = parameters[0];
-      final PsiStatement[] statements = codeBlock.getStatements();
+      PsiParameter parameter = parameters[0];
+      PsiStatement[] statements = codeBlock.getStatements();
       for (PsiStatement statement : statements) {
         if (isResourceClose(statement, parameter)) {
           containsClose = true;
@@ -358,9 +358,9 @@ public abstract class ResourceInspection extends BaseInspection {
       PsiExpression value = statement.getReturnValue();
       value = PsiUtil.deparenthesizeExpression(value);
       if (value instanceof PsiReferenceExpression) {
-        final PsiReferenceExpression referenceExpression =
+        PsiReferenceExpression referenceExpression =
           (PsiReferenceExpression)value;
-        final PsiElement target = referenceExpression.resolve();
+        PsiElement target = referenceExpression.resolve();
         if (target != null && target.equals(boundVariable)) {
           escaped = true;
         }

@@ -40,7 +40,7 @@ public class JavaIndexPatternBuilder implements IndexPatternBuilder {
 
   @Override
   @Nullable
-  public Lexer getIndexingLexer(final PsiFile file) {
+  public Lexer getIndexingLexer(PsiFile file) {
     if (file instanceof PsiJavaFile /*&& !(file instanceof JspFile)*/) {
       return new JavaLexer(((PsiJavaFile) file).getLanguageLevel());
     }
@@ -49,7 +49,7 @@ public class JavaIndexPatternBuilder implements IndexPatternBuilder {
 
   @Override
   @Nullable
-  public TokenSet getCommentTokenSet(final PsiFile file) {
+  public TokenSet getCommentTokenSet(PsiFile file) {
     if (file instanceof PsiJavaFile /*&& !(file instanceof JspFile)*/) {
       return TokenSet.orSet(StdTokenSets.COMMENT_BIT_SET, XML_COMMENT_BIT_SET, JavaDocTokenType.ALL_JAVADOC_TOKENS, XML_DATA_CHARS);
     }
@@ -57,12 +57,12 @@ public class JavaIndexPatternBuilder implements IndexPatternBuilder {
   }
 
   @Override
-  public int getCommentStartDelta(final IElementType tokenType) {
+  public int getCommentStartDelta(IElementType tokenType) {
     return 0;
   }
 
   @Override
-  public int getCommentEndDelta(final IElementType tokenType) {
+  public int getCommentEndDelta(IElementType tokenType) {
     return tokenType == JavaTokenType.C_STYLE_COMMENT ? "*/".length() : 0;
   }
 }

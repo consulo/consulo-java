@@ -67,7 +67,7 @@ public class JavaPushDownHandler implements RefactoringActionHandler, ElementsHa
     }
   }
 
-  public void invoke(@Nonnull final Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length != 1) return;
 
     PsiElement element = elements[0];

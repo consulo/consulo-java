@@ -48,7 +48,7 @@ public class AccessToNonThreadSafeStaticFieldFromInstanceInspection
   public AccessToNonThreadSafeStaticFieldFromInstanceInspection() {
     if (nonThreadSafeTypes.length() != 0) {
       nonThreadSafeClasses.clear();
-      final List<String> strings =
+      List<String> strings =
         StringUtil.split(nonThreadSafeTypes, ",");
       for (String string : strings) {
         nonThreadSafeClasses.add(string);
@@ -97,7 +97,7 @@ public class AccessToNonThreadSafeStaticFieldFromInstanceInspection
     public void visitReferenceExpression(
       PsiReferenceExpression expression) {
       super.visitReferenceExpression(expression);
-      final PsiModifierListOwner parent =
+      PsiModifierListOwner parent =
         PsiTreeUtil.getParentOfType(expression,
                                     PsiField.class, PsiMethod.class,
                                     PsiClassInitializer.class);
@@ -109,31 +109,31 @@ public class AccessToNonThreadSafeStaticFieldFromInstanceInspection
         if (parent.hasModifierProperty(PsiModifier.SYNCHRONIZED)) {
           return;
         }
-        final PsiSynchronizedStatement synchronizedStatement =
+        PsiSynchronizedStatement synchronizedStatement =
           PsiTreeUtil.getParentOfType(expression,
                                       PsiSynchronizedStatement.class);
         if (synchronizedStatement != null) {
           return;
         }
       }
-      final PsiExpression qualifier = expression.getQualifierExpression();
+      PsiExpression qualifier = expression.getQualifierExpression();
       if (qualifier != null) {
         return;
       }
-      final PsiType type = expression.getType();
+      PsiType type = expression.getType();
       if (!(type instanceof PsiClassType)) {
         return;
       }
-      final PsiClassType classType = (PsiClassType)type;
-      final String className = classType.rawType().getCanonicalText();
+      PsiClassType classType = (PsiClassType)type;
+      String className = classType.rawType().getCanonicalText();
       if (!nonThreadSafeClasses.contains(className)) {
         return;
       }
-      final PsiElement target = expression.resolve();
+      PsiElement target = expression.resolve();
       if (!(target instanceof PsiField)) {
         return;
       }
-      final PsiField field = (PsiField)target;
+      PsiField field = (PsiField)target;
       if (!field.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }

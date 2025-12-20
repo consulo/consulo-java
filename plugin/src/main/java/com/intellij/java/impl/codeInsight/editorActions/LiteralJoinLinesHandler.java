@@ -26,7 +26,7 @@ import consulo.language.psi.PsiFile;
 @ExtensionImpl
 public class LiteralJoinLinesHandler implements JoinLinesHandlerDelegate {
   @Override
-  public int tryJoinLines(final Document doc, final PsiFile psiFile, final int offsetNear, final int end) {
+  public int tryJoinLines(Document doc, PsiFile psiFile, int offsetNear, int end) {
     CharSequence text = doc.getCharsSequence();
 
     int start = offsetNear;

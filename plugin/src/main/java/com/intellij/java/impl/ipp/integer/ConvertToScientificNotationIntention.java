@@ -42,9 +42,9 @@ public class ConvertToScientificNotationIntention extends ConvertNumberIntention
     }
 
     @Override
-    protected String convertValue(final Number value, final PsiType type, final boolean negated) {
-        final double doubleValue = Double.parseDouble(value.toString());  // convert to double w/o adding parasitic digits
-        final String text = FORMAT.format(negated ? -doubleValue : doubleValue);
+    protected String convertValue(Number value, PsiType type, boolean negated) {
+        double doubleValue = Double.parseDouble(value.toString());  // convert to double w/o adding parasitic digits
+        String text = FORMAT.format(negated ? -doubleValue : doubleValue);
         return PsiType.FLOAT.equals(type) ? text + "f" : text;
     }
 

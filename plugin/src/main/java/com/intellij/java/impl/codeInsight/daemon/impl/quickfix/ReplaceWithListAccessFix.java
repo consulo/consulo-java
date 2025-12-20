@@ -53,17 +53,17 @@ public class ReplaceWithListAccessFix implements SyntheticIntentionAction {
     if (!TypeConversionUtil.areTypesAssignmentCompatible(PsiType.INT, myArrayAccessExpression.getIndexExpression())) {
       return false;
     }
-    final PsiElement parent = myArrayAccessExpression.getParent();
+    PsiElement parent = myArrayAccessExpression.getParent();
     if (parent instanceof PsiAssignmentExpression) {
-      final PsiExpression lExpression = ((PsiAssignmentExpression)parent).getLExpression();
+      PsiExpression lExpression = ((PsiAssignmentExpression)parent).getLExpression();
       if (lExpression.equals(myArrayAccessExpression) && !(parent.getParent() instanceof PsiExpressionStatement)) {
         return false;
       }
     }
 
-    final PsiExpression arrayExpression = myArrayAccessExpression.getArrayExpression();
-    final PsiType type = arrayExpression.getType();
-    final PsiType listType = createUtilListType(project);
+    PsiExpression arrayExpression = myArrayAccessExpression.getArrayExpression();
+    PsiType type = arrayExpression.getType();
+    PsiType listType = createUtilListType(project);
 
     if (type == null || listType == null) return false;
 
@@ -73,32 +73,32 @@ public class ReplaceWithListAccessFix implements SyntheticIntentionAction {
 
   @Nullable
   private PsiType createUtilListType(@Nonnull Project project) {
-    final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-    final PsiClass listClass = JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_UTIL_LIST, myArrayAccessExpression.getResolveScope());
+    JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
+    PsiClass listClass = JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_UTIL_LIST, myArrayAccessExpression.getResolveScope());
 
     if (listClass == null) return null;
 
-    final PsiElementFactory factory = facade.getElementFactory();
+    PsiElementFactory factory = facade.getElementFactory();
     return factory.createType(listClass);
   }
 
   @Override
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
-    final PsiExpression arrayExpression = myArrayAccessExpression.getArrayExpression();
-    final PsiExpression indexExpression = myArrayAccessExpression.getIndexExpression();
+    PsiExpression arrayExpression = myArrayAccessExpression.getArrayExpression();
+    PsiExpression indexExpression = myArrayAccessExpression.getIndexExpression();
 
     if (indexExpression == null) return;
 
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
-    final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+    PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
+    CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
 
-    final PsiElement parent = myArrayAccessExpression.getParent();
+    PsiElement parent = myArrayAccessExpression.getParent();
     if (parent instanceof PsiAssignmentExpression) {
-      final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression)parent;
+      PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression)parent;
 
-      final PsiExpression lExpression = assignmentExpression.getLExpression();
-      final PsiExpression rExpression = assignmentExpression.getRExpression();
+      PsiExpression lExpression = assignmentExpression.getLExpression();
+      PsiExpression rExpression = assignmentExpression.getRExpression();
       if (lExpression.equals(myArrayAccessExpression) && parent.getParent() instanceof PsiExpressionStatement && rExpression != null) {
         replaceWithSet(factory, codeStyleManager, arrayExpression, indexExpression, rExpression, assignmentExpression);
         return;
@@ -114,7 +114,7 @@ public class ReplaceWithListAccessFix implements SyntheticIntentionAction {
                                            @Nonnull PsiExpression indexExpression,
                                            @Nonnull PsiElement anchor) {
 
-    final PsiElement listAccess = factory.createExpressionFromText(
+    PsiElement listAccess = factory.createExpressionFromText(
       arrayExpression.getText() + ".get(" + indexExpression.getText() + ")",
       anchor);
     return anchor.replace(codeStyleManager.reformat(listAccess));
@@ -126,7 +126,7 @@ public class ReplaceWithListAccessFix implements SyntheticIntentionAction {
                                            @Nonnull PsiExpression indexExpression,
                                            @Nonnull PsiExpression expression,
                                            @Nonnull PsiElement anchor) {
-    final PsiElement listAccess = factory.createExpressionFromText(
+    PsiElement listAccess = factory.createExpressionFromText(
       arrayExpression.getText() + ".set(" + indexExpression.getText() + "," + expression.getText() + ")",
       anchor
     );

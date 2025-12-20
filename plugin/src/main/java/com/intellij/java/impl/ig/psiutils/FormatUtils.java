@@ -49,45 +49,45 @@ public class FormatUtils {
   private FormatUtils() {}
 
   public static boolean isFormatCall(PsiMethodCallExpression expression) {
-    final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-    final String name = methodExpression.getReferenceName();
+    PsiReferenceExpression methodExpression = expression.getMethodExpression();
+    String name = methodExpression.getReferenceName();
     if (!formatMethodNames.contains(name)) {
       return false;
     }
-    final PsiMethod method = expression.resolveMethod();
+    PsiMethod method = expression.resolveMethod();
     if (method == null) {
       return false;
     }
-    final PsiClass containingClass = method.getContainingClass();
+    PsiClass containingClass = method.getContainingClass();
     if (containingClass == null) {
       return false;
     }
-    final String className = containingClass.getQualifiedName();
+    String className = containingClass.getQualifiedName();
     return formatClassNames.contains(className);
   }
 
   public static boolean isFormatCallArgument(PsiElement element) {
-    final PsiExpressionList expressionList =
+    PsiExpressionList expressionList =
       PsiTreeUtil.getParentOfType(element, PsiExpressionList.class, true, PsiCodeBlock.class, PsiStatement.class, PsiClass.class);
     if (expressionList == null) {
       return false;
     }
-    final PsiElement parent = expressionList.getParent();
+    PsiElement parent = expressionList.getParent();
     return parent instanceof PsiMethodCallExpression && isFormatCall((PsiMethodCallExpression)parent);
   }
 
   @Nullable
   public static PsiExpression getFormatArgument(PsiExpressionList argumentList) {
-    final PsiExpression[] arguments = argumentList.getExpressions();
+    PsiExpression[] arguments = argumentList.getExpressions();
     if (arguments.length == 0) {
       return null;
     }
-    final PsiExpression firstArgument = arguments[0];
-    final PsiType type = firstArgument.getType();
+    PsiExpression firstArgument = arguments[0];
+    PsiType type = firstArgument.getType();
     if (type == null) {
       return null;
     }
-    final int formatArgumentIndex;
+    int formatArgumentIndex;
     if ("java.util.Locale".equals(type.getCanonicalText()) && arguments.length > 1) {
       formatArgumentIndex = 1;
     }

@@ -30,25 +30,25 @@ class NestedTryStatementsPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiJavaToken)) {
       return false;
     }
-    final PsiJavaToken javaToken = (PsiJavaToken)element;
-    final IElementType tokenType = javaToken.getTokenType();
+    PsiJavaToken javaToken = (PsiJavaToken)element;
+    IElementType tokenType = javaToken.getTokenType();
     if (!JavaTokenType.TRY_KEYWORD.equals(tokenType)) {
       return false;
     }
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!isSimpleTry(parent)) {
       return false;
     }
-    final PsiTryStatement tryStatement = (PsiTryStatement)parent;
-    final PsiCodeBlock block = tryStatement.getTryBlock();
+    PsiTryStatement tryStatement = (PsiTryStatement)parent;
+    PsiCodeBlock block = tryStatement.getTryBlock();
     if (block == null) {
       return false;
     }
-    final PsiStatement[] statements = block.getStatements();
+    PsiStatement[] statements = block.getStatements();
     if (statements.length != 1) {
       return false;
     }
-    final PsiStatement statement = statements[0];
+    PsiStatement statement = statements[0];
     return isSimpleTry(statement);
   }
 
@@ -56,12 +56,12 @@ class NestedTryStatementsPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiTryStatement)) {
       return false;
     }
-    final PsiTryStatement tryStatement = (PsiTryStatement)element;
-    final PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
+    PsiTryStatement tryStatement = (PsiTryStatement)element;
+    PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
     if (finallyBlock != null) {
       return false;
     }
-    final PsiCodeBlock block = tryStatement.getTryBlock();
+    PsiCodeBlock block = tryStatement.getTryBlock();
     return block != null;
   }
 }

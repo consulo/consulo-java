@@ -58,8 +58,8 @@ public class InnerClassOnInterfaceInspection extends BaseInspection {
 
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiClass parentInterface = (PsiClass) infos[0];
-        final String interfaceName = parentInterface.getName();
+        PsiClass parentInterface = (PsiClass) infos[0];
+        String interfaceName = parentInterface.getName();
         return InspectionGadgetsLocalize.innerClassOnInterfaceProblemDescriptor(interfaceName).get();
     }
 
@@ -83,8 +83,8 @@ public class InnerClassOnInterfaceInspection extends BaseInspection {
             if (!aClass.isInterface() || aClass.isAnnotationType()) {
                 return;
             }
-            final PsiClass[] innerClasses = aClass.getInnerClasses();
-            for (final PsiClass innerClass : innerClasses) {
+            PsiClass[] innerClasses = aClass.getInnerClasses();
+            for (PsiClass innerClass : innerClasses) {
                 if (isInnerClass(innerClass)) {
                     registerClassError(innerClass, aClass);
                 }

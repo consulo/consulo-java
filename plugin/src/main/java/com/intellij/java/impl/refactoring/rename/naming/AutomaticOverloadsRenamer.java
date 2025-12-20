@@ -26,9 +26,9 @@ import consulo.language.editor.refactoring.rename.AutomaticRenamer;
 
 public class AutomaticOverloadsRenamer extends AutomaticRenamer {
   public AutomaticOverloadsRenamer(PsiMethod method, String newName) {
-    final PsiClass containingClass = method.getContainingClass();
+    PsiClass containingClass = method.getContainingClass();
     if (containingClass != null) {
-      final PsiMethod[] overloads = containingClass.findMethodsByName(method.getName(), false);
+      PsiMethod[] overloads = containingClass.findMethodsByName(method.getName(), false);
       for (PsiMethod overload : overloads) {
         if (overload != method) {
           myElements.add(overload);

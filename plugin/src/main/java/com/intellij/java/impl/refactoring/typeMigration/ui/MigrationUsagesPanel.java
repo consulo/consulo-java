@@ -49,17 +49,17 @@ public class MigrationUsagesPanel extends UsagesPanel
 		return "Found reasons to migrate";
 	}
 
-	public void showRootUsages(UsageInfo root, UsageInfo migration, final TypeMigrationLabeler labeler)
+	public void showRootUsages(UsageInfo root, UsageInfo migration, TypeMigrationLabeler labeler)
 	{
-		final PsiElement rootElement = root.getElement();
+		PsiElement rootElement = root.getElement();
 		if(rootElement == null)
 		{
 			return;
 		}
-		final Set<PsiElement> usages = labeler.getTypeUsages((TypeMigrationUsageInfo) migration, ((TypeMigrationUsageInfo) root));
+		Set<PsiElement> usages = labeler.getTypeUsages((TypeMigrationUsageInfo) migration, ((TypeMigrationUsageInfo) root));
 		if(usages != null)
 		{
-			final List<UsageInfo> infos = new ArrayList<>(usages.size());
+			List<UsageInfo> infos = new ArrayList<>(usages.size());
 			for(PsiElement usage : usages)
 			{
 				if(usage != null && usage.isValid())

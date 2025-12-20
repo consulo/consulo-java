@@ -32,7 +32,7 @@ public class BlockBraceFixer implements Fixer
 		{
 			PsiCodeBlock block = (PsiCodeBlock) psiElement;
 			int stopOffset = block.getTextRange().getEndOffset();
-			final PsiStatement[] statements = block.getStatements();
+			PsiStatement[] statements = block.getStatements();
 			if(statements.length > 0)
 			{
 				stopOffset = statements[0].getTextRange().getEndOffset();

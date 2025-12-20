@@ -34,7 +34,7 @@ public class DeclarationJoinLinesHandler implements JoinLinesHandlerDelegate {
   private static final Logger LOG = Logger.getInstance(DeclarationJoinLinesHandler.class);
 
   @Override
-  public int tryJoinLines(final Document document, final PsiFile file, final int start, final int end) {
+  public int tryJoinLines(Document document, PsiFile file, int start, int end) {
     PsiElement elementAtStartLineEnd = file.findElementAt(start);
     PsiElement elementAtNextLineStart = file.findElementAt(end);
     if (elementAtStartLineEnd == null || elementAtNextLineStart == null) return -1;
@@ -68,9 +68,9 @@ public class DeclarationJoinLinesHandler implements JoinLinesHandlerDelegate {
       return -1;
     }
 
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(psiManager.getProject()).getElementFactory();
+    PsiElementFactory factory = JavaPsiFacade.getInstance(psiManager.getProject()).getElementFactory();
     PsiExpression initializerExpression;
-    final IElementType originalOpSign = assignment.getOperationTokenType();
+    IElementType originalOpSign = assignment.getOperationTokenType();
     if (originalOpSign == JavaTokenType.EQ) {
       initializerExpression = assignment.getRExpression();
     } else {
@@ -121,8 +121,8 @@ public class DeclarationJoinLinesHandler implements JoinLinesHandlerDelegate {
       }
       newVar.getModifierList().replace(var.getModifierList());
       PsiVariable variable = (PsiVariable) newDecl.getDeclaredElements()[0];
-      final int offsetBeforeEQ = variable.getNameIdentifier().getTextRange().getEndOffset();
-      final int offsetAfterEQ = variable.getInitializer().getTextRange().getStartOffset() + 1;
+      int offsetBeforeEQ = variable.getNameIdentifier().getTextRange().getEndOffset();
+      int offsetAfterEQ = variable.getInitializer().getTextRange().getStartOffset() + 1;
       newDecl = (PsiDeclarationStatement) CodeStyleManager.getInstance(psiManager).reformatRange(newDecl, offsetBeforeEQ, offsetAfterEQ);
 
       PsiElement child = statement.getLastChild();

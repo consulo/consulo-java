@@ -44,7 +44,7 @@ public class TypeParameterHidesVisibleTypeInspection extends BaseInspection {
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final PsiClass aClass = (PsiClass)infos[0];
+    PsiClass aClass = (PsiClass)infos[0];
     return InspectionGadgetsLocalize.typeParameterHidesVisibleTypeProblemDescriptor(aClass.getQualifiedName()).get();
   }
 
@@ -58,18 +58,18 @@ public class TypeParameterHidesVisibleTypeInspection extends BaseInspection {
     @Override
     public void visitTypeParameter(PsiTypeParameter parameter) {
       super.visitTypeParameter(parameter);
-      final String unqualifiedClassName = parameter.getName();
+      String unqualifiedClassName = parameter.getName();
 
-      final JavaPsiFacade manager = JavaPsiFacade.getInstance(parameter.getProject());
-      final PsiFile containingFile = parameter.getContainingFile();
-      final PsiResolveHelper resolveHelper = manager.getResolveHelper();
-      final PsiClass aClass =
+      JavaPsiFacade manager = JavaPsiFacade.getInstance(parameter.getProject());
+      PsiFile containingFile = parameter.getContainingFile();
+      PsiResolveHelper resolveHelper = manager.getResolveHelper();
+      PsiClass aClass =
         resolveHelper.resolveReferencedClass(unqualifiedClassName,
                                              containingFile);
       if (aClass == null) {
         return;
       }
-      final PsiIdentifier identifier = parameter.getNameIdentifier();
+      PsiIdentifier identifier = parameter.getNameIdentifier();
       if (identifier == null) {
         return;
       }

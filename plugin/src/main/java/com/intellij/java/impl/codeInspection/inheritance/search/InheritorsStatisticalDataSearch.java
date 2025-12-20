@@ -22,29 +22,29 @@ public class InheritorsStatisticalDataSearch {
    * @param minPercentRatio - head volume
    * @return - search results in relevant ordering (frequency descent)
    */
-  public static List<InheritorsStatisticsSearchResult> search(final @Nonnull PsiClass superClass,
-                                          final @Nonnull PsiClass aClass,
-                                          final @Nonnull GlobalSearchScope scope,
-                                          final int minPercentRatio) {
-    final String superClassName = superClass.getName();
-    final String aClassName = aClass.getName();
-    final Set<String> disabledNames = new HashSet<String>();
+  public static List<InheritorsStatisticsSearchResult> search(@Nonnull PsiClass superClass,
+                                                              @Nonnull PsiClass aClass,
+                                                              @Nonnull GlobalSearchScope scope,
+                                                              int minPercentRatio) {
+    String superClassName = superClass.getName();
+    String aClassName = aClass.getName();
+    Set<String> disabledNames = new HashSet<String>();
     disabledNames.add(aClassName);
     disabledNames.add(superClassName);
-    final Set<InheritorsCountData> collector = new TreeSet<InheritorsCountData>();
-    final Pair<Integer, Integer> collectingResult = collectInheritorsInfo(superClass, collector, disabledNames);
-    final int allAnonymousInheritors = collectingResult.getSecond();
-    final int allInheritors = collectingResult.getFirst() + allAnonymousInheritors - 1;
+    Set<InheritorsCountData> collector = new TreeSet<InheritorsCountData>();
+    Pair<Integer, Integer> collectingResult = collectInheritorsInfo(superClass, collector, disabledNames);
+    int allAnonymousInheritors = collectingResult.getSecond();
+    int allInheritors = collectingResult.getFirst() + allAnonymousInheritors - 1;
 
-    final List<InheritorsStatisticsSearchResult> result = new ArrayList<InheritorsStatisticsSearchResult>();
+    List<InheritorsStatisticsSearchResult> result = new ArrayList<InheritorsStatisticsSearchResult>();
 
     Integer firstPercent = null;
-    for (final InheritorsCountData data : collector) {
-      final int inheritorsCount = data.getInheritorsCount();
+    for (InheritorsCountData data : collector) {
+      int inheritorsCount = data.getInheritorsCount();
       if (inheritorsCount < allAnonymousInheritors) {
         break;
       }
-      final int percent = (inheritorsCount * 100) / allInheritors;
+      int percent = (inheritorsCount * 100) / allInheritors;
       if (percent < 1) {
         break;
       }
@@ -55,8 +55,8 @@ public class InheritorsStatisticalDataSearch {
         break;
       }
 
-      final PsiClass psiClass = data.getPsiClass();
-      final VirtualFile file = psiClass.getContainingFile().getVirtualFile();
+      PsiClass psiClass = data.getPsiClass();
+      VirtualFile file = psiClass.getContainingFile().getVirtualFile();
       if (file != null && scope.contains(file)) {
         result.add(new InheritorsStatisticsSearchResult(psiClass, percent));
       }
@@ -64,26 +64,26 @@ public class InheritorsStatisticalDataSearch {
     return result;
   }
 
-  private static Pair<Integer, Integer> collectInheritorsInfo(final PsiClass superClass,
-                                                              final Set<InheritorsCountData> collector,
-                                                              final Set<String> disabledNames) {
+  private static Pair<Integer, Integer> collectInheritorsInfo(PsiClass superClass,
+                                                              Set<InheritorsCountData> collector,
+                                                              Set<String> disabledNames) {
     return collectInheritorsInfo(superClass, collector, disabledNames, new HashSet<String>(), new HashSet<String>());
   }
 
-  private static Pair<Integer, Integer> collectInheritorsInfo(final PsiClass aClass,
-                                                              final Set<InheritorsCountData> collector,
-                                                              final Set<String> disabledNames,
-                                                              final Set<String> processedElements,
-                                                              final Set<String> allNotAnonymousInheritors) {
-    final String className = aClass.getName();
+  private static Pair<Integer, Integer> collectInheritorsInfo(PsiClass aClass,
+                                                              Set<InheritorsCountData> collector,
+                                                              Set<String> disabledNames,
+                                                              Set<String> processedElements,
+                                                              Set<String> allNotAnonymousInheritors) {
+    String className = aClass.getName();
     if (!processedElements.add(className)) return Pair.create(0, 0);
 
-    final MyInheritorsInfoProcessor processor = new MyInheritorsInfoProcessor(collector, disabledNames, processedElements);
+    MyInheritorsInfoProcessor processor = new MyInheritorsInfoProcessor(collector, disabledNames, processedElements);
     DirectClassInheritorsSearch.search(aClass).forEach(processor);
 
     allNotAnonymousInheritors.addAll(processor.getAllNotAnonymousInheritors());
 
-    final int allInheritorsCount = processor.getAllNotAnonymousInheritors().size() + processor.getAnonymousInheritorsCount();
+    int allInheritorsCount = processor.getAllNotAnonymousInheritors().size() + processor.getAnonymousInheritorsCount();
     if (!aClass.isInterface() && allInheritorsCount != 0 && !disabledNames.contains(className)) {
       collector.add(new InheritorsCountData(aClass, allInheritorsCount));
     }
@@ -114,13 +114,13 @@ public class InheritorsStatisticalDataSearch {
     }
 
     @Override
-    public boolean process(final PsiClass psiClass) {
-      final String inheritorName = psiClass.getName();
+    public boolean process(PsiClass psiClass) {
+      String inheritorName = psiClass.getName();
       if (inheritorName == null) {
         myAnonymousInheritorsCount++;
       }
       else {
-        final Pair<Integer, Integer> res =
+        Pair<Integer, Integer> res =
           collectInheritorsInfo(psiClass, myCollector, myDisabledNames, myProcessedElements, myAllNotAnonymousInheritors);
         myAnonymousInheritorsCount += res.getSecond();
         if (!psiClass.isInterface()) {

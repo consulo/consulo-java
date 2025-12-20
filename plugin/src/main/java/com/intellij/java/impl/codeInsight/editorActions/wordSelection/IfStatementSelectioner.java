@@ -40,17 +40,17 @@ public class IfStatementSelectioner extends BasicSelectioner {
 
     PsiIfStatement statement = (PsiIfStatement)e;
 
-    final PsiKeyword elseKeyword = statement.getElseElement();
+    PsiKeyword elseKeyword = statement.getElseElement();
     if (elseKeyword != null) {
       result.addAll(expandToWholeLine(editorText,
                                       new TextRange(elseKeyword.getTextRange().getStartOffset(),
                                                     statement.getTextRange().getEndOffset()),
                                       false));
 
-      final PsiStatement branch = statement.getElseBranch();
+      PsiStatement branch = statement.getElseBranch();
       if (branch instanceof PsiIfStatement) {
         PsiIfStatement elseIf = (PsiIfStatement)branch;
-        final PsiKeyword element = elseIf.getElseElement();
+        PsiKeyword element = elseIf.getElseElement();
         if (element != null) {
           result.addAll(expandToWholeLine(editorText,
                                           new TextRange(elseKeyword.getTextRange().getStartOffset(),

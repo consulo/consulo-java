@@ -22,7 +22,7 @@ public class ClassUtil {
   }
 
   public static boolean classExists(String className) {
-    final Class<?> aClass;
+    Class<?> aClass;
     try {
       aClass = Class.forName(className);
     }

@@ -52,13 +52,13 @@ public class DivideByZeroInspection extends BaseInspection {
     @Override
     public void visitPolyadicExpression(PsiPolyadicExpression expression) {
       super.visitPolyadicExpression(expression);
-      final IElementType tokenType = expression.getOperationTokenType();
+      IElementType tokenType = expression.getOperationTokenType();
       if (!JavaTokenType.DIV.equals(tokenType) && !JavaTokenType.PERC.equals(tokenType)) {
         return;
       }
-      final PsiExpression[] operands = expression.getOperands();
+      PsiExpression[] operands = expression.getOperands();
       for (int i = 1; i < operands.length; i++) {
-        final PsiExpression operand = operands[i];
+        PsiExpression operand = operands[i];
         if (isZero(operand)) {
           registerError(operand);
           return;
@@ -69,11 +69,11 @@ public class DivideByZeroInspection extends BaseInspection {
     @Override
     public void visitAssignmentExpression(PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
-      final PsiExpression rhs = expression.getRExpression();
+      PsiExpression rhs = expression.getRExpression();
       if (rhs == null) {
         return;
       }
-      final IElementType tokenType = expression.getOperationTokenType();
+      IElementType tokenType = expression.getOperationTokenType();
       if (!tokenType.equals(JavaTokenType.DIVEQ) && !tokenType.equals(JavaTokenType.PERCEQ) || isZero(rhs)) {
         return;
       }
@@ -81,11 +81,11 @@ public class DivideByZeroInspection extends BaseInspection {
     }
 
     private static boolean isZero(PsiExpression expression) {
-      final Object value = ConstantExpressionUtil.computeCastTo(expression, PsiType.DOUBLE);
+      Object value = ConstantExpressionUtil.computeCastTo(expression, PsiType.DOUBLE);
       if (!(value instanceof Double)) {
         return false;
       }
-      final double constantValue = ((Double)value).doubleValue();
+      double constantValue = ((Double)value).doubleValue();
       return constantValue == 0.0 || constantValue == -0.0;
     }
   }

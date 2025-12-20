@@ -78,19 +78,19 @@ public class ForLoopReplaceableByWhileInspection extends BaseInspection {
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
-            final PsiElement forKeywordElement = descriptor.getPsiElement();
-            final PsiForStatement forStatement = (PsiForStatement) forKeywordElement.getParent();
+            PsiElement forKeywordElement = descriptor.getPsiElement();
+            PsiForStatement forStatement = (PsiForStatement) forKeywordElement.getParent();
             assert forStatement != null;
-            final PsiExpression condition = forStatement.getCondition();
-            final PsiStatement body = forStatement.getBody();
-            final String bodyText;
+            PsiExpression condition = forStatement.getCondition();
+            PsiStatement body = forStatement.getBody();
+            String bodyText;
             if (body == null) {
                 bodyText = "";
             }
             else {
                 bodyText = body.getText();
             }
-            @NonNls final String whileStatement;
+            @NonNls String whileStatement;
             if (condition == null) {
                 whileStatement = "while(true)" + bodyText;
             }
@@ -115,21 +115,21 @@ public class ForLoopReplaceableByWhileInspection extends BaseInspection {
             @Nonnull PsiForStatement statement
         ) {
             super.visitForStatement(statement);
-            final PsiStatement initialization = statement.getInitialization();
+            PsiStatement initialization = statement.getInitialization();
             if (initialization != null &&
                 !(initialization instanceof PsiEmptyStatement)) {
                 return;
             }
-            final PsiStatement update = statement.getUpdate();
+            PsiStatement update = statement.getUpdate();
             if (update != null && !(update instanceof PsiEmptyStatement)) {
                 return;
             }
             if (m_ignoreLoopsWithoutConditions) {
-                final PsiExpression condition = statement.getCondition();
+                PsiExpression condition = statement.getCondition();
                 if (condition == null) {
                     return;
                 }
-                final String conditionText = condition.getText();
+                String conditionText = condition.getText();
                 if (PsiKeyword.TRUE.equals(conditionText)) {
                     return;
                 }

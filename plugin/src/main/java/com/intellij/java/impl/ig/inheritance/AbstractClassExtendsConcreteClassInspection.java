@@ -56,14 +56,14 @@ public class AbstractClassExtendsConcreteClassInspection extends BaseInspection 
             if (!aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
                 return;
             }
-            final PsiClass superClass = aClass.getSuperClass();
+            PsiClass superClass = aClass.getSuperClass();
             if (superClass == null) {
                 return;
             }
             if (superClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
                 return;
             }
-            final String superclassName = superClass.getQualifiedName();
+            String superclassName = superClass.getQualifiedName();
             if (CommonClassNames.JAVA_LANG_OBJECT.equals(superclassName)) {
                 return;
             }

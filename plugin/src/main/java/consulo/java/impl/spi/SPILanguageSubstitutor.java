@@ -41,16 +41,16 @@ public class SPILanguageSubstitutor extends LanguageSubstitutor {
   @Nullable
   @Override
   public Language getLanguage(@Nonnull VirtualFile file, @Nonnull Project project) {
-    final Module moduleForPsiElement = ModuleUtilCore.findModuleForFile(file, project);
+    Module moduleForPsiElement = ModuleUtilCore.findModuleForFile(file, project);
     if (moduleForPsiElement == null) {
       return null;
     }
 
-    final VirtualFile parent = file.getParent();
+    VirtualFile parent = file.getParent();
     if (parent != null && "services".equals(parent.getName())) {
-      final VirtualFile gParent = parent.getParent();
+      VirtualFile gParent = parent.getParent();
       if (gParent != null && SpecialDirUtil.META_INF.equals(gParent.getName())) {
-        final List<VirtualFile> virtualFiles = SpecialDirUtil.collectSpecialDirs(moduleForPsiElement, SpecialDirUtil.META_INF);
+        List<VirtualFile> virtualFiles = SpecialDirUtil.collectSpecialDirs(moduleForPsiElement, SpecialDirUtil.META_INF);
         if(!virtualFiles.contains(gParent)) {
           return null;
         }

@@ -56,11 +56,11 @@ public class MethodCountInspection extends BaseInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final JComponent panel = new JPanel(new GridBagLayout());
-        final Component label = new JLabel(InspectionGadgetsLocalize.methodCountLimitOption().get());
-        final JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
+        JComponent panel = new JPanel(new GridBagLayout());
+        Component label = new JLabel(InspectionGadgetsLocalize.methodCountLimitOption().get());
+        JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
 
-        final GridBagConstraints constraints = new GridBagConstraints();
+        GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.insets.right = UIUtil.DEFAULT_HGAP;
@@ -71,7 +71,7 @@ public class MethodCountInspection extends BaseInspection {
         constraints.insets.right = 0;
         panel.add(valueField, constraints);
 
-        final CheckBox gettersSettersCheckBox = new CheckBox(
+        CheckBox gettersSettersCheckBox = new CheckBox(
             InspectionGadgetsLocalize.methodCountIgnoreGettersSettersOption().get(),
             this,
             "ignoreGettersAndSetters"
@@ -91,7 +91,7 @@ public class MethodCountInspection extends BaseInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final Integer count = (Integer) infos[0];
+        Integer count = (Integer) infos[0];
         return InspectionGadgetsLocalize.tooManyMethodsProblemDescriptor(count).get();
     }
 
@@ -105,7 +105,7 @@ public class MethodCountInspection extends BaseInspection {
         @Override
         public void visitClass(@Nonnull PsiClass aClass) {
             // note: no call to super
-            final int methodCount = calculateTotalMethodCount(aClass);
+            int methodCount = calculateTotalMethodCount(aClass);
             if (methodCount <= m_limit) {
                 return;
             }
@@ -113,9 +113,9 @@ public class MethodCountInspection extends BaseInspection {
         }
 
         private int calculateTotalMethodCount(PsiClass aClass) {
-            final PsiMethod[] methods = aClass.getMethods();
+            PsiMethod[] methods = aClass.getMethods();
             int totalCount = 0;
-            for (final PsiMethod method : methods) {
+            for (PsiMethod method : methods) {
                 if (method.isConstructor()) {
                     continue;
                 }

@@ -50,13 +50,13 @@ public class AbstractExpectedTypeSkipper extends CompletionPreselectSkipper {
     return getSkippingStatus(element, location) != Result.ACCEPT;
   }
 
-  private static Result getSkippingStatus(final LookupElement item, final CompletionLocation location) {
+  private static Result getSkippingStatus(LookupElement item, CompletionLocation location) {
     if (location.getCompletionType() != CompletionType.SMART) return Result.ACCEPT;
 
-    final PsiExpression expression = PsiTreeUtil.getParentOfType(location.getCompletionParameters().getPosition(), PsiExpression.class);
+    PsiExpression expression = PsiTreeUtil.getParentOfType(location.getCompletionParameters().getPosition(), PsiExpression.class);
     if (!(expression instanceof PsiNewExpression)) return Result.ACCEPT;
 
-    final Object object = item.getObject();
+    Object object = item.getObject();
     if (!(object instanceof PsiClass)) return Result.ACCEPT;
 
     if (StatisticsManager.getInstance().getUseCount(CompletionStatistician.getBaseStatisticsInfo(item, location)) > 1)
@@ -65,7 +65,7 @@ public class AbstractExpectedTypeSkipper extends CompletionPreselectSkipper {
     PsiClass psiClass = (PsiClass) object;
 
     int toImplement = 0;
-    for (final PsiMethod method : psiClass.getMethods()) {
+    for (PsiMethod method : psiClass.getMethods()) {
       if (method.hasModifierProperty(PsiModifier.ABSTRACT)) {
         toImplement++;
         if (toImplement > 2) return Result.ABSTRACT;
@@ -75,13 +75,13 @@ public class AbstractExpectedTypeSkipper extends CompletionPreselectSkipper {
     toImplement += OverrideImplementUtil.getMethodSignaturesToImplement(psiClass).size();
     if (toImplement > 2) return Result.ABSTRACT;
 
-    final ExpectedTypeInfo[] infos = JavaCompletionUtil.EXPECTED_TYPES.getValue(location);
+    ExpectedTypeInfo[] infos = JavaCompletionUtil.EXPECTED_TYPES.getValue(location);
     boolean isDefaultType = false;
     if (infos != null) {
-      final PsiType type = JavaPsiFacade.getInstance(psiClass.getProject()).getElementFactory().createType(psiClass);
-      for (final ExpectedTypeInfo info : infos) {
-        final PsiType infoType = TypeConversionUtil.erasure(info.getType().getDeepComponentType());
-        final PsiType defaultType = TypeConversionUtil.erasure(info.getDefaultType().getDeepComponentType());
+      PsiType type = JavaPsiFacade.getInstance(psiClass.getProject()).getElementFactory().createType(psiClass);
+      for (ExpectedTypeInfo info : infos) {
+        PsiType infoType = TypeConversionUtil.erasure(info.getType().getDeepComponentType());
+        PsiType defaultType = TypeConversionUtil.erasure(info.getDefaultType().getDeepComponentType());
         if (!defaultType.equals(infoType) && infoType.isAssignableFrom(type)) {
           if (!defaultType.isAssignableFrom(type)) return Result.NON_DEFAULT;
           isDefaultType = true;

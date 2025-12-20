@@ -158,7 +158,7 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
     final Content[] myContent = new Content[1];
     ToolWindow toolWindow =
       ToolWindowManager.getInstance(myProject).getToolWindow(dataFlowToThis ? BACK_TOOLWINDOW_ID : FORTH_TOOLWINDOW_ID);
-    final SlicePanel slicePanel = new SlicePanel(myProject, dataFlowToThis, rootNode, splitByLeafExpressions, toolWindow) {
+    SlicePanel slicePanel = new SlicePanel(myProject, dataFlowToThis, rootNode, splitByLeafExpressions, toolWindow) {
       @Override
       protected void close() {
         super.close();

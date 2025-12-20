@@ -60,10 +60,10 @@ public class EqualsWhichDoesntCheckParameterClassInspection extends BaseInspecti
             if (!MethodUtils.isEquals(method)) {
                 return;
             }
-            final PsiParameterList parameterList = method.getParameterList();
-            final PsiParameter[] parameters = parameterList.getParameters();
-            final PsiParameter parameter = parameters[0];
-            final PsiCodeBlock body = method.getBody();
+            PsiParameterList parameterList = method.getParameterList();
+            PsiParameter[] parameters = parameterList.getParameters();
+            PsiParameter parameter = parameters[0];
+            PsiCodeBlock body = method.getBody();
             if (body == null || isParameterChecked(body, parameter) || isParameterCheckNotNeeded(body, parameter)) {
                 return;
             }
@@ -71,7 +71,7 @@ public class EqualsWhichDoesntCheckParameterClassInspection extends BaseInspecti
         }
 
         private static boolean isParameterChecked(PsiCodeBlock body, PsiParameter parameter) {
-            final ParameterClassCheckVisitor visitor = new ParameterClassCheckVisitor(parameter);
+            ParameterClassCheckVisitor visitor = new ParameterClassCheckVisitor(parameter);
             body.accept(visitor);
             return visitor.isChecked();
         }
@@ -80,16 +80,16 @@ public class EqualsWhichDoesntCheckParameterClassInspection extends BaseInspecti
             if (ControlFlowUtils.isEmptyCodeBlock(body)) {
                 return true; // incomplete code
             }
-            final PsiStatement statement = ControlFlowUtils.getOnlyStatementInBlock(body);
+            PsiStatement statement = ControlFlowUtils.getOnlyStatementInBlock(body);
             if (statement == null) {
                 return false;
             }
             if (!(statement instanceof PsiReturnStatement)) {
                 return true; // incomplete code
             }
-            final PsiReturnStatement returnStatement = (PsiReturnStatement) statement;
-            final PsiExpression returnValue = returnStatement.getReturnValue();
-            final Object constant = ExpressionUtils.computeConstantExpression(returnValue);
+            PsiReturnStatement returnStatement = (PsiReturnStatement) statement;
+            PsiExpression returnValue = returnStatement.getReturnValue();
+            Object constant = ExpressionUtils.computeConstantExpression(returnValue);
             if (Boolean.FALSE.equals(constant)) {
                 return true; // incomplete code
             }
@@ -106,9 +106,9 @@ public class EqualsWhichDoesntCheckParameterClassInspection extends BaseInspecti
             if (!(expression instanceof PsiBinaryExpression)) {
                 return false;
             }
-            final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) expression;
-            final PsiExpression lhs = binaryExpression.getLOperand();
-            final PsiExpression rhs = binaryExpression.getROperand();
+            PsiBinaryExpression binaryExpression = (PsiBinaryExpression) expression;
+            PsiExpression lhs = binaryExpression.getLOperand();
+            PsiExpression rhs = binaryExpression.getROperand();
             return isIdentityEquals(lhs, rhs, parameter) || isIdentityEquals(rhs, lhs, parameter);
         }
 
@@ -116,15 +116,15 @@ public class EqualsWhichDoesntCheckParameterClassInspection extends BaseInspecti
             if (!(lhs instanceof PsiReferenceExpression)) {
                 return false;
             }
-            final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) lhs;
-            final PsiElement target = referenceExpression.resolve();
+            PsiReferenceExpression referenceExpression = (PsiReferenceExpression) lhs;
+            PsiElement target = referenceExpression.resolve();
             if (target != parameter) {
                 return false;
             }
             if (!(rhs instanceof PsiThisExpression)) {
                 return false;
             }
-            final PsiThisExpression thisExpression = (PsiThisExpression) rhs;
+            PsiThisExpression thisExpression = (PsiThisExpression) rhs;
             return thisExpression.getQualifier() == null;
         }
 
@@ -132,23 +132,23 @@ public class EqualsWhichDoesntCheckParameterClassInspection extends BaseInspecti
             if (!(expression instanceof PsiMethodCallExpression)) {
                 return false;
             }
-            final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
-            final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-            @NonNls final String referenceName = methodExpression.getReferenceName();
+            PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
+            PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+            @NonNls String referenceName = methodExpression.getReferenceName();
             if (!"reflectionEquals".equals(referenceName)) {
                 return false;
             }
-            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
             if (!(qualifier instanceof PsiReferenceExpression)) {
                 return false;
             }
-            final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) qualifier;
-            final PsiElement target = referenceExpression.resolve();
+            PsiReferenceExpression referenceExpression = (PsiReferenceExpression) qualifier;
+            PsiElement target = referenceExpression.resolve();
             if (!(target instanceof PsiClass)) {
                 return false;
             }
-            final PsiClass aClass = (PsiClass) target;
-            final String className = aClass.getQualifiedName();
+            PsiClass aClass = (PsiClass) target;
+            String className = aClass.getQualifiedName();
             return "org.apache.commons.lang.builder.EqualsBuilder".equals(className);
         }
     }

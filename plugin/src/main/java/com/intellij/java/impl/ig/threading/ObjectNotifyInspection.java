@@ -67,18 +67,18 @@ public class ObjectNotifyInspection extends BaseInspection {
 
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement methodNameElement = descriptor.getPsiElement();
-      final PsiReferenceExpression methodExpression =
+      PsiElement methodNameElement = descriptor.getPsiElement();
+      PsiReferenceExpression methodExpression =
         (PsiReferenceExpression)methodNameElement.getParent();
       assert methodExpression != null;
-      final PsiExpression qualifier =
+      PsiExpression qualifier =
         methodExpression.getQualifierExpression();
       if (qualifier == null) {
         replaceExpression(methodExpression,
                           HardcodedMethodConstants.NOTIFY_ALL);
       }
       else {
-        final String qualifierText = qualifier.getText();
+        String qualifierText = qualifier.getText();
         replaceExpression(methodExpression,
                           qualifierText + '.' +
                           HardcodedMethodConstants.NOTIFY_ALL);
@@ -92,14 +92,14 @@ public class ObjectNotifyInspection extends BaseInspection {
     public void visitMethodCallExpression(
       @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
+      String methodName = methodExpression.getReferenceName();
 
       if (!HardcodedMethodConstants.NOTIFY.equals(methodName)) {
         return;
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpressionList argumentList = expression.getArgumentList();
       if (argumentList.getExpressions().length != 0) {
         return;
       }

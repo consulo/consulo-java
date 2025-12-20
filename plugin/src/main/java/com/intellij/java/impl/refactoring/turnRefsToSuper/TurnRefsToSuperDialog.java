@@ -85,7 +85,7 @@ public class TurnRefsToSuperDialog extends RefactoringDialog {
     JPanel panel = new JPanel();
     panel.setLayout(new BorderLayout(UIUtil.DEFAULT_HGAP, UIUtil.DEFAULT_VGAP));
 
-    final JLabel classListLabel = new JLabel();
+    JLabel classListLabel = new JLabel();
     panel.add(classListLabel, BorderLayout.NORTH);
 
     mySuperClassesList = new JBList(mySuperClasses.toArray());
@@ -115,7 +115,7 @@ public class TurnRefsToSuperDialog extends RefactoringDialog {
 
   protected void doAction() {
     JavaRefactoringSettings.getInstance().TURN_REFS_TO_SUPER_PREVIEW_USAGES = isPreviewUsages();
-    final PsiClass superClass = getSuperClass();
+    PsiClass superClass = getSuperClass();
     if (superClass != null) {
       invokeRefactoring(new TurnRefsToSuperProcessor(getProject(), mySubClass, superClass, isUseInInstanceOf()));
     }

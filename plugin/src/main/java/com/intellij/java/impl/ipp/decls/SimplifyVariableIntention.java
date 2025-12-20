@@ -44,7 +44,7 @@ public class SimplifyVariableIntention extends Intention {
     @Override
     public void processIntention(PsiElement element)
         throws IncorrectOperationException {
-        final PsiVariable var = (PsiVariable) element;
+        PsiVariable var = (PsiVariable) element;
         var.normalizeDeclaration();
     }
 }

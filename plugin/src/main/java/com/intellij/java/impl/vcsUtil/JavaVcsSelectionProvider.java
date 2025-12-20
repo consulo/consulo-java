@@ -42,8 +42,8 @@ import java.util.Set;
 public class JavaVcsSelectionProvider implements VcsSelectionProvider {
   @Nullable
   @RequiredUIAccess
-  public VcsSelection getSelection(final VcsContext context) {
-    final Editor editor = context.getEditor();
+  public VcsSelection getSelection(VcsContext context) {
+    Editor editor = context.getEditor();
     if (editor == null) return null;
     PsiElement psiElement = TargetElementUtil.findTargetElement(editor, Set.of(TargetElementUtilExtender.ELEMENT_NAME_ACCEPTED));
     if (psiElement == null) {
@@ -56,7 +56,7 @@ public class JavaVcsSelectionProvider implements VcsSelectionProvider {
       return null;
     }
 
-    final String actionName;
+    String actionName;
 
     if (psiElement instanceof PsiClass) {
       actionName = VcsBundle.message("action.name.show.history.for.class");

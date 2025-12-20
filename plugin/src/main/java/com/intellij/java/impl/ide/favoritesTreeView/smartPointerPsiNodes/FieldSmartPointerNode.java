@@ -36,7 +36,7 @@ public class FieldSmartPointerNode extends BaseSmartPointerPsiNode<SmartPsiEleme
     super(project, SmartPointerManager.getInstance(project).createSmartPsiElementPointer(value), viewSettings);
   }
 
-  public FieldSmartPointerNode(final Project project, final Object value, final ViewSettings viewSettings) {
+  public FieldSmartPointerNode(Project project, Object value, ViewSettings viewSettings) {
     this(project, (PsiField)value, viewSettings);
   }
 

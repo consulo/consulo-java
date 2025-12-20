@@ -70,7 +70,7 @@ public abstract class InconsistentLanguageLevelInspection extends GlobalInspecti
             @Override
             @RequiredReadAction
             public void visitElement(PsiElement element) {
-                final Module module = ModuleUtilCore.findModuleForPsiElement(element);
+                Module module = ModuleUtilCore.findModuleForPsiElement(element);
                 if (module != null) {
                     modules.add(module);
                 }
@@ -80,18 +80,18 @@ public abstract class InconsistentLanguageLevelInspection extends GlobalInspecti
         for (Module module : modules) {
             LanguageLevel languageLevel = EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(module);
 
-            final RefModule refModule = globalContext.getRefManager().getRefModule(module);
+            RefModule refModule = globalContext.getRefManager().getRefModule(module);
             for (OrderEntry entry : ModuleRootManager.getInstance(module).getOrderEntries()) {
                 if (!(entry instanceof ModuleOrderEntry)) {
                     continue;
                 }
-                final Module dependantModule = ((ModuleOrderEntry) entry).getModule();
+                Module dependantModule = ((ModuleOrderEntry) entry).getModule();
                 if (dependantModule == null) {
                     continue;
                 }
                 LanguageLevel dependantLanguageLevel = EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(dependantModule);
                 if (languageLevel.compareTo(dependantLanguageLevel) < 0) {
-                    final CommonProblemDescriptor problemDescriptor = manager.createProblemDescriptor(
+                    CommonProblemDescriptor problemDescriptor = manager.createProblemDescriptor(
                         "Inconsistent language level settings: module " + module.getName() + " with language level " +
                             languageLevel + " depends on module " + dependantModule.getName() + " with language level " + dependantLanguageLevel,
                         new UnnecessaryModuleDependencyInspection.RemoveModuleDependencyFix(module, dependantModule),

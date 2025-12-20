@@ -29,13 +29,13 @@ class MergeIfAndPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiJavaToken)) {
       return false;
     }
-    final PsiJavaToken token = (PsiJavaToken)element;
+    PsiJavaToken token = (PsiJavaToken)element;
 
-    final PsiElement parent = token.getParent();
+    PsiElement parent = token.getParent();
     if (!(parent instanceof PsiIfStatement)) {
       return false;
     }
-    final PsiIfStatement ifStatement = (PsiIfStatement)parent;
+    PsiIfStatement ifStatement = (PsiIfStatement)parent;
     if (ErrorUtil.containsError(ifStatement)) {
       return false;
     }
@@ -52,7 +52,7 @@ class MergeIfAndPredicate implements PsiElementPredicate {
     if (!(thenBranch instanceof PsiIfStatement)) {
       return false;
     }
-    final PsiIfStatement childIfStatement = (PsiIfStatement)thenBranch;
+    PsiIfStatement childIfStatement = (PsiIfStatement)thenBranch;
     return childIfStatement.getElseBranch() == null;
   }
 }

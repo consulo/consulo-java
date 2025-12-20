@@ -34,7 +34,7 @@ public class PsiDocTagValueManipulator extends AbstractElementManipulator<PsiDoc
 
   @Override
   public PsiDocTag handleContentChange(PsiDocTag tag, TextRange range, String newContent) throws IncorrectOperationException {
-    final StringBuilder replacement = new StringBuilder( tag.getText() );
+    StringBuilder replacement = new StringBuilder( tag.getText() );
 
     replacement.replace(
       range.getStartOffset(),
@@ -45,15 +45,15 @@ public class PsiDocTagValueManipulator extends AbstractElementManipulator<PsiDoc
   }
 
   @Override
-  public TextRange getRangeInElement(final PsiDocTag tag) {
-    final PsiElement[] elements = tag.getDataElements();
+  public TextRange getRangeInElement(PsiDocTag tag) {
+    PsiElement[] elements = tag.getDataElements();
     if (elements.length == 0) {
-      final PsiElement name = tag.getNameElement();
-      final int offset = name.getStartOffsetInParent() + name.getTextLength();
+      PsiElement name = tag.getNameElement();
+      int offset = name.getStartOffsetInParent() + name.getTextLength();
       return new TextRange(offset, offset);
     }
-    final PsiElement first = elements[0];
-    final PsiElement last = elements[elements.length - 1];
+    PsiElement first = elements[0];
+    PsiElement last = elements[elements.length - 1];
     return new TextRange(first.getStartOffsetInParent(), last.getStartOffsetInParent()+last.getTextLength());
   }
 

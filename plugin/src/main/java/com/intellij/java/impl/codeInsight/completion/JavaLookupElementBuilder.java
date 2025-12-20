@@ -36,19 +36,19 @@ public class JavaLookupElementBuilder {
   }
 
   public static LookupElementBuilder forField(@Nonnull PsiField field,
-                                              final String lookupString,
-                                              final @Nullable PsiClass qualifierClass) {
-    final LookupElementBuilder builder = LookupElementBuilder.create(field, lookupString).withIcon(
+                                              String lookupString,
+                                              @Nullable PsiClass qualifierClass) {
+    LookupElementBuilder builder = LookupElementBuilder.create(field, lookupString).withIcon(
       IconDescriptorUpdaters.getIcon(field, 0));
     return setBoldIfInClass(field, qualifierClass, builder);
   }
 
-  public static LookupElementBuilder forMethod(@Nonnull PsiMethod method, final PsiSubstitutor substitutor) {
+  public static LookupElementBuilder forMethod(@Nonnull PsiMethod method, PsiSubstitutor substitutor) {
     return forMethod(method, method.getName(), substitutor, null);
   }
 
   public static LookupElementBuilder forMethod(@Nonnull PsiMethod method,
-                                               @Nonnull String lookupString, final @Nonnull PsiSubstitutor substitutor,
+                                               @Nonnull String lookupString, @Nonnull PsiSubstitutor substitutor,
                                                @Nullable PsiClass qualifierClass) {
     LookupElementBuilder builder = LookupElementBuilder.create(method, lookupString)
       .withIcon(IconDescriptorUpdaters.getIcon(method, 0))
@@ -56,7 +56,7 @@ public class JavaLookupElementBuilder {
       .withTailText(PsiFormatUtil.formatMethod(method, substitutor,
                                                PsiFormatUtilBase.SHOW_PARAMETERS,
                                                PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_TYPE));
-    final PsiType returnType = method.getReturnType();
+    PsiType returnType = method.getReturnType();
     if (returnType != null) {
       builder = builder.withTypeText(substitutor.substitute(returnType).getPresentableText());
     }
@@ -76,13 +76,13 @@ public class JavaLookupElementBuilder {
   }
 
   public static LookupElementBuilder forClass(@Nonnull PsiClass psiClass,
-                                              final String lookupString) {
+                                              String lookupString) {
     return forClass(psiClass, lookupString, false);
   }
 
   public static LookupElementBuilder forClass(@Nonnull PsiClass psiClass,
-                                              final String lookupString,
-                                              final boolean withLocation) {
+                                              String lookupString,
+                                              boolean withLocation) {
     LookupElementBuilder builder =
       LookupElementBuilder.create(psiClass, lookupString).withIcon(IconDescriptorUpdaters.getIcon(psiClass, 0));
     String name = psiClass.getName();

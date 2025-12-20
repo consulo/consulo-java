@@ -32,8 +32,8 @@ class NestingDepthVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitBlockStatement(PsiBlockStatement statement) {
-    final PsiElement parent = statement.getParent();
-    final boolean isAlreadyCounted = parent instanceof PsiDoWhileStatement ||
+    PsiElement parent = statement.getParent();
+    boolean isAlreadyCounted = parent instanceof PsiDoWhileStatement ||
                                      parent instanceof PsiWhileStatement ||
                                      parent instanceof PsiForStatement ||
                                      parent instanceof PsiIfStatement ||
@@ -65,9 +65,9 @@ class NestingDepthVisitor extends JavaRecursiveElementVisitor {
   public void visitIfStatement(@Nonnull PsiIfStatement statement) {
     boolean isAlreadyCounted = false;
     if (statement.getParent() instanceof PsiIfStatement) {
-      final PsiIfStatement parent = (PsiIfStatement)statement.getParent();
+      PsiIfStatement parent = (PsiIfStatement)statement.getParent();
       assert parent != null;
-      final PsiStatement elseBranch = parent.getElseBranch();
+      PsiStatement elseBranch = parent.getElseBranch();
       if (statement.equals(elseBranch)) {
         isAlreadyCounted = true;
       }

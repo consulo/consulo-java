@@ -54,7 +54,7 @@ public abstract class LiteralExpressionTokenizerTest {
     doTest("\\nhello\\nworld\\n", "hello", "world");
   }
 
-  private static void doTest(final String text, final String... expected) {
+  private static void doTest(String text, String... expected) {
     TokenCollector collector = new TokenCollector();
     LiteralExpressionTokenizer.processTextWithEscapeSequences(null, text, collector);
     assertOrderedEquals(collector.getTokenTexts(), expected);

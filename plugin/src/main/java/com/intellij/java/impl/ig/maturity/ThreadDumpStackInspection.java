@@ -52,25 +52,25 @@ public class ThreadDumpStackInspection extends BaseInspection {
         @Override
         public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
-            final String methodName = MethodCallUtils.getMethodName(expression);
+            String methodName = MethodCallUtils.getMethodName(expression);
             if (!HardcodedMethodConstants.DUMP_STACKTRACE.equals(methodName)) {
                 return;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpressionList argumentList = expression.getArgumentList();
             if (argumentList.getExpressions().length != 0) {
                 return;
             }
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final PsiElement element = methodExpression.resolve();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            PsiElement element = methodExpression.resolve();
             if (!(element instanceof PsiMethod)) {
                 return;
             }
-            final PsiMethod method = (PsiMethod) element;
-            final PsiClass aClass = method.getContainingClass();
+            PsiMethod method = (PsiMethod) element;
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null) {
                 return;
             }
-            final String qualifiedName = aClass.getQualifiedName();
+            String qualifiedName = aClass.getQualifiedName();
             if (!"java.lang.Thread".equals(qualifiedName)) {
                 return;
             }

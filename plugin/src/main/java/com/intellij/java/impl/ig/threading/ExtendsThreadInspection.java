@@ -45,7 +45,7 @@ public class ExtendsThreadInspection extends BaseInspection {
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    final PsiClass aClass = (PsiClass)infos[0];
+    PsiClass aClass = (PsiClass)infos[0];
     return aClass instanceof PsiAnonymousClass
       ? InspectionGadgetsLocalize.anonymousExtendsThreadProblemDescriptor().get()
       : InspectionGadgetsLocalize.extendsThreadProblemDescriptor().get();
@@ -56,7 +56,7 @@ public class ExtendsThreadInspection extends BaseInspection {
    */
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiClass aClass = (PsiClass)infos[0];
+    PsiClass aClass = (PsiClass)infos[0];
     if (aClass instanceof PsiAnonymousClass) {
       return null;
     }
@@ -75,11 +75,11 @@ public class ExtendsThreadInspection extends BaseInspection {
       if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {
         return;
       }
-      final PsiClass superClass = aClass.getSuperClass();
+      PsiClass superClass = aClass.getSuperClass();
       if (superClass == null) {
         return;
       }
-      final String superclassName = superClass.getQualifiedName();
+      String superclassName = superClass.getQualifiedName();
       if (!"java.lang.Thread".equals(superclassName)) {
         return;
       }

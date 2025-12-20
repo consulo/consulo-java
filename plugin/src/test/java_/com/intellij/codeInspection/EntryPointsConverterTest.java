@@ -26,17 +26,17 @@ public abstract class EntryPointsConverterTest extends TestCase {
   }
 
   private static void doTest(String type, String fqName, String expectedFQName) throws Exception {
-    final Element entryPoints = setUpEntryPoint(type, fqName);
+    Element entryPoints = setUpEntryPoint(type, fqName);
 
-    final HashMap<String, SmartRefElementPointer> persistentEntryPoints = new HashMap<String, SmartRefElementPointer>();
+    HashMap<String, SmartRefElementPointer> persistentEntryPoints = new HashMap<String, SmartRefElementPointer>();
     EntryPointsManagerImpl.convert(entryPoints, persistentEntryPoints);
 
-    final Element testElement = new Element("comp");
+    Element testElement = new Element("comp");
     EntryPointsManagerImpl.writeExternal(testElement, persistentEntryPoints, new JDOMExternalizableStringList());
 
-    final Element expectedEntryPoints = setUpEntryPoint(type, expectedFQName);
+    Element expectedEntryPoints = setUpEntryPoint(type, expectedFQName);
     expectedEntryPoints.setAttribute("version", "2.0");
-    final Element expected = new Element("comp");
+    Element expected = new Element("comp");
     expected.addContent(expectedEntryPoints);
 
     assertTrue(JDOMUtil.areElementsEqual(testElement, expected));

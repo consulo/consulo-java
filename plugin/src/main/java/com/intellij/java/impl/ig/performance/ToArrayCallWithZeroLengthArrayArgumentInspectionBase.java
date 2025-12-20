@@ -39,7 +39,7 @@ public class ToArrayCallWithZeroLengthArrayArgumentInspectionBase extends BaseIn
     @Override
     @Nonnull
     protected String buildErrorString(Object... infos) {
-        final PsiExpression argument = (PsiExpression) infos[1];
+        PsiExpression argument = (PsiExpression) infos[1];
         return InspectionGadgetsLocalize.toArrayCallWithZeroLengthArrayArgumentProblemDescriptor(argument.getText()).get();
     }
 
@@ -52,18 +52,18 @@ public class ToArrayCallWithZeroLengthArrayArgumentInspectionBase extends BaseIn
         @Override
         public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            @NonNls final String methodName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            @NonNls String methodName = methodExpression.getReferenceName();
             if (!"toArray".equals(methodName)) {
                 return;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length != 1) {
                 return;
             }
-            final PsiExpression argument = arguments[0];
-            final PsiType type = argument.getType();
+            PsiExpression argument = arguments[0];
+            PsiType type = argument.getType();
             if (!(type instanceof PsiArrayType)) {
                 return;
             }
@@ -71,12 +71,12 @@ public class ToArrayCallWithZeroLengthArrayArgumentInspectionBase extends BaseIn
                 return;
             }
             if (argument instanceof PsiReferenceExpression) {
-                final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) argument;
-                final PsiElement element = referenceExpression.resolve();
+                PsiReferenceExpression referenceExpression = (PsiReferenceExpression) argument;
+                PsiElement element = referenceExpression.resolve();
                 if (!(element instanceof PsiField)) {
                     return;
                 }
-                final PsiField field = (PsiField) element;
+                PsiField field = (PsiField) element;
                 if (!CollectionUtils.isConstantEmptyArray(field)) {
                     return;
                 }
@@ -84,11 +84,11 @@ public class ToArrayCallWithZeroLengthArrayArgumentInspectionBase extends BaseIn
             else if (!ConstructionUtils.isEmptyArrayInitializer(argument)) {
                 return;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (!InheritanceUtil.isInheritor(containingClass, CommonClassNames.JAVA_UTIL_COLLECTION)) {
                 return;
             }

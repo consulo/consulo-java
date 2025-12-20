@@ -45,16 +45,16 @@ public class ObscureThrownExceptionsIntention extends MutablyNamedIntention {
         if (!(element instanceof PsiReferenceList)) {
             return;
         }
-        final PsiReferenceList referenceList = (PsiReferenceList) element;
-        final PsiClassType[] types = referenceList.getReferencedTypes();
-        final PsiClass commonSuperClass = findCommonSuperClass(types);
+        PsiReferenceList referenceList = (PsiReferenceList) element;
+        PsiClassType[] types = referenceList.getReferencedTypes();
+        PsiClass commonSuperClass = findCommonSuperClass(types);
         if (commonSuperClass == null) {
             return;
         }
-        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
-        final PsiClassType classType = factory.createType(commonSuperClass);
-        final PsiJavaCodeReferenceElement referenceElement = factory.createReferenceElementByType(classType);
-        final PsiReferenceList newReferenceList = factory.createReferenceList(new PsiJavaCodeReferenceElement[]{referenceElement});
+        PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
+        PsiClassType classType = factory.createType(commonSuperClass);
+        PsiJavaCodeReferenceElement referenceElement = factory.createReferenceElementByType(classType);
+        PsiReferenceList newReferenceList = factory.createReferenceList(new PsiJavaCodeReferenceElement[]{referenceElement});
         referenceList.replace(newReferenceList);
     }
 
@@ -63,7 +63,7 @@ public class ObscureThrownExceptionsIntention extends MutablyNamedIntention {
         if (types.length == 0) {
             return null;
         }
-        final PsiClass firstClass = types[0].resolve();
+        PsiClass firstClass = types[0].resolve();
         if (firstClass == null || types.length == 1) {
             return firstClass;
         }
@@ -77,9 +77,9 @@ public class ObscureThrownExceptionsIntention extends MutablyNamedIntention {
             return null;
         }
         Set<PsiClass> targetSet = new HashSet();
-        final int max = types.length - 1;
+        int max = types.length - 1;
         for (int i = 1; i < max; i++) {
-            final PsiClassType classType = types[i];
+            PsiClassType classType = types[i];
             PsiClass aClass1 = classType.resolve();
             while (aClass1 != null) {
                 if (sourceSet.contains(aClass1)) {
@@ -99,9 +99,9 @@ public class ObscureThrownExceptionsIntention extends MutablyNamedIntention {
 
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
-        final PsiReferenceList referenceList = (PsiReferenceList) element;
-        final PsiClassType[] types = referenceList.getReferencedTypes();
-        final PsiClass commonSuperClass = findCommonSuperClass(types);
+        PsiReferenceList referenceList = (PsiReferenceList) element;
+        PsiClassType[] types = referenceList.getReferencedTypes();
+        PsiClass commonSuperClass = findCommonSuperClass(types);
         if (commonSuperClass == null) {
             return LocalizeValue.of();
         }

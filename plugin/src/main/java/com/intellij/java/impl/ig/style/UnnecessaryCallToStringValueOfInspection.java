@@ -42,14 +42,14 @@ public class UnnecessaryCallToStringValueOfInspection extends BaseInspection {
     @Override
     @Nonnull
     protected String buildErrorString(Object... infos) {
-        final String text = (String) infos[0];
+        String text = (String) infos[0];
         return InspectionGadgetsLocalize.unnecessaryCallToStringValueofProblemDescriptor(text).get();
     }
 
     @Override
     @Nullable
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final String text = (String) infos[0];
+        String text = (String) infos[0];
         return new UnnecessaryCallToStringValueOfFix(text);
     }
 
@@ -57,7 +57,7 @@ public class UnnecessaryCallToStringValueOfInspection extends BaseInspection {
         if (!(expression instanceof PsiPolyadicExpression)) {
             return expression.getText();
         }
-        final PsiType type = expression.getType();
+        PsiType type = expression.getType();
         if (TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING, type) ||
             ParenthesesUtils.getPrecedence(expression) < ParenthesesUtils.ADDITIVE_PRECEDENCE) {
             return expression.getText();
@@ -80,9 +80,9 @@ public class UnnecessaryCallToStringValueOfInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) descriptor.getPsiElement();
-            final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) descriptor.getPsiElement();
+            PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length != 1) {
                 return;
             }
@@ -99,37 +99,37 @@ public class UnnecessaryCallToStringValueOfInspection extends BaseInspection {
         @Override
         public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final String referenceName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            String referenceName = methodExpression.getReferenceName();
             if (!"valueOf".equals(referenceName)) {
                 return;
             }
             if (isCallToStringValueOfNecessary(expression)) {
                 return;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length != 1) {
                 return;
             }
-            final PsiExpression argument = arguments[0];
-            final PsiType argumentType = argument.getType();
+            PsiExpression argument = arguments[0];
+            PsiType argumentType = argument.getType();
             if (argumentType instanceof PsiArrayType) {
-                final PsiArrayType arrayType = (PsiArrayType) argumentType;
-                final PsiType componentType = arrayType.getComponentType();
+                PsiArrayType arrayType = (PsiArrayType) argumentType;
+                PsiType componentType = arrayType.getComponentType();
                 if (PsiType.CHAR.equals(componentType)) {
                     return;
                 }
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return;
             }
-            final PsiClass aClass = method.getContainingClass();
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null) {
                 return;
             }
-            final String qualifiedName = aClass.getQualifiedName();
+            String qualifiedName = aClass.getQualifiedName();
             if (!CommonClassNames.JAVA_LANG_STRING.equals(qualifiedName)) {
                 return;
             }
@@ -137,17 +137,17 @@ public class UnnecessaryCallToStringValueOfInspection extends BaseInspection {
         }
 
         private boolean isCallToStringValueOfNecessary(PsiMethodCallExpression expression) {
-            final PsiElement parent = ParenthesesUtils.getParentSkipParentheses(expression);
+            PsiElement parent = ParenthesesUtils.getParentSkipParentheses(expression);
             if (parent instanceof PsiPolyadicExpression) {
-                final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) parent;
-                final PsiType type = polyadicExpression.getType();
+                PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) parent;
+                PsiType type = polyadicExpression.getType();
                 if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING, type)) {
                     return true;
                 }
-                final PsiExpression[] operands = polyadicExpression.getOperands();
+                PsiExpression[] operands = polyadicExpression.getOperands();
                 int index = -1;
                 for (int i = 0, length = operands.length; i < length; i++) {
-                    final PsiExpression operand = operands[i];
+                    PsiExpression operand = operands[i];
                     if (expression.equals(operand)) {
                         index = i;
                     }
@@ -167,15 +167,15 @@ public class UnnecessaryCallToStringValueOfInspection extends BaseInspection {
                 }
             }
             else if (parent instanceof PsiExpressionList) {
-                final PsiExpressionList expressionList = (PsiExpressionList) parent;
-                final PsiElement grandParent = expressionList.getParent();
+                PsiExpressionList expressionList = (PsiExpressionList) parent;
+                PsiElement grandParent = expressionList.getParent();
                 if (!(grandParent instanceof PsiMethodCallExpression)) {
                     return true;
                 }
-                final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) grandParent;
-                final PsiReferenceExpression methodExpression1 = methodCallExpression.getMethodExpression();
-                final String name = methodExpression1.getReferenceName();
-                final PsiExpression[] expressions = expressionList.getExpressions();
+                PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) grandParent;
+                PsiReferenceExpression methodExpression1 = methodCallExpression.getMethodExpression();
+                String name = methodExpression1.getReferenceName();
+                PsiExpression[] expressions = expressionList.getExpressions();
                 if ("insert".equals(name)) {
                     if (expressions.length < 2 || !expression.equals(ParenthesesUtils.stripParentheses(expressions[1]))) {
                         return true;
@@ -218,15 +218,15 @@ public class UnnecessaryCallToStringValueOfInspection extends BaseInspection {
         }
 
         private boolean isCallToMethodIn(PsiMethodCallExpression methodCallExpression, String... classNames) {
-            final PsiMethod method = methodCallExpression.resolveMethod();
+            PsiMethod method = methodCallExpression.resolveMethod();
             if (method == null) {
                 return false;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return false;
             }
-            final String qualifiedName = containingClass.getQualifiedName();
+            String qualifiedName = containingClass.getQualifiedName();
             for (String className : classNames) {
                 if (className.equals(qualifiedName)) {
                     return true;

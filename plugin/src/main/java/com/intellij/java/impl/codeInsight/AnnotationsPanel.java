@@ -110,7 +110,7 @@ public class AnnotationsPanel {
       checkColumn.sizeWidthToFit();
     }
 
-    final AnActionButton selectButton =
+    AnActionButton selectButton =
         new AnActionButton("Select annotation used for code generation", AllIcons.Actions.Checked) {
           @Override
           public void actionPerformed(@Nonnull AnActionEvent e) {
@@ -131,7 +131,7 @@ public class AnnotationsPanel {
           }
         };
 
-    final ToolbarDecorator toolbarDecorator = ToolbarDecorator.createDecorator(myTable).disableUpDownActions()
+    ToolbarDecorator toolbarDecorator = ToolbarDecorator.createDecorator(myTable).disableUpDownActions()
         .setAddAction(b -> chooseAnnotation(name))
         .setRemoveAction(new AnActionButtonRunnable() {
           @Override
@@ -151,7 +151,7 @@ public class AnnotationsPanel {
     if (showDefaultActions) {
       toolbarDecorator.addExtraAction(selectButton);
     }
-    final JPanel panel = toolbarDecorator.createPanel();
+    JPanel panel = toolbarDecorator.createPanel();
     myComponent = new JPanel(new BorderLayout());
     myComponent.setBorder(IdeBorderFactory.createTitledBorder(name + " annotations", false, JBUI.insetsTop(10)));
     myComponent.add(panel);
@@ -187,7 +187,7 @@ public class AnnotationsPanel {
   }
 
   private void chooseAnnotation(String title) {
-    final TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject)
+    TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject)
         .createNoInnerClassesScopeChooser("Choose " + title + " annotation", GlobalSearchScope.allScope(myProject), new ClassFilter() {
           @Override
           public boolean isAccepted(PsiClass aClass) {
@@ -195,11 +195,11 @@ public class AnnotationsPanel {
           }
         }, null);
     chooser.showDialog();
-    final PsiClass selected = chooser.getSelected();
+    PsiClass selected = chooser.getSelected();
     if (selected == null) {
       return;
     }
-    final String qualifiedName = selected.getQualifiedName();
+    String qualifiedName = selected.getQualifiedName();
     if (selectAnnotation(qualifiedName) == null) {
       addRow(qualifiedName, false);
     }

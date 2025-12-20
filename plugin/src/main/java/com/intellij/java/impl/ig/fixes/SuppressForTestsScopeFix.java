@@ -83,16 +83,16 @@ public class SuppressForTestsScopeFix extends InspectionGadgetsFix {
     }
 
     private void addRemoveTestsScope(Project project, boolean add) {
-        final InspectionProfile profile = InspectionProjectProfileManager.getInstance(project).getInspectionProfile();
-        final String shortName = myInspection.getShortName();
-        final InspectionToolWrapper tool = profile.getInspectionTool(shortName, project);
+        InspectionProfile profile = InspectionProjectProfileManager.getInstance(project).getInspectionProfile();
+        String shortName = myInspection.getShortName();
+        InspectionToolWrapper tool = profile.getInspectionTool(shortName, project);
         if (tool == null) {
             return;
         }
         if (add) {
-            final NamedScope namedScope = NamedScopesHolder.getScope(project, "Tests");
-            final HighlightDisplayKey key = HighlightDisplayKey.find(shortName);
-            final HighlightDisplayLevel level = profile.getErrorLevel(key, namedScope, project);
+            NamedScope namedScope = NamedScopesHolder.getScope(project, "Tests");
+            HighlightDisplayKey key = HighlightDisplayKey.find(shortName);
+            HighlightDisplayLevel level = profile.getErrorLevel(key, namedScope, project);
             profile.addScope(tool, namedScope, level, false, project);
         }
         else {

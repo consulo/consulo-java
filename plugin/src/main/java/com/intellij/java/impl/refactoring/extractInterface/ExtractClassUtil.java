@@ -33,12 +33,12 @@ import consulo.ui.annotation.RequiredUIAccess;
 public class ExtractClassUtil {
   @RequiredUIAccess
   public static void askAndTurnRefsToSuper(
-    final Project project,
-    final SmartPsiElementPointer classPointer,
-    final SmartPsiElementPointer interfacePointer
+    Project project,
+    SmartPsiElementPointer classPointer,
+    SmartPsiElementPointer interfacePointer
   ) {
-    final PsiElement classElement = classPointer.getElement();
-    final PsiElement interfaceElement = interfacePointer.getElement();
+    PsiElement classElement = classPointer.getElement();
+    PsiElement interfaceElement = interfacePointer.getElement();
     if (classElement instanceof PsiClass psiClass && classElement.isValid()
       && interfaceElement instanceof PsiClass superClass && interfaceElement.isValid()) {
       String superClassName = superClass.getName();
@@ -55,7 +55,7 @@ public class ExtractClassUtil {
         /*HelpID.TURN_REFS_TO_SUPER*/null, project);
       dialog.show();
       if (dialog.isOK()) {
-        final boolean isPreviewUsages = dialog.isPreviewUsages();
+        boolean isPreviewUsages = dialog.isPreviewUsages();
         JavaRefactoringSettings.getInstance().EXTRACT_INTERFACE_PREVIEW_USAGES = isPreviewUsages;
         TurnRefsToSuperProcessor processor =
                 new TurnRefsToSuperProcessor(project, (PsiClass) classElement, superClass, true);

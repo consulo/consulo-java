@@ -61,7 +61,7 @@ public class ConstantNamingConventionInspection extends ConventionInspection {
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final String fieldName = (String)infos[0];
+    String fieldName = (String)infos[0];
     if (fieldName.length() < getMinLength()) {
       return InspectionGadgetsLocalize.constantNamingConventionProblemDescriptorShort().get();
     }
@@ -108,11 +108,11 @@ public class ConstantNamingConventionInspection extends ConventionInspection {
       if (!field.hasModifierProperty(PsiModifier.STATIC) || !field.hasModifierProperty(PsiModifier.FINAL)) {
         return;
       }
-      final String name = field.getName();
+      String name = field.getName();
       if (name == null) {
         return;
       }
-      final PsiType type = field.getType();
+      PsiType type = field.getType();
       if (onlyCheckImmutables && !ClassUtils.isImmutable(type)) {
         return;
       }

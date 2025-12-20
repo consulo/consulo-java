@@ -102,7 +102,7 @@ public class JavaArrangementParseInfo {
 
   @Nullable
   private ArrangementEntryDependencyInfo buildMethodDependencyInfo(
-    @Nonnull final PsiMethod method, @Nonnull Map<PsiMethod, ArrangementEntryDependencyInfo> cache) {
+          @Nonnull PsiMethod method, @Nonnull Map<PsiMethod, ArrangementEntryDependencyInfo> cache) {
     JavaElementArrangementEntry entry = myMethodEntriesMap.get(method);
     if (entry == null) {
       return null;
@@ -180,7 +180,7 @@ public class JavaArrangementParseInfo {
   @Nonnull
   public List<JavaArrangementOverriddenMethodsInfo> getOverriddenMethods() {
     List<JavaArrangementOverriddenMethodsInfo> result = new ArrayList<JavaArrangementOverriddenMethodsInfo>();
-    final ObjectIntMap<PsiMethod> weights = ObjectMaps.newObjectIntHashMap();
+    ObjectIntMap<PsiMethod> weights = ObjectMaps.newObjectIntHashMap();
     Comparator<Pair<PsiMethod, PsiMethod>> comparator = (o1, o2) -> weights.getInt(o1.first) - weights.getInt(o2.first);
     for (Map.Entry<PsiClass, List<Pair<PsiMethod, PsiMethod>>> entry : myOverriddenMethods.entrySet()) {
       JavaArrangementOverriddenMethodsInfo info = new JavaArrangementOverriddenMethodsInfo(entry.getKey().getName());

@@ -70,7 +70,7 @@ public class SerializableHasSerialVersionUIDFieldInspection extends Serializable
             if (ignoreAnonymousInnerClasses && aClass instanceof PsiAnonymousClass) {
                 return;
             }
-            final PsiField serialVersionUIDField = aClass.findFieldByName(HardcodedMethodConstants.SERIAL_VERSION_UID, false);
+            PsiField serialVersionUIDField = aClass.findFieldByName(HardcodedMethodConstants.SERIAL_VERSION_UID, false);
             if (serialVersionUIDField != null) {
                 return;
             }

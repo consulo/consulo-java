@@ -31,8 +31,8 @@ import java.util.List;
 @ExtensionImpl
 public class JavaTemplateCompletionProcessor implements TemplateCompletionProcessor {
   @Override
-  public boolean nextTabOnItemSelected(final ExpressionContext context, final LookupElement item) {
-    final List<? extends PsiElement> elements = JavaCompletionUtil.getAllPsiElements(item);
+  public boolean nextTabOnItemSelected(ExpressionContext context, LookupElement item) {
+    List<? extends PsiElement> elements = JavaCompletionUtil.getAllPsiElements(item);
     if (elements != null && elements.size() == 1 && elements.get(0) instanceof PsiJavaPackage) {
       return false;
     }

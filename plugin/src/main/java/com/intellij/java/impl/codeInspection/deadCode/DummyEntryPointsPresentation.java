@@ -44,7 +44,7 @@ public class DummyEntryPointsPresentation extends UnusedDeclarationPresentation 
   }
 
   @Override
-  public QuickFixAction[] getQuickFixes(@Nonnull final RefEntity[] refElements) {
+  public QuickFixAction[] getQuickFixes(@Nonnull RefEntity[] refElements) {
     if (myQuickFixActions == null) {
       myQuickFixActions = new QuickFixAction[]{new MoveEntriesToSuspicious(getToolWrapper())};
     }
@@ -63,7 +63,7 @@ public class DummyEntryPointsPresentation extends UnusedDeclarationPresentation 
 
     @Override
     protected boolean applyFix(@Nonnull RefEntity[] refElements) {
-      final EntryPointsManager entryPointsManager = getContext().getExtension(GlobalJavaInspectionContext.CONTEXT)
+      EntryPointsManager entryPointsManager = getContext().getExtension(GlobalJavaInspectionContext.CONTEXT)
         .getEntryPointsManager(getContext().getRefManager());
       for (RefEntity refEntity : refElements) {
         if (refEntity instanceof RefElement refElement) {

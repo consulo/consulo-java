@@ -62,7 +62,7 @@ public class PsiMethodNode extends BasePsiMemberNode<PsiMethod>{
   }
 
   public boolean isConstructor() {
-    final PsiMethod psiMethod = getValue();
+    PsiMethod psiMethod = getValue();
     return psiMethod != null && psiMethod.isConstructor();
   }
 
@@ -73,7 +73,7 @@ public class PsiMethodNode extends BasePsiMemberNode<PsiMethod>{
 
   @Override
   public String getTitle() {
-    final PsiMethod method = getValue();
+    PsiMethod method = getValue();
     if (method != null) {
       PsiClass aClass = method.getContainingClass();
       if (aClass != null) {

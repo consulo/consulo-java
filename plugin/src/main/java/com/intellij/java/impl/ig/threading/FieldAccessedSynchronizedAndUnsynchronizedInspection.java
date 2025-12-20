@@ -84,17 +84,17 @@ public class FieldAccessedSynchronizedAndUnsynchronizedInspection
       if (!containsSynchronization(aClass)) {
         return;
       }
-      final VariableAccessVisitor visitor =
+      VariableAccessVisitor visitor =
         new VariableAccessVisitor(aClass, countGettersAndSetters);
       aClass.accept(visitor);
-      final Set<PsiField> fields =
+      Set<PsiField> fields =
         visitor.getInappropriatelyAccessedFields();
-      for (final PsiField field : fields) {
+      for (PsiField field : fields) {
         if (field.hasModifierProperty(PsiModifier.FINAL) ||
             field.hasModifierProperty(PsiModifier.VOLATILE)) {
           continue;
         }
-        final PsiClass containingClass = field.getContainingClass();
+        PsiClass containingClass = field.getContainingClass();
         if (aClass.equals(containingClass)) {
           registerFieldError(field, field);
         }
@@ -102,7 +102,7 @@ public class FieldAccessedSynchronizedAndUnsynchronizedInspection
     }
 
     private boolean containsSynchronization(PsiElement context) {
-      final ContainsSynchronizationVisitor visitor =
+      ContainsSynchronizationVisitor visitor =
         new ContainsSynchronizationVisitor();
       context.accept(visitor);
       return visitor.containsSynchronization();

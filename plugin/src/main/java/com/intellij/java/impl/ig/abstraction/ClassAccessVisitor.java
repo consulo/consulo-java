@@ -43,18 +43,18 @@ class ClassAccessVisitor extends JavaRecursiveElementVisitor {
   public void visitMethodCallExpression(
     @Nonnull PsiMethodCallExpression expression) {
     super.visitMethodCallExpression(expression);
-    final PsiMethod method = expression.resolveMethod();
+    PsiMethod method = expression.resolveMethod();
     if (method == null) {
       return;
     }
-    final PsiClass calledClass = method.getContainingClass();
+    PsiClass calledClass = method.getContainingClass();
     if (calledClass == null) {
       return;
     }
     if (currentClass.equals(calledClass)) {
       return;
     }
-    final Set<PsiClass> overAccessedClasses = m_overAccessedClasses;
+    Set<PsiClass> overAccessedClasses = m_overAccessedClasses;
     if (overAccessedClasses.contains(calledClass)) {
       return;
     }
@@ -75,8 +75,8 @@ class ClassAccessVisitor extends JavaRecursiveElementVisitor {
       lexicallyEnclosingClass =
         ClassUtils.getContainingClass(lexicallyEnclosingClass);
     }
-    final Map<PsiClass, Integer> accessCounts = m_accessCounts;
-    final Integer count = accessCounts.get(calledClass);
+    Map<PsiClass, Integer> accessCounts = m_accessCounts;
+    Integer count = accessCounts.get(calledClass);
     if (count == null) {
       accessCounts.put(calledClass, Integer.valueOf(1));
     }

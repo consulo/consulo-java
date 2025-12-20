@@ -46,7 +46,7 @@ public class SliceHandler implements CodeInsightActionHandler {
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull final PsiFile file) {
+  public void invoke(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
     PsiDocumentManager.getInstance(project).commitAllDocuments(); // prevents problems with smart pointers creation
     PsiElement expression = getExpressionAtCaret(editor, file);
     if (expression == null) {
@@ -66,7 +66,7 @@ public class SliceHandler implements CodeInsightActionHandler {
   }
 
   @Nullable
-  public PsiElement getExpressionAtCaret(final Editor editor, final PsiFile file) {
+  public PsiElement getExpressionAtCaret(Editor editor, PsiFile file) {
     int offset = TargetElementUtil.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
     if (offset == 0) {
       return null;

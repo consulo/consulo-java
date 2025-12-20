@@ -55,7 +55,7 @@ public class SliceTreeStructure extends AbstractTreeStructureBase {
   }
 
   @Override
-  public boolean isToBuildChildrenInBackground(final Object element) {
+  public boolean isToBuildChildrenInBackground(Object element) {
     return true;//!ApplicationManager.getApplication().isUnitTestMode();
   }
 }

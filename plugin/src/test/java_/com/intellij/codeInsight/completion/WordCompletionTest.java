@@ -39,10 +39,10 @@ public abstract class WordCompletionTest extends CompletionTestCase {
   }
 
   public void testNoWordCompletionForNonSoftReference() throws Throwable {
-    final PsiReferenceProvider softProvider = new PsiReferenceProvider() {
+    PsiReferenceProvider softProvider = new PsiReferenceProvider() {
       @Override
       @Nonnull
-      public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull final ProcessingContext context) {
+      public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context) {
         return new PsiReference[]{new PsiReferenceBase<PsiElement>(element, true) {
           @Override
           public PsiElement resolve() {
@@ -57,10 +57,10 @@ public abstract class WordCompletionTest extends CompletionTestCase {
         }};
       }
     };
-    final PsiReferenceProvider hardProvider = new PsiReferenceProvider() {
+    PsiReferenceProvider hardProvider = new PsiReferenceProvider() {
       @Override
       @Nonnull
-      public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull final ProcessingContext context) {
+      public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context) {
         return new PsiReference[]{new PsiReferenceBase<PsiElement>(element, false) {
           @Override
           public PsiElement resolve() {

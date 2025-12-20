@@ -71,9 +71,9 @@ public class SubtypesMacro extends Macro {
     if (params.length == 0) return LookupElement.EMPTY_ARRAY;
     Result paramResult = params[0].calculateQuickResult(context);
     if (paramResult instanceof PsiTypeResult) {
-      final PsiType type = ((PsiTypeResult)paramResult).getType();
-      final PsiFile file = PsiDocumentManager.getInstance(context.getProject()).getPsiFile(context.getEditor().getDocument());
-      final PsiElement element = file.findElementAt(context.getStartOffset());
+      PsiType type = ((PsiTypeResult)paramResult).getType();
+      PsiFile file = PsiDocumentManager.getInstance(context.getProject()).getPsiFile(context.getEditor().getDocument());
+      PsiElement element = file.findElementAt(context.getStartOffset());
 
       final Set<LookupElement> set = new LinkedHashSet<LookupElement>();
       JavaEditorTemplateUtilImpl.addTypeLookupItem(set, type);

@@ -47,14 +47,14 @@ public class JavaClassReferenceSet {
   private final int myStartInElement;
   private final JavaClassReferenceProvider myProvider;
 
-  public JavaClassReferenceSet(@Nonnull String str, @Nonnull PsiElement element, int startInElement, final boolean isStatic, @Nonnull JavaClassReferenceProvider provider) {
+  public JavaClassReferenceSet(@Nonnull String str, @Nonnull PsiElement element, int startInElement, boolean isStatic, @Nonnull JavaClassReferenceProvider provider) {
     this(str, element, startInElement, isStatic, provider, null);
   }
 
   private JavaClassReferenceSet(@Nonnull String str,
                                 @Nonnull PsiElement element,
                                 int startInElement,
-                                final boolean isStatic,
+                                boolean isStatic,
                                 @Nonnull JavaClassReferenceProvider provider,
                                 JavaClassReferenceSet context) {
     myStartInElement = startInElement;
@@ -73,10 +73,10 @@ public class JavaClassReferenceSet {
     return new TextRange(references[0].getRangeInElement().getStartOffset(), references[references.length - 1].getRangeInElement().getEndOffset());
   }
 
-  private void reparse(@Nonnull String str, @Nonnull PsiElement element, final boolean isStaticImport, JavaClassReferenceSet context) {
+  private void reparse(@Nonnull String str, @Nonnull PsiElement element, boolean isStaticImport, JavaClassReferenceSet context) {
     myElement = element;
     myContext = context;
-    final List<JavaClassReference> referencesList = new ArrayList<JavaClassReference>();
+    List<JavaClassReference> referencesList = new ArrayList<JavaClassReference>();
     int currentDot = -1;
     int referenceIndex = 0;
     boolean allowDollarInNames = isAllowDollarInNames();
@@ -87,7 +87,7 @@ public class JavaClassReferenceSet {
     while (parsingClassNames) {
       int nextDotOrDollar = -1;
       for (int curIndex = currentDot + 1; curIndex < str.length(); ++curIndex) {
-        final char ch = str.charAt(curIndex);
+        char ch = str.charAt(curIndex);
 
         if (ch == DOT || ch == DOLLAR && allowDollarInNames) {
           nextDotOrDollar = curIndex;
@@ -142,7 +142,7 @@ public class JavaClassReferenceSet {
             }
           }
 
-          final Boolean aBoolean = JavaClassReferenceProvider.JVM_FORMAT.getValue(getOptions());
+          Boolean aBoolean = JavaClassReferenceProvider.JVM_FORMAT.getValue(getOptions());
           if (aBoolean == null || !aBoolean.booleanValue()) {
             if (!recognized) {
               nextDotOrDollar = -1; // nonsensible characters anyway, don't do resolve
@@ -152,7 +152,7 @@ public class JavaClassReferenceSet {
       }
 
       if (nextDotOrDollar != -1 && nextDotOrDollar < str.length()) {
-        final char c = str.charAt(nextDotOrDollar);
+        char c = str.charAt(nextDotOrDollar);
         if (c == LT) {
           int end = str.lastIndexOf('>');
           if (end != -1 && end > nextDotOrDollar) {
@@ -180,7 +180,7 @@ public class JavaClassReferenceSet {
         beginIndex++;
       }
 
-      final String subreferenceText = nextDotOrDollar > 0 ? str.substring(beginIndex, nextDotOrDollar) : str.substring(beginIndex);
+      String subreferenceText = nextDotOrDollar > 0 ? str.substring(beginIndex, nextDotOrDollar) : str.substring(beginIndex);
 
       TextRange textRange = new TextRange(myStartInElement + beginIndex, myStartInElement + (nextDotOrDollar > 0 ? nextDotOrDollar : str.length()));
       JavaClassReference currentContextRef = createReference(referenceIndex, subreferenceText, textRange, isStaticImport);
@@ -195,12 +195,12 @@ public class JavaClassReferenceSet {
   }
 
   @Nonnull
-  protected JavaClassReference createReference(final int referenceIndex, @Nonnull String subreferenceText, @Nonnull TextRange textRange, final boolean staticImport) {
+  protected JavaClassReference createReference(int referenceIndex, @Nonnull String subreferenceText, @Nonnull TextRange textRange, boolean staticImport) {
     return new JavaClassReference(this, textRange, referenceIndex, subreferenceText, staticImport);
   }
 
   public boolean isAllowDollarInNames() {
-    final Boolean aBoolean = myProvider.getOption(JavaClassReferenceProvider.ALLOW_DOLLAR_NAMES);
+    Boolean aBoolean = myProvider.getOption(JavaClassReferenceProvider.ALLOW_DOLLAR_NAMES);
     return !Boolean.FALSE.equals(aBoolean) && myElement.getLanguage() instanceof XMLLanguage;
   }
 
@@ -209,7 +209,7 @@ public class JavaClassReferenceSet {
   }
 
   public void reparse(@Nonnull PsiElement element, @Nonnull TextRange range) {
-    final String text = range.substring(element.getText());
+    String text = range.substring(element.getText());
     reparse(text, element, false, myContext);
   }
 

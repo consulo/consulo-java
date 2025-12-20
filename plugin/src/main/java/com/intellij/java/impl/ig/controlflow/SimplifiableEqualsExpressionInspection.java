@@ -69,20 +69,20 @@ public class SimplifiableEqualsExpressionInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = ParenthesesUtils.getParentSkipParentheses(element);
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement parent = ParenthesesUtils.getParentSkipParentheses(element);
             if (!(parent instanceof PsiPolyadicExpression)) {
                 return;
             }
-            final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) parent;
-            final PsiExpression[] operands = polyadicExpression.getOperands();
+            PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) parent;
+            PsiExpression[] operands = polyadicExpression.getOperands();
             if (operands.length != 2) {
                 return;
             }
             PsiExpression operand = ParenthesesUtils.stripParentheses(operands[1]);
-            @NonNls final StringBuilder newExpressionText = new StringBuilder();
+            @NonNls StringBuilder newExpressionText = new StringBuilder();
             if (operand instanceof PsiPrefixExpression) {
-                final PsiPrefixExpression prefixExpression = (PsiPrefixExpression) operand;
+                PsiPrefixExpression prefixExpression = (PsiPrefixExpression) operand;
                 if (!JavaTokenType.EXCL.equals(prefixExpression.getOperationTokenType())) {
                     return;
                 }
@@ -92,22 +92,22 @@ public class SimplifiableEqualsExpressionInspection extends BaseInspection {
             if (!(operand instanceof PsiMethodCallExpression)) {
                 return;
             }
-            final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) operand;
-            final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-            final String referenceName = methodExpression.getReferenceName();
-            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) operand;
+            PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+            String referenceName = methodExpression.getReferenceName();
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
             if (qualifier == null) {
                 return;
             }
-            final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length != 1) {
                 return;
             }
-            final PsiExpression argument = arguments[0];
-            final PsiType type = argument.getType();
+            PsiExpression argument = arguments[0];
+            PsiType type = argument.getType();
             if (PsiType.BOOLEAN.equals(type)) {
-                final Object value = ExpressionUtils.computeConstantExpression(argument);
+                Object value = ExpressionUtils.computeConstantExpression(argument);
                 if (Boolean.TRUE.equals(value)) {
                     newExpressionText.append("java.lang.Boolean.TRUE");
                 }
@@ -154,48 +154,48 @@ public class SimplifiableEqualsExpressionInspection extends BaseInspection {
         @Override
         public void visitPolyadicExpression(PsiPolyadicExpression expression) {
             super.visitPolyadicExpression(expression);
-            final IElementType tokenType = expression.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (JavaTokenType.ANDAND.equals(tokenType)) {
-                final PsiExpression[] operands = expression.getOperands();
+                PsiExpression[] operands = expression.getOperands();
                 if (operands.length != 2) {
                     return;
                 }
-                final PsiExpression lhs = ParenthesesUtils.stripParentheses(operands[0]);
+                PsiExpression lhs = ParenthesesUtils.stripParentheses(operands[0]);
                 if (lhs == null) {
                     return;
                 }
-                final PsiVariable variable = getVariableFromNullComparison(lhs, false);
+                PsiVariable variable = getVariableFromNullComparison(lhs, false);
                 if (variable == null) {
                     return;
                 }
-                final PsiExpression rhs = ParenthesesUtils.stripParentheses(operands[1]);
+                PsiExpression rhs = ParenthesesUtils.stripParentheses(operands[1]);
                 if (!isEqualsConstant(rhs, variable)) {
                     return;
                 }
                 registerError(lhs, getMethodName((PsiMethodCallExpression) rhs));
             }
             else if (JavaTokenType.OROR.equals(tokenType)) {
-                final PsiExpression[] operands = expression.getOperands();
+                PsiExpression[] operands = expression.getOperands();
                 if (operands.length != 2) {
                     return;
                 }
-                final PsiExpression lhs = ParenthesesUtils.stripParentheses(operands[0]);
+                PsiExpression lhs = ParenthesesUtils.stripParentheses(operands[0]);
                 if (lhs == null) {
                     return;
                 }
-                final PsiVariable variable = getVariableFromNullComparison(lhs, true);
+                PsiVariable variable = getVariableFromNullComparison(lhs, true);
                 if (variable == null) {
                     return;
                 }
-                final PsiExpression rhs = ParenthesesUtils.stripParentheses(operands[1]);
+                PsiExpression rhs = ParenthesesUtils.stripParentheses(operands[1]);
                 if (!(rhs instanceof PsiPrefixExpression)) {
                     return;
                 }
-                final PsiPrefixExpression prefixExpression = (PsiPrefixExpression) rhs;
+                PsiPrefixExpression prefixExpression = (PsiPrefixExpression) rhs;
                 if (!JavaTokenType.EXCL.equals(prefixExpression.getOperationTokenType())) {
                     return;
                 }
-                final PsiExpression operand = ParenthesesUtils.stripParentheses(prefixExpression.getOperand());
+                PsiExpression operand = ParenthesesUtils.stripParentheses(prefixExpression.getOperand());
                 if (!isEqualsConstant(operand, variable)) {
                     return;
                 }
@@ -204,7 +204,7 @@ public class SimplifiableEqualsExpressionInspection extends BaseInspection {
         }
 
         private static String getMethodName(PsiMethodCallExpression methodCallExpression) {
-            final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+            PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
             return methodExpression.getReferenceName();
         }
 
@@ -212,27 +212,27 @@ public class SimplifiableEqualsExpressionInspection extends BaseInspection {
             if (!(expression instanceof PsiMethodCallExpression)) {
                 return false;
             }
-            final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
-            final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
+            PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+            String methodName = methodExpression.getReferenceName();
             if (!HardcodedMethodConstants.EQUALS.equals(methodName) && !HardcodedMethodConstants.EQUALS_IGNORE_CASE.equals(methodName)) {
                 return false;
             }
-            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
             if (!(qualifier instanceof PsiReferenceExpression)) {
                 return false;
             }
-            final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) qualifier;
-            final PsiElement target = referenceExpression.resolve();
+            PsiReferenceExpression referenceExpression = (PsiReferenceExpression) qualifier;
+            PsiElement target = referenceExpression.resolve();
             if (!variable.equals(target)) {
                 return false;
             }
-            final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length != 1) {
                 return false;
             }
-            final PsiExpression argument = arguments[0];
+            PsiExpression argument = arguments[0];
             return PsiUtil.isConstantExpression(argument);
         }
 
@@ -241,8 +241,8 @@ public class SimplifiableEqualsExpressionInspection extends BaseInspection {
             if (!(expression instanceof PsiPolyadicExpression)) {
                 return null;
             }
-            final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
-            final IElementType tokenType = polyadicExpression.getOperationTokenType();
+            PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
+            IElementType tokenType = polyadicExpression.getOperationTokenType();
             if (equals) {
                 if (!JavaTokenType.EQEQ.equals(tokenType)) {
                     return null;
@@ -253,15 +253,15 @@ public class SimplifiableEqualsExpressionInspection extends BaseInspection {
                     return null;
                 }
             }
-            final PsiExpression[] operands = polyadicExpression.getOperands();
+            PsiExpression[] operands = polyadicExpression.getOperands();
             if (operands.length != 2) {
                 return null;
             }
-            final PsiExpression lhs = ParenthesesUtils.stripParentheses(operands[0]);
+            PsiExpression lhs = ParenthesesUtils.stripParentheses(operands[0]);
             if (lhs == null) {
                 return null;
             }
-            final PsiExpression rhs = ParenthesesUtils.stripParentheses(operands[1]);
+            PsiExpression rhs = ParenthesesUtils.stripParentheses(operands[1]);
             if (rhs == null) {
                 return null;
             }
@@ -269,8 +269,8 @@ public class SimplifiableEqualsExpressionInspection extends BaseInspection {
                 if (!(rhs instanceof PsiReferenceExpression)) {
                     return null;
                 }
-                final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) rhs;
-                final PsiElement target = referenceExpression.resolve();
+                PsiReferenceExpression referenceExpression = (PsiReferenceExpression) rhs;
+                PsiElement target = referenceExpression.resolve();
                 if (!(target instanceof PsiVariable)) {
                     return null;
                 }
@@ -280,8 +280,8 @@ public class SimplifiableEqualsExpressionInspection extends BaseInspection {
                 if (!(lhs instanceof PsiReferenceExpression)) {
                     return null;
                 }
-                final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) lhs;
-                final PsiElement target = referenceExpression.resolve();
+                PsiReferenceExpression referenceExpression = (PsiReferenceExpression) lhs;
+                PsiElement target = referenceExpression.resolve();
                 if (!(target instanceof PsiVariable)) {
                     return null;
                 }

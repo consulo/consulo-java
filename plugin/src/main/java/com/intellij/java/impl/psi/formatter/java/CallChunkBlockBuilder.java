@@ -51,12 +51,12 @@ public class CallChunkBlockBuilder {
   }
 
   @Nonnull
-  public Block create(@Nonnull final List<? extends ASTNode> subNodes,
-                      final Wrap wrap,
-                      @Nullable final Alignment alignment,
+  public Block create(@Nonnull List<? extends ASTNode> subNodes,
+                      Wrap wrap,
+                      @Nullable Alignment alignment,
                       int relativeIndentSize) {
-    final ArrayList<Block> subBlocks = new ArrayList<>();
-    final ASTNode firstNode = subNodes.get(0);
+    ArrayList<Block> subBlocks = new ArrayList<>();
+    ASTNode firstNode = subNodes.get(0);
     if (JavaFormatterUtil.isStartOfCallChunk(mySettings, firstNode)) {
       AlignmentStrategy strategy = AlignmentStrategy.getNullStrategy();
       Indent indent = relativeIndentSize > 0 ? Indent.getSpaceIndent(relativeIndentSize) : Indent.getNoneIndent();
@@ -95,8 +95,8 @@ public class CallChunkBlockBuilder {
   }
 
   @Nonnull
-  private List<Block> createJavaBlocks(@Nonnull final List<? extends ASTNode> subNodes) {
-    final ArrayList<Block> result = new ArrayList<>();
+  private List<Block> createJavaBlocks(@Nonnull List<? extends ASTNode> subNodes) {
+    ArrayList<Block> result = new ArrayList<>();
     for (ASTNode node : subNodes) {
       Indent indent = Indent.getContinuationWithoutFirstIndent(myIndentSettings.USE_RELATIVE_INDENTS);
       result.add(newJavaBlock(node, mySettings, myJavaSettings, indent, null, AlignmentStrategy.getNullStrategy(), myFormattingMode));

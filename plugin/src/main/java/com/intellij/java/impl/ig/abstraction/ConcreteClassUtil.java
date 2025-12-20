@@ -27,7 +27,7 @@ class ConcreteClassUtil {
     if (typeElement == null) {
       return false;
     }
-    final PsiType type = typeElement.getType();
+    PsiType type = typeElement.getType();
     return typeIsConcreteClass(type, ignoreCastToAbstractClass);
   }
 
@@ -35,12 +35,12 @@ class ConcreteClassUtil {
     if (type == null) {
       return false;
     }
-    final PsiType baseType = type.getDeepComponentType();
+    PsiType baseType = type.getDeepComponentType();
     if (!(baseType instanceof PsiClassType)) {
       return false;
     }
-    final PsiClassType classType = (PsiClassType)baseType;
-    final PsiClass aClass = classType.resolve();
+    PsiClassType classType = (PsiClassType)baseType;
+    PsiClass aClass = classType.resolve();
     if (aClass == null) {
       return false;
     }

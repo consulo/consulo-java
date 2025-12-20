@@ -67,13 +67,13 @@ public class SerialVersionUIDNotStaticFinalInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = element.getParent();
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement parent = element.getParent();
             if (!(parent instanceof PsiField)) {
                 return;
             }
-            final PsiField field = (PsiField) parent;
-            final PsiModifierList modifierList = field.getModifierList();
+            PsiField field = (PsiField) parent;
+            PsiModifierList modifierList = field.getModifierList();
             if (modifierList == null) {
                 return;
             }
@@ -96,14 +96,14 @@ public class SerialVersionUIDNotStaticFinalInspection extends BaseInspection {
             if (aClass.isInterface() || aClass.isAnnotationType()) {
                 return;
             }
-            final PsiField field =
+            PsiField field =
                 aClass.findFieldByName(
                     HardcodedMethodConstants.SERIAL_VERSION_UID, false);
             if (field == null) {
                 return;
             }
-            final PsiType type = field.getType();
-            final boolean wrongType = !PsiType.LONG.equals(type);
+            PsiType type = field.getType();
+            boolean wrongType = !PsiType.LONG.equals(type);
             if (field.hasModifierProperty(PsiModifier.STATIC) &&
                 field.hasModifierProperty(PsiModifier.PRIVATE) &&
                 field.hasModifierProperty(PsiModifier.FINAL) &&

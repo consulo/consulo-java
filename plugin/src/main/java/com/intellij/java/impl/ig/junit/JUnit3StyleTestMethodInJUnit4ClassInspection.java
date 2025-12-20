@@ -62,7 +62,7 @@ public class JUnit3StyleTestMethodInJUnit4ClassInspection extends BaseInspection
         @Override
         public void visitMethod(PsiMethod method) {
             super.visitMethod(method);
-            final String name = method.getName();
+            String name = method.getName();
             if (!name.startsWith("test")) {
                 return;
             }
@@ -72,15 +72,15 @@ public class JUnit3StyleTestMethodInJUnit4ClassInspection extends BaseInspection
             if (TestUtils.isJUnit4TestMethod(method)) {
                 return;
             }
-            final PsiType returnType = method.getReturnType();
+            PsiType returnType = method.getReturnType();
             if (returnType == null || !returnType.equals(PsiType.VOID)) {
                 return;
             }
-            final PsiParameterList parameterList = method.getParameterList();
+            PsiParameterList parameterList = method.getParameterList();
             if (parameterList.getParametersCount() != 0) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (TestUtils.isJUnitTestClass(containingClass)) {
                 return;
             }
@@ -92,7 +92,7 @@ public class JUnit3StyleTestMethodInJUnit4ClassInspection extends BaseInspection
     }
 
     public static boolean containsReferenceToClass(PsiElement element, String fullyQualifiedName) {
-        final ClassReferenceVisitor visitor = new ClassReferenceVisitor(fullyQualifiedName);
+        ClassReferenceVisitor visitor = new ClassReferenceVisitor(fullyQualifiedName);
         element.accept(visitor);
         return visitor.isReferenceFound();
     }
@@ -116,12 +116,12 @@ public class JUnit3StyleTestMethodInJUnit4ClassInspection extends BaseInspection
                 // optimization
                 return;
             }
-            final PsiElement element = reference.resolve();
+            PsiElement element = reference.resolve();
             if (!(element instanceof PsiClass) || element instanceof PsiTypeParameter) {
                 return;
             }
-            final PsiClass aClass = (PsiClass) element;
-            final String classQualifiedName = aClass.getQualifiedName();
+            PsiClass aClass = (PsiClass) element;
+            String classQualifiedName = aClass.getQualifiedName();
             if (classQualifiedName == null || !classQualifiedName.equals(fullyQualifiedName)) {
                 return;
             }

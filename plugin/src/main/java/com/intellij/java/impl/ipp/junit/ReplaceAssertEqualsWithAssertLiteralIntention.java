@@ -36,16 +36,16 @@ public class ReplaceAssertEqualsWithAssertLiteralIntention extends MutablyNamedI
     @Nonnull
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
-        final PsiMethodCallExpression call = (PsiMethodCallExpression) element;
-        final PsiExpressionList argumentList = call.getArgumentList();
-        final PsiExpression[] args = argumentList.getExpressions();
-        final String assertString;
+        PsiMethodCallExpression call = (PsiMethodCallExpression) element;
+        PsiExpressionList argumentList = call.getArgumentList();
+        PsiExpression[] args = argumentList.getExpressions();
+        String assertString;
         if (args.length == 2) {
-            final String argText = args[0].getText();
+            String argText = args[0].getText();
             assertString = getAssertString(argText);
         }
         else {
-            final String argText = args[1].getText();
+            String argText = args[1].getText();
             assertString = getAssertString(argText);
         }
         return IntentionPowerPackLocalize.replaceAssertEqualsWithAssertLiteralIntentionName(assertString);
@@ -65,15 +65,15 @@ public class ReplaceAssertEqualsWithAssertLiteralIntention extends MutablyNamedI
 
     @Override
     public void processIntention(@Nonnull PsiElement element) {
-        final PsiMethodCallExpression call = (PsiMethodCallExpression) element;
-        final PsiReferenceExpression expression = call.getMethodExpression();
-        final PsiExpressionList argumentList = call.getArgumentList();
-        final PsiExpression[] args = argumentList.getExpressions();
-        final String assertString;
-        final String actualArgumentText;
+        PsiMethodCallExpression call = (PsiMethodCallExpression) element;
+        PsiReferenceExpression expression = call.getMethodExpression();
+        PsiExpressionList argumentList = call.getArgumentList();
+        PsiExpression[] args = argumentList.getExpressions();
+        String assertString;
+        String actualArgumentText;
         if (args.length == 2) {
-            @NonNls final String argText = args[0].getText();
-            final PsiExpression otherArg;
+            @NonNls String argText = args[0].getText();
+            PsiExpression otherArg;
             if ("true".equals(argText) || "false".equals(argText) || "null".equals(argText)) {
                 otherArg = args[1];
             }
@@ -84,8 +84,8 @@ public class ReplaceAssertEqualsWithAssertLiteralIntention extends MutablyNamedI
             assertString = getAssertString(argText);
         }
         else {
-            @NonNls final String argText = args[1].getText();
-            final PsiExpression otherArg;
+            @NonNls String argText = args[1].getText();
+            PsiExpression otherArg;
             if ("true".equals(argText) || "false".equals(argText) || "null".equals(argText)) {
                 otherArg = args[2];
             }
@@ -95,10 +95,10 @@ public class ReplaceAssertEqualsWithAssertLiteralIntention extends MutablyNamedI
             actualArgumentText = args[0].getText() + ", " + otherArg.getText();
             assertString = getAssertString(argText);
         }
-        final PsiElement qualifier = expression.getQualifier();
-        @NonNls final StringBuilder newExpression = new StringBuilder();
+        PsiElement qualifier = expression.getQualifier();
+        @NonNls StringBuilder newExpression = new StringBuilder();
         if (qualifier == null) {
-            final PsiMethod containingMethod = PsiTreeUtil.getParentOfType(call, PsiMethod.class);
+            PsiMethod containingMethod = PsiTreeUtil.getParentOfType(call, PsiMethod.class);
             if (containingMethod != null && AnnotationUtil.isAnnotated(containingMethod, "org.junit.Test", true)) {
                 if (!ImportUtils.addStaticImport("org.junit.Assert", assertString, element)) {
                     newExpression.append("org.junit.Assert.");

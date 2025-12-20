@@ -50,16 +50,16 @@ public class NestedSynchronizedStatementInspection extends BaseInspection {
     public void visitSynchronizedStatement(
       @Nonnull PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
-      final PsiElement containingSynchronizedStatement =
+      PsiElement containingSynchronizedStatement =
         PsiTreeUtil.getParentOfType(statement,
                                     PsiSynchronizedStatement.class);
       if (containingSynchronizedStatement == null) {
         return;
       }
-      final PsiMethod containingMethod =
+      PsiMethod containingMethod =
         PsiTreeUtil.getParentOfType(statement,
                                     PsiMethod.class);
-      final PsiMethod containingContainingMethod =
+      PsiMethod containingContainingMethod =
         PsiTreeUtil.getParentOfType(containingSynchronizedStatement,
                                     PsiMethod.class);
       if (containingMethod == null ||

@@ -34,8 +34,8 @@ class CallToSuperFinalizeVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitIfStatement(PsiIfStatement statement) {
-    final PsiExpression condition = statement.getCondition();
-    final Object result =
+    PsiExpression condition = statement.getCondition();
+    Object result =
       ExpressionUtils.computeConstantExpression(condition);
     if (result != null && result.equals(Boolean.FALSE)) {
       return;
@@ -50,13 +50,13 @@ class CallToSuperFinalizeVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     super.visitMethodCallExpression(expression);
-    final PsiReferenceExpression methodExpression =
+    PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
-    final PsiExpression target = methodExpression.getQualifierExpression();
+    PsiExpression target = methodExpression.getQualifierExpression();
     if (!(target instanceof PsiSuperExpression)) {
       return;
     }
-    final String methodName = methodExpression.getReferenceName();
+    String methodName = methodExpression.getReferenceName();
     if (!HardcodedMethodConstants.FINALIZE.equals(methodName)) {
       return;
     }

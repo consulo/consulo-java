@@ -39,7 +39,7 @@ public class RemoveModifierFix extends InspectionGadgetsFix {
 
   public void doFix(Project project, ProblemDescriptor descriptor)
     throws IncorrectOperationException {
-    final PsiElement modifierElement = descriptor.getPsiElement();
+    PsiElement modifierElement = descriptor.getPsiElement();
     deleteElement(modifierElement);
   }
 }

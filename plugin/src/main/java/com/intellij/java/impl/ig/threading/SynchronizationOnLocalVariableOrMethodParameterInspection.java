@@ -44,7 +44,7 @@ public class SynchronizationOnLocalVariableOrMethodParameterInspection extends B
 
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    final Boolean localVariable = (Boolean)infos[0];
+    Boolean localVariable = (Boolean)infos[0];
     return localVariable
       ? InspectionGadgetsLocalize.synchronizationOnLocalVariableProblemDescriptor().get()
       : InspectionGadgetsLocalize.synchronizationOnMethodParameterProblemDescriptor().get();
@@ -61,16 +61,16 @@ public class SynchronizationOnLocalVariableOrMethodParameterInspection extends B
       if (!reportLocalVariables && !reportMethodParameters) {
         return;
       }
-      final PsiExpression lockExpression = statement.getLockExpression();
+      PsiExpression lockExpression = statement.getLockExpression();
       if (!(lockExpression instanceof PsiReferenceExpression)) {
         return;
       }
-      final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)lockExpression;
+      PsiReferenceExpression referenceExpression = (PsiReferenceExpression)lockExpression;
       if (referenceExpression.isQualified()) {
         return;
       }
       boolean localVariable = false;
-      final PsiElement target = referenceExpression.resolve();
+      PsiElement target = referenceExpression.resolve();
       if (target instanceof PsiLocalVariable) {
         if (!reportLocalVariables) {
           return;
@@ -78,8 +78,8 @@ public class SynchronizationOnLocalVariableOrMethodParameterInspection extends B
         localVariable = true;
       }
       else if (target instanceof PsiParameter) {
-        final PsiParameter parameter = (PsiParameter)target;
-        final PsiElement scope = parameter.getDeclarationScope();
+        PsiParameter parameter = (PsiParameter)target;
+        PsiElement scope = parameter.getDeclarationScope();
         if (scope instanceof PsiMethod) {
           if (!reportMethodParameters) {
             return;
@@ -95,8 +95,8 @@ public class SynchronizationOnLocalVariableOrMethodParameterInspection extends B
       else {
         return;
       }
-      final PsiElement statementScope = getScope(statement);
-      final PsiElement targetScope = getScope(target);
+      PsiElement statementScope = getScope(statement);
+      PsiElement targetScope = getScope(target);
       if (statementScope != targetScope) {
         return;
       }

@@ -38,7 +38,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   }
 
   public void testGenericParametersReplace() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
 
     configureByFile(path + "/before1.java");
     performSmartCompletion();
@@ -89,7 +89,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   }
 
   public void testMethodsParametersStyle1() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
 
     configureByFile(path + "/before3.java");
     performSmartCompletion();
@@ -97,7 +97,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   }
 
   public void testMethodsParametersStyle2() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
 
     configureByFile(path + "/before4.java");
     performSmartCompletion();
@@ -105,7 +105,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   }
 
   public void testKeywordsReplace() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
 
     configureByFile(path + "/before6.java");
     performNormalCompletion();
@@ -114,7 +114,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   }
 
   public void testLocalVariablePreselect() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
 
     configureByFile(path + "/before5.java");
     performSmartCompletion();
@@ -122,7 +122,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   }
 
   public void testMethodCompletionInsideInlineTags() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
 
     configureByFile(path + "/before7.java");
     performNormalCompletion();
@@ -131,7 +131,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   }
 
   public void testConstantsCompletion1() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
 
     configureByFile(path + "/before8.java");
     performSmartCompletion();
@@ -140,7 +140,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   }
 
   public void testConstantsCompletion2() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
 
     configureByFile(path + "/before9.java");
     performSmartCompletion();
@@ -149,7 +149,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   }
 
   public void testConstantsCompletion3() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
 
     configureByFile(path + "/before10.java");
     performSmartCompletion();
@@ -158,7 +158,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   }
 
   public void testCaretPositionAfterCompletion1() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
 
     configureByFile(path + "/before11.java");
     performNormalCompletion();
@@ -167,7 +167,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   }
 
   public void testCaretPositionAfterCompletion2() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
 
     configureByFile(path + "/before12.java");
     performSmartCompletion();
@@ -176,7 +176,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   }
 
   public void testParensReuse() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
 
     configureByFile(path + "/before13.java");
     performNormalCompletion();
@@ -187,7 +187,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
     CommonCodeStyleSettings styleSettings = getCodeStyleSettings();
     styleSettings.SPACE_BEFORE_SYNCHRONIZED_PARENTHESES = false;
     styleSettings.SPACE_WITHIN_SYNCHRONIZED_PARENTHESES = true;
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
 
     configureByFile(path + "/before22.java");
     performNormalCompletion();
@@ -195,7 +195,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   }
 
   public void testMethodReplacementReuseParens1() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
 
     configureByFile(path + "/before15.java");
     performNormalCompletion();
@@ -204,7 +204,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   }
 
   public void testMethodReplacementReuseParens2() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
 
     configureByFile(path + "/before16.java");
     performNormalCompletion();
@@ -213,7 +213,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   }
 
   public void testMethodReplacementReuseParens3() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
 
     configureByFile(path + "/before17.java");
     performNormalCompletion();
@@ -222,7 +222,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   }
 
   public void testCastAfterNew1() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
 
     configureByFile(path + "/before21.java");
     performSmartCompletion();
@@ -230,7 +230,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   }
 
   public void testCastParensStyle1() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
 
     getCodeStyleSettings().SPACE_WITHIN_CAST_PARENTHESES = true;
     getCodeStyleSettings().SPACE_AFTER_TYPE_CAST = false;
@@ -240,9 +240,9 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   }
 
   public void testMethodParensStyle2() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
     CommonCodeStyleSettings styleSettings = getCodeStyleSettings();
-    final boolean space_before_method_call_parentheses = styleSettings.SPACE_BEFORE_METHOD_CALL_PARENTHESES;
+    boolean space_before_method_call_parentheses = styleSettings.SPACE_BEFORE_METHOD_CALL_PARENTHESES;
     styleSettings.SPACE_BEFORE_METHOD_CALL_PARENTHESES = true;
     configureByFile(path + "/before32.java");
     performNormalCompletion();
@@ -256,10 +256,10 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
 
 
   public void testMethodParensStyle3() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
     CommonCodeStyleSettings styleSettings = getCodeStyleSettings();
-    final boolean space_before_method_call_parentheses = styleSettings.SPACE_BEFORE_METHOD_CALL_PARENTHESES;
-    final boolean space_within_method_call_parentheses = styleSettings.SPACE_WITHIN_METHOD_CALL_PARENTHESES;
+    boolean space_before_method_call_parentheses = styleSettings.SPACE_BEFORE_METHOD_CALL_PARENTHESES;
+    boolean space_within_method_call_parentheses = styleSettings.SPACE_WITHIN_METHOD_CALL_PARENTHESES;
 
     styleSettings.SPACE_BEFORE_METHOD_CALL_PARENTHESES = true;
     styleSettings.SPACE_WITHIN_METHOD_CALL_PARENTHESES = true;
@@ -279,7 +279,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   } */
 
   public void testStaticsCompletion1() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
     configureByFile(path + "/before33.java");
     performSmartCompletion();
     select(Lookup.NORMAL_SELECT_CHAR, getSelected());
@@ -287,7 +287,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   }
 
   public void testStaticsCompletion2() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
     configureByFile(path + "/before39.java");
     performSmartCompletion();
     select(Lookup.NORMAL_SELECT_CHAR, getSelected());
@@ -295,7 +295,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
   }
 
   public void testJavaDocLinkCompletion1() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
     configureByFile(path + "/before36.java");
     performNormalCompletion();
     select(Lookup.REPLACE_SELECT_CHAR, getSelected());
@@ -304,7 +304,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
 
 
   public void testGetterNameInInterface() throws Exception{
-    final String path = BASE_PATH;
+    String path = BASE_PATH;
     configureByFile(path + "/before38.java");
     performNormalCompletion();
     checkResultByFile(path + "/after38.java");
@@ -342,7 +342,7 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
     ll.setLanguageLevel(LanguageLevel.JDK_1_5);
 	     */
     try {
-      final String path = BASE_PATH;
+      String path = BASE_PATH;
       configureByFile(path + "/AfterNew15.java");
       performSmartCompletion();
       select('\n', getSelected());

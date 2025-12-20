@@ -64,13 +64,13 @@ public class RenameFix extends InspectionGadgetsFix {
     }
 
     @Override
-    public void doFix(final Project project, final ProblemDescriptor descriptor) {
-        final PsiElement nameIdentifier = descriptor.getPsiElement();
-        final PsiElement elementToRename = nameIdentifier.getParent();
+    public void doFix(Project project, ProblemDescriptor descriptor) {
+        PsiElement nameIdentifier = descriptor.getPsiElement();
+        PsiElement elementToRename = nameIdentifier.getParent();
         if (m_targetName == null) {
-            final AsyncResult<DataContext> contextFromFocus = DataManager.getInstance().getDataContextFromFocus();
+            AsyncResult<DataContext> contextFromFocus = DataManager.getInstance().getDataContextFromFocus();
             contextFromFocus.doWhenDone(context -> {
-                final RenameHandler renameHandler = RenameHandlerRegistry.getInstance().getRenameHandler(context);
+                RenameHandler renameHandler = RenameHandlerRegistry.getInstance().getRenameHandler(context);
                 if (renameHandler == null) {
                     return;
                 }
@@ -78,8 +78,8 @@ public class RenameFix extends InspectionGadgetsFix {
             });
         }
         else {
-            final RefactoringFactory factory = RefactoringFactory.getInstance(project);
-            final RenameRefactoring renameRefactoring = factory.createRename(elementToRename, m_targetName, m_searchInStrings, m_searchInNonJavaFiles);
+            RefactoringFactory factory = RefactoringFactory.getInstance(project);
+            RenameRefactoring renameRefactoring = factory.createRename(elementToRename, m_targetName, m_searchInStrings, m_searchInNonJavaFiles);
             renameRefactoring.run();
         }
     }

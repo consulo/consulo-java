@@ -176,13 +176,13 @@ public class AddImportAction implements QuestionAction {
     };
   }
 
-  public static void excludeFromImport(final Project project, final String prefix) {
+  public static void excludeFromImport(Project project, String prefix) {
     ApplicationManager.getApplication().invokeLater(() -> {
       if (project.isDisposed()) {
         return;
       }
 
-      final JavaAutoImportConfigurable configurable = new JavaAutoImportConfigurable(project);
+      JavaAutoImportConfigurable configurable = new JavaAutoImportConfigurable(project);
       ShowSettingsUtil.getInstance().editConfigurable("Auto Import", project, configurable, () -> configurable.addExcludePackage(prefix));
     });
   }
@@ -191,7 +191,7 @@ public class AddImportAction implements QuestionAction {
     List<String> toExclude = new ArrayList<>();
     while (true) {
       toExclude.add(qname);
-      final int i = qname.lastIndexOf('.');
+      int i = qname.lastIndexOf('.');
       if (i < 0 || i == qname.indexOf('.')) {
         break;
       }
@@ -200,7 +200,7 @@ public class AddImportAction implements QuestionAction {
     return toExclude;
   }
 
-  private void addImport(final PsiReference ref, final PsiClass targetClass) {
+  private void addImport(PsiReference ref, PsiClass targetClass) {
     DumbService.getInstance(myProject).withAlternativeResolveEnabled(() -> {
       if (!ref.getElement().isValid() || !targetClass.isValid() || ref.resolve() == targetClass) {
         return;

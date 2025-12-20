@@ -63,10 +63,10 @@ public class MoveToPackageFix implements LocalQuickFix {
   }
 
   @Override
-  public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
     if (element == null) return;
-    final PsiFile myFile = element.getContainingFile();
+    PsiFile myFile = element.getContainingFile();
 
     if (!FileModificationService.getInstance().prepareFileForWrite(myFile)) return;
 

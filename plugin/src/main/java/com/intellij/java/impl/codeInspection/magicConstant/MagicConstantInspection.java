@@ -195,9 +195,9 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
   }
 
   private static void checkAnnotationsJarAttached(@Nonnull PsiFile file, @Nonnull ProblemsHolder holder) {
-    final Project project = file.getProject();
+    Project project = file.getProject();
     if (!holder.isOnTheFly()) {
-      final Boolean found = project.getUserData(NO_ANNOTATIONS_FOUND);
+      Boolean found = project.getUserData(NO_ANNOTATIONS_FOUND);
       if (found != null) {
         return;
       }
@@ -216,11 +216,11 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
     if (annotation != null) {
       return;
     }
-    final VirtualFile virtualFile = PsiUtilCore.getVirtualFile(getModifiers);
+    VirtualFile virtualFile = PsiUtilCore.getVirtualFile(getModifiers);
     if (virtualFile == null) {
       return; // no jdk to attach
     }
-    final List<OrderEntry> entries = ProjectRootManager.getInstance(project).getFileIndex().getOrderEntriesForFile(virtualFile);
+    List<OrderEntry> entries = ProjectRootManager.getInstance(project).getFileIndex().getOrderEntriesForFile(virtualFile);
     Sdk jdk = null;
     for (OrderEntry orderEntry : entries) {
       if (orderEntry instanceof ModuleExtensionWithSdkOrderEntry) {
@@ -376,7 +376,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
     @Nonnull PsiManager manager
   ) {
     PsiAnnotationMemberValue[] allowedValues;
-    final boolean canBeOred;
+    boolean canBeOred;
     if (TypeConversionUtil.getTypeRank(type) <= TypeConversionUtil.LONG_RANK) {
       PsiAnnotationMemberValue intValues = magic.findAttributeValue("intValues");
       allowedValues = intValues instanceof PsiArrayInitializerMemberValue arrayInitializerMemberValue
@@ -629,7 +629,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
     @Nonnull AllowedValues allowedValues,
     @Nonnull ProblemsHolder holder
   ) {
-    final PsiManager manager = PsiManager.getInstance(holder.getProject());
+    PsiManager manager = PsiManager.getInstance(holder.getProject());
 
     if (!argument.getTextRange().isEmpty() && !isAllowed(parameter.getDeclarationScope(), argument, allowedValues, manager, null)) {
       registerProblem(argument, allowedValues, holder);
@@ -660,11 +660,11 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
 
   @RequiredReadAction
   private static boolean isAllowed(
-    @Nonnull final PsiElement scope,
-    @Nonnull final PsiExpression argument,
-    @Nonnull final AllowedValues allowedValues,
-    @Nonnull final PsiManager manager,
-    final Set<PsiExpression> visited
+    @Nonnull PsiElement scope,
+    @Nonnull PsiExpression argument,
+    @Nonnull AllowedValues allowedValues,
+    @Nonnull PsiManager manager,
+    Set<PsiExpression> visited
   ) {
     if (isGoodExpression(argument, allowedValues, scope, manager, visited)) {
       return true;
@@ -794,10 +794,10 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
 
   @RequiredReadAction
   private static boolean processValuesFlownTo(
-    @Nonnull final PsiExpression argument,
+    @Nonnull PsiExpression argument,
     @Nonnull PsiElement scope,
     @Nonnull PsiManager manager,
-    @Nonnull final Processor<PsiExpression> processor
+    @Nonnull Processor<PsiExpression> processor
   ) {
     SliceAnalysisParams params = new SliceAnalysisParams();
     params.dataFlowToThis = true;

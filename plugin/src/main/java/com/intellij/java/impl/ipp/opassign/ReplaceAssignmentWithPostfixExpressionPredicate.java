@@ -36,35 +36,35 @@ class ReplaceAssignmentWithPostfixExpressionPredicate implements PsiElementPredi
     if (!(element instanceof PsiAssignmentExpression)) {
       return false;
     }
-    final PsiAssignmentExpression assignmentExpression =
+    PsiAssignmentExpression assignmentExpression =
       (PsiAssignmentExpression)element;
-    final PsiExpression lhs = assignmentExpression.getLExpression();
-    final PsiExpression strippedLhs =
+    PsiExpression lhs = assignmentExpression.getLExpression();
+    PsiExpression strippedLhs =
       ParenthesesUtils.stripParentheses(lhs);
     if (!(strippedLhs instanceof PsiReferenceExpression)) {
       return false;
     }
-    final PsiReferenceExpression referenceExpression =
+    PsiReferenceExpression referenceExpression =
       (PsiReferenceExpression)strippedLhs;
-    final PsiElement target = referenceExpression.resolve();
+    PsiElement target = referenceExpression.resolve();
     if (!(target instanceof PsiVariable)) {
       return false;
     }
-    final PsiVariable variable = (PsiVariable)target;
-    final PsiExpression rhs = assignmentExpression.getRExpression();
+    PsiVariable variable = (PsiVariable)target;
+    PsiExpression rhs = assignmentExpression.getRExpression();
     if (!(rhs instanceof PsiBinaryExpression)) {
       return false;
     }
-    final PsiBinaryExpression binaryExpression = (PsiBinaryExpression)rhs;
-    final PsiExpression rOperand = binaryExpression.getROperand();
+    PsiBinaryExpression binaryExpression = (PsiBinaryExpression)rhs;
+    PsiExpression rOperand = binaryExpression.getROperand();
     if (rOperand == null) {
       return false;
     }
-    final PsiExpression lOperand = binaryExpression.getLOperand();
-    final IElementType tokenType = binaryExpression.getOperationTokenType();
+    PsiExpression lOperand = binaryExpression.getLOperand();
+    IElementType tokenType = binaryExpression.getOperationTokenType();
     if (lOperand instanceof PsiLiteral) {
-      final PsiLiteral literal = (PsiLiteral)lOperand;
-      final Object value = literal.getValue();
+      PsiLiteral literal = (PsiLiteral)lOperand;
+      Object value = literal.getValue();
       if (ONE != value) {
         return false;
       }
@@ -74,8 +74,8 @@ class ReplaceAssignmentWithPostfixExpressionPredicate implements PsiElementPredi
       return JavaTokenType.PLUS.equals(tokenType);
     }
     else if (rOperand instanceof PsiLiteral) {
-      final PsiLiteral literal = (PsiLiteral)rOperand;
-      final Object value = literal.getValue();
+      PsiLiteral literal = (PsiLiteral)rOperand;
+      Object value = literal.getValue();
       if (ONE != value) {
         return false;
       }

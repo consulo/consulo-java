@@ -59,7 +59,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 
   @Override
   public Object[] getParametersForLookup(LookupElement item, ParameterInfoContext context) {
-    final List<? extends PsiElement> elements = JavaCompletionUtil.getAllPsiElements(item);
+    List<? extends PsiElement> elements = JavaCompletionUtil.getAllPsiElements(item);
     return elements != null && !elements.isEmpty() && elements.get(0) instanceof PsiMethod ? elements.toArray() : null;
   }
 
@@ -70,7 +70,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 
   @Override
   @Nullable
-  public PsiExpressionList findElementForParameterInfo(@Nonnull final CreateParameterInfoContext context) {
+  public PsiExpressionList findElementForParameterInfo(@Nonnull CreateParameterInfoContext context) {
     PsiExpressionList argumentList = findArgumentList(context.getFile(), context.getOffset(), context.getParameterListStart());
 
     if (argumentList != null) {
@@ -79,10 +79,10 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
     return null;
   }
 
-  private PsiExpressionList findArgumentList(final PsiFile file, int offset, int parameterStart) {
+  private PsiExpressionList findArgumentList(PsiFile file, int offset, int parameterStart) {
     PsiExpressionList argumentList = ParameterInfoUtils.findArgumentList(file, offset, parameterStart, this);
     if (argumentList == null) {
-      final PsiMethodCallExpression methodCall =
+      PsiMethodCallExpression methodCall =
         ParameterInfoUtils.findParentOfTypeWithStopElements(file, offset, PsiMethodCallExpression.class, PsiMethod.class);
 
       if (methodCall != null) {
@@ -92,7 +92,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
     return argumentList;
   }
 
-  private static PsiExpressionList findMethodsForArgumentList(final CreateParameterInfoContext context, @Nonnull final PsiExpressionList argumentList) {
+  private static PsiExpressionList findMethodsForArgumentList(CreateParameterInfoContext context, @Nonnull PsiExpressionList argumentList) {
     CandidateInfo[] candidates = getMethods(argumentList);
     if (candidates.length == 0) {
       return null;
@@ -103,18 +103,18 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 
   @Override
   @RequiredReadAction
-  public void showParameterInfo(@Nonnull final PsiExpressionList element, @Nonnull final CreateParameterInfoContext context) {
+  public void showParameterInfo(@Nonnull PsiExpressionList element, @Nonnull CreateParameterInfoContext context) {
     context.showHint(element, element.getTextRange().getStartOffset(), this);
   }
 
   @Override
-  public PsiExpressionList findElementForUpdatingParameterInfo(@Nonnull final UpdateParameterInfoContext context) {
+  public PsiExpressionList findElementForUpdatingParameterInfo(@Nonnull UpdateParameterInfoContext context) {
     return findArgumentList(context.getFile(), context.getOffset(), context.getParameterListStart());
   }
 
   @Override
   @RequiredReadAction
-  public void updateParameterInfo(@Nonnull final PsiExpressionList o, @Nonnull final UpdateParameterInfoContext context) {
+  public void updateParameterInfo(@Nonnull PsiExpressionList o, @Nonnull UpdateParameterInfoContext context) {
     PsiElement parameterOwner = context.getParameterOwner();
     if (parameterOwner != o) {
       context.removeHint();
@@ -217,7 +217,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
       : candidate.getSubstitutor();
   }
 
-  private static boolean isAssignableParametersBeforeGivenIndex(final PsiParameter[] parms, final PsiExpression[] args, int length, PsiSubstitutor substitutor) {
+  private static boolean isAssignableParametersBeforeGivenIndex(PsiParameter[] parms, PsiExpression[] args, int length, PsiSubstitutor substitutor) {
     for (int j = 0; j < length; j++) {
       PsiParameter parm = parms[j];
       PsiExpression arg = args[j];
@@ -294,7 +294,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
   }
 
   private static CandidateInfo[] getMethods(PsiExpressionList argList) {
-    final PsiCall call = getCall(argList);
+    PsiCall call = getCall(argList);
     PsiResolveHelper helper = JavaPsiFacade.getInstance(argList.getProject()).getResolveHelper();
 
     if (call instanceof PsiCallExpression callExpression) {
@@ -346,7 +346,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
   }
 
   private static CandidateInfo[] getCandidates(PsiCallExpression call) {
-    final MethodCandidatesProcessor processor = new MethodResolverProcessor(call, call.getContainingFile(), new PsiConflictResolver[0]) {
+    MethodCandidatesProcessor processor = new MethodResolverProcessor(call, call.getContainingFile(), new PsiConflictResolver[0]) {
       @Override
       protected boolean acceptVarargs() {
         return false;
@@ -358,7 +358,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
     } catch (MethodProcessorSetupFailedException e) {
       return CandidateInfo.EMPTY_ARRAY;
     }
-    final List<CandidateInfo> results = processor.getResults();
+    List<CandidateInfo> results = processor.getResults();
     return results.toArray(new CandidateInfo[results.size()]);
   }
 
@@ -393,7 +393,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
       buffer.append("(");
     }
 
-    final int currentParameter = context.getCurrentParameterIndex();
+    int currentParameter = context.getCurrentParameterIndex();
 
     PsiParameter[] parms = method.getParameterList().getParameters();
     int numParams = parms.length;
@@ -449,9 +449,9 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
     int lastSize = buffer.length();
 		Set<String> shownAnnotations = new HashSet<>();
     for (PsiAnnotation annotation : AnnotationUtil.getAllAnnotations(owner, false, null, !DumbService.isDumb(owner.getProject()))) {
-      final PsiJavaCodeReferenceElement element = annotation.getNameReferenceElement();
+      PsiJavaCodeReferenceElement element = annotation.getNameReferenceElement();
       if (element != null) {
-        final PsiElement resolved = element.resolve();
+        PsiElement resolved = element.resolve();
         if (resolved instanceof PsiClass psiClass
           && (
             !JavaDocInfoGenerator.isDocumentedAnnotationType(resolved)
@@ -477,7 +477,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 
   @RequiredReadAction
   @Override
-  public void updateUI(final Object p, @Nonnull final ParameterInfoUIContext context) {
+  public void updateUI(Object p, @Nonnull ParameterInfoUIContext context) {
     if (p instanceof CandidateInfo info) {
       PsiMethod method = (PsiMethod) info.getElement();
       if (!method.isValid()) {

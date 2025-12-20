@@ -71,31 +71,31 @@ public class MalformedXPathInspection extends BaseInspection {
         @Override
         public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
-            final PsiExpressionList argumentList = expression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length == 0) {
                 return;
             }
-            final PsiExpression xpathArgument = arguments[0];
+            PsiExpression xpathArgument = arguments[0];
             if (!ExpressionUtils.hasStringType(xpathArgument)) {
                 return;
             }
             if (!PsiUtil.isConstantExpression(xpathArgument)) {
                 return;
             }
-            final PsiType type = xpathArgument.getType();
+            PsiType type = xpathArgument.getType();
             if (type == null) {
                 return;
             }
-            final String value = (String) ConstantExpressionUtil.computeCastTo(xpathArgument, type);
+            String value = (String) ConstantExpressionUtil.computeCastTo(xpathArgument, type);
             if (value == null) {
                 return;
             }
             if (!callTakesXPathExpression(expression)) {
                 return;
             }
-            final XPathFactory xpathFactory = XPathFactory.newInstance();
-            final XPath xpath = xpathFactory.newXPath();
+            XPathFactory xpathFactory = XPathFactory.newInstance();
+            XPath xpath = xpathFactory.newXPath();
             //noinspection UnusedCatchParameter,ProhibitedExceptionCaught
             try {
                 xpath.compile(value);
@@ -106,20 +106,20 @@ public class MalformedXPathInspection extends BaseInspection {
         }
 
         private static boolean callTakesXPathExpression(PsiMethodCallExpression expression) {
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final String name = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            String name = methodExpression.getReferenceName();
             if (!xpathMethodNames.contains(name)) {
                 return false;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return false;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return false;
             }
-            final String className = containingClass.getQualifiedName();
+            String className = containingClass.getQualifiedName();
             return "javax.xml.xpath.XPath".equals(className);
         }
     }

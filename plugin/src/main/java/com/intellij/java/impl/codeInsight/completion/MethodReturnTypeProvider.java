@@ -47,7 +47,7 @@ class MethodReturnTypeProvider implements CompletionProvider {
 
   @RequiredReadAction
   @Override
-  public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull final CompletionResultSet result) {
+  public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull CompletionResultSet result) {
     addProbableReturnTypes(parameters, result);
   }
 
@@ -56,7 +56,7 @@ class MethodReturnTypeProvider implements CompletionProvider {
     PsiMethod method = PsiTreeUtil.getParentOfType(position, PsiMethod.class);
     assert method != null;
 
-    final PsiTypeVisitor<PsiType> eachProcessor = new PsiTypeVisitor<PsiType>() {
+    PsiTypeVisitor<PsiType> eachProcessor = new PsiTypeVisitor<PsiType>() {
       private Set<PsiType> myProcessed = new HashSet<>();
 
       @Nullable

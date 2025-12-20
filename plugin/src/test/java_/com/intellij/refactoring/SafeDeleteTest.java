@@ -204,12 +204,12 @@ public abstract class SafeDeleteTest extends MultiFileTestCase
 		checkResultByFile(getTestRoot() + getTestName(false) + "_after.java");
 	}
 
-	private void performAction(final String qClassName) throws Exception
+	private void performAction(String qClassName) throws Exception
 	{
-		final PsiClass aClass = myJavaFacade.findClass(qClassName, GlobalSearchScope.allScope(getProject()));
+		PsiClass aClass = myJavaFacade.findClass(qClassName, GlobalSearchScope.allScope(getProject()));
 		assertNotNull("Class " + qClassName + " not found", aClass);
 
-		final String root = ProjectRootManager.getInstance(getProject()).getContentRoots()[0].getPath();
+		String root = ProjectRootManager.getInstance(getProject()).getContentRoots()[0].getPath();
 		myRootBefore = configureByFiles(new File(root), aClass.getContainingFile().getVirtualFile());
 
 		performAction();
@@ -217,7 +217,7 @@ public abstract class SafeDeleteTest extends MultiFileTestCase
 
 	private void performAction()
 	{
-		final PsiElement psiElement = TargetElementUtil
+		PsiElement psiElement = TargetElementUtil
 				.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED, TargetElementUtilEx.REFERENCED_ELEMENT_ACCEPTED));
 		assertNotNull("No element found in text:\n" + getFile().getText(), psiElement);
 		SafeDeleteHandler.invoke(getProject(), new PsiElement[]{psiElement}, true);

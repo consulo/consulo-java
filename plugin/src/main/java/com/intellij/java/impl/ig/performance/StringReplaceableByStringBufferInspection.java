@@ -67,11 +67,11 @@ public class StringReplaceableByStringBufferInspection extends BaseInspection {
         @Override
         public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
             super.visitLocalVariable(variable);
-            final PsiCodeBlock codeBlock = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
+            PsiCodeBlock codeBlock = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
             if (codeBlock == null) {
                 return;
             }
-            final PsiType type = variable.getType();
+            PsiType type = variable.getType();
             if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING, type)) {
                 return;
             }
@@ -82,7 +82,7 @@ public class StringReplaceableByStringBufferInspection extends BaseInspection {
         }
 
         public boolean variableIsAppendedTo(PsiVariable variable, PsiElement context) {
-            final StringVariableIsAppendedToVisitor visitor = new StringVariableIsAppendedToVisitor(variable, onlyWarnOnLoop);
+            StringVariableIsAppendedToVisitor visitor = new StringVariableIsAppendedToVisitor(variable, onlyWarnOnLoop);
             context.accept(visitor);
             return visitor.isAppendedTo();
         }

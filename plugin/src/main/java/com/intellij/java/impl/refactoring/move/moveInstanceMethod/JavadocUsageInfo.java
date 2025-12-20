@@ -24,7 +24,7 @@ import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 public class JavadocUsageInfo extends UsageInfo {
   private final PsiDocTagValue myDocTagValue;
 
-  public JavadocUsageInfo(final PsiDocTagValue docTagValue) {
+  public JavadocUsageInfo(PsiDocTagValue docTagValue) {
     super(docTagValue);
     myDocTagValue = docTagValue;
   }

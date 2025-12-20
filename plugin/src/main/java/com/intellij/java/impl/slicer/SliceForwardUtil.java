@@ -57,7 +57,7 @@ public class SliceForwardUtil {
               if (!parent.getScope().contains(override)) {
                 return true;
               }
-              final PsiSubstitutor superSubstitutor = method == override ? substitutor : MethodSignatureUtil
+              PsiSubstitutor superSubstitutor = method == override ? substitutor : MethodSignatureUtil
                   .getSuperMethodSignatureSubstitutor(method.getSignature(substitutor), override.getSignature(substitutor));
 
               PsiParameter[] parameters = override.getParameterList().getParameters();
@@ -87,7 +87,7 @@ public class SliceForwardUtil {
       if (!(resolved instanceof PsiVariable)) {
         return true;
       }
-      final PsiVariable variable = (PsiVariable) resolved;
+      PsiVariable variable = (PsiVariable) resolved;
       return processAssignedFrom(variable, ref, parent, processor);
     }
     if (element instanceof PsiVariable) {
@@ -99,8 +99,8 @@ public class SliceForwardUtil {
     return true;
   }
 
-  private static boolean processAssignedFrom(final PsiElement from,
-                                             final PsiElement context,
+  private static boolean processAssignedFrom(PsiElement from,
+                                             PsiElement context,
                                              final SliceUsage parent,
                                              @Nonnull final Processor<SliceUsage> processor) {
     if (from instanceof PsiLocalVariable) {
@@ -111,7 +111,7 @@ public class SliceForwardUtil {
       PsiElement scope = parameter.getDeclarationScope();
       Collection<PsiParameter> parametersToAnalyze = new HashSet<PsiParameter>();
       if (scope instanceof PsiMethod) {
-        final PsiMethod method = (PsiMethod) scope;
+        PsiMethod method = (PsiMethod) scope;
         int index = method.getParameterList().getParameterIndex(parameter);
 
         Collection<PsiMethod> superMethods = new HashSet<PsiMethod>(Arrays.asList(method.findDeepestSuperMethods()));
@@ -155,7 +155,7 @@ public class SliceForwardUtil {
       } else {
         parametersToAnalyze.add(parameter);
       }
-      for (final PsiParameter psiParameter : parametersToAnalyze) {
+      for (PsiParameter psiParameter : parametersToAnalyze) {
         ProgressManager.checkCanceled();
 
         if (!searchReferencesAndProcessAssignmentTarget(psiParameter, null, parent, processor)) {
@@ -174,10 +174,10 @@ public class SliceForwardUtil {
       Collection<PsiMethod> superMethods = new HashSet<PsiMethod>(Arrays.asList(method.findDeepestSuperMethods()));
       superMethods.add(method);
       final Set<PsiReference> processed = new HashSet<PsiReference>(); //usages of super method and overridden method can overlap
-      for (final PsiMethod containingMethod : superMethods) {
+      for (PsiMethod containingMethod : superMethods) {
         if (!MethodReferencesSearch.search(containingMethod, parent.getScope().toSearchScope(), true).forEach(new Processor<PsiReference>() {
           @Override
-          public boolean process(final PsiReference reference) {
+          public boolean process(PsiReference reference) {
             ProgressManager.checkCanceled();
             synchronized (processed) {
               if (!processed.add(reference)) {
@@ -212,7 +212,7 @@ public class SliceForwardUtil {
     });
   }
 
-  private static boolean processAssignmentTarget(PsiElement element, final SliceUsage parent, final Processor<SliceUsage> processor) {
+  private static boolean processAssignmentTarget(PsiElement element, SliceUsage parent, Processor<SliceUsage> processor) {
     if (!parent.params.scope.contains(element)) {
       return true;
     }

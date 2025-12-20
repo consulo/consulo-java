@@ -139,14 +139,14 @@ public abstract class ClassNameCompletionTest extends LightFixtureCompletionTest
   }
 
   public void testImplementsFiltering1() throws Exception {
-    final String path = "/nameCompletion/java";
+    String path = "/nameCompletion/java";
     configureByFile(path + "/test4-source.java");
     performAction();
     checkResultByFile(path + "/test4-result.java");
   }
 
   public void testImplementsFiltering2() throws Exception {
-    final String path = "/nameCompletion/java";
+    String path = "/nameCompletion/java";
     configureByFile(path + "/test3-source.java");
     performAction();
     checkResultByFile(path + "/test3-result.java");
@@ -163,7 +163,7 @@ public abstract class ClassNameCompletionTest extends LightFixtureCompletionTest
   public void testAnnotationFiltering() throws Exception {
     createClass("@interface MyObjectType {}");
 
-    final String path = "/nameCompletion/java";
+    String path = "/nameCompletion/java";
     configureByFile(path + "/test8-source.java");
     performAction();
     checkResultByFile(path + "/test8-result.java");
@@ -221,21 +221,21 @@ public abstract class ClassNameCompletionTest extends LightFixtureCompletionTest
   }
 
   public void testInMethodCall() throws Exception {
-    final String path = "/nameCompletion/java";
+    String path = "/nameCompletion/java";
     configureByFile(path + "/methodCall-source.java");
     performAction();
     checkResultByFile(path + "/methodCall-result.java");
   }
 
   public void testInMethodCallQualifier() throws Exception {
-    final String path = "/nameCompletion/java";
+    String path = "/nameCompletion/java";
     configureByFile(path + "/methodCall1-source.java");
     performAction();
     checkResultByFile(path + "/methodCall1-result.java");
   }
 
   public void testInVariableDeclarationType() throws Exception {
-    final String path = "/nameCompletion/java";
+    String path = "/nameCompletion/java";
     configureByFile(path + "/varType-source.java");
     performAction();
     checkResultByFile(path + "/varType-result.java");
@@ -250,7 +250,7 @@ public abstract class ClassNameCompletionTest extends LightFixtureCompletionTest
   public void testInCommentWithPackagePrefix() throws Exception { doJavaTest(); }
 
   private void doJavaTest() throws Exception {
-    final String path = "/nameCompletion/java";
+    String path = "/nameCompletion/java";
     myFixture.configureByFile(path + "/" + getTestName(false) + "-source.java");
     performAction();
     checkResultByFile(path + "/" + getTestName(false) + "-result.java");

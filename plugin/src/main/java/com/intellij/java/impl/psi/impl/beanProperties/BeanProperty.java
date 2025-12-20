@@ -51,7 +51,7 @@ public class BeanProperty {
 
   @Nonnull
   public String getName() {
-    final String name = PropertyUtil.getPropertyName(myMethod);
+    String name = PropertyUtil.getPropertyName(myMethod);
     return name == null ? "" : name;
   }
 
@@ -84,14 +84,14 @@ public class BeanProperty {
   }
 
   public void setName(String newName) throws IncorrectOperationException {
-    final PsiMethod setter = getSetter();
-    final PsiMethod getter = getGetter();
+    PsiMethod setter = getSetter();
+    PsiMethod getter = getGetter();
     if (getter != null) {
-      final String getterName = PropertyUtil.suggestGetterName(newName, getter.getReturnType());
+      String getterName = PropertyUtil.suggestGetterName(newName, getter.getReturnType());
       getter.setName(getterName);
     }
     if (setter != null) {
-      final String setterName = PropertyUtil.suggestSetterName(newName);
+      String setterName = PropertyUtil.suggestSetterName(newName);
       setter.setName(setterName);
     }
   }

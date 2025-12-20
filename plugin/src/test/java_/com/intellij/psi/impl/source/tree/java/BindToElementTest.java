@@ -55,8 +55,8 @@ public abstract class BindToElementTest extends CodeInsightTestCase
 			public void run()
 			{
 				PsiElement element = myFile.findElementAt(myEditor.getCaretModel().getOffset());
-				final PsiJavaCodeReferenceElement referenceElement = PsiTreeUtil.getParentOfType(element, PsiJavaCodeReferenceElement.class);
-				final PsiClass aClassA = JavaPsiFacade.getInstance(myProject).findClass("p2.A", GlobalSearchScope.moduleScope(myModule));
+				PsiJavaCodeReferenceElement referenceElement = PsiTreeUtil.getParentOfType(element, PsiJavaCodeReferenceElement.class);
+				PsiClass aClassA = JavaPsiFacade.getInstance(myProject).findClass("p2.A", GlobalSearchScope.moduleScope(myModule));
 				assertNotNull(aClassA);
 				try
 				{
@@ -77,12 +77,12 @@ public abstract class BindToElementTest extends CodeInsightTestCase
 			@Override
 			public void run()
 			{
-				final PsiElement elementAt = myFile.findElementAt(myEditor.getCaretModel().getOffset());
-				final PsiTypeElement typeElement = PsiTreeUtil.getParentOfType(elementAt, PsiTypeElement.class);
-				final PsiClass aClassA = JavaPsiFacade.getInstance(myProject).findClass("p2.A", GlobalSearchScope.moduleScope(myModule));
+				PsiElement elementAt = myFile.findElementAt(myEditor.getCaretModel().getOffset());
+				PsiTypeElement typeElement = PsiTreeUtil.getParentOfType(elementAt, PsiTypeElement.class);
+				PsiClass aClassA = JavaPsiFacade.getInstance(myProject).findClass("p2.A", GlobalSearchScope.moduleScope(myModule));
 				assertNotNull(aClassA);
-				final PsiElementFactory factory = myJavaFacade.getElementFactory();
-				final PsiClassType type = factory.createType(aClassA);
+				PsiElementFactory factory = myJavaFacade.getElementFactory();
+				PsiClassType type = factory.createType(aClassA);
 				try
 				{
 					typeElement.replace(factory.createTypeElement(type));
@@ -95,9 +95,9 @@ public abstract class BindToElementTest extends CodeInsightTestCase
 		});
 	}
 
-	private void doTest(final Runnable runnable) throws Exception
+	private void doTest(Runnable runnable) throws Exception
 	{
-		final String relativeFilePath = "/psi/impl/bindToElementTest/" + getTestName(false);
+		String relativeFilePath = "/psi/impl/bindToElementTest/" + getTestName(false);
 		configureByFile(relativeFilePath + ".java");
 		runnable.run();
 		checkResultByFile(relativeFilePath + ".java.after");

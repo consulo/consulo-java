@@ -28,12 +28,12 @@ class SwitchPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiJavaToken)) {
       return false;
     }
-    final PsiJavaToken token = (PsiJavaToken)element;
-    final IElementType tokenType = token.getTokenType();
+    PsiJavaToken token = (PsiJavaToken)element;
+    IElementType tokenType = token.getTokenType();
     if (!JavaTokenType.SWITCH_KEYWORD.equals(tokenType)) {
       return false;
     }
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!(parent instanceof PsiSwitchStatement)) {
       return false;
     }
@@ -41,11 +41,11 @@ class SwitchPredicate implements PsiElementPredicate {
   }
 
   public static boolean checkSwitchStatement(@Nonnull PsiSwitchStatement switchStatement) {
-    final PsiExpression expression = switchStatement.getExpression();
+    PsiExpression expression = switchStatement.getExpression();
     if (expression == null) {
       return false;
     }
-    final PsiCodeBlock body = switchStatement.getBody();
+    PsiCodeBlock body = switchStatement.getBody();
     if (body == null) {
       return false;
     }
@@ -53,7 +53,7 @@ class SwitchPredicate implements PsiElementPredicate {
       return false;
     }
     boolean hasLabel = false;
-    final PsiStatement[] statements = body.getStatements();
+    PsiStatement[] statements = body.getStatements();
     for (PsiStatement statement : statements) {
       if (statement instanceof PsiSwitchLabelStatement) {
         hasLabel = true;

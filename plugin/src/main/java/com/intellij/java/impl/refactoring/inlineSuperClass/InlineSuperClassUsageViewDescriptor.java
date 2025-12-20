@@ -28,7 +28,7 @@ import jakarta.annotation.Nonnull;
 public class InlineSuperClassUsageViewDescriptor extends UsageViewDescriptorAdapter{
   private final PsiClass myClass;
 
-  public InlineSuperClassUsageViewDescriptor(final PsiClass aClass) {
+  public InlineSuperClassUsageViewDescriptor(PsiClass aClass) {
     myClass = aClass;
   }
 

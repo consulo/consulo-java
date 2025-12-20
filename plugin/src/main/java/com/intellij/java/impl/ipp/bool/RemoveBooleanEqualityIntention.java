@@ -37,9 +37,9 @@ public class RemoveBooleanEqualityIntention extends MutablyNamedIntention {
 
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
-        final PsiBinaryExpression binaryExpression =
+        PsiBinaryExpression binaryExpression =
             (PsiBinaryExpression) element;
-        final PsiJavaToken sign = binaryExpression.getOperationSign();
+        PsiJavaToken sign = binaryExpression.getOperationSign();
         return IntentionPowerPackLocalize.removeBooleanEqualityIntentionName(sign.getText());
     }
 
@@ -58,16 +58,16 @@ public class RemoveBooleanEqualityIntention extends MutablyNamedIntention {
     @Override
     public void processIntention(PsiElement element)
         throws IncorrectOperationException {
-        final PsiBinaryExpression exp =
+        PsiBinaryExpression exp =
             (PsiBinaryExpression) element;
         assert exp != null;
-        final IElementType tokenType = exp.getOperationTokenType();
-        final boolean isEquals = JavaTokenType.EQEQ.equals(tokenType);
-        final PsiExpression lhs = exp.getLOperand();
-        @NonNls final String lhsText = lhs.getText();
-        final PsiExpression rhs = exp.getROperand();
+        IElementType tokenType = exp.getOperationTokenType();
+        boolean isEquals = JavaTokenType.EQEQ.equals(tokenType);
+        PsiExpression lhs = exp.getLOperand();
+        @NonNls String lhsText = lhs.getText();
+        PsiExpression rhs = exp.getROperand();
         assert rhs != null;
-        @NonNls final String rhsText = rhs.getText();
+        @NonNls String rhsText = rhs.getText();
         if (PsiKeyword.TRUE.equals(lhsText)) {
             if (isEquals) {
                 replaceExpression(rhsText, exp);

@@ -53,16 +53,16 @@ public class NonAtomicOperationOnVolatileFieldInspection
     @Override
     public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
-      final PsiExpression rhs = expression.getRExpression();
+      PsiExpression rhs = expression.getRExpression();
       if (rhs == null) {
         return;
       }
-      final PsiExpression lhs = expression.getLExpression();
-      final PsiField volatileField = findNonSynchronizedVolatileField(lhs);
+      PsiExpression lhs = expression.getLExpression();
+      PsiField volatileField = findNonSynchronizedVolatileField(lhs);
       if (volatileField == null) {
         return;
       }
-      final IElementType tokenType = expression.getOperationTokenType();
+      IElementType tokenType = expression.getOperationTokenType();
       if (tokenType.equals(JavaTokenType.PLUSEQ) ||
           tokenType.equals(JavaTokenType.MINUSEQ) ||
           tokenType.equals(JavaTokenType.ASTERISKEQ) ||
@@ -85,17 +85,17 @@ public class NonAtomicOperationOnVolatileFieldInspection
     @Override
     public void visitPrefixExpression(PsiPrefixExpression expression) {
       super.visitPrefixExpression(expression);
-      final IElementType tokenType = expression.getOperationTokenType();
+      IElementType tokenType = expression.getOperationTokenType();
       if (JavaTokenType.PLUS.equals(tokenType) ||
           JavaTokenType.MINUS.equals(tokenType) ||
           JavaTokenType.EXCL.equals(tokenType)) {
         return;
       }
-      final PsiExpression operand = expression.getOperand();
+      PsiExpression operand = expression.getOperand();
       if (operand == null) {
         return;
       }
-      final PsiField volatileField = findNonSynchronizedVolatileField(operand);
+      PsiField volatileField = findNonSynchronizedVolatileField(operand);
       if (volatileField == null) {
         return;
       }
@@ -105,8 +105,8 @@ public class NonAtomicOperationOnVolatileFieldInspection
     @Override
     public void visitPostfixExpression(PsiPostfixExpression expression) {
       super.visitPostfixExpression(expression);
-      final PsiExpression operand = expression.getOperand();
-      final PsiField volatileField = findNonSynchronizedVolatileField(operand);
+      PsiExpression operand = expression.getOperand();
+      PsiField volatileField = findNonSynchronizedVolatileField(operand);
       if (volatileField == null) {
         return;
       }
@@ -118,15 +118,15 @@ public class NonAtomicOperationOnVolatileFieldInspection
       if (!(expression instanceof PsiReferenceExpression)) {
         return null;
       }
-      final PsiReferenceExpression reference = (PsiReferenceExpression)expression;
+      PsiReferenceExpression reference = (PsiReferenceExpression)expression;
       if (SynchronizationUtil.isInSynchronizedContext(reference)) {
         return null;
       }
-      final PsiElement referent = reference.resolve();
+      PsiElement referent = reference.resolve();
       if (!(referent instanceof PsiField)) {
         return null;
       }
-      final PsiField field = (PsiField)referent;
+      PsiField field = (PsiField)referent;
       if (!field.hasModifierProperty(PsiModifier.VOLATILE)) {
         return null;
       }

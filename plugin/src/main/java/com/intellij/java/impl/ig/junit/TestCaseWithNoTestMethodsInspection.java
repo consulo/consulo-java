@@ -87,16 +87,16 @@ public class TestCaseWithNoTestMethodsInspection extends BaseInspection {
             )) {
                 return;
             }
-            final PsiMethod[] methods = aClass.getMethods();
-            for (final PsiMethod method : methods) {
+            PsiMethod[] methods = aClass.getMethods();
+            for (PsiMethod method : methods) {
                 if (TestUtils.isJUnitTestMethod(method)) {
                     return;
                 }
             }
             if (ignoreSupers) {
-                final PsiClass superClass = aClass.getSuperClass();
+                PsiClass superClass = aClass.getSuperClass();
                 if (superClass != null) {
-                    final PsiMethod[] superMethods = superClass.getMethods();
+                    PsiMethod[] superMethods = superClass.getMethods();
                     for (PsiMethod superMethod : superMethods) {
                         if (TestUtils.isJUnitTestMethod(superMethod)) {
                             return;

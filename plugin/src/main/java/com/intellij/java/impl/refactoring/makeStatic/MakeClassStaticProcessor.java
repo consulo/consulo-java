@@ -52,18 +52,18 @@ public class MakeClassStaticProcessor extends MakeMethodOrClassStaticProcessor<P
     private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.makeMethodStatic.MakeClassStaticProcessor");
     private List<PsiField> myFieldsToSplit = new ArrayList<PsiField>();
 
-    public MakeClassStaticProcessor(final Project project, final PsiClass aClass, final Settings settings) {
+    public MakeClassStaticProcessor(Project project, PsiClass aClass, Settings settings) {
         super(project, aClass, settings);
     }
 
-    protected void changeSelf(final PsiElementFactory factory, final UsageInfo[] usages) throws IncorrectOperationException {
+    protected void changeSelf(PsiElementFactory factory, UsageInfo[] usages) throws IncorrectOperationException {
         PsiClass containingClass = myMember.getContainingClass();
 
         //Add fields
         if (mySettings.isMakeClassParameter()) {
             PsiType type = factory.createType(containingClass, PsiSubstitutor.EMPTY);
-            final String classParameterName = mySettings.getClassParameterName();
-            final String fieldName = convertToFieldName(classParameterName);
+            String classParameterName = mySettings.getClassParameterName();
+            String fieldName = convertToFieldName(classParameterName);
             myMember.add(factory.createField(fieldName, type));
         }
 
@@ -71,8 +71,8 @@ public class MakeClassStaticProcessor extends MakeMethodOrClassStaticProcessor<P
             List<Settings.FieldParameter> parameters = mySettings.getParameterOrderList();
 
             for (Settings.FieldParameter fieldParameter : parameters) {
-                final PsiType type = fieldParameter.type;
-                final PsiField field = factory.createField(convertToFieldName(fieldParameter.name), type);
+                PsiType type = fieldParameter.type;
+                PsiField field = factory.createField(convertToFieldName(fieldParameter.name), type);
                 myMember.add(field);
             }
         }
@@ -81,13 +81,13 @@ public class MakeClassStaticProcessor extends MakeMethodOrClassStaticProcessor<P
         PsiMethod[] constructors = myMember.getConstructors();
 
         if (constructors.length == 0) {
-            final PsiMethod defConstructor = (PsiMethod) myMember.add(factory.createConstructor());
+            PsiMethod defConstructor = (PsiMethod) myMember.add(factory.createConstructor());
             constructors = new PsiMethod[]{defConstructor};
         }
 
         boolean generateFinalParams = CodeStyleSettingsManager.getSettings(myProject).GENERATE_FINAL_PARAMETERS;
         for (PsiMethod constructor : constructors) {
-            final MethodJavaDocHelper javaDocHelper = new MethodJavaDocHelper(constructor);
+            MethodJavaDocHelper javaDocHelper = new MethodJavaDocHelper(constructor);
             PsiParameterList paramList = constructor.getParameterList();
             PsiElement addParameterAfter = null;
             PsiDocTag anchor = null;
@@ -95,7 +95,7 @@ public class MakeClassStaticProcessor extends MakeMethodOrClassStaticProcessor<P
             if (mySettings.isMakeClassParameter()) {
                 // Add parameter for object
                 PsiType parameterType = factory.createType(containingClass, PsiSubstitutor.EMPTY);
-                final String classParameterName = mySettings.getClassParameterName();
+                String classParameterName = mySettings.getClassParameterName();
                 PsiParameter parameter = factory.createParameter(classParameterName, parameterType);
                 PsiUtil.setModifierProperty(parameter, PsiModifier.FINAL, makeClassParameterFinal(usages) || generateFinalParams);
                 addParameterAfter = paramList.addAfter(parameter, null);
@@ -109,8 +109,8 @@ public class MakeClassStaticProcessor extends MakeMethodOrClassStaticProcessor<P
                 List<Settings.FieldParameter> parameters = mySettings.getParameterOrderList();
 
                 for (Settings.FieldParameter fieldParameter : parameters) {
-                    final PsiType fieldParameterType = fieldParameter.field.getType();
-                    final PsiParameter parameter = factory.createParameter(fieldParameter.name, fieldParameterType);
+                    PsiType fieldParameterType = fieldParameter.field.getType();
+                    PsiParameter parameter = factory.createParameter(fieldParameter.name, fieldParameterType);
                     PsiUtil.setModifierProperty(parameter, PsiModifier.FINAL,
                         makeFieldParameterFinal(fieldParameter.field, usages) || generateFinalParams
                     );
@@ -120,10 +120,10 @@ public class MakeClassStaticProcessor extends MakeMethodOrClassStaticProcessor<P
                 }
                 for (UsageInfo usage : usages) {
                     if (usage instanceof InternalUsageInfo) {
-                        final PsiElement element = usage.getElement();
-                        final PsiElement referencedElement = ((InternalUsageInfo) usage).getReferencedElement();
+                        PsiElement element = usage.getElement();
+                        PsiElement referencedElement = ((InternalUsageInfo) usage).getReferencedElement();
                         if (referencedElement instanceof PsiField && mySettings.getNameForField((PsiField) referencedElement) != null) {
-                            final PsiField field = PsiTreeUtil.getParentOfType(element, PsiField.class);
+                            PsiField field = PsiTreeUtil.getParentOfType(element, PsiField.class);
                             if (field != null) {
                                 MoveInstanceMembersUtil.moveInitializerToConstructor(factory, constructor, field);
                             }
@@ -140,19 +140,19 @@ public class MakeClassStaticProcessor extends MakeMethodOrClassStaticProcessor<P
         setupTypeParameterList();
 
         // Add static modifier
-        final PsiModifierList modifierList = myMember.getModifierList();
+        PsiModifierList modifierList = myMember.getModifierList();
         modifierList.setModifierProperty(PsiModifier.STATIC, true);
         modifierList.setModifierProperty(PsiModifier.FINAL, false);
     }
 
-    private void addAssignmentToField(final String parameterName, final PsiMethod constructor) {
+    private void addAssignmentToField(String parameterName, PsiMethod constructor) {
         @NonNls String fieldName = convertToFieldName(parameterName);
-        final PsiManager manager = PsiManager.getInstance(myProject);
+        PsiManager manager = PsiManager.getInstance(myProject);
         PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-        final PsiCodeBlock body = constructor.getBody();
+        PsiCodeBlock body = constructor.getBody();
         if (body != null) {
             try {
-                final PsiReferenceExpression refExpr = (PsiReferenceExpression) factory.createExpressionFromText(fieldName, body);
+                PsiReferenceExpression refExpr = (PsiReferenceExpression) factory.createExpressionFromText(fieldName, body);
                 if (refExpr.resolve() != null) {
                     fieldName = "this." + fieldName;
                 }
@@ -166,14 +166,14 @@ public class MakeClassStaticProcessor extends MakeMethodOrClassStaticProcessor<P
         }
     }
 
-    private String convertToFieldName(final String parameterName) {
+    private String convertToFieldName(String parameterName) {
         JavaCodeStyleManager manager = JavaCodeStyleManager.getInstance(myProject);
-        final String propertyName = manager.variableNameToPropertyName(parameterName, VariableKind.PARAMETER);
-        final String fieldName = manager.propertyNameToVariableName(propertyName, VariableKind.FIELD);
+        String propertyName = manager.variableNameToPropertyName(parameterName, VariableKind.PARAMETER);
+        String fieldName = manager.propertyNameToVariableName(propertyName, VariableKind.FIELD);
         return fieldName;
     }
 
-    protected void changeSelfUsage(final SelfUsageInfo usageInfo) throws IncorrectOperationException {
+    protected void changeSelfUsage(SelfUsageInfo usageInfo) throws IncorrectOperationException {
         PsiElement parent = usageInfo.getElement().getParent();
         LOG.assertTrue(parent instanceof PsiCallExpression); //either this() or new()
         PsiCallExpression call = (PsiCallExpression) parent;
@@ -200,7 +200,7 @@ public class MakeClassStaticProcessor extends MakeMethodOrClassStaticProcessor<P
         }
     }
 
-    protected void changeInternalUsage(final InternalUsageInfo usage, final PsiElementFactory factory) throws IncorrectOperationException {
+    protected void changeInternalUsage(InternalUsageInfo usage, PsiElementFactory factory) throws IncorrectOperationException {
         if (!mySettings.isChangeSignature()) {
             return;
         }
@@ -236,24 +236,24 @@ public class MakeClassStaticProcessor extends MakeMethodOrClassStaticProcessor<P
             }
         }
         else if (mySettings.isMakeClassParameter() && (element instanceof PsiThisExpression || element instanceof PsiSuperExpression)) {
-            final PsiElement replace =
+            PsiElement replace =
                 element.replace(factory.createExpressionFromText(convertToFieldName(mySettings.getClassParameterName()), null));
-            final PsiField field = PsiTreeUtil.getParentOfType(replace, PsiField.class);
+            PsiField field = PsiTreeUtil.getParentOfType(replace, PsiField.class);
             if (field != null) {
                 myFieldsToSplit.add(field);
             }
         }
         else if (element instanceof PsiNewExpression && mySettings.isMakeClassParameter()) {
-            final PsiNewExpression newExpression = ((PsiNewExpression) element);
+            PsiNewExpression newExpression = ((PsiNewExpression) element);
             LOG.assertTrue(newExpression.getQualifier() == null);
-            final String newText = convertToFieldName(mySettings.getClassParameterName()) + "." + newExpression.getText();
-            final PsiExpression expr = factory.createExpressionFromText(newText, null);
+            String newText = convertToFieldName(mySettings.getClassParameterName()) + "." + newExpression.getText();
+            PsiExpression expr = factory.createExpressionFromText(newText, null);
             element.replace(expr);
         }
     }
 
-    protected void changeExternalUsage(final UsageInfo usage, final PsiElementFactory factory) throws IncorrectOperationException {
-        final PsiElement element = usage.getElement();
+    protected void changeExternalUsage(UsageInfo usage, PsiElementFactory factory) throws IncorrectOperationException {
+        PsiElement element = usage.getElement();
         if (!(element instanceof PsiJavaCodeReferenceElement)) {
             return;
         }
@@ -275,7 +275,7 @@ public class MakeClassStaticProcessor extends MakeMethodOrClassStaticProcessor<P
         PsiElement newQualifier;
 
         if (instanceRef == null || instanceRef instanceof PsiSuperExpression) {
-            final PsiClass thisClass = RefactoringChangeUtil.getThisClass(element);
+            PsiClass thisClass = RefactoringChangeUtil.getThisClass(element);
             @NonNls String thisText;
             if (thisClass.getManager().areElementsEquivalent(thisClass, myMember.getContainingClass())) {
                 thisText = "this";
@@ -317,7 +317,7 @@ public class MakeClassStaticProcessor extends MakeMethodOrClassStaticProcessor<P
 
             for (Settings.FieldParameter fieldParameter : parameters) {
                 PsiReferenceExpression fieldRef;
-                final String fieldName = fieldParameter.field.getName();
+                String fieldName = fieldParameter.field.getName();
                 if (newQualifier != null) {
                     fieldRef = (PsiReferenceExpression) factory.createExpressionFromText(
                         "a." + fieldName, null);
@@ -346,10 +346,10 @@ public class MakeClassStaticProcessor extends MakeMethodOrClassStaticProcessor<P
                 instanceRef.replace(newQualifier);
             }
             else {
-                final PsiAnonymousClass anonymousClass = ((PsiNewExpression) call).getAnonymousClass();
+                PsiAnonymousClass anonymousClass = ((PsiNewExpression) call).getAnonymousClass();
                 if (anonymousClass != null) {
                     ((PsiNewExpression) call).getQualifier().delete();
-                    final PsiJavaCodeReferenceElement baseClassReference = anonymousClass.getBaseClassReference();
+                    PsiJavaCodeReferenceElement baseClassReference = anonymousClass.getBaseClassReference();
                     baseClassReference.replace(((PsiNewExpression) factory.createExpressionFromText(
                         "new " + newQualifier.getText() + "." + baseClassReference.getText() + "()",
                         baseClassReference
@@ -358,14 +358,14 @@ public class MakeClassStaticProcessor extends MakeMethodOrClassStaticProcessor<P
                 else {
                     PsiJavaCodeReferenceElement classReference = ((PsiNewExpression) call).getClassReference();
                     LOG.assertTrue(classReference != null);
-                    final PsiNewExpression newExpr =
+                    PsiNewExpression newExpr =
                         (PsiNewExpression) factory.createExpressionFromText(
                             "new " + newQualifier.getText() + "." + classReference.getText() + "()",
                             classReference
                         );
-                    final PsiExpressionList callArgs = call.getArgumentList();
+                    PsiExpressionList callArgs = call.getArgumentList();
                     if (callArgs != null) {
-                        final PsiExpressionList argumentList = newExpr.getArgumentList();
+                        PsiExpressionList argumentList = newExpr.getArgumentList();
                         LOG.assertTrue(argumentList != null);
                         argumentList.replace(callArgs);
                     }
@@ -382,8 +382,8 @@ public class MakeClassStaticProcessor extends MakeMethodOrClassStaticProcessor<P
 
         //Check fields already exist
         if (mySettings.isMakeClassParameter()) {
-            final String fieldName = convertToFieldName(mySettings.getClassParameterName());
-            final PsiField existing = myMember.findFieldByName(fieldName, false);
+            String fieldName = convertToFieldName(mySettings.getClassParameterName());
+            PsiField existing = myMember.findFieldByName(fieldName, false);
             if (existing != null) {
                 LocalizeValue message = RefactoringLocalize.thereIsAlreadyA0In1(
                     RefactoringUIUtil.getDescription(existing, false),
@@ -394,10 +394,10 @@ public class MakeClassStaticProcessor extends MakeMethodOrClassStaticProcessor<P
         }
 
         if (mySettings.isMakeFieldParameters()) {
-            final List<Settings.FieldParameter> parameterOrderList = mySettings.getParameterOrderList();
+            List<Settings.FieldParameter> parameterOrderList = mySettings.getParameterOrderList();
             for (Settings.FieldParameter parameter : parameterOrderList) {
-                final String fieldName = convertToFieldName(parameter.name);
-                final PsiField existing = myMember.findFieldByName(fieldName, false);
+                String fieldName = convertToFieldName(parameter.name);
+                PsiField existing = myMember.findFieldByName(fieldName, false);
 
                 if (existing != null) {
                     LocalizeValue message = RefactoringLocalize.thereIsAlreadyA0In1(

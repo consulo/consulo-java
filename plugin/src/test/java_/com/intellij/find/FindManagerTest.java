@@ -147,7 +147,7 @@ public abstract class FindManagerTest extends DaemonAnalyzerTestCase {
 
   public void testFindUsages() throws Exception{
     initProject("findManager", "src", "src1");
-    final String projectDir = ("/find/findManager").replace('/', File.separatorChar);
+    String projectDir = ("/find/findManager").replace('/', File.separatorChar);
 
     FindModel findModel = new FindModel();
     findModel.setStringToFind("done");
@@ -182,10 +182,10 @@ public abstract class FindManagerTest extends DaemonAnalyzerTestCase {
     assertEquals(expectedResults, usages.size());
   }
 
-  private List<UsageInfo> findUsages(final FindModel findModel) {
+  private List<UsageInfo> findUsages(FindModel findModel) {
     PsiDirectory psiDirectory = FindInProjectUtil.getPsiDirectory(findModel, myProject);
     List<UsageInfo> result = new ArrayList<UsageInfo>();
-    final CommonProcessors.CollectProcessor<UsageInfo> collector = new CommonProcessors.CollectProcessor<UsageInfo>(result);
+    CommonProcessors.CollectProcessor<UsageInfo> collector = new CommonProcessors.CollectProcessor<UsageInfo>(result);
     FindInProjectUtil.findUsages(findModel, psiDirectory, myProject, collector, new FindUsagesProcessPresentation(new UsageViewPresentation()));
     return result;
   }
@@ -238,9 +238,9 @@ public abstract class FindManagerTest extends DaemonAnalyzerTestCase {
     findModel.setFromCursor(false);
     findModel.setGlobal(true);
     findModel.setMultipleFiles(true);
-    final JavaPsiFacade facade = JavaPsiFacade.getInstance(getProject());
-    final PsiClass baseClass = facade.findClass("A", GlobalSearchScope.allScope(getProject()));
-    final PsiClass implClass = facade.findClass("AImpl", GlobalSearchScope.allScope(getProject()));
+    JavaPsiFacade facade = JavaPsiFacade.getInstance(getProject());
+    PsiClass baseClass = facade.findClass("A", GlobalSearchScope.allScope(getProject()));
+    PsiClass implClass = facade.findClass("AImpl", GlobalSearchScope.allScope(getProject()));
     findModel.setCustomScope(new LocalSearchScope(new PsiElement[]{baseClass, implClass}));
 
     List<UsageInfo> usages = findUsages(findModel);
@@ -396,7 +396,7 @@ public abstract class FindManagerTest extends DaemonAnalyzerTestCase {
   }
 
   public void testLocalScopeSearchPerformance() throws Throwable {
-    final int fileCount = 3000;
+    int fileCount = 3000;
     final int lineCount = 500;
     TempDirTestFixture fixture = new LightTempDirTestFixtureImpl();
     fixture.setUp();

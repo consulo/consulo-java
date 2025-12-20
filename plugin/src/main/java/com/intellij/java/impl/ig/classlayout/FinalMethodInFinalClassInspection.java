@@ -59,7 +59,7 @@ public class FinalMethodInFinalClassInspection extends BaseInspection {
             if (!method.hasModifierProperty(PsiModifier.FINAL)) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null || containingClass.isEnum()) {
                 return;
             }

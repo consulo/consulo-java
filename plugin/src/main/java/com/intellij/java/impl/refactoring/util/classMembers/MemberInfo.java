@@ -105,7 +105,7 @@ public class MemberInfo extends MemberInfoBase<PsiMember> {
     return members;
   }
 
-  public static void extractClassMembers(PsiClass subclass, List<MemberInfo> result, Filter<PsiMember> filter, final boolean extractInterfacesDeep) {
+  public static void extractClassMembers(PsiClass subclass, List<MemberInfo> result, Filter<PsiMember> filter, boolean extractInterfacesDeep) {
     if (extractInterfacesDeep) {
       extractSuperInterfaces(subclass, filter, result, new HashSet<PsiClass>());
     }
@@ -132,16 +132,16 @@ public class MemberInfo extends MemberInfoBase<PsiMember> {
       }
     }
     PsiField[] fields = subclass.getFields();
-    for (final PsiField field : fields) {
+    for (PsiField field : fields) {
       if (filter.includeMember(field)) {
         result.add(new MemberInfo(field));
       }
     }
   }
 
-  private static void extractSuperInterfaces(final PsiClass subclass,
-                                             final Filter<PsiMember> filter,
-                                             final List<MemberInfo> result,
+  private static void extractSuperInterfaces(PsiClass subclass,
+                                             Filter<PsiMember> filter,
+                                             List<MemberInfo> result,
                                              Set<PsiClass> processed) {
     if (!processed.contains(subclass)) {
       processed.add(subclass);
@@ -150,14 +150,14 @@ public class MemberInfo extends MemberInfoBase<PsiMember> {
     }
   }
 
-  private static void extractSuperInterfacesFromReferenceList(final PsiReferenceList referenceList,
-                                                              final Filter<PsiMember> filter,
-                                                              final List<MemberInfo> result,
-                                                              final Set<PsiClass> processed) {
+  private static void extractSuperInterfacesFromReferenceList(PsiReferenceList referenceList,
+                                                              Filter<PsiMember> filter,
+                                                              List<MemberInfo> result,
+                                                              Set<PsiClass> processed) {
     if (referenceList != null) {
-      final PsiClassType[] extendsListTypes = referenceList.getReferencedTypes();
+      PsiClassType[] extendsListTypes = referenceList.getReferencedTypes();
       for (PsiClassType extendsListType : extendsListTypes) {
-        final PsiClass aSuper = extendsListType.resolve();
+        PsiClass aSuper = extendsListType.resolve();
         if (aSuper != null) {
           if (aSuper.isInterface()) {
             if (filter.includeMember(aSuper)) {

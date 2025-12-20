@@ -110,7 +110,7 @@ public abstract class JavaTreeStructureTest extends TestSourceBasedTestCase {
       @Override
       public void testClassStructure(StructureViewComponent structureViewComponent) {
         structureViewComponent.setActionActive(JavaInheritedMembersNodeProvider.ID, true);
-        final JTree tree = structureViewComponent.getTree();
+        JTree tree = structureViewComponent.getTree();
         tree.collapseRow(2);
         IdeaTestUtil.assertTreeEqual(tree, "-Class2.java\n" +
                                            " -Class2\n" +
@@ -192,13 +192,13 @@ public abstract class JavaTreeStructureTest extends TestSourceBasedTestCase {
     void testClassStructure(StructureViewComponent structureViewComponent);
   }
   private void dotest(CheckAction checkAction) throws Exception {
-    final PsiClass psiClass = JavaDirectoryService.getInstance().getClasses(getPackageDirectory("com/package1"))[0];
-    final VirtualFile virtualFile = psiClass.getContainingFile().getVirtualFile();
-    final FileEditorManager fileEditorManager = FileEditorManager.getInstance(myProject);
+    PsiClass psiClass = JavaDirectoryService.getInstance().getClasses(getPackageDirectory("com/package1"))[0];
+    VirtualFile virtualFile = psiClass.getContainingFile().getVirtualFile();
+    FileEditorManager fileEditorManager = FileEditorManager.getInstance(myProject);
     FileEditor[] fileEditors = fileEditorManager.openFile(virtualFile, false);
-    final FileEditor fileEditor = fileEditors[0];
+    FileEditor fileEditor = fileEditors[0];
     try {
-      final StructureViewComponent structureViewComponent =
+      StructureViewComponent structureViewComponent =
         (StructureViewComponent)fileEditor.getStructureViewBuilder().createStructureView(fileEditor, myProject);
 
       checkAction.testClassStructure(structureViewComponent);

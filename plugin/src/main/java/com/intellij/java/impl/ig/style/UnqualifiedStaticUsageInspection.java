@@ -60,7 +60,7 @@ public abstract class UnqualifiedStaticUsageInspection extends BaseInspection {
   }
 
   public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel optionsPanel =
+    MultipleCheckboxOptionsPanel optionsPanel =
       new MultipleCheckboxOptionsPanel(this);
     optionsPanel.addCheckbox(
       InspectionGadgetsLocalize.unqualifiedStaticUsageIgnoreFieldOption().get(),
@@ -108,13 +108,13 @@ public abstract class UnqualifiedStaticUsageInspection extends BaseInspection {
 
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiReferenceExpression expression = (PsiReferenceExpression)descriptor.getPsiElement();
-      final PsiMember member = (PsiMember)expression.resolve();
+      PsiReferenceExpression expression = (PsiReferenceExpression)descriptor.getPsiElement();
+      PsiMember member = (PsiMember)expression.resolve();
       assert member != null;
-      final PsiClass containingClass = member.getContainingClass();
+      PsiClass containingClass = member.getContainingClass();
       assert containingClass != null;
-      final String className = containingClass.getName();
-      final String text = expression.getText();
+      String className = containingClass.getName();
+      String text = expression.getText();
       replaceExpression(expression, className + '.' + text);
     }
   }
@@ -128,7 +128,7 @@ public abstract class UnqualifiedStaticUsageInspection extends BaseInspection {
       if (m_ignoreStaticMethodCalls) {
         return;
       }
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
       if (!isUnqualifiedStaticAccess(methodExpression)) {
         return;
@@ -143,11 +143,11 @@ public abstract class UnqualifiedStaticUsageInspection extends BaseInspection {
       if (m_ignoreStaticFieldAccesses) {
         return;
       }
-      final PsiElement element = expression.resolve();
+      PsiElement element = expression.resolve();
       if (!(element instanceof PsiField)) {
         return;
       }
-      final PsiField field = (PsiField)element;
+      PsiField field = (PsiField)element;
       if (field.hasModifierProperty(PsiModifier.FINAL) &&
           PsiUtil.isOnAssignmentLeftHand(expression)) {
         return;
@@ -161,7 +161,7 @@ public abstract class UnqualifiedStaticUsageInspection extends BaseInspection {
     private boolean isUnqualifiedStaticAccess(
       PsiReferenceExpression expression) {
       if (m_ignoreStaticAccessFromStaticContext) {
-        final PsiMember member =
+        PsiMember member =
           PsiTreeUtil.getParentOfType(expression,
                                       PsiMember.class);
         if (member != null &&
@@ -169,24 +169,24 @@ public abstract class UnqualifiedStaticUsageInspection extends BaseInspection {
           return false;
         }
       }
-      final PsiExpression qualifierExpression =
+      PsiExpression qualifierExpression =
         expression.getQualifierExpression();
       if (qualifierExpression != null) {
         return false;
       }
-      final JavaResolveResult resolveResult =
+      JavaResolveResult resolveResult =
         expression.advancedResolve(false);
-      final PsiElement currentFileResolveScope =
+      PsiElement currentFileResolveScope =
         resolveResult.getCurrentFileResolveScope();
       if (currentFileResolveScope instanceof PsiImportStaticStatement) {
         return false;
       }
-      final PsiElement element = resolveResult.getElement();
+      PsiElement element = resolveResult.getElement();
       if (!(element instanceof PsiField) &&
           !(element instanceof PsiMethod)) {
         return false;
       }
-      final PsiMember member = (PsiMember)element;
+      PsiMember member = (PsiMember)element;
       if (member instanceof PsiEnumConstant &&
           expression.getParent() instanceof PsiSwitchLabelStatement) {
         return false;

@@ -69,7 +69,7 @@ public abstract class AdvHighlightingJdk7Test extends DaemonAnalyzerTestCase {
 
   //ambiguous method calls
   private void doTestAmbiguous(@Nonnull JavaSdkVersion javaSdkVersion) throws Exception {
-    final String name = getTestName(true);
+    String name = getTestName(true);
     IdeaTestUtil.setTestVersion(javaSdkVersion, getModule(), myTestRootDisposable);
     doTest(BASE_PATH + name + "/pck/AmbiguousMethodCall.java", BASE_PATH + "/" + name, false, false);
   }

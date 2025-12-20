@@ -100,9 +100,9 @@ public class DefaultQuickFixProvider extends UnresolvedReferenceQuickFixProvider
   private static void registerPriorityActions(@Nonnull QuickFixActionRegistrar registrar,
                                               @Nonnull TextRange fixRange,
                                               @Nonnull PsiReferenceExpression refExpr) {
-    final JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(refExpr.getProject());
+    JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(refExpr.getProject());
 
-    final Map<VariableKind, IntentionAction> map = new EnumMap<>(VariableKind.class);
+    Map<VariableKind, IntentionAction> map = new EnumMap<>(VariableKind.class);
     map.put(VariableKind.FIELD, new CreateFieldFromUsageFix(refExpr));
     map.put(VariableKind.STATIC_FINAL_FIELD, new CreateConstantFieldFromUsageFix(refExpr));
     if (!refExpr.isQualified()) {
@@ -110,7 +110,7 @@ public class DefaultQuickFixProvider extends UnresolvedReferenceQuickFixProvider
       map.put(VariableKind.PARAMETER, new CreateParameterFromUsageFix(refExpr));
     }
 
-    final VariableKind kind = getKind(styleManager, refExpr);
+    VariableKind kind = getKind(styleManager, refExpr);
     if (map.containsKey(kind)) {
       map.put(kind, PriorityIntentionActionWrapper.highPriority(map.get(kind)));
     }
@@ -122,7 +122,7 @@ public class DefaultQuickFixProvider extends UnresolvedReferenceQuickFixProvider
 
   @Nullable
   private static VariableKind getKind(@Nonnull JavaCodeStyleManager styleManager, @Nonnull PsiReferenceExpression refExpr) {
-    final String reference = refExpr.getText();
+    String reference = refExpr.getText();
 
     boolean upperCase = true;
     for (int i = 0; i < reference.length(); i++) {
@@ -136,8 +136,8 @@ public class DefaultQuickFixProvider extends UnresolvedReferenceQuickFixProvider
     }
 
     for (VariableKind kind : VariableKind.values()) {
-      final String prefix = styleManager.getPrefixByVariableKind(kind);
-      final String suffix = styleManager.getSuffixByVariableKind(kind);
+      String prefix = styleManager.getPrefixByVariableKind(kind);
+      String suffix = styleManager.getSuffixByVariableKind(kind);
 
       if (prefix.isEmpty() && suffix.isEmpty()) {
         continue;

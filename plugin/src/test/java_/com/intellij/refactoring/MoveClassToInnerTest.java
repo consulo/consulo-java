@@ -55,7 +55,7 @@ public abstract class MoveClassToInnerTest extends RefactoringTestCase {
   }
 
   public void testInsertInnerClassImport() throws Exception {
-    final boolean imports = CodeStyleSettingsManager.getSettings(myProject).INSERT_INNER_CLASS_IMPORTS;
+    boolean imports = CodeStyleSettingsManager.getSettings(myProject).INSERT_INNER_CLASS_IMPORTS;
     try {
       CodeStyleSettingsManager.getSettings(myProject).INSERT_INNER_CLASS_IMPORTS = true;
       doTest(new String[] { "pack1.Class1" }, "pack2.A");
@@ -157,7 +157,7 @@ public abstract class MoveClassToInnerTest extends RefactoringTestCase {
   }
 
   private void performAction(String[] classNames, String targetClassName) throws Exception{
-    final PsiClass[] classes = new PsiClass[classNames.length];
+    PsiClass[] classes = new PsiClass[classNames.length];
     for(int i = 0; i < classes.length; i++){
       String className = classNames[i];
       classes[i] = myJavaFacade.findClass(className, ProjectScope.getAllScope(myProject));

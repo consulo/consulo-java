@@ -93,7 +93,7 @@ public abstract class LambdaHighlightingTest extends LightDaemonAnalyzerTestCase
     doTest(false);
   }
 
-  private void doTest(final boolean checkWarnings) {
+  private void doTest(boolean checkWarnings) {
     doTest(BASE_PATH + "/" + getTestName(false) + ".java", checkWarnings, false);
   }
 }

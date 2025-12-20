@@ -26,12 +26,12 @@ import consulo.project.Project;
  */
 public class JavaCodeFragmentTableCellEditor extends CodeFragmentTableCellEditorBase {
 
-  public JavaCodeFragmentTableCellEditor(final Project project) {
+  public JavaCodeFragmentTableCellEditor(Project project) {
     super(project, JavaFileType.INSTANCE);
   }
 
   public boolean stopCellEditing() {
-    final Editor editor = myEditorTextField.getEditor();
+    Editor editor = myEditorTextField.getEditor();
     if (editor != null) {
       JavaReferenceImporter.autoImportReferenceAtCursor(editor, myCodeFragment, true);
     }

@@ -25,7 +25,7 @@ import consulo.project.Project;
  */
 @ExtensionImpl
 public class JavaClassGroupRuleProvider implements FileStructureGroupRuleProvider {
-  public UsageGroupingRule getUsageGroupingRule(final Project project) {
+  public UsageGroupingRule getUsageGroupingRule(Project project) {
     return new ClassGroupingRule();
   }
 }

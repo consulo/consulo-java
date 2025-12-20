@@ -33,12 +33,12 @@ import consulo.language.util.IncorrectOperationException;
 @ExtensionImpl
 public class JavaUpdateAddedFileProcessor extends UpdateAddedFileProcessor {
   @Override
-  public boolean canProcessElement(final PsiFile file) {
+  public boolean canProcessElement(PsiFile file) {
     return file instanceof PsiClassOwner;
   }
 
   @Override
-  public void update(final PsiFile element, PsiFile originalElement) throws IncorrectOperationException {
+  public void update(PsiFile element, PsiFile originalElement) throws IncorrectOperationException {
     if (element.getViewProvider() instanceof TemplateLanguageFileViewProvider) return;
 
     PsiDirectory dir = element.getContainingDirectory();

@@ -44,11 +44,11 @@ public class TestMethodIsPublicVoidNoArgInspection extends BaseInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final boolean isStatic = (Boolean) infos[1];
+        boolean isStatic = (Boolean) infos[1];
         if (isStatic) {
             return InspectionGadgetsLocalize.testMethodIsPublicVoidNoArgProblemDescriptor3().get();
         }
-        final boolean takesArguments = (Boolean) infos[0];
+        boolean takesArguments = (Boolean) infos[0];
         return takesArguments
             ? InspectionGadgetsLocalize.testMethodIsPublicVoidNoArgProblemDescriptor1().get()
             : InspectionGadgetsLocalize.testMethodIsPublicVoidNoArgProblemDescriptor2().get();
@@ -65,18 +65,18 @@ public class TestMethodIsPublicVoidNoArgInspection extends BaseInspection {
         @Override
         public void visitMethod(@Nonnull PsiMethod method) {
             //note: no call to super;
-            @NonNls final String methodName = method.getName();
+            @NonNls String methodName = method.getName();
             if (!methodName.startsWith("test") &&
                 !TestUtils.isJUnit4TestMethod(method)) {
                 return;
             }
-            final PsiType returnType = method.getReturnType();
+            PsiType returnType = method.getReturnType();
             if (returnType == null) {
                 return;
             }
-            final PsiParameterList parameterList = method.getParameterList();
-            final boolean takesArguments;
-            final boolean isStatic;
+            PsiParameterList parameterList = method.getParameterList();
+            boolean takesArguments;
+            boolean isStatic;
             if (parameterList.getParametersCount() == 0) {
                 takesArguments = false;
                 isStatic = method.hasModifierProperty(PsiModifier.STATIC);
@@ -89,7 +89,7 @@ public class TestMethodIsPublicVoidNoArgInspection extends BaseInspection {
                 isStatic = false;
                 takesArguments = true;
             }
-            final PsiClass targetClass = method.getContainingClass();
+            PsiClass targetClass = method.getContainingClass();
             if (!AnnotationUtil.isAnnotated(method, "org.junit.Test", true)) {
                 if (targetClass == null ||
                     !InheritanceUtil.isInheritor(

@@ -19,7 +19,7 @@ public class XmlJavaReferenceContributor extends PsiReferenceContributor
 	@Override
 	public void registerReferenceProviders(@Nonnull PsiReferenceRegistrar registrar)
 	{
-		final JavaClassListReferenceProvider classListProvider = new JavaClassListReferenceProvider();
+		JavaClassListReferenceProvider classListProvider = new JavaClassListReferenceProvider();
 		registrar.registerReferenceProvider(XmlPatterns.xmlAttributeValue(), classListProvider, PsiReferenceRegistrar.LOWER_PRIORITY);
 		registrar.registerReferenceProvider(XmlPatterns.xmlTag(), classListProvider, PsiReferenceRegistrar.LOWER_PRIORITY);
 	}

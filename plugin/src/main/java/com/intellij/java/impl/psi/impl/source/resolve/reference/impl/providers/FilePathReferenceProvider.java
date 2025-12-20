@@ -48,7 +48,7 @@ public class FilePathReferenceProvider extends PsiReferenceProvider {
   }
 
   @Nonnull
-  public PsiReference[] getReferencesByElement(PsiElement element, String text, int offset, final boolean soft) {
+  public PsiReference[] getReferencesByElement(PsiElement element, String text, int offset, boolean soft) {
     return getReferencesByElement(element, text, offset, soft, Module.EMPTY_ARRAY);
   }
 
@@ -73,7 +73,7 @@ public class FilePathReferenceProvider extends PsiReferenceProvider {
 
       @Override
       public boolean absoluteUrlNeedsStartSlash() {
-        final String s = getPathString();
+        String s = getPathString();
         return s != null && s.length() > 0 && s.charAt(0) == '/';
       }
 
@@ -92,7 +92,7 @@ public class FilePathReferenceProvider extends PsiReferenceProvider {
       }
 
       @Override
-      public FileReference createFileReference(final TextRange range, final int index, final String text) {
+      public FileReference createFileReference(TextRange range, int index, String text) {
         return FilePathReferenceProvider.this.createFileReference(this, range, index, text);
       }
 
@@ -100,7 +100,7 @@ public class FilePathReferenceProvider extends PsiReferenceProvider {
       public Condition<PsiFileSystemItem> getReferenceCompletionFilter() {
         return new Condition<PsiFileSystemItem>() {
           @Override
-          public boolean value(final PsiFileSystemItem element) {
+          public boolean value(PsiFileSystemItem element) {
             return isPsiElementAccepted(element);
           }
         };
@@ -117,13 +117,13 @@ public class FilePathReferenceProvider extends PsiReferenceProvider {
     return !(element instanceof PsiJavaFile && element instanceof PsiCompiledElement);
   }
 
-  protected FileReference createFileReference(FileReferenceSet referenceSet, final TextRange range, final int index, final String text) {
+  protected FileReference createFileReference(FileReferenceSet referenceSet, TextRange range, int index, String text) {
     return new FileReference(referenceSet, range, index, text);
   }
 
   @Override
   @Nonnull
-  public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull final ProcessingContext context) {
+  public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context) {
     String text = null;
     if (element instanceof PsiLiteralExpression) {
       Object value = ((PsiLiteralExpression) element).getValue();
@@ -141,13 +141,13 @@ public class FilePathReferenceProvider extends PsiReferenceProvider {
   }
 
   @Nonnull
-  public static Collection<PsiFileSystemItem> getRoots(final Module thisModule, boolean includingClasses) {
+  public static Collection<PsiFileSystemItem> getRoots(Module thisModule, boolean includingClasses) {
     if (thisModule == null) {
       return Collections.emptyList();
     }
     ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(thisModule);
     List<PsiFileSystemItem> result = new ArrayList<PsiFileSystemItem>();
-    final PsiManager psiManager = PsiManager.getInstance(thisModule.getProject());
+    PsiManager psiManager = PsiManager.getInstance(thisModule.getProject());
     if (includingClasses) {
       VirtualFile[] libraryUrls = moduleRootManager.orderEntries().getAllLibrariesAndSdkClassesRoots();
       for (VirtualFile file : libraryUrls) {
@@ -160,9 +160,9 @@ public class FilePathReferenceProvider extends PsiReferenceProvider {
 
     VirtualFile[] sourceRoots = moduleRootManager.orderEntries().recursively().withoutSdk().withoutLibraries().getSourceRoots();
     for (VirtualFile root : sourceRoots) {
-      final PsiDirectory directory = psiManager.findDirectory(root);
+      PsiDirectory directory = psiManager.findDirectory(root);
       if (directory != null) {
-        final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
+        PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
         if (aPackage != null && aPackage.getName() != null) {
           // package prefix
           result.add(PackagePrefixFileSystemItem.create(directory));

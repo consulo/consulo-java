@@ -201,10 +201,10 @@ public class JavaAutoImportConfigurable implements ProjectConfigurable {
         myCbAddUnambiguousImports = new JCheckBox();
         this.$$$loadButtonText$$$(myCbAddUnambiguousImports, ApplicationBundle.message("checkbox.add.unambiguous.imports.on.the.fly"));
         myWholePanel.add(myCbAddUnambiguousImports, new GridConstraints(2, 0, 1, 4, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JPanel panel1 = new JPanel();
+        JPanel panel1 = new JPanel();
         panel1.setLayout(new GridLayoutManager(1, 2, new Insets(0, JBUI.scale(2), 0, 0), -1, -1));
         myWholePanel.add(panel1, new GridConstraints(0, 0, 1, 4, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        final JLabel label1 = new JLabel();
+        JLabel label1 = new JLabel();
         this.$$$loadLabelText$$$(label1, ApplicationBundle.message("combobox.paste.insert.imports"));
         panel1.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         mySmartPasteCombo = new JComboBox(InsertImportOption.values());
@@ -220,7 +220,7 @@ public class JavaAutoImportConfigurable implements ProjectConfigurable {
         myExcludeFromImportAndCompletionPanel = new JPanel();
         myExcludeFromImportAndCompletionPanel.setLayout(new BorderLayout(0, 0));
         myWholePanel.add(myExcludeFromImportAndCompletionPanel, new GridConstraints(5, 0, 1, 4, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(JBUI.scale(400), JBUI.scale(150)), null, 0, false));
-        final TitledSeparator titledSeparator1 = new TitledSeparator();
+        TitledSeparator titledSeparator1 = new TitledSeparator();
         titledSeparator1.setText(ApplicationBundle.message("exclude.from.completion.group"));
         myWholePanel.add(titledSeparator1, new GridConstraints(4, 0, 1, 4, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         myCbShowImportPopup = new JCheckBox();
@@ -236,10 +236,10 @@ public class JavaAutoImportConfigurable implements ProjectConfigurable {
         myCbOptimizeImports = new JCheckBox();
         this.$$$loadButtonText$$$(myCbOptimizeImports, ApplicationBundle.message("checkbox.optimize.imports.on.the.fly"));
         myWholePanel.add(myCbOptimizeImports, new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JBLabel jBLabel1 = new JBLabel();
+        JBLabel jBLabel1 = new JBLabel();
         jBLabel1.setText("Show import popup for:");
         myWholePanel.add(jBLabel1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer1 = new Spacer();
+        Spacer spacer1 = new Spacer();
         myWholePanel.add(spacer1, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         label1.setLabelFor(mySmartPasteCombo);
     }

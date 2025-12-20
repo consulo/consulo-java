@@ -37,16 +37,16 @@ public class MakeSerializableFix extends InspectionGadgetsFix {
   @Override
   public void doFix(Project project, ProblemDescriptor descriptor)
     throws IncorrectOperationException {
-    final PsiElement nameElement = descriptor.getPsiElement();
-    final PsiClass containingClass =
+    PsiElement nameElement = descriptor.getPsiElement();
+    PsiClass containingClass =
       ClassUtils.getContainingClass(nameElement);
     assert containingClass != null;
-    final PsiElementFactory elementFactory =
+    PsiElementFactory elementFactory =
       JavaPsiFacade.getElementFactory(project);
-    final GlobalSearchScope scope = GlobalSearchScope.allScope(project);
-    final PsiJavaCodeReferenceElement referenceElement =
+    GlobalSearchScope scope = GlobalSearchScope.allScope(project);
+    PsiJavaCodeReferenceElement referenceElement =
       elementFactory.createReferenceElementByFQClassName(CommonClassNames.JAVA_IO_SERIALIZABLE, scope);
-    final PsiReferenceList implementsList =
+    PsiReferenceList implementsList =
       containingClass.getImplementsList();
     assert implementsList != null;
     implementsList.add(referenceElement);

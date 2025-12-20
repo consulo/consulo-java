@@ -64,11 +64,11 @@ public class NonShortCircuitBooleanInspection extends BaseInspection {
         }
 
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiPolyadicExpression expression = (PsiPolyadicExpression) descriptor.getPsiElement();
-            final IElementType tokenType = expression.getOperationTokenType();
-            final String operandText = getShortCircuitOperand(tokenType);
-            final PsiExpression[] operands = expression.getOperands();
-            final StringBuilder newExpression = new StringBuilder();
+            PsiPolyadicExpression expression = (PsiPolyadicExpression) descriptor.getPsiElement();
+            IElementType tokenType = expression.getOperationTokenType();
+            String operandText = getShortCircuitOperand(tokenType);
+            PsiExpression[] operands = expression.getOperands();
+            StringBuilder newExpression = new StringBuilder();
             for (PsiExpression operand : operands) {
                 if (newExpression.length() != 0) {
                     newExpression.append(operandText);
@@ -97,11 +97,11 @@ public class NonShortCircuitBooleanInspection extends BaseInspection {
         @Override
         public void visitPolyadicExpression(PsiPolyadicExpression expression) {
             super.visitPolyadicExpression(expression);
-            final IElementType tokenType = expression.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (!tokenType.equals(JavaTokenType.AND) && !tokenType.equals(JavaTokenType.OR)) {
                 return;
             }
-            final PsiType type = expression.getType();
+            PsiType type = expression.getType();
             if (type == null) {
                 return;
             }

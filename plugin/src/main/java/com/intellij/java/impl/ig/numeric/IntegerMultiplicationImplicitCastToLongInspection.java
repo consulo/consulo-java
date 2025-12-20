@@ -82,28 +82,28 @@ public class IntegerMultiplicationImplicitCastToLongInspection extends
     public void visitBinaryExpression(
       @Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
-      final IElementType tokenType = expression.getOperationTokenType();
+      IElementType tokenType = expression.getOperationTokenType();
       if (!tokenType.equals(JavaTokenType.ASTERISK)
           && !tokenType.equals(JavaTokenType.LTLT)) {
         return;
       }
-      final PsiType type = expression.getType();
+      PsiType type = expression.getType();
       if (!isNonLongInteger(type)) {
         return;
       }
-      final PsiExpression rhs = expression.getROperand();
+      PsiExpression rhs = expression.getROperand();
       if (rhs == null) {
         return;
       }
-      final PsiType rhsType = rhs.getType();
+      PsiType rhsType = rhs.getType();
       if (!isNonLongInteger(rhsType)) {
         return;
       }
-      final PsiExpression context = getContainingExpression(expression);
+      PsiExpression context = getContainingExpression(expression);
       if (context == null) {
         return;
       }
-      final PsiType contextType =
+      PsiType contextType =
         ExpectedTypeUtils.findExpectedType(context, true);
       if (contextType == null) {
         return;
@@ -112,7 +112,7 @@ public class IntegerMultiplicationImplicitCastToLongInspection extends
         return;
       }
       try {
-        final Object result =
+        Object result =
           ExpressionUtils.computeConstantExpression(expression,
                                                     true);
         if (ignoreNonOverflowingCompileTimeConstants &&
@@ -127,7 +127,7 @@ public class IntegerMultiplicationImplicitCastToLongInspection extends
 
     private PsiExpression getContainingExpression(
       PsiExpression expression) {
-      final PsiElement parent = expression.getParent();
+      PsiElement parent = expression.getParent();
       if (parent instanceof PsiBinaryExpression ||
           parent instanceof PsiParenthesizedExpression ||
           parent instanceof PsiPrefixExpression ||
@@ -141,7 +141,7 @@ public class IntegerMultiplicationImplicitCastToLongInspection extends
       if (type == null) {
         return false;
       }
-      final String text = type.getCanonicalText();
+      String text = type.getCanonicalText();
       return text != null && s_typesToCheck.contains(text);
     }
   }

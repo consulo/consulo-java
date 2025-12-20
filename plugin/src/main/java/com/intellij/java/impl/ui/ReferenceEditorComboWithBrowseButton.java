@@ -38,21 +38,21 @@ import java.util.List;
  * @author ven
  */
 public class ReferenceEditorComboWithBrowseButton extends ComponentWithBrowseButton<EditorComboBox> implements TextAccessor {
-  public ReferenceEditorComboWithBrowseButton(final ActionListener browseActionListener,
-                                              final String text,
-                                              @Nonnull final Project project,
-                                              boolean toAcceptClasses, final String recentsKey) {
+  public ReferenceEditorComboWithBrowseButton(ActionListener browseActionListener,
+                                              String text,
+                                              @Nonnull Project project,
+                                              boolean toAcceptClasses, String recentsKey) {
     this(browseActionListener, text, project, toAcceptClasses, JavaCodeFragment.VisibilityChecker.EVERYTHING_VISIBLE, recentsKey);
   }
 
-  public ReferenceEditorComboWithBrowseButton(final ActionListener browseActionListener,
-                                              final String text,
-                                              @Nonnull final Project project,
+  public ReferenceEditorComboWithBrowseButton(ActionListener browseActionListener,
+                                              String text,
+                                              @Nonnull Project project,
                                               boolean toAcceptClasses,
-                                              final JavaCodeFragment.VisibilityChecker visibilityChecker, final String recentsKey) {
+                                              JavaCodeFragment.VisibilityChecker visibilityChecker, String recentsKey) {
     super(new EditorComboBox(createDocument(StringUtil.isEmpty(text) ? "" : text, project, toAcceptClasses, visibilityChecker), project, JavaFileType.INSTANCE),
           browseActionListener);
-    final List<String> recentEntries = RecentsManager.getInstance(project).getRecentEntries(recentsKey);
+    List<String> recentEntries = RecentsManager.getInstance(project).getRecentEntries(recentsKey);
     if (recentEntries != null) {
       setHistory(ArrayUtil.toStringArray(recentEntries));
     }
@@ -61,12 +61,12 @@ public class ReferenceEditorComboWithBrowseButton extends ComponentWithBrowseBut
     }
   }
 
-  private static Document createDocument(final String text,
+  private static Document createDocument(String text,
                                          Project project,
-                                         boolean isClassesAccepted, 
-                                         final JavaCodeFragment.VisibilityChecker visibilityChecker) {
+                                         boolean isClassesAccepted,
+                                         JavaCodeFragment.VisibilityChecker visibilityChecker) {
     PsiJavaPackage defaultPackage = JavaPsiFacade.getInstance(project).findPackage("");
-    final JavaCodeFragment fragment = JavaCodeFragmentFactory.getInstance(project).createReferenceCodeFragment(text, defaultPackage, true, isClassesAccepted);
+    JavaCodeFragment fragment = JavaCodeFragmentFactory.getInstance(project).createReferenceCodeFragment(text, defaultPackage, true, isClassesAccepted);
     fragment.setVisibilityChecker(visibilityChecker);
     return PsiDocumentManager.getInstance(project).getDocument(fragment);
   }
@@ -75,7 +75,7 @@ public class ReferenceEditorComboWithBrowseButton extends ComponentWithBrowseBut
     return getChildComponent().getText().trim();
   }
 
-  public void setText(final String text){
+  public void setText(String text){
     getChildComponent().setText(text);
   }
 

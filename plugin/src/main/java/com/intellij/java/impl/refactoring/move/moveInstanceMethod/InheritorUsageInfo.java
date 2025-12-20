@@ -24,7 +24,7 @@ import com.intellij.java.language.psi.PsiClass;
 public class InheritorUsageInfo extends UsageInfo {
   private final PsiClass myInheritor;
 
-  public InheritorUsageInfo(final PsiClass inheritor) {
+  public InheritorUsageInfo(PsiClass inheritor) {
     super(inheritor);
     myInheritor = inheritor;
   }

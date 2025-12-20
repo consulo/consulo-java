@@ -156,20 +156,20 @@ public abstract class SmartPsiElementPointersTest extends CodeInsightTestCase {
     PsiClass aClass = myJavaFacade.findClass("AClass",GlobalSearchScope.allScope(getProject()));
     assertNotNull(aClass);
 
-    final SmartPsiElementPointer<PsiIdentifier> pointer =
+    SmartPsiElementPointer<PsiIdentifier> pointer =
       SmartPointerManager.getInstance(myProject).createSmartPsiElementPointer(aClass.getNameIdentifier());
-    final PsiComment javadoc =
+    PsiComment javadoc =
       JavaPsiFacade.getInstance(aClass.getProject()).getElementFactory().createCommentFromText("/** javadoc */", aClass);
     aClass.getParent().addBefore(javadoc, aClass);
 
-    final PsiIdentifier elt = pointer.getElement();
+    PsiIdentifier elt = pointer.getElement();
     assertNotNull(elt);
     assertSame(elt, aClass.getNameIdentifier());
   }
 
   public void testTypePointer() {
     PsiClass aClass = myJavaFacade.findClass("AClass",GlobalSearchScope.allScope(getProject()));
-    final PsiTypeElement typeElement = myJavaFacade.findClass("Test",GlobalSearchScope.allScope(getProject())).getFields()[0].getTypeElement();
+    PsiTypeElement typeElement = myJavaFacade.findClass("Test",GlobalSearchScope.allScope(getProject())).getFields()[0].getTypeElement();
 
     SmartPsiElementPointer typePointer = SmartPointerManager.getInstance(myProject).createSmartPsiElementPointer(typeElement);
     SmartPsiElementPointer classPointer = SmartPointerManager.getInstance(myProject).createSmartPsiElementPointer(aClass);
@@ -231,7 +231,7 @@ public abstract class SmartPsiElementPointersTest extends CodeInsightTestCase {
     myPsiManager.startBatchFilesProcessingMode(); // to use weak refs
 
     try {
-      final PsiClass aClass = myJavaFacade.findClass("AClass",GlobalSearchScope.allScope(getProject()));
+      PsiClass aClass = myJavaFacade.findClass("AClass",GlobalSearchScope.allScope(getProject()));
       assertNotNull(aClass);
 
       VirtualFile vFile = myRoot.findChild("AClass.java");
@@ -239,7 +239,7 @@ public abstract class SmartPsiElementPointersTest extends CodeInsightTestCase {
       PsiDocumentManager psiDocumentManager = PsiDocumentManager.getInstance(myProject);
       Document document = FileDocumentManager.getInstance().getDocument(vFile);
 
-      final SmartPsiElementPointer pointer = SmartPointerManager.getInstance(myProject).createSmartPsiElementPointer(aClass);
+      SmartPsiElementPointer pointer = SmartPointerManager.getInstance(myProject).createSmartPsiElementPointer(aClass);
 
       System.gc();
       /*

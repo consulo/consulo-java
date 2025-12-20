@@ -40,16 +40,16 @@ public class ReplaceInheritanceWithDelegationFix extends InspectionGadgetsFix {
 
   @Override
   public void doFix(@Nonnull final Project project, ProblemDescriptor descriptor) {
-    final PsiElement nameElement = descriptor.getPsiElement();
+    PsiElement nameElement = descriptor.getPsiElement();
     final PsiClass aClass = (PsiClass)nameElement.getParent();
     assert !(aClass instanceof PsiAnonymousClass);
-    final JavaRefactoringActionHandlerFactory factory =
+    JavaRefactoringActionHandlerFactory factory =
       JavaRefactoringActionHandlerFactory.getInstance();
     final RefactoringActionHandler anonymousToInner =
       factory.createInheritanceToDelegationHandler();
-    final DataManager dataManager = DataManager.getInstance();
+    DataManager dataManager = DataManager.getInstance();
     final DataContext dataContext = dataManager.getDataContext();
-    final Runnable runnable = new Runnable() {
+    Runnable runnable = new Runnable() {
       public void run() {
         anonymousToInner.invoke(project, new PsiElement[]{aClass}, dataContext);
       }

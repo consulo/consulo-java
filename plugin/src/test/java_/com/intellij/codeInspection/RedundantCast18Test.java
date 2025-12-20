@@ -23,7 +23,7 @@ import com.intellij.testFramework.InspectionTestCase;
 
 public abstract class RedundantCast18Test extends InspectionTestCase {
   private void doTest() throws Exception {
-    final LocalInspectionToolWrapper tool = new LocalInspectionToolWrapper(new RedundantCastInspection());
+    LocalInspectionToolWrapper tool = new LocalInspectionToolWrapper(new RedundantCastInspection());
     doTest("redundantCast/lambda/" + getTestName(false), tool, "java 1.5");
   }
 

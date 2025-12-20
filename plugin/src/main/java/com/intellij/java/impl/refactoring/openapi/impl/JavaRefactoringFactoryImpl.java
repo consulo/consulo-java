@@ -59,7 +59,7 @@ public class JavaRefactoringFactoryImpl extends JavaRefactoringFactory {
 
   @Override
   public MoveInnerRefactoring createMoveInner(PsiClass innerClass, String newName, boolean passOuterClass, String parameterName) {
-    final PsiElement targetContainer = MoveInnerImpl.getTargetContainer(innerClass, false);
+    PsiElement targetContainer = MoveInnerImpl.getTargetContainer(innerClass, false);
     if (targetContainer == null) return null;
     return new MoveInnerRefactoringImpl(myProject, innerClass, newName, passOuterClass, parameterName, targetContainer);
   }
@@ -75,7 +75,7 @@ public class JavaRefactoringFactoryImpl extends JavaRefactoringFactory {
 
   @Override
   public MoveDestination createSourceRootMoveDestination(@Nonnull String targetPackageQualifiedName, @Nonnull VirtualFile sourceRoot) {
-    final PsiDirectory directory = PsiManager.getInstance(myProject).findDirectory(sourceRoot);
+    PsiDirectory directory = PsiManager.getInstance(myProject).findDirectory(sourceRoot);
     LOG.assertTrue(directory != null && JavaDirectoryService.getInstance().isSourceRoot(directory), "Should pass source root");
     return new AutocreatingSingleSourceRootMoveDestination(createPackageWrapper(targetPackageQualifiedName),
         sourceRoot);
@@ -88,17 +88,17 @@ public class JavaRefactoringFactoryImpl extends JavaRefactoringFactory {
   }
 
   @Override
-  public MoveMembersRefactoring createMoveMembers(final PsiMember[] elements,
-                                                  final String targetClassQualifiedName,
-                                                  final String newVisibility) {
+  public MoveMembersRefactoring createMoveMembers(PsiMember[] elements,
+                                                  String targetClassQualifiedName,
+                                                  String newVisibility) {
     return createMoveMembers(elements, targetClassQualifiedName, newVisibility, false);
   }
 
   @Override
-  public MoveMembersRefactoring createMoveMembers(final PsiMember[] elements,
-                                                  final String targetClassQualifiedName,
-                                                  final String newVisibility,
-                                                  final boolean makeEnumConstants) {
+  public MoveMembersRefactoring createMoveMembers(PsiMember[] elements,
+                                                  String targetClassQualifiedName,
+                                                  String newVisibility,
+                                                  boolean makeEnumConstants) {
     return new MoveMembersRefactoringImpl(myProject, elements, targetClassQualifiedName, newVisibility, makeEnumConstants);
   }
 
@@ -173,7 +173,7 @@ public class JavaRefactoringFactoryImpl extends JavaRefactoringFactory {
                                                                            PsiMethod methodToSearchFor,
                                                                            String parameterName, PsiExpression parameterInitializer,
                                                                            PsiExpression expressionToSearchFor,
-                                                                           boolean declareFinal, final boolean replaceAllOccurences) {
+                                                                           boolean declareFinal, boolean replaceAllOccurences) {
     return new IntroduceParameterRefactoringImpl(myProject, methodToReplaceIn, methodToSearchFor, parameterName, parameterInitializer,
         expressionToSearchFor, declareFinal, replaceAllOccurences);
   }

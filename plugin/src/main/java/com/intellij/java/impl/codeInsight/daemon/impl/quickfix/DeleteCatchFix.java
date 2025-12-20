@@ -54,17 +54,17 @@ public class DeleteCatchFix implements SyntheticIntentionAction {
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(myCatchParameter.getContainingFile())) return;
 
-    final PsiTryStatement tryStatement = ((PsiCatchSection)myCatchParameter.getDeclarationScope()).getTryStatement();
+    PsiTryStatement tryStatement = ((PsiCatchSection)myCatchParameter.getDeclarationScope()).getTryStatement();
     if (tryStatement.getCatchBlocks().length == 1 && tryStatement.getFinallyBlock() == null) {
       // unwrap entire try statement
-      final PsiCodeBlock tryBlock = tryStatement.getTryBlock();
+      PsiCodeBlock tryBlock = tryStatement.getTryBlock();
       PsiElement lastAddedStatement = null;
       if (tryBlock != null) {
-        final PsiElement firstElement = tryBlock.getFirstBodyElement();
+        PsiElement firstElement = tryBlock.getFirstBodyElement();
         if (firstElement != null) {
-          final PsiElement tryParent = tryStatement.getParent();
+          PsiElement tryParent = tryStatement.getParent();
           if (tryParent instanceof PsiCodeBlock) {
-            final PsiElement lastBodyElement = tryBlock.getLastBodyElement();
+            PsiElement lastBodyElement = tryBlock.getLastBodyElement();
             assert lastBodyElement != null : tryBlock.getText();
             tryParent.addRangeBefore(firstElement, lastBodyElement, tryStatement);
             lastAddedStatement = tryStatement.getPrevSibling();
@@ -87,7 +87,7 @@ public class DeleteCatchFix implements SyntheticIntentionAction {
     }
 
     // delete catch section
-    final PsiElement catchSection = myCatchParameter.getParent();
+    PsiElement catchSection = myCatchParameter.getParent();
     assert catchSection instanceof PsiCatchSection : catchSection;
     //save previous element to move caret to
     PsiElement previousElement = catchSection.getPrevSibling();

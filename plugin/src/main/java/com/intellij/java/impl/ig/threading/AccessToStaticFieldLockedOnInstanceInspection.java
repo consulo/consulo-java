@@ -67,7 +67,7 @@ public class AccessToStaticFieldLockedOnInstanceInspection extends BaseInspectio
       super.visitReferenceExpression(expression);
       boolean isLockedOnInstance = false;
       boolean isLockedOnClass = false;
-      final PsiMethod containingMethod = PsiTreeUtil.getParentOfType(expression, PsiMethod.class);
+      PsiMethod containingMethod = PsiTreeUtil.getParentOfType(expression, PsiMethod.class);
       if (containingMethod != null && containingMethod.hasModifierProperty(PsiModifier.SYNCHRONIZED)) {
         if (containingMethod.hasModifierProperty(PsiModifier.STATIC)) {
           isLockedOnClass = true;
@@ -76,22 +76,22 @@ public class AccessToStaticFieldLockedOnInstanceInspection extends BaseInspectio
           isLockedOnInstance = true;
         }
       }
-      final PsiClass expressionClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
+      PsiClass expressionClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
       if (expressionClass == null) {
         return;
       }
       PsiElement elementToCheck = expression;
       while (true) {
-        final PsiSynchronizedStatement synchronizedStatement = PsiTreeUtil.getParentOfType(elementToCheck, PsiSynchronizedStatement.class);
+        PsiSynchronizedStatement synchronizedStatement = PsiTreeUtil.getParentOfType(elementToCheck, PsiSynchronizedStatement.class);
         if (synchronizedStatement == null || !PsiTreeUtil.isAncestor(expressionClass, synchronizedStatement, true)) {
           break;
         }
-        final PsiExpression lockExpression = synchronizedStatement.getLockExpression();
+        PsiExpression lockExpression = synchronizedStatement.getLockExpression();
         if (lockExpression instanceof PsiReferenceExpression) {
-          final PsiReferenceExpression reference = (PsiReferenceExpression)lockExpression;
-          final PsiElement target = reference.resolve();
+          PsiReferenceExpression reference = (PsiReferenceExpression)lockExpression;
+          PsiElement target = reference.resolve();
           if (target instanceof PsiField) {
-            final PsiField lockField = (PsiField)target;
+            PsiField lockField = (PsiField)target;
             if (lockField.hasModifierProperty(PsiModifier.STATIC)) {
               isLockedOnClass = true;
             }
@@ -111,23 +111,23 @@ public class AccessToStaticFieldLockedOnInstanceInspection extends BaseInspectio
       if (!isLockedOnInstance || isLockedOnClass) {
         return;
       }
-      final PsiElement target = expression.resolve();
+      PsiElement target = expression.resolve();
       if (!(target instanceof PsiField)) {
         return;
       }
-      final PsiField lockedField = (PsiField)target;
+      PsiField lockedField = (PsiField)target;
       if (!lockedField.hasModifierProperty(PsiModifier.STATIC) || ExpressionUtils.isConstant(lockedField)) {
         return;
       }
-      final PsiClass containingClass = lockedField.getContainingClass();
+      PsiClass containingClass = lockedField.getContainingClass();
       if (!PsiTreeUtil.isAncestor(containingClass, expression, false)) {
         return;
       }
       if (!ignoredClasses.isEmpty()) {
-        final PsiType type = lockedField.getType();
+        PsiType type = lockedField.getType();
         if (type instanceof PsiClassType) {
-          final PsiClassType classType = (PsiClassType)type;
-          final PsiClass aClass = classType.resolve();
+          PsiClassType classType = (PsiClassType)type;
+          PsiClass aClass = classType.resolve();
           if (aClass != null && ignoredClasses.contains(aClass.getQualifiedName())) {
             return;
           }

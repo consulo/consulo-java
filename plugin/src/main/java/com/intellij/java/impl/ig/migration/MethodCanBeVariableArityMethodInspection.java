@@ -57,7 +57,7 @@ public class MethodCanBeVariableArityMethodInspection extends BaseInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+        MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
         panel.addCheckbox(
             InspectionGadgetsLocalize.methodCanBeVariableArityMethodIgnoreByteShortOption().get(),
             "ignoreByteAndShortArrayParameters"
@@ -84,27 +84,27 @@ public class MethodCanBeVariableArityMethodInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = element.getParent();
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement parent = element.getParent();
             if (!(parent instanceof PsiMethod)) {
                 return;
             }
-            final PsiMethod method = (PsiMethod) parent;
-            final PsiParameterList parameterList = method.getParameterList();
+            PsiMethod method = (PsiMethod) parent;
+            PsiParameterList parameterList = method.getParameterList();
             if (parameterList.getParametersCount() == 0) {
                 return;
             }
-            final PsiParameter[] parameters = parameterList.getParameters();
-            final PsiParameter lastParameter = parameters[parameters.length - 1];
-            final PsiType type = lastParameter.getType();
+            PsiParameter[] parameters = parameterList.getParameters();
+            PsiParameter lastParameter = parameters[parameters.length - 1];
+            PsiType type = lastParameter.getType();
             if (!(type instanceof PsiArrayType)) {
                 return;
             }
-            final PsiArrayType arrayType = (PsiArrayType) type;
-            final PsiType componentType = arrayType.getComponentType();
-            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-            final PsiTypeElement newTypeElement = factory.createTypeElementFromText(componentType.getCanonicalText() + "...", method);
-            final PsiTypeElement typeElement = lastParameter.getTypeElement();
+            PsiArrayType arrayType = (PsiArrayType) type;
+            PsiType componentType = arrayType.getComponentType();
+            PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+            PsiTypeElement newTypeElement = factory.createTypeElementFromText(componentType.getCanonicalText() + "...", method);
+            PsiTypeElement typeElement = lastParameter.getTypeElement();
             if (typeElement != null) {
                 typeElement.replace(newTypeElement);
             }
@@ -124,21 +124,21 @@ public class MethodCanBeVariableArityMethodInspection extends BaseInspection {
                 return;
             }
             super.visitMethod(method);
-            final PsiParameterList parameterList = method.getParameterList();
+            PsiParameterList parameterList = method.getParameterList();
             if (parameterList.getParametersCount() == 0) {
                 return;
             }
-            final PsiParameter[] parameters = parameterList.getParameters();
-            final PsiParameter lastParameter = parameters[parameters.length - 1];
-            final PsiType type = lastParameter.getType();
+            PsiParameter[] parameters = parameterList.getParameters();
+            PsiParameter lastParameter = parameters[parameters.length - 1];
+            PsiType type = lastParameter.getType();
             if (!(type instanceof PsiArrayType)) {
                 return;
             }
             if (type instanceof PsiEllipsisType) {
                 return;
             }
-            final PsiArrayType arrayType = (PsiArrayType) type;
-            final PsiType componentType = arrayType.getComponentType();
+            PsiArrayType arrayType = (PsiArrayType) type;
+            PsiType componentType = arrayType.getComponentType();
             if (componentType instanceof PsiArrayType) {
                 // don't report when it is multidimensional array
                 return;

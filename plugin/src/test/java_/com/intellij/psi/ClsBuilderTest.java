@@ -65,30 +65,30 @@ public abstract class ClsBuilderTest extends LightIdeaTestCase {
   }
 
   public void testModifiers() throws Exception {
-    final String clsFilePath = JavaTestUtil.getJavaTestDataPath() + "/psi/repositoryUse/cls/pack/" + getTestName(false) + ".class";
-    final VirtualFile clsFile = LocalFileSystem.getInstance().findFileByPath(clsFilePath);
+    String clsFilePath = JavaTestUtil.getJavaTestDataPath() + "/psi/repositoryUse/cls/pack/" + getTestName(false) + ".class";
+    VirtualFile clsFile = LocalFileSystem.getInstance().findFileByPath(clsFilePath);
     assert clsFile != null : clsFilePath;
     doTest(clsFile, getTestName(false) + ".txt");
   }
 
   private void doTestFromTestData() throws ClsFormatException, IOException {
-    final String clsFilePath = JavaTestUtil.getJavaTestDataPath() + "/psi/cls/stubBuilder/" + getTestName(false) + ".class";
-    final VirtualFile clsFile = LocalFileSystem.getInstance().findFileByPath(clsFilePath);
+    String clsFilePath = JavaTestUtil.getJavaTestDataPath() + "/psi/cls/stubBuilder/" + getTestName(false) + ".class";
+    VirtualFile clsFile = LocalFileSystem.getInstance().findFileByPath(clsFilePath);
     assert clsFile != null : clsFilePath;
     doTest(clsFile, getTestName(false) + ".txt");
   }
 
-  private void doTest(final String className) throws IOException, ClsFormatException {
-    final VirtualFile clsFile = findFile(className);
+  private void doTest(String className) throws IOException, ClsFormatException {
+    VirtualFile clsFile = findFile(className);
     doTest(clsFile, getTestName(false) + ".txt");
   }
 
   private static void doTest(VirtualFile vFile, String goldFile) throws ClsFormatException, IOException {
-    final PsiFileStub stub = ClsFileImpl.buildFileStub(vFile, vFile.contentsToByteArray());
+    PsiFileStub stub = ClsFileImpl.buildFileStub(vFile, vFile.contentsToByteArray());
     assert stub != null : vFile;
-    final String butWas = ((StubBase)stub).printTree();
+    String butWas = ((StubBase)stub).printTree();
 
-    final String goldFilePath = JavaTestUtil.getJavaTestDataPath() + "/psi/cls/stubBuilder/" + goldFile;
+    String goldFilePath = JavaTestUtil.getJavaTestDataPath() + "/psi/cls/stubBuilder/" + goldFile;
     String expected = "";
     try {
       expected = FileUtil.loadFile(new File(goldFilePath));
@@ -96,7 +96,7 @@ public abstract class ClsBuilderTest extends LightIdeaTestCase {
     }
     catch (FileNotFoundException e) {
       System.out.println("No expected data found at: " + goldFilePath + ", creating one.");
-      final FileWriter fileWriter = new FileWriter(goldFilePath);
+      FileWriter fileWriter = new FileWriter(goldFilePath);
       try {
         fileWriter.write(butWas);
         fileWriter.close();
@@ -110,8 +110,8 @@ public abstract class ClsBuilderTest extends LightIdeaTestCase {
     assertEquals(expected, butWas);
   }
 
-  private VirtualFile findFile(final String className) {
-    final VirtualFile[] roots = getProjectJDK().getRootProvider().getFiles(OrderRootType.CLASSES);
+  private VirtualFile findFile(String className) {
+    VirtualFile[] roots = getProjectJDK().getRootProvider().getFiles(OrderRootType.CLASSES);
     for (VirtualFile root : roots) {
       VirtualFile vFile = root.findFileByRelativePath(className);
       if (vFile != null) return vFile;

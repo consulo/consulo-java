@@ -12,7 +12,7 @@ public abstract class ReplaceMethodDuplicatesTestSuite {
   }
 
   public static Test suite() {
-    final TestSuite testSuite = new TestSuite("Replace Duplicates Suite");
+    TestSuite testSuite = new TestSuite("Replace Duplicates Suite");
     testSuite.addTestSuite(ExtractMethod15Test.class);
     testSuite.addTestSuite(ExtractMethodTest.class);
     testSuite.addTestSuite(ExtractMethodObjectWithMultipleExitPointsTest.class);

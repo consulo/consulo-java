@@ -52,7 +52,7 @@ public class HtmlTagCanBeJavadocTagInspection extends BaseInspection {
 
     @Override
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final int offset = ((Integer) infos[0]).intValue();
+        int offset = ((Integer) infos[0]).intValue();
         return new HtmlTagCanBeJavaDocTagFix(offset);
     }
 
@@ -71,15 +71,15 @@ public class HtmlTagCanBeJavadocTagInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiDocComment comment = PsiTreeUtil.getParentOfType(element, PsiDocComment.class);
+            PsiElement element = descriptor.getPsiElement();
+            PsiDocComment comment = PsiTreeUtil.getParentOfType(element, PsiDocComment.class);
             if (comment == null) {
                 return;
             }
-            @NonNls final StringBuilder newCommentText = new StringBuilder();
+            @NonNls StringBuilder newCommentText = new StringBuilder();
             buildNewCommentText(comment, element, false, newCommentText);
-            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-            final PsiDocComment newComment = factory.createDocCommentFromText(newCommentText.toString());
+            PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+            PsiDocComment newComment = factory.createDocCommentFromText(newCommentText.toString());
             comment.replace(newComment);
         }
 
@@ -87,19 +87,19 @@ public class HtmlTagCanBeJavadocTagInspection extends BaseInspection {
             PsiElement element, PsiElement elementToReplace, boolean missingEndTag,
             @NonNls StringBuilder newCommentText
         ) {
-            final PsiElement[] children = element.getChildren();
+            PsiElement[] children = element.getChildren();
             if (children.length != 0) {
                 for (PsiElement child : children) {
                     missingEndTag = buildNewCommentText(child, elementToReplace, missingEndTag, newCommentText);
                 }
                 return missingEndTag;
             }
-            @NonNls final String text = element.getText();
+            @NonNls String text = element.getText();
             if (element != elementToReplace) {
                 if (missingEndTag) {
-                    final int endIndex = text.indexOf("</code>");
+                    int endIndex = text.indexOf("</code>");
                     if (endIndex >= 0) {
-                        final String codeText = text.substring(0, endIndex);
+                        String codeText = text.substring(0, endIndex);
                         newCommentText.append(codeText);
                         newCommentText.append('}');
                         newCommentText.append(text.substring(endIndex + 7));
@@ -111,16 +111,16 @@ public class HtmlTagCanBeJavadocTagInspection extends BaseInspection {
             else {
                 newCommentText.append(text.substring(0, startIndex));
                 newCommentText.append("{@code ");
-                final int endIndex = text.indexOf("</code>", startIndex);
+                int endIndex = text.indexOf("</code>", startIndex);
                 if (endIndex >= 0) {
-                    final String codeText = text.substring(startIndex + 6, endIndex);
+                    String codeText = text.substring(startIndex + 6, endIndex);
                     newCommentText.append(codeText);
                     //StringUtil.replace(codeText, "}", "&#125;"));
                     newCommentText.append('}');
                     newCommentText.append(text.substring(endIndex + 7));
                 }
                 else {
-                    final String codeText = text.substring(startIndex + 6);
+                    String codeText = text.substring(startIndex + 6);
                     newCommentText.append(codeText);
                     //StringUtil.replace(codeText, "}", "&#125;"));
                     return true;
@@ -143,11 +143,11 @@ public class HtmlTagCanBeJavadocTagInspection extends BaseInspection {
             if (!PsiUtil.isLanguageLevel5OrHigher(token)) {
                 return;
             }
-            final IElementType tokenType = token.getTokenType();
+            IElementType tokenType = token.getTokenType();
             if (!JavaDocTokenType.DOC_COMMENT_DATA.equals(tokenType)) {
                 return;
             }
-            @NonNls final String text = token.getText();
+            @NonNls String text = token.getText();
             int startIndex = 0;
             while (true) {
                 startIndex = text.indexOf("<code>", startIndex);
@@ -162,18 +162,18 @@ public class HtmlTagCanBeJavadocTagInspection extends BaseInspection {
         }
 
         private static boolean hasMatchingCloseTag(PsiElement element, int offset) {
-            final String text = element.getText();
-            final int endOffset1 = text.indexOf("</code>", offset);
+            String text = element.getText();
+            int endOffset1 = text.indexOf("</code>", offset);
             if (endOffset1 >= 0) {
-                final int startOffset1 = text.indexOf("<code>", offset);
+                int startOffset1 = text.indexOf("<code>", offset);
                 return startOffset1 < 0 || startOffset1 > endOffset1;
             }
             PsiElement sibling = element.getNextSibling();
             while (sibling != null) {
-                final String text1 = sibling.getText();
-                final int endOffset = text1.indexOf("</code>");
+                String text1 = sibling.getText();
+                int endOffset = text1.indexOf("</code>");
                 if (endOffset >= 0) {
-                    final int startOffset = text1.indexOf("<code>");
+                    int startOffset = text1.indexOf("<code>");
                     return startOffset < 0 || startOffset > endOffset;
                 }
                 sibling = sibling.getNextSibling();

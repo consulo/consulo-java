@@ -38,7 +38,7 @@ public class ConvertToPlainIntention extends ConvertNumberIntentionBase {
     }
 
     @Override
-    protected String convertValue(final Number value, final PsiType type, final boolean negated) {
+    protected String convertValue(Number value, PsiType type, boolean negated) {
         String text = new BigDecimal(value.toString()).toPlainString();
         if (negated) {
             text = "-" + text;

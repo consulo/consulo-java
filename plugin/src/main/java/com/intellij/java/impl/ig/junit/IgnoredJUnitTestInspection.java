@@ -40,7 +40,7 @@ public class IgnoredJUnitTestInspection extends BaseInspection {
     @Override
     @RequiredReadAction
     protected String buildErrorString(Object... infos) {
-        final PsiNamedElement info = (PsiNamedElement) infos[0];
+        PsiNamedElement info = (PsiNamedElement) infos[0];
         return info instanceof PsiClass
             ? InspectionGadgetsLocalize.ignoredJunitTestClassproblemDescriptor(info.getName()).get()
             : InspectionGadgetsLocalize.ignoredJunitTestMethodProblemDescriptor(info.getName()).get();
@@ -56,7 +56,7 @@ public class IgnoredJUnitTestInspection extends BaseInspection {
         @Override
         public void visitAnnotation(PsiAnnotation annotation) {
             super.visitAnnotation(annotation);
-            final PsiModifierListOwner modifierListOwner =
+            PsiModifierListOwner modifierListOwner =
                 PsiTreeUtil.getParentOfType(
                     annotation,
                     PsiModifierListOwner.class
@@ -65,17 +65,17 @@ public class IgnoredJUnitTestInspection extends BaseInspection {
                 modifierListOwner instanceof PsiMethod)) {
                 return;
             }
-            final PsiJavaCodeReferenceElement nameReferenceElement =
+            PsiJavaCodeReferenceElement nameReferenceElement =
                 annotation.getNameReferenceElement();
             if (nameReferenceElement == null) {
                 return;
             }
-            final PsiElement target = nameReferenceElement.resolve();
+            PsiElement target = nameReferenceElement.resolve();
             if (!(target instanceof PsiClass)) {
                 return;
             }
-            final PsiClass aClass = (PsiClass) target;
-            @NonNls final String qualifiedName = aClass.getQualifiedName();
+            PsiClass aClass = (PsiClass) target;
+            @NonNls String qualifiedName = aClass.getQualifiedName();
             if (!"org.junit.Ignore".equals(qualifiedName)) {
                 return;
             }

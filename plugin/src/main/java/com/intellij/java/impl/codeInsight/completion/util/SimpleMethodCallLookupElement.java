@@ -31,7 +31,7 @@ import jakarta.annotation.Nonnull;
 public class SimpleMethodCallLookupElement extends LookupElement {
   private final PsiMethod myMethod;
 
-  public SimpleMethodCallLookupElement(final PsiMethod method) {
+  public SimpleMethodCallLookupElement(PsiMethod method) {
     myMethod = method;
   }
 
@@ -58,7 +58,7 @@ public class SimpleMethodCallLookupElement extends LookupElement {
                                                         PsiSubstitutor.EMPTY,
                                                         PsiFormatUtil.SHOW_PARAMETERS,
                                                         PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_TYPE));
-    final PsiType returnType = myMethod.getReturnType();
+    PsiType returnType = myMethod.getReturnType();
     if (returnType != null) {
       presentation.setTypeText(returnType.getCanonicalText());
     }

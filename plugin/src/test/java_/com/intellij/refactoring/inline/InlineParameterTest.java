@@ -290,7 +290,7 @@ public abstract class InlineParameterTest extends LightRefactoringTestCase {
     }
   }
 
-  private void doTest(final boolean createLocal) throws Exception {
+  private void doTest(boolean createLocal) throws Exception {
     getProject().putUserData(InlineParameterExpressionProcessor.CREATE_LOCAL_FOR_TESTS,createLocal);
 
     String name = getTestName(false);
@@ -301,7 +301,7 @@ public abstract class InlineParameterTest extends LightRefactoringTestCase {
   }
 
   private static void performAction() {
-    final PsiElement element = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx
+    PsiElement element = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx
 			.REFERENCED_ELEMENT_ACCEPTED, TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     new InlineParameterHandler().inlineElement(getProject(), myEditor, element);
   }

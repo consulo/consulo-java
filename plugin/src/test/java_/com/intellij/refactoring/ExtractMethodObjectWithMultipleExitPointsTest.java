@@ -25,13 +25,13 @@ public abstract class ExtractMethodObjectWithMultipleExitPointsTest extends Ligh
     doTest(true);
   }
 
-  private void doTest(final boolean createInnerClass) throws Exception {
-    final String testName = getTestName(false);
+  private void doTest(boolean createInnerClass) throws Exception {
+    String testName = getTestName(false);
     configureByFile("/refactoring/extractMethodObject/multipleExitPoints/" + testName + ".java");
     int startOffset = myEditor.getSelectionModel().getSelectionStart();
     int endOffset = myEditor.getSelectionModel().getSelectionEnd();
 
-    final PsiElement[] elements;
+    PsiElement[] elements;
     PsiExpression expr = CodeInsightUtil.findExpressionInRange(myFile, startOffset, endOffset);
     if (expr != null) {
       elements = new PsiElement[]{expr};

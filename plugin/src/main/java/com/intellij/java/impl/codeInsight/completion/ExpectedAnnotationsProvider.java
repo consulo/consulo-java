@@ -41,11 +41,11 @@ class ExpectedAnnotationsProvider implements CompletionProvider {
 
   @RequiredReadAction
   @Override
-  public void addCompletions(@Nonnull final CompletionParameters parameters, final ProcessingContext context, @Nonnull final CompletionResultSet result) {
-    final PsiElement element = parameters.getPosition();
+  public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull CompletionResultSet result) {
+    PsiElement element = parameters.getPosition();
 
-    for (final PsiType type : ExpectedTypesGetter.getExpectedTypes(element, false)) {
-      final PsiClass psiClass = PsiUtil.resolveClassInType(type);
+    for (PsiType type : ExpectedTypesGetter.getExpectedTypes(element, false)) {
+      PsiClass psiClass = PsiUtil.resolveClassInType(type);
       if (psiClass != null && psiClass.isAnnotationType()) {
         result.addElement(AllClassesGetter.createLookupItem(psiClass, AnnotationInsertHandler.INSTANCE));
       }

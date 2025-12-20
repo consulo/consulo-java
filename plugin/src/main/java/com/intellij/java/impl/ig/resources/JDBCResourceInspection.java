@@ -85,10 +85,10 @@ public class JDBCResourceInspection extends ResourceInspection {
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final PsiExpression expression = (PsiExpression)infos[0];
-    final PsiType type = expression.getType();
+    PsiExpression expression = (PsiExpression)infos[0];
+    PsiType type = expression.getType();
     assert type != null;
-    final String text = type.getPresentableText();
+    String text = type.getPresentableText();
     return InspectionGadgetsLocalize.jdbcResourceOpenedNotClosedProblemDescriptor(text).get();
   }
 
@@ -112,12 +112,12 @@ public class JDBCResourceInspection extends ResourceInspection {
       if (!isJDBCResourceCreation(expression)) {
         return;
       }
-      final PsiElement parent = getExpressionParent(expression);
+      PsiElement parent = getExpressionParent(expression);
       if (parent instanceof PsiReturnStatement ||
           parent instanceof PsiResourceVariable) {
         return;
       }
-      final PsiVariable boundVariable = getVariable(parent);
+      PsiVariable boundVariable = getVariable(parent);
       if (isSafelyClosed(boundVariable, expression, insideTryAllowed)) {
         return;
       }
@@ -129,16 +129,16 @@ public class JDBCResourceInspection extends ResourceInspection {
 
     private boolean isJDBCResourceCreation(
       PsiMethodCallExpression expression) {
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      final String name = methodExpression.getReferenceName();
+      String name = methodExpression.getReferenceName();
       if (name == null) {
         return false;
       }
       if (!creationMethodNameSet.contains(name)) {
         return false;
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return false;
       }
@@ -146,11 +146,11 @@ public class JDBCResourceInspection extends ResourceInspection {
         if (!name.equals(creationMethodName[i])) {
           continue;
         }
-        final PsiClass containingClass = method.getContainingClass();
+        PsiClass containingClass = method.getContainingClass();
         if (containingClass == null) {
           return false;
         }
-        final String className = containingClass.getQualifiedName();
+        String className = containingClass.getQualifiedName();
         if (className == null) {
           return false;
         }

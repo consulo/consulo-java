@@ -32,12 +32,12 @@ public abstract class FilePathResolveTest extends CodeInsightTestCase{
   }
 
   private void checkNavigatesTo(String expected) {
-    final int offset = myEditor.getCaretModel().getOffset();
-    final PsiElement targetElement = GotoDeclarationAction.findTargetElement(myProject, myEditor, offset);
+    int offset = myEditor.getCaretModel().getOffset();
+    PsiElement targetElement = GotoDeclarationAction.findTargetElement(myProject, myEditor, offset);
     assertEquals(expected, ((PsiFile)targetElement).getName());
   }
 
-  private void configure(final String fileName) throws Exception {
+  private void configure(String fileName) throws Exception {
     configureByFile(BASE_PATH + fileName, BASE_PATH);
   }
 }

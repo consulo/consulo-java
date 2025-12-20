@@ -27,12 +27,12 @@ public class AddDefaultConstructorFix extends AddMethodFix {
         this(aClass, PsiUtil.getMaximumModifierForMember(aClass, false));
     }
 
-    public AddDefaultConstructorFix(PsiClass aClass, @Nonnull @PsiModifier.ModifierConstant final String modifier) {
+    public AddDefaultConstructorFix(PsiClass aClass, @Nonnull @PsiModifier.ModifierConstant String modifier) {
         super(generateConstructor(aClass.getName(), modifier), aClass);
         setText(JavaQuickFixLocalize.addDefaultConstructorText(VisibilityUtil.toPresentableText(modifier), aClass.getName()));
     }
 
-    private static String generateConstructor(final String className, @PsiModifier.ModifierConstant final String modifier) {
+    private static String generateConstructor(String className, @PsiModifier.ModifierConstant String modifier) {
         if (modifier.equals(PsiModifier.PACKAGE_LOCAL)) {
             return className + "() {}";
         }

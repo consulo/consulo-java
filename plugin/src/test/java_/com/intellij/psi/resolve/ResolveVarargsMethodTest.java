@@ -54,9 +54,9 @@ public abstract class ResolveVarargsMethodTest extends Resolve15TestCase {
   }
 
   private void doTest(int resolved) throws Exception {
-    final PsiReference ref = configureByFile();
+    PsiReference ref = configureByFile();
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
     PsiCallExpression call = (PsiCallExpression) refExpr.getParent();
     JavaResolveResult resolveResult = call.resolveMethodGenerics();
     PsiElement element = resolveResult.getElement();
@@ -65,20 +65,20 @@ public abstract class ResolveVarargsMethodTest extends Resolve15TestCase {
     } else {
       assertNull(element);
     }
-    final JavaResolveResult[] candidates = refExpr.multiResolve(false);
+    JavaResolveResult[] candidates = refExpr.multiResolve(false);
     assertEquals(resolved, candidates.length);
   }
 
   private PsiReference configureByFile() throws Exception {
     return configureByFile("method/varargs/" + getTestName(false) + ".java");
   }
-  private static PsiMethod checkResolvesUnique(final PsiReference ref) {
+  private static PsiMethod checkResolvesUnique(PsiReference ref) {
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
-    final PsiElement parent = refExpr.getParent();
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    PsiElement parent = refExpr.getParent();
     assertThat(parent, instanceOf(PsiMethodCallExpression.class));
-    final PsiMethodCallExpression expression = (PsiMethodCallExpression)parent;
-    final PsiMethod method = expression.resolveMethod();
+    PsiMethodCallExpression expression = (PsiMethodCallExpression)parent;
+    PsiMethod method = expression.resolveMethod();
     assertNotNull(method);
     return method;
   }

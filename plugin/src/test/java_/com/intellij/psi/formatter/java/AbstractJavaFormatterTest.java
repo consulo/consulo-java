@@ -58,7 +58,7 @@ import consulo.ide.impl.idea.util.text.LineReader;
 public abstract class AbstractJavaFormatterTest extends LightIdeaTestCase {
 
   @Nonnull
-  public static String shiftIndentInside(@Nonnull String initial, final int i, boolean shiftEmptyLines) throws IOException {
+  public static String shiftIndentInside(@Nonnull String initial, int i, boolean shiftEmptyLines) throws IOException {
     StringBuilder result = new StringBuilder(initial.length());
     LineReader reader = new LineReader(new ByteArrayInputStream(initial.getBytes()));
     boolean first = true;
@@ -128,7 +128,7 @@ public abstract class AbstractJavaFormatterTest extends LightIdeaTestCase {
     doTextTest(Action.REFORMAT, loadFile(fileNameBefore), loadFile(fileNameAfter));
   }
 
-  public void doTextTest(@NonNls final String text, @NonNls String textAfter) throws IncorrectOperationException {
+  public void doTextTest(@NonNls String text, @NonNls String textAfter) throws IncorrectOperationException {
     doTextTest(Action.REFORMAT, text, textAfter);
   }
 
@@ -136,7 +136,7 @@ public abstract class AbstractJavaFormatterTest extends LightIdeaTestCase {
     final PsiFile file = createFile("A.java", text);
 
     if (myLineRange != null) {
-      final DocumentImpl document = new DocumentImpl(text);
+      DocumentImpl document = new DocumentImpl(text);
       myTextRange =
         new TextRange(document.getLineStartOffset(myLineRange.getStartOffset()), document.getLineEndOffset(myLineRange.getEndOffset()));
     }
@@ -195,7 +195,7 @@ public abstract class AbstractJavaFormatterTest extends LightIdeaTestCase {
 
   }
 
-  public void doMethodTest(@NonNls final String before, @NonNls final String after) throws Exception {
+  public void doMethodTest(@NonNls String before, @NonNls String after) throws Exception {
     doTextTest(
       Action.REFORMAT,
       "class Foo{\n" + "    void foo() {\n" + before + '\n' + "    }\n" + "}",
@@ -203,7 +203,7 @@ public abstract class AbstractJavaFormatterTest extends LightIdeaTestCase {
     );
   }
 
-  public void doClassTest(@NonNls final String before, @NonNls final String after) throws Exception {
+  public void doClassTest(@NonNls String before, @NonNls String after) throws Exception {
     doTextTest(
       Action.REFORMAT,
       "class Foo{\n" + before + '\n' + "}",

@@ -27,7 +27,7 @@ public class DefaultGenerateAccessorProvider implements GenerateAccessorProvider
     if (s.getLanguage() != JavaLanguage.INSTANCE) {
       return Collections.emptyList();
     }
-    final List<EncapsulatableClassMember> result = new ArrayList<>();
+    List<EncapsulatableClassMember> result = new ArrayList<>();
     for (PsiField field : s.getFields()) {
       if (!(field instanceof PsiEnumConstant)) {
         result.add(new PsiFieldMember(field));

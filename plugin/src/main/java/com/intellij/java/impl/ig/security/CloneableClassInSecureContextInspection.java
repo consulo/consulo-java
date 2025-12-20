@@ -54,8 +54,8 @@ public class CloneableClassInSecureContextInspection extends BaseInspection {
       if (!CloneUtils.isCloneable(aClass)) {
         return;
       }
-      final PsiMethod[] methods = aClass.getMethods();
-      for (final PsiMethod method : methods) {
+      PsiMethod[] methods = aClass.getMethods();
+      for (PsiMethod method : methods) {
         if (CloneUtils.isClone(method)) {
           if (ControlFlowUtils.methodAlwaysThrowsException(method)) {
             return;

@@ -33,10 +33,10 @@ public class JavaProblemHighlightFilter extends ProblemHighlightFilter {
 
   @Override
   public boolean shouldProcessInBatch(@Nonnull PsiFile psiFile) {
-    final boolean shouldHighlight = shouldHighlightFile(psiFile);
+    boolean shouldHighlight = shouldHighlightFile(psiFile);
     if (shouldHighlight) {
       if (psiFile.getFileType() == JavaFileType.INSTANCE) {
-        final VirtualFile virtualFile = psiFile.getVirtualFile();
+        VirtualFile virtualFile = psiFile.getVirtualFile();
         if (virtualFile != null && ProjectRootManager.getInstance(psiFile.getProject()).getFileIndex().isInLibrarySource(virtualFile)) {
           return false;
         }

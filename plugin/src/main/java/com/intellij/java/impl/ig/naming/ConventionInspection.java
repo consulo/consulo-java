@@ -79,7 +79,7 @@ public abstract class ConventionInspection extends BaseInspection {
   }
 
   protected boolean isValid(String name) {
-    final int length = name.length();
+    int length = name.length();
     if (length < m_minLength) {
       return false;
     }
@@ -89,7 +89,7 @@ public abstract class ConventionInspection extends BaseInspection {
     if (HardcodedMethodConstants.SERIAL_VERSION_UID.equals(name)) {
       return true;
     }
-    final Matcher matcher = m_regexPattern.matcher(name);
+    Matcher matcher = m_regexPattern.matcher(name);
     return matcher.matches();
   }
 
@@ -107,25 +107,25 @@ public abstract class ConventionInspection extends BaseInspection {
 
   @Override
   public final JComponent createOptionsPanel() {
-    final GridBagLayout layout = new GridBagLayout();
-    final JPanel panel = new JPanel(layout);
+    GridBagLayout layout = new GridBagLayout();
+    JPanel panel = new JPanel(layout);
 
-    final JLabel patternLabel = new JLabel(InspectionGadgetsLocalize.conventionPatternOption().get());
-    final JLabel minLengthLabel = new JLabel(InspectionGadgetsLocalize.conventionMinLengthOption().get());
-    final JLabel maxLengthLabel = new JLabel(InspectionGadgetsLocalize.conventionMaxLengthOption().get());
+    JLabel patternLabel = new JLabel(InspectionGadgetsLocalize.conventionPatternOption().get());
+    JLabel minLengthLabel = new JLabel(InspectionGadgetsLocalize.conventionMinLengthOption().get());
+    JLabel maxLengthLabel = new JLabel(InspectionGadgetsLocalize.conventionMaxLengthOption().get());
 
-    final NumberFormat numberFormat = NumberFormat.getIntegerInstance();
+    NumberFormat numberFormat = NumberFormat.getIntegerInstance();
     numberFormat.setParseIntegerOnly(true);
     numberFormat.setMinimumIntegerDigits(1);
     numberFormat.setMaximumIntegerDigits(2);
-    final InternationalFormatter formatter =
+    InternationalFormatter formatter =
       new InternationalFormatter(numberFormat);
     formatter.setAllowsInvalid(true);
     formatter.setCommitsOnValidEdit(true);
 
     final JFormattedTextField minLengthField =
       new JFormattedTextField(formatter);
-    final Font panelFont = panel.getFont();
+    Font panelFont = panel.getFont();
     minLengthField.setFont(panelFont);
     minLengthField.setValue(Integer.valueOf(m_minLength));
     minLengthField.setColumns(2);
@@ -146,7 +146,7 @@ public abstract class ConventionInspection extends BaseInspection {
     regexField.setInputVerifier(new RegExInputVerifier());
     regexField.setFocusLostBehavior(JFormattedTextField.COMMIT);
     UIUtil.fixFormattedField(minLengthField);
-    final DocumentListener listener = new DocumentAdapter() {
+    DocumentListener listener = new DocumentAdapter() {
       @Override
       public void textChanged(DocumentEvent evt) {
         try {
@@ -163,14 +163,14 @@ public abstract class ConventionInspection extends BaseInspection {
         }
       }
     };
-    final Document regexDocument = regexField.getDocument();
+    Document regexDocument = regexField.getDocument();
     regexDocument.addDocumentListener(listener);
-    final Document minLengthDocument = minLengthField.getDocument();
+    Document minLengthDocument = minLengthField.getDocument();
     minLengthDocument.addDocumentListener(listener);
-    final Document maxLengthDocument = maxLengthField.getDocument();
+    Document maxLengthDocument = maxLengthField.getDocument();
     maxLengthDocument.addDocumentListener(listener);
 
-    final GridBagConstraints constraints = new GridBagConstraints();
+    GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 0;
     constraints.gridy = 0;
     constraints.weightx = 0.0;
@@ -209,7 +209,7 @@ public abstract class ConventionInspection extends BaseInspection {
     constraints.insets.right = 0;
     panel.add(maxLengthField, constraints);
 
-    final Collection<? extends JComponent> extraOptions =
+    Collection<? extends JComponent> extraOptions =
       createExtraOptions();
     constraints.gridx = 0;
     constraints.gridwidth = 2;

@@ -68,7 +68,7 @@ public class JavaRefactoringSupportProvider extends RefactoringSupportProvider {
   }
 
   @Override
-  public boolean isInplaceRenameAvailable(final PsiElement element, final PsiElement context) {
+  public boolean isInplaceRenameAvailable(PsiElement element, PsiElement context) {
     return mayRenameInplace(element, context);
   }
 
@@ -137,7 +137,7 @@ public class JavaRefactoringSupportProvider extends RefactoringSupportProvider {
     return true;
   }
 
-  public static boolean mayRenameInplace(@Nonnull PsiElement elementToRename, final PsiElement nameSuggestionContext) {
+  public static boolean mayRenameInplace(@Nonnull PsiElement elementToRename, PsiElement nameSuggestionContext) {
     if (isDisableRefactoringForLightElement(elementToRename)) {
       return false;
     }
@@ -171,7 +171,7 @@ public class JavaRefactoringSupportProvider extends RefactoringSupportProvider {
     return false;
   }
 
-  private static boolean isElementWithComment(final PsiElement[] scopeElements) {
+  private static boolean isElementWithComment(PsiElement[] scopeElements) {
     if (scopeElements.length > 2) {
       return false;
     }
@@ -189,7 +189,7 @@ public class JavaRefactoringSupportProvider extends RefactoringSupportProvider {
     return comment != null && comment.getOwner() == owner;
   }
 
-  private static boolean isResourceVariable(final PsiElement[] scopeElements) {
+  private static boolean isResourceVariable(PsiElement[] scopeElements) {
     return scopeElements.length == 2 &&
         scopeElements[0] instanceof PsiResourceList &&
         scopeElements[1] instanceof PsiCodeBlock;

@@ -35,38 +35,38 @@ class EnumSwitchPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiSwitchStatement)) {
       return false;
     }
-    final PsiSwitchStatement switchStatement = (PsiSwitchStatement)element;
-    final PsiCodeBlock body = switchStatement.getBody();
-    final PsiExpression expression = switchStatement.getExpression();
+    PsiSwitchStatement switchStatement = (PsiSwitchStatement)element;
+    PsiCodeBlock body = switchStatement.getBody();
+    PsiExpression expression = switchStatement.getExpression();
     if (expression == null) {
       return false;
     }
-    final PsiType type = expression.getType();
+    PsiType type = expression.getType();
     if (!(type instanceof PsiClassType)) {
       return false;
     }
-    final PsiClass enumClass = ((PsiClassType)type).resolve();
+    PsiClass enumClass = ((PsiClassType)type).resolve();
     if (enumClass == null || !enumClass.isEnum()) {
       return false;
     }
-    final PsiField[] fields = enumClass.getFields();
-    final Set<String> enumElements = new HashSet<String>(fields.length);
-    for (final PsiField field : fields) {
-      final PsiType fieldType = field.getType();
+    PsiField[] fields = enumClass.getFields();
+    Set<String> enumElements = new HashSet<String>(fields.length);
+    for (PsiField field : fields) {
+      PsiType fieldType = field.getType();
       if (fieldType.equals(type)) {
-        final String fieldName = field.getName();
+        String fieldName = field.getName();
         enumElements.add(fieldName);
       }
     }
     if (body != null) {
-      final PsiStatement[] statements = body.getStatements();
+      PsiStatement[] statements = body.getStatements();
       for (PsiStatement statement : statements) {
         if (statement instanceof PsiSwitchLabelStatement) {
-          final PsiSwitchLabelStatement labelStatement =
+          PsiSwitchLabelStatement labelStatement =
             (PsiSwitchLabelStatement)statement;
-          final PsiExpression value = labelStatement.getCaseValue();
+          PsiExpression value = labelStatement.getCaseValue();
           if (value != null) {
-            final String valueText = value.getText();
+            String valueText = value.getText();
             enumElements.remove(valueText);
           }
         }

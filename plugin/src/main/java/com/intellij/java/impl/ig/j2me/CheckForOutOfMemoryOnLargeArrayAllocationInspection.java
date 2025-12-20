@@ -58,14 +58,14 @@ public abstract class CheckForOutOfMemoryOnLargeArrayAllocationInspection extend
         @Override
         public void visitNewExpression(@Nonnull PsiNewExpression expression) {
             super.visitNewExpression(expression);
-            final PsiType type = expression.getType();
+            PsiType type = expression.getType();
             if (!(type instanceof PsiArrayType)) {
                 return;
             }
             int size = 1;
-            final PsiExpression[] dimensions = expression.getArrayDimensions();
-            for (final PsiExpression dimension : dimensions) {
-                final Integer intValue = (Integer) ConstantExpressionUtil.computeCastTo(dimension, PsiType.INT);
+            PsiExpression[] dimensions = expression.getArrayDimensions();
+            for (PsiExpression dimension : dimensions) {
+                Integer intValue = (Integer) ConstantExpressionUtil.computeCastTo(dimension, PsiType.INT);
                 if (intValue != null) {
                     size *= intValue.intValue();
                 }
@@ -82,7 +82,7 @@ public abstract class CheckForOutOfMemoryOnLargeArrayAllocationInspection extend
         private boolean outOfMemoryExceptionCaught(PsiElement element) {
             PsiElement currentElement = element;
             while (true) {
-                final PsiTryStatement containingTryStatement = PsiTreeUtil.getParentOfType(currentElement, PsiTryStatement.class);
+                PsiTryStatement containingTryStatement = PsiTreeUtil.getParentOfType(currentElement, PsiTryStatement.class);
                 if (containingTryStatement == null) {
                     return false;
                 }
@@ -94,11 +94,11 @@ public abstract class CheckForOutOfMemoryOnLargeArrayAllocationInspection extend
         }
 
         private boolean catchesOutOfMemoryException(PsiTryStatement statement) {
-            final PsiCatchSection[] sections = statement.getCatchSections();
-            for (final PsiCatchSection section : sections) {
-                final PsiType catchType = section.getCatchType();
+            PsiCatchSection[] sections = statement.getCatchSections();
+            for (PsiCatchSection section : sections) {
+                PsiType catchType = section.getCatchType();
                 if (catchType != null) {
-                    final String typeText = catchType.getCanonicalText();
+                    String typeText = catchType.getCanonicalText();
                     if ("java.lang.OutOfMemoryError".equals(typeText)) {
                         return true;
                     }

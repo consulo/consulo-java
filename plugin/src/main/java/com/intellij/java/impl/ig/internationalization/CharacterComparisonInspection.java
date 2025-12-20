@@ -61,11 +61,11 @@ public class CharacterComparisonInspection extends BaseInspection {
         @Override
         public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
             super.visitBinaryExpression(expression);
-            final PsiExpression rhs = expression.getROperand();
+            PsiExpression rhs = expression.getROperand();
             if (!ComparisonUtils.isComparison(expression) || ComparisonUtils.isEqualityComparison(expression)) {
                 return;
             }
-            final PsiExpression lhs = expression.getLOperand();
+            PsiExpression lhs = expression.getLOperand();
             if (!isCharacter(lhs) || !isCharacter(rhs)) {
                 return;
             }

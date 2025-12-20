@@ -52,8 +52,8 @@ public class ElementExtractorFilter implements ElementFilter {
   @Override
   public boolean isAcceptable(Object element, PsiElement context) {
     if (element instanceof CandidateInfo) {
-      final CandidateInfo candidateInfo = (CandidateInfo) element;
-      final PsiElement psiElement = candidateInfo.getElement();
+      CandidateInfo candidateInfo = (CandidateInfo) element;
+      PsiElement psiElement = candidateInfo.getElement();
 
       return myFilter.isAcceptable(psiElement, context);
     } else if (element instanceof PsiElement)

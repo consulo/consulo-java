@@ -41,20 +41,20 @@ public class JavaMethodParameterUnwrapper extends JavaUnwrapper {
 
   @Override
   public boolean isApplicableTo(PsiElement e) {
-    final PsiElement parent = e.getParent();
+    PsiElement parent = e.getParent();
     if (e instanceof PsiExpression){
       if (parent instanceof PsiExpressionList) {
         return true;
       }
       if (e instanceof PsiReferenceExpression && parent instanceof PsiCallExpression callExpression) {
-        final PsiExpressionList argumentList = callExpression.getArgumentList();
+        PsiExpressionList argumentList = callExpression.getArgumentList();
         if (argumentList != null && argumentList.getExpressions().length == 1) {
           return true;
         }
       }
     } else if (e instanceof PsiJavaCodeReferenceElement) {
       if (parent instanceof PsiCall call) {
-        final PsiExpressionList argumentList = call.getArgumentList();
+        PsiExpressionList argumentList = call.getArgumentList();
         if (argumentList != null && argumentList.getExpressions().length == 1) {
           return true;
         }
@@ -77,7 +77,7 @@ public class JavaMethodParameterUnwrapper extends JavaUnwrapper {
   @Override
   protected void doUnwrap(PsiElement element, Context context) throws IncorrectOperationException {
     PsiElement methodCall = isTopLevelCall(element) ? element.getParent() : element.getParent().getParent();
-    final PsiElement extractedElement = isTopLevelCall(element) ? getArg(element) : element;
+    PsiElement extractedElement = isTopLevelCall(element) ? getArg(element) : element;
     context.extractElement(extractedElement, methodCall);
     if (methodCall.getParent() instanceof PsiExpressionList) {
       context.delete(methodCall);
@@ -88,9 +88,9 @@ public class JavaMethodParameterUnwrapper extends JavaUnwrapper {
   }
 
   private static PsiExpression getArg(PsiElement element) {
-    final PsiExpressionList argumentList = ((PsiCall)element.getParent()).getArgumentList();
+    PsiExpressionList argumentList = ((PsiCall)element.getParent()).getArgumentList();
     LOG.assertTrue(argumentList != null);
-    final PsiExpression[] args = argumentList.getExpressions();
+    PsiExpression[] args = argumentList.getExpressions();
     LOG.assertTrue(args.length == 1);
     return args[0];
   }

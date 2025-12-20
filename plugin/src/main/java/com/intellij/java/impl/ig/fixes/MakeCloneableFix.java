@@ -47,18 +47,18 @@ public class MakeCloneableFix extends InspectionGadgetsFix {
   @Override
   public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-    final PsiElement nameElement = descriptor.getPsiElement();
-    final PsiClass containingClass =
+    PsiElement nameElement = descriptor.getPsiElement();
+    PsiClass containingClass =
         ClassUtils.getContainingClass(nameElement);
     if (containingClass == null) {
       return;
     }
-    final PsiElementFactory elementFactory =
+    PsiElementFactory elementFactory =
         JavaPsiFacade.getElementFactory(project);
-    final GlobalSearchScope scope = GlobalSearchScope.allScope(project);
-    final PsiJavaCodeReferenceElement ref =
+    GlobalSearchScope scope = GlobalSearchScope.allScope(project);
+    PsiJavaCodeReferenceElement ref =
         elementFactory.createReferenceElementByFQClassName(CommonClassNames.JAVA_LANG_CLONEABLE, scope);
-    final PsiReferenceList extendsImplementsList;
+    PsiReferenceList extendsImplementsList;
     if (containingClass.isInterface()) {
       extendsImplementsList = containingClass.getExtendsList();
     } else {

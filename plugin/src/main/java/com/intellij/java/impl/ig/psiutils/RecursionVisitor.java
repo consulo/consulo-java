@@ -45,12 +45,12 @@ class RecursionVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     super.visitMethodCallExpression(call);
-    final PsiReferenceExpression methodExpression = call.getMethodExpression();
-    final String calledMethodName = methodExpression.getReferenceName();
+    PsiReferenceExpression methodExpression = call.getMethodExpression();
+    String calledMethodName = methodExpression.getReferenceName();
     if (!methodName.equals(calledMethodName)) {
       return;
     }
-    final PsiMethod calledMethod = call.resolveMethod();
+    PsiMethod calledMethod = call.resolveMethod();
     if (!method.equals(calledMethod)) {
       return;
     }
@@ -58,7 +58,7 @@ class RecursionVisitor extends JavaRecursiveElementVisitor {
       recursive = true;
       return;
     }
-    final PsiExpression qualifier = methodExpression.getQualifierExpression();
+    PsiExpression qualifier = methodExpression.getQualifierExpression();
     if (qualifier == null || qualifier instanceof PsiThisExpression) {
       recursive = true;
     }

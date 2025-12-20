@@ -45,7 +45,7 @@ public class ClassTreeNode extends BasePsiMemberNode<PsiClass>
 	public Collection<AbstractTreeNode> getChildrenImpl()
 	{
 		PsiClass parent = getValue();
-		final ArrayList<AbstractTreeNode> treeNodes = new ArrayList<>();
+		ArrayList<AbstractTreeNode> treeNodes = new ArrayList<>();
 
 		if(getSettings().isShowMembers())
 		{
@@ -90,7 +90,7 @@ public class ClassTreeNode extends BasePsiMemberNode<PsiClass>
 	@Override
 	public void updateImpl(PresentationData data)
 	{
-		final PsiClass aClass = getValue();
+		PsiClass aClass = getValue();
 		if(aClass != null)
 		{
 			if(aClass.hasTypeParameters())
@@ -139,7 +139,7 @@ public class ClassTreeNode extends BasePsiMemberNode<PsiClass>
 	@Override
 	public String getTitle()
 	{
-		final PsiClass psiClass = getValue();
+		PsiClass psiClass = getValue();
 		if(psiClass != null && psiClass.isValid())
 		{
 			return psiClass.getQualifiedName();
@@ -154,7 +154,7 @@ public class ClassTreeNode extends BasePsiMemberNode<PsiClass>
 	}
 
 	@Override
-	public int getTypeSortWeight(final boolean sortByType)
+	public int getTypeSortWeight(boolean sortByType)
 	{
 		return sortByType ? 5 : 0;
 	}
@@ -165,7 +165,7 @@ public class ClassTreeNode extends BasePsiMemberNode<PsiClass>
 		return new ClassNameSortKey();
 	}
 
-	public static int getClassPosition(final PsiClass aClass)
+	public static int getClassPosition(PsiClass aClass)
 	{
 		if(aClass == null || !aClass.isValid())
 		{
@@ -204,7 +204,7 @@ public class ClassTreeNode extends BasePsiMemberNode<PsiClass>
 	private class ClassNameSortKey implements Comparable
 	{
 		@Override
-		public int compareTo(final Object o)
+		public int compareTo(Object o)
 		{
 			if(!(o instanceof ClassNameSortKey))
 			{
@@ -227,7 +227,7 @@ public class ClassTreeNode extends BasePsiMemberNode<PsiClass>
 	}
 
 	@Override
-	public boolean canRepresent(final Object element)
+	public boolean canRepresent(Object element)
 	{
 		if(!isValid())
 		{
@@ -237,14 +237,14 @@ public class ClassTreeNode extends BasePsiMemberNode<PsiClass>
 		return super.canRepresent(element) || canRepresent(getValue(), element);
 	}
 
-	private boolean canRepresent(final PsiClass psiClass, final Object element)
+	private boolean canRepresent(PsiClass psiClass, Object element)
 	{
 		if(psiClass == null || !psiClass.isValid() || element == null)
 		{
 			return false;
 		}
 
-		final PsiFile parentFile = parentFileOf(psiClass);
+		PsiFile parentFile = parentFileOf(psiClass);
 		if(parentFile != null && (parentFile == element || element.equals(parentFile.getVirtualFile())))
 		{
 			return true;
@@ -266,7 +266,7 @@ public class ClassTreeNode extends BasePsiMemberNode<PsiClass>
 	}
 
 	@Nullable
-	private static PsiFile parentFileOf(final PsiClass psiClass)
+	private static PsiFile parentFileOf(PsiClass psiClass)
 	{
 		return psiClass.getContainingClass() == null ? psiClass.getContainingFile() : null;
 	}

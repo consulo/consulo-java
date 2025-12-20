@@ -75,38 +75,38 @@ public class VarargParameterInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiMethod method = (PsiMethod) element.getParent();
-            final PsiParameterList parameterList = method.getParameterList();
-            final PsiParameter[] parameters = parameterList.getParameters();
-            final PsiParameter lastParameter = parameters[parameters.length - 1];
+            PsiElement element = descriptor.getPsiElement();
+            PsiMethod method = (PsiMethod) element.getParent();
+            PsiParameterList parameterList = method.getParameterList();
+            PsiParameter[] parameters = parameterList.getParameters();
+            PsiParameter lastParameter = parameters[parameters.length - 1];
             if (!lastParameter.isVarArgs()) {
                 return;
             }
-            final PsiEllipsisType type = (PsiEllipsisType) lastParameter.getType();
-            final Query<PsiReference> query = ReferencesSearch.search(method);
-            final PsiType componentType = type.getComponentType();
-            final String typeText;
+            PsiEllipsisType type = (PsiEllipsisType) lastParameter.getType();
+            Query<PsiReference> query = ReferencesSearch.search(method);
+            PsiType componentType = type.getComponentType();
+            String typeText;
             if (componentType instanceof PsiClassType) {
-                final PsiClassType classType = (PsiClassType) componentType;
+                PsiClassType classType = (PsiClassType) componentType;
                 typeText = classType.rawType().getCanonicalText();
             }
             else {
                 typeText = componentType.getCanonicalText();
             }
-            final Collection<PsiReference> references = query.findAll();
+            Collection<PsiReference> references = query.findAll();
             for (PsiReference reference : references) {
                 modifyCalls(reference, typeText, parameters.length - 1);
             }
-            final PsiType arrayType = type.toArrayType();
-            final PsiManager psiManager = lastParameter.getManager();
-            final PsiElementFactory factory = JavaPsiFacade.getInstance(psiManager.getProject()).getElementFactory();
-            final PsiTypeElement newTypeElement = factory.createTypeElement(arrayType);
-            final PsiTypeElement typeElement = lastParameter.getTypeElement();
+            PsiType arrayType = type.toArrayType();
+            PsiManager psiManager = lastParameter.getManager();
+            PsiElementFactory factory = JavaPsiFacade.getInstance(psiManager.getProject()).getElementFactory();
+            PsiTypeElement newTypeElement = factory.createTypeElement(arrayType);
+            PsiTypeElement typeElement = lastParameter.getTypeElement();
             if (typeElement == null) {
                 return;
             }
-            final PsiAnnotation annotation = AnnotationUtil.findAnnotation(method, CommonClassNames.JAVA_LANG_SAFE_VARARGS);
+            PsiAnnotation annotation = AnnotationUtil.findAnnotation(method, CommonClassNames.JAVA_LANG_SAFE_VARARGS);
             if (annotation != null) {
                 annotation.delete();
             }
@@ -114,35 +114,35 @@ public class VarargParameterInspection extends BaseInspection {
         }
 
         public static void modifyCalls(PsiReference reference, String arrayTypeText, int indexOfFirstVarargArgument) {
-            final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) reference.getElement();
-            final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) referenceExpression.getParent();
-            final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
-            @NonNls final StringBuilder builder = new StringBuilder("new ");
+            PsiReferenceExpression referenceExpression = (PsiReferenceExpression) reference.getElement();
+            PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) referenceExpression.getParent();
+            PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
+            @NonNls StringBuilder builder = new StringBuilder("new ");
             builder.append(arrayTypeText);
             builder.append("[]{");
             if (arguments.length > indexOfFirstVarargArgument) {
-                final PsiExpression firstArgument = arguments[indexOfFirstVarargArgument];
-                final String firstArgumentText = firstArgument.getText();
+                PsiExpression firstArgument = arguments[indexOfFirstVarargArgument];
+                String firstArgumentText = firstArgument.getText();
                 builder.append(firstArgumentText);
                 for (int i = indexOfFirstVarargArgument + 1; i < arguments.length; i++) {
                     builder.append(',').append(arguments[i].getText());
                 }
             }
             builder.append('}');
-            final Project project = referenceExpression.getProject();
-            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-            final PsiExpression arrayExpression = factory.createExpressionFromText(builder.toString(), referenceExpression);
+            Project project = referenceExpression.getProject();
+            PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+            PsiExpression arrayExpression = factory.createExpressionFromText(builder.toString(), referenceExpression);
             if (arguments.length > indexOfFirstVarargArgument) {
-                final PsiExpression firstArgument = arguments[indexOfFirstVarargArgument];
+                PsiExpression firstArgument = arguments[indexOfFirstVarargArgument];
                 argumentList.deleteChildRange(firstArgument, arguments[arguments.length - 1]);
                 argumentList.add(arrayExpression);
             }
             else {
                 argumentList.add(arrayExpression);
             }
-            final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
-            final JavaCodeStyleManager javaCodeStyleManager = JavaCodeStyleManager.getInstance(project);
+            CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+            JavaCodeStyleManager javaCodeStyleManager = JavaCodeStyleManager.getInstance(project);
             javaCodeStyleManager.shortenClassReferences(argumentList);
             codeStyleManager.reformat(argumentList);
         }
@@ -157,12 +157,12 @@ public class VarargParameterInspection extends BaseInspection {
 
         @Override
         public void visitMethod(@Nonnull PsiMethod method) {
-            final PsiParameterList parameterList = method.getParameterList();
+            PsiParameterList parameterList = method.getParameterList();
             if (parameterList.getParametersCount() < 1) {
                 return;
             }
-            final PsiParameter[] parameters = parameterList.getParameters();
-            final PsiParameter lastParameter = parameters[parameters.length - 1];
+            PsiParameter[] parameters = parameterList.getParameters();
+            PsiParameter lastParameter = parameters[parameters.length - 1];
             if (lastParameter.isVarArgs()) {
                 registerMethodError(method);
             }

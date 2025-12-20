@@ -50,25 +50,25 @@ public class MergeCallSequenceToChainIntention extends Intention {
         if (!(element instanceof PsiExpressionStatement)) {
             return;
         }
-        final PsiExpressionStatement statement = (PsiExpressionStatement) element;
-        final PsiExpressionStatement nextSibling = PsiTreeUtil.getNextSiblingOfType(statement, PsiExpressionStatement.class);
+        PsiExpressionStatement statement = (PsiExpressionStatement) element;
+        PsiExpressionStatement nextSibling = PsiTreeUtil.getNextSiblingOfType(statement, PsiExpressionStatement.class);
         if (nextSibling == null) {
             return;
         }
-        final PsiExpression expression = statement.getExpression();
-        final StringBuilder newMethodCallExpression = new StringBuilder(expression.getText());
-        final PsiExpression expression1 = nextSibling.getExpression();
+        PsiExpression expression = statement.getExpression();
+        StringBuilder newMethodCallExpression = new StringBuilder(expression.getText());
+        PsiExpression expression1 = nextSibling.getExpression();
         if (!(expression1 instanceof PsiMethodCallExpression)) {
             return;
         }
         PsiMethodCallExpression methodCallExpression = getRootMethodCallExpression((PsiMethodCallExpression) expression1);
         while (true) {
-            final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-            final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+            PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+            String methodName = methodExpression.getReferenceName();
             newMethodCallExpression.append('.').append(methodName).append(argumentList.getText());
-            final PsiElement parent = methodCallExpression.getParent();
-            final PsiElement grandParent = parent.getParent();
+            PsiElement parent = methodCallExpression.getParent();
+            PsiElement grandParent = parent.getParent();
             if (!(grandParent instanceof PsiMethodCallExpression)) {
                 break;
             }
@@ -79,10 +79,10 @@ public class MergeCallSequenceToChainIntention extends Intention {
     }
 
     public static PsiMethodCallExpression getRootMethodCallExpression(PsiMethodCallExpression expression) {
-        final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-        final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
+        PsiReferenceExpression methodExpression = expression.getMethodExpression();
+        PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
         if (qualifierExpression instanceof PsiMethodCallExpression) {
-            final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) qualifierExpression;
+            PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) qualifierExpression;
             return getRootMethodCallExpression(methodCallExpression);
         }
         return expression;

@@ -47,17 +47,17 @@ public class ConfigFileContainerImpl implements ConfigFileContainer {
   private final ConfigFileInfoSetImpl myConfiguration;
   private long myModificationCount;
 
-  public ConfigFileContainerImpl(final Project project, final ConfigFileMetaDataProvider descriptorMetaDataProvider,
-                                 final ConfigFileInfoSetImpl configuration) {
+  public ConfigFileContainerImpl(Project project, ConfigFileMetaDataProvider descriptorMetaDataProvider,
+                                 ConfigFileInfoSetImpl configuration) {
     myConfiguration = configuration;
     myMetaDataProvider = descriptorMetaDataProvider;
     myProject = project;
     VirtualFileManager.getInstance().addVirtualFileListener(new VirtualFileAdapter() {
-      public void propertyChanged(final VirtualFilePropertyEvent event) {
+      public void propertyChanged(VirtualFilePropertyEvent event) {
         fileChanged(event.getFile());
       }
 
-      public void fileMoved(final VirtualFileMoveEvent event) {
+      public void fileMoved(VirtualFileMoveEvent event) {
         fileChanged(event.getFile());
       }
     }, this);
@@ -73,9 +73,9 @@ public class ConfigFileContainerImpl implements ConfigFileContainer {
     return myModificationCount;
   }
 
-  private void fileChanged(final VirtualFile file) {
+  private void fileChanged(VirtualFile file) {
     for (ConfigFile descriptor : myConfigFiles.values()) {
-      final VirtualFile virtualFile = descriptor.getVirtualFile();
+      VirtualFile virtualFile = descriptor.getVirtualFile();
       if (virtualFile != null && VirtualFileUtil.isAncestor(file, virtualFile, false)) {
         myConfiguration.updateConfigFile(descriptor);
         fireDescriptorChanged(descriptor);
@@ -85,7 +85,7 @@ public class ConfigFileContainerImpl implements ConfigFileContainer {
 
   @Nullable
   public ConfigFile getConfigFile(ConfigFileMetaData metaData) {
-    final Collection<ConfigFile> descriptors = myConfigFiles.get(metaData);
+    Collection<ConfigFile> descriptors = myConfigFiles.get(metaData);
     if (descriptors == null || descriptors.isEmpty()) {
       return null;
     }
@@ -94,7 +94,7 @@ public class ConfigFileContainerImpl implements ConfigFileContainer {
 
   public ConfigFile[] getConfigFiles() {
     if (myCachedConfigFiles == null) {
-      final Collection<ConfigFile> descriptors = myConfigFiles.values();
+      Collection<ConfigFile> descriptors = myConfigFiles.values();
       myCachedConfigFiles = descriptors.toArray(new ConfigFile[descriptors.size()]);
     }
     return myCachedConfigFiles;
@@ -104,11 +104,11 @@ public class ConfigFileContainerImpl implements ConfigFileContainer {
     return myProject;
   }
 
-  public void addListener(final ConfigFileListener listener, final Disposable parentDisposable) {
+  public void addListener(ConfigFileListener listener, Disposable parentDisposable) {
     myDispatcher.addListener(listener, parentDisposable);
   }
 
-  public void fireDescriptorChanged(final ConfigFile descriptor) {
+  public void fireDescriptorChanged(ConfigFile descriptor) {
     incModificationCount();
     myDispatcher.getMulticaster().configFileChanged(descriptor);
   }
@@ -122,11 +122,11 @@ public class ConfigFileContainerImpl implements ConfigFileContainer {
     int i = 0;
   }
 
-  public void addListener(final ConfigFileListener listener) {
+  public void addListener(ConfigFileListener listener) {
     myDispatcher.addListener(listener);
   }
 
-  public void removeListener(final ConfigFileListener listener) {
+  public void removeListener(ConfigFileListener listener) {
     myDispatcher.removeListener(listener);
   }
 
@@ -134,14 +134,14 @@ public class ConfigFileContainerImpl implements ConfigFileContainer {
     return myMetaDataProvider;
   }
 
-  public void updateDescriptors(final MultiValuesMap<ConfigFileMetaData, ConfigFileInfo> descriptorsMap) {
+  public void updateDescriptors(MultiValuesMap<ConfigFileMetaData, ConfigFileInfo> descriptorsMap) {
     Set<ConfigFile> toDelete = new HashSet<ConfigFile>(myConfigFiles.values());
     Set<ConfigFile> added = new HashSet<ConfigFile>();
 
     for (Map.Entry<ConfigFileMetaData, Collection<ConfigFileInfo>> entry : descriptorsMap.entrySet()) {
       ConfigFileMetaData metaData = entry.getKey();
       Set<ConfigFileInfo> newDescriptors = new HashSet<ConfigFileInfo>(entry.getValue());
-      final Collection<ConfigFile> oldDescriptors = myConfigFiles.get(metaData);
+      Collection<ConfigFile> oldDescriptors = myConfigFiles.get(metaData);
       if (oldDescriptors != null) {
         for (ConfigFile descriptor : oldDescriptors) {
           if (newDescriptors.contains(descriptor.getInfo())) {
@@ -151,7 +151,7 @@ public class ConfigFileContainerImpl implements ConfigFileContainer {
         }
       }
       for (ConfigFileInfo configuration : newDescriptors) {
-        final ConfigFileImpl configFile = new ConfigFileImpl(this, configuration);
+        ConfigFileImpl configFile = new ConfigFileImpl(this, configuration);
         Disposer.register(this, configFile);
         myConfigFiles.put(metaData, configFile);
         added.add(configFile);

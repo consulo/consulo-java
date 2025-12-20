@@ -49,8 +49,8 @@ abstract class StaticMembersProcessor<T extends PsiMember & PsiDocCommentOwner> 
 
     @Nonnull
     public List<T> getMembersToImport(boolean applicableOnly) {
-        final List<T> list = new ArrayList<>();
-        final List<T> applicableList = new ArrayList<>();
+        List<T> list = new ArrayList<>();
+        List<T> applicableList = new ArrayList<>();
         for (Map.Entry<PsiClass, Collection<T>> methodEntry : mySuggestions.entrySet()) {
             registerMember(methodEntry.getKey(), methodEntry.getValue(), list, applicableList);
         }
@@ -81,10 +81,10 @@ abstract class StaticMembersProcessor<T extends PsiMember & PsiDocCommentOwner> 
         if (StaticImportMemberFix.isExcluded(member)) {
             return true;
         }
-        final PsiClass containingClass = member.getContainingClass();
+        PsiClass containingClass = member.getContainingClass();
         if (containingClass != null) {
-            final String qualifiedName = containingClass.getQualifiedName();
-            final PsiFile containingFile = myPlace.getContainingFile();
+            String qualifiedName = containingClass.getQualifiedName();
+            PsiFile containingFile = myPlace.getContainingFile();
             if (qualifiedName != null && containingFile != null && !ImportFilter.shouldImport(containingFile, qualifiedName)) {
                 return true;
             }

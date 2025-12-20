@@ -50,18 +50,18 @@ import java.util.stream.Stream;
  */
 public class MetaAnnotationUtil {
   private static final HashingStrategy<PsiClass> HASHING_STRATEGY = new HashingStrategy<PsiClass>() {
-    public int hashCode(final PsiClass object) {
-      final String qualifiedName = object.getQualifiedName();
+    public int hashCode(PsiClass object) {
+      String qualifiedName = object.getQualifiedName();
       return qualifiedName == null ? 0 : qualifiedName.hashCode();
     }
 
-    public boolean equals(final PsiClass o1, final PsiClass o2) {
+    public boolean equals(PsiClass o1, PsiClass o2) {
       return Comparing.equal(o1.getQualifiedName(), o2.getQualifiedName());
     }
   };
 
-  public static Collection<PsiClass> getAnnotationTypesWithChildren(@Nonnull final Module module, final String annotationName, final boolean includeTests) {
-    final Project project = module.getProject();
+  public static Collection<PsiClass> getAnnotationTypesWithChildren(@Nonnull Module module, String annotationName, boolean includeTests) {
+    Project project = module.getProject();
 
     Map<Pair<String, Boolean>, Collection<PsiClass>> map = CachedValuesManager.getManager(project).getCachedValue(module, () ->
     {
@@ -84,17 +84,17 @@ public class MetaAnnotationUtil {
     return map.get(Pair.create(annotationName, includeTests));
   }
 
-  public static Set<PsiClass> getChildren(final PsiClass psiClass, final GlobalSearchScope scope) {
+  public static Set<PsiClass> getChildren(PsiClass psiClass, GlobalSearchScope scope) {
     if (AnnotationTargetUtil.findAnnotationTarget(psiClass, PsiAnnotation.TargetType.ANNOTATION_TYPE, PsiAnnotation.TargetType.TYPE) == null) {
       return Collections.emptySet();
     }
 
-    final String name = psiClass.getQualifiedName();
+    String name = psiClass.getQualifiedName();
     if (name == null) {
       return Collections.emptySet();
     }
 
-    final Set<PsiClass> result = Sets.newHashSet(HASHING_STRATEGY);
+    Set<PsiClass> result = Sets.newHashSet(HASHING_STRATEGY);
 
     AnnotatedElementsSearch.searchPsiClasses(psiClass, scope).forEach(processorResult ->
     {
@@ -107,13 +107,13 @@ public class MetaAnnotationUtil {
     return result;
   }
 
-  public static Collection<PsiClass> getAnnotatedTypes(final Module module, final Key<CachedValue<Collection<PsiClass>>> key, final String annotationName) {
+  public static Collection<PsiClass> getAnnotatedTypes(Module module, Key<CachedValue<Collection<PsiClass>>> key, String annotationName) {
     return CachedValuesManager.getManager(module.getProject()).getCachedValue(module, key, () ->
     {
-      final GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module, false);
-      final PsiClass psiClass = JavaPsiFacade.getInstance(module.getProject()).findClass(annotationName, scope);
+      GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module, false);
+      PsiClass psiClass = JavaPsiFacade.getInstance(module.getProject()).findClass(annotationName, scope);
 
-      final Collection<PsiClass> classes;
+      Collection<PsiClass> classes;
       if (psiClass == null || !psiClass.isAnnotationType()) {
         classes = Collections.emptyList();
       } else {
@@ -125,7 +125,7 @@ public class MetaAnnotationUtil {
 
   @Nonnull
   private static Collection<PsiClass> getAnnotationTypesWithChildren(PsiClass annotationClass, GlobalSearchScope scope) {
-    final Set<PsiClass> classes = Sets.newHashSet(HASHING_STRATEGY);
+    Set<PsiClass> classes = Sets.newHashSet(HASHING_STRATEGY);
 
     collectClassWithChildren(annotationClass, classes, scope);
 
@@ -148,7 +148,7 @@ public class MetaAnnotationUtil {
     });
   }
 
-  private static void collectClassWithChildren(final PsiClass psiClass, final Set<PsiClass> classes, final GlobalSearchScope scope) {
+  private static void collectClassWithChildren(PsiClass psiClass, Set<PsiClass> classes, GlobalSearchScope scope) {
     classes.add(psiClass);
 
     for (PsiClass aClass : getChildren(psiClass, scope)) {
@@ -161,12 +161,12 @@ public class MetaAnnotationUtil {
   /**
    * Check if listOwner is annotated with annotations or listOwner's annotations contain given annotations
    */
-  public static boolean isMetaAnnotated(@Nonnull PsiModifierListOwner listOwner, @Nonnull final Collection<String> annotations) {
+  public static boolean isMetaAnnotated(@Nonnull PsiModifierListOwner listOwner, @Nonnull Collection<String> annotations) {
     if (AnnotationUtil.isAnnotated(listOwner, annotations, false)) {
       return true;
     }
 
-    final List<PsiClass> resolvedAnnotations = getResolvedClassesInAnnotationsList(listOwner);
+    List<PsiClass> resolvedAnnotations = getResolvedClassesInAnnotationsList(listOwner);
     for (String annotationFQN : annotations) {
       for (PsiClass resolvedAnnotation : resolvedAnnotations) {
         if (metaAnnotationCached(resolvedAnnotation, annotationFQN) != null) {
@@ -189,7 +189,7 @@ public class MetaAnnotationUtil {
   }
 
   @Nullable
-  private static PsiAnnotation findMetaAnnotation(PsiClass aClass, final String annotation, final Set<PsiClass> visited) {
+  private static PsiAnnotation findMetaAnnotation(PsiClass aClass, String annotation, Set<PsiClass> visited) {
     PsiAnnotation directAnnotation = AnnotationUtil.findAnnotation(aClass, annotation);
     if (directAnnotation != null) {
       return directAnnotation;
@@ -209,7 +209,7 @@ public class MetaAnnotationUtil {
 
 
   @Nonnull
-  public static Stream<PsiAnnotation> findMetaAnnotations(@Nonnull PsiModifierListOwner listOwner, @Nonnull final Collection<String> annotations) {
+  public static Stream<PsiAnnotation> findMetaAnnotations(@Nonnull PsiModifierListOwner listOwner, @Nonnull Collection<String> annotations) {
     Stream<PsiAnnotation> directAnnotations = Stream.of(AnnotationUtil.findAnnotations(listOwner, annotations));
 
     Stream<PsiClass> lazyResolvedAnnotations = Stream.generate(() -> getResolvedClassesInAnnotationsList(listOwner)).limit(1).flatMap(it -> it.stream());

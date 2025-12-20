@@ -57,15 +57,15 @@ class ImportsAreUsedVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     // during typing there can be incomplete code
-    final JavaResolveResult resolveResult = reference.advancedResolve(true);
-    final PsiElement element = resolveResult.getElement();
+    JavaResolveResult resolveResult = reference.advancedResolve(true);
+    PsiElement element = resolveResult.getElement();
     if (element == null) {
       return;
     }
     if (findImport(element, usedImportStatements) != null) {
       return;
     }
-    final PsiImportStatementBase foundImport = findImport(element, importStatements);
+    PsiImportStatementBase foundImport = findImport(element, importStatements);
     if (foundImport != null) {
       removeAll(foundImport);
       usedImportStatements.add(foundImport);
@@ -73,10 +73,10 @@ class ImportsAreUsedVisitor extends JavaRecursiveElementVisitor {
   }
 
   private static PsiImportStatementBase findImport(PsiElement element, List<PsiImportStatementBase> importStatements) {
-    final String qualifiedName;
-    final String packageName;
+    String qualifiedName;
+    String packageName;
     if (element instanceof PsiClass) {
-      final PsiClass referencedClass = (PsiClass)element;
+      PsiClass referencedClass = (PsiClass)element;
       qualifiedName = referencedClass.getQualifiedName();
       packageName = qualifiedName != null ? StringUtil.getPackageName(qualifiedName) : null;
     }
@@ -84,10 +84,10 @@ class ImportsAreUsedVisitor extends JavaRecursiveElementVisitor {
       qualifiedName = null;
       packageName = null;
     }
-    final PsiClass referenceClass;
-    final String referenceName;
+    PsiClass referenceClass;
+    String referenceName;
     if (element instanceof PsiMember) {
-      final PsiMember member = (PsiMember)element;
+      PsiMember member = (PsiMember)element;
       if (member instanceof PsiClass && !member.hasModifierProperty(PsiModifier.STATIC)) {
         referenceClass = null;
         referenceName = null;
@@ -103,8 +103,8 @@ class ImportsAreUsedVisitor extends JavaRecursiveElementVisitor {
     }
     for (PsiImportStatementBase importStatementBase : importStatements) {
       if (importStatementBase instanceof PsiImportStatement && qualifiedName != null && packageName != null) {
-        final PsiImportStatement importStatement = (PsiImportStatement)importStatementBase;
-        final String importName = importStatement.getQualifiedName();
+        PsiImportStatement importStatement = (PsiImportStatement)importStatementBase;
+        String importName = importStatement.getQualifiedName();
         if (importName != null) {
           if (importStatement.isOnDemand()) {
             if (importName.equals(packageName)) {
@@ -117,15 +117,15 @@ class ImportsAreUsedVisitor extends JavaRecursiveElementVisitor {
         }
       }
       if (importStatementBase instanceof PsiImportStaticStatement && referenceClass != null && referenceName != null) {
-        final PsiImportStaticStatement importStaticStatement = (PsiImportStaticStatement)importStatementBase;
+        PsiImportStaticStatement importStaticStatement = (PsiImportStaticStatement)importStatementBase;
         if (importStaticStatement.isOnDemand()) {
-          final PsiClass targetClass = importStaticStatement.resolveTargetClass();
+          PsiClass targetClass = importStaticStatement.resolveTargetClass();
           if (InheritanceUtil.isInheritorOrSelf(targetClass, referenceClass, true)) {
             return importStaticStatement;
           }
         }
         else {
-          final String importReferenceName = importStaticStatement.getReferenceName();
+          String importReferenceName = importStaticStatement.getReferenceName();
           if (importReferenceName != null) {
             if (importReferenceName.equals(referenceName)) {
               return importStaticStatement;
@@ -139,9 +139,9 @@ class ImportsAreUsedVisitor extends JavaRecursiveElementVisitor {
 
   private void removeAll(@Nonnull PsiImportStatementBase importStatement) {
     for (int i = importStatements.size() - 1; i >= 0; i--) {
-      final PsiImportStatementBase statement = importStatements.get(i);
-      final String statementText = statement.getText();
-      final String importText = importStatement.getText();
+      PsiImportStatementBase statement = importStatements.get(i);
+      String statementText = statement.getText();
+      String importText = importStatement.getText();
       if (importText.equals(statementText)) {
         importStatements.remove(i);
       }

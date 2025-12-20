@@ -63,11 +63,11 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
     @Override
     @Nullable
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiExpression expression = (PsiExpression) infos[0];
-        final boolean removeToString = ((Boolean) infos[1]).booleanValue();
-        final PsiArrayType type = (PsiArrayType) expression.getType();
+        PsiExpression expression = (PsiExpression) infos[0];
+        boolean removeToString = ((Boolean) infos[1]).booleanValue();
+        PsiArrayType type = (PsiArrayType) expression.getType();
         if (type != null) {
-            final PsiType componentType = type.getComponentType();
+            PsiType componentType = type.getComponentType();
             if (componentType instanceof PsiArrayType) {
                 return new ImplicitArrayToStringFix(true, removeToString);
             }
@@ -100,21 +100,21 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiExpression expression;
+            PsiElement element = descriptor.getPsiElement();
+            PsiExpression expression;
             if (element instanceof PsiExpression) {
                 expression = (PsiExpression) element;
             }
             else {
                 expression = (PsiExpression) element.getParent().getParent();
             }
-            final String expressionText;
+            String expressionText;
             if (removeToString) {
-                final PsiMethodCallExpression methodCallExpression =
+                PsiMethodCallExpression methodCallExpression =
                     (PsiMethodCallExpression) expression;
-                final PsiReferenceExpression methodExpression =
+                PsiReferenceExpression methodExpression =
                     methodCallExpression.getMethodExpression();
-                final PsiExpression qualifier =
+                PsiExpression qualifier =
                     methodExpression.getQualifierExpression();
                 if (qualifier == null) {
                     return;
@@ -124,7 +124,7 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
             else {
                 expressionText = expression.getText();
             }
-            @NonNls final String newExpressionText;
+            @NonNls String newExpressionText;
             if (deepString) {
                 newExpressionText =
                     "java.util.Arrays.deepToString(" + expressionText + ')';
@@ -133,13 +133,13 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
                 newExpressionText =
                     "java.util.Arrays.toString(" + expressionText + ')';
             }
-            final PsiElement parent = expression.getParent();
+            PsiElement parent = expression.getParent();
             if (parent instanceof PsiExpressionList) {
-                final PsiElement grandParent = parent.getParent();
+                PsiElement grandParent = parent.getParent();
                 if (grandParent instanceof PsiMethodCallExpression) {
-                    final PsiMethodCallExpression methodCallExpression =
+                    PsiMethodCallExpression methodCallExpression =
                         (PsiMethodCallExpression) grandParent;
-                    final PsiReferenceExpression methodExpression =
+                    PsiReferenceExpression methodExpression =
                         methodCallExpression.getMethodExpression();
                     if ("valueOf".equals(methodExpression.getReferenceName())) {
                         replaceExpressionAndShorten(
@@ -188,9 +188,9 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
         ) {
             super.visitMethodCallExpression(expression);
             if (isExplicitArrayToStringCall(expression)) {
-                final PsiReferenceExpression methodExpression =
+                PsiReferenceExpression methodExpression =
                     expression.getMethodExpression();
-                final PsiExpression qualifier =
+                PsiExpression qualifier =
                     methodExpression.getQualifierExpression();
                 registerMethodCallError(expression, qualifier, Boolean.TRUE);
                 return;
@@ -204,63 +204,63 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
         private static boolean isExplicitArrayToStringCall(
             PsiMethodCallExpression expression
         ) {
-            final PsiReferenceExpression methodExpression =
+            PsiReferenceExpression methodExpression =
                 expression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            String methodName = methodExpression.getReferenceName();
             if (!HardcodedMethodConstants.TO_STRING.equals(methodName)) {
                 return false;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length != 0) {
                 return false;
             }
-            final PsiExpression qualifier =
+            PsiExpression qualifier =
                 methodExpression.getQualifierExpression();
             if (qualifier == null) {
                 return false;
             }
-            final PsiType type = qualifier.getType();
+            PsiType type = qualifier.getType();
             return type instanceof PsiArrayType;
         }
 
         private static boolean isImplicitArrayToStringCall(
             PsiExpression expression
         ) {
-            final PsiType type = expression.getType();
+            PsiType type = expression.getType();
             if (!(type instanceof PsiArrayType)) {
                 return false;
             }
             if (ExpressionUtils.isStringConcatenationOperand(expression)) {
                 return true;
             }
-            final PsiElement parent = expression.getParent();
+            PsiElement parent = expression.getParent();
             if (parent instanceof PsiExpressionList) {
-                final PsiExpressionList expressionList =
+                PsiExpressionList expressionList =
                     (PsiExpressionList) parent;
-                final PsiArrayType arrayType = (PsiArrayType) type;
-                final PsiType componentType = arrayType.getComponentType();
+                PsiArrayType arrayType = (PsiArrayType) type;
+                PsiType componentType = arrayType.getComponentType();
                 if (componentType.equals(PsiType.CHAR)) {
                     return false;
                 }
-                final PsiElement grandParent = expressionList.getParent();
+                PsiElement grandParent = expressionList.getParent();
                 if (!(grandParent instanceof PsiMethodCallExpression)) {
                     return false;
                 }
-                final PsiExpression[] arguments =
+                PsiExpression[] arguments =
                     expressionList.getExpressions();
-                final PsiMethodCallExpression methodCallExpression =
+                PsiMethodCallExpression methodCallExpression =
                     (PsiMethodCallExpression) grandParent;
-                final PsiReferenceExpression methodExpression =
+                PsiReferenceExpression methodExpression =
                     methodCallExpression.getMethodExpression();
-                @NonNls final String methodName =
+                @NonNls String methodName =
                     methodExpression.getReferenceName();
-                final PsiMethod method =
+                PsiMethod method =
                     methodCallExpression.resolveMethod();
                 if (method == null) {
                     return false;
                 }
-                final PsiClass containingClass = method.getContainingClass();
+                PsiClass containingClass = method.getContainingClass();
                 if (containingClass == null) {
                     return false;
                 }
@@ -274,7 +274,7 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
                     if (arguments.length != 1) {
                         return false;
                     }
-                    final String qualifiedName =
+                    String qualifiedName =
                         containingClass.getQualifiedName();
                     return CommonClassNames.JAVA_LANG_STRING.equals(qualifiedName);
                 }
@@ -288,12 +288,12 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
                         if (arguments.length < 1) {
                             return false;
                         }
-                        final PsiParameterList parameterList =
+                        PsiParameterList parameterList =
                             method.getParameterList();
-                        final PsiParameter[] parameters =
+                        PsiParameter[] parameters =
                             parameterList.getParameters();
-                        final PsiParameter parameter = parameters[0];
-                        final PsiType firstParameterType = parameter.getType();
+                        PsiParameter parameter = parameters[0];
+                        PsiType firstParameterType = parameter.getType();
                         if (firstParameterType.equalsToText(
                             "java.util.Locale")) {
                             if (arguments.length < 4) {
@@ -307,7 +307,7 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
                         }
                     }
                 }
-                final String qualifiedName = containingClass.getQualifiedName();
+                String qualifiedName = containingClass.getQualifiedName();
                 if ("java.util.Formatter".equals(qualifiedName) ||
                     CommonClassNames.JAVA_LANG_STRING.equals(qualifiedName)) {
                     return true;

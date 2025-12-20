@@ -38,7 +38,7 @@ public class JavaImplementationTextSelectioner implements ImplementationTextSele
   private static final Logger LOG = Logger.getInstance(JavaImplementationTextSelectioner.class);
 
   @Override
-  public int getTextStartOffset(@Nonnull final PsiElement parent) {
+  public int getTextStartOffset(@Nonnull PsiElement parent) {
     PsiElement element = parent;
     if (element instanceof PsiDocCommentOwner) {
       PsiDocComment comment = ((PsiDocCommentOwner) element).getDocComment();

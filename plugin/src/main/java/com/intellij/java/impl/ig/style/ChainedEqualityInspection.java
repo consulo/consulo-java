@@ -56,13 +56,13 @@ public class ChainedEqualityInspection extends BaseInspection {
       if (!ComparisonUtils.isEqualityComparison(expression)) {
         return;
       }
-      final PsiElement parent = expression.getParent();
+      PsiElement parent = expression.getParent();
       if (parent instanceof PsiExpression) {
         if (ComparisonUtils.isEqualityComparison((PsiExpression)parent)) {
           return;
         }
       }
-      final PsiExpression[] operands = expression.getOperands();
+      PsiExpression[] operands = expression.getOperands();
       if (operands.length >= 3) {
         registerError(expression);
       }

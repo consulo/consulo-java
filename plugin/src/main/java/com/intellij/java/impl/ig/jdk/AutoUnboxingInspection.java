@@ -93,17 +93,17 @@ public class AutoUnboxingInspection extends BaseInspection {
         // Applying the quick fix in such a case would break the code
         // because the explicit unboxing code would split the expression in
         // multiple statements.
-        final PsiElement parent = location.getParent();
+        PsiElement parent = location.getParent();
         if (!(parent instanceof PsiPostfixExpression)) {
             return true;
         }
-        final PsiReferenceExpression reference;
+        PsiReferenceExpression reference;
         if (location instanceof PsiReferenceExpression) {
             reference = (PsiReferenceExpression) location;
         }
         else if (location instanceof PsiArrayAccessExpression) {
-            final PsiArrayAccessExpression arrayAccessExpression = (PsiArrayAccessExpression) location;
-            final PsiExpression expression = arrayAccessExpression.getArrayExpression();
+            PsiArrayAccessExpression arrayAccessExpression = (PsiArrayAccessExpression) location;
+            PsiExpression expression = arrayAccessExpression.getArrayExpression();
             if (!(expression instanceof PsiReferenceExpression)) {
                 return true;
             }
@@ -112,14 +112,14 @@ public class AutoUnboxingInspection extends BaseInspection {
         else {
             return true;
         }
-        final PsiElement element = reference.resolve();
+        PsiElement element = reference.resolve();
         if (element == null) {
             return true;
         }
-        final PsiStatement statement = PsiTreeUtil.getParentOfType(parent, PsiStatement.class);
-        final LocalSearchScope scope = new LocalSearchScope(statement);
-        final Query<PsiReference> query = ReferencesSearch.search(element, scope);
-        final Collection<PsiReference> references = query.findAll();
+        PsiStatement statement = PsiTreeUtil.getParentOfType(parent, PsiStatement.class);
+        LocalSearchScope scope = new LocalSearchScope(statement);
+        Query<PsiReference> query = ReferencesSearch.search(element, scope);
+        Collection<PsiReference> references = query.findAll();
         return references.size() <= 1;
     }
 
@@ -132,28 +132,28 @@ public class AutoUnboxingInspection extends BaseInspection {
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) {
-            final PsiExpression expression = (PsiExpression) descriptor.getPsiElement();
-            final PsiType type = expression.getType();
+            PsiExpression expression = (PsiExpression) descriptor.getPsiElement();
+            PsiType type = expression.getType();
             if (type == null) {
                 return;
             }
-            final PsiPrimitiveType unboxedType =
+            PsiPrimitiveType unboxedType =
                 (PsiPrimitiveType) ExpectedTypeUtils.findExpectedType(expression, false, true);
             if (unboxedType == null) {
                 return;
             }
-            final String newExpressionText = buildNewExpressionText(expression, unboxedType);
-            final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-            final PsiElementFactory factory = psiFacade.getElementFactory();
-            final PsiElement parent = expression.getParent();
-            final String expressionText = expression.getText();
+            String newExpressionText = buildNewExpressionText(expression, unboxedType);
+            JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+            PsiElementFactory factory = psiFacade.getElementFactory();
+            PsiElement parent = expression.getParent();
+            String expressionText = expression.getText();
             if (parent instanceof PsiTypeCastExpression) {
-                final PsiTypeCastExpression typeCastExpression = (PsiTypeCastExpression) parent;
+                PsiTypeCastExpression typeCastExpression = (PsiTypeCastExpression) parent;
                 PsiReplacementUtil.replaceExpression(typeCastExpression, newExpressionText);
             }
             else if (parent instanceof PsiPrefixExpression && !unboxedType.equalsToText("boolean")) {
-                final PsiPrefixExpression prefixExpression = (PsiPrefixExpression) parent;
-                final IElementType tokenType = prefixExpression.getOperationTokenType();
+                PsiPrefixExpression prefixExpression = (PsiPrefixExpression) parent;
+                IElementType tokenType = prefixExpression.getOperationTokenType();
                 if (JavaTokenType.PLUSPLUS.equals(tokenType)) {
                     PsiReplacementUtil.replaceExpression(prefixExpression, expressionText + '=' + newExpressionText + "+1");
                 }
@@ -168,9 +168,9 @@ public class AutoUnboxingInspection extends BaseInspection {
                 }
             }
             else if (parent instanceof PsiPostfixExpression) {
-                final PsiPostfixExpression postfixExpression = (PsiPostfixExpression) parent;
-                final IElementType tokenType = postfixExpression.getOperationTokenType();
-                final PsiElement grandParent = postfixExpression.getParent();
+                PsiPostfixExpression postfixExpression = (PsiPostfixExpression) parent;
+                IElementType tokenType = postfixExpression.getOperationTokenType();
+                PsiElement grandParent = postfixExpression.getParent();
                 if (grandParent instanceof PsiExpressionStatement) {
                     if (JavaTokenType.PLUSPLUS.equals(tokenType)) {
                         PsiReplacementUtil.replaceExpression(postfixExpression, expressionText + '=' + newExpressionText + "+1");
@@ -180,35 +180,35 @@ public class AutoUnboxingInspection extends BaseInspection {
                     }
                 }
                 else {
-                    final PsiElement element = postfixExpression.replace(postfixExpression.getOperand());
-                    final PsiStatement statement = PsiTreeUtil.getParentOfType(element, PsiStatement.class);
+                    PsiElement element = postfixExpression.replace(postfixExpression.getOperand());
+                    PsiStatement statement = PsiTreeUtil.getParentOfType(element, PsiStatement.class);
                     if (statement == null) {
                         return;
                     }
-                    final PsiStatement newStatement;
+                    PsiStatement newStatement;
                     if (JavaTokenType.PLUSPLUS.equals(tokenType)) {
                         newStatement = factory.createStatementFromText(expressionText + '=' + newExpressionText + "+1;", statement);
                     }
                     else {
                         newStatement = factory.createStatementFromText(expressionText + '=' + newExpressionText + "-1;", statement);
                     }
-                    final PsiElement greatGrandParent = statement.getParent();
+                    PsiElement greatGrandParent = statement.getParent();
                     greatGrandParent.addAfter(newStatement, statement);
                 }
             }
             else if (parent instanceof PsiAssignmentExpression) {
-                final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) parent;
-                final PsiExpression lExpression = assignmentExpression.getLExpression();
+                PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) parent;
+                PsiExpression lExpression = assignmentExpression.getLExpression();
                 if (expression.equals(lExpression)) {
-                    final PsiJavaToken operationSign = assignmentExpression.getOperationSign();
-                    final String operationSignText = operationSign.getText();
-                    final char sign = operationSignText.charAt(0);
-                    final PsiExpression rExpression = assignmentExpression.getRExpression();
+                    PsiJavaToken operationSign = assignmentExpression.getOperationSign();
+                    String operationSignText = operationSign.getText();
+                    char sign = operationSignText.charAt(0);
+                    PsiExpression rExpression = assignmentExpression.getRExpression();
                     if (rExpression == null) {
                         return;
                     }
-                    final String text = lExpression.getText() + '=' + newExpressionText + sign + rExpression.getText();
-                    final PsiExpression newExpression = factory.createExpressionFromText(text, assignmentExpression);
+                    String text = lExpression.getText() + '=' + newExpressionText + sign + rExpression.getText();
+                    PsiExpression newExpression = factory.createExpressionFromText(text, assignmentExpression);
                     assignmentExpression.replace(newExpression);
                 }
                 else {
@@ -221,26 +221,26 @@ public class AutoUnboxingInspection extends BaseInspection {
         }
 
         private static String buildNewExpressionText(PsiExpression expression, PsiPrimitiveType unboxedType) {
-            final String unboxedTypeText = unboxedType.getCanonicalText();
-            final String expressionText = expression.getText();
-            final String boxMethodName = s_unboxingMethods.get(unboxedTypeText);
+            String unboxedTypeText = unboxedType.getCanonicalText();
+            String expressionText = expression.getText();
+            String boxMethodName = s_unboxingMethods.get(unboxedTypeText);
             if (expression instanceof PsiTypeCastExpression) {
                 return '(' + expressionText + ")." + boxMethodName + "()";
             }
-            final String constantText = computeConstantBooleanText(expression);
+            String constantText = computeConstantBooleanText(expression);
             if (constantText != null) {
                 return constantText;
             }
             if (expression instanceof PsiMethodCallExpression) {
-                final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
+                PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
                 if (isValueOfCall(methodCallExpression)) {
-                    final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-                    final PsiExpression[] arguments = argumentList.getExpressions();
-                    final PsiExpression argument = arguments[0];
+                    PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+                    PsiExpression[] arguments = argumentList.getExpressions();
+                    PsiExpression argument = arguments[0];
                     return argument.getText();
                 }
             }
-            final PsiType type = expression.getType();
+            PsiType type = expression.getType();
             if (type != null && type.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
                 return "((" + unboxedType.getBoxedTypeName() + ')' + expressionText + ")." + boxMethodName + "()";
             }
@@ -248,13 +248,13 @@ public class AutoUnboxingInspection extends BaseInspection {
         }
 
         private static boolean isValueOfCall(PsiMethodCallExpression callExpr) {
-            final PsiExpressionList argumentList = callExpr.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = callExpr.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length != 1) {
                 return false;
             }
-            final PsiExpression argument = arguments[0];
-            final PsiType type = argument.getType();
+            PsiExpression argument = arguments[0];
+            PsiType type = argument.getType();
             return (MethodCallUtils.isCallToMethod(callExpr, CommonClassNames.JAVA_LANG_INTEGER, null, "valueOf", PsiType.INT) && PsiType.INT.equals(type))
                 || (MethodCallUtils.isCallToMethod(callExpr, CommonClassNames.JAVA_LANG_SHORT, null, "valueOf", PsiType.SHORT) && PsiType.SHORT.equals(type))
                 || (MethodCallUtils.isCallToMethod(callExpr, CommonClassNames.JAVA_LANG_BYTE, null, "valueOf", PsiType.BYTE) && PsiType.BYTE.equals(type))
@@ -269,21 +269,21 @@ public class AutoUnboxingInspection extends BaseInspection {
             if (!(expression instanceof PsiReferenceExpression)) {
                 return null;
             }
-            final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) expression;
-            final PsiElement target = referenceExpression.resolve();
+            PsiReferenceExpression referenceExpression = (PsiReferenceExpression) expression;
+            PsiElement target = referenceExpression.resolve();
             if (!(target instanceof PsiField)) {
                 return null;
             }
-            final PsiField field = (PsiField) target;
-            final PsiClass containingClass = field.getContainingClass();
+            PsiField field = (PsiField) target;
+            PsiClass containingClass = field.getContainingClass();
             if (containingClass == null) {
                 return null;
             }
-            final String qualifiedName = containingClass.getQualifiedName();
+            String qualifiedName = containingClass.getQualifiedName();
             if (!CommonClassNames.JAVA_LANG_BOOLEAN.equals(qualifiedName)) {
                 return null;
             }
-            @NonNls final String name = field.getName();
+            @NonNls String name = field.getName();
             if ("TRUE".equals(name)) {
                 return "true";
             }
@@ -323,28 +323,28 @@ public class AutoUnboxingInspection extends BaseInspection {
         public void visitReferenceExpression(PsiReferenceExpression expression) {
             super.visitReferenceExpression(expression);
             if (expression instanceof PsiMethodReferenceExpression) {
-                final PsiMethodReferenceExpression methodReferenceExpression = (PsiMethodReferenceExpression) expression;
+                PsiMethodReferenceExpression methodReferenceExpression = (PsiMethodReferenceExpression) expression;
                 if (methodReferenceExpression.isConstructor()) {
                     return;
                 }
-                final PsiElement referenceNameElement = methodReferenceExpression.getReferenceNameElement();
+                PsiElement referenceNameElement = methodReferenceExpression.getReferenceNameElement();
                 if (referenceNameElement == null) {
                     return;
                 }
-                final PsiElement target = methodReferenceExpression.resolve();
+                PsiElement target = methodReferenceExpression.resolve();
                 if (!(target instanceof PsiMethod)) {
                     return;
                 }
-                final PsiMethod method = (PsiMethod) target;
-                final PsiType returnType = method.getReturnType();
+                PsiMethod method = (PsiMethod) target;
+                PsiType returnType = method.getReturnType();
                 if (!TypeConversionUtil.isAssignableFromPrimitiveWrapper(returnType)) {
                     return;
                 }
-                final PsiPrimitiveType unboxedType = PsiPrimitiveType.getUnboxedType(returnType);
+                PsiPrimitiveType unboxedType = PsiPrimitiveType.getUnboxedType(returnType);
                 if (unboxedType == null) {
                     return;
                 }
-                final PsiType functionalInterfaceReturnType = LambdaUtil.getFunctionalInterfaceReturnType(methodReferenceExpression);
+                PsiType functionalInterfaceReturnType = LambdaUtil.getFunctionalInterfaceReturnType(methodReferenceExpression);
                 if (functionalInterfaceReturnType == null || !ClassUtils.isPrimitive(functionalInterfaceReturnType) ||
                     !functionalInterfaceReturnType.isAssignableFrom(unboxedType)) {
                     return;
@@ -365,7 +365,7 @@ public class AutoUnboxingInspection extends BaseInspection {
         @Override
         public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method != null && AnnotationUtil.isAnnotated(
                 method,
                 Collections.singletonList("java.lang.invoke.MethodHandle.PolymorphicSignature")
@@ -397,16 +397,16 @@ public class AutoUnboxingInspection extends BaseInspection {
             if (expression.getParent() instanceof PsiParenthesizedExpression) {
                 return;
             }
-            final PsiType expressionType = expression.getType();
+            PsiType expressionType = expression.getType();
             if (!TypeConversionUtil.isAssignableFromPrimitiveWrapper(expressionType)) {
                 return;
             }
-            final PsiType expectedType = ExpectedTypeUtils.findExpectedType(expression, false, true);
+            PsiType expectedType = ExpectedTypeUtils.findExpectedType(expression, false, true);
             if (!TypeConversionUtil.isPrimitiveAndNotNull(expectedType)) {
                 return;
             }
             if (!(expression.getParent() instanceof PsiTypeCastExpression)) {
-                final PsiPrimitiveType unboxedType = PsiPrimitiveType.getUnboxedType(expressionType);
+                PsiPrimitiveType unboxedType = PsiPrimitiveType.getUnboxedType(expressionType);
                 if (unboxedType == null || !expectedType.isAssignableFrom(unboxedType)) {
                     return;
                 }

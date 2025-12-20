@@ -41,8 +41,8 @@ public class ExpressionUtil {
   }
 
   @Nullable
-  public static String[] getNames(final ExpressionContext context) {
-    final Project project = context.getProject();
+  public static String[] getNames(ExpressionContext context) {
+    Project project = context.getProject();
     final int offset = context.getStartOffset();
 
     PsiDocumentManager.getInstance(project).commitAllDocuments();
@@ -83,10 +83,10 @@ public class ExpressionUtil {
         if (var instanceof PsiParameter && ((PsiParameter) var).getDeclarationScope() instanceof PsiForeachStatement) {
           //synthesize initializer
           PsiForeachStatement foreachStatement = (PsiForeachStatement) ((PsiParameter) var).getDeclarationScope();
-          final PsiExpression iteratedValue = foreachStatement.getIteratedValue();
+          PsiExpression iteratedValue = foreachStatement.getIteratedValue();
           if (iteratedValue != null) {
             try {
-              final PsiArrayAccessExpression expr = (PsiArrayAccessExpression) JavaPsiFacade.getInstance(iteratedValue.getProject())
+              PsiArrayAccessExpression expr = (PsiArrayAccessExpression) JavaPsiFacade.getInstance(iteratedValue.getProject())
                   .getElementFactory().createExpressionFromText("a[0]", var);
               expr.getArrayExpression().replace(iteratedValue);
               initializer = expr; //note: non physical with no parent

@@ -511,7 +511,7 @@ public abstract class SmartTypeCompletionTest extends LightFixtureCompletionTest
 
   public void testAnonymousNoPairBracket() throws Throwable { doTestNoPairBracket(Lookup.NORMAL_SELECT_CHAR); }
 
-  private void doTestNoPairBracket(final char c) throws Exception {
+  private void doTestNoPairBracket(char c) throws Exception {
     boolean old = CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET;
     CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET = false;
     try {
@@ -638,9 +638,9 @@ public abstract class SmartTypeCompletionTest extends LightFixtureCompletionTest
   public void _testDefaultAnnoParam2() throws Throwable { doTest(); }
 
   public void testLiveTemplate() throws Throwable {
-    final Template template = TemplateManager.getInstance(getProject()).createTemplate("foo", "zzz");
+    Template template = TemplateManager.getInstance(getProject()).createTemplate("foo", "zzz");
     template.addTextSegment("FooFactory.createFoo()");
-    final SmartCompletionContextType completionContextType =
+    SmartCompletionContextType completionContextType =
       ContainerUtil.findInstance(TemplateContextType.EP_NAME.getExtensions(), SmartCompletionContextType.class);
     ((TemplateImpl)template).getTemplateContext().setEnabled(completionContextType, true);
     TemplateSettings.getInstance().addTemplate(template);
@@ -1111,7 +1111,7 @@ public abstract class SmartTypeCompletionTest extends LightFixtureCompletionTest
 
     getLookup().setCurrentItem(ContainerUtil.find(myItems, new Condition<LookupElement>() {
       @Override
-      public boolean value(final LookupElement lookupItem) {
+      public boolean value(LookupElement lookupItem) {
         return "Bar.Fubar.Bar".equals(lookupItem.getLookupString());
       }
     }));
@@ -1152,7 +1152,7 @@ public abstract class SmartTypeCompletionTest extends LightFixtureCompletionTest
     doTest(Lookup.NORMAL_SELECT_CHAR);
   }
 
-  private void doTest(final char c) {
+  private void doTest(char c) {
     boolean old = CodeInsightSettings.getInstance().AUTOCOMPLETE_ON_SMART_TYPE_COMPLETION;
     if (c != Lookup.NORMAL_SELECT_CHAR) {
       CodeInsightSettings.getInstance().AUTOCOMPLETE_ON_SMART_TYPE_COMPLETION = false;
@@ -1186,8 +1186,8 @@ public abstract class SmartTypeCompletionTest extends LightFixtureCompletionTest
     select(Lookup.NORMAL_SELECT_CHAR);
   }
 
-  private void select(final char c) {
-    final Lookup lookup = getLookup();
+  private void select(char c) {
+    Lookup lookup = getLookup();
     if (lookup != null) {
       selectItem(lookup.getCurrentItem(), c);
     }

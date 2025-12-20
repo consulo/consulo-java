@@ -68,11 +68,11 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection {
 
     @Override
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final boolean packageInfoExists = (Boolean) infos[1];
+        boolean packageInfoExists = (Boolean) infos[1];
         if (packageInfoExists) {
             return new DeletePackageDotHtmlFix();
         }
-        final String aPackage = (String) infos[0];
+        String aPackage = (String) infos[0];
         return new PackageDotHtmlMayBePackageInfoFix(aPackage);
     }
 
@@ -136,15 +136,15 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection {
             new WriteCommandAction.Simple(project, InspectionGadgetsLocalize.packageDotHtmlConvertCommand().get(), file) {
                 @Override
                 protected void run() throws Throwable {
-                    final PsiJavaFile file = (PsiJavaFile) directory.createFile("package-info.java");
+                    PsiJavaFile file = (PsiJavaFile) directory.createFile("package-info.java");
                     CommandProcessor.getInstance().addAffectedFiles(project, file.getVirtualFile());
-                    final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
+                    PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
                     String packageInfoText = getPackageInfoText(xmlFile);
                     if (packageInfoText == null) {
                         packageInfoText = xmlFile.getText();
                     }
-                    final StringBuilder commentText = new StringBuilder("/**\n");
-                    final String[] lines = StringUtil.splitByLines(packageInfoText);
+                    StringBuilder commentText = new StringBuilder("/**\n");
+                    String[] lines = StringUtil.splitByLines(packageInfoText);
                     boolean appended = false;
                     for (String line : lines) {
                         if (!appended && line.length() == 0) {
@@ -155,10 +155,10 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection {
                         appended = true;
                     }
                     commentText.append("*/");
-                    final PsiDocComment comment = elementFactory.createDocCommentFromText(commentText.toString());
+                    PsiDocComment comment = elementFactory.createDocCommentFromText(commentText.toString());
                     if (aPackage.length() > 0) {
-                        final PsiPackageStatement packageStatement = elementFactory.createPackageStatement(aPackage);
-                        final PsiElement addedElement = file.add(packageStatement);
+                        PsiPackageStatement packageStatement = elementFactory.createPackageStatement(aPackage);
+                        PsiElement addedElement = file.add(packageStatement);
                         file.addBefore(comment, addedElement);
                     }
                     else {
@@ -168,10 +168,10 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection {
                     if (!isOnTheFly()) {
                         return;
                     }
-                    final AsyncResult<DataContext> dataContextFromFocus = DataManager.getInstance().getDataContextFromFocus();
+                    AsyncResult<DataContext> dataContextFromFocus = DataManager.getInstance().getDataContextFromFocus();
                     dataContextFromFocus.doWhenDone(dataContext -> {
-                        final FileEditorManager editorManager = FileEditorManager.getInstance(project);
-                        final VirtualFile virtualFile = file.getVirtualFile();
+                        FileEditorManager editorManager = FileEditorManager.getInstance(project);
+                        VirtualFile virtualFile = file.getVirtualFile();
                         if (virtualFile == null) {
                             return;
                         }
@@ -188,19 +188,19 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection {
 
         @Nullable
         private static String getPackageInfoText(XmlFile xmlFile) {
-            final XmlTag rootTag = xmlFile.getRootTag();
+            XmlTag rootTag = xmlFile.getRootTag();
             if (rootTag == null) {
                 return null;
             }
-            final PsiElement[] children = rootTag.getChildren();
+            PsiElement[] children = rootTag.getChildren();
             for (PsiElement child : children) {
                 if (!(child instanceof HtmlTag)) {
                     continue;
                 }
-                final HtmlTag htmlTag = (HtmlTag) child;
-                @NonNls final String name = htmlTag.getName();
+                HtmlTag htmlTag = (HtmlTag) child;
+                @NonNls String name = htmlTag.getName();
                 if ("body".equals(name)) {
-                    final XmlTagValue value = htmlTag.getValue();
+                    XmlTagValue value = htmlTag.getValue();
                     return value.getText();
                 }
             }
@@ -221,27 +221,27 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection {
             if (!(file instanceof XmlFile)) {
                 return;
             }
-            @NonNls final String fileName = file.getName();
+            @NonNls String fileName = file.getName();
             if (!"package.html".equals(fileName)) {
                 return;
             }
-            final PsiDirectory directory = file.getContainingDirectory();
+            PsiDirectory directory = file.getContainingDirectory();
             if (directory == null) {
                 return;
             }
-            final String aPackage = getPackage(directory);
+            String aPackage = getPackage(directory);
             if (aPackage == null) {
                 return;
             }
-            final boolean exists = directory.findFile("package-info.java") != null;
+            boolean exists = directory.findFile("package-info.java") != null;
             registerError(file, aPackage, Boolean.valueOf(exists));
         }
 
         public static String getPackage(@Nonnull PsiDirectory directory) {
-            final VirtualFile virtualFile = directory.getVirtualFile();
-            final Project project = directory.getProject();
-            final ProjectRootManager projectRootManager = ProjectRootManager.getInstance(project);
-            final ProjectFileIndex fileIndex = projectRootManager.getFileIndex();
+            VirtualFile virtualFile = directory.getVirtualFile();
+            Project project = directory.getProject();
+            ProjectRootManager projectRootManager = ProjectRootManager.getInstance(project);
+            ProjectFileIndex fileIndex = projectRootManager.getFileIndex();
             return fileIndex.getPackageNameByDirectory(virtualFile);
         }
     }

@@ -24,7 +24,7 @@ class ParameterSpec {
     private final String name;
     private final PsiType type;
 
-  ParameterSpec(final PsiParameter parameter, final String name, final PsiType type, final boolean setterRequired) {
+  ParameterSpec(PsiParameter parameter, String name, PsiType type, boolean setterRequired) {
     myParameter = parameter;
     this.setterRequired = setterRequired;
     this.name = name;

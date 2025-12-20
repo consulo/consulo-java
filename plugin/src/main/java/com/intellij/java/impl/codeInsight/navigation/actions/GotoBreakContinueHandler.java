@@ -34,7 +34,7 @@ public class GotoBreakContinueHandler extends GotoDeclarationHandlerBase {
 
   @Override
   @Nullable
-  public PsiElement getGotoDeclarationTarget(final PsiElement elementAt, Editor editor) {
+  public PsiElement getGotoDeclarationTarget(PsiElement elementAt, Editor editor) {
     if (elementAt instanceof PsiKeyword) {
       IElementType type = ((PsiKeyword) elementAt).getTokenType();
       if (type == JavaTokenType.CONTINUE_KEYWORD) {

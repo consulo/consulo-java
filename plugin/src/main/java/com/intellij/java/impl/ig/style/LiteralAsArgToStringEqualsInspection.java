@@ -41,7 +41,7 @@ public class LiteralAsArgToStringEqualsInspection extends BaseInspection {
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final String methodName = (String)infos[0];
+    String methodName = (String)infos[0];
     return InspectionGadgetsLocalize.literalAsArgToStringEqualsProblemDescriptor(methodName).get();
   }
 
@@ -62,21 +62,21 @@ public class LiteralAsArgToStringEqualsInspection extends BaseInspection {
 
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiExpression argument = (PsiExpression)descriptor.getPsiElement();
-      final PsiElement argumentList = argument.getParent();
-      final PsiMethodCallExpression expression = (PsiMethodCallExpression)argumentList.getParent();
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      final PsiExpression target = methodExpression.getQualifierExpression();
-      final String methodName = methodExpression.getReferenceName();
-      final PsiExpression strippedTarget = ParenthesesUtils.stripParentheses(target);
+      PsiExpression argument = (PsiExpression)descriptor.getPsiElement();
+      PsiElement argumentList = argument.getParent();
+      PsiMethodCallExpression expression = (PsiMethodCallExpression)argumentList.getParent();
+      PsiReferenceExpression methodExpression = expression.getMethodExpression();
+      PsiExpression target = methodExpression.getQualifierExpression();
+      String methodName = methodExpression.getReferenceName();
+      PsiExpression strippedTarget = ParenthesesUtils.stripParentheses(target);
       if (strippedTarget == null) {
         return;
       }
-      final PsiExpression strippedArg = ParenthesesUtils.stripParentheses(argument);
+      PsiExpression strippedArg = ParenthesesUtils.stripParentheses(argument);
       if (strippedArg == null) {
         return;
       }
-      final String callString;
+      String callString;
       if (ParenthesesUtils.getPrecedence(strippedArg) >
           ParenthesesUtils.METHOD_CALL_PRECEDENCE) {
         callString = '(' + strippedArg.getText() + ")." + methodName +
@@ -94,20 +94,20 @@ public class LiteralAsArgToStringEqualsInspection extends BaseInspection {
     @Override
     public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      @NonNls final String methodName = methodExpression.getReferenceName();
+      PsiReferenceExpression methodExpression = expression.getMethodExpression();
+      @NonNls String methodName = methodExpression.getReferenceName();
       if (!HardcodedMethodConstants.EQUALS.equals(methodName) &&
           !HardcodedMethodConstants.EQUALS_IGNORE_CASE.equals(
             methodName)) {
         return;
       }
-      final PsiExpressionList argList = expression.getArgumentList();
-      final PsiExpression[] args = argList.getExpressions();
+      PsiExpressionList argList = expression.getArgumentList();
+      PsiExpression[] args = argList.getExpressions();
       if (args.length != 1) {
         return;
       }
-      final PsiExpression argument = args[0];
-      final PsiType argumentType = argument.getType();
+      PsiExpression argument = args[0];
+      PsiType argumentType = argument.getType();
       if (argumentType == null) {
         return;
       }
@@ -117,7 +117,7 @@ public class LiteralAsArgToStringEqualsInspection extends BaseInspection {
       if (!TypeUtils.isJavaLangString(argumentType)) {
         return;
       }
-      final PsiExpression target = methodExpression.getQualifierExpression();
+      PsiExpression target = methodExpression.getQualifierExpression();
       if (target instanceof PsiLiteralExpression) {
         return;
       }

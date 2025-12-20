@@ -59,11 +59,11 @@ public class StaticSuiteInspection extends BaseInspection {
         @Override
         public void visitMethod(@Nonnull PsiMethod method) {
             //note: no call to super
-            @NonNls final String methodName = method.getName();
+            @NonNls String methodName = method.getName();
             if (!"suite".equals(methodName)) {
                 return;
             }
-            final PsiClass aClass = method.getContainingClass();
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null) {
                 return;
             }
@@ -73,7 +73,7 @@ public class StaticSuiteInspection extends BaseInspection {
             )) {
                 return;
             }
-            final PsiParameterList parameterList = method.getParameterList();
+            PsiParameterList parameterList = method.getParameterList();
             if (parameterList.getParametersCount() != 0) {
                 return;
             }

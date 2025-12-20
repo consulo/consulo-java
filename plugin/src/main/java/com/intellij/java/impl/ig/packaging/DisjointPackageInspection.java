@@ -55,17 +55,17 @@ public abstract class DisjointPackageInspection extends BaseGlobalInspection {
         if (!(refEntity instanceof RefPackage)) {
             return null;
         }
-        final RefPackage refPackage = (RefPackage) refEntity;
-        final List<RefEntity> children = refPackage.getChildren();
+        RefPackage refPackage = (RefPackage) refEntity;
+        List<RefEntity> children = refPackage.getChildren();
         if (children == null) {
             return null;
         }
-        final Set<RefClass> childClasses = new HashSet<RefClass>();
+        Set<RefClass> childClasses = new HashSet<RefClass>();
         for (RefEntity child : children) {
             if (!(child instanceof RefClass)) {
                 continue;
             }
-            final PsiClass psiClass = ((RefClass) child).getElement();
+            PsiClass psiClass = ((RefClass) child).getElement();
             if (ClassUtils.isInnerClass(psiClass)) {
                 continue;
             }
@@ -74,12 +74,12 @@ public abstract class DisjointPackageInspection extends BaseGlobalInspection {
         if (childClasses.isEmpty()) {
             return null;
         }
-        final Set<Set<RefClass>> components =
+        Set<Set<RefClass>> components =
             createComponents(refPackage, childClasses);
         if (components.size() == 1) {
             return null;
         }
-        final String errorString = InspectionGadgetsLocalize.disjointPackageProblemDescriptor(
+        String errorString = InspectionGadgetsLocalize.disjointPackageProblemDescriptor(
             refPackage.getQualifiedName(),
             components.size()
         ).get();
@@ -91,18 +91,18 @@ public abstract class DisjointPackageInspection extends BaseGlobalInspection {
 
     private static Set<Set<RefClass>> createComponents(
         RefPackage aPackage, Set<RefClass> classes) {
-        final Set<RefClass> allClasses = new HashSet<RefClass>(classes);
-        final Set<Set<RefClass>> out = new HashSet<Set<RefClass>>();
+        Set<RefClass> allClasses = new HashSet<RefClass>(classes);
+        Set<Set<RefClass>> out = new HashSet<Set<RefClass>>();
         while (!allClasses.isEmpty()) {
-            final RefClass seed = allClasses.iterator().next();
+            RefClass seed = allClasses.iterator().next();
             allClasses.remove(seed);
-            final Set<RefClass> currentComponent = new HashSet<RefClass>();
+            Set<RefClass> currentComponent = new HashSet<RefClass>();
             currentComponent.add(seed);
-            final List<RefClass> pendingClasses = new ArrayList<RefClass>();
+            List<RefClass> pendingClasses = new ArrayList<RefClass>();
             pendingClasses.add(seed);
             while (!pendingClasses.isEmpty()) {
-                final RefClass classToProcess = pendingClasses.remove(0);
-                final Set<RefClass> relatedClasses =
+                RefClass classToProcess = pendingClasses.remove(0);
+                Set<RefClass> relatedClasses =
                     getRelatedClasses(aPackage, classToProcess);
                 for (RefClass relatedClass : relatedClasses) {
                     if (!currentComponent.contains(relatedClass) &&
@@ -120,8 +120,8 @@ public abstract class DisjointPackageInspection extends BaseGlobalInspection {
 
     private static Set<RefClass> getRelatedClasses(RefPackage aPackage,
                                                    RefClass classToProcess) {
-        final Set<RefClass> out = new HashSet<RefClass>();
-        final Set<RefClass> dependencies =
+        Set<RefClass> out = new HashSet<RefClass>();
+        Set<RefClass> dependencies =
             DependencyUtils.calculateDependenciesForClass(classToProcess);
         for (RefClass dependency : dependencies) {
             if (packageContainsClass(aPackage, dependency)) {
@@ -129,7 +129,7 @@ public abstract class DisjointPackageInspection extends BaseGlobalInspection {
             }
         }
 
-        final Set<RefClass> dependents =
+        Set<RefClass> dependents =
             DependencyUtils.calculateDependentsForClass(classToProcess);
         for (RefClass dependent : dependents) {
             if (packageContainsClass(aPackage, dependent)) {

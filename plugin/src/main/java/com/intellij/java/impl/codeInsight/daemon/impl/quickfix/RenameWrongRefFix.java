@@ -59,7 +59,7 @@ public class RenameWrongRefFix implements SyntheticIntentionAction {
     this(refExpr, false);
   }
 
-  public RenameWrongRefFix(PsiReferenceExpression refExpr, final boolean unresolvedOnly) {
+  public RenameWrongRefFix(PsiReferenceExpression refExpr, boolean unresolvedOnly) {
     myRefExpr = refExpr;
     myUnresolvedOnly = unresolvedOnly;
   }
@@ -189,7 +189,7 @@ public class RenameWrongRefFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, final Editor editor, PsiFile file) {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     PsiReferenceExpression[] refs = CreateFromUsageUtils.collectExpressions(myRefExpr, PsiMember.class, PsiFile.class);
     PsiElement element = PsiTreeUtil.getParentOfType(myRefExpr, PsiMember.class, PsiFile.class);
@@ -206,7 +206,7 @@ public class RenameWrongRefFix implements SyntheticIntentionAction {
       }
     }
 
-    final float proportion = EditorUtil.calcVerticalScrollProportion(editor);
+    float proportion = EditorUtil.calcVerticalScrollProportion(editor);
     editor.getCaretModel().moveToOffset(element.getTextRange().getStartOffset());
 
     /*for (int i = refs.length - 1; i >= 0; i--) {

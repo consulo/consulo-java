@@ -46,7 +46,7 @@ public class FieldConflictsResolver {
       return;
     }
     JavaPsiFacade facade = JavaPsiFacade.getInstance(myScope.getProject());
-    final PsiVariable oldVariable = facade.getResolveHelper().resolveAccessibleReferencedVariable(name, myScope);
+    PsiVariable oldVariable = facade.getResolveHelper().resolveAccessibleReferencedVariable(name, myScope);
     myField = oldVariable instanceof PsiField ? (PsiField) oldVariable : null;
     if (!(oldVariable instanceof PsiField)) {
       myReferenceExpressions = null;
@@ -54,9 +54,9 @@ public class FieldConflictsResolver {
     }
     myReferenceExpressions = new ArrayList<PsiReferenceExpression>();
     for (PsiReference reference : ReferencesSearch.search(myField, new LocalSearchScope(myScope), false)) {
-      final PsiElement element = reference.getElement();
+      PsiElement element = reference.getElement();
       if (element instanceof PsiReferenceExpression) {
-        final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)element;
+        PsiReferenceExpression referenceExpression = (PsiReferenceExpression)element;
         if (referenceExpression.getQualifierExpression() == null) {
           myReferenceExpressions.add(referenceExpression);
         }
@@ -73,12 +73,12 @@ public class FieldConflictsResolver {
     initializer.accept(new JavaRecursiveElementVisitor() {
       @Override
       public void visitReferenceExpression(PsiReferenceExpression expression) {
-        final PsiExpression qualifierExpression = expression.getQualifierExpression();
+        PsiExpression qualifierExpression = expression.getQualifierExpression();
         if (qualifierExpression != null) {
           qualifierExpression.accept(this);
         }
         else {
-          final PsiElement result = expression.resolve();
+          PsiElement result = expression.resolve();
           if (expression.getManager().areElementsEquivalent(result, myField)) {
             try {
               replacedRef[0] = RefactoringChangeUtil.qualifyReference(expression, myField, myQualifyingClass);
@@ -96,10 +96,10 @@ public class FieldConflictsResolver {
 
   public void fix() throws IncorrectOperationException {
     if (myField == null) return;
-    final PsiManager manager = myScope.getManager();
+    PsiManager manager = myScope.getManager();
     for (PsiReferenceExpression referenceExpression : myReferenceExpressions) {
       if (!referenceExpression.isValid()) continue;
-      final PsiElement newlyResolved = referenceExpression.resolve();
+      PsiElement newlyResolved = referenceExpression.resolve();
       if (!manager.areElementsEquivalent(newlyResolved, myField)) {
         RefactoringChangeUtil.qualifyReference(referenceExpression, myField, myQualifyingClass);
       }

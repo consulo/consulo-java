@@ -29,7 +29,7 @@ class HierarchicalTypeComparator implements Comparator<PsiType> {
     if (type2.isAssignableFrom(type1)) {
       return -1;
     }
-    final String canonicalText1 = type1.getCanonicalText();
+    String canonicalText1 = type1.getCanonicalText();
     return canonicalText1.compareTo(type2.getCanonicalText());
   }
 }

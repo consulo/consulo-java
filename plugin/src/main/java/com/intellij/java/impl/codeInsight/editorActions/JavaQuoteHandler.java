@@ -97,17 +97,17 @@ public class JavaQuoteHandler extends SimpleTokenSetQuoteHandler implements Java
   }
 
   @Override
-  public boolean isAppropriateElementTypeForLiteral(final @Nonnull IElementType tokenType) {
+  public boolean isAppropriateElementTypeForLiteral(@Nonnull IElementType tokenType) {
     return isAppropriateElementTypeForLiteralStatic(tokenType);
   }
 
   @Override
-  public boolean needParenthesesAroundConcatenation(final PsiElement element) {
+  public boolean needParenthesesAroundConcatenation(PsiElement element) {
     // example code: "some string".length() must become ("some" + " string").length()
     return element.getParent() instanceof PsiLiteralExpression && element.getParent().getParent() instanceof PsiReferenceExpression;
   }
 
-  public static boolean isAppropriateElementTypeForLiteralStatic(final IElementType tokenType) {
+  public static boolean isAppropriateElementTypeForLiteralStatic(IElementType tokenType) {
     return ElementType.JAVA_COMMENT_OR_WHITESPACE_BIT_SET.contains(tokenType)
         || tokenType == JavaTokenType.SEMICOLON
         || tokenType == JavaTokenType.COMMA

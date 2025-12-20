@@ -49,13 +49,13 @@ public class UnimplementInterfaceAction implements IntentionAction {
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!(file instanceof PsiJavaFile)) return false;
-    final PsiReference psiReference = TargetElementUtil.findReference(editor);
+    PsiReference psiReference = TargetElementUtil.findReference(editor);
     if (psiReference == null) return false;
 
-    final PsiReferenceList referenceList = PsiTreeUtil.getParentOfType(psiReference.getElement(), PsiReferenceList.class);
+    PsiReferenceList referenceList = PsiTreeUtil.getParentOfType(psiReference.getElement(), PsiReferenceList.class);
     if (referenceList == null) return false;
 
-    final PsiClass psiClass = PsiTreeUtil.getParentOfType(referenceList, PsiClass.class);
+    PsiClass psiClass = PsiTreeUtil.getParentOfType(referenceList, PsiClass.class);
     if (psiClass == null) return false;
 
     if (psiClass.getExtendsList() != referenceList && psiClass.getImplementsList() != referenceList) return false;
@@ -63,7 +63,7 @@ public class UnimplementInterfaceAction implements IntentionAction {
     PsiJavaCodeReferenceElement referenceElement = getTopLevelRef(psiReference, referenceList);
     if (referenceElement == null) return false;
 
-    final PsiElement target = referenceElement.resolve();
+    PsiElement target = referenceElement.resolve();
     if (target == null || !(target instanceof PsiClass)) return false;
 
     PsiClass targetClass = (PsiClass)target;
@@ -90,16 +90,16 @@ public class UnimplementInterfaceAction implements IntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(file)) return;
 
-    final PsiReference psiReference = TargetElementUtil.findReference(editor);
+    PsiReference psiReference = TargetElementUtil.findReference(editor);
     if (psiReference == null) return;
 
-    final PsiReferenceList referenceList = PsiTreeUtil.getParentOfType(psiReference.getElement(), PsiReferenceList.class);
+    PsiReferenceList referenceList = PsiTreeUtil.getParentOfType(psiReference.getElement(), PsiReferenceList.class);
     if (referenceList == null) return;
 
-    final PsiClass psiClass = PsiTreeUtil.getParentOfType(referenceList, PsiClass.class);
+    PsiClass psiClass = PsiTreeUtil.getParentOfType(referenceList, PsiClass.class);
     if (psiClass == null) return;
 
     if (psiClass.getExtendsList() != referenceList && psiClass.getImplementsList() != referenceList) return;
@@ -107,28 +107,28 @@ public class UnimplementInterfaceAction implements IntentionAction {
     PsiJavaCodeReferenceElement element = getTopLevelRef(psiReference, referenceList);
     if (element == null) return;
 
-    final PsiElement target = element.resolve();
+    PsiElement target = element.resolve();
     if (target == null || !(target instanceof PsiClass)) return;
 
     PsiClass targetClass = (PsiClass)target;
 
-    final Map<PsiMethod, PsiMethod> implementations = new HashMap<PsiMethod, PsiMethod>();
+    Map<PsiMethod, PsiMethod> implementations = new HashMap<PsiMethod, PsiMethod>();
     for (PsiMethod psiMethod : targetClass.getAllMethods()) {
-      final PsiMethod implementingMethod = MethodSignatureUtil.findMethodBySuperMethod(psiClass, psiMethod, false);
+      PsiMethod implementingMethod = MethodSignatureUtil.findMethodBySuperMethod(psiClass, psiMethod, false);
       if (implementingMethod != null) {
         implementations.put(psiMethod, implementingMethod);
       }
     }
     element.delete();
 
-    final Set<PsiMethod> superMethods = new HashSet<PsiMethod>();
+    Set<PsiMethod> superMethods = new HashSet<PsiMethod>();
     for (PsiClass aClass : psiClass.getSupers()) {
       Collections.addAll(superMethods, aClass.getAllMethods());
     }
-    final PsiMethod[] psiMethods = targetClass.getAllMethods();
+    PsiMethod[] psiMethods = targetClass.getAllMethods();
     for (PsiMethod psiMethod : psiMethods) {
       if (superMethods.contains(psiMethod)) continue;
-      final PsiMethod impl = implementations.get(psiMethod);
+      PsiMethod impl = implementations.get(psiMethod);
       if (impl != null) impl.delete();
     }
   }

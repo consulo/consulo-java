@@ -43,7 +43,7 @@ public class SynchronizeOnLockInspection extends BaseInspection {
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    final String type = (String)infos[0];
+    String type = (String)infos[0];
     return InspectionGadgetsLocalize.synchronizeOnLockProblemDescriptor(type).get();
   }
 
@@ -59,11 +59,11 @@ public class SynchronizeOnLockInspection extends BaseInspection {
     public void visitSynchronizedStatement(
       @Nonnull PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
-      final PsiExpression lockExpression = statement.getLockExpression();
+      PsiExpression lockExpression = statement.getLockExpression();
       if (lockExpression == null) {
         return;
       }
-      final String type = TypeUtils.expressionHasTypeOrSubtype(
+      String type = TypeUtils.expressionHasTypeOrSubtype(
         lockExpression,
         "java.util.concurrent.locks.Lock",
         "java.util.concurrent.locks.ReadWriteLock");

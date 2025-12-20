@@ -35,14 +35,14 @@ class MergeIfOrPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiJavaToken)) {
       return false;
     }
-    final PsiJavaToken token = (PsiJavaToken)element;
-    final PsiElement parent = token.getParent();
+    PsiJavaToken token = (PsiJavaToken)element;
+    PsiElement parent = token.getParent();
     if (!(parent instanceof PsiIfStatement)) {
       return false;
     }
-    final PsiIfStatement ifStatement = (PsiIfStatement)parent;
-    final PsiStatement thenBranch = ifStatement.getThenBranch();
-    final PsiStatement elseBranch = ifStatement.getElseBranch();
+    PsiIfStatement ifStatement = (PsiIfStatement)parent;
+    PsiStatement thenBranch = ifStatement.getThenBranch();
+    PsiStatement elseBranch = ifStatement.getElseBranch();
     if (thenBranch == null) {
       return false;
     }
@@ -55,8 +55,8 @@ class MergeIfOrPredicate implements PsiElementPredicate {
     if (ErrorUtil.containsError(ifStatement)) {
       return false;
     }
-    final PsiIfStatement childIfStatement = (PsiIfStatement)elseBranch;
-    final PsiStatement childThenBranch = childIfStatement.getThenBranch();
+    PsiIfStatement childIfStatement = (PsiIfStatement)elseBranch;
+    PsiStatement childThenBranch = childIfStatement.getThenBranch();
     return EquivalenceChecker.statementsAreEquivalent(thenBranch, childThenBranch);
   }
 
@@ -64,30 +64,30 @@ class MergeIfOrPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiJavaToken)) {
       return false;
     }
-    final PsiJavaToken token = (PsiJavaToken)element;
+    PsiJavaToken token = (PsiJavaToken)element;
 
-    final PsiElement parent = token.getParent();
+    PsiElement parent = token.getParent();
     if (!(parent instanceof PsiIfStatement)) {
       return false;
     }
-    final PsiIfStatement ifStatement = (PsiIfStatement)parent;
-    final PsiStatement thenBranch = ifStatement.getThenBranch();
+    PsiIfStatement ifStatement = (PsiIfStatement)parent;
+    PsiStatement thenBranch = ifStatement.getThenBranch();
     if (thenBranch == null) {
       return false;
     }
-    final PsiStatement elseBranch = ifStatement.getElseBranch();
+    PsiStatement elseBranch = ifStatement.getElseBranch();
     if (elseBranch != null) {
       return false;
     }
     if (ControlFlowUtils.statementMayCompleteNormally(thenBranch)) {
       return false;
     }
-    final PsiElement nextStatement = PsiTreeUtil.skipSiblingsForward(ifStatement, PsiWhiteSpace.class);
+    PsiElement nextStatement = PsiTreeUtil.skipSiblingsForward(ifStatement, PsiWhiteSpace.class);
     if (!(nextStatement instanceof PsiIfStatement)) {
       return false;
     }
-    final PsiIfStatement nextIfStatement = (PsiIfStatement)nextStatement;
-    final PsiStatement nextThenBranch = nextIfStatement.getThenBranch();
+    PsiIfStatement nextIfStatement = (PsiIfStatement)nextStatement;
+    PsiStatement nextThenBranch = nextIfStatement.getThenBranch();
     return EquivalenceChecker.statementsAreEquivalent(thenBranch, nextThenBranch);
   }
 }

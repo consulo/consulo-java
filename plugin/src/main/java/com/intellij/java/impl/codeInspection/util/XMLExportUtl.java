@@ -54,7 +54,7 @@ public class XMLExportUtl {
   }
 
   @RequiredReadAction
-  public static Element createElement(RefEntity refEntity, Element parentNode, int actualLine, final TextRange range) {
+  public static Element createElement(RefEntity refEntity, Element parentNode, int actualLine, TextRange range) {
     refEntity = refEntity.getRefManager().getRefinedElement(refEntity);
 
     Element problem = new Element("problem");
@@ -65,12 +65,12 @@ public class XMLExportUtl {
 
       Element fileElement = new Element("file");
       Element lineElement = new Element("line");
-      final VirtualFile virtualFile = psiFile.getVirtualFile();
+      VirtualFile virtualFile = psiFile.getVirtualFile();
       LOG.assertTrue(virtualFile != null);
       fileElement.addContent(virtualFile.getUrl());
 
       if (actualLine == -1) {
-        final Document document = PsiDocumentManager.getInstance(refElement.getRefManager().getProject()).getDocument(psiFile);
+        Document document = PsiDocumentManager.getInstance(refElement.getRefManager().getProject()).getDocument(psiFile);
         LOG.assertTrue(document != null);
         lineElement.addContent(String.valueOf(document.getLineNumber(psiElement.getTextOffset()) + 1));
       }
@@ -83,8 +83,8 @@ public class XMLExportUtl {
       appendModule(problem, refElement.getModule());
     }
     else if (refEntity instanceof RefModule refModule) {
-      final VirtualFile moduleDir = refModule.getModule().getModuleDir();
-      final Element fileElement = new Element("file");
+      VirtualFile moduleDir = refModule.getModule().getModuleDir();
+      Element fileElement = new Element("file");
       fileElement.addContent(moduleDir != null ? moduleDir.getUrl() : refEntity.getName());
       problem.addContent(fileElement);
       appendModule(problem, refModule);
@@ -113,7 +113,7 @@ public class XMLExportUtl {
     return problem;
   }
 
-  private static void appendModule(final Element problem, final RefModule refModule) {
+  private static void appendModule(Element problem, RefModule refModule) {
     if (refModule != null) {
       Element moduleElement = new Element("module");
       moduleElement.addContent(refModule.getName());
@@ -121,8 +121,8 @@ public class XMLExportUtl {
     }
   }
 
-  private static void appendFakePackage(final Element problem) {
-    final Element fakePackage = new Element("package");
+  private static void appendFakePackage(Element problem) {
+    Element fakePackage = new Element("package");
     fakePackage.addContent(InspectionLocalize.inspectionExportResultsDefault().get());
     problem.addContent(fakePackage);
   }
@@ -169,7 +169,7 @@ public class XMLExportUtl {
   }
 
   @RequiredReadAction
-  private static void appendMethod(final RefMethod refMethod, Element parentNode) {
+  private static void appendMethod(RefMethod refMethod, Element parentNode) {
     Element methodElement = new Element(refMethod.isConstructor() ? "constructor" : "method");
 
     PsiMethod psiMethod = (PsiMethod)refMethod.getElement();
@@ -194,7 +194,7 @@ public class XMLExportUtl {
   }
 
   @RequiredReadAction
-  private static void appendField(final RefField refField, Element parentNode) {
+  private static void appendField(RefField refField, Element parentNode) {
     Element fieldElement = new Element("field");
     PsiField psiField = refField.getElement();
     String name = PsiFormatUtil.formatVariable(psiField, PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_TYPE, PsiSubstitutor.EMPTY);

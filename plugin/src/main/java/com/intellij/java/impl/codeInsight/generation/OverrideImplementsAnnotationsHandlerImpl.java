@@ -35,8 +35,8 @@ import java.util.Collection;
 public class OverrideImplementsAnnotationsHandlerImpl implements OverrideImplementsAnnotationsHandler {
   @Override
   public String[] getAnnotations(Project project) {
-    final NullableNotNullManager manager = NullableNotNullManager.getInstance(project);
-    final Collection<String> anns = new ArrayList<String>(manager.getNotNulls());
+    NullableNotNullManager manager = NullableNotNullManager.getInstance(project);
+    Collection<String> anns = new ArrayList<String>(manager.getNotNulls());
     anns.addAll(manager.getNullables());
     anns.add(AnnotationUtil.NLS);
     return ArrayUtil.toStringArray(anns);
@@ -44,8 +44,8 @@ public class OverrideImplementsAnnotationsHandlerImpl implements OverrideImpleme
 
   @Override
   @Nonnull
-  public String[] annotationsToRemove(Project project, @Nonnull final String fqName) {
-    final NullableNotNullManager manager = NullableNotNullManager.getInstance(project);
+  public String[] annotationsToRemove(Project project, @Nonnull String fqName) {
+    NullableNotNullManager manager = NullableNotNullManager.getInstance(project);
     if (manager.getNotNulls().contains(fqName)) {
       return ArrayUtil.toStringArray(manager.getNullables());
     }

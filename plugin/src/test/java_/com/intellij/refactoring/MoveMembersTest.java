@@ -161,20 +161,20 @@ public abstract class MoveMembersTest extends MultiFileTestCase {
     return "/refactoring/moveMembers/";
   }
 
-  private void doTest(final String sourceClassName, final String targetClassName, final int... memberIndices) throws Exception {
+  private void doTest(String sourceClassName, String targetClassName, int... memberIndices) throws Exception {
     doTest(sourceClassName, targetClassName, true, memberIndices);
   }
 
-  private void doTest(final String sourceClassName,
-                      final String targetClassName,
-                      final boolean lowercaseFirstLetter,
-                      final int... memberIndices) throws Exception {
+  private void doTest(String sourceClassName,
+                      String targetClassName,
+                      boolean lowercaseFirstLetter,
+                      int... memberIndices) throws Exception {
     doTest(sourceClassName, targetClassName, lowercaseFirstLetter, null, memberIndices);
   }
 
   private void doTest(final String sourceClassName,
                       final String targetClassName,
-                      final boolean lowercaseFirstLetter,
+                      boolean lowercaseFirstLetter,
                       final String defaultVisibility,
                       final int... memberIndices)
     throws Exception {
@@ -186,7 +186,7 @@ public abstract class MoveMembersTest extends MultiFileTestCase {
     }, lowercaseFirstLetter);
   }
 
-  private void performAction(String sourceClassName, String targetClassName, int[] memberIndices, final String visibility) throws Exception {
+  private void performAction(String sourceClassName, String targetClassName, int[] memberIndices, String visibility) throws Exception {
     PsiClass sourceClass = myJavaFacade.findClass(sourceClassName, ProjectScope.getProjectScope(myProject));
     assertNotNull("Class " + sourceClassName + " not found", sourceClass);
     PsiClass targetClass = myJavaFacade.findClass(targetClassName, ProjectScope.getProjectScope(myProject));

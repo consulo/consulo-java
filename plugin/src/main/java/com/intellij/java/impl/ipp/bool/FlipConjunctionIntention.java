@@ -39,10 +39,10 @@ public class FlipConjunctionIntention extends MutablyNamedIntention {
 
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
-        final PsiPolyadicExpression binaryExpression =
+        PsiPolyadicExpression binaryExpression =
             (PsiPolyadicExpression) element;
         PsiExpression op = binaryExpression.getOperands()[1];
-        final PsiJavaToken sign = binaryExpression.getTokenBeforeOperand(op);
+        PsiJavaToken sign = binaryExpression.getTokenBeforeOperand(op);
         return IntentionPowerPackLocalize.flipSmthIntentionName(sign.getText());
     }
 
@@ -62,15 +62,15 @@ public class FlipConjunctionIntention extends MutablyNamedIntention {
     public void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
         PsiExpression exp = (PsiExpression) element;
-        final PsiPolyadicExpression binaryExpression = (PsiPolyadicExpression) exp;
-        final IElementType conjunctionType = binaryExpression.getOperationTokenType();
+        PsiPolyadicExpression binaryExpression = (PsiPolyadicExpression) exp;
+        IElementType conjunctionType = binaryExpression.getOperationTokenType();
         PsiElement parent = exp.getParent();
         while (isConjunctionExpression(parent, conjunctionType)) {
             exp = (PsiExpression) parent;
             assert exp != null;
             parent = exp.getParent();
         }
-        final String newExpression = flipExpression(exp, conjunctionType);
+        String newExpression = flipExpression(exp, conjunctionType);
         replaceExpression(newExpression, exp);
     }
 
@@ -79,9 +79,9 @@ public class FlipConjunctionIntention extends MutablyNamedIntention {
         if (!isConjunctionExpression(expression, conjunctionType)) {
             return expression.getText();
         }
-        final PsiPolyadicExpression andExpression =
+        PsiPolyadicExpression andExpression =
             (PsiPolyadicExpression) expression;
-        final String conjunctionSign;
+        String conjunctionSign;
         if (conjunctionType.equals(JavaTokenType.ANDAND)) {
             conjunctionSign = "&&";
         }
@@ -103,9 +103,9 @@ public class FlipConjunctionIntention extends MutablyNamedIntention {
         if (!(element instanceof PsiPolyadicExpression)) {
             return false;
         }
-        final PsiPolyadicExpression binaryExpression =
+        PsiPolyadicExpression binaryExpression =
             (PsiPolyadicExpression) element;
-        final IElementType tokenType = binaryExpression.getOperationTokenType();
+        IElementType tokenType = binaryExpression.getOperationTokenType();
         return tokenType.equals(conjunctionType);
     }
 }

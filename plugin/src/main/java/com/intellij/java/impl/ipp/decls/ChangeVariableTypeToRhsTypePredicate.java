@@ -29,30 +29,30 @@ class ChangeVariableTypeToRhsTypePredicate implements PsiElementPredicate {
     if (!(element instanceof PsiTypeElement)) {
       return false;
     }
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!(parent instanceof PsiVariable)) {
       return false;
     }
-    final PsiVariable variable = (PsiVariable)parent;
-    final PsiExpression initializer = variable.getInitializer();
+    PsiVariable variable = (PsiVariable)parent;
+    PsiExpression initializer = variable.getInitializer();
     if (!(initializer instanceof PsiNewExpression)) {
       return false;
     }
-    final PsiType type = variable.getType();
+    PsiType type = variable.getType();
     if (!(type instanceof PsiClassType)) {
       return false;
     }
-    final PsiType initializerType = initializer.getType();
+    PsiType initializerType = initializer.getType();
     if (!(initializerType instanceof PsiClassType)) {
       return false;
     }
-    final PsiClassType initializerClassType = (PsiClassType)initializerType;
-    final PsiClass initializerClass = initializerClassType.resolve();
+    PsiClassType initializerClassType = (PsiClassType)initializerType;
+    PsiClass initializerClass = initializerClassType.resolve();
     if (initializerClass == null) {
       return false;
     }
-    final PsiClassType classType = (PsiClassType)type;
-    final PsiClass variableClass = classType.resolve();
+    PsiClassType classType = (PsiClassType)type;
+    PsiClass variableClass = classType.resolve();
     if (variableClass == null) {
       return false;
     }

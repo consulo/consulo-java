@@ -40,7 +40,7 @@ public abstract class JavaAnonymousClassesHelperTest extends LightCodeInsightFix
 
   @SuppressWarnings("ConstantConditions")
   private void doTest(int num) {
-    final PsiElement element = PsiUtilBase.getElementAtCaret(myFixture.getEditor()).getParent().getParent();
+    PsiElement element = PsiUtilBase.getElementAtCaret(myFixture.getEditor()).getParent().getParent();
 
     assert element instanceof PsiAnonymousClass : "There should be anonymous class at caret but " + element + " found";
 

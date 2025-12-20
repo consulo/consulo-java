@@ -51,13 +51,13 @@ public class MathRandomCastToIntInspection extends BaseInspection {
 
     @Override
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiTypeCastExpression expression = (PsiTypeCastExpression) infos[0];
-        final PsiElement parent = expression.getParent();
+        PsiTypeCastExpression expression = (PsiTypeCastExpression) infos[0];
+        PsiElement parent = expression.getParent();
         if (!(parent instanceof PsiPolyadicExpression)) {
             return null;
         }
-        final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) parent;
-        final IElementType tokenType = polyadicExpression.getOperationTokenType();
+        PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) parent;
+        IElementType tokenType = polyadicExpression.getOperationTokenType();
         if (JavaTokenType.ASTERISK != tokenType) {
             return null;
         }
@@ -73,26 +73,26 @@ public class MathRandomCastToIntInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = element.getParent();
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement parent = element.getParent();
             if (!(parent instanceof PsiTypeCastExpression)) {
                 return;
             }
-            final PsiTypeCastExpression typeCastExpression = (PsiTypeCastExpression) parent;
-            final PsiElement grandParent = typeCastExpression.getParent();
+            PsiTypeCastExpression typeCastExpression = (PsiTypeCastExpression) parent;
+            PsiElement grandParent = typeCastExpression.getParent();
             if (!(grandParent instanceof PsiPolyadicExpression)) {
                 return;
             }
-            final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) grandParent;
-            final PsiExpression operand = typeCastExpression.getOperand();
+            PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) grandParent;
+            PsiExpression operand = typeCastExpression.getOperand();
             if (operand == null) {
                 return;
             }
-            @NonNls final StringBuilder newExpression = new StringBuilder();
+            @NonNls StringBuilder newExpression = new StringBuilder();
             newExpression.append("(int)(");
-            final PsiExpression[] operands = polyadicExpression.getOperands();
-            for (final PsiExpression expression : operands) {
-                final PsiJavaToken token = polyadicExpression.getTokenBeforeOperand(expression);
+            PsiExpression[] operands = polyadicExpression.getOperands();
+            for (PsiExpression expression : operands) {
+                PsiJavaToken token = polyadicExpression.getTokenBeforeOperand(expression);
                 if (token != null) {
                     newExpression.append(token.getText());
                 }
@@ -118,33 +118,33 @@ public class MathRandomCastToIntInspection extends BaseInspection {
         @Override
         public void visitTypeCastExpression(PsiTypeCastExpression expression) {
             super.visitTypeCastExpression(expression);
-            final PsiExpression operand = expression.getOperand();
+            PsiExpression operand = expression.getOperand();
             if (!(operand instanceof PsiMethodCallExpression)) {
                 return;
             }
-            final PsiTypeElement castType = expression.getCastType();
+            PsiTypeElement castType = expression.getCastType();
             if (castType == null) {
                 return;
             }
-            final PsiType type = castType.getType();
+            PsiType type = castType.getType();
             if (!PsiType.INT.equals(type) && !PsiType.LONG.equals(type)) {
                 return;
             }
-            final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) operand;
-            final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-            @NonNls final String referenceName = methodExpression.getReferenceName();
+            PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) operand;
+            PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+            @NonNls String referenceName = methodExpression.getReferenceName();
             if (!"random".equals(referenceName)) {
                 return;
             }
-            final PsiMethod method = methodCallExpression.resolveMethod();
+            PsiMethod method = methodCallExpression.resolveMethod();
             if (method == null) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return;
             }
-            final String qualifiedName = containingClass.getQualifiedName();
+            String qualifiedName = containingClass.getQualifiedName();
             if (!CommonClassNames.JAVA_LANG_MATH.equals(qualifiedName) && !CommonClassNames.JAVA_LANG_STRICT_MATH.equals(qualifiedName)) {
                 return;
             }

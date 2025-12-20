@@ -46,25 +46,25 @@ public class SplitMultiCatchIntention extends Intention {
 
     @Override
     protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-        final PsiElement parent = element.getParent();
+        PsiElement parent = element.getParent();
         if (!(parent instanceof PsiCatchSection)) {
             return;
         }
-        final PsiCatchSection catchSection = (PsiCatchSection) parent;
-        final PsiElement grandParent = catchSection.getParent();
+        PsiCatchSection catchSection = (PsiCatchSection) parent;
+        PsiElement grandParent = catchSection.getParent();
         if (!(grandParent instanceof PsiTryStatement)) {
             return;
         }
-        final PsiParameter parameter = catchSection.getParameter();
+        PsiParameter parameter = catchSection.getParameter();
         if (parameter == null) {
             return;
         }
-        final PsiType type = parameter.getType();
+        PsiType type = parameter.getType();
         if (!(type instanceof PsiDisjunctionType)) {
             return;
         }
 
-        final PsiModifierList modifierList = parameter.getModifierList();
+        PsiModifierList modifierList = parameter.getModifierList();
         if (modifierList != null) {
             for (PsiAnnotation annotation : modifierList.getAnnotations()) {
                 if (PsiImplUtil.findApplicableTarget(annotation, TargetType.TYPE_USE) == TargetType.TYPE_USE) {
@@ -73,14 +73,14 @@ public class SplitMultiCatchIntention extends Intention {
             }
         }
 
-        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
+        PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
         for (PsiType disjunction : ((PsiDisjunctionType) type).getDisjunctions()) {
-            final PsiCatchSection copy = (PsiCatchSection) catchSection.copy();
-            final PsiParameter copyParameter = copy.getParameter();
+            PsiCatchSection copy = (PsiCatchSection) catchSection.copy();
+            PsiParameter copyParameter = copy.getParameter();
             assert copyParameter != null : copy.getText();
-            final PsiTypeElement typeElement = copyParameter.getTypeElement();
+            PsiTypeElement typeElement = copyParameter.getTypeElement();
             assert typeElement != null : copyParameter.getText();
-            final PsiTypeElement newTypeElement = factory.createTypeElement(disjunction);
+            PsiTypeElement newTypeElement = factory.createTypeElement(disjunction);
             typeElement.replace(newTypeElement);
             grandParent.addBefore(copy, catchSection);
         }

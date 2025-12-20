@@ -57,7 +57,7 @@ public class LoopStatementsThatDontLoopInspection extends BaseInspection {
         @Override
         public void visitForStatement(@Nonnull PsiForStatement statement) {
             super.visitForStatement(statement);
-            final PsiStatement body = statement.getBody();
+            PsiStatement body = statement.getBody();
             if (body == null) {
                 return;
             }
@@ -75,7 +75,7 @@ public class LoopStatementsThatDontLoopInspection extends BaseInspection {
             @Nonnull PsiForeachStatement statement
         ) {
             super.visitForeachStatement(statement);
-            final PsiStatement body = statement.getBody();
+            PsiStatement body = statement.getBody();
             if (body == null) {
                 return;
             }
@@ -91,7 +91,7 @@ public class LoopStatementsThatDontLoopInspection extends BaseInspection {
         @Override
         public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
             super.visitWhileStatement(statement);
-            final PsiStatement body = statement.getBody();
+            PsiStatement body = statement.getBody();
             if (body == null) {
                 return;
             }
@@ -109,7 +109,7 @@ public class LoopStatementsThatDontLoopInspection extends BaseInspection {
             @Nonnull PsiDoWhileStatement statement
         ) {
             super.visitDoWhileStatement(statement);
-            final PsiStatement body = statement.getBody();
+            PsiStatement body = statement.getBody();
             if (body == null) {
                 return;
             }

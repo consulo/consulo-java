@@ -45,21 +45,21 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection extends Base
     @Override
     @RequiredReadAction
     protected String buildErrorString(Object... infos) {
-        final PsiClass aClass = (PsiClass) infos[0];
+        PsiClass aClass = (PsiClass) infos[0];
         return InspectionGadgetsLocalize.privateMemberAccessBetweenOuterAndInnerClassesProblemDescriptor(aClass.getName()).get();
     }
 
     @Override
     public InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiClass aClass = (PsiClass) infos[0];
-        final String className = aClass.getName();
+        PsiClass aClass = (PsiClass) infos[0];
+        String className = aClass.getName();
         if (infos.length == 1) {
             return new MakePackagePrivateFix(className, true);
         }
-        final PsiMember member = (PsiMember) infos[1];
-        @NonNls final String memberName;
+        PsiMember member = (PsiMember) infos[1];
+        @NonNls String memberName;
         if (member instanceof PsiMethod) {
-            final PsiMethod method = (PsiMethod) member;
+            PsiMethod method = (PsiMethod) member;
             if (method.isConstructor()) {
             }
 
@@ -68,7 +68,7 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection extends Base
         else {
             memberName = member.getName();
         }
-        @NonNls final String elementName = className + '.' + memberName;
+        @NonNls String elementName = className + '.' + memberName;
         return new MakePackagePrivateFix(elementName, false);
     }
 
@@ -93,7 +93,7 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection extends Base
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
+            PsiElement element = descriptor.getPsiElement();
             if (constructor) {
                 makeConstructorPackageLocal(project, element);
             }
@@ -103,15 +103,15 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection extends Base
         }
 
         private static void makeMemberPackageLocal(PsiElement element) {
-            final PsiElement parent = element.getParent();
-            final PsiReferenceExpression reference =
+            PsiElement parent = element.getParent();
+            PsiReferenceExpression reference =
                 (PsiReferenceExpression) parent;
-            final PsiModifierListOwner member =
+            PsiModifierListOwner member =
                 (PsiModifierListOwner) reference.resolve();
             if (member == null) {
                 return;
             }
-            final PsiModifierList modifiers = member.getModifierList();
+            PsiModifierList modifiers = member.getModifierList();
             if (modifiers == null) {
                 return;
             }
@@ -124,7 +124,7 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection extends Base
             Project project,
             PsiElement element
         ) {
-            final PsiNewExpression newExpression =
+            PsiNewExpression newExpression =
                 PsiTreeUtil.getParentOfType(
                     element,
                     PsiNewExpression.class
@@ -132,10 +132,10 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection extends Base
             if (newExpression == null) {
                 return;
             }
-            final PsiMethod constructor =
+            PsiMethod constructor =
                 newExpression.resolveConstructor();
             if (constructor != null) {
-                final PsiModifierList modifierList =
+                PsiModifierList modifierList =
                     constructor.getModifierList();
                 modifierList.setModifierProperty(
                     PsiModifier.PRIVATE,
@@ -143,17 +143,17 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection extends Base
                 );
                 return;
             }
-            final PsiJavaCodeReferenceElement referenceElement =
+            PsiJavaCodeReferenceElement referenceElement =
                 (PsiJavaCodeReferenceElement) element;
-            final PsiElement target = referenceElement.resolve();
+            PsiElement target = referenceElement.resolve();
             if (!(target instanceof PsiClass)) {
                 return;
             }
-            final PsiClass aClass = (PsiClass) target;
-            final PsiElementFactory elementFactory =
+            PsiClass aClass = (PsiClass) target;
+            PsiElementFactory elementFactory =
                 JavaPsiFacade.getElementFactory(project);
-            final PsiMethod newConstructor = elementFactory.createConstructor();
-            final PsiModifierList modifierList =
+            PsiMethod newConstructor = elementFactory.createConstructor();
+            PsiModifierList modifierList =
                 newConstructor.getModifierList();
             modifierList.setModifierProperty(PsiModifier.PACKAGE_LOCAL, true);
             aClass.add(newConstructor);
@@ -174,23 +174,23 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection extends Base
         return;
       }     */
             super.visitNewExpression(expression);
-            final PsiClass containingClass =
+            PsiClass containingClass =
                 getContainingContextClass(expression);
             if (containingClass == null) {
                 return;
             }
-            final PsiMethod constructor = expression.resolveConstructor();
+            PsiMethod constructor = expression.resolveConstructor();
             if (constructor == null) {
-                final PsiJavaCodeReferenceElement classReference =
+                PsiJavaCodeReferenceElement classReference =
                     expression.getClassOrAnonymousClassReference();
                 if (classReference == null) {
                     return;
                 }
-                final PsiElement target = classReference.resolve();
+                PsiElement target = classReference.resolve();
                 if (!(target instanceof PsiClass)) {
                     return;
                 }
-                final PsiClass aClass = (PsiClass) target;
+                PsiClass aClass = (PsiClass) target;
                 if (!aClass.hasModifierProperty(PsiModifier.PRIVATE)) {
                     return;
                 }
@@ -203,7 +203,7 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection extends Base
                 if (!constructor.hasModifierProperty(PsiModifier.PRIVATE)) {
                     return;
                 }
-                final PsiClass aClass = constructor.getContainingClass();
+                PsiClass aClass = constructor.getContainingClass();
                 if (containingClass.equals(aClass)) {
                     return;
                 }
@@ -223,25 +223,25 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection extends Base
             if (expression.getQualifierExpression() == null) {
                 return;
             }
-            final PsiElement referenceNameElement =
+            PsiElement referenceNameElement =
                 expression.getReferenceNameElement();
             if (referenceNameElement == null) {
                 return;
             }
-            final PsiElement containingClass =
+            PsiElement containingClass =
                 getContainingContextClass(expression);
             if (containingClass == null) {
                 return;
             }
-            final PsiElement element = expression.resolve();
+            PsiElement element = expression.resolve();
             if (!(element instanceof PsiMethod || element instanceof PsiField)) {
                 return;
             }
-            final PsiMember member = (PsiMember) element;
+            PsiMember member = (PsiMember) element;
             if (!member.hasModifierProperty(PsiModifier.PRIVATE)) {
                 return;
             }
-            final PsiClass memberClass =
+            PsiClass memberClass =
                 ClassUtils.getContainingClass(member);
             if (memberClass == null) {
                 return;
@@ -254,12 +254,12 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection extends Base
 
         @Nullable
         private static PsiClass getContainingContextClass(PsiElement element) {
-            final PsiClass aClass =
+            PsiClass aClass =
                 ClassUtils.getContainingClass(element);
             if (aClass instanceof PsiAnonymousClass) {
-                final PsiAnonymousClass anonymousClass =
+                PsiAnonymousClass anonymousClass =
                     (PsiAnonymousClass) aClass;
-                final PsiExpressionList args = anonymousClass.getArgumentList();
+                PsiExpressionList args = anonymousClass.getArgumentList();
                 if (args != null &&
                     PsiTreeUtil.isAncestor(args, element, true)) {
                     return ClassUtils.getContainingClass(aClass);

@@ -82,29 +82,29 @@ public class ThreadStartInConstructionInspection extends BaseInspection {
         @Nonnull PsiMethodCallExpression expression) {
         super.visitMethodCallExpression(expression);
 
-        final PsiReferenceExpression methodExpression =
+        PsiReferenceExpression methodExpression =
           expression.getMethodExpression();
-        @NonNls final String methodName =
+        @NonNls String methodName =
           methodExpression.getReferenceName();
         if (!"start".equals(methodName)) {
           return;
         }
-        final PsiMethod method = expression.resolveMethod();
+        PsiMethod method = expression.resolveMethod();
         if (method == null) {
           return;
         }
-        final PsiParameterList parameterList =
+        PsiParameterList parameterList =
           method.getParameterList();
         if (parameterList.getParametersCount() != 0) {
           return;
         }
-        final PsiClass methodClass = method.getContainingClass();
+        PsiClass methodClass = method.getContainingClass();
         if (methodClass == null ||
             !InheritanceUtil.isInheritor(methodClass,
                                          "java.lang.Thread")) {
           return;
         }
-        final PsiClass containingClass =
+        PsiClass containingClass =
           ClassUtils.getContainingClass(expression);
         if (containingClass == null ||
             containingClass.hasModifierProperty(

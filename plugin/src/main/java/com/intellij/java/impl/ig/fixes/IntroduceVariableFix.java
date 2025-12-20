@@ -58,13 +58,13 @@ public class IntroduceVariableFix extends InspectionGadgetsFix {
     }
 
     @Override
-    protected void doFix(final Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-        final PsiExpression expression = getExpressionToExtract(descriptor.getPsiElement());
+    protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+        PsiExpression expression = getExpressionToExtract(descriptor.getPsiElement());
         if (expression == null) {
             return;
         }
-        final RefactoringActionHandler handler = JavaRefactoringActionHandlerFactory.getInstance().createIntroduceVariableHandler();
-        final AsyncResult<DataContext> dataContextContainer = DataManager.getInstance().getDataContextFromFocus();
+        RefactoringActionHandler handler = JavaRefactoringActionHandlerFactory.getInstance().createIntroduceVariableHandler();
+        AsyncResult<DataContext> dataContextContainer = DataManager.getInstance().getDataContextFromFocus();
         dataContextContainer.doWhenDone(dataContext -> {
             handler.invoke(project, new PsiElement[]{expression}, dataContext);
         });

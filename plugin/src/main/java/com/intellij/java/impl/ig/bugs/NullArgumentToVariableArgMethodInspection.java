@@ -58,25 +58,25 @@ public class NullArgumentToVariableArgMethodInspection extends BaseInspection {
             if (!PsiUtil.isLanguageLevel5OrHigher(call)) {
                 return;
             }
-            final PsiExpressionList argumentList = call.getArgumentList();
-            final PsiExpression[] args = argumentList.getExpressions();
+            PsiExpressionList argumentList = call.getArgumentList();
+            PsiExpression[] args = argumentList.getExpressions();
             if (args.length == 0) {
                 return;
             }
-            final PsiExpression lastArg = args[args.length - 1];
+            PsiExpression lastArg = args[args.length - 1];
             if (!ExpressionUtils.isNullLiteral(lastArg)) {
                 return;
             }
-            final PsiMethod method = call.resolveMethod();
+            PsiMethod method = call.resolveMethod();
             if (method == null) {
                 return;
             }
-            final PsiParameterList parameterList = method.getParameterList();
+            PsiParameterList parameterList = method.getParameterList();
             if (parameterList.getParametersCount() != args.length) {
                 return;
             }
-            final PsiParameter[] parameters = parameterList.getParameters();
-            final PsiParameter lastParameter =
+            PsiParameter[] parameters = parameterList.getParameters();
+            PsiParameter lastParameter =
                 parameters[parameters.length - 1];
             if (!lastParameter.isVarArgs()) {
                 return;

@@ -38,15 +38,15 @@ public class IntroduceConstantFix extends InspectionGadgetsFix {
 
   public void doFix(@Nonnull final Project project, ProblemDescriptor descriptor) {
     final PsiElement constant = descriptor.getPsiElement();
-    final Application application = ApplicationManager.getApplication();
+    Application application = ApplicationManager.getApplication();
     application.invokeLater(new Runnable() {
 
       public void run() {
         if (!constant.isValid()) return;
-        final JavaRefactoringActionHandlerFactory factory = JavaRefactoringActionHandlerFactory.getInstance();
-        final RefactoringActionHandler introduceHandler = factory.createIntroduceConstantHandler();
-        final DataManager dataManager = DataManager.getInstance();
-        final DataContext dataContext = dataManager.getDataContext();
+        JavaRefactoringActionHandlerFactory factory = JavaRefactoringActionHandlerFactory.getInstance();
+        RefactoringActionHandler introduceHandler = factory.createIntroduceConstantHandler();
+        DataManager dataManager = DataManager.getInstance();
+        DataContext dataContext = dataManager.getDataContext();
         introduceHandler.invoke(project, new PsiElement[]{constant}, dataContext);
       }
     }, project.getDisposed());

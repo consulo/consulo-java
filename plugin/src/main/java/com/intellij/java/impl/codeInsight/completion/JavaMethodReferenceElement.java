@@ -49,9 +49,9 @@ class JavaMethodReferenceElement extends LookupElement {
       PsiClass containingClass = Objects.requireNonNull(myMethod.getContainingClass());
       String qualifiedName = Objects.requireNonNull(containingClass.getQualifiedName());
 
-      final Editor editor = context.getEditor();
-      final Document document = editor.getDocument();
-      final int startOffset = context.getStartOffset();
+      Editor editor = context.getEditor();
+      Document document = editor.getDocument();
+      int startOffset = context.getStartOffset();
 
       document.insertString(startOffset, qualifiedName + "::");
       JavaCompletionUtil.shortenReference(context.getFile(), startOffset + qualifiedName.length() - 1);

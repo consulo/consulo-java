@@ -72,9 +72,9 @@ public class ExplicitTypeCanBeDiamondInspection extends BaseJavaLocalInspectionT
       @Override
       public void visitNewExpression(PsiNewExpression expression) {
         if (PsiDiamondTypeUtil.canCollapseToDiamond(expression, expression, null)) {
-          final PsiJavaCodeReferenceElement classReference = expression.getClassOrAnonymousClassReference();
+          PsiJavaCodeReferenceElement classReference = expression.getClassOrAnonymousClassReference();
           LOG.assertTrue(classReference != null);
-          final PsiReferenceParameterList parameterList = classReference.getParameterList();
+          PsiReferenceParameterList parameterList = classReference.getParameterList();
           LOG.assertTrue(parameterList != null);
           holder.registerProblem(parameterList, "Explicit type argument #ref #loc can be replaced with <>",
               ProblemHighlightType.LIKE_UNUSED_SYMBOL, new ReplaceWithDiamondFix());

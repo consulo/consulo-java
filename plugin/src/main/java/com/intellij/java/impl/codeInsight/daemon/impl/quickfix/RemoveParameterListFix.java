@@ -49,7 +49,7 @@ public class RemoveParameterListFix implements SyntheticIntentionAction {
   @Override
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
-    final PsiMethod emptyMethod = JavaPsiFacade.getElementFactory(project).createMethodFromText("void foo(){}", myMethod);
+    PsiMethod emptyMethod = JavaPsiFacade.getElementFactory(project).createMethodFromText("void foo(){}", myMethod);
     myMethod.getParameterList().replace(emptyMethod.getParameterList());
   }
 

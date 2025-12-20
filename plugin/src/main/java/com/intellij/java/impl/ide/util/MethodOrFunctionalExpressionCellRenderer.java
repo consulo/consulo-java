@@ -46,7 +46,7 @@ public class MethodOrFunctionalExpressionCellRenderer extends PsiElementListCell
     return element instanceof PsiMethod ? myMethodCellRenderer.getIcon(element) : super.getIcon(element);
   }
 
-  public String getContainerText(final NavigatablePsiElement element, final String name) {
+  public String getContainerText(NavigatablePsiElement element, String name) {
     return element instanceof PsiMethod ? myMethodCellRenderer.getContainerText((PsiMethod) element, name) : PsiClassListCellRenderer.getContainerTextStatic(element);
   }
 

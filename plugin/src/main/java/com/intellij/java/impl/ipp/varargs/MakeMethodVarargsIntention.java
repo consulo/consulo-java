@@ -53,15 +53,15 @@ public class MakeMethodVarargsIntention extends Intention {
 
     private static void makeMethodVarargs(PsiElement element)
         throws IncorrectOperationException {
-        final PsiParameterList parameterList = (PsiParameterList) element;
-        final PsiParameter[] parameters = parameterList.getParameters();
-        final PsiParameter lastParameter = parameters[parameters.length - 1];
-        final PsiType type = lastParameter.getType();
-        final PsiType componentType = type.getDeepComponentType();
-        final String text = componentType.getCanonicalText();
-        final PsiManager manager = element.getManager();
-        final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-        final PsiParameter newParameter =
+        PsiParameterList parameterList = (PsiParameterList) element;
+        PsiParameter[] parameters = parameterList.getParameters();
+        PsiParameter lastParameter = parameters[parameters.length - 1];
+        PsiType type = lastParameter.getType();
+        PsiType componentType = type.getDeepComponentType();
+        String text = componentType.getCanonicalText();
+        PsiManager manager = element.getManager();
+        PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
+        PsiParameter newParameter =
             factory.createParameterFromText(text + "... " +
                 lastParameter.getName(), element);
         lastParameter.replace(newParameter);
@@ -69,36 +69,36 @@ public class MakeMethodVarargsIntention extends Intention {
 
     private static void makeMethodCallsVarargs(PsiElement element)
         throws IncorrectOperationException {
-        final PsiMethod method = (PsiMethod) element.getParent();
-        final Query<PsiReference> query =
+        PsiMethod method = (PsiMethod) element.getParent();
+        Query<PsiReference> query =
             ReferencesSearch.search(method, method.getUseScope(), false);
         for (PsiReference reference : query) {
-            final PsiElement referenceElement = reference.getElement();
+            PsiElement referenceElement = reference.getElement();
             if (!(referenceElement instanceof PsiReferenceExpression)) {
                 continue;
             }
-            final PsiReferenceExpression referenceExpression =
+            PsiReferenceExpression referenceExpression =
                 (PsiReferenceExpression) referenceElement;
-            final PsiMethodCallExpression methodCallExpression =
+            PsiMethodCallExpression methodCallExpression =
                 (PsiMethodCallExpression) referenceExpression.getParent();
-            final PsiExpressionList argumentList =
+            PsiExpressionList argumentList =
                 methodCallExpression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length == 0) {
                 continue;
             }
-            final PsiExpression lastArgument = arguments[arguments.length - 1];
+            PsiExpression lastArgument = arguments[arguments.length - 1];
             if (!(lastArgument instanceof PsiNewExpression)) {
                 continue;
             }
-            final PsiNewExpression newExpression =
+            PsiNewExpression newExpression =
                 (PsiNewExpression) lastArgument;
-            final PsiArrayInitializerExpression arrayInitializerExpression =
+            PsiArrayInitializerExpression arrayInitializerExpression =
                 newExpression.getArrayInitializer();
             if (arrayInitializerExpression == null) {
                 continue;
             }
-            final PsiExpression[] initializers =
+            PsiExpression[] initializers =
                 arrayInitializerExpression.getInitializers();
             for (PsiExpression initializer : initializers) {
                 argumentList.add(initializer);

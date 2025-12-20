@@ -38,7 +38,7 @@ public class JavaInheritedMembersNodeProvider extends InheritedMembersNodeProvid
     }
 
     JavaClassTreeElement classNode = (JavaClassTreeElement) node;
-    final PsiClass aClass = classNode.getElement();
+    PsiClass aClass = classNode.getElement();
     if (aClass == null) {
       return Collections.emptyList();
     }
@@ -49,7 +49,7 @@ public class JavaInheritedMembersNodeProvider extends InheritedMembersNodeProvid
     aClass.processDeclarations(new AddAllMembersProcessor(inherited, aClass), ResolveState.initial(), null, aClass);
     inherited.removeAll(ownChildren);
     if (aClass instanceof PsiAnonymousClass) {
-      final PsiElement element = ((PsiAnonymousClass) aClass).getBaseClassReference().resolve();
+      PsiElement element = ((PsiAnonymousClass) aClass).getBaseClassReference().resolve();
       if (element instanceof PsiClass) {
         ContainerUtil.addAll(inherited, ((PsiClass) element).getInnerClasses());
       }

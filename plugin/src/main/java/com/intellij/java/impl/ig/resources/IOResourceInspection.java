@@ -80,21 +80,21 @@ public class IOResourceInspection extends ResourceInspection {
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final PsiExpression expression = (PsiExpression)infos[0];
-    final PsiType type = expression.getType();
+    PsiExpression expression = (PsiExpression)infos[0];
+    PsiType type = expression.getType();
     assert type != null;
-    final String text = type.getPresentableText();
+    String text = type.getPresentableText();
     return InspectionGadgetsLocalize.resourceOpenedNotClosedProblemDescriptor(text).get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    final JComponent panel = new JPanel(new BorderLayout());
-    final ListTable table =
+    JComponent panel = new JPanel(new BorderLayout());
+    ListTable table =
       new ListTable(new ListWrappingTableModel(ignoredTypes, InspectionGadgetsLocalize.ignoredIoResourceTypes().get()));
     JPanel tablePanel =
       UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsLocalize.chooseIoResourceTypeToIgnore().get(), IO_TYPES);
-    final CheckBox checkBox =
+    CheckBox checkBox =
       new CheckBox(InspectionGadgetsLocalize.allowResourceToBeOpenedInsideATryBlock().get(), this, "insideTryAllowed");
     panel.add(tablePanel, BorderLayout.CENTER);
     panel.add(checkBox, BorderLayout.SOUTH);
@@ -141,7 +141,7 @@ public class IOResourceInspection extends ResourceInspection {
     }
 
     private void checkExpression(PsiExpression expression) {
-      final PsiElement parent = getExpressionParent(expression);
+      PsiElement parent = getExpressionParent(expression);
       if (parent instanceof PsiReturnStatement || parent instanceof PsiResourceVariable) {
         return;
       }
@@ -154,8 +154,8 @@ public class IOResourceInspection extends ResourceInspection {
           return;
         }
       }
-      final PsiVariable boundVariable = getVariable(parent);
-      final PsiElement containingBlock = PsiTreeUtil.getParentOfType(expression, PsiCodeBlock.class);
+      PsiVariable boundVariable = getVariable(parent);
+      PsiElement containingBlock = PsiTreeUtil.getParentOfType(expression, PsiCodeBlock.class);
       if (containingBlock == null) {
         return;
       }
@@ -173,12 +173,12 @@ public class IOResourceInspection extends ResourceInspection {
   }
 
   public static boolean isIOResourceFactoryMethodCall(PsiMethodCallExpression expression) {
-    final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-    @NonNls final String methodName = methodExpression.getReferenceName();
+    PsiReferenceExpression methodExpression = expression.getMethodExpression();
+    @NonNls String methodName = methodExpression.getReferenceName();
     if (!"getResourceAsStream".equals(methodName)) {
       return false;
     }
-    final PsiExpression qualifier = methodExpression.getQualifierExpression();
+    PsiExpression qualifier = methodExpression.getQualifierExpression();
     if (qualifier == null) {
       return false;
     }
@@ -195,7 +195,7 @@ public class IOResourceInspection extends ResourceInspection {
 
   private boolean isArgumentOfResourceCreation(
     PsiVariable boundVariable, PsiElement scope) {
-    final UsedAsIOResourceArgumentVisitor visitor =
+    UsedAsIOResourceArgumentVisitor visitor =
       new UsedAsIOResourceArgumentVisitor(boundVariable);
     scope.accept(visitor);
     return visitor.isUsedAsArgumentToResourceCreation();
@@ -221,20 +221,20 @@ public class IOResourceInspection extends ResourceInspection {
       if (!isIOResource(expression)) {
         return;
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpressionList argumentList = expression.getArgumentList();
       if (argumentList == null) {
         return;
       }
-      final PsiExpression[] arguments = argumentList.getExpressions();
+      PsiExpression[] arguments = argumentList.getExpressions();
       if (arguments.length == 0) {
         return;
       }
-      final PsiExpression argument = arguments[0];
+      PsiExpression argument = arguments[0];
       if (!(argument instanceof PsiReferenceExpression)) {
         return;
       }
-      final PsiReference reference = (PsiReference)argument;
-      final PsiElement target = reference.resolve();
+      PsiReference reference = (PsiReference)argument;
+      PsiElement target = reference.resolve();
       if (target == null || !target.equals(ioResource)) {
         return;
       }

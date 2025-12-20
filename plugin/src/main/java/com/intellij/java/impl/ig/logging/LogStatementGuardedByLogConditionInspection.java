@@ -83,11 +83,11 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
 
   @Override
   public JComponent createOptionsPanel() {
-    final JPanel panel = new JPanel(new BorderLayout());
-    final JLabel classNameLabel = new JLabel(InspectionGadgetsLocalize.loggerNameOption().get());
+    JPanel panel = new JPanel(new BorderLayout());
+    JLabel classNameLabel = new JLabel(InspectionGadgetsLocalize.loggerNameOption().get());
     classNameLabel.setHorizontalAlignment(SwingConstants.TRAILING);
-    final TextField loggerClassNameField = new TextField(this, "loggerClassName");
-    final ListTable table = new ListTable(new ListWrappingTableModel(
+    TextField loggerClassNameField = new TextField(this, "loggerClassName");
+    ListTable table = new ListTable(new ListWrappingTableModel(
       Arrays.asList(logMethodNameList, logConditionMethodNameList),
       InspectionGadgetsLocalize.logMethodName().get(),
       InspectionGadgetsLocalize.logConditionText().get()
@@ -120,17 +120,17 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
 
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor) {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)element.getParent().getParent();
-      final PsiStatement statement = PsiTreeUtil.getParentOfType(
+      PsiElement element = descriptor.getPsiElement();
+      PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)element.getParent().getParent();
+      PsiStatement statement = PsiTreeUtil.getParentOfType(
         methodCallExpression, PsiStatement.class);
       if (statement == null) {
         return;
       }
-      final List<PsiStatement> logStatements = new ArrayList();
+      List<PsiStatement> logStatements = new ArrayList();
       logStatements.add(statement);
-      final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-      final String referenceName = methodExpression.getReferenceName();
+      PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+      String referenceName = methodExpression.getReferenceName();
       if (referenceName == null) {
         return;
       }
@@ -144,33 +144,32 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
         logStatements.add(nextStatement);
         nextStatement = PsiTreeUtil.getNextSiblingOfType(nextStatement, PsiStatement.class);
       }
-      final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
-      final PsiExpression qualifier = methodExpression.getQualifierExpression();
+      PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
+      PsiExpression qualifier = methodExpression.getQualifierExpression();
       if (qualifier == null) {
         return;
       }
-      @NonNls
-      final StringBuilder ifStatementText = new StringBuilder("if (");
+      @NonNls StringBuilder ifStatementText = new StringBuilder("if (");
       ifStatementText.append(qualifier.getText());
       ifStatementText.append('.');
-      final int index = logMethodNameList.indexOf(referenceName);
-      final String conditionMethodText = logConditionMethodNameList.get(index);
+      int index = logMethodNameList.indexOf(referenceName);
+      String conditionMethodText = logConditionMethodNameList.get(index);
       ifStatementText.append(conditionMethodText);
       ifStatementText.append(") {}");
-      final PsiIfStatement ifStatement = (PsiIfStatement)factory.createStatementFromText(
+      PsiIfStatement ifStatement = (PsiIfStatement)factory.createStatementFromText(
           ifStatementText.toString(), statement);
-      final PsiBlockStatement blockStatement = (PsiBlockStatement)ifStatement.getThenBranch();
+      PsiBlockStatement blockStatement = (PsiBlockStatement)ifStatement.getThenBranch();
       if (blockStatement == null) {
         return;
       }
-      final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
+      PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
       for (PsiStatement logStatement : logStatements) {
         codeBlock.add(logStatement);
       }
-      final PsiStatement firstStatement = logStatements.get(0);
-      final PsiElement parent = firstStatement.getParent();
-      final PsiElement result = parent.addBefore(ifStatement, firstStatement);
-      final JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
+      PsiStatement firstStatement = logStatements.get(0);
+      PsiElement parent = firstStatement.getParent();
+      PsiElement result = parent.addBefore(ifStatement, firstStatement);
+      JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
       codeStyleManager.shortenClassReferences(result);
       for (PsiStatement logStatement : logStatements) {
         logStatement.delete();
@@ -184,18 +183,18 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
       if (!(statement instanceof PsiExpressionStatement)) {
         return false;
       }
-      final PsiExpressionStatement expressionStatement = (PsiExpressionStatement)statement;
-      final PsiExpression expression = expressionStatement.getExpression();
+      PsiExpressionStatement expressionStatement = (PsiExpressionStatement)statement;
+      PsiExpression expression = expressionStatement.getExpression();
       if (!(expression instanceof PsiMethodCallExpression)) {
         return false;
       }
-      final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)expression;
-      final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-      final String referenceName = methodExpression.getReferenceName();
+      PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)expression;
+      PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+      String referenceName = methodExpression.getReferenceName();
       if (!methodName.equals(referenceName)) {
         return false;
       }
-      final PsiExpression qualifier = methodExpression.getQualifierExpression();
+      PsiExpression qualifier = methodExpression.getQualifierExpression();
       if (qualifier == null) {
         return false;
       }
@@ -213,12 +212,12 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
     @Override
     public void visitMethodCallExpression(PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      final String referenceName = methodExpression.getReferenceName();
+      PsiReferenceExpression methodExpression = expression.getMethodExpression();
+      String referenceName = methodExpression.getReferenceName();
       if (!logMethodNameList.contains(referenceName)) {
         return;
       }
-      final PsiExpression qualifier = methodExpression.getQualifierExpression();
+      PsiExpression qualifier = methodExpression.getQualifierExpression();
       if (qualifier == null) {
         return;
       }
@@ -228,8 +227,8 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
       if (isSurroundedByLogGuard(expression, referenceName)) {
         return;
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
+      PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpression[] arguments = argumentList.getExpressions();
       if (arguments.length == 0) {
         return;
       }
@@ -250,11 +249,11 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
 
     private boolean isSurroundedByLogGuard(PsiElement element, String logMethodName) {
       while (true) {
-        final PsiIfStatement ifStatement = PsiTreeUtil.getParentOfType(element, PsiIfStatement.class);
+        PsiIfStatement ifStatement = PsiTreeUtil.getParentOfType(element, PsiIfStatement.class);
         if (ifStatement == null) {
           return false;
         }
-        final PsiExpression condition = ifStatement.getCondition();
+        PsiExpression condition = ifStatement.getCondition();
         if (isLogGuardCheck(condition, logMethodName)) {
           return true;
         }
@@ -264,23 +263,23 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
 
     private boolean isLogGuardCheck(@Nullable PsiExpression expression, String logMethodName) {
       if (expression instanceof PsiMethodCallExpression) {
-        final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)expression;
-        final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-        final PsiExpression qualifier = methodExpression.getQualifierExpression();
+        PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)expression;
+        PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+        PsiExpression qualifier = methodExpression.getQualifierExpression();
         if (qualifier == null) {
           return false;
         }
         if (!TypeUtils.expressionHasTypeOrSubtype(qualifier, loggerClassName)) {
           return false;
         }
-        final String referenceName = methodExpression.getReferenceName();
-        final int index = logMethodNameList.indexOf(logMethodName);
-        final String conditionName = logConditionMethodNameList.get(index);
+        String referenceName = methodExpression.getReferenceName();
+        int index = logMethodNameList.indexOf(logMethodName);
+        String conditionName = logConditionMethodNameList.get(index);
         return conditionName.startsWith(referenceName);
       }
       else if (expression instanceof PsiPolyadicExpression) {
-        final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)expression;
-        final PsiExpression[] operands = polyadicExpression.getOperands();
+        PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)expression;
+        PsiExpression[] operands = polyadicExpression.getOperands();
         for (PsiExpression operand : operands) {
           if (isLogGuardCheck(operand, logMethodName)) {
             return true;

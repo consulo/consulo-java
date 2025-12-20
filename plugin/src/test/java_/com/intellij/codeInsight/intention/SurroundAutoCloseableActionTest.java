@@ -32,7 +32,7 @@ public abstract class SurroundAutoCloseableActionTest extends JavaCodeInsightFix
   }
 
   @Override
-  protected void tuneFixture(final JavaModuleFixtureBuilder moduleBuilder) throws Exception {
+  protected void tuneFixture(JavaModuleFixtureBuilder moduleBuilder) throws Exception {
     moduleBuilder.setLanguageLevel(LanguageLevel.JDK_1_7);
   }
 

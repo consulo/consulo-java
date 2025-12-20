@@ -62,8 +62,8 @@ public class UnnecessaryQualifierForThisInspection extends BaseInspection {
         }
 
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement qualifier = descriptor.getPsiElement();
-            final PsiThisExpression thisExpression = (PsiThisExpression) qualifier.getParent();
+            PsiElement qualifier = descriptor.getPsiElement();
+            PsiThisExpression thisExpression = (PsiThisExpression) qualifier.getParent();
             replaceExpression(thisExpression, PsiKeyword.THIS);
         }
     }
@@ -72,15 +72,15 @@ public class UnnecessaryQualifierForThisInspection extends BaseInspection {
         @Override
         public void visitThisExpression(@Nonnull PsiThisExpression thisExpression) {
             super.visitThisExpression(thisExpression);
-            final PsiJavaCodeReferenceElement qualifier = thisExpression.getQualifier();
+            PsiJavaCodeReferenceElement qualifier = thisExpression.getQualifier();
             if (qualifier == null) {
                 return;
             }
-            final PsiElement referent = qualifier.resolve();
+            PsiElement referent = qualifier.resolve();
             if (!(referent instanceof PsiClass)) {
                 return;
             }
-            final PsiClass containingClass = ClassUtils.getContainingClass(thisExpression);
+            PsiClass containingClass = ClassUtils.getContainingClass(thisExpression);
             if (containingClass == null) {
                 return;
             }

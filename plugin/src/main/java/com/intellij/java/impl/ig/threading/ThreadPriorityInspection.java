@@ -65,51 +65,51 @@ public class ThreadPriorityInspection extends BaseInspection {
 
     private static boolean isThreadSetPriority(
       @Nonnull PsiMethodCallExpression methodCallExpression) {
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         methodCallExpression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
-      @NonNls final String setPriority = "setPriority";
+      String methodName = methodExpression.getReferenceName();
+      @NonNls String setPriority = "setPriority";
       if (!setPriority.equals(methodName)) {
         return false;
       }
-      final PsiMethod method = methodCallExpression.resolveMethod();
+      PsiMethod method = methodCallExpression.resolveMethod();
       if (method == null) {
         return false;
       }
-      final PsiClass aClass = method.getContainingClass();
+      PsiClass aClass = method.getContainingClass();
       if (aClass == null) {
         return false;
       }
-      final String className = aClass.getQualifiedName();
+      String className = aClass.getQualifiedName();
       return "java.lang.Thread".equals(className);
     }
 
     private static boolean hasNormalPriorityArgument(
       @Nonnull PsiMethodCallExpression methodCallExpression) {
-      final PsiExpressionList argumentList =
+      PsiExpressionList argumentList =
         methodCallExpression.getArgumentList();
-      final PsiExpression[] expressions = argumentList.getExpressions();
+      PsiExpression[] expressions = argumentList.getExpressions();
       if (expressions.length != 1) {
         return false;
       }
-      final PsiExpression expression = expressions[0];
+      PsiExpression expression = expressions[0];
       if (!(expression instanceof PsiReferenceExpression)) {
         return false;
       }
-      final PsiReferenceExpression referenceExpression =
+      PsiReferenceExpression referenceExpression =
         (PsiReferenceExpression)expression;
-      final String referenceName = referenceExpression.getReferenceName();
-      @NonNls final String normPriority = "NORM_PRIORITY";
+      String referenceName = referenceExpression.getReferenceName();
+      @NonNls String normPriority = "NORM_PRIORITY";
       if (!normPriority.equals(referenceName)) {
         return false;
       }
-      final PsiElement element = referenceExpression.resolve();
+      PsiElement element = referenceExpression.resolve();
       if (!(element instanceof PsiField)) {
         return false;
       }
-      final PsiField field = (PsiField)element;
-      final PsiClass aClass = field.getContainingClass();
-      final String className = aClass.getQualifiedName();
+      PsiField field = (PsiField)element;
+      PsiClass aClass = field.getContainingClass();
+      String className = aClass.getQualifiedName();
       return "java.lang.Thread".equals(className);
     }
   }

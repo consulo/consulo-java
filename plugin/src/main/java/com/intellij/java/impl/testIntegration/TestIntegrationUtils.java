@@ -101,9 +101,9 @@ public class TestIntegrationUtils {
   public static PsiClass findOuterClass(@Nonnull PsiElement element) {
     PsiClass result = PsiTreeUtil.getParentOfType(element, PsiClass.class, false);
     if (result == null) {
-       final PsiFile containingFile = element.getContainingFile();
+       PsiFile containingFile = element.getContainingFile();
        if (containingFile instanceof PsiClassOwner){
-        final PsiClass[] classes = ((PsiClassOwner)containingFile).getClasses();
+        PsiClass[] classes = ((PsiClassOwner)containingFile).getClasses();
         if (classes.length == 1) {
           result = classes[0];
         }
@@ -141,13 +141,13 @@ public class TestIntegrationUtils {
   public static void runTestMethodTemplate(MethodKind methodKind,
                                            TestFramework framework,
                                            final Editor editor,
-                                           final PsiClass targetClass,
-                                           final PsiMethod method,
+                                           PsiClass targetClass,
+                                           PsiMethod method,
                                            @Nullable String name,
                                            boolean automatic) {
     Template template = createTestMethodTemplate(methodKind, framework, targetClass, name, automatic);
 
-    final TextRange range = method.getTextRange();
+    TextRange range = method.getTextRange();
     editor.getDocument().replaceString(range.getStartOffset(), range.getEndOffset(), "");
     editor.getCaretModel().moveToOffset(range.getStartOffset());
 

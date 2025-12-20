@@ -54,12 +54,12 @@ public class DefaultClassNavigationContributor implements GotoClassOrTypeContrib
 
   @Override
   @Nonnull
-  public NavigationItem[] getItemsByName(String name, final String pattern, Project project, boolean includeNonProjectItems) {
-    final GlobalSearchScope scope = includeNonProjectItems ? GlobalSearchScope.allScope(project) : GlobalSearchScope.projectScope(project);
+  public NavigationItem[] getItemsByName(String name, String pattern, Project project, boolean includeNonProjectItems) {
+    GlobalSearchScope scope = includeNonProjectItems ? GlobalSearchScope.allScope(project) : GlobalSearchScope.projectScope(project);
     return filterUnshowable(PsiShortNamesCache.getInstance(project).getClassesByName(name, scope), pattern);
   }
 
-  private static NavigationItem[] filterUnshowable(PsiClass[] items, final String pattern) {
+  private static NavigationItem[] filterUnshowable(PsiClass[] items, String pattern) {
     boolean isAnnotation = pattern.startsWith("@");
     ArrayList<NavigationItem> list = new ArrayList<NavigationItem>(items.length);
     for (PsiClass item : items) {
@@ -71,7 +71,7 @@ public class DefaultClassNavigationContributor implements GotoClassOrTypeContrib
   }
 
   @Override
-  public String getQualifiedName(final NavigationItem item) {
+  public String getQualifiedName(NavigationItem item) {
     if (item instanceof PsiClass) {
       return getQualifiedNameForClass((PsiClass) item);
     }
@@ -79,10 +79,10 @@ public class DefaultClassNavigationContributor implements GotoClassOrTypeContrib
   }
 
   public static String getQualifiedNameForClass(PsiClass psiClass) {
-    final String qName = psiClass.getQualifiedName();
+    String qName = psiClass.getQualifiedName();
     if (qName != null) return qName;
 
-    final String containerText = SymbolPresentationUtil.getSymbolContainerText(psiClass);
+    String containerText = SymbolPresentationUtil.getSymbolContainerText(psiClass);
     return containerText + "." + psiClass.getName();
   }
 

@@ -21,7 +21,7 @@ public abstract class RedundantTypeArgsInspectionTest extends JavaCodeInsightFix
   }
 
   private void doTest() throws Throwable {
-    final RedundantTypeArgsInspection inspection = new RedundantTypeArgsInspection();
+    RedundantTypeArgsInspection inspection = new RedundantTypeArgsInspection();
     myFixture.enableInspections(inspection);
     myFixture.testHighlighting(true, false, false, getTestName(false) + ".java");
   }

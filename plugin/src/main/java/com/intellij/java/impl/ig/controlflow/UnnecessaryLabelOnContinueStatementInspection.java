@@ -59,11 +59,11 @@ public class UnnecessaryLabelOnContinueStatementInspection extends BaseInspectio
 
         public void doFix(Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
-            final PsiElement continueKeywordElement =
+            PsiElement continueKeywordElement =
                 descriptor.getPsiElement();
-            final PsiContinueStatement continueStatement =
+            PsiContinueStatement continueStatement =
                 (PsiContinueStatement) continueKeywordElement.getParent();
-            final PsiIdentifier labelIdentifier =
+            PsiIdentifier labelIdentifier =
                 continueStatement.getLabelIdentifier();
             if (labelIdentifier == null) {
                 return;
@@ -83,21 +83,21 @@ public class UnnecessaryLabelOnContinueStatementInspection extends BaseInspectio
         public void visitContinueStatement(
             @Nonnull PsiContinueStatement statement
         ) {
-            final PsiIdentifier labelIdentifier =
+            PsiIdentifier labelIdentifier =
                 statement.getLabelIdentifier();
             if (labelIdentifier == null) {
                 return;
             }
-            final String labelText = labelIdentifier.getText();
+            String labelText = labelIdentifier.getText();
             if (labelText == null || labelText.length() == 0) {
                 return;
             }
-            final PsiStatement exitedStatement =
+            PsiStatement exitedStatement =
                 statement.findContinuedStatement();
             if (exitedStatement == null) {
                 return;
             }
-            final PsiStatement labelEnabledParent =
+            PsiStatement labelEnabledParent =
                 PsiTreeUtil.getParentOfType(statement,
                     PsiForStatement.class, PsiDoWhileStatement.class,
                     PsiForeachStatement.class, PsiWhileStatement.class,

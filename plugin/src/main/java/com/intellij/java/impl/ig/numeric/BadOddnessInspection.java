@@ -58,8 +58,8 @@ public class BadOddnessInspection extends BaseInspection {
       if (!ComparisonUtils.isEqualityComparison(expression)) {
         return;
       }
-      final PsiExpression lhs = expression.getLOperand();
-      final PsiExpression rhs = expression.getROperand();
+      PsiExpression lhs = expression.getLOperand();
+      PsiExpression rhs = expression.getROperand();
       if (isModTwo(lhs) && hasValue(rhs, 1)) {
         registerError(expression, expression);
       }
@@ -72,13 +72,13 @@ public class BadOddnessInspection extends BaseInspection {
       if (!(exp instanceof PsiBinaryExpression)) {
         return false;
       }
-      final PsiBinaryExpression binary = (PsiBinaryExpression)exp;
-      final IElementType tokenType = binary.getOperationTokenType();
+      PsiBinaryExpression binary = (PsiBinaryExpression)exp;
+      IElementType tokenType = binary.getOperationTokenType();
       if (!JavaTokenType.PERC.equals(tokenType)) {
         return false;
       }
-      final PsiExpression rhs = binary.getROperand();
-      final PsiExpression lhs = binary.getLOperand();
+      PsiExpression rhs = binary.getROperand();
+      PsiExpression lhs = binary.getLOperand();
       if (rhs == null) {
         return false;
       }
@@ -86,7 +86,7 @@ public class BadOddnessInspection extends BaseInspection {
     }
 
     private static boolean hasValue(PsiExpression expression, int testValue) {
-      final Integer value = (Integer)
+      Integer value = (Integer)
         ConstantExpressionUtil.computeCastTo(
           expression, PsiType.INT);
       return value != null && value.intValue() == testValue;

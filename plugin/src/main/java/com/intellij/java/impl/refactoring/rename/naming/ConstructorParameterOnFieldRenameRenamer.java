@@ -39,25 +39,25 @@ import java.util.Set;
  */
 public class ConstructorParameterOnFieldRenameRenamer extends AutomaticRenamer {
   @NonNls
-  protected String canonicalNameToName(@NonNls final String canonicalName, final PsiNamedElement element) {
+  protected String canonicalNameToName(@NonNls String canonicalName, PsiNamedElement element) {
     return JavaCodeStyleManager.getInstance(element.getProject()).propertyNameToVariableName(canonicalName, VariableKind.PARAMETER);
   }
 
-  protected String nameToCanonicalName(@NonNls final String name, final PsiNamedElement element) {
+  protected String nameToCanonicalName(@NonNls String name, PsiNamedElement element) {
     return JavaCodeStyleManager.getInstance(element.getProject()).variableNameToPropertyName(name, VariableKind.FIELD);
   }
 
   public ConstructorParameterOnFieldRenameRenamer(PsiField aField, String newFieldName) {
-    final JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(aField.getProject());
-    final String propertyName = styleManager.variableNameToPropertyName(aField.getName(), VariableKind.FIELD);
+    JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(aField.getProject());
+    String propertyName = styleManager.variableNameToPropertyName(aField.getName(), VariableKind.FIELD);
     if (!Comparing.strEqual(propertyName, styleManager.variableNameToPropertyName(newFieldName, VariableKind.FIELD))) {
-      final String paramName = styleManager.propertyNameToVariableName(propertyName, VariableKind.PARAMETER);
-      final PsiClass aClass = aField.getContainingClass();
+      String paramName = styleManager.propertyNameToVariableName(propertyName, VariableKind.PARAMETER);
+      PsiClass aClass = aField.getContainingClass();
 
       Set<PsiParameter> toRename = new HashSet<PsiParameter>();
       for (PsiMethod constructor : aClass.getConstructors()) {
         if (constructor instanceof PsiMirrorElement) {
-          final PsiElement prototype = ((PsiMirrorElement) constructor).getPrototype();
+          PsiElement prototype = ((PsiMirrorElement) constructor).getPrototype();
           if (prototype instanceof PsiMethod && ((PsiMethod) prototype).isConstructor()) {
             constructor = (PsiMethod) prototype;
           } else {
@@ -65,9 +65,9 @@ public class ConstructorParameterOnFieldRenameRenamer extends AutomaticRenamer {
           }
         }
         if (constructor instanceof LightElement) continue;
-        final PsiParameter[] parameters = constructor.getParameterList().getParameters();
-        for (final PsiParameter parameter : parameters) {
-          final String parameterName = parameter.getName();
+        PsiParameter[] parameters = constructor.getParameterList().getParameters();
+        for (PsiParameter parameter : parameters) {
+          String parameterName = parameter.getName();
           if (paramName.equals(parameterName) ||
               propertyName.equals(styleManager.variableNameToPropertyName(parameterName, VariableKind.PARAMETER))) {
             toRename.add(parameter);

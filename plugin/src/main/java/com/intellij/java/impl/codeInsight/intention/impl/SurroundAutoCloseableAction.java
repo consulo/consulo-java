@@ -47,24 +47,24 @@ import java.util.List;
 public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
   @Override
   @RequiredReadAction
-  public boolean isAvailable(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (!element.getLanguage().isKindOf(JavaLanguage.INSTANCE)) return false;
     if (!PsiUtil.getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_1_7)) return false;
 
-    final PsiLocalVariable variable = PsiTreeUtil.getParentOfType(element, PsiLocalVariable.class);
+    PsiLocalVariable variable = PsiTreeUtil.getParentOfType(element, PsiLocalVariable.class);
     if (variable == null) return false;
-    final PsiExpression initializer = variable.getInitializer();
+    PsiExpression initializer = variable.getInitializer();
     if (initializer == null) return false;
-    final PsiElement declaration = variable.getParent();
+    PsiElement declaration = variable.getParent();
     if (!(declaration instanceof PsiDeclarationStatement)) return false;
-    final PsiElement codeBlock = declaration.getParent();
+    PsiElement codeBlock = declaration.getParent();
     if (!(codeBlock instanceof PsiCodeBlock)) return false;
 
-    final PsiType type = variable.getType();
+    PsiType type = variable.getType();
     if (!(type instanceof PsiClassType)) return false;
-    final PsiClass aClass = ((PsiClassType)type).resolve();
-    final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-    final PsiClass autoCloseable = facade.findClass(
+    PsiClass aClass = ((PsiClassType)type).resolve();
+    JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
+    PsiClass autoCloseable = facade.findClass(
         CommonClassNames.JAVA_LANG_AUTO_CLOSEABLE,
         (GlobalSearchScope) ProjectScopes.getLibrariesScope(project)
     );
@@ -73,40 +73,40 @@ public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
 
   @Override
   @RequiredReadAction
-  public void invoke(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element)
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element)
     throws IncorrectOperationException {
-    final PsiLocalVariable variable = PsiTreeUtil.getParentOfType(element, PsiLocalVariable.class);
+    PsiLocalVariable variable = PsiTreeUtil.getParentOfType(element, PsiLocalVariable.class);
     if (variable == null) return;
-    final PsiExpression initializer = variable.getInitializer();
+    PsiExpression initializer = variable.getInitializer();
     if (initializer == null) return;
-    final PsiElement declaration = variable.getParent();
+    PsiElement declaration = variable.getParent();
     if (!(declaration instanceof PsiDeclarationStatement)) return;
-    final PsiElement codeBlock = declaration.getParent();
+    PsiElement codeBlock = declaration.getParent();
     if (!(codeBlock instanceof PsiCodeBlock)) return;
 
-    final LocalSearchScope scope = new LocalSearchScope(codeBlock);
+    LocalSearchScope scope = new LocalSearchScope(codeBlock);
     PsiElement last = null;
     for (PsiReference reference : ReferencesSearch.search(variable, scope).findAll()) {
-      final PsiElement usage = PsiTreeUtil.findPrevParent(codeBlock, reference.getElement());
+      PsiElement usage = PsiTreeUtil.findPrevParent(codeBlock, reference.getElement());
       if ((last == null || usage.getTextOffset() > last.getTextOffset())) {
         last = usage;
       }
     }
 
-    final String text = "try (" + variable.getTypeElement().getText() + " " + variable.getName() + " = " + initializer.getText() + ") {}";
-    final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-    final PsiTryStatement armStatement = (PsiTryStatement)declaration.replace(factory.createStatementFromText(text, codeBlock));
+    String text = "try (" + variable.getTypeElement().getText() + " " + variable.getName() + " = " + initializer.getText() + ") {}";
+    PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+    PsiTryStatement armStatement = (PsiTryStatement)declaration.replace(factory.createStatementFromText(text, codeBlock));
 
     List<PsiElement> toFormat = null;
     if (last != null) {
-      final PsiElement first = armStatement.getNextSibling();
+      PsiElement first = armStatement.getNextSibling();
       if (first != null) {
         toFormat = moveStatements(first, last, armStatement);
       }
     }
 
-    final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
-    final PsiElement formattedElement = codeStyleManager.reformat(armStatement);
+    CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+    PsiElement formattedElement = codeStyleManager.reformat(armStatement);
     if (toFormat != null) {
       for (PsiElement psiElement : toFormat) {
         codeStyleManager.reformat(psiElement);
@@ -114,9 +114,9 @@ public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
     }
 
     if (last == null) {
-      final PsiCodeBlock tryBlock = ((PsiTryStatement)formattedElement).getTryBlock();
+      PsiCodeBlock tryBlock = ((PsiTryStatement)formattedElement).getTryBlock();
       if (tryBlock != null) {
-        final PsiJavaToken brace = tryBlock.getLBrace();
+        PsiJavaToken brace = tryBlock.getLBrace();
         if (brace != null) {
           editor.getCaretModel().moveToOffset(brace.getTextOffset() + 1);
         }
@@ -139,7 +139,7 @@ public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
       for (PsiElement declared : ((PsiDeclarationStatement)child).getDeclaredElements()) {
         if (!(declared instanceof PsiLocalVariable)) continue;
 
-        final int endOffset = last.getTextRange().getEndOffset();
+        int endOffset = last.getTextRange().getEndOffset();
         boolean contained = ReferencesSearch.search(declared, new LocalSearchScope(parent))
           .forEach(reference -> reference.getElement().getTextOffset() <= endOffset);
 

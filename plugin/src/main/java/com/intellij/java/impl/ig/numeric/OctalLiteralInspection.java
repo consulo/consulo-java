@@ -70,21 +70,21 @@ public class OctalLiteralInspection extends BaseInspection {
         @Override
         public void visitLiteralExpression(@Nonnull PsiLiteralExpression literal) {
             super.visitLiteralExpression(literal);
-            final PsiType type = literal.getType();
+            PsiType type = literal.getType();
             if (type == null) {
                 return;
             }
             if (!(type.equals(PsiType.INT) || type.equals(PsiType.LONG))) {
                 return;
             }
-            final String text = literal.getText();
+            String text = literal.getText();
             if (text.length() == 1) {
                 return;
             }
             if (text.charAt(0) != '0') {
                 return;
             }
-            final char c1 = text.charAt(1);
+            char c1 = text.charAt(1);
             if (c1 != '_' && (c1 < '0' || c1 > '7')) {
                 return;
             }

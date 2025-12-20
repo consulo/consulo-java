@@ -55,7 +55,7 @@ public class ExtractInterfaceProcessor extends ExtractSuperBaseProcessor {
 
   protected boolean isInSuper(PsiElement member) {
     if (member instanceof PsiField) {
-      final PsiField field = ((PsiField)member);
+      PsiField field = ((PsiField)member);
       return doMemberInfosContain(field);
     }
     else if (member instanceof PsiMethod) {

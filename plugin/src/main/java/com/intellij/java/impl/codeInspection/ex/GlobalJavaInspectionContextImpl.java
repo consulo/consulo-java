@@ -146,16 +146,16 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 	}
 
 	@Override
-	public EntryPointsManager getEntryPointsManager(final RefManager manager)
+	public EntryPointsManager getEntryPointsManager(RefManager manager)
 	{
 		return manager.getExtension(RefJavaManager.MANAGER).getEntryPointsManager();
 	}
 
 	@RequiredReadAction
 	@SuppressWarnings({"UseOfSystemOutOrSystemErr"})
-	public static boolean isInspectionsEnabled(final boolean online, @Nonnull Project project)
+	public static boolean isInspectionsEnabled(boolean online, @Nonnull Project project)
 	{
-		final Module[] modules = ModuleManager.getInstance(project).getModules();
+		Module[] modules = ModuleManager.getInstance(project).getModules();
 		if (online)
 		{
 			if (modules.length == 0)
@@ -176,7 +176,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 					CommonLocalize.titleError().get(),
 					UIUtil.getErrorIcon()
 				);
-				final Sdk projectJdk = null;
+				Sdk projectJdk = null;
 				if (projectJdk == null)
 				{
 					return false;
@@ -198,8 +198,8 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 			}
 			for (Module module : modules)
 			{
-				final ModuleRootManager rootManager = ModuleRootManager.getInstance(module);
-				final OrderEntry[] entries = rootManager.getOrderEntries();
+				ModuleRootManager rootManager = ModuleRootManager.getInstance(module);
+				OrderEntry[] entries = rootManager.getOrderEntries();
 				for (OrderEntry entry : entries)
 				{
 					if (entry instanceof ModuleExtensionWithSdkOrderEntry sdkOrderEntry)
@@ -212,7 +212,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 					}
 					else if (entry instanceof LibraryOrderEntry libraryOrderEntry)
 					{
-						final Library library = libraryOrderEntry.getLibrary();
+						Library library = libraryOrderEntry.getLibrary();
 						if (library == null
 							|| library.getFiles(BinariesOrderRootType.getInstance()).length < library.getUrls(BinariesOrderRootType.getInstance()).length)
 						{
@@ -227,7 +227,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 		return true;
 	}
 
-	private static boolean isBadSdk(final Project project, final Module[] modules)
+	private static boolean isBadSdk(Project project, Module[] modules)
 	{
    /* boolean anyModuleAcceptsSdk = false;
 	boolean anyModuleUsesProjectSdk = false;
@@ -268,12 +268,12 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 		myClassUsagesRequests = null;
 	}
 
-	public void processSearchRequests(final GlobalInspectionContext context)
+	public void processSearchRequests(GlobalInspectionContext context)
 	{
 		final RefManager refManager = context.getRefManager();
 		final AnalysisScope scope = refManager.getScope();
 
-		final SearchScope searchScope = new GlobalSearchScope(refManager.getProject())
+		SearchScope searchScope = new GlobalSearchScope(refManager.getProject())
 		{
 			@Override
 			public boolean contains(@Nonnull VirtualFile file)
@@ -302,7 +302,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 
 		if (myDerivedClassesRequests != null)
 		{
-			final List<SmartPsiElementPointer> sortedIDs = getSortedIDs(myDerivedClassesRequests);
+			List<SmartPsiElementPointer> sortedIDs = getSortedIDs(myDerivedClassesRequests);
 			for (SmartPsiElementPointer sortedID : sortedIDs)
 			{
 				final PsiClass psiClass = (PsiClass) dereferenceInReadAction(sortedID);
@@ -324,7 +324,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 					)
 				);
 
-				final List<DerivedClassesProcessor> processors = myDerivedClassesRequests.get(sortedID);
+				List<DerivedClassesProcessor> processors = myDerivedClassesRequests.get(sortedID);
 				LOG.assertTrue(processors != null, psiClass.getClass().getName());
 				ClassInheritorsSearch.search(psiClass, searchScope, false)
 					.forEach(createMembersProcessor(processors, scope));
@@ -335,19 +335,19 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 
 		if (myDerivedMethodsRequests != null)
 		{
-			final List<SmartPsiElementPointer> sortedIDs = getSortedIDs(myDerivedMethodsRequests);
+			List<SmartPsiElementPointer> sortedIDs = getSortedIDs(myDerivedMethodsRequests);
 			for (SmartPsiElementPointer sortedID : sortedIDs)
 			{
-				final PsiMethod psiMethod = (PsiMethod) dereferenceInReadAction(sortedID);
+				PsiMethod psiMethod = (PsiMethod) dereferenceInReadAction(sortedID);
 				if (psiMethod == null)
 				{
 					continue;
 				}
-				final RefMethod refMethod = (RefMethod) refManager.getReference(psiMethod);
+				RefMethod refMethod = (RefMethod) refManager.getReference(psiMethod);
 
 				context.incrementJobDoneAmount(context.getStdJobDescriptors().FIND_EXTERNAL_USAGES, refManager.getQualifiedName(refMethod));
 
-				final List<DerivedMethodsProcessor> processors = myDerivedMethodsRequests.get(sortedID);
+				List<DerivedMethodsProcessor> processors = myDerivedMethodsRequests.get(sortedID);
 				LOG.assertTrue(processors != null, psiMethod.getClass().getName());
 				OverridingMethodsSearch.search(psiMethod, searchScope, true)
 						.forEach(createMembersProcessor(processors, scope));
@@ -358,15 +358,15 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 
 		if (myFieldUsagesRequests != null)
 		{
-			final List<SmartPsiElementPointer> sortedIDs = getSortedIDs(myFieldUsagesRequests);
+			List<SmartPsiElementPointer> sortedIDs = getSortedIDs(myFieldUsagesRequests);
 			for (SmartPsiElementPointer sortedID : sortedIDs)
 			{
-				final PsiField psiField = (PsiField) dereferenceInReadAction(sortedID);
+				PsiField psiField = (PsiField) dereferenceInReadAction(sortedID);
 				if (psiField == null)
 				{
 					continue;
 				}
-				final List<UsagesProcessor> processors = myFieldUsagesRequests.get(sortedID);
+				List<UsagesProcessor> processors = myFieldUsagesRequests.get(sortedID);
 
 				LOG.assertTrue(processors != null, psiField.getClass().getName());
 				context.incrementJobDoneAmount(context.getStdJobDescriptors().FIND_EXTERNAL_USAGES, refManager.getQualifiedName(refManager.getReference(psiField)));
@@ -380,7 +380,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 
 		if (myClassUsagesRequests != null)
 		{
-			final List<SmartPsiElementPointer> sortedIDs = getSortedIDs(myClassUsagesRequests);
+			List<SmartPsiElementPointer> sortedIDs = getSortedIDs(myClassUsagesRequests);
 			for (SmartPsiElementPointer sortedID : sortedIDs)
 			{
 				final PsiClass psiClass = (PsiClass) dereferenceInReadAction(sortedID);
@@ -388,7 +388,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 				{
 					continue;
 				}
-				final List<UsagesProcessor> processors = myClassUsagesRequests.get(sortedID);
+				List<UsagesProcessor> processors = myClassUsagesRequests.get(sortedID);
 
 				LOG.assertTrue(processors != null, psiClass.getClass().getName());
 				context.incrementJobDoneAmount(
@@ -417,12 +417,12 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 			List<SmartPsiElementPointer> sortedIDs = getSortedIDs(myMethodUsagesRequests);
 			for (SmartPsiElementPointer sortedID : sortedIDs)
 			{
-				final PsiMethod psiMethod = (PsiMethod) dereferenceInReadAction(sortedID);
+				PsiMethod psiMethod = (PsiMethod) dereferenceInReadAction(sortedID);
 				if (psiMethod == null)
 				{
 					continue;
 				}
-				final List<UsagesProcessor> processors = myMethodUsagesRequests.get(sortedID);
+				List<UsagesProcessor> processors = myMethodUsagesRequests.get(sortedID);
 
 				LOG.assertTrue(processors != null, psiMethod.getClass().getName());
 				context.incrementJobDoneAmount(
@@ -439,20 +439,20 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 	}
 
 	@RequiredReadAction
-	private static PsiElement dereferenceInReadAction(final SmartPsiElementPointer sortedID)
+	private static PsiElement dereferenceInReadAction(SmartPsiElementPointer sortedID)
 	{
 		return Application.get().runReadAction((Computable<PsiElement>)() -> sortedID.getElement());
 	}
 
 	private static <Member extends PsiMember, P extends Processor<Member>>
-	PsiElementProcessorAdapter<Member> createMembersProcessor(final List<P> processors, final AnalysisScope scope)
+	PsiElementProcessorAdapter<Member> createMembersProcessor(List<P> processors, AnalysisScope scope)
 	{
 		return new PsiElementProcessorAdapter<>((PsiElementProcessor<Member>)member -> {
 			if (scope.contains(member))
 			{
 				return true;
 			}
-			final List<P> processorsArrayed = new ArrayList<>(processors);
+			List<P> processorsArrayed = new ArrayList<>(processors);
 			for (P processor : processorsArrayed)
 			{
 				if (!processor.process(member))
@@ -486,16 +486,16 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 		return list.size();
 	}
 
-	private static List<SmartPsiElementPointer> getSortedIDs(final Map<SmartPsiElementPointer, ?> requests)
+	private static List<SmartPsiElementPointer> getSortedIDs(Map<SmartPsiElementPointer, ?> requests)
 	{
-		final List<SmartPsiElementPointer> result = new ArrayList<>();
+		List<SmartPsiElementPointer> result = new ArrayList<>();
 
 		Application.get().runReadAction(() -> {
 			for (SmartPsiElementPointer id : requests.keySet())
 			{
 				if (id != null)
 				{
-					final PsiElement psi = id.getElement();
+					PsiElement psi = id.getElement();
 					if (psi != null)
 					{
 						result.add(id);
@@ -505,9 +505,9 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 			Collections.sort(result, (o1, o2) -> {
 				PsiElement p1 = o1.getElement();
 				PsiElement p2 = o2.getElement();
-				final PsiFile psiFile1 = p1 != null ? p1.getContainingFile() : null;
+				PsiFile psiFile1 = p1 != null ? p1.getContainingFile() : null;
 				LOG.assertTrue(psiFile1 != null);
-				final PsiFile psiFile2 = p2 != null ? p2.getContainingFile() : null;
+				PsiFile psiFile2 = p2 != null ? p2.getContainingFile() : null;
 				LOG.assertTrue(psiFile2 != null);
 				return psiFile1.getName().compareTo(psiFile2.getName());
 			});
@@ -517,8 +517,8 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 	}
 
 	private static PsiReferenceProcessor createReferenceProcessor(
-		@Nonnull final List<UsagesProcessor> processors,
-		final GlobalInspectionContext context
+		@Nonnull List<UsagesProcessor> processors,
+		GlobalInspectionContext context
 	)
 	{
 		return reference -> {
@@ -547,9 +547,9 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 
 	@Override
 	public void performPreRunActivities(
-		@Nonnull final List<Tools> globalTools,
-		@Nonnull final List<Tools> localTools,
-		@Nonnull final GlobalInspectionContext context
+		@Nonnull List<Tools> globalTools,
+		@Nonnull List<Tools> localTools,
+		@Nonnull GlobalInspectionContext context
 	)
 	{
 		getEntryPointsManager(context.getRefManager()).resolveEntryPoints(context.getRefManager());
@@ -567,7 +567,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 
 
 	@Override
-	public void performPostRunActivities(@Nonnull List<InspectionToolWrapper> needRepeatSearchRequest, @Nonnull final GlobalInspectionContext context)
+	public void performPostRunActivities(@Nonnull List<InspectionToolWrapper> needRepeatSearchRequest, @Nonnull GlobalInspectionContext context)
 	{
 		JobDescriptor progress = context.getStdJobDescriptors().FIND_EXTERNAL_USAGES;
 		progress.setTotalAmount(getRequestCount());

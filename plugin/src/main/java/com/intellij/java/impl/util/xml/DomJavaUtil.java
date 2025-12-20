@@ -37,11 +37,11 @@ public class DomJavaUtil {
   }
 
   @Nullable
-  public static PsiClass findClass(@Nullable String name, @Nonnull PsiFile file, @Nullable final Module module, @Nullable final GlobalSearchScope searchScope) {
+  public static PsiClass findClass(@Nullable String name, @Nonnull PsiFile file, @Nullable Module module, @Nullable GlobalSearchScope searchScope) {
     if (name == null) return null;
     if (name.indexOf('$') >= 0) name = name.replace('$', '.');
 
-    final GlobalSearchScope scope;
+    GlobalSearchScope scope;
     if (searchScope == null) {
 
       if (module != null) {
@@ -61,7 +61,7 @@ public class DomJavaUtil {
       scope = searchScope;
     }
 
-    final PsiClass aClass = JavaPsiFacade.getInstance(file.getProject()).findClass(name, scope);
+    PsiClass aClass = JavaPsiFacade.getInstance(file.getProject()).findClass(name, scope);
     if (aClass != null) {
       assert aClass.isValid() : name;
     }

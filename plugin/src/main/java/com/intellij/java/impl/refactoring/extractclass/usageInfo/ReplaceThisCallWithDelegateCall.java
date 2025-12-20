@@ -33,8 +33,8 @@ public class ReplaceThisCallWithDelegateCall extends FixableUsageInfo {
     }
 
     public void fixUsage() throws IncorrectOperationException {
-        final PsiReferenceExpression methodExpression = call.getMethodExpression();
-        final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
+        PsiReferenceExpression methodExpression = call.getMethodExpression();
+        PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
         if (qualifierExpression == null) {
             MutationUtils.replaceExpression(delegateFieldName + '.' + call.getText(), call);
         } else {

@@ -46,17 +46,17 @@ import java.util.List;
  * @author Gregory.Shrago
  */
 public class SpecialAnnotationsUtil {
-  public static JPanel createSpecialAnnotationsListControl(final List<String> list, final String borderTitle) {
+  public static JPanel createSpecialAnnotationsListControl(List<String> list, String borderTitle) {
     return createSpecialAnnotationsListControl(list, borderTitle, false);
   }
 
   public static JPanel createSpecialAnnotationsListControl(
     final List<String> list,
-    final String borderTitle,
-    final boolean acceptPatterns
+    String borderTitle,
+    boolean acceptPatterns
   ) {
     final SortedListModel<String> listModel = new SortedListModel<>(String::compareTo);
-    final JList injectionList = new JBList(listModel);
+    JList injectionList = new JBList(listModel);
     for (String s : list) {
       listModel.add(s);
     }
@@ -96,7 +96,7 @@ public class SpecialAnnotationsUtil {
           null
         );
         chooser.showDialog();
-        final PsiClass selected = chooser.getSelected();
+        PsiClass selected = chooser.getSelected();
         if (selected != null) {
           listModel.add(selected.getQualifiedName());
         }

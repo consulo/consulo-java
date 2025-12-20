@@ -53,19 +53,19 @@ public class SignalWithoutCorrespondingAwaitInspection extends BaseInspection {
       if (!ThreadingUtils.isSignalOrSignalAllCall(expression)) {
         return;
       }
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      final PsiExpression qualifier =
+      PsiExpression qualifier =
         methodExpression.getQualifierExpression();
       if (!(qualifier instanceof PsiReferenceExpression)) {
         return;
       }
-      final PsiElement referent = ((PsiReference)qualifier).resolve();
+      PsiElement referent = ((PsiReference)qualifier).resolve();
       if (!(referent instanceof PsiField)) {
         return;
       }
-      final PsiField field = (PsiField)referent;
-      final PsiClass fieldClass = field.getContainingClass();
+      PsiField field = (PsiField)referent;
+      PsiClass fieldClass = field.getContainingClass();
       if (fieldClass == null) {
         return;
       }
@@ -80,7 +80,7 @@ public class SignalWithoutCorrespondingAwaitInspection extends BaseInspection {
 
     private static boolean containsAwaitCall(
       PsiClass fieldClass, PsiField field) {
-      final ContainsAwaitVisitor visitor =
+      ContainsAwaitVisitor visitor =
         new ContainsAwaitVisitor(field);
       fieldClass.accept(visitor);
       return visitor.containsAwait();
@@ -113,9 +113,9 @@ public class SignalWithoutCorrespondingAwaitInspection extends BaseInspection {
       if (!ThreadingUtils.isAwaitCall(expression)) {
         return;
       }
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      final PsiExpression qualifier =
+      PsiExpression qualifier =
         methodExpression.getQualifierExpression();
       if (qualifier == null) {
         return;
@@ -123,7 +123,7 @@ public class SignalWithoutCorrespondingAwaitInspection extends BaseInspection {
       if (!(qualifier instanceof PsiReferenceExpression)) {
         return;
       }
-      final PsiElement referent = ((PsiReference)qualifier).resolve();
+      PsiElement referent = ((PsiReference)qualifier).resolve();
       if (referent == null) {
         return;
       }

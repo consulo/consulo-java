@@ -144,7 +144,7 @@ public class JavadocTypedHandler extends TypedHandlerDelegate {
     FileViewProvider provider = file.getViewProvider();
     int offset = editor.getCaretModel().getOffset();
 
-    final PsiElement elementAtCaret;
+    PsiElement elementAtCaret;
     if (offset < editor.getDocument().getTextLength()) {
       elementAtCaret = provider.findElementAt(offset);
     }
@@ -172,7 +172,7 @@ public class JavadocTypedHandler extends TypedHandlerDelegate {
       //  */
       PsiDocTag tag = (PsiDocTag)element;
       if ("param".equals(tag.getName())) {
-        final PsiDocTagValue value = tag.getValueElement();
+        PsiDocTagValue value = tag.getValueElement();
         if (value == null || value.getTextRange().getEndOffset() == offset) {
           return false;
         } 

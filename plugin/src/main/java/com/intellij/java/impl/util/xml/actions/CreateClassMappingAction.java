@@ -53,7 +53,7 @@ public abstract class CreateClassMappingAction<T extends DomElement> extends Cre
   }
 
   @Override
-  protected DomElement createElement(final T context, final Editor editor, PsiFile file, final Project project) {
+  protected DomElement createElement(T context, Editor editor, PsiFile file, Project project) {
     PsiClass selectedClass;
     if (!ApplicationManager.getApplication().isUnitTestMode()) {
       PsiClass baseClass = getBaseClass(context, project, myBaseClass);

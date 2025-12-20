@@ -31,7 +31,7 @@ public class TypeMigrationUsageInfo extends UsageInfo {
     super(element);
   }
 
-  public void setExcluded(final boolean excluded) {
+  public void setExcluded(boolean excluded) {
     myExcluded = excluded;
   }
 

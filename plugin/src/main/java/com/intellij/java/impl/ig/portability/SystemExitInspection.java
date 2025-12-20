@@ -38,7 +38,7 @@ public class SystemExitInspection extends BaseInspection {
 
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final String className = (String) infos[0];
+        String className = (String) infos[0];
         return InspectionGadgetsLocalize.systemExitCallProblemDescriptor(className).get();
     }
 
@@ -50,32 +50,32 @@ public class SystemExitInspection extends BaseInspection {
         @Override
         public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
-            final String exit = "exit";
-            final String halt = "halt";
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            String methodName = methodExpression.getReferenceName();
+            String exit = "exit";
+            String halt = "halt";
             if (!exit.equals(methodName) && !halt.equals(methodName)) {
                 return;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return;
             }
 
-            final PsiParameterList parameterList = method.getParameterList();
+            PsiParameterList parameterList = method.getParameterList();
             if (parameterList.getParametersCount() != 1) {
                 return;
             }
-            final PsiParameter[] parameters = parameterList.getParameters();
-            final PsiType parameterType = parameters[0].getType();
+            PsiParameter[] parameters = parameterList.getParameters();
+            PsiType parameterType = parameters[0].getType();
             if (!parameterType.equals(PsiType.INT)) {
                 return;
             }
-            final PsiClass aClass = method.getContainingClass();
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null) {
                 return;
             }
-            final String className = aClass.getQualifiedName();
+            String className = aClass.getQualifiedName();
             if (className == null) {
                 return;
             }

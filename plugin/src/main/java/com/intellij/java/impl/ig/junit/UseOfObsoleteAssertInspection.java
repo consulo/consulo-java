@@ -63,21 +63,21 @@ public abstract class UseOfObsoleteAssertInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(PsiMethodCallExpression expression) {
-      final Project project = expression.getProject();
-      final Module module = ModuleUtil.findModuleForPsiElement(expression);
+      Project project = expression.getProject();
+      Module module = ModuleUtil.findModuleForPsiElement(expression);
       if (module == null) {
         return;
       }
-      final PsiClass newAssertClass = JavaPsiFacade.getInstance(project)
+      PsiClass newAssertClass = JavaPsiFacade.getInstance(project)
         .findClass("org.junit.Assert", GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module));
       if (newAssertClass == null) {
         return;
       }
-      final PsiMethod psiMethod = expression.resolveMethod();
+      PsiMethod psiMethod = expression.resolveMethod();
       if (psiMethod == null || !psiMethod.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }
-      final PsiClass containingClass = psiMethod.getContainingClass();
+      PsiClass containingClass = psiMethod.getContainingClass();
       if (containingClass != null && Comparing.strEqual(containingClass.getQualifiedName(), "junit.framework.Assert")) {
         registerMethodCallError(expression);
       }
@@ -87,34 +87,34 @@ public abstract class UseOfObsoleteAssertInspection extends BaseInspection {
   private static class ReplaceObsoleteAssertsFix extends InspectionGadgetsFix {
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement psiElement = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethodCallExpression.class);
+      PsiElement psiElement = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethodCallExpression.class);
       if (!(psiElement instanceof PsiMethodCallExpression)) {
         return;
       }
-      final PsiClass newAssertClass =
+      PsiClass newAssertClass =
         JavaPsiFacade.getInstance(project).findClass("org.junit.Assert", GlobalSearchScope.allScope(project));
-      final PsiClass oldAssertClass =
+      PsiClass oldAssertClass =
         JavaPsiFacade.getInstance(project).findClass("junit.framework.Assert", GlobalSearchScope.allScope(project));
 
       if (newAssertClass == null) {
         return;
       }
-      final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)psiElement;
-      final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-      final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
-      final PsiElement usedImport = qualifierExpression instanceof PsiReferenceExpression ?
+      PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)psiElement;
+      PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+      PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
+      PsiElement usedImport = qualifierExpression instanceof PsiReferenceExpression ?
                                     ((PsiReferenceExpression)qualifierExpression).advancedResolve(true).getCurrentFileResolveScope() :
                                     methodExpression.advancedResolve(true).getCurrentFileResolveScope();
-      final PsiMethod psiMethod = methodCallExpression.resolveMethod();
+      PsiMethod psiMethod = methodCallExpression.resolveMethod();
 
-      final boolean isImportUnused = isImportBecomeUnused(methodCallExpression, usedImport, psiMethod);
+      boolean isImportUnused = isImportBecomeUnused(methodCallExpression, usedImport, psiMethod);
 
       PsiImportStaticStatement staticStatement = null;
       if (qualifierExpression == null) {
         staticStatement = staticallyImported(oldAssertClass, methodExpression);
       }
 
-      final JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(project);
+      JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(project);
       if (staticStatement == null) {
         methodExpression.setQualifierExpression(JavaPsiFacade.getElementFactory(project).createReferenceExpression(newAssertClass));
 
@@ -126,13 +126,13 @@ public abstract class UseOfObsoleteAssertInspection extends BaseInspection {
       }
       else {
         if (isImportUnused) {
-          final PsiJavaCodeReferenceElement importReference = staticStatement.getImportReference();
+          PsiJavaCodeReferenceElement importReference = staticStatement.getImportReference();
           if (importReference != null) {
             if (staticStatement.isOnDemand()) {
               importReference.bindToElement(newAssertClass);
             }
             else {
-              final PsiElement importQExpression = importReference.getQualifier();
+              PsiElement importQExpression = importReference.getQualifier();
               if (importQExpression instanceof PsiReferenceExpression) {
                 ((PsiReferenceExpression)importQExpression).bindToElement(newAssertClass);
               }
@@ -173,12 +173,12 @@ public abstract class UseOfObsoleteAssertInspection extends BaseInspection {
           if (expression == methodCallExpression) {
             return;
           }
-          final PsiMethod resolved = expression.resolveMethod();
+          PsiMethod resolved = expression.resolveMethod();
           if (resolved == psiMethod) {
             proceed[0] = false;
           }
           else {
-            final PsiElement resolveScope =
+            PsiElement resolveScope =
               expression.getMethodExpression().advancedResolve(false).getCurrentFileResolveScope();
             if (resolveScope == usedImport) {
               proceed[0] = false;
@@ -191,27 +191,27 @@ public abstract class UseOfObsoleteAssertInspection extends BaseInspection {
 
     @Nullable
     private static PsiImportStaticStatement staticallyImported(PsiClass oldAssertClass, PsiReferenceExpression methodExpression) {
-      final String referenceName = methodExpression.getReferenceName();
-      final PsiFile containingFile = methodExpression.getContainingFile();
+      String referenceName = methodExpression.getReferenceName();
+      PsiFile containingFile = methodExpression.getContainingFile();
       if (!(containingFile instanceof PsiJavaFile)) {
         return null;
       }
-      final PsiImportList importList = ((PsiJavaFile)containingFile).getImportList();
+      PsiImportList importList = ((PsiJavaFile)containingFile).getImportList();
       if (importList == null) {
         return null;
       }
-      final PsiImportStaticStatement[] statements = importList.getImportStaticStatements();
+      PsiImportStaticStatement[] statements = importList.getImportStaticStatements();
       for (PsiImportStaticStatement statement : statements) {
         if (oldAssertClass != statement.resolveTargetClass()) {
           continue;
         }
-        final String importRefName = statement.getReferenceName();
-        final PsiJavaCodeReferenceElement importReference = statement.getImportReference();
+        String importRefName = statement.getReferenceName();
+        PsiJavaCodeReferenceElement importReference = statement.getImportReference();
         if (importReference == null) {
           continue;
         }
         if (Comparing.strEqual(importRefName, referenceName)) {
-          final PsiElement qualifier = importReference.getQualifier();
+          PsiElement qualifier = importReference.getQualifier();
           if (qualifier instanceof PsiJavaCodeReferenceElement) {
             return statement;
           }

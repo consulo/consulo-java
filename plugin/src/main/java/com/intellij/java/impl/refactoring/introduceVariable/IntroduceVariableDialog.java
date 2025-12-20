@@ -216,7 +216,7 @@ class IntroduceVariableDialog extends DialogWrapper implements IntroduceVariable
 
     myCbFinal = new NonFocusableCheckBox();
     myCbFinal.setText(RefactoringLocalize.declareFinal().get());
-    final Boolean createFinals = JavaRefactoringSettings.getInstance().INTRODUCE_LOCAL_CREATE_FINALS;
+    Boolean createFinals = JavaRefactoringSettings.getInstance().INTRODUCE_LOCAL_CREATE_FINALS;
     myCbFinalState = createFinals == null ?
                      CodeStyleSettingsManager.getSettings(myProject).GENERATE_FINAL_LOCALS :
                      createFinals.booleanValue();

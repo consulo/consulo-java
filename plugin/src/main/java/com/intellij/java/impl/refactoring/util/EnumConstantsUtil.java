@@ -34,7 +34,7 @@ public class EnumConstantsUtil {
   public static boolean isSuitableForEnumConstant(PsiType constantType, PsiClass enumClass) {
     if (enumClass != null && enumClass.isEnum()) {
       for (PsiMethod constructor : enumClass.getConstructors()) {
-        final PsiParameter[] parameters = constructor.getParameterList().getParameters();
+        PsiParameter[] parameters = constructor.getParameterList().getParameters();
         if (parameters.length == 1 && TypeConversionUtil.isAssignable(parameters[0].getType(), constantType)) return true;
       }
     }
@@ -43,33 +43,33 @@ public class EnumConstantsUtil {
 
   public static PsiEnumConstant createEnumConstant(PsiClass enumClass, String constantName, PsiExpression initializerExpr) throws
                                                                                                                               IncorrectOperationException {
-    final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(enumClass.getProject()).getElementFactory();
-    final String enumConstantText = initializerExpr != null ? constantName + "(" + initializerExpr.getText() + ")" : constantName;
+    PsiElementFactory elementFactory = JavaPsiFacade.getInstance(enumClass.getProject()).getElementFactory();
+    String enumConstantText = initializerExpr != null ? constantName + "(" + initializerExpr.getText() + ")" : constantName;
     return elementFactory.createEnumConstantFromText(enumConstantText, enumClass);
   }
 
-  public static PsiEnumConstant createEnumConstant(PsiClass enumClass, PsiLocalVariable local, final String fieldName) throws IncorrectOperationException {
+  public static PsiEnumConstant createEnumConstant(PsiClass enumClass, PsiLocalVariable local, String fieldName) throws IncorrectOperationException {
     return createEnumConstant(enumClass, fieldName, local.getInitializer());
   }
 
   @Nullable
-  public static PsiStatement isEnumSwitch(final PsiSwitchStatement switchStatement,
-                                          final PsiType enumValueType,
-                                          final Set<Object> enumValues) {
-    final PsiExpression expression = switchStatement.getExpression();
+  public static PsiStatement isEnumSwitch(PsiSwitchStatement switchStatement,
+                                          PsiType enumValueType,
+                                          Set<Object> enumValues) {
+    PsiExpression expression = switchStatement.getExpression();
     if (expression != null) {
-      final PsiType expressionType = expression.getType();
+      PsiType expressionType = expression.getType();
       if (expressionType != null && !TypeConversionUtil.isAssignable(expressionType, enumValueType)) {
         return switchStatement;
       }
-      final PsiConstantEvaluationHelper evaluationHelper =
+      PsiConstantEvaluationHelper evaluationHelper =
         JavaPsiFacade.getInstance(expression.getProject()).getConstantEvaluationHelper();
-      final PsiCodeBlock body = switchStatement.getBody();
+      PsiCodeBlock body = switchStatement.getBody();
       if (body != null) {
         for (PsiStatement statement : body.getStatements()) {
           if (statement instanceof PsiSwitchLabelStatement) {
-            final PsiSwitchLabelStatement labelStatement = (PsiSwitchLabelStatement)statement;
-            final Object caseValue = evaluationHelper.computeConstantExpression(labelStatement.getCaseValue());
+            PsiSwitchLabelStatement labelStatement = (PsiSwitchLabelStatement)statement;
+            Object caseValue = evaluationHelper.computeConstantExpression(labelStatement.getCaseValue());
             if (caseValue != null && !enumValues.contains(caseValue)) return statement;
           }
         }

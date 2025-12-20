@@ -39,8 +39,8 @@ import java.util.List;
 @ExtensionImpl
 public class JavaSafeDeleteDelegateImpl implements JavaSafeDeleteDelegate {
   @Override
-  public void createUsageInfoForParameter(final PsiReference reference,
-                                          final List<UsageInfo> usages,
+  public void createUsageInfoForParameter(PsiReference reference,
+                                          List<UsageInfo> usages,
                                           final PsiParameter parameter,
                                           final PsiMethod method) {
     int index = method.getParameterList().getParameterIndex(parameter);
@@ -53,9 +53,9 @@ public class JavaSafeDeleteDelegateImpl implements JavaSafeDeleteDelegate {
       call = (PsiCall)element.getParent();
     }
     if (call != null) {
-      final PsiExpressionList argList = call.getArgumentList();
+      PsiExpressionList argList = call.getArgumentList();
       if (argList != null) {
-        final PsiExpression[] args = argList.getExpressions();
+        PsiExpression[] args = argList.getExpressions();
         if (index < args.length) {
           if (!parameter.isVarArgs()) {
             usages.add(new SafeDeleteReferenceJavaDeleteUsageInfo(args[index], parameter, true));
@@ -72,13 +72,13 @@ public class JavaSafeDeleteDelegateImpl implements JavaSafeDeleteDelegate {
       if (((PsiDocMethodOrFieldRef)element).getSignature() != null) {
         @NonNls final StringBuffer newText = new StringBuffer();
         newText.append("/** @see #").append(method.getName()).append('(');
-        final List<PsiParameter> parameters = new ArrayList<PsiParameter>(Arrays.asList(method.getParameterList().getParameters()));
+        List<PsiParameter> parameters = new ArrayList<PsiParameter>(Arrays.asList(method.getParameterList().getParameters()));
         parameters.remove(parameter);
         newText.append(StringUtil.join(parameters, psiParameter -> parameter.getType().getCanonicalText(), ","));
         newText.append(")*/");
         usages.add(new SafeDeleteReferenceJavaDeleteUsageInfo(element, parameter, true) {
           public void deleteElement() throws IncorrectOperationException {
-            final PsiDocMethodOrFieldRef.MyReference javadocMethodReference =
+            PsiDocMethodOrFieldRef.MyReference javadocMethodReference =
               (PsiDocMethodOrFieldRef.MyReference)element.getReference();
             if (javadocMethodReference != null) {
               javadocMethodReference.bindToText(method.getContainingClass(), newText);

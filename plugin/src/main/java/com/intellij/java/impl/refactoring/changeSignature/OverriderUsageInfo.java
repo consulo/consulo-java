@@ -32,11 +32,11 @@ public class OverriderUsageInfo extends UsageInfo
 	private final boolean myIsOriginalOverrider;
 	private final PsiMethod myOverridingMethod;
 
-	public OverriderUsageInfo(final PsiMethod method,
-			PsiMethod baseMethod,
-			boolean isOriginalOverrider,
-			boolean toInsertArgs,
-			boolean toCatchExceptions)
+	public OverriderUsageInfo(PsiMethod method,
+                              PsiMethod baseMethod,
+                              boolean isOriginalOverrider,
+                              boolean toInsertArgs,
+                              boolean toCatchExceptions)
 	{
 		super(method);
 		myOverridingMethod = method;

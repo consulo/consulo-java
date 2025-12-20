@@ -52,7 +52,7 @@ public class DuplicateBooleanBranchInspection extends BaseInspection {
         @Override
         public void visitPolyadicExpression(PsiPolyadicExpression expression) {
             super.visitPolyadicExpression(expression);
-            final IElementType tokenType = expression.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (!tokenType.equals(JavaTokenType.ANDAND) && !tokenType.equals(JavaTokenType.OROR)) {
                 return;
             }
@@ -61,31 +61,31 @@ public class DuplicateBooleanBranchInspection extends BaseInspection {
                 parent = parent.getParent();
             }
             if (parent instanceof PsiBinaryExpression) {
-                final PsiBinaryExpression parentExpression = (PsiBinaryExpression) parent;
+                PsiBinaryExpression parentExpression = (PsiBinaryExpression) parent;
                 if (tokenType.equals(parentExpression.getOperationTokenType())) {
                     return;
                 }
             }
-            final Set<PsiExpression> conditions = new HashSet<PsiExpression>();
+            Set<PsiExpression> conditions = new HashSet<PsiExpression>();
             collectConditions(expression, conditions, tokenType);
-            final int numConditions = conditions.size();
+            int numConditions = conditions.size();
             if (numConditions < 2) {
                 return;
             }
-            final PsiExpression[] conditionArray = conditions.toArray(new PsiExpression[numConditions]);
-            final boolean[] matched = new boolean[conditionArray.length];
+            PsiExpression[] conditionArray = conditions.toArray(new PsiExpression[numConditions]);
+            boolean[] matched = new boolean[conditionArray.length];
             Arrays.fill(matched, false);
             for (int i = 0; i < conditionArray.length; i++) {
                 if (matched[i]) {
                     continue;
                 }
-                final PsiExpression condition = conditionArray[i];
+                PsiExpression condition = conditionArray[i];
                 for (int j = i + 1; j < conditionArray.length; j++) {
                     if (matched[j]) {
                         continue;
                     }
-                    final PsiExpression testCondition = conditionArray[j];
-                    final boolean areEquivalent =
+                    PsiExpression testCondition = conditionArray[j];
+                    boolean areEquivalent =
                         EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(condition, testCondition);
                     if (areEquivalent) {
                         registerError(testCondition);
@@ -104,16 +104,16 @@ public class DuplicateBooleanBranchInspection extends BaseInspection {
                 return;
             }
             if (condition instanceof PsiParenthesizedExpression) {
-                final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) condition;
-                final PsiExpression contents = parenthesizedExpression.getExpression();
+                PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) condition;
+                PsiExpression contents = parenthesizedExpression.getExpression();
                 collectConditions(contents, conditions, tokenType);
                 return;
             }
             if (condition instanceof PsiPolyadicExpression) {
-                final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) condition;
-                final IElementType testTokeType = polyadicExpression.getOperationTokenType();
+                PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) condition;
+                IElementType testTokeType = polyadicExpression.getOperationTokenType();
                 if (testTokeType.equals(tokenType)) {
-                    final PsiExpression[] operands = polyadicExpression.getOperands();
+                    PsiExpression[] operands = polyadicExpression.getOperands();
                     for (PsiExpression operand : operands) {
                         collectConditions(operand, conditions, tokenType);
                     }

@@ -49,8 +49,8 @@ public class EqualsCalledOnEnumConstantInspection extends BaseInspection {
 
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiElement element = (PsiElement)infos[0];
-    final PsiElement parent = element.getParent();
+    PsiElement element = (PsiElement)infos[0];
+    PsiElement parent = element.getParent();
     if (parent instanceof PsiExpressionStatement) {
       return null;
     }
@@ -68,37 +68,37 @@ public class EqualsCalledOnEnumConstantInspection extends BaseInspection {
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiElement parent = element.getParent();
+      PsiElement element = descriptor.getPsiElement();
+      PsiElement parent = element.getParent();
       if (parent == null) {
         return;
       }
-      final PsiElement grandParent = parent.getParent();
+      PsiElement grandParent = parent.getParent();
       if (!(grandParent instanceof PsiMethodCallExpression)) {
         return;
       }
-      final PsiMethodCallExpression methodCallExpression =
+      PsiMethodCallExpression methodCallExpression =
         (PsiMethodCallExpression)grandParent;
-      final PsiExpressionList argumentList =
+      PsiExpressionList argumentList =
         methodCallExpression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
+      PsiExpression[] arguments = argumentList.getExpressions();
       if (arguments.length > 1) {
         return;
       }
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         methodCallExpression.getMethodExpression();
-      final PsiExpression qualifier =
+      PsiExpression qualifier =
         methodExpression.getQualifierExpression();
       if (qualifier == null) {
         return;
       }
-      final StringBuilder newExpression = new StringBuilder();
-      final PsiElement greatGrandParent = grandParent.getParent();
-      final boolean not;
-      final PsiPrefixExpression prefixExpression;
+      StringBuilder newExpression = new StringBuilder();
+      PsiElement greatGrandParent = grandParent.getParent();
+      boolean not;
+      PsiPrefixExpression prefixExpression;
       if (greatGrandParent instanceof PsiPrefixExpression) {
         prefixExpression = (PsiPrefixExpression)greatGrandParent;
-        final IElementType tokenType =
+        IElementType tokenType =
           prefixExpression.getOperationTokenType();
         not = JavaTokenType.EXCL == tokenType;
       }
@@ -141,8 +141,8 @@ public class EqualsCalledOnEnumConstantInspection extends BaseInspection {
       if (!MethodCallUtils.isEqualsCall(expression)) {
         return;
       }
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      final PsiExpression qualifier = methodExpression.getQualifierExpression();
+      PsiReferenceExpression methodExpression = expression.getMethodExpression();
+      PsiExpression qualifier = methodExpression.getQualifierExpression();
       if (!TypeUtils.expressionHasTypeOrSubtype(qualifier, CommonClassNames.JAVA_LANG_ENUM)) {
         return;
       }

@@ -34,8 +34,8 @@ import java.util.function.Consumer;
 
 public class ClassLiteralGetter {
 
-  public static void addCompletions(@Nonnull final JavaSmartCompletionParameters parameters,
-                                    @Nonnull Consumer<LookupElement> result, final PrefixMatcher matcher) {
+  public static void addCompletions(@Nonnull JavaSmartCompletionParameters parameters,
+                                    @Nonnull Consumer<LookupElement> result, PrefixMatcher matcher) {
     PsiType expectedType = parameters.getExpectedType();
     if (!InheritanceUtil.isInheritor(expectedType, CommonClassNames.JAVA_LANG_CLASS)) {
       return;
@@ -46,7 +46,7 @@ public class ClassLiteralGetter {
     boolean addInheritors = false;
     PsiElement position = parameters.getPosition();
     if (classParameter instanceof PsiWildcardType) {
-      final PsiWildcardType wildcardType = (PsiWildcardType)classParameter;
+      PsiWildcardType wildcardType = (PsiWildcardType)classParameter;
       classParameter = wildcardType.isSuper() ? wildcardType.getSuperBound() : wildcardType.getExtendsBound();
       addInheritors = wildcardType.isExtends() && classParameter instanceof PsiClassType;
     } else if (!matcher.getPrefix().isEmpty()) {
@@ -62,10 +62,10 @@ public class ClassLiteralGetter {
     }
   }
 
-  private static void addInheritorClassLiterals(final PsiFile context,
-                                                final PsiType classParameter,
-                                                final Consumer<LookupElement> result, PrefixMatcher matcher) {
-    final String canonicalText = classParameter.getCanonicalText();
+  private static void addInheritorClassLiterals(PsiFile context,
+                                                PsiType classParameter,
+                                                Consumer<LookupElement> result, PrefixMatcher matcher) {
+    String canonicalText = classParameter.getCanonicalText();
     if (CommonClassNames.JAVA_LANG_OBJECT.equals(canonicalText) && StringUtil.isEmpty(matcher.getPrefix())) {
       return;
     }
@@ -73,7 +73,7 @@ public class ClassLiteralGetter {
     CodeInsightUtil.processSubTypes(classParameter, context, true, matcher, (Consumer<PsiType>) type -> addClassLiteralLookupElement(type, result, context));
   }
 
-  private static void addClassLiteralLookupElement(@Nullable final PsiType type, final Consumer<LookupElement> resultSet, final PsiFile context) {
+  private static void addClassLiteralLookupElement(@Nullable PsiType type, Consumer<LookupElement> resultSet, PsiFile context) {
     if (type instanceof PsiClassType &&
         PsiUtil.resolveClassInType(type) != null &&
         !((PsiClassType)type).hasParameters() &&

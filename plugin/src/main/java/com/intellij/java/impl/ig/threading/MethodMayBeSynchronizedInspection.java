@@ -62,39 +62,39 @@ public class MethodMayBeSynchronizedInspection extends BaseInspection {
 
     protected void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement identifier = descriptor.getPsiElement();
-      final PsiMethod method = (PsiMethod)identifier.getParent();
-      final PsiCodeBlock methodBody = method.getBody();
+      PsiElement identifier = descriptor.getPsiElement();
+      PsiMethod method = (PsiMethod)identifier.getParent();
+      PsiCodeBlock methodBody = method.getBody();
       if (methodBody == null) {
         return;
       }
-      final PsiStatement[] methodStatements = methodBody.getStatements();
+      PsiStatement[] methodStatements = methodBody.getStatements();
       if (methodStatements.length != 1) {
         return;
       }
-      final PsiStatement statement = methodStatements[0];
+      PsiStatement statement = methodStatements[0];
       if (!(statement instanceof PsiSynchronizedStatement)) {
         return;
       }
-      final PsiSynchronizedStatement synchronizedStatement =
+      PsiSynchronizedStatement synchronizedStatement =
         (PsiSynchronizedStatement)statement;
-      final PsiCodeBlock body = synchronizedStatement.getBody();
+      PsiCodeBlock body = synchronizedStatement.getBody();
       if (body == null) {
         return;
       }
-      final PsiStatement[] statements = body.getStatements();
+      PsiStatement[] statements = body.getStatements();
       if (statements.length > 0) {
-        final PsiElement added =
+        PsiElement added =
           methodBody.addRangeBefore(
             statements[0],
             statements[statements.length - 1],
             synchronizedStatement);
-        final CodeStyleManager codeStyleManager =
+        CodeStyleManager codeStyleManager =
           CodeStyleManager.getInstance(project);
         codeStyleManager.reformat(added);
       }
       synchronizedStatement.delete();
-      final PsiModifierList modifierList = method.getModifierList();
+      PsiModifierList modifierList = method.getModifierList();
       modifierList.setModifierProperty(PsiModifier.SYNCHRONIZED, true);
     }
   }
@@ -106,40 +106,40 @@ public class MethodMayBeSynchronizedInspection extends BaseInspection {
     public void visitSynchronizedStatement(
       PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
-      final PsiElement parent = statement.getParent();
+      PsiElement parent = statement.getParent();
       if (!(parent instanceof PsiCodeBlock)) {
         return;
       }
-      final PsiElement grandParent = parent.getParent();
+      PsiElement grandParent = parent.getParent();
       if (!(grandParent instanceof PsiMethod)) {
         return;
       }
-      final PsiMethod method = (PsiMethod)grandParent;
-      final PsiCodeBlock body = method.getBody();
+      PsiMethod method = (PsiMethod)grandParent;
+      PsiCodeBlock body = method.getBody();
       if (body == null) {
         return;
       }
-      final PsiStatement[] statements = body.getStatements();
+      PsiStatement[] statements = body.getStatements();
       if (statements.length != 1) {
         return;
       }
-      final PsiExpression lockExpression = statement.getLockExpression();
+      PsiExpression lockExpression = statement.getLockExpression();
       if (method.hasModifierProperty(PsiModifier.STATIC)) {
         if (!(lockExpression
                 instanceof PsiClassObjectAccessExpression)) {
           return;
         }
-        final PsiClassObjectAccessExpression classExpression =
+        PsiClassObjectAccessExpression classExpression =
           (PsiClassObjectAccessExpression)lockExpression;
-        final PsiTypeElement typeElement =
+        PsiTypeElement typeElement =
           classExpression.getOperand();
-        final PsiType type = typeElement.getType();
+        PsiType type = typeElement.getType();
         if (!(type instanceof PsiClassType)) {
           return;
         }
-        final PsiClassType classType = (PsiClassType)type;
-        final PsiClass aClass = classType.resolve();
-        final PsiClass containingClass = method.getContainingClass();
+        PsiClassType classType = (PsiClassType)type;
+        PsiClass aClass = classType.resolve();
+        PsiClass containingClass = method.getContainingClass();
         if (aClass != containingClass) {
           return;
         }
@@ -149,13 +149,13 @@ public class MethodMayBeSynchronizedInspection extends BaseInspection {
         if (!(lockExpression instanceof PsiThisExpression)) {
           return;
         }
-        final PsiThisExpression thisExpression =
+        PsiThisExpression thisExpression =
           (PsiThisExpression)lockExpression;
-        final PsiJavaCodeReferenceElement qualifier =
+        PsiJavaCodeReferenceElement qualifier =
           thisExpression.getQualifier();
         if (qualifier != null) {
-          final PsiElement target = qualifier.resolve();
-          final PsiClass containingClass = method.getContainingClass();
+          PsiElement target = qualifier.resolve();
+          PsiClass containingClass = method.getContainingClass();
           if (!containingClass.equals(target)) {
             return;
           }

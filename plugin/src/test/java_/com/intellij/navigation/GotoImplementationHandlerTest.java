@@ -45,7 +45,7 @@ public abstract class GotoImplementationHandlerTest extends JavaCodeInsightFixtu
                                                           "\n");
     myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
 
-    final PsiElement[] impls = new GotoImplementationHandler().getSourceAndTargetElements(myFixture.getEditor(), file).targets;
+    PsiElement[] impls = new GotoImplementationHandler().getSourceAndTargetElements(myFixture.getEditor(), file).targets;
     assertEquals(2, impls.length);
   }
 
@@ -69,7 +69,7 @@ public abstract class GotoImplementationHandlerTest extends JavaCodeInsightFixtu
                                                           "\n");
     myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
 
-    final PsiElement[] impls = new GotoImplementationHandler().getSourceAndTargetElements(myFixture.getEditor(), file).targets;
+    PsiElement[] impls = new GotoImplementationHandler().getSourceAndTargetElements(myFixture.getEditor(), file).targets;
     assertEquals(3, impls.length);
   }
 
@@ -87,7 +87,7 @@ public abstract class GotoImplementationHandlerTest extends JavaCodeInsightFixtu
                                                           "}");
     myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
 
-    final PsiElement[] impls = new GotoImplementationHandler().getSourceAndTargetElements(myFixture.getEditor(), file).targets;
+    PsiElement[] impls = new GotoImplementationHandler().getSourceAndTargetElements(myFixture.getEditor(), file).targets;
     assertEquals(2, impls.length);
   }
 
@@ -113,11 +113,11 @@ public abstract class GotoImplementationHandlerTest extends JavaCodeInsightFixtu
                                                           "}");
     myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
 
-    final PsiElement[] impls = new GotoImplementationHandler().getSourceAndTargetElements(myFixture.getEditor(), file).targets;
+    PsiElement[] impls = new GotoImplementationHandler().getSourceAndTargetElements(myFixture.getEditor(), file).targets;
     assertEquals(1, impls.length);
-    final PsiElement meth = impls[0];
+    PsiElement meth = impls[0];
     assertTrue(meth instanceof PsiMethod);
-    final PsiClass aClass = ((PsiMethod)meth).getContainingClass();
+    PsiClass aClass = ((PsiMethod)meth).getContainingClass();
     assertNotNull(aClass);
     assertEquals(aClass.getName(), "X");
   }

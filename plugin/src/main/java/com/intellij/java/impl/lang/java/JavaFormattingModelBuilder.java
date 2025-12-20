@@ -50,7 +50,7 @@ public class JavaFormattingModelBuilder implements FormattingModelBuilderEx {
     CodeStyleSettings settings = context.getCodeStyleSettings();
     PsiElement element = context.getPsiElement();
     FormattingMode formattingMode = context.getFormattingMode();
-    final FileElement fileElement = TreeUtil.getFileElement((TreeElement) SourceTreeToPsiMap.psiElementToTree(element));
+    FileElement fileElement = TreeUtil.getFileElement((TreeElement) SourceTreeToPsiMap.psiElementToTree(element));
     LOG.assertTrue(fileElement != null, "File element should not be null for " + element);
     CommonCodeStyleSettings commonSettings = settings.getCommonSettings(JavaLanguage.INSTANCE);
     JavaCodeStyleSettings customJavaSettings = settings.getCustomSettings(JavaCodeStyleSettings.class);
@@ -65,7 +65,7 @@ public class JavaFormattingModelBuilder implements FormattingModelBuilderEx {
   }
 
   @Nullable
-  public static TextRange doGetRangeAffectingIndent(final ASTNode elementAtOffset) {
+  public static TextRange doGetRangeAffectingIndent(ASTNode elementAtOffset) {
     ASTNode current = elementAtOffset;
     current = findNearestExpressionParent(current);
     if (current == null) {
@@ -102,12 +102,12 @@ public class JavaFormattingModelBuilder implements FormattingModelBuilderEx {
     if (node.getElementType() == TokenType.ERROR_ELEMENT) {
       return node.getTextRange();
     }
-    final ASTNode prevLeaf = FormatterUtil.getPreviousLeaf(node, TokenType.WHITE_SPACE);
+    ASTNode prevLeaf = FormatterUtil.getPreviousLeaf(node, TokenType.WHITE_SPACE);
     if (prevLeaf == null || prevLeaf.getElementType() != TokenType.ERROR_ELEMENT) {
       return node.getTextRange();
     }
 
-    final TextRange range = doGetRangeAffectingIndent(prevLeaf);
+    TextRange range = doGetRangeAffectingIndent(prevLeaf);
     if (range == null) {
       return node.getTextRange();
     } else {
@@ -116,7 +116,7 @@ public class JavaFormattingModelBuilder implements FormattingModelBuilderEx {
   }
 
   @Nullable
-  private static ASTNode findNearestExpressionParent(final ASTNode current) {
+  private static ASTNode findNearestExpressionParent(ASTNode current) {
     ASTNode result = current;
     while (result != null) {
       PsiElement psi = result.getPsi();

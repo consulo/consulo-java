@@ -57,8 +57,8 @@ public class CStyleArrayDeclarationInspection extends BaseInspection {
 
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement nameElement = descriptor.getPsiElement();
-      final PsiVariable var = (PsiVariable)nameElement.getParent();
+      PsiElement nameElement = descriptor.getPsiElement();
+      PsiVariable var = (PsiVariable)nameElement.getParent();
       assert var != null;
       var.normalizeDeclaration();
     }
@@ -74,15 +74,15 @@ public class CStyleArrayDeclarationInspection extends BaseInspection {
     @Override
     public void visitVariable(@Nonnull PsiVariable var) {
       super.visitVariable(var);
-      final PsiType declaredType = var.getType();
+      PsiType declaredType = var.getType();
       if (declaredType.getArrayDimensions() == 0) {
         return;
       }
-      final PsiTypeElement typeElement = var.getTypeElement();
+      PsiTypeElement typeElement = var.getTypeElement();
       if (typeElement == null) {
         return; // Could be true for enum constants.
       }
-      final PsiType elementType = typeElement.getType();
+      PsiType elementType = typeElement.getType();
       if (elementType.equals(declaredType)) {
         return;
       }

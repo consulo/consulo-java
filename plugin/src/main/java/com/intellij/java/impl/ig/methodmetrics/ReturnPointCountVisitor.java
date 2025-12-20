@@ -53,11 +53,11 @@ class ReturnPointCountVisitor extends JavaRecursiveElementVisitor {
     if (statement instanceof PsiDeclarationStatement) {
       return;
     }
-    final PsiElement parent = statement.getParent();
+    PsiElement parent = statement.getParent();
     if (!(parent instanceof PsiCodeBlock)) {
       return;
     }
-    final PsiElement grandParent = parent.getParent();
+    PsiElement grandParent = parent.getParent();
     if (!(grandParent instanceof PsiMethod)) {
       return;
     }
@@ -68,24 +68,24 @@ class ReturnPointCountVisitor extends JavaRecursiveElementVisitor {
     if (!(statement instanceof PsiIfStatement)) {
       return false;
     }
-    final PsiIfStatement ifStatement = (PsiIfStatement)statement;
+    PsiIfStatement ifStatement = (PsiIfStatement)statement;
     if (ifStatement.getElseBranch() != null) {
       return false;
     }
-    final PsiStatement thenBranch = ifStatement.getThenBranch();
+    PsiStatement thenBranch = ifStatement.getThenBranch();
     if (thenBranch instanceof PsiReturnStatement) {
       return true;
     }
     if (!(thenBranch instanceof PsiBlockStatement)) {
       return false;
     }
-    final PsiBlockStatement blockStatement = (PsiBlockStatement)thenBranch;
-    final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
-    final PsiStatement[] statements = codeBlock.getStatements();
+    PsiBlockStatement blockStatement = (PsiBlockStatement)thenBranch;
+    PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
+    PsiStatement[] statements = codeBlock.getStatements();
     if (statements.length != 1) {
       return false;
     }
-    final PsiStatement containedStatement = statements[0];
+    PsiStatement containedStatement = statements[0];
     return containedStatement instanceof PsiReturnStatement;
   }
 

@@ -42,8 +42,8 @@ public class AmbiguousMethodCallInspection extends BaseInspection {
   @Nonnull
   @RequiredReadAction
   protected String buildErrorString(Object... infos) {
-    final PsiClass superClass = (PsiClass)infos[0];
-    final PsiClass outerClass = (PsiClass)infos[1];
+    PsiClass superClass = (PsiClass)infos[0];
+    PsiClass outerClass = (PsiClass)infos[1];
     return InspectionGadgetsLocalize.ambiguousMethodCallProblemDescriptor(superClass.getName(), outerClass.getName()).get();
   }
 
@@ -60,10 +60,10 @@ public class AmbiguousMethodCallInspection extends BaseInspection {
     }
 
     protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiElement parent = element.getParent();
-      final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)parent.getParent();
-      final String newExpressionText = "super." + methodCallExpression.getText();
+      PsiElement element = descriptor.getPsiElement();
+      PsiElement parent = element.getParent();
+      PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)parent.getParent();
+      String newExpressionText = "super." + methodCallExpression.getText();
       replaceExpression(methodCallExpression, newExpressionText);
     }
   }
@@ -76,8 +76,8 @@ public class AmbiguousMethodCallInspection extends BaseInspection {
 
     public void visitMethodCallExpression(PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      final PsiExpression qualifier = methodExpression.getQualifierExpression();
+      PsiReferenceExpression methodExpression = expression.getMethodExpression();
+      PsiExpression qualifier = methodExpression.getQualifierExpression();
       if (qualifier != null) {
         return;
       }
@@ -85,18 +85,18 @@ public class AmbiguousMethodCallInspection extends BaseInspection {
       if (containingClass == null) {
         return;
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return;
       }
-      final PsiClass methodClass = method.getContainingClass();
+      PsiClass methodClass = method.getContainingClass();
       if (methodClass == null || !containingClass.isInheritor(methodClass, true)) {
         return;
       }
       containingClass = ClassUtils.getContainingClass(containingClass);
-      final String methodName = methodExpression.getReferenceName();
+      String methodName = methodExpression.getReferenceName();
       while (containingClass != null) {
-        final PsiMethod[] methods = containingClass.findMethodsByName(methodName, false);
+        PsiMethod[] methods = containingClass.findMethodsByName(methodName, false);
         if (methods.length > 0 && !methodClass.equals(containingClass)) {
           registerMethodCallError(expression, methodClass, containingClass);
           return;

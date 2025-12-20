@@ -47,7 +47,7 @@ public class StaticMethodNamingConventionInspection
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final String methodName = (String)infos[0];
+    String methodName = (String)infos[0];
     if (methodName.length() < getMinLength()) {
       return InspectionGadgetsLocalize.staticMethodNamingConventionProblemDescriptorShort().get();
     }
@@ -81,7 +81,7 @@ public class StaticMethodNamingConventionInspection
       if (!method.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }
-      final String name = method.getName();
+      String name = method.getName();
       if (isValid(name)) {
         return;
       }

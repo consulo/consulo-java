@@ -82,7 +82,7 @@ public class AccessStaticViaInstanceFix extends LocalQuickFixAndIntentionActionO
         @Nonnull PsiElement startElement,
         @Nonnull PsiElement endElement
     ) {
-        final PsiReferenceExpression myExpression = (PsiReferenceExpression) startElement;
+        PsiReferenceExpression myExpression = (PsiReferenceExpression) startElement;
 
         if (!myExpression.isValid()) {
             return;
@@ -104,7 +104,7 @@ public class AccessStaticViaInstanceFix extends LocalQuickFixAndIntentionActionO
             return;
         }
         try {
-            final PsiExpression qualifierExpression = myExpression.getQualifierExpression();
+            PsiExpression qualifierExpression = myExpression.getQualifierExpression();
             PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
             if (qualifierExpression != null) {
                 if (!checkSideEffects(project, containingClass, qualifierExpression, factory, myExpression, editor)) {
@@ -154,7 +154,7 @@ public class AccessStaticViaInstanceFix extends LocalQuickFixAndIntentionActionO
         final PsiReferenceExpression qualifiedWithClassName = (PsiReferenceExpression) myExpression.copy();
         qualifiedWithClassName.setQualifierExpression(factory.createReferenceExpression(containingClass));
         final boolean canCopeWithSideEffects = hasSideEffects;
-        final SideEffectWarningDialog dialog = new SideEffectWarningDialog(
+        SideEffectWarningDialog dialog = new SideEffectWarningDialog(
             project,
             false,
             null,
@@ -194,8 +194,8 @@ public class AccessStaticViaInstanceFix extends LocalQuickFixAndIntentionActionO
         }
         try {
             if (res == RemoveUnusedVariableUtil.MAKE_STATEMENT) {
-                final PsiStatement statementFromText = factory.createStatementFromText(qualifierExpression.getText() + ";", null);
-                final PsiStatement statement = PsiTreeUtil.getParentOfType(myExpression, PsiStatement.class);
+                PsiStatement statementFromText = factory.createStatementFromText(qualifierExpression.getText() + ";", null);
+                PsiStatement statement = PsiTreeUtil.getParentOfType(myExpression, PsiStatement.class);
                 statement.getParent().addBefore(statementFromText, statement);
             }
         }

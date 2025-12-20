@@ -70,7 +70,7 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
         if (!isMethodUsage(usage)) {
             return true;
         }
-        final PsiElement ref = usage.getElement();
+        PsiElement ref = usage.getElement();
         PsiCall callExpression = RefactoringUtil.getCallExpressionByMethodReference(ref);
         PsiExpressionList argList = RefactoringUtil.getArgumentListByMethodReference(ref);
         if (argList == null) {
@@ -78,19 +78,19 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
         }
         PsiExpression[] oldArgs = argList.getExpressions();
 
-        final PsiExpression anchor;
-        final PsiMethod methodToSearchFor = data.getMethodToSearchFor();
+        PsiExpression anchor;
+        PsiMethod methodToSearchFor = data.getMethodToSearchFor();
         if (!methodToSearchFor.isVarArgs()) {
             anchor = getLast(oldArgs);
         }
         else {
-            final PsiParameter[] parameters = methodToSearchFor.getParameterList().getParameters();
+            PsiParameter[] parameters = methodToSearchFor.getParameterList().getParameters();
             if (parameters.length > oldArgs.length) {
                 anchor = getLast(oldArgs);
             }
             else {
                 LOG.assertTrue(parameters.length > 0);
-                final int lastNonVararg = parameters.length - 2;
+                int lastNonVararg = parameters.length - 2;
                 anchor = lastNonVararg >= 0 ? oldArgs[lastNonVararg] : null;
             }
         }
@@ -128,7 +128,7 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
         }
 
 
-        final PsiExpressionList argumentList = callExpression.getArgumentList();
+        PsiExpressionList argumentList = callExpression.getArgumentList();
         LOG.assertTrue(argumentList != null, callExpression.getText());
         removeParametersFromCall(argumentList, data.getParametersToRemove());
         return false;
@@ -140,8 +140,8 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
         PsiExpressionList argList,
         PsiMethod method
     ) {
-        final Project project = method.getProject();
-        final PsiSubstitutor psiSubstitutor = JavaPsiFacade.getInstance(project).getResolveHelper()
+        Project project = method.getProject();
+        PsiSubstitutor psiSubstitutor = JavaPsiFacade.getInstance(project).getResolveHelper()
             .inferTypeArguments(
                 method.getTypeParameters(),
                 method.getParameterList().getParameters(),
@@ -155,8 +155,8 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
         );
     }
 
-    private static void removeParametersFromCall(@Nonnull final PsiExpressionList argList, IntList parametersToRemove) {
-        final PsiExpression[] exprs = argList.getExpressions();
+    private static void removeParametersFromCall(@Nonnull PsiExpressionList argList, IntList parametersToRemove) {
+        PsiExpression[] exprs = argList.getExpressions();
 
         IntList reverse = IntLists.newArrayList(parametersToRemove.toArray());
         IntLists.reverse(reverse);
@@ -186,17 +186,17 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
 
     @Override
     public void findConflicts(IntroduceParameterData data, UsageInfo[] usages, MultiMap<PsiElement, LocalizeValue> conflicts) {
-        final PsiMethod method = data.getMethodToReplaceIn();
-        final int parametersCount = method.getParameterList().getParametersCount();
+        PsiMethod method = data.getMethodToReplaceIn();
+        int parametersCount = method.getParameterList().getParametersCount();
         for (UsageInfo usage : usages) {
             if (!isMethodUsage(usage)) {
                 continue;
             }
-            final PsiElement element = usage.getElement();
-            final PsiCall call = RefactoringUtil.getCallExpressionByMethodReference(element);
-            final PsiExpressionList argList = call.getArgumentList();
+            PsiElement element = usage.getElement();
+            PsiCall call = RefactoringUtil.getCallExpressionByMethodReference(element);
+            PsiExpressionList argList = call.getArgumentList();
             if (argList != null) {
-                final int actualParamLength = argList.getExpressions().length;
+                int actualParamLength = argList.getExpressions().length;
                 if ((method.isVarArgs() && actualParamLength + 1 < parametersCount) ||
                     (!method.isVarArgs() && actualParamLength < parametersCount)) {
                     conflicts.putValue(
@@ -233,15 +233,15 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
         }
         PsiMethod method = (PsiMethod) usage.getElement();
 
-        final FieldConflictsResolver fieldConflictsResolver = new FieldConflictsResolver(data.getParameterName(), method.getBody());
-        final MethodJavaDocHelper javaDocHelper = new MethodJavaDocHelper(method);
+        FieldConflictsResolver fieldConflictsResolver = new FieldConflictsResolver(data.getParameterName(), method.getBody());
+        MethodJavaDocHelper javaDocHelper = new MethodJavaDocHelper(method);
         PsiElementFactory factory = JavaPsiFacade.getInstance(data.getProject()).getElementFactory();
 
         PsiParameter parameter = factory.createParameter(data.getParameterName(), data.getForcedType());
         PsiUtil.setModifierProperty(parameter, PsiModifier.FINAL, data.isDeclareFinal());
 
-        final PsiParameterList parameterList = method.getParameterList();
-        final PsiParameter[] parameters = parameterList.getParameters();
+        PsiParameterList parameterList = method.getParameterList();
+        PsiParameter[] parameters = parameterList.getParameters();
 
         IntList reverse = IntLists.newArrayList(data.getParametersToRemove().toArray());
         IntLists.reverse(reverse);
@@ -260,10 +260,10 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
             }
         });
 
-        final PsiParameter anchorParameter = getAnchorParameter(method);
+        PsiParameter anchorParameter = getAnchorParameter(method);
         parameter = (PsiParameter) parameterList.addAfter(parameter, anchorParameter);
         JavaCodeStyleManager.getInstance(data.getProject()).shortenClassReferences(parameter);
-        final PsiDocTag tagForAnchorParameter = javaDocHelper.getTagForParameter(anchorParameter);
+        PsiDocTag tagForAnchorParameter = javaDocHelper.getTagForParameter(anchorParameter);
         javaDocHelper.addParameterAfter(data.getParameterName(), tagForAnchorParameter);
 
         fieldConflictsResolver.fix();
@@ -274,9 +274,9 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
     @Nullable
     public static PsiParameter getAnchorParameter(PsiMethod methodToReplaceIn) {
         PsiParameterList parameterList = methodToReplaceIn.getParameterList();
-        final PsiParameter anchorParameter;
-        final PsiParameter[] parameters = parameterList.getParameters();
-        final int length = parameters.length;
+        PsiParameter anchorParameter;
+        PsiParameter[] parameters = parameterList.getParameters();
+        int length = parameters.length;
         if (!methodToReplaceIn.isVarArgs()) {
             anchorParameter = length > 0 ? parameters[length - 1] : null;
         }
@@ -294,7 +294,7 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
         }
         PsiClass aClass = (PsiClass) usage.getElement();
         if (!(aClass instanceof PsiAnonymousClass)) {
-            final PsiElementFactory factory = JavaPsiFacade.getInstance(data.getProject()).getElementFactory();
+            PsiElementFactory factory = JavaPsiFacade.getInstance(data.getProject()).getElementFactory();
             PsiMethod constructor = factory.createMethodFromText(aClass.getName() + "(){}", aClass);
             constructor = (PsiMethod) CodeStyleManager.getInstance(data.getProject()).reformat(constructor);
             constructor = (PsiMethod) aClass.add(constructor);
@@ -321,11 +321,11 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
             return true;
         }
 
-        final PsiElementFactory factory = JavaPsiFacade.getInstance(data.getProject()).getElementFactory();
+        PsiElementFactory factory = JavaPsiFacade.getInstance(data.getProject()).getElementFactory();
         PsiExpressionStatement superCall = (PsiExpressionStatement) factory.createStatementFromText("super();", constructor);
         superCall = (PsiExpressionStatement) CodeStyleManager.getInstance(data.getProject()).reformat(superCall);
         PsiCodeBlock body = constructor.getBody();
-        final PsiStatement[] statements = body.getStatements();
+        PsiStatement[] statements = body.getStatements();
         if (statements.length > 0) {
             superCall = (PsiExpressionStatement) body.addBefore(superCall, statements[0]);
         }

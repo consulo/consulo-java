@@ -56,9 +56,9 @@ public class AssignmentToCollectionFieldFromParameterInspection extends BaseInsp
     @Nonnull
     @RequiredReadAction
     public String buildErrorString(Object... infos) {
-        final PsiExpression rhs = (PsiExpression) infos[0];
-        final PsiField field = (PsiField) infos[1];
-        final PsiType type = field.getType();
+        PsiExpression rhs = (PsiExpression) infos[0];
+        PsiField field = (PsiField) infos[1];
+        PsiType type = field.getType();
         return type instanceof PsiArrayType
             ? InspectionGadgetsLocalize.assignmentCollectionArrayFieldFromParameterProblemDescriptorArray(rhs.getText()).get()
             : InspectionGadgetsLocalize.assignmentCollectionArrayFieldFromParameterProblemDescriptorCollection(rhs.getText()).get();
@@ -83,20 +83,20 @@ public class AssignmentToCollectionFieldFromParameterInspection extends BaseInsp
             PsiAssignmentExpression expression
         ) {
             super.visitAssignmentExpression(expression);
-            final PsiExpression rhs = expression.getRExpression();
+            PsiExpression rhs = expression.getRExpression();
             if (!(rhs instanceof PsiReferenceExpression)) {
                 return;
             }
-            final IElementType tokenType = expression.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (!tokenType.equals(JavaTokenType.EQ)) {
                 return;
             }
-            final PsiExpression lhs = expression.getLExpression();
+            PsiExpression lhs = expression.getLExpression();
             if (!(lhs instanceof PsiReferenceExpression)) {
                 return;
             }
             if (ignorePrivateMethods) {
-                final PsiMethod containingMethod =
+                PsiMethod containingMethod =
                     PsiTreeUtil.getParentOfType(
                         expression,
                         PsiMethod.class
@@ -107,20 +107,20 @@ public class AssignmentToCollectionFieldFromParameterInspection extends BaseInsp
                     return;
                 }
             }
-            final PsiElement element = ((PsiReference) rhs).resolve();
+            PsiElement element = ((PsiReference) rhs).resolve();
             if (!(element instanceof PsiParameter)) {
                 return;
             }
             if (!(element.getParent() instanceof PsiParameterList)) {
                 return;
             }
-            final PsiReferenceExpression referenceExpression =
+            PsiReferenceExpression referenceExpression =
                 (PsiReferenceExpression) lhs;
-            final PsiElement referent = referenceExpression.resolve();
+            PsiElement referent = referenceExpression.resolve();
             if (!(referent instanceof PsiField)) {
                 return;
             }
-            final PsiField field = (PsiField) referent;
+            PsiField field = (PsiField) referent;
             if (!CollectionUtils.isArrayOrCollectionField(field)) {
                 return;
             }

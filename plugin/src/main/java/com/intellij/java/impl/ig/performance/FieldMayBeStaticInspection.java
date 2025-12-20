@@ -59,7 +59,7 @@ public class FieldMayBeStaticInspection extends BaseInspection {
       if (!field.hasModifierProperty(PsiModifier.FINAL)) {
         return;
       }
-      final PsiExpression initializer = field.getInitializer();
+      PsiExpression initializer = field.getInitializer();
       if (initializer == null) {
         return;
       }
@@ -69,11 +69,11 @@ public class FieldMayBeStaticInspection extends BaseInspection {
       if (!canBeStatic(initializer)) {
         return;
       }
-      final PsiType type = field.getType();
+      PsiType type = field.getType();
       if (!ClassUtils.isImmutable(type)) {
         return;
       }
-      final PsiClass containingClass = field.getContainingClass();
+      PsiClass containingClass = field.getContainingClass();
       if (containingClass != null
           && !containingClass.hasModifierProperty(PsiModifier.STATIC)
           && containingClass.getContainingClass() != null
@@ -85,7 +85,7 @@ public class FieldMayBeStaticInspection extends BaseInspection {
     }
 
     private static boolean canBeStatic(PsiExpression initializer) {
-      final CanBeStaticVisitor canBeStaticVisitor =
+      CanBeStaticVisitor canBeStaticVisitor =
         new CanBeStaticVisitor();
       initializer.accept(canBeStaticVisitor);
       return canBeStaticVisitor.canBeStatic();

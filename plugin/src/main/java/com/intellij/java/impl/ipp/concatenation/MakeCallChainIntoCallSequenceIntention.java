@@ -54,28 +54,28 @@ public class MakeCallChainIntoCallSequenceIntention extends Intention {
 
     @Override
     public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-        final List<String> callTexts = new ArrayList<String>();
+        List<String> callTexts = new ArrayList<String>();
         PsiExpression root = (PsiExpression) element;
         while (root instanceof PsiMethodCallExpression) {
-            final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) root;
-            final PsiExpressionList arguments = methodCallExpression.getArgumentList();
-            final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+            PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) root;
+            PsiExpressionList arguments = methodCallExpression.getArgumentList();
+            PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
             callTexts.add(methodExpression.getReferenceName() + arguments.getText());
             root = methodExpression.getQualifierExpression();
             if (root == null) {
                 return;
             }
         }
-        final PsiType rootType = root.getType();
+        PsiType rootType = root.getType();
         if (rootType == null) {
             return;
         }
-        final String targetText;
-        final PsiStatement appendStatement;
-        @NonNls final String firstStatement;
-        final String variableDeclaration;
-        final boolean showRenameTemplate;
-        final PsiElement parent = element.getParent();
+        String targetText;
+        PsiStatement appendStatement;
+        @NonNls String firstStatement;
+        String variableDeclaration;
+        boolean showRenameTemplate;
+        PsiElement parent = element.getParent();
         if (parent instanceof PsiExpressionStatement) {
             targetText = root.getText();
             appendStatement = (PsiStatement) parent;
@@ -84,32 +84,32 @@ public class MakeCallChainIntoCallSequenceIntention extends Intention {
             showRenameTemplate = false;
         }
         else {
-            final PsiElement grandParent = parent.getParent();
+            PsiElement grandParent = parent.getParent();
             appendStatement = (PsiStatement) grandParent;
             if (parent instanceof PsiAssignmentExpression && grandParent instanceof PsiExpressionStatement) {
-                final PsiAssignmentExpression assignment = (PsiAssignmentExpression) parent;
-                final PsiExpression lhs = assignment.getLExpression();
+                PsiAssignmentExpression assignment = (PsiAssignmentExpression) parent;
+                PsiExpression lhs = assignment.getLExpression();
                 if (!(lhs instanceof PsiReferenceExpression)) {
                     return;
                 }
-                final PsiReferenceExpression expression = (PsiReferenceExpression) lhs;
-                final PsiElement target = expression.resolve();
+                PsiReferenceExpression expression = (PsiReferenceExpression) lhs;
+                PsiElement target = expression.resolve();
                 if (!(target instanceof PsiVariable)) {
                     return;
                 }
-                final PsiVariable variable = (PsiVariable) target;
-                final PsiType variableType = variable.getType();
+                PsiVariable variable = (PsiVariable) target;
+                PsiType variableType = variable.getType();
                 if (variableType.equals(rootType)) {
                     targetText = lhs.getText();
-                    final PsiJavaToken token = assignment.getOperationSign();
+                    PsiJavaToken token = assignment.getOperationSign();
                     firstStatement = targetText + token.getText() + root.getText() + ';';
                     showRenameTemplate = false;
                 }
                 else {
                     targetText = "x";
                     showRenameTemplate = true;
-                    final Project project = element.getProject();
-                    final JavaCodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
+                    Project project = element.getProject();
+                    JavaCodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
                     if (codeStyleSettings.GENERATE_FINAL_LOCALS) {
                         firstStatement = "final " + rootType.getCanonicalText() + ' ' + targetText + '=' + root.getText() + ';';
                     }
@@ -120,9 +120,9 @@ public class MakeCallChainIntoCallSequenceIntention extends Intention {
                 variableDeclaration = null;
             }
             else {
-                final PsiDeclarationStatement declaration = (PsiDeclarationStatement) appendStatement;
-                final PsiVariable variable = (PsiVariable) declaration.getDeclaredElements()[0];
-                final PsiType variableType = variable.getType();
+                PsiDeclarationStatement declaration = (PsiDeclarationStatement) appendStatement;
+                PsiVariable variable = (PsiVariable) declaration.getDeclaredElements()[0];
+                PsiType variableType = variable.getType();
                 if (variableType.equals(rootType)) {
                     targetText = variable.getName();
                     if (variable.hasModifierProperty(PsiModifier.FINAL)) {
@@ -143,8 +143,8 @@ public class MakeCallChainIntoCallSequenceIntention extends Intention {
                     }
                     targetText = "x";
                     showRenameTemplate = true;
-                    final Project project = element.getProject();
-                    final JavaCodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
+                    Project project = element.getProject();
+                    JavaCodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
                     if (codeStyleSettings.GENERATE_FINAL_LOCALS) {
                         firstStatement = "final " + rootType.getCanonicalText() + " x=" + root.getText() + ';';
                     }
@@ -154,39 +154,39 @@ public class MakeCallChainIntoCallSequenceIntention extends Intention {
                 }
             }
         }
-        final StringBuilder builder = new StringBuilder("{\n");
+        StringBuilder builder = new StringBuilder("{\n");
         if (firstStatement != null) {
             builder.append(firstStatement);
         }
         Collections.reverse(callTexts);
         for (int i = 0, size = callTexts.size(); i < size; i++) {
-            final String callText = callTexts.get(i);
+            String callText = callTexts.get(i);
             if (i == size - 1 && variableDeclaration != null) {
                 builder.append(variableDeclaration);
             }
             builder.append(targetText).append('.').append(callText).append(";\n");
         }
         builder.append('}');
-        final PsiManager manager = element.getManager();
-        final Project project = manager.getProject();
-        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-        final PsiElement appendStatementParent = appendStatement.getParent();
-        final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(manager.getProject());
-        final PsiCodeBlock codeBlock = factory.createCodeBlockFromText(builder.toString(), appendStatement);
+        PsiManager manager = element.getManager();
+        Project project = manager.getProject();
+        PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+        PsiElement appendStatementParent = appendStatement.getParent();
+        CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(manager.getProject());
+        PsiCodeBlock codeBlock = factory.createCodeBlockFromText(builder.toString(), appendStatement);
         if (appendStatementParent instanceof PsiLoopStatement || appendStatementParent instanceof PsiIfStatement) {
-            final PsiElement insertedCodeBlock = appendStatement.replace(codeBlock);
-            final PsiCodeBlock reformattedCodeBlock = (PsiCodeBlock) codeStyleManager.reformat(insertedCodeBlock);
+            PsiElement insertedCodeBlock = appendStatement.replace(codeBlock);
+            PsiCodeBlock reformattedCodeBlock = (PsiCodeBlock) codeStyleManager.reformat(insertedCodeBlock);
             if (showRenameTemplate) {
-                final PsiStatement[] statements = reformattedCodeBlock.getStatements();
-                final PsiVariable variable = (PsiVariable) ((PsiDeclarationStatement) statements[0]).getDeclaredElements()[0];
+                PsiStatement[] statements = reformattedCodeBlock.getStatements();
+                PsiVariable variable = (PsiVariable) ((PsiDeclarationStatement) statements[0]).getDeclaredElements()[0];
                 HighlightUtil.showRenameTemplate(appendStatementParent, variable);
             }
         }
         else {
-            final PsiStatement[] statements = codeBlock.getStatements();
+            PsiStatement[] statements = codeBlock.getStatements();
             PsiVariable variable = null;
             for (int i = 0, length = statements.length; i < length; i++) {
-                final PsiElement insertedStatement = appendStatementParent.addBefore(statements[i], appendStatement);
+                PsiElement insertedStatement = appendStatementParent.addBefore(statements[i], appendStatement);
                 if (i == 0 && showRenameTemplate) {
                     variable = (PsiVariable) ((PsiDeclarationStatement) insertedStatement).getDeclaredElements()[0];
                 }

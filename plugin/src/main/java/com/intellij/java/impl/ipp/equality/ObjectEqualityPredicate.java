@@ -28,30 +28,30 @@ class ObjectEqualityPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiBinaryExpression)) {
       return false;
     }
-    final PsiBinaryExpression expression = (PsiBinaryExpression)element;
-    final IElementType tokenType = expression.getOperationTokenType();
+    PsiBinaryExpression expression = (PsiBinaryExpression)element;
+    IElementType tokenType = expression.getOperationTokenType();
     if (!tokenType.equals(JavaTokenType.NE) &&
         !tokenType.equals(JavaTokenType.EQEQ)) {
       return false;
     }
-    final PsiExpression lhs = expression.getLOperand();
-    final String lhsText = lhs.getText();
+    PsiExpression lhs = expression.getLOperand();
+    String lhsText = lhs.getText();
     if (PsiKeyword.NULL.equals(lhsText)) {
       return false;
     }
-    final PsiType lhsType = lhs.getType();
+    PsiType lhsType = lhs.getType();
     if (lhsType == null) {
       return false;
     }
-    final PsiExpression rhs = expression.getROperand();
+    PsiExpression rhs = expression.getROperand();
     if (rhs == null) {
       return false;
     }
-    final String rhsText = rhs.getText();
+    String rhsText = rhs.getText();
     if (PsiKeyword.NULL.equals(rhsText)) {
       return false;
     }
-    final PsiType rhsType = rhs.getType();
+    PsiType rhsType = rhs.getType();
     if (rhsType == null) {
       return false;
     }
@@ -60,15 +60,15 @@ class ObjectEqualityPredicate implements PsiElementPredicate {
       return false;
     }
     if (rhsType instanceof PsiClassType) {
-      final PsiClassType rhsClassType = (PsiClassType)rhsType;
-      final PsiClass rhsClass = rhsClassType.resolve();
+      PsiClassType rhsClassType = (PsiClassType)rhsType;
+      PsiClass rhsClass = rhsClassType.resolve();
       if (rhsClass != null && rhsClass.isEnum()) {
         return false;
       }
     }
     if (lhsType instanceof PsiClassType) {
-      final PsiClassType lhsClassType = (PsiClassType)lhsType;
-      final PsiClass lhsClass = lhsClassType.resolve();
+      PsiClassType lhsClassType = (PsiClassType)lhsType;
+      PsiClass lhsClass = lhsClassType.resolve();
       if (lhsClass != null && lhsClass.isEnum()) {
         return false;
       }

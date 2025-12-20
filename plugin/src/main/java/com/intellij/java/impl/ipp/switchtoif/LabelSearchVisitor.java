@@ -39,8 +39,8 @@ class LabelSearchVisitor extends JavaRecursiveElementWalkingVisitor {
 
   @Override
   public void visitLabeledStatement(PsiLabeledStatement statement) {
-    final PsiIdentifier labelIdentifier = statement.getLabelIdentifier();
-    final String labelText = labelIdentifier.getText();
+    PsiIdentifier labelIdentifier = statement.getLabelIdentifier();
+    String labelText = labelIdentifier.getText();
     if (labelText.equals(m_labelName)) {
       m_used = true;
     }

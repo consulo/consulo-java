@@ -53,7 +53,7 @@ class SameNamesJoiner implements TreeStructureProvider {
   }
 
 
-  public PsiElement getTopLevelElement(final PsiElement element) {
+  public PsiElement getTopLevelElement(PsiElement element) {
     return null;
   }
 

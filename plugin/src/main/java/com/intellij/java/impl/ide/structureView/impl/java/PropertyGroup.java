@@ -58,7 +58,7 @@ public class PropertyGroup implements Group, ColoredItemPresentation, AccessLeve
     myProject = project;
   }
 
-  public static PropertyGroup createOn(PsiElement object, final TreeElement treeElement) {
+  public static PropertyGroup createOn(PsiElement object, TreeElement treeElement) {
     if (object instanceof PsiField) {
       PsiField field = (PsiField)object;
       PropertyGroup group = new PropertyGroup(PropertyUtil.suggestPropertyName(field), field.getType(),
@@ -143,7 +143,7 @@ public class PropertyGroup implements Group, ColoredItemPresentation, AccessLeve
     if (this == o) return true;
     if (!(o instanceof PropertyGroup)) return false;
 
-    final PropertyGroup propertyGroup = (PropertyGroup)o;
+    PropertyGroup propertyGroup = (PropertyGroup)o;
 
     if (myPropertyName != null ? !myPropertyName.equals(propertyGroup.myPropertyName) : propertyGroup.myPropertyName != null) return false;
 
@@ -232,7 +232,7 @@ public class PropertyGroup implements Group, ColoredItemPresentation, AccessLeve
     return isDeprecated(getField()) && isDeprecated(getGetter()) && isDeprecated(getSetter());
   }
 
-  private static boolean isDeprecated(final PsiElement element) {
+  private static boolean isDeprecated(PsiElement element) {
     if (element == null) return false;
     if (!element.isValid()) return false;
     if (!(element instanceof PsiDocCommentOwner)) return false;

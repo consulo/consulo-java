@@ -42,10 +42,10 @@ public class ReplaceShiftWithMultiplyIntention extends MutablyNamedIntention {
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
         if (element instanceof PsiBinaryExpression) {
-            final PsiBinaryExpression exp = (PsiBinaryExpression) element;
-            final PsiJavaToken sign = exp.getOperationSign();
-            final IElementType tokenType = sign.getTokenType();
-            final String operatorString;
+            PsiBinaryExpression exp = (PsiBinaryExpression) element;
+            PsiJavaToken sign = exp.getOperationSign();
+            IElementType tokenType = sign.getTokenType();
+            String operatorString;
             if (tokenType.equals(JavaTokenType.LTLT)) {
                 operatorString = "*";
             }
@@ -55,11 +55,11 @@ public class ReplaceShiftWithMultiplyIntention extends MutablyNamedIntention {
             return IntentionPowerPackLocalize.replaceSomeOperatorWithOtherIntentionName(sign.getText(), operatorString);
         }
         else {
-            final PsiAssignmentExpression exp =
+            PsiAssignmentExpression exp =
                 (PsiAssignmentExpression) element;
-            final PsiJavaToken sign = exp.getOperationSign();
-            final IElementType tokenType = sign.getTokenType();
-            final String assignString;
+            PsiJavaToken sign = exp.getOperationSign();
+            IElementType tokenType = sign.getTokenType();
+            String assignString;
             if (JavaTokenType.LTLTEQ.equals(tokenType)) {
                 assignString = "*=";
             }
@@ -90,38 +90,38 @@ public class ReplaceShiftWithMultiplyIntention extends MutablyNamedIntention {
     private static void replaceShiftAssignWithMultiplyOrDivideAssign(
         PsiElement element)
         throws IncorrectOperationException {
-        final PsiAssignmentExpression exp =
+        PsiAssignmentExpression exp =
             (PsiAssignmentExpression) element;
-        final PsiExpression lhs = exp.getLExpression();
-        final PsiExpression rhs = exp.getRExpression();
-        final IElementType tokenType = exp.getOperationTokenType();
-        final String assignString;
+        PsiExpression lhs = exp.getLExpression();
+        PsiExpression rhs = exp.getRExpression();
+        IElementType tokenType = exp.getOperationTokenType();
+        String assignString;
         if (tokenType.equals(JavaTokenType.LTLTEQ)) {
             assignString = "*=";
         }
         else {
             assignString = "/=";
         }
-        final String expString =
+        String expString =
             lhs.getText() + assignString + ShiftUtils.getExpBase2(rhs);
         replaceExpression(expString, exp);
     }
 
     private static void replaceShiftWithMultiplyOrDivide(PsiElement element)
         throws IncorrectOperationException {
-        final PsiBinaryExpression exp =
+        PsiBinaryExpression exp =
             (PsiBinaryExpression) element;
-        final PsiExpression lhs = exp.getLOperand();
-        final PsiExpression rhs = exp.getROperand();
-        final IElementType tokenType = exp.getOperationTokenType();
-        final String operatorString;
+        PsiExpression lhs = exp.getLOperand();
+        PsiExpression rhs = exp.getROperand();
+        IElementType tokenType = exp.getOperationTokenType();
+        String operatorString;
         if (tokenType.equals(JavaTokenType.LTLT)) {
             operatorString = "*";
         }
         else {
             operatorString = "/";
         }
-        final String lhsText;
+        String lhsText;
         if (ParenthesesUtils.getPrecedence(lhs) >
             ParenthesesUtils.MULTIPLICATIVE_PRECEDENCE) {
             lhsText = '(' + lhs.getText() + ')';
@@ -131,7 +131,7 @@ public class ReplaceShiftWithMultiplyIntention extends MutablyNamedIntention {
         }
         String expString =
             lhsText + operatorString + ShiftUtils.getExpBase2(rhs);
-        final PsiElement parent = exp.getParent();
+        PsiElement parent = exp.getParent();
         if (parent instanceof PsiExpression) {
             if (!(parent instanceof PsiParenthesizedExpression) &&
                 ParenthesesUtils.getPrecedence((PsiExpression) parent) <

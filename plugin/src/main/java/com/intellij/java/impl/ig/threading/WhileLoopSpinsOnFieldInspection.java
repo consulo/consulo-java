@@ -66,12 +66,12 @@ public class WhileLoopSpinsOnFieldInspection extends BaseInspection {
     @Override
     public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
       super.visitWhileStatement(statement);
-      final PsiStatement body = statement.getBody();
+      PsiStatement body = statement.getBody();
       if (ignoreNonEmtpyLoops && !statementIsEmpty(body)) {
         return;
       }
-      final PsiExpression condition = statement.getCondition();
-      final PsiField field = getFieldIfSimpleFieldComparison(condition);
+      PsiExpression condition = statement.getCondition();
+      PsiField field = getFieldIfSimpleFieldComparison(condition);
       if (field == null) {
         return;
       }
@@ -87,24 +87,24 @@ public class WhileLoopSpinsOnFieldInspection extends BaseInspection {
       if (condition == null) {
         return null;
       }
-      final PsiField field = getFieldIfSimpleFieldAccess(condition);
+      PsiField field = getFieldIfSimpleFieldAccess(condition);
       if (field != null) {
         return field;
       }
       if (condition instanceof PsiPrefixExpression) {
-        final PsiPrefixExpression prefixExpression = (PsiPrefixExpression)condition;
-        final PsiExpression operand = prefixExpression.getOperand();
+        PsiPrefixExpression prefixExpression = (PsiPrefixExpression)condition;
+        PsiExpression operand = prefixExpression.getOperand();
         return getFieldIfSimpleFieldComparison(operand);
       }
       if (condition instanceof PsiPostfixExpression) {
-        final PsiPostfixExpression postfixExpression = (PsiPostfixExpression)condition;
-        final PsiExpression operand = postfixExpression.getOperand();
+        PsiPostfixExpression postfixExpression = (PsiPostfixExpression)condition;
+        PsiExpression operand = postfixExpression.getOperand();
         return getFieldIfSimpleFieldComparison(operand);
       }
       if (condition instanceof PsiBinaryExpression) {
-        final PsiBinaryExpression binaryExpression = (PsiBinaryExpression)condition;
-        final PsiExpression lOperand = binaryExpression.getLOperand();
-        final PsiExpression rOperand = binaryExpression.getROperand();
+        PsiBinaryExpression binaryExpression = (PsiBinaryExpression)condition;
+        PsiExpression lOperand = binaryExpression.getLOperand();
+        PsiExpression rOperand = binaryExpression.getROperand();
         if (ExpressionUtils.isLiteral(rOperand)) {
           return getFieldIfSimpleFieldComparison(lOperand);
         }
@@ -127,16 +127,16 @@ public class WhileLoopSpinsOnFieldInspection extends BaseInspection {
       if (!(expression instanceof PsiReferenceExpression)) {
         return null;
       }
-      final PsiReferenceExpression reference = (PsiReferenceExpression)expression;
-      final PsiExpression qualifierExpression = reference.getQualifierExpression();
+      PsiReferenceExpression reference = (PsiReferenceExpression)expression;
+      PsiExpression qualifierExpression = reference.getQualifierExpression();
       if (qualifierExpression != null) {
         return null;
       }
-      final PsiElement referent = reference.resolve();
+      PsiElement referent = reference.resolve();
       if (!(referent instanceof PsiField)) {
         return null;
       }
-      final PsiField field = (PsiField)referent;
+      PsiField field = (PsiField)referent;
       if (field.hasModifierProperty(PsiModifier.VOLATILE)) {
         return null;
       }
@@ -153,9 +153,9 @@ public class WhileLoopSpinsOnFieldInspection extends BaseInspection {
         return true;
       }
       if (statement instanceof PsiBlockStatement) {
-        final PsiBlockStatement blockStatement = (PsiBlockStatement)statement;
-        final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
-        final PsiStatement[] codeBlockStatements = codeBlock.getStatements();
+        PsiBlockStatement blockStatement = (PsiBlockStatement)statement;
+        PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
+        PsiStatement[] codeBlockStatements = codeBlock.getStatements();
         for (PsiStatement codeBlockStatement : codeBlockStatements) {
           if (!statementIsEmpty(codeBlockStatement)) {
             return false;

@@ -45,8 +45,8 @@ public class ConnectionResourceInspection extends BaseInspection {
 
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiType type = (PsiType) infos[0];
-        final String text = type.getPresentableText();
+        PsiType type = (PsiType) infos[0];
+        String text = type.getPresentableText();
         return InspectionGadgetsLocalize.resourceOpenedNotClosedProblemDescriptor(text).get();
     }
 
@@ -65,19 +65,19 @@ public class ConnectionResourceInspection extends BaseInspection {
             if (!isConnectionFactoryMethod(expression)) {
                 return;
             }
-            final PsiElement parent = expression.getParent();
-            final PsiAssignmentExpression assignment;
+            PsiElement parent = expression.getParent();
+            PsiAssignmentExpression assignment;
             if (!(parent instanceof PsiAssignmentExpression)) {
                 if (!(parent instanceof PsiTypeCastExpression)) {
-                    final PsiType type = expression.getType();
+                    PsiType type = expression.getType();
                     if (type != null) {
                         registerError(expression, type);
                     }
                     return;
                 }
-                final PsiElement grandParent = parent.getParent();
+                PsiElement grandParent = parent.getParent();
                 if (!(grandParent instanceof PsiAssignmentExpression)) {
-                    final PsiType type = expression.getType();
+                    PsiType type = expression.getType();
                     if (type != null) {
                         registerError(expression, type);
                     }
@@ -88,26 +88,26 @@ public class ConnectionResourceInspection extends BaseInspection {
             else {
                 assignment = (PsiAssignmentExpression) parent;
             }
-            final PsiExpression lhs = assignment.getLExpression();
+            PsiExpression lhs = assignment.getLExpression();
             if (!(lhs instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiReferenceExpression referenceExpression =
+            PsiReferenceExpression referenceExpression =
                 (PsiReferenceExpression) lhs;
-            final PsiElement referent = referenceExpression.resolve();
+            PsiElement referent = referenceExpression.resolve();
             if (!(referent instanceof PsiVariable)) {
                 return;
             }
-            final PsiVariable boundVariable = (PsiVariable) referent;
+            PsiVariable boundVariable = (PsiVariable) referent;
             PsiElement currentContext = expression;
             while (true) {
-                final PsiTryStatement tryStatement =
+                PsiTryStatement tryStatement =
                     PsiTreeUtil.getParentOfType(
                         currentContext,
                         PsiTryStatement.class
                     );
                 if (tryStatement == null) {
-                    final PsiType type = expression.getType();
+                    PsiType type = expression.getType();
                     if (type != null) {
                         registerError(expression, type);
                     }
@@ -126,11 +126,11 @@ public class ConnectionResourceInspection extends BaseInspection {
             PsiTryStatement tryStatement, PsiExpression lhs,
             PsiVariable boundVariable
         ) {
-            final PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
+            PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
             if (finallyBlock == null) {
                 return false;
             }
-            final PsiCodeBlock tryBlock = tryStatement.getTryBlock();
+            PsiCodeBlock tryBlock = tryStatement.getTryBlock();
             if (tryBlock == null) {
                 return false;
             }
@@ -143,7 +143,7 @@ public class ConnectionResourceInspection extends BaseInspection {
         private static boolean containsResourceClose(
             PsiCodeBlock finallyBlock, PsiVariable boundVariable
         ) {
-            final CloseVisitor visitor =
+            CloseVisitor visitor =
                 new CloseVisitor(boundVariable);
             finallyBlock.accept(visitor);
             return visitor.containsStreamClose();
@@ -152,22 +152,22 @@ public class ConnectionResourceInspection extends BaseInspection {
         private static boolean isConnectionFactoryMethod(
             @Nonnull PsiMethodCallExpression expression
         ) {
-            final PsiReferenceExpression methodExpression =
+            PsiReferenceExpression methodExpression =
                 expression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            String methodName = methodExpression.getReferenceName();
             if (!HardcodedMethodConstants.OPEN.equals(methodName)) {
                 return false;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return false;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return false;
             }
-            final String className = containingClass.getQualifiedName();
-            @NonNls final String microeditionConnector =
+            String className = containingClass.getQualifiedName();
+            @NonNls String microeditionConnector =
                 "javax.microedition.io.Connector";
             return microeditionConnector.equals(className);
         }
@@ -199,20 +199,20 @@ public class ConnectionResourceInspection extends BaseInspection {
                 return;
             }
             super.visitMethodCallExpression(call);
-            final PsiReferenceExpression methodExpression =
+            PsiReferenceExpression methodExpression =
                 call.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            String methodName = methodExpression.getReferenceName();
             if (!HardcodedMethodConstants.CLOSE.equals(methodName)) {
                 return;
             }
-            final PsiExpression qualifier =
+            PsiExpression qualifier =
                 methodExpression.getQualifierExpression();
             if (!(qualifier instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiReferenceExpression referenceExpression =
+            PsiReferenceExpression referenceExpression =
                 (PsiReferenceExpression) qualifier;
-            final PsiElement referent = referenceExpression.resolve();
+            PsiElement referent = referenceExpression.resolve();
             if (referent == null) {
                 return;
             }

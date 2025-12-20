@@ -44,16 +44,16 @@ public class EncapsulateVariableFix extends InspectionGadgetsFix {
 
   @Override
   public void doFix(final Project project, ProblemDescriptor descriptor) {
-    final PsiElement nameElement = descriptor.getPsiElement();
-    final PsiElement parent = nameElement.getParent();
+    PsiElement nameElement = descriptor.getPsiElement();
+    PsiElement parent = nameElement.getParent();
     final PsiField field;
     if (parent instanceof PsiField) {
       field = (PsiField)parent;
     }
     else if (parent instanceof PsiReferenceExpression) {
-      final PsiReferenceExpression referenceExpression =
+      PsiReferenceExpression referenceExpression =
         (PsiReferenceExpression)parent;
-      final PsiElement target = referenceExpression.resolve();
+      PsiElement target = referenceExpression.resolve();
       if (!(target instanceof PsiField)) {
         return;
       }
@@ -62,11 +62,11 @@ public class EncapsulateVariableFix extends InspectionGadgetsFix {
     else {
       return;
     }
-    final JavaRefactoringActionHandlerFactory factory =
+    JavaRefactoringActionHandlerFactory factory =
       JavaRefactoringActionHandlerFactory.getInstance();
     final RefactoringActionHandler renameHandler =
       factory.createEncapsulateFieldsHandler();
-    final Runnable runnable = new Runnable() {
+    Runnable runnable = new Runnable() {
       @Override
       public void run() {
         renameHandler.invoke(project, new PsiElement[]{field}, null);

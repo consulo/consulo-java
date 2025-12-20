@@ -46,7 +46,7 @@ import java.util.function.Function;
 public class JavaMoveFilesOrDirectoriesHandler extends MoveFilesOrDirectoriesHandler {
   @Override
   public boolean canMove(PsiElement[] elements, PsiElement targetContainer) {
-    final PsiElement[] srcElements = adjustForMove(null, elements, targetContainer);
+    PsiElement[] srcElements = adjustForMove(null, elements, targetContainer);
     assert srcElements != null;
 
     return super.canMove(srcElements, targetContainer);
@@ -55,9 +55,9 @@ public class JavaMoveFilesOrDirectoriesHandler extends MoveFilesOrDirectoriesHan
   @Override
   public PsiElement adjustTargetForMove(DataContext dataContext, PsiElement targetContainer) {
     if (targetContainer instanceof PsiJavaPackage) {
-      final Module module = dataContext.getData(LangDataKeys.TARGET_MODULE);
+      Module module = dataContext.getData(LangDataKeys.TARGET_MODULE);
       if (module != null) {
-        final PsiDirectory[] directories = ((PsiJavaPackage) targetContainer).getDirectories(GlobalSearchScope.moduleScope(module));
+        PsiDirectory[] directories = ((PsiJavaPackage) targetContainer).getDirectories(GlobalSearchScope.moduleScope(module));
         if (directories.length == 1) {
           return directories[0];
         }
@@ -85,13 +85,13 @@ public class JavaMoveFilesOrDirectoriesHandler extends MoveFilesOrDirectoriesHan
             return new WriteCommandAction<PsiElement[]>(project, "Regrouping ...") {
               @Override
               protected void run(Result<PsiElement[]> result) throws Throwable {
-                final List<PsiElement> adjustedElements = new ArrayList<PsiElement>();
+                List<PsiElement> adjustedElements = new ArrayList<PsiElement>();
                 for (int i = 0, length = elements.length; i < length; i++) {
                   PsiElement element = elements[i];
                   if (element instanceof PsiClass) {
-                    final PsiClass topLevelClass = PsiUtil.getTopLevelClass(element);
+                    PsiClass topLevelClass = PsiUtil.getTopLevelClass(element);
                     elements[i] = topLevelClass;
-                    final PsiFile containingFile = obtainContainingFile(topLevelClass, elements);
+                    PsiFile containingFile = obtainContainingFile(topLevelClass, elements);
                     if (containingFile != null && !adjustedElements.contains(containingFile)) {
                       adjustedElements.add(containingFile);
                     }
@@ -108,31 +108,31 @@ public class JavaMoveFilesOrDirectoriesHandler extends MoveFilesOrDirectoriesHan
 
   @Nullable
   private static PsiFile obtainContainingFile(PsiElement element, PsiElement[] elements) {
-    final PsiClass[] classes = ((PsiClassOwner) element.getParent()).getClasses();
-    final Set<PsiClass> nonMovedClasses = new HashSet<PsiClass>();
+    PsiClass[] classes = ((PsiClassOwner) element.getParent()).getClasses();
+    Set<PsiClass> nonMovedClasses = new HashSet<PsiClass>();
     for (PsiClass aClass : classes) {
       if (ArrayUtil.find(elements, aClass) < 0) {
         nonMovedClasses.add(aClass);
       }
     }
-    final PsiFile containingFile = element.getContainingFile();
+    PsiFile containingFile = element.getContainingFile();
     if (nonMovedClasses.isEmpty()) {
       return containingFile;
     } else {
-      final PsiDirectory containingDirectory = containingFile.getContainingDirectory();
+      PsiDirectory containingDirectory = containingFile.getContainingDirectory();
       if (containingDirectory != null) {
         try {
           JavaDirectoryServiceImpl.checkCreateClassOrInterface(containingDirectory, ((PsiClass) element).getName());
-          final PsiElement createdClass = containingDirectory.add(element);
+          PsiElement createdClass = containingDirectory.add(element);
           element.delete();
           return createdClass.getContainingFile();
         } catch (IncorrectOperationException e) {
-          final Iterator<PsiClass> iterator = nonMovedClasses.iterator();
-          final PsiClass nonMovedClass = iterator.next();
-          final PsiElement createdFile = containingDirectory.add(nonMovedClass).getContainingFile();
+          Iterator<PsiClass> iterator = nonMovedClasses.iterator();
+          PsiClass nonMovedClass = iterator.next();
+          PsiElement createdFile = containingDirectory.add(nonMovedClass).getContainingFile();
           nonMovedClass.delete();
           while (iterator.hasNext()) {
-            final PsiClass currentClass = iterator.next();
+            PsiClass currentClass = iterator.next();
             createdFile.add(currentClass);
             currentClass.delete();
           }

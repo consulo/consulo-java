@@ -56,15 +56,15 @@ public class UnnecessaryUnaryMinusInspection extends BaseInspection {
         }
 
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiPrefixExpression prefixExpression = (PsiPrefixExpression) element.getParent();
-            final PsiExpression parentExpression = (PsiExpression) prefixExpression.getParent();
-            @NonNls final StringBuilder newExpression = new StringBuilder();
+            PsiElement element = descriptor.getPsiElement();
+            PsiPrefixExpression prefixExpression = (PsiPrefixExpression) element.getParent();
+            PsiExpression parentExpression = (PsiExpression) prefixExpression.getParent();
+            @NonNls StringBuilder newExpression = new StringBuilder();
             if (parentExpression instanceof PsiAssignmentExpression) {
-                final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) parentExpression;
-                final PsiExpression lhs = assignmentExpression.getLExpression();
+                PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) parentExpression;
+                PsiExpression lhs = assignmentExpression.getLExpression();
                 newExpression.append(lhs.getText());
-                final IElementType tokenType = assignmentExpression.getOperationTokenType();
+                IElementType tokenType = assignmentExpression.getOperationTokenType();
                 if (tokenType.equals(JavaTokenType.PLUSEQ)) {
                     newExpression.append("-=");
                 }
@@ -73,10 +73,10 @@ public class UnnecessaryUnaryMinusInspection extends BaseInspection {
                 }
             }
             else if (parentExpression instanceof PsiBinaryExpression) {
-                final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) parentExpression;
-                final PsiExpression lhs = binaryExpression.getLOperand();
+                PsiBinaryExpression binaryExpression = (PsiBinaryExpression) parentExpression;
+                PsiExpression lhs = binaryExpression.getLOperand();
                 newExpression.append(lhs.getText());
-                final IElementType tokenType = binaryExpression.getOperationTokenType();
+                IElementType tokenType = binaryExpression.getOperationTokenType();
                 if (tokenType.equals(JavaTokenType.PLUS)) {
                     newExpression.append('-');
                 }
@@ -84,7 +84,7 @@ public class UnnecessaryUnaryMinusInspection extends BaseInspection {
                     newExpression.append('+');
                 }
             }
-            final PsiExpression operand = prefixExpression.getOperand();
+            PsiExpression operand = prefixExpression.getOperand();
             if (operand == null) {
                 return;
             }
@@ -101,26 +101,26 @@ public class UnnecessaryUnaryMinusInspection extends BaseInspection {
         @Override
         public void visitPrefixExpression(PsiPrefixExpression expression) {
             super.visitPrefixExpression(expression);
-            final IElementType operationTokenType = expression.getOperationTokenType();
+            IElementType operationTokenType = expression.getOperationTokenType();
             if (!JavaTokenType.MINUS.equals(operationTokenType)) {
                 return;
             }
-            final PsiElement parent = expression.getParent();
+            PsiElement parent = expression.getParent();
             if (parent instanceof PsiBinaryExpression) {
-                final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) parent;
-                final IElementType binaryExpressionTokenType = binaryExpression.getOperationTokenType();
+                PsiBinaryExpression binaryExpression = (PsiBinaryExpression) parent;
+                IElementType binaryExpressionTokenType = binaryExpression.getOperationTokenType();
                 if (!JavaTokenType.PLUS.equals(binaryExpressionTokenType)) {
                     return;
                 }
-                final PsiExpression rhs = binaryExpression.getROperand();
+                PsiExpression rhs = binaryExpression.getROperand();
                 if (!expression.equals(rhs)) {
                     return;
                 }
                 registerError(expression.getOperationSign());
             }
             else if (parent instanceof PsiAssignmentExpression) {
-                final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) parent;
-                final IElementType assignmentTokenType = assignmentExpression.getOperationTokenType();
+                PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) parent;
+                IElementType assignmentTokenType = assignmentExpression.getOperationTokenType();
                 if (!JavaTokenType.PLUSEQ.equals(assignmentTokenType)) {
                     return;
                 }

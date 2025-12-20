@@ -28,18 +28,18 @@ class ExpressionPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiJavaToken)) {
       return false;
     }
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!(parent instanceof PsiPolyadicExpression)) {
       return false;
     }
-    final PsiPolyadicExpression expression = (PsiPolyadicExpression)parent;
-    final PsiExpression[] operands = expression.getOperands();
+    PsiPolyadicExpression expression = (PsiPolyadicExpression)parent;
+    PsiExpression[] operands = expression.getOperands();
     if (operands.length < 2) {
       return false;
     }
     PsiExpression prevOperand = null;
     for (PsiExpression operand : operands) {
-      final PsiJavaToken token = expression.getTokenBeforeOperand(operand);
+      PsiJavaToken token = expression.getTokenBeforeOperand(operand);
       if (element == token) {
         if (prevOperand == null || operand.getText().equals(prevOperand.getText())) {
           return false;

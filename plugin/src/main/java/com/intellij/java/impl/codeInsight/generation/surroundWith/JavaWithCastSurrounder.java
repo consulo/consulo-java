@@ -46,18 +46,18 @@ public class JavaWithCastSurrounder extends JavaExpressionSurrounder {
 
   @Override
   @RequiredReadAction
-  public TextRange surroundExpression(final Project project, final Editor editor, PsiExpression expr) throws IncorrectOperationException {
+  public TextRange surroundExpression(Project project, Editor editor, PsiExpression expr) throws IncorrectOperationException {
     assert expr.isValid();
     PsiType[] types = GuessManager.getInstance(project).guessTypeToCast(expr);
-    final boolean parenthesesNeeded =
+    boolean parenthesesNeeded =
       expr instanceof PsiPolyadicExpression || expr instanceof PsiConditionalExpression || expr instanceof PsiAssignmentExpression;
     String exprText = parenthesesNeeded ? "(" + expr.getText() + ")" : expr.getText();
-    final Template template = generateTemplate(project, exprText, types);
+    Template template = generateTemplate(project, exprText, types);
     TextRange range;
     if (expr.isPhysical()) {
       range = expr.getTextRange();
     } else {
-      final RangeMarker rangeMarker = expr.getUserData(ElementToWorkOn.TEXT_RANGE);
+      RangeMarker rangeMarker = expr.getUserData(ElementToWorkOn.TEXT_RANGE);
       if (rangeMarker == null) return null;
       range = new TextRange(rangeMarker.getStartOffset(), rangeMarker.getEndOffset());
     }
@@ -68,9 +68,9 @@ public class JavaWithCastSurrounder extends JavaExpressionSurrounder {
     return null;
   }
 
-  private static Template generateTemplate(Project project, String exprText, final PsiType[] suggestedTypes) {
-    final TemplateManager templateManager = TemplateManager.getInstance(project);
-    final Template template = templateManager.createTemplate("", "");
+  private static Template generateTemplate(Project project, String exprText, PsiType[] suggestedTypes) {
+    TemplateManager templateManager = TemplateManager.getInstance(project);
+    Template template = templateManager.createTemplate("", "");
     template.setToReformat(true);
 
     Set<LookupElement> itemSet = new LinkedHashSet<>();

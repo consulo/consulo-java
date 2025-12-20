@@ -57,68 +57,68 @@ public class SuspiciousSystemArraycopyInspection extends BaseInspection {
             @Nonnull PsiMethodCallExpression expression
         ) {
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression =
+            PsiReferenceExpression methodExpression =
                 expression.getMethodExpression();
-            @NonNls final String name = methodExpression.getReferenceName();
+            @NonNls String name = methodExpression.getReferenceName();
             if (!"arraycopy".equals(name)) {
                 return;
             }
-            final PsiExpression qualifierExpression =
+            PsiExpression qualifierExpression =
                 methodExpression.getQualifierExpression();
             if (!(qualifierExpression instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiReferenceExpression referenceExpression =
+            PsiReferenceExpression referenceExpression =
                 (PsiReferenceExpression) qualifierExpression;
-            final String canonicalText = referenceExpression.getCanonicalText();
+            String canonicalText = referenceExpression.getCanonicalText();
             if (!canonicalText.equals("java.lang.System")) {
                 return;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length != 5) {
                 return;
             }
-            final PsiExpression src = arguments[0];
-            final PsiType srcType = src.getType();
-            final PsiExpression srcPos = arguments[1];
+            PsiExpression src = arguments[0];
+            PsiType srcType = src.getType();
+            PsiExpression srcPos = arguments[1];
             if (isNegativeArgument(srcPos)) {
-                final LocalizeValue errorString = InspectionGadgetsLocalize.suspiciousSystemArraycopyProblemDescriptor1();
+                LocalizeValue errorString = InspectionGadgetsLocalize.suspiciousSystemArraycopyProblemDescriptor1();
                 registerError(srcPos, errorString.get());
             }
-            final PsiExpression destPos = arguments[3];
+            PsiExpression destPos = arguments[3];
             if (isNegativeArgument(destPos)) {
-                final LocalizeValue errorString = InspectionGadgetsLocalize.suspiciousSystemArraycopyProblemDescriptor2();
+                LocalizeValue errorString = InspectionGadgetsLocalize.suspiciousSystemArraycopyProblemDescriptor2();
                 registerError(destPos, errorString.get());
             }
-            final PsiExpression length = arguments[4];
+            PsiExpression length = arguments[4];
             if (isNegativeArgument(length)) {
-                final LocalizeValue errorString = InspectionGadgetsLocalize.suspiciousSystemArraycopyProblemDescriptor3();
+                LocalizeValue errorString = InspectionGadgetsLocalize.suspiciousSystemArraycopyProblemDescriptor3();
                 registerError(length, errorString.get());
             }
             boolean notArrayReported = false;
             if (!(srcType instanceof PsiArrayType)) {
-                final LocalizeValue errorString = InspectionGadgetsLocalize.suspiciousSystemArraycopyProblemDescriptor4();
+                LocalizeValue errorString = InspectionGadgetsLocalize.suspiciousSystemArraycopyProblemDescriptor4();
                 registerError(src, errorString.get());
                 notArrayReported = true;
             }
-            final PsiExpression dest = arguments[2];
-            final PsiType destType = dest.getType();
+            PsiExpression dest = arguments[2];
+            PsiType destType = dest.getType();
             if (!(destType instanceof PsiArrayType)) {
-                final LocalizeValue errorString = InspectionGadgetsLocalize.suspiciousSystemArraycopyProblemDescriptor5();
+                LocalizeValue errorString = InspectionGadgetsLocalize.suspiciousSystemArraycopyProblemDescriptor5();
                 registerError(dest, errorString.get());
                 notArrayReported = true;
             }
             if (notArrayReported) {
                 return;
             }
-            final PsiArrayType srcArrayType = (PsiArrayType) srcType;
-            final PsiArrayType destArrayType = (PsiArrayType) destType;
-            final PsiType srcComponentType = srcArrayType.getComponentType();
-            final PsiType destComponentType = destArrayType.getComponentType();
+            PsiArrayType srcArrayType = (PsiArrayType) srcType;
+            PsiArrayType destArrayType = (PsiArrayType) destType;
+            PsiType srcComponentType = srcArrayType.getComponentType();
+            PsiType destComponentType = destArrayType.getComponentType();
             if (!(srcComponentType instanceof PsiPrimitiveType)) {
                 if (!destComponentType.isAssignableFrom(srcComponentType)) {
-                    final LocalizeValue errorString = InspectionGadgetsLocalize.suspiciousSystemArraycopyProblemDescriptor6(
+                    LocalizeValue errorString = InspectionGadgetsLocalize.suspiciousSystemArraycopyProblemDescriptor6(
                         srcType.getCanonicalText(),
                         destType.getCanonicalText()
                     );
@@ -126,7 +126,7 @@ public class SuspiciousSystemArraycopyInspection extends BaseInspection {
                 }
             }
             else if (!destComponentType.equals(srcComponentType)) {
-                final LocalizeValue errorString = InspectionGadgetsLocalize.suspiciousSystemArraycopyProblemDescriptor6(
+                LocalizeValue errorString = InspectionGadgetsLocalize.suspiciousSystemArraycopyProblemDescriptor6(
                     srcType.getCanonicalText(),
                     destType.getCanonicalText()
                 );
@@ -137,12 +137,12 @@ public class SuspiciousSystemArraycopyInspection extends BaseInspection {
         private static boolean isNegativeArgument(
             @Nonnull PsiExpression argument
         ) {
-            final Object constant =
+            Object constant =
                 ExpressionUtils.computeConstantExpression(argument);
             if (!(constant instanceof Integer)) {
                 return false;
             }
-            final Integer integer = (Integer) constant;
+            Integer integer = (Integer) constant;
             return integer.intValue() < 0;
         }
     }

@@ -30,12 +30,12 @@ public class DelegationUtils {
 
 
   public static Set<PsiMethod> getDelegatingMethodsForField(PsiField field) {
-    final Set<PsiMethod> out = new HashSet<PsiMethod>();
-    final PsiClass containingClass = field.getContainingClass();
+    Set<PsiMethod> out = new HashSet<PsiMethod>();
+    PsiClass containingClass = field.getContainingClass();
     if (containingClass == null) {
       return out;
     }
-    final PsiMethod[] methods = containingClass.getMethods();
+    PsiMethod[] methods = containingClass.getMethods();
     for (PsiMethod method : methods) {
       if (isDelegation(field, method)) {
         out.add(method);
@@ -48,23 +48,23 @@ public class DelegationUtils {
     if (method.isConstructor()) {
       return false;
     }
-    final PsiCodeBlock body = method.getBody();
+    PsiCodeBlock body = method.getBody();
     if (body == null) {
       return false;
     }
-    final PsiStatement[] statements = body.getStatements();
+    PsiStatement[] statements = body.getStatements();
     if (statements.length != 1) {
       return false;
     }
-    final PsiStatement statement = statements[0];
+    PsiStatement statement = statements[0];
     if (statement instanceof PsiReturnStatement) {
-      final PsiExpression returnValue = ((PsiReturnStatement)statement).getReturnValue();
+      PsiExpression returnValue = ((PsiReturnStatement)statement).getReturnValue();
       if (!isDelegationCall(returnValue, field, method)) {
         return false;
       }
     }
     else if (statement instanceof PsiExpressionStatement) {
-      final PsiExpression value = ((PsiExpressionStatement)statement).getExpression();
+      PsiExpression value = ((PsiExpressionStatement)statement).getExpression();
       if (!isDelegationCall(value, field, method)) {
         return false;
       }
@@ -87,18 +87,18 @@ public class DelegationUtils {
     if (!(expression instanceof PsiMethodCallExpression)) {
       return false;
     }
-    final PsiMethodCallExpression call = (PsiMethodCallExpression)expression;
-    final PsiReferenceExpression methodExpression = call.getMethodExpression();
-    final PsiExpression qualifier = methodExpression.getQualifierExpression();
+    PsiMethodCallExpression call = (PsiMethodCallExpression)expression;
+    PsiReferenceExpression methodExpression = call.getMethodExpression();
+    PsiExpression qualifier = methodExpression.getQualifierExpression();
     if (!(qualifier instanceof PsiReferenceExpression)) {
       return false;
     }
-    final PsiElement referent = ((PsiReference)qualifier).resolve();
+    PsiElement referent = ((PsiReference)qualifier).resolve();
     if (referent == null || !referent.equals(field)) {
       return false;
     }
-    final PsiExpressionList argumentList = call.getArgumentList();
-    final PsiExpression[] args = argumentList.getExpressions();
+    PsiExpressionList argumentList = call.getArgumentList();
+    PsiExpression[] args = argumentList.getExpressions();
     for (PsiExpression arg : args) {
       if (!isParameterReference(arg, method)) {
         return false;
@@ -111,59 +111,59 @@ public class DelegationUtils {
     if (!(arg instanceof PsiReferenceExpression)) {
       return false;
     }
-    final PsiElement referent = ((PsiReference)arg).resolve();
+    PsiElement referent = ((PsiReference)arg).resolve();
     if (!(referent instanceof PsiParameter)) {
       return false;
     }
-    final PsiElement declarationScope = ((PsiParameter)referent).getDeclarationScope();
+    PsiElement declarationScope = ((PsiParameter)referent).getDeclarationScope();
     return method.equals(declarationScope);
   }
 
 
   public static int[] getParameterPermutation(PsiMethod method) {
-    final PsiCodeBlock body = method.getBody();
+    PsiCodeBlock body = method.getBody();
     assert body != null;
-    final PsiStatement[] statements = body.getStatements();
-    final PsiStatement statement = statements[0];
-    final PsiParameterList parameterList = method.getParameterList();
+    PsiStatement[] statements = body.getStatements();
+    PsiStatement statement = statements[0];
+    PsiParameterList parameterList = method.getParameterList();
     if (statement instanceof PsiReturnStatement) {
-      final PsiExpression returnValue = ((PsiReturnStatement)statement).getReturnValue();
-      final PsiMethodCallExpression call = (PsiMethodCallExpression)returnValue;
+      PsiExpression returnValue = ((PsiReturnStatement)statement).getReturnValue();
+      PsiMethodCallExpression call = (PsiMethodCallExpression)returnValue;
       return calculatePermutation(call, parameterList);
     }
     else {
-      final PsiExpression value = ((PsiExpressionStatement)statement).getExpression();
-      final PsiMethodCallExpression call = (PsiMethodCallExpression)value;
+      PsiExpression value = ((PsiExpressionStatement)statement).getExpression();
+      PsiMethodCallExpression call = (PsiMethodCallExpression)value;
       return calculatePermutation(call, parameterList);
     }
   }
 
   private static int[] calculatePermutation(PsiMethodCallExpression call, PsiParameterList parameterList) {
-    final PsiExpressionList argumentList = call.getArgumentList();
-    final PsiExpression[] args = argumentList.getExpressions();
-    final int[] out = ArrayUtil.newIntArray(args.length);
+    PsiExpressionList argumentList = call.getArgumentList();
+    PsiExpression[] args = argumentList.getExpressions();
+    int[] out = ArrayUtil.newIntArray(args.length);
     for (int i = 0; i < args.length; i++) {
-      final PsiExpression arg = args[i];
-      final PsiParameter parameter = (PsiParameter)((PsiReference)arg).resolve();
+      PsiExpression arg = args[i];
+      PsiParameter parameter = (PsiParameter)((PsiReference)arg).resolve();
       out[i] = parameterList.getParameterIndex(parameter);
     }
     return out;
   }
 
   public static PsiMethod getDelegatedMethod(PsiMethod method) {
-    final PsiCodeBlock body = method.getBody();
+    PsiCodeBlock body = method.getBody();
     assert body != null;
-    final PsiStatement[] statements = body.getStatements();
-    final PsiStatement statement = statements[0];
+    PsiStatement[] statements = body.getStatements();
+    PsiStatement statement = statements[0];
     if (statement instanceof PsiReturnStatement) {
-      final PsiExpression returnValue = ((PsiReturnStatement)statement).getReturnValue();
-      final PsiMethodCallExpression call = (PsiMethodCallExpression)returnValue;
+      PsiExpression returnValue = ((PsiReturnStatement)statement).getReturnValue();
+      PsiMethodCallExpression call = (PsiMethodCallExpression)returnValue;
       assert call != null;
       return call.resolveMethod();
     }
     else {
-      final PsiExpression value = ((PsiExpressionStatement)statement).getExpression();
-      final PsiMethodCallExpression call = (PsiMethodCallExpression)value;
+      PsiExpression value = ((PsiExpressionStatement)statement).getExpression();
+      PsiMethodCallExpression call = (PsiMethodCallExpression)value;
       return call.resolveMethod();
     }
   }

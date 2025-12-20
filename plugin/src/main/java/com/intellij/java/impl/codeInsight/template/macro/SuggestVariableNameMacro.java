@@ -73,7 +73,7 @@ public class SuggestVariableNameMacro extends Macro {
   }
 
   @Override
-  public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, final ExpressionContext context) {
+  public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, ExpressionContext context) {
     String[] names = getNames(context);
     if (names == null || names.length < 2) return null;
     LookupItem[] items = new LookupItem[names.length];
@@ -85,7 +85,7 @@ public class SuggestVariableNameMacro extends Macro {
   }
 
   @RequiredReadAction
-  private static String[] getNames (final ExpressionContext context) {
+  private static String[] getNames (ExpressionContext context) {
     String[] names = ExpressionUtil.getNames(context);
     if (names == null || names.length == 0) return names;
     PsiFile file = PsiDocumentManager.getInstance(context.getProject()).getPsiFile(context.getEditor().getDocument());

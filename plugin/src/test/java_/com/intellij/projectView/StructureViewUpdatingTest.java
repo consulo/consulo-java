@@ -59,13 +59,13 @@ public abstract class StructureViewUpdatingTest extends TestSourceBasedTestCase 
   }
 
   public void testJavaClassStructure() throws Exception {
-    final PsiClass psiClass = JavaDirectoryService.getInstance().getClasses(getPackageDirectory("com/package1"))[0];
-    final VirtualFile virtualFile = psiClass.getContainingFile().getVirtualFile();
-    final FileEditorManager fileEditorManager = FileEditorManager.getInstance(myProject);
+    PsiClass psiClass = JavaDirectoryService.getInstance().getClasses(getPackageDirectory("com/package1"))[0];
+    VirtualFile virtualFile = psiClass.getContainingFile().getVirtualFile();
+    FileEditorManager fileEditorManager = FileEditorManager.getInstance(myProject);
     FileEditor[] fileEditors = fileEditorManager.openFile(virtualFile, false);
-    final FileEditor fileEditor = fileEditors[0];
+    FileEditor fileEditor = fileEditors[0];
     try {
-      final StructureViewComponent structureViewComponent =
+      StructureViewComponent structureViewComponent =
         (StructureViewComponent)fileEditor.getStructureViewBuilder().createStructureView(fileEditor, myProject);
       final Document document = PsiDocumentManager.getInstance(myProject).getDocument(psiClass.getContainingFile());
       structureViewComponent.setActionActive(InheritedMembersNodeProvider.ID, true);
@@ -90,7 +90,7 @@ public abstract class StructureViewUpdatingTest extends TestSourceBasedTestCase 
       new WriteCommandAction.Simple(getProject()) {
         @Override
         protected void run() throws Throwable {
-          final int offset = document.getLineStartOffset(5);
+          int offset = document.getLineStartOffset(5);
           document.insertString(offset, "    boolean myNewField = false;\n");
         }
       }.execute().throwException();
@@ -128,12 +128,12 @@ public abstract class StructureViewUpdatingTest extends TestSourceBasedTestCase 
   }
 
   public void testShowClassMembers() throws Exception {
-    final PsiClass psiClass = JavaDirectoryService.getInstance().getClasses(getPackageDirectory("com/package1"))[0];
-    final VirtualFile virtualFile = psiClass.getContainingFile().getVirtualFile();
-    final FileEditorManager fileEditorManager = FileEditorManager.getInstance(myProject);
+    PsiClass psiClass = JavaDirectoryService.getInstance().getClasses(getPackageDirectory("com/package1"))[0];
+    VirtualFile virtualFile = psiClass.getContainingFile().getVirtualFile();
+    FileEditorManager fileEditorManager = FileEditorManager.getInstance(myProject);
     FileEditor[] fileEditors = fileEditorManager.openFile(virtualFile, false);
-    final FileEditor fileEditor = fileEditors[0];
-    final StructureViewComponent structureViewComponent =
+    FileEditor fileEditor = fileEditors[0];
+    StructureViewComponent structureViewComponent =
       (StructureViewComponent)fileEditor.getStructureViewBuilder().createStructureView(fileEditor, myProject);
     try {
       PlatformTestUtil.assertTreeEqual(structureViewComponent.getTree(), "-Class2.java\n" +
@@ -202,15 +202,15 @@ public abstract class StructureViewUpdatingTest extends TestSourceBasedTestCase 
 
   public void testExpandElementWithExitingName() throws InterruptedException {
 
-    final VirtualFile xmlVirtualFile = getContentRoot().findFileByRelativePath("test.xml");
-    final FileEditorManager fileEditorManager = FileEditorManager.getInstance(myProject);
+    VirtualFile xmlVirtualFile = getContentRoot().findFileByRelativePath("test.xml");
+    FileEditorManager fileEditorManager = FileEditorManager.getInstance(myProject);
     FileEditor[] fileEditors = fileEditorManager.openFile(xmlVirtualFile, false);
-    final FileEditor fileEditor = fileEditors[0];
+    FileEditor fileEditor = fileEditors[0];
     try {
-      final StructureViewComponent structureViewComponent =
+      StructureViewComponent structureViewComponent =
         (StructureViewComponent)fileEditor.getStructureViewBuilder().createStructureView(fileEditor, myProject);
 
-      final JTree tree = structureViewComponent.getTree();
+      JTree tree = structureViewComponent.getTree();
       PlatformTestUtil.assertTreeEqual(tree, "-test.xml\n" +
                                              " -test\n" +
                                              "  +level1\n" +

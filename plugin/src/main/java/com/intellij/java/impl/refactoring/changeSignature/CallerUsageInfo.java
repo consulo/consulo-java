@@ -25,7 +25,7 @@ public class CallerUsageInfo extends UsageInfo {
   private final boolean myToInsertParameter;
   private final boolean myToInsertException;
 
-  public CallerUsageInfo(final PsiMethod method, boolean isToInsertParameter, boolean isToInsertException) {
+  public CallerUsageInfo(PsiMethod method, boolean isToInsertParameter, boolean isToInsertException) {
     super(method);
     myToInsertParameter = isToInsertParameter;
     myToInsertException = isToInsertException;

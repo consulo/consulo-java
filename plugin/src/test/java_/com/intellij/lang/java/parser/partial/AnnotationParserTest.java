@@ -36,13 +36,13 @@ public abstract class AnnotationParserTest extends JavaParsingTestCase {
   public void testParameterizedAnnotation () { doParserTest("@Nullable<T>"); }
   public void testFirstNameMissed() { doParserTest("@Anno(value1, param2=value2)"); }
 
-  private void doParserTest(final String text) {
+  private void doParserTest(String text) {
     doParserTest(text, new MyTestParser());
   }
 
   private static class MyTestParser implements TestParser {
     @Override
-    public void parse(final PsiBuilder builder) {
+    public void parse(PsiBuilder builder) {
       JavaParser.INSTANCE.getDeclarationParser().parseAnnotations(builder);
     }
   }

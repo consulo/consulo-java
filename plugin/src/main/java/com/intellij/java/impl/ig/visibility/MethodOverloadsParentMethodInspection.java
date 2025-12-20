@@ -87,7 +87,7 @@ public class MethodOverloadsParentMethodInspection extends BaseInspection {
       if (method.getNameIdentifier() == null || method.isConstructor()) {
         return;
       }
-      final PsiClass aClass = method.getContainingClass();
+      PsiClass aClass = method.getContainingClass();
       if (aClass == null) {
         return;
       }
@@ -95,7 +95,7 @@ public class MethodOverloadsParentMethodInspection extends BaseInspection {
         return;
       }
       PsiClass ancestorClass = aClass.getSuperClass();
-      final Set<PsiClass> visitedClasses = new HashSet<PsiClass>();
+      Set<PsiClass> visitedClasses = new HashSet<PsiClass>();
       while (ancestorClass != null) {
         if (!visitedClasses.add(ancestorClass)) {
           return;
@@ -109,16 +109,16 @@ public class MethodOverloadsParentMethodInspection extends BaseInspection {
     }
 
     private boolean methodOverloads(PsiMethod method, PsiClass ancestorClass) {
-      final String methodName = method.getName();
-      final PsiParameterList parameterList = method.getParameterList();
-      final PsiParameter[] parameters = parameterList.getParameters();
-      final PsiMethod[] methods = ancestorClass.findMethodsByName(methodName, false);
-      for (final PsiMethod testMethod : methods) {
+      String methodName = method.getName();
+      PsiParameterList parameterList = method.getParameterList();
+      PsiParameter[] parameters = parameterList.getParameters();
+      PsiMethod[] methods = ancestorClass.findMethodsByName(methodName, false);
+      for (PsiMethod testMethod : methods) {
         if (!testMethod.hasModifierProperty(PsiModifier.PRIVATE) &&
             !testMethod.hasModifierProperty(PsiModifier.STATIC) &&
             !isOverriddenInClass(testMethod, method.getContainingClass())) {
-          final PsiParameterList testParameterList = testMethod.getParameterList();
-          final PsiParameter[] testParameters = testParameterList.getParameters();
+          PsiParameterList testParameterList = testMethod.getParameterList();
+          PsiParameter[] testParameters = testParameterList.getParameters();
           if (testParameters.length == parameters.length) {
             if (reportIncompatibleParameters || parametersAreCompatible(parameters, testParameters)) {
               return true;
@@ -135,10 +135,10 @@ public class MethodOverloadsParentMethodInspection extends BaseInspection {
 
     private boolean parametersAreCompatible(PsiParameter[] parameters, PsiParameter[] testParameters) {
       for (int i = 0; i < parameters.length; i++) {
-        final PsiParameter parameter = parameters[i];
-        final PsiType parameterType = parameter.getType();
-        final PsiParameter testParameter = testParameters[i];
-        final PsiType testParameterType = testParameter.getType();
+        PsiParameter parameter = parameters[i];
+        PsiType parameterType = parameter.getType();
+        PsiParameter testParameter = testParameters[i];
+        PsiType testParameterType = testParameter.getType();
         if (!parameterType.isAssignableFrom(testParameterType) && !testParameterType.isAssignableFrom(parameterType)) {
           return false;
         }

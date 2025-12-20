@@ -59,7 +59,7 @@ public class StaticImportConstantFix extends StaticImportMemberFix<PsiField> imp
   @Nonnull
   @Override
   protected List<PsiField> getMembersToImport(boolean applicableOnly) {
-    final Project project = myRef.getProject();
+    Project project = myRef.getProject();
     PsiShortNamesCache cache = PsiShortNamesCache.getInstance(project);
     final PsiJavaCodeReferenceElement element = myRef.getElement();
     String name = element != null ? element.getReferenceName() : null;
@@ -69,10 +69,10 @@ public class StaticImportConstantFix extends StaticImportMemberFix<PsiField> imp
     if (element instanceof PsiExpression && PsiUtil.isAccessedForWriting((PsiExpression)element) || element.getParent() instanceof PsiTypeElement) {
       return Collections.emptyList();
     }
-    final StaticMembersProcessor<PsiField> processor = new StaticMembersProcessor<PsiField>(element) {
+    StaticMembersProcessor<PsiField> processor = new StaticMembersProcessor<PsiField>(element) {
       @Override
       protected boolean isApplicable(PsiField field, PsiElement place) {
-        final PsiType expectedType = getExpectedType();
+        PsiType expectedType = getExpectedType();
         return expectedType == null || TypeConversionUtil.isAssignable(expectedType, field.getType());
       }
     };
@@ -102,14 +102,14 @@ public class StaticImportConstantFix extends StaticImportMemberFix<PsiField> imp
   @Nullable
   @Override
   protected PsiElement getQualifierExpression() {
-    final PsiJavaCodeReferenceElement element = myRef.getElement();
+    PsiJavaCodeReferenceElement element = myRef.getElement();
     return element != null ? element.getQualifier() : null;
   }
 
   @Nullable
   @Override
   protected PsiElement resolveRef() {
-    final PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement)getElement();
+    PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement)getElement();
     return referenceElement != null ? referenceElement.advancedResolve(true).getElement() : null;
   }
 }

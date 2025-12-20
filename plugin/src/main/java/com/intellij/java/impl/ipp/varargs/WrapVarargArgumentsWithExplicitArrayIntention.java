@@ -46,41 +46,41 @@ public class WrapVarargArgumentsWithExplicitArrayIntention extends Intention {
     @Override
     protected void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiMethodCallExpression methodCallExpression =
+        PsiMethodCallExpression methodCallExpression =
             PsiTreeUtil.getParentOfType(element,
                 PsiMethodCallExpression.class);
         if (methodCallExpression == null) {
             return;
         }
-        final PsiMethod method = methodCallExpression.resolveMethod();
+        PsiMethod method = methodCallExpression.resolveMethod();
         if (method == null) {
             return;
         }
-        final PsiParameterList parameterList = method.getParameterList();
-        final int parametersCount = parameterList.getParametersCount();
-        final PsiReferenceExpression methodExpression =
+        PsiParameterList parameterList = method.getParameterList();
+        int parametersCount = parameterList.getParametersCount();
+        PsiReferenceExpression methodExpression =
             methodCallExpression.getMethodExpression();
-        final String methodExpressionText = methodExpression.getText();
-        final StringBuilder newExpression =
+        String methodExpressionText = methodExpression.getText();
+        StringBuilder newExpression =
             new StringBuilder(methodExpressionText);
-        final PsiExpressionList argumentList =
+        PsiExpressionList argumentList =
             methodCallExpression.getArgumentList();
-        final PsiExpression[] arguments = argumentList.getExpressions();
+        PsiExpression[] arguments = argumentList.getExpressions();
         newExpression.append('(');
-        final int varargParameterIndex = parametersCount - 1;
+        int varargParameterIndex = parametersCount - 1;
         for (int i = 0; i < varargParameterIndex; i++) {
             newExpression.append(arguments[i].getText());
             newExpression.append(", ");
         }
-        final PsiParameter[] parameters = parameterList.getParameters();
-        final PsiParameter varargParameter = parameters[varargParameterIndex];
-        final PsiArrayType type = (PsiArrayType) varargParameter.getType();
+        PsiParameter[] parameters = parameterList.getParameters();
+        PsiParameter varargParameter = parameters[varargParameterIndex];
+        PsiArrayType type = (PsiArrayType) varargParameter.getType();
         newExpression.append("new ");
-        final PsiType componentType = type.getComponentType();
-        final JavaResolveResult resolveResult =
+        PsiType componentType = type.getComponentType();
+        JavaResolveResult resolveResult =
             methodCallExpression.resolveMethodGenerics();
-        final PsiSubstitutor substitutor = resolveResult.getSubstitutor();
-        final PsiType substitutedType = substitutor.substitute(componentType);
+        PsiSubstitutor substitutor = resolveResult.getSubstitutor();
+        PsiType substitutedType = substitutor.substitute(componentType);
         newExpression.append(substitutedType.getCanonicalText());
         newExpression.append("[]{");
         if (arguments.length > varargParameterIndex) {

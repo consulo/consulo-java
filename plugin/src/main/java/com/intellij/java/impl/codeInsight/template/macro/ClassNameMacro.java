@@ -47,7 +47,7 @@ public class ClassNameMacro extends Macro {
 
   @Override
   @RequiredReadAction
-  public Result calculateResult(@Nonnull Expression[] params, final ExpressionContext context) {
+  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
     int templateStartOffset = context.getTemplateStartOffset();
     int offset = templateStartOffset > 0 ? context.getTemplateStartOffset() - 1 : context.getTemplateStartOffset();
     PsiElement place = context.getPsiElementAtStartOffset();
@@ -57,7 +57,7 @@ public class ClassNameMacro extends Macro {
       if (place instanceof PsiClass placeClass && !(place instanceof PsiAnonymousClass) && !(place instanceof PsiTypeParameter)) {
         aClass = placeClass;
         // if className() is evaluated outside of the body of inner class, return name of its outer class instead (IDEADEV-19865)
-        final PsiElement lBrace = aClass.getLBrace();
+        PsiElement lBrace = aClass.getLBrace();
         if (lBrace != null && offset < lBrace.getTextOffset() && aClass.getContainingClass() != null) {
           aClass = aClass.getContainingClass();
         }

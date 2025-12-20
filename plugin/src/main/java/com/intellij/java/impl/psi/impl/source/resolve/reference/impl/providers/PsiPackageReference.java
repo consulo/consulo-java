@@ -34,7 +34,7 @@ public class PsiPackageReference extends PsiPolyVariantReferenceBase<PsiElement>
   private final PackageReferenceSet myReferenceSet;
   private final int myIndex;
 
-  public PsiPackageReference(final PackageReferenceSet set, final TextRange range, final int index) {
+  public PsiPackageReference(PackageReferenceSet set, TextRange range, int index) {
     super(set.getElement(), range, set.isSoft());
     myReferenceSet = set;
     myIndex = index;
@@ -74,13 +74,13 @@ public class PsiPackageReference extends PsiPolyVariantReferenceBase<PsiElement>
 
   @Override
   @Nonnull
-  public ResolveResult[] multiResolve(final boolean incompleteCode) {
+  public ResolveResult[] multiResolve(boolean incompleteCode) {
     return doMultiResolve();
   }
 
   @Nonnull
   protected ResolveResult[] doMultiResolve() {
-    final Collection<PsiJavaPackage> packages = new HashSet<>();
+    Collection<PsiJavaPackage> packages = new HashSet<>();
     for (PsiJavaPackage parentPackage : getContext()) {
       packages.addAll(myReferenceSet.resolvePackageName(parentPackage, getValue()));
     }
@@ -88,14 +88,14 @@ public class PsiPackageReference extends PsiPolyVariantReferenceBase<PsiElement>
   }
 
   @Override
-  public PsiElement bindToElement(@Nonnull final PsiElement element) throws IncorrectOperationException {
+  public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
     if (!(element instanceof PsiJavaPackage)) {
       throw new IncorrectOperationException("Cannot bind to " + element);
     }
-    final String newName = ((PsiJavaPackage)element).getQualifiedName();
-    final TextRange range =
+    String newName = ((PsiJavaPackage)element).getQualifiedName();
+    TextRange range =
       new TextRange(getReferenceSet().getReference(0).getRangeInElement().getStartOffset(), getRangeInElement().getEndOffset());
-    final ElementManipulator<PsiElement> manipulator = ElementManipulators.getManipulator(getElement());
+    ElementManipulator<PsiElement> manipulator = ElementManipulators.getManipulator(getElement());
     return manipulator.handleContentChange(getElement(), range, newName);
   }
 

@@ -58,9 +58,9 @@ public class UnnecessaryLabelOnBreakStatementInspection extends BaseInspection {
         }
 
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement breakKeywordElement = descriptor.getPsiElement();
-            final PsiBreakStatement breakStatement = (PsiBreakStatement) breakKeywordElement.getParent();
-            final PsiIdentifier identifier = breakStatement.getLabelIdentifier();
+            PsiElement breakKeywordElement = descriptor.getPsiElement();
+            PsiBreakStatement breakStatement = (PsiBreakStatement) breakKeywordElement.getParent();
+            PsiIdentifier identifier = breakStatement.getLabelIdentifier();
             if (identifier == null) {
                 return;
             }
@@ -75,19 +75,19 @@ public class UnnecessaryLabelOnBreakStatementInspection extends BaseInspection {
     private static class UnnecessaryLabelOnBreakStatementVisitor extends BaseInspectionVisitor {
         @Override
         public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
-            final PsiIdentifier labelIdentifier = statement.getLabelIdentifier();
+            PsiIdentifier labelIdentifier = statement.getLabelIdentifier();
             if (labelIdentifier == null) {
                 return;
             }
-            final String labelText = labelIdentifier.getText();
+            String labelText = labelIdentifier.getText();
             if (labelText == null || labelText.length() == 0) {
                 return;
             }
-            final PsiStatement exitedStatement = statement.findExitedStatement();
+            PsiStatement exitedStatement = statement.findExitedStatement();
             if (exitedStatement == null) {
                 return;
             }
-            final PsiStatement labelEnabledParent =
+            PsiStatement labelEnabledParent =
                 PsiTreeUtil.getParentOfType(statement,
                     PsiForStatement.class, PsiDoWhileStatement.class,
                     PsiForeachStatement.class, PsiWhileStatement.class,

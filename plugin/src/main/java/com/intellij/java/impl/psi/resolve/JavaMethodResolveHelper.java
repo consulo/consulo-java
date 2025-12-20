@@ -56,17 +56,17 @@ public class JavaMethodResolveHelper {
         JavaMethodsConflictResolver(argumentList, argumentTypes, languageLevel);
     myProcessor = new MethodResolverProcessor(argumentList, containingFile, new PsiConflictResolver[]{resolver}) {
       @Override
-      protected MethodCandidateInfo createCandidateInfo(@Nonnull final PsiMethod method,
-                                                        @Nonnull final PsiSubstitutor substitutor,
-                                                        final boolean staticProblem,
-                                                        final boolean accessible,
-                                                        final boolean varargs) {
+      protected MethodCandidateInfo createCandidateInfo(@Nonnull PsiMethod method,
+                                                        @Nonnull PsiSubstitutor substitutor,
+                                                        boolean staticProblem,
+                                                        boolean accessible,
+                                                        boolean varargs) {
         return JavaMethodResolveHelper.this.createCandidateInfo(method, substitutor, staticProblem,
             myCurrentFileContext, !accessible, argumentList, argumentTypes, languageLevel);
       }
 
       @Override
-      protected boolean isAccepted(final PsiMethod candidate) {
+      protected boolean isAccepted(PsiMethod candidate) {
         return !candidate.isConstructor();
       }
     };
@@ -92,7 +92,7 @@ public class JavaMethodResolveHelper {
 
   @Nonnull
   public ErrorType getResolveError() {
-    final List<CandidateInfo> candidates = getCandidates();
+    List<CandidateInfo> candidates = getCandidates();
     if (candidates.size() != 1) {
       return ErrorType.RESOLVE;
     }
@@ -116,7 +116,7 @@ public class JavaMethodResolveHelper {
     if (!info.isApplicable()) {
       boolean hasNulls = false;
       //noinspection ConstantConditions
-      final PsiParameter[] parameters = info.getElement().getParameterList().getParameters();
+      PsiParameter[] parameters = info.getElement().getParameterList().getParameters();
       if (myArgumentTypes.length == parameters.length) {
         for (int i = 0; i < myArgumentTypes.length; i++) {
           PsiType type = myArgumentTypes[i];
@@ -132,7 +132,7 @@ public class JavaMethodResolveHelper {
     return ErrorType.NONE;
   }
 
-  public void handleEvent(final PsiScopeProcessor.Event event, final Object associated) {
+  public void handleEvent(PsiScopeProcessor.Event event, Object associated) {
     myProcessor.handleEvent(event, associated);
   }
 
@@ -143,7 +143,7 @@ public class JavaMethodResolveHelper {
   public Collection<JavaMethodCandidateInfo> getMethods() {
     return ContainerUtil.mapNotNull(getCandidates(), new Function<JavaResolveResult, JavaMethodCandidateInfo>() {
       @Override
-      public JavaMethodCandidateInfo apply(final JavaResolveResult javaResolveResult) {
+      public JavaMethodCandidateInfo apply(JavaResolveResult javaResolveResult) {
         return new JavaMethodCandidateInfo((PsiMethod) javaResolveResult.getElement(), javaResolveResult.getSubstitutor());
       }
     });

@@ -57,7 +57,7 @@ public class JavaModuleExtensionPanel extends JPanel {
   private JRadioButton mySourceDirRadioButton;
 
   @RequiredUIAccess
-  public JavaModuleExtensionPanel(final JavaMutableModuleExtension<?> extension, Runnable classpathStateUpdater) {
+  public JavaModuleExtensionPanel(JavaMutableModuleExtension<?> extension, Runnable classpathStateUpdater) {
     super(new VerticalFlowLayout());
     myExtension = extension;
 
@@ -70,15 +70,15 @@ public class JavaModuleExtensionPanel extends JPanel {
         if (value == ObjectUtil.NULL) {
           append(TargetOptionsComponent.COMPILER_DEFAULT, SimpleTextAttributes.GRAY_ATTRIBUTES);
         } else if (value instanceof LanguageLevel) {
-          final LanguageLevel languageLevel = (LanguageLevel) value;
+          LanguageLevel languageLevel = (LanguageLevel) value;
           append(languageLevel.getDescription().get(), SimpleTextAttributes.GRAY_ATTRIBUTES);
         } else if (value instanceof Module) {
           setIcon(AllIcons.Nodes.Module);
           append(((Module) value).getName(), SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES);
 
-          final JavaModuleExtension extension = ModuleUtilCore.getExtension((Module) value, JavaModuleExtension.class);
+          JavaModuleExtension extension = ModuleUtilCore.getExtension((Module) value, JavaModuleExtension.class);
           if (extension != null) {
-            final LanguageLevel languageLevel = extension.getLanguageLevel();
+            LanguageLevel languageLevel = extension.getLanguageLevel();
             append("(" + languageLevel.getMajor() + ")", SimpleTextAttributes.GRAY_ATTRIBUTES);
           }
         } else if (value instanceof String) {
@@ -116,7 +116,7 @@ public class JavaModuleExtensionPanel extends JPanel {
     buttonGroup.add(myModuleDirRadioButton);
     buttonGroup.add(mySourceDirRadioButton);
 
-    final JRadioButton radioButton = extension.getSpecialDirLocation() == SpecialDirLocation.MODULE_DIR ? myModuleDirRadioButton : mySourceDirRadioButton;
+    JRadioButton radioButton = extension.getSpecialDirLocation() == SpecialDirLocation.MODULE_DIR ? myModuleDirRadioButton : mySourceDirRadioButton;
     radioButton.setSelected(true);
 
     ChangeListener changeListener = e -> {
@@ -180,9 +180,9 @@ public class JavaModuleExtensionPanel extends JPanel {
         continue;
       }
 
-      final ModuleExtension extension = ModuleUtilCore.getExtension(module, myExtension.getId());
+      ModuleExtension extension = ModuleUtilCore.getExtension(module, myExtension.getId());
       if (extension instanceof ModuleExtensionWithSdk) {
-        final ModuleExtensionWithSdk sdkExtension = (ModuleExtensionWithSdk) extension;
+        ModuleExtensionWithSdk sdkExtension = (ModuleExtensionWithSdk) extension;
         // recursive depend
         if (sdkExtension.getInheritableSdk().getModule() == myExtension.getModule()) {
           continue;
@@ -191,11 +191,11 @@ public class JavaModuleExtensionPanel extends JPanel {
       }
     }
 
-    final MutableModuleInheritableNamedPointer<LanguageLevel> inheritableLanguageLevel = myExtension.getInheritableLanguageLevel();
+    MutableModuleInheritableNamedPointer<LanguageLevel> inheritableLanguageLevel = myExtension.getInheritableLanguageLevel();
 
-    final String moduleName = inheritableLanguageLevel.getModuleName();
+    String moduleName = inheritableLanguageLevel.getModuleName();
     if (moduleName != null) {
-      final Module module = inheritableLanguageLevel.getModule();
+      Module module = inheritableLanguageLevel.getModule();
       if (module != null) {
         myLanguageLevelComboBox.setSelectedItem(module);
       } else {
@@ -207,7 +207,7 @@ public class JavaModuleExtensionPanel extends JPanel {
 
     myLanguageLevelComboBox.addItemListener(e -> {
       if (e.getStateChange() == ItemEvent.SELECTED) {
-        final Object selectedItem = myLanguageLevelComboBox.getSelectedItem();
+        Object selectedItem = myLanguageLevelComboBox.getSelectedItem();
         if (selectedItem instanceof Module) {
           inheritableLanguageLevel.set(((Module) selectedItem).getName(), null);
         } else if (selectedItem instanceof LanguageLevel) {

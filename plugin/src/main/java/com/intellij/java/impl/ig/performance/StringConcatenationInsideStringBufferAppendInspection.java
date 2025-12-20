@@ -50,8 +50,8 @@ public class StringConcatenationInsideStringBufferAppendInspection extends BaseI
     @Nonnull
     @RequiredReadAction
     public String buildErrorString(Object... infos) {
-        final PsiClass aClass = (PsiClass) infos[0];
-        final String className = aClass.getName();
+        PsiClass aClass = (PsiClass) infos[0];
+        String className = aClass.getName();
         return InspectionGadgetsLocalize.stringConcatenationInsideStringBufferAppendProblemDescriptor(className).get();
     }
 
@@ -74,23 +74,23 @@ public class StringConcatenationInsideStringBufferAppendInspection extends BaseI
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement methodNameElement = descriptor.getPsiElement();
-            final PsiReferenceExpression methodExpression = (PsiReferenceExpression) methodNameElement.getParent();
+            PsiElement methodNameElement = descriptor.getPsiElement();
+            PsiReferenceExpression methodExpression = (PsiReferenceExpression) methodNameElement.getParent();
             if (methodExpression == null) {
                 return;
             }
-            final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) methodExpression.getParent();
+            PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) methodExpression.getParent();
             if (methodCallExpression == null) {
                 return;
             }
-            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
             if (qualifier == null) {
                 return;
             }
-            final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
-            final PsiExpression argument = arguments[0];
-            final PsiExpression appendExpression = ChangeToAppendFix.buildAppendExpression(qualifier, argument);
+            PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpression argument = arguments[0];
+            PsiExpression appendExpression = ChangeToAppendFix.buildAppendExpression(qualifier, argument);
             if (appendExpression == null) {
                 return;
             }
@@ -102,37 +102,37 @@ public class StringConcatenationInsideStringBufferAppendInspection extends BaseI
         @Override
         public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            String methodName = methodExpression.getReferenceName();
             if (!"append".equals(methodName)) {
                 return;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length != 1) {
                 return;
             }
-            final PsiExpression argument = arguments[0];
+            PsiExpression argument = arguments[0];
             if (!isConcatenation(argument)) {
                 return;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return;
             }
-            final String className = containingClass.getQualifiedName();
+            String className = containingClass.getQualifiedName();
             if (CommonClassNames.JAVA_LANG_STRING_BUFFER.equals(className)
                 || CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(className)) {
                 registerMethodCallError(expression, containingClass);
                 return;
             }
-            final Project project = containingClass.getProject();
-            final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-            final PsiClass appendableClass = psiFacade.findClass("java.lang.Appendable", GlobalSearchScope.allScope(project));
+            Project project = containingClass.getProject();
+            JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+            PsiClass appendableClass = psiFacade.findClass("java.lang.Appendable", GlobalSearchScope.allScope(project));
             if (appendableClass == null) {
                 return;
             }
@@ -144,7 +144,7 @@ public class StringConcatenationInsideStringBufferAppendInspection extends BaseI
 
         private static boolean isConcatenation(PsiExpression expression) {
             if (expression instanceof PsiParenthesizedExpression) {
-                final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) expression;
+                PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) expression;
                 return isConcatenation(parenthesizedExpression.getExpression());
             }
             if (!(expression instanceof PsiPolyadicExpression)) {
@@ -153,7 +153,7 @@ public class StringConcatenationInsideStringBufferAppendInspection extends BaseI
             if (PsiUtil.isConstantExpression(expression)) {
                 return false;
             }
-            final PsiType type = expression.getType();
+            PsiType type = expression.getType();
             if (type == null) {
                 return false;
             }

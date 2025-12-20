@@ -40,7 +40,7 @@ public class LanguageLevelUsagesCollector extends AbstractApplicationUsagesColle
   @Override
   @Nonnull
   public Set<UsageDescriptor> getProjectUsages(@Nonnull Project project) {
-    final Set<String> languageLevels = new HashSet<String>();
+    Set<String> languageLevels = new HashSet<String>();
     for (Module module : ModuleManager.getInstance(project).getModules()) {
       JavaModuleExtension extension = ModuleRootManager.getInstance(module).getExtension(JavaModuleExtension.class);
       if (extension != null) {

@@ -43,7 +43,7 @@ public class AddNotNullAnnotationIntention extends AddAnnotationIntention {
 
   @Nonnull
   private static String[] getNullables(@Nonnull Project project) {
-    final List<String> nullables = NullableNotNullManager.getInstance(project).getNullables();
+    List<String> nullables = NullableNotNullManager.getInstance(project).getNullables();
     return ArrayUtil.toStringArray(nullables);
   }
 }

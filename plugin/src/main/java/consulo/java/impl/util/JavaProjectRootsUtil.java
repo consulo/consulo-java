@@ -49,7 +49,7 @@ public class JavaProjectRootsUtil extends ProjectRootsUtil {
       }
     }
 
-    final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
+    ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
     if (isInsideResourceRoot(file, fileIndex)) {
       return false;
     }
@@ -63,7 +63,7 @@ public class JavaProjectRootsUtil extends ProjectRootsUtil {
     if (psiFile instanceof PsiCodeFragment) {
       return false;
     }
-    final VirtualFile file = psiFile.getVirtualFile();
+    VirtualFile file = psiFile.getVirtualFile();
     if (file == null) {
       return false;
     }

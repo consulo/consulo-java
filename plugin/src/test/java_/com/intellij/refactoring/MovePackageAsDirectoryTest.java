@@ -55,7 +55,7 @@ public abstract class MovePackageAsDirectoryTest extends MultiFileTestCase {
 
   public void testMultipleClassesInOneFile() throws Exception {
     final boolean [] fileWasDeleted = new boolean[]{false};
-    final VirtualFileAdapter fileAdapter = new VirtualFileAdapter() {
+    VirtualFileAdapter fileAdapter = new VirtualFileAdapter() {
       @Override
       public void fileDeleted(VirtualFileEvent event) {
         fileWasDeleted[0] = !event.getFile().isDirectory();
@@ -108,14 +108,14 @@ public abstract class MovePackageAsDirectoryTest extends MultiFileTestCase {
     });
   }
 
-  private PerformAction createAction(final String packageName, final String targetPackageName) {
+  private PerformAction createAction(String packageName, String targetPackageName) {
     return new MyPerformAction(packageName, targetPackageName);
   }
 
   @Override
   protected void prepareProject(VirtualFile rootDir) {
     PsiTestUtil.addContentRoot(myModule, rootDir);
-    final VirtualFile[] children = rootDir.getChildren();
+    VirtualFile[] children = rootDir.getChildren();
     for (VirtualFile child : children) {
       if (child.getName().startsWith("src")) {
         PsiTestUtil.addSourceRoot(myModule, child);
@@ -134,23 +134,23 @@ public abstract class MovePackageAsDirectoryTest extends MultiFileTestCase {
 
     @Override
     public void performAction(VirtualFile rootDir, VirtualFile rootAfter) throws Exception {
-      final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(myProject);
-      final Comparator<PsiDirectory> directoryComparator = new Comparator<PsiDirectory>() {
+      JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(myProject);
+      Comparator<PsiDirectory> directoryComparator = new Comparator<PsiDirectory>() {
         @Override
         public int compare(PsiDirectory o1, PsiDirectory o2) {
           return o1.getVirtualFile().getPresentableUrl().compareTo(o2.getVirtualFile().getPresentableUrl());
         }
       };
 
-      final PsiJavaPackage sourcePackage = psiFacade.findPackage(myPackageName);
+      PsiJavaPackage sourcePackage = psiFacade.findPackage(myPackageName);
       assertNotNull(sourcePackage);
-      final PsiDirectory[] srcDirectories = sourcePackage.getDirectories();
+      PsiDirectory[] srcDirectories = sourcePackage.getDirectories();
       assertEquals(srcDirectories.length, 2);
       Arrays.sort(srcDirectories, directoryComparator);
 
-      final PsiJavaPackage targetPackage = psiFacade.findPackage(myTargetPackageName);
+      PsiJavaPackage targetPackage = psiFacade.findPackage(myTargetPackageName);
       assertNotNull(targetPackage);
-      final PsiDirectory[] targetDirectories = targetPackage.getDirectories();
+      PsiDirectory[] targetDirectories = targetPackage.getDirectories();
       Arrays.sort(targetDirectories, directoryComparator);
       assertTrue(targetDirectories.length > 0);
       preprocessSrcDir(srcDirectories[0]);

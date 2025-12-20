@@ -35,9 +35,9 @@ import java.util.Collection;
  */
 @ExtensionImpl
 public class AutomaticTestRenamerFactory implements AutomaticRenamerFactory {
-  public boolean isApplicable(final PsiElement element) {
+  public boolean isApplicable(PsiElement element) {
     if (element instanceof PsiClass) {
-      final String qualifiedName = ((PsiClass) element).getQualifiedName();
+      String qualifiedName = ((PsiClass) element).getQualifiedName();
       if (qualifiedName != null) {
         return !qualifiedName.endsWith("Test") && !qualifiedName.endsWith("TestCase");
       }
@@ -53,11 +53,11 @@ public class AutomaticTestRenamerFactory implements AutomaticRenamerFactory {
     return JavaRefactoringSettings.getInstance().isToRenameTests();
   }
 
-  public void setEnabled(final boolean enabled) {
+  public void setEnabled(boolean enabled) {
     JavaRefactoringSettings.getInstance().setRenameTests(enabled);
   }
 
-  public AutomaticRenamer createRenamer(final PsiElement element, final String newName, final Collection<UsageInfo> usages) {
+  public AutomaticRenamer createRenamer(PsiElement element, String newName, Collection<UsageInfo> usages) {
     return new TestsRenamer((PsiClass) element, newName);
   }
 
@@ -71,9 +71,9 @@ public class AutomaticTestRenamerFactory implements AutomaticRenamerFactory {
     }
 
     private void appendTestClass(PsiClass aClass, String testSuffix) {
-      final Project project = aClass.getProject();
-      final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-      final PsiClass psiClassTest = facade.findClass(aClass.getQualifiedName() + testSuffix, GlobalSearchScope.projectScope(project));
+      Project project = aClass.getProject();
+      JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
+      PsiClass psiClassTest = facade.findClass(aClass.getQualifiedName() + testSuffix, GlobalSearchScope.projectScope(project));
       if (psiClassTest != null) {
         myElements.add(psiClassTest);
       }

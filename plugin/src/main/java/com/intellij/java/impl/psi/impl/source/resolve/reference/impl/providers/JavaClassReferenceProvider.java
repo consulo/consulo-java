@@ -69,15 +69,15 @@ public class JavaClassReferenceProvider extends JavaClassPsiReferenceProvider im
     private final ParameterizedCachedValueProvider<List<PsiElement>, Project> myProvider = new ParameterizedCachedValueProvider<List<PsiElement>, Project>() {
         @Override
         public CachedValueProvider.Result<List<PsiElement>> compute(Project project) {
-            final List<PsiElement> psiPackages = new ArrayList<PsiElement>();
-            final String defPackageName = DEFAULT_PACKAGE.getValue(myOptions);
+            List<PsiElement> psiPackages = new ArrayList<PsiElement>();
+            String defPackageName = DEFAULT_PACKAGE.getValue(myOptions);
             if (StringUtil.isNotEmpty(defPackageName)) {
-                final PsiJavaPackage defaultPackage = JavaPsiFacade.getInstance(project).findPackage(defPackageName);
+                PsiJavaPackage defaultPackage = JavaPsiFacade.getInstance(project).findPackage(defPackageName);
                 if (defaultPackage != null) {
                     psiPackages.addAll(getSubPackages(defaultPackage));
                 }
             }
-            final PsiJavaPackage rootPackage = JavaPsiFacade.getInstance(project).findPackage("");
+            PsiJavaPackage rootPackage = JavaPsiFacade.getInstance(project).findPackage("");
             if (rootPackage != null) {
                 psiPackages.addAll(getSubPackages(rootPackage));
             }
@@ -116,13 +116,13 @@ public class JavaClassReferenceProvider extends JavaClassPsiReferenceProvider im
 
     @Override
     @Nonnull
-    public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull final ProcessingContext context) {
+    public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context) {
         return getReferencesByElement(element);
     }
 
     public PsiReference[] getReferencesByElement(@Nonnull PsiElement element) {
-        final int offsetInElement = ElementManipulators.getOffsetInElement(element);
-        final String text = ElementManipulators.getValueText(element);
+        int offsetInElement = ElementManipulators.getOffsetInElement(element);
+        String text = ElementManipulators.getValueText(element);
         return getReferencesByString(text, element, offsetInElement);
     }
 
@@ -137,13 +137,13 @@ public class JavaClassReferenceProvider extends JavaClassPsiReferenceProvider im
 
     @Override
     public void handleEmptyContext(PsiScopeProcessor processor, PsiElement position) {
-        final ElementClassHint hint = processor.getHint(ElementClassHint.KEY);
+        ElementClassHint hint = processor.getHint(ElementClassHint.KEY);
         if (position == null) {
             return;
         }
         if (hint == null || hint.shouldProcess(ElementClassHint.DeclarationKind.PACKAGE) || hint.shouldProcess(ElementClassHint.DeclarationKind.CLASS)) {
-            final List<PsiElement> cachedPackages = getDefaultPackages(position.getProject());
-            for (final PsiElement psiPackage : cachedPackages) {
+            List<PsiElement> cachedPackages = getDefaultPackages(position.getProject());
+            for (PsiElement psiPackage : cachedPackages) {
                 if (!processor.execute(psiPackage, ResolveState.initial())) {
                     return;
                 }
@@ -155,9 +155,9 @@ public class JavaClassReferenceProvider extends JavaClassPsiReferenceProvider im
         return CachedValuesManager.getManager(project).getParameterizedCachedValue(project, myKey, myProvider, false, project);
     }
 
-    private static Collection<PsiPackage> getSubPackages(final PsiJavaPackage defaultPackage) {
+    private static Collection<PsiPackage> getSubPackages(PsiJavaPackage defaultPackage) {
         return ContainerUtil.mapNotNull(defaultPackage.getSubPackages(), psiPackage -> {
-            final String packageName = psiPackage.getName();
+            String packageName = psiPackage.getName();
             return PsiNameHelper.getInstance(psiPackage.getProject()).isIdentifier(packageName, PsiUtil.getLanguageLevel(psiPackage)) ? psiPackage : null;
         });
     }
@@ -173,7 +173,7 @@ public class JavaClassReferenceProvider extends JavaClassPsiReferenceProvider im
         return myOptions;
     }
 
-    public void setAllowEmpty(final boolean allowEmpty) {
+    public void setAllowEmpty(boolean allowEmpty) {
         myAllowEmpty = allowEmpty;
     }
 }

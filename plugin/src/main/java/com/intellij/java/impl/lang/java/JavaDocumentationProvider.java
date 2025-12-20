@@ -112,7 +112,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
     }
 
     @Override
-    public List<String> getUrlFor(final PsiElement element, final PsiElement originalElement) {
+    public List<String> getUrlFor(PsiElement element, PsiElement originalElement) {
         return getExternalJavaDocUrl(element);
     }
 
@@ -188,7 +188,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
         generateOrderEntryAndPackageInfo(buffer, aClass);
         generateModifiers(buffer, aClass);
 
-        final String classString = aClass.isAnnotationType() ? "java.terms.annotation.interface" : aClass.isInterface() ? "java.terms.interface" : aClass instanceof PsiTypeParameter ? "java.terms" +
+        String classString = aClass.isAnnotationType() ? "java.terms.annotation.interface" : aClass.isInterface() ? "java.terms.interface" : aClass instanceof PsiTypeParameter ? "java.terms" +
             ".type.parameter" : aClass.isEnum() ? "java.terms.enum" : "java.terms.class";
         buffer.append(LangBundle.message(classString)).append(" ");
 
@@ -382,9 +382,9 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
     }
 
     @Override
-    public PsiComment findExistingDocComment(final PsiComment comment) {
+    public PsiComment findExistingDocComment(PsiComment comment) {
         if (comment instanceof PsiDocComment) {
-            final PsiJavaDocumentedElement owner = ((PsiDocComment) comment).getOwner();
+            PsiJavaDocumentedElement owner = ((PsiDocComment) comment).getOwner();
             if (owner != null) {
                 return owner.getDocComment();
             }
@@ -405,15 +405,15 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
 
     @Override
     public String generateDocumentationContentStub(PsiComment _comment) {
-        final PsiJavaDocumentedElement commentOwner = ((PsiDocComment) _comment).getOwner();
-        final Project project = _comment.getProject();
-        final StringBuilder builder = new StringBuilder();
-        final CodeDocumentationAwareCommenter commenter = (CodeDocumentationAwareCommenter) Commenter.forLanguage(_comment.getLanguage());
+        PsiJavaDocumentedElement commentOwner = ((PsiDocComment) _comment).getOwner();
+        Project project = _comment.getProject();
+        StringBuilder builder = new StringBuilder();
+        CodeDocumentationAwareCommenter commenter = (CodeDocumentationAwareCommenter) Commenter.forLanguage(_comment.getLanguage());
         if (commentOwner instanceof PsiMethod) {
             PsiMethod psiMethod = (PsiMethod) commentOwner;
             generateParametersTakingDocFromSuperMethods(project, builder, commenter, psiMethod);
 
-            final PsiTypeParameterList typeParameterList = psiMethod.getTypeParameterList();
+            PsiTypeParameterList typeParameterList = psiMethod.getTypeParameterList();
             if (typeParameterList != null) {
                 createTypeParamsListComment(builder, project, commenter, typeParameterList);
             }
@@ -422,7 +422,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
                 builder.append(LINE_SEPARATOR);
             }
 
-            final PsiJavaCodeReferenceElement[] references = psiMethod.getThrowsList().getReferenceElements();
+            PsiJavaCodeReferenceElement[] references = psiMethod.getThrowsList().getReferenceElements();
             for (PsiJavaCodeReferenceElement reference : references) {
                 builder.append(CodeDocumentationUtil.createDocCommentLine(THROWS_TAG, project, commenter));
                 builder.append(reference.getText());
@@ -430,7 +430,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
             }
         }
         else if (commentOwner instanceof PsiClass) {
-            final PsiTypeParameterList typeParameterList = ((PsiClass) commentOwner).getTypeParameterList();
+            PsiTypeParameterList typeParameterList = ((PsiClass) commentOwner).getTypeParameterList();
             if (typeParameterList != null) {
                 createTypeParamsListComment(builder, project, commenter, typeParameterList);
             }
@@ -439,16 +439,16 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
     }
 
     public static void generateParametersTakingDocFromSuperMethods(Project project, StringBuilder builder, CodeDocumentationAwareCommenter commenter, PsiMethod psiMethod) {
-        final PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
-        final Map<String, String> param2Description = new HashMap<>();
-        final PsiMethod[] superMethods = psiMethod.findSuperMethods();
+        PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
+        Map<String, String> param2Description = new HashMap<>();
+        PsiMethod[] superMethods = psiMethod.findSuperMethods();
 
         for (PsiMethod superMethod : superMethods) {
-            final PsiDocComment comment = superMethod.getDocComment();
+            PsiDocComment comment = superMethod.getDocComment();
             if (comment != null) {
-                final PsiDocTag[] params = comment.findTagsByName("param");
+                PsiDocTag[] params = comment.findTagsByName("param");
                 for (PsiDocTag param : params) {
-                    final PsiElement[] dataElements = param.getDataElements();
+                    PsiElement[] dataElements = param.getDataElements();
                     if (dataElements != null) {
                         String paramName = null;
                         for (PsiElement dataElement : dataElements) {
@@ -483,8 +483,8 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
         }
     }
 
-    public static void createTypeParamsListComment(final StringBuilder buffer, final Project project, final CodeDocumentationAwareCommenter commenter, final PsiTypeParameterList typeParameterList) {
-        final PsiTypeParameter[] typeParameters = typeParameterList.getTypeParameters();
+    public static void createTypeParamsListComment(StringBuilder buffer, Project project, CodeDocumentationAwareCommenter commenter, PsiTypeParameterList typeParameterList) {
+        PsiTypeParameter[] typeParameters = typeParameterList.getTypeParameters();
         for (PsiTypeParameter typeParameter : typeParameters) {
             buffer.append(CodeDocumentationUtil.createDocCommentLine(PARAM_TAG, project, commenter));
             buffer.append("<").append(typeParameter.getName()).append(">");
@@ -540,10 +540,10 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
                     if (constructors.length == 1) {
                         return generateDoc(constructors[0], originalElement);
                     }
-                    final StringBuilder sb = new StringBuilder();
+                    StringBuilder sb = new StringBuilder();
 
                     for (PsiMethod constructor : constructors) {
-                        final String str = PsiFormatUtil.formatMethod(constructor, PsiSubstitutor.EMPTY, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_TYPE | PsiFormatUtilBase
+                        String str = PsiFormatUtil.formatMethod(constructor, PsiSubstitutor.EMPTY, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_TYPE | PsiFormatUtilBase
                             .SHOW_PARAMETERS, PsiFormatUtilBase.SHOW_TYPE | PsiFormatUtilBase.SHOW_NAME);
                         createElementLink(sb, constructor, StringUtil.escapeXml(str));
                     }
@@ -558,25 +558,25 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
     }
 
     @Override
-    public PsiElement getDocumentationElementForLookupItem(final PsiManager psiManager, final Object object, final PsiElement element) {
+    public PsiElement getDocumentationElementForLookupItem(PsiManager psiManager, Object object, PsiElement element) {
         return null;
     }
 
     @Nullable
-    public static String generateExternalJavadoc(@Nonnull final PsiElement element) {
+    public static String generateExternalJavadoc(@Nonnull PsiElement element) {
         List<String> docURLs = getExternalJavaDocUrl(element);
         return generateExternalJavadoc(element, docURLs);
     }
 
     @Nullable
-    public static String generateExternalJavadoc(@Nonnull final PsiElement element, @Nullable List<String> docURLs) {
-        final JavaDocInfoGenerator javaDocInfoGenerator = new JavaDocInfoGenerator(element.getProject(), element);
+    public static String generateExternalJavadoc(@Nonnull PsiElement element, @Nullable List<String> docURLs) {
+        JavaDocInfoGenerator javaDocInfoGenerator = new JavaDocInfoGenerator(element.getProject(), element);
         return generateExternalJavadoc(javaDocInfoGenerator, docURLs);
     }
 
     @Nullable
-    public static String generateExternalJavadoc(@Nonnull final PsiElement element, @Nonnull JavaDocInfoGenerator generator) {
-        final List<String> docURLs = getExternalJavaDocUrl(element);
+    public static String generateExternalJavadoc(@Nonnull PsiElement element, @Nonnull JavaDocInfoGenerator generator) {
+        List<String> docURLs = getExternalJavaDocUrl(element);
         return generateExternalJavadoc(generator, docURLs);
     }
 
@@ -586,7 +586,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
     }
 
     @Nullable
-    private static String fetchExternalJavadoc(final PsiElement element, String fromUrl, @Nonnull JavaDocExternalFilter filter) {
+    private static String fetchExternalJavadoc(PsiElement element, String fromUrl, @Nonnull JavaDocExternalFilter filter) {
         try {
             String externalDoc = filter.getExternalDocInfoForElement(fromUrl, element);
             if (!StringUtil.isEmpty(externalDoc)) {
@@ -602,9 +602,9 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
     }
 
     private String getMethodCandidateInfo(PsiMethodCallExpression expr) {
-        final PsiResolveHelper rh = PsiResolveHelper.getInstance(expr.getProject());
-        final CandidateInfo[] candidates = rh.getReferencedMethodCandidates(expr, true);
-        final String text = expr.getText();
+        PsiResolveHelper rh = PsiResolveHelper.getInstance(expr.getProject());
+        CandidateInfo[] candidates = rh.getReferencedMethodCandidates(expr, true);
+        String text = expr.getText();
         if (candidates.length > 0) {
             if (candidates.length == 1) {
                 PsiElement element = candidates[0].getElement();
@@ -612,16 +612,16 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
                     return generateDoc(element, null);
                 }
             }
-            final StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
-            for (final CandidateInfo candidate : candidates) {
-                final PsiElement element = candidate.getElement();
+            for (CandidateInfo candidate : candidates) {
+                PsiElement element = candidate.getElement();
 
                 if (!(element instanceof PsiMethod)) {
                     continue;
                 }
 
-                final String str = PsiFormatUtil.formatMethod((PsiMethod) element, candidate.getSubstitutor(), PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_TYPE | PsiFormatUtilBase
+                String str = PsiFormatUtil.formatMethod((PsiMethod) element, candidate.getSubstitutor(), PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_TYPE | PsiFormatUtilBase
                     .SHOW_PARAMETERS, PsiFormatUtilBase.SHOW_TYPE);
                 createElementLink(sb, element, StringUtil.escapeXml(str));
             }
@@ -642,7 +642,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
     }
 
     @Nullable
-    public static List<String> getExternalJavaDocUrl(final PsiElement element) {
+    public static List<String> getExternalJavaDocUrl(PsiElement element) {
         List<String> urls = null;
 
         if (element instanceof PsiClass) {
@@ -668,9 +668,9 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
                 if (classUrls != null) {
                     urls = new ArrayList<>();
 
-                    final boolean useJava8Format = PsiUtil.isLanguageLevel8OrHigher(method);
+                    boolean useJava8Format = PsiUtil.isLanguageLevel8OrHigher(method);
 
-                    final Set<String> signatures = getHtmlMethodSignatures(method, useJava8Format);
+                    Set<String> signatures = getHtmlMethodSignatures(method, useJava8Format);
                     for (String signature : signatures) {
                         for (String classUrl : classUrls) {
                             urls.add(classUrl + "#" + signature);
@@ -701,7 +701,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
     }
 
     public static Set<String> getHtmlMethodSignatures(PsiMethod method, boolean java8FormatFirst) {
-        final Set<String> signatures = new LinkedHashSet<>();
+        Set<String> signatures = new LinkedHashSet<>();
         signatures.add(formatMethodSignature(method, true, java8FormatFirst));
         signatures.add(formatMethodSignature(method, false, java8FormatFirst));
 
@@ -758,12 +758,12 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
 
     @Nullable
     public static List<String> findUrlForVirtualFile(@Nonnull Project project, @Nonnull VirtualFile virtualFile, @Nonnull String relPath) {
-        final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
+        ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
         Module module = fileIndex.getModuleForFile(virtualFile);
         if (module == null) {
-            final VirtualFileSystem fs = virtualFile.getFileSystem();
+            VirtualFileSystem fs = virtualFile.getFileSystem();
             if (fs instanceof ArchiveFileSystem) {
-                final VirtualFile jar = ((ArchiveFileSystem) fs).getLocalVirtualFileFor(virtualFile);
+                VirtualFile jar = ((ArchiveFileSystem) fs).getLocalVirtualFileFor(virtualFile);
                 if (jar != null) {
                     module = fileIndex.getModuleForFile(jar);
                 }
@@ -772,8 +772,8 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
 
 
         for (OrderEntry orderEntry : fileIndex.getOrderEntriesForFile(virtualFile)) {
-            final String[] files = orderEntry.getUrls(DocumentationOrderRootType.getInstance());
-            final List<String> httpRoot = PlatformDocumentationUtil.getHttpRoots(files, relPath);
+            String[] files = orderEntry.getUrls(DocumentationOrderRootType.getInstance());
+            List<String> httpRoot = PlatformDocumentationUtil.getHttpRoots(files, relPath);
             if (httpRoot != null) {
                 return httpRoot;
             }
@@ -795,7 +795,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
     }
 
     @Override
-    public PsiElement getDocumentationElementForLink(final PsiManager psiManager, final String link, final PsiElement context) {
+    public PsiElement getDocumentationElementForLink(PsiManager psiManager, String link, PsiElement context) {
         return JavaDocUtil.findReferenceTarget(psiManager, link, context);
     }
 
@@ -831,7 +831,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
         return null;
     }
 
-    public static String fetchExternalJavadoc(PsiElement element, final Project project, final List<String> docURLs) {
+    public static String fetchExternalJavadoc(PsiElement element, Project project, List<String> docURLs) {
         return fetchExternalJavadoc(element, docURLs, new JavaDocExternalFilter(project));
     }
 
@@ -839,7 +839,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
         if (docURLs != null) {
             for (String docURL : docURLs) {
                 try {
-                    final String javadoc = fetchExternalJavadoc(element, docURL, docFilter);
+                    String javadoc = fetchExternalJavadoc(element, docURL, docFilter);
                     if (javadoc != null) {
                         return javadoc;
                     }

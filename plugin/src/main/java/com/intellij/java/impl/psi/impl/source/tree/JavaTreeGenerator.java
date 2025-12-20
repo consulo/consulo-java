@@ -56,18 +56,18 @@ public class JavaTreeGenerator implements TreeGenerator {
 
   @Override
   @Nullable
-  public TreeElement generateTreeFor(@Nonnull PsiElement original, @Nonnull final CharTable table, @Nonnull final PsiManager manager) {
+  public TreeElement generateTreeFor(@Nonnull PsiElement original, @Nonnull CharTable table, @Nonnull PsiManager manager) {
     if (original instanceof PsiKeyword || original instanceof PsiIdentifier) {
-      final String text = original.getText();
+      String text = original.getText();
       return createLeafFromText(text, table, manager, original, ((PsiJavaToken)original).getTokenType());
     }
 
     if (original instanceof PsiModifierList) {
-      final String text = original.getText();
+      String text = original.getText();
       assert text != null : "Text is null for " + original + "; " + original.getClass();
-      final LanguageLevel level = PsiUtil.getLanguageLevel(original);
-      final DummyHolder holder = DummyHolderFactory.createHolder(original.getManager(), new JavaDummyElement(text, MOD_LIST, level), null);
-      final TreeElement modifierListElement = holder.getTreeElement().getFirstChildNode();
+      LanguageLevel level = PsiUtil.getLanguageLevel(original);
+      DummyHolder holder = DummyHolderFactory.createHolder(original.getManager(), new JavaDummyElement(text, MOD_LIST, level), null);
+      TreeElement modifierListElement = holder.getTreeElement().getFirstChildNode();
       if (modifierListElement == null) {
         throw new AssertionError("No modifier list for \"" + text + '\"');
       }
@@ -85,7 +85,7 @@ public class JavaTreeGenerator implements TreeGenerator {
 
     if (original instanceof PsiJavaCodeReferenceElement) {
       PsiElement refElement = ((PsiJavaCodeReferenceElement)original).resolve();
-      final boolean generated = refElement != null && CodeEditUtil.isNodeGenerated(refElement.getNode());
+      boolean generated = refElement != null && CodeEditUtil.isNodeGenerated(refElement.getNode());
       if (refElement instanceof PsiClass) {
         if (refElement instanceof PsiAnonymousClass) {
           PsiJavaCodeReferenceElement ref = ((PsiAnonymousClass)refElement).getBaseClassReference();
@@ -113,8 +113,8 @@ public class JavaTreeGenerator implements TreeGenerator {
           }
         }
 
-        final String text = isFQ ? ((PsiClass)refElement).getQualifiedName() : original.getText();
-        final TreeElement element = createReference(original.getProject(), text, generated);
+        String text = isFQ ? ((PsiClass)refElement).getQualifiedName() : original.getText();
+        TreeElement element = createReference(original.getProject(), text, generated);
         element.putCopyableUserData(REFERENCED_CLASS_KEY, (PsiClass)refElement);
         return element;
       }
@@ -165,18 +165,18 @@ public class JavaTreeGenerator implements TreeGenerator {
     return copy;
   }
 
-  private static TreeElement createReference(final Project project, final String text, boolean mark) {
-    final PsiJavaParserFacade parserFacade = JavaPsiFacade.getInstance(project).getParserFacade();
-    final TreeElement element = (TreeElement)parserFacade.createReferenceFromText(text, null).getNode();
+  private static TreeElement createReference(Project project, String text, boolean mark) {
+    PsiJavaParserFacade parserFacade = JavaPsiFacade.getInstance(project).getParserFacade();
+    TreeElement element = (TreeElement)parserFacade.createReferenceFromText(text, null).getNode();
     if (mark) {
       CodeEditUtil.markGenerated(element);
     }
     return element;
   }
 
-  private static TreeElement createReferenceExpression(final Project project, final String text, final PsiElement context) {
-    final PsiJavaParserFacade parserFacade = JavaPsiFacade.getInstance(project).getParserFacade();
-    final PsiExpression expression = parserFacade.createExpressionFromText(text, context);
+  private static TreeElement createReferenceExpression(Project project, String text, PsiElement context) {
+    PsiJavaParserFacade parserFacade = JavaPsiFacade.getInstance(project).getParserFacade();
+    PsiExpression expression = parserFacade.createExpressionFromText(text, context);
     return (TreeElement)expression.getNode();
   }
 
@@ -186,27 +186,27 @@ public class JavaTreeGenerator implements TreeGenerator {
     }
     LOG.assertTrue(typeElement.getElementType() == JavaElementType.TYPE);
     if (type instanceof PsiArrayType) {
-      final ASTNode firstChild = typeElement.getFirstChildNode();
+      ASTNode firstChild = typeElement.getFirstChildNode();
       LOG.assertTrue(firstChild.getElementType() == JavaElementType.TYPE);
       encodeInfoInTypeElement(firstChild, ((PsiArrayType)type).getComponentType());
     }
     else if (type instanceof PsiWildcardType) {
-      final PsiType bound = ((PsiWildcardType)type).getBound();
+      PsiType bound = ((PsiWildcardType)type).getBound();
       if (bound == null) {
         return;
       }
-      final ASTNode lastChild = typeElement.getLastChildNode();
+      ASTNode lastChild = typeElement.getLastChildNode();
       if (lastChild.getElementType() != JavaElementType.TYPE) {
         return;
       }
       encodeInfoInTypeElement(lastChild, bound);
     }
     else if (type instanceof PsiCapturedWildcardType) {
-      final PsiType bound = ((PsiCapturedWildcardType)type).getWildcard().getBound();
+      PsiType bound = ((PsiCapturedWildcardType)type).getWildcard().getBound();
       if (bound == null) {
         return;
       }
-      final ASTNode lastChild = typeElement.getLastChildNode();
+      ASTNode lastChild = typeElement.getLastChildNode();
       if (lastChild.getElementType() != JavaElementType.TYPE) {
         return;
       }
@@ -216,8 +216,8 @@ public class JavaTreeGenerator implements TreeGenerator {
       encodeInfoInTypeElement(typeElement, ((PsiIntersectionType)type).getRepresentative());
     }
     else if (type instanceof PsiClassType) {
-      final PsiClassType classType = (PsiClassType)type;
-      final PsiClassType.ClassResolveResult resolveResult = classType.resolveGenerics();
+      PsiClassType classType = (PsiClassType)type;
+      PsiClassType.ClassResolveResult resolveResult = classType.resolveGenerics();
       PsiClass referencedClass = resolveResult.getElement();
       if (referencedClass == null) {
         return;
@@ -226,7 +226,7 @@ public class JavaTreeGenerator implements TreeGenerator {
         encodeInfoInTypeElement(typeElement, ((PsiAnonymousClass)referencedClass).getBaseClassType());
       }
       else {
-        final ASTNode reference = typeElement.findChildByType(JavaElementType.JAVA_CODE_REFERENCE);
+        ASTNode reference = typeElement.findChildByType(JavaElementType.JAVA_CODE_REFERENCE);
         // can be not the case for "? name"
         if (reference instanceof CompositeElement) {
           encodeClassTypeInfoInReference((CompositeElement)reference, resolveResult.getElement(), resolveResult.getSubstitutor());
@@ -240,17 +240,17 @@ public class JavaTreeGenerator implements TreeGenerator {
                                                      PsiSubstitutor substitutor) {
     reference.putCopyableUserData(REFERENCED_CLASS_KEY, referencedClass);
 
-    final PsiTypeParameter[] typeParameters = referencedClass.getTypeParameters();
+    PsiTypeParameter[] typeParameters = referencedClass.getTypeParameters();
     if (typeParameters.length == 0) {
       return;
     }
 
-    final ASTNode referenceParameterList = reference.findChildByRole(ChildRole.REFERENCE_PARAMETER_LIST);
+    ASTNode referenceParameterList = reference.findChildByRole(ChildRole.REFERENCE_PARAMETER_LIST);
     int index = 0;
     for (ASTNode child = referenceParameterList.getFirstChildNode(); child != null && index < typeParameters.length;
          child = child.getTreeNext()) {
       if (child.getElementType() == JavaElementType.TYPE) {
-        final PsiType substitutedType = substitutor.substitute(typeParameters[index]);
+        PsiType substitutedType = substitutor.substitute(typeParameters[index]);
         if (substitutedType != null) {
           encodeInfoInTypeElement(child, substitutedType);
         }
@@ -258,12 +258,12 @@ public class JavaTreeGenerator implements TreeGenerator {
       }
     }
 
-    final ASTNode qualifier = reference.findChildByRole(ChildRole.QUALIFIER);
+    ASTNode qualifier = reference.findChildByRole(ChildRole.QUALIFIER);
     if (qualifier != null) {
       if (referencedClass.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }
-      final PsiClass outerClass = referencedClass.getContainingClass();
+      PsiClass outerClass = referencedClass.getContainingClass();
       if (outerClass != null) {
         encodeClassTypeInfoInReference((CompositeElement)qualifier, outerClass, substitutor);
       }

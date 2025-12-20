@@ -25,7 +25,7 @@ public class SmartCompletionTemplateItem extends LookupItem<Template> implements
 
   @Override
   public PsiType getType() {
-    final Template template = getObject();
+    Template template = getObject();
     String text = template.getTemplateText();
     StringBuilder resultingText = new StringBuilder(text);
 
@@ -42,7 +42,7 @@ public class SmartCompletionTemplateItem extends LookupItem<Template> implements
     }
 
     try {
-      final PsiExpression templateExpression = JavaPsiFacade.getElementFactory(myContext.getProject()).createExpressionFromText(resultingText.toString(), myContext);
+      PsiExpression templateExpression = JavaPsiFacade.getElementFactory(myContext.getProject()).createExpressionFromText(resultingText.toString(), myContext);
       return templateExpression.getType();
     }
     catch (IncorrectOperationException e) { // can happen when text of the template does not form an expression

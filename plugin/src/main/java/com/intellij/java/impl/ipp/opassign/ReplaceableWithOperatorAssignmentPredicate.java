@@ -33,27 +33,27 @@ class ReplaceableWithOperatorAssignmentPredicate implements PsiElementPredicate 
     if (!(element instanceof PsiAssignmentExpression)) {
       return false;
     }
-    final PsiAssignmentExpression assignment = (PsiAssignmentExpression)element;
-    final IElementType tokenType = assignment.getOperationTokenType();
+    PsiAssignmentExpression assignment = (PsiAssignmentExpression)element;
+    IElementType tokenType = assignment.getOperationTokenType();
     if (!JavaTokenType.EQ.equals(tokenType)) {
       return false;
     }
-    final PsiExpression rhs = assignment.getRExpression();
-    final PsiExpression expression = PsiUtil.deparenthesizeExpression(rhs);
+    PsiExpression rhs = assignment.getRExpression();
+    PsiExpression expression = PsiUtil.deparenthesizeExpression(rhs);
     if (!(expression instanceof PsiPolyadicExpression)) {
       return false;
     }
-    final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)expression;
-    final PsiExpression[] operands = polyadicExpression.getOperands();
+    PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)expression;
+    PsiExpression[] operands = polyadicExpression.getOperands();
     if (operands.length < 2) {
       return false;
     }
-    final IElementType rhsTokenType = polyadicExpression.getOperationTokenType();
+    IElementType rhsTokenType = polyadicExpression.getOperationTokenType();
     if (JavaTokenType.OROR.equals(rhsTokenType) || JavaTokenType.ANDAND.equals(rhsTokenType) ||
         JavaTokenType.EQEQ.equals(rhsTokenType) || JavaTokenType.NE.equals(rhsTokenType)) {
       return false;
     }
-    final PsiExpression lhs = assignment.getLExpression();
+    PsiExpression lhs = assignment.getLExpression();
     if (SideEffectChecker.mayHaveSideEffects(lhs)) {
       return false;
     }

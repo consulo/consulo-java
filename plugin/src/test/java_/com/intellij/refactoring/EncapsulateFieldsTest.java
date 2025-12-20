@@ -62,9 +62,9 @@ public abstract class EncapsulateFieldsTest extends MultiFileTestCase{
     doTest(new PerformAction() {
       @Override
       public void performAction(VirtualFile rootDir, VirtualFile rootAfter) throws Exception {
-        final PsiClass aClass = myJavaFacade.findClass("A", GlobalSearchScope.projectScope(myProject));
+        PsiClass aClass = myJavaFacade.findClass("A", GlobalSearchScope.projectScope(myProject));
         assertNotNull("Tested class not found", aClass);
-        final PsiField field = aClass.findFieldByName("i", false);
+        PsiField field = aClass.findFieldByName("i", false);
         assertNotNull(field);
         doTest(aClass, field, null, true, true);
       }
@@ -82,14 +82,14 @@ public abstract class EncapsulateFieldsTest extends MultiFileTestCase{
   }
 
 
-  private void doTest(final String fieldName, final String conflicts) throws Exception {
+  private void doTest(String fieldName, String conflicts) throws Exception {
     doTest(fieldName, "Test", conflicts);
   }
 
   private void doTest(final String fieldName, final String className, final String conflicts) throws Exception {
     doTest(new PerformAction() {
       @Override
-      public void performAction(final VirtualFile rootDir, final VirtualFile rootAfter) throws Exception {
+      public void performAction(VirtualFile rootDir, VirtualFile rootAfter) throws Exception {
         PsiClass aClass = myJavaFacade.findClass(className, GlobalSearchScope.projectScope(myProject));
 
         assertNotNull("Tested class not found", aClass);
@@ -103,11 +103,11 @@ public abstract class EncapsulateFieldsTest extends MultiFileTestCase{
 
   private static void doTest(final PsiClass aClass,
                              final PsiField field,
-                             final String conflicts,
+                             String conflicts,
                              final boolean generateGetters,
                              final boolean generateSetters) {
     try {
-      final Project project = aClass.getProject();
+      Project project = aClass.getProject();
       EncapsulateFieldsProcessor processor = new EncapsulateFieldsProcessor(project, new EncapsulateFieldsDescriptor() {
         @Override
         public FieldDescriptor[] getSelectedFields() {

@@ -49,27 +49,27 @@ public class HighlightUtils {
   }
 
   public static void highlightElements(
-    @Nonnull final Collection<? extends PsiElement> elementCollection) {
+    @Nonnull Collection<? extends PsiElement> elementCollection) {
     if (elementCollection.isEmpty()) {
       return;
     }
-    final Application application = Application.get();
+    Application application = Application.get();
     application.invokeLater(() -> {
-      final PsiElement[] elements = PsiUtilBase.toPsiElementArray(elementCollection);
-      final PsiElement firstElement = elements[0];
+      PsiElement[] elements = PsiUtilBase.toPsiElementArray(elementCollection);
+      PsiElement firstElement = elements[0];
       if (!firstElement.isValid()) {
         return;
       }
-      final Project project = firstElement.getProject();
-      final FileEditorManager editorManager = FileEditorManager.getInstance(project);
-      final Editor editor = editorManager.getSelectedTextEditor();
+      Project project = firstElement.getProject();
+      FileEditorManager editorManager = FileEditorManager.getInstance(project);
+      Editor editor = editorManager.getSelectedTextEditor();
       if (editor == null) {
         return;
       }
-      final HighlightManager highlightManager = HighlightManager.getInstance(project);
+      HighlightManager highlightManager = HighlightManager.getInstance(project);
       highlightManager.addOccurrenceHighlights(editor, elements, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
-      final WindowManager windowManager = WindowManager.getInstance();
-      final FindManager findmanager = FindManager.getInstance(project);
+      WindowManager windowManager = WindowManager.getInstance();
+      FindManager findmanager = FindManager.getInstance(project);
       FindModel findmodel = findmanager.getFindNextModel();
       if (findmodel == null) {
         findmodel = findmanager.getFindInFileModel();
@@ -83,24 +83,24 @@ public class HighlightUtils {
   @RequiredReadAction
   public static void showRenameTemplate(PsiElement context, PsiNameIdentifierOwner element, PsiReference... references) {
     context = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(context);
-    final Project project = context.getProject();
-    final FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
-    final Editor editor = fileEditorManager.getSelectedTextEditor();
+    Project project = context.getProject();
+    FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
+    Editor editor = fileEditorManager.getSelectedTextEditor();
     if (editor == null) {
       return;
     }
-    final TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(context);
-    final Expression macroCallNode = new MacroCallNode(new SuggestVariableNameMacro());
-    final PsiElement identifier = element.getNameIdentifier();
+    TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(context);
+    Expression macroCallNode = new MacroCallNode(new SuggestVariableNameMacro());
+    PsiElement identifier = element.getNameIdentifier();
     builder.replaceElement(identifier, "PATTERN", macroCallNode, true);
     for (PsiReference reference : references) {
       builder.replaceElement(reference, "PATTERN", "PATTERN", false);
     }
-    final Template template = builder.buildInlineTemplate();
-    final TextRange textRange = context.getTextRange();
-    final int startOffset = textRange.getStartOffset();
+    Template template = builder.buildInlineTemplate();
+    TextRange textRange = context.getTextRange();
+    int startOffset = textRange.getStartOffset();
     editor.getCaretModel().moveToOffset(startOffset);
-    final TemplateManager templateManager = TemplateManager.getInstance(project);
+    TemplateManager templateManager = TemplateManager.getInstance(project);
     templateManager.startTemplate(editor, template);
   }
 }

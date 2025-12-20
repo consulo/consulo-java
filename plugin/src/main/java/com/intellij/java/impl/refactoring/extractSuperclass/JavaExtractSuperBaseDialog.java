@@ -79,11 +79,11 @@ public abstract class JavaExtractSuperBaseDialog extends ExtractSuperBaseDialog<
 
   @Override
   protected JPanel createDestinationRootPanel() {
-    final VirtualFile[] sourceRoots = ProjectRootManager.getInstance(myProject).getContentSourceRoots();
+    VirtualFile[] sourceRoots = ProjectRootManager.getInstance(myProject).getContentSourceRoots();
     if (sourceRoots.length <= 1) return super.createDestinationRootPanel();
-    final JPanel panel = new JPanel(new BorderLayout());
+    JPanel panel = new JPanel(new BorderLayout());
     panel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-    final JBLabel label = new JBLabel(RefactoringLocalize.targetDestinationFolder().get());
+    JBLabel label = new JBLabel(RefactoringLocalize.targetDestinationFolder().get());
     panel.add(label, BorderLayout.NORTH);
     label.setLabelFor(myDestinationFolderComboBox);
     myDestinationFolderComboBox.setData(
@@ -110,17 +110,17 @@ public abstract class JavaExtractSuperBaseDialog extends ExtractSuperBaseDialog<
 
   @Override
   protected JTextField createExtractedSuperNameField() {
-    final JTextField superNameField = super.createExtractedSuperNameField();
+    JTextField superNameField = super.createExtractedSuperNameField();
     superNameField.setText(mySourceClass.getName());
     superNameField.selectAll();
     return superNameField;
   }
 
-  private PsiDirectory getDirUnderSameSourceRoot(final PsiDirectory[] directories) {
-    final VirtualFile sourceFile = mySourceClass.getContainingFile().getVirtualFile();
+  private PsiDirectory getDirUnderSameSourceRoot(PsiDirectory[] directories) {
+    VirtualFile sourceFile = mySourceClass.getContainingFile().getVirtualFile();
     if (sourceFile != null) {
-      final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(myProject).getFileIndex();
-      final VirtualFile sourceRoot = fileIndex.getSourceRootForFile(sourceFile);
+      ProjectFileIndex fileIndex = ProjectRootManager.getInstance(myProject).getFileIndex();
+      VirtualFile sourceRoot = fileIndex.getSourceRootForFile(sourceFile);
       if (sourceRoot != null) {
         for (PsiDirectory dir : directories) {
           if (Comparing.equal(fileIndex.getSourceRootForFile(dir.getVirtualFile()), sourceRoot)) {
@@ -135,16 +135,16 @@ public abstract class JavaExtractSuperBaseDialog extends ExtractSuperBaseDialog<
 
   @Override
   protected void preparePackage() throws OperationFailedException {
-    final String targetPackageName = getTargetPackageName();
-    final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(myProject);
-    final PsiFile containingFile = mySourceClass.getContainingFile();
-    final boolean fromDefaultPackage = containingFile instanceof PsiClassOwner && ((PsiClassOwner) containingFile).getPackageName().isEmpty();
+    String targetPackageName = getTargetPackageName();
+    JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(myProject);
+    PsiFile containingFile = mySourceClass.getContainingFile();
+    boolean fromDefaultPackage = containingFile instanceof PsiClassOwner && ((PsiClassOwner) containingFile).getPackageName().isEmpty();
     if (!(fromDefaultPackage && StringUtil.isEmpty(targetPackageName)) && !PsiNameHelper.getInstance(myProject).isQualifiedName(targetPackageName)) {
       throw new OperationFailedException("Invalid package name: " + targetPackageName);
     }
-    final PsiJavaPackage aPackage = psiFacade.findPackage(targetPackageName);
+    PsiJavaPackage aPackage = psiFacade.findPackage(targetPackageName);
     if (aPackage != null) {
-      final PsiDirectory[] directories = aPackage.getDirectories(mySourceClass.getResolveScope());
+      PsiDirectory[] directories = aPackage.getDirectories(mySourceClass.getResolveScope());
       if (directories.length >= 1) {
         myTargetDirectory = getDirUnderSameSourceRoot(directories);
       }

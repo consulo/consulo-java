@@ -45,12 +45,12 @@ public class ArrayVariableMacro extends VariableTypeMacroBase {
 
   @Override
   @RequiredReadAction
-  protected PsiElement[] getVariables(Expression[] params, final ExpressionContext context) {
+  protected PsiElement[] getVariables(Expression[] params, ExpressionContext context) {
     if (params.length != 0) return null;
 
     Project project = context.getProject();
-    final int offset = context.getStartOffset();
-    final ArrayList<PsiVariable> array = new ArrayList<>();
+    int offset = context.getStartOffset();
+    ArrayList<PsiVariable> array = new ArrayList<>();
     PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
     PsiElement place = file.findElementAt(offset);
     PsiVariable[] variables = MacroUtil.getVariablesVisibleAt(place, "");

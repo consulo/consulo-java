@@ -104,7 +104,7 @@ public class DeadHTMLComposer extends HTMLComposerBase {
     }
   }
 
-  public static void appendProblemSynopsis(final RefElement refElement, final StringBuffer buf) {
+  public static void appendProblemSynopsis(RefElement refElement, final StringBuffer buf) {
     refElement.accept(new RefJavaVisitor() {
       @Override public void visitField(@Nonnull RefField field) {
         if (field.isUsedForReading() && !field.isUsedForWriting()) {
@@ -344,33 +344,33 @@ public class DeadHTMLComposer extends HTMLComposerBase {
 
   @RequiredReadAction
   private void appendCallesList(RefElement element, StringBuffer buf, Set<RefElement> mentionedElements, boolean appendCallees) {
-    final Set<RefElement> possibleChildren = getPossibleChildren(new RefElementNode(element, myToolPresentation), element);
+    Set<RefElement> possibleChildren = getPossibleChildren(new RefElementNode(element, myToolPresentation), element);
     if (!possibleChildren.isEmpty()) {
       if (appendCallees) {
         appendHeading(buf, InspectionLocalize.inspectionExportResultsCallees());
       }
-      @NonNls final String ul = "<ul>";
+      @NonNls String ul = "<ul>";
       buf.append(ul);
       for (RefElement refElement : possibleChildren) {
         if (!mentionedElements.contains(refElement)) {
           mentionedElements.add(refElement);
-          @NonNls final String li = "<li>";
+          @NonNls String li = "<li>";
           buf.append(li);
           appendElementReference(buf, refElement, true);
-          @NonNls final String closeLi = "</li>";
+          @NonNls String closeLi = "</li>";
           buf.append(closeLi);
           appendCallesList(refElement, buf, mentionedElements, false);
         }
       }
-      @NonNls final String closeUl = "</ul>";
+      @NonNls String closeUl = "</ul>";
       buf.append(closeUl);
     }
   }
 
-  public static Set<RefElement> getPossibleChildren(final RefElementNode refElementNode, RefElement refElement) {
-    final TreeNode[] pathToRoot = refElementNode.getPath();
+  public static Set<RefElement> getPossibleChildren(RefElementNode refElementNode, RefElement refElement) {
+    TreeNode[] pathToRoot = refElementNode.getPath();
 
-    final HashSet<RefElement> newChildren = new HashSet<>();
+    HashSet<RefElement> newChildren = new HashSet<>();
 
     if (!refElement.isValid()) return newChildren;
 

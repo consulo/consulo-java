@@ -54,15 +54,15 @@ public class CollectionAddedToSelfInspection extends BaseInspection {
         public void visitMethodCallExpression(
             @Nonnull PsiMethodCallExpression call) {
             super.visitMethodCallExpression(call);
-            final PsiReferenceExpression methodExpression =
+            PsiReferenceExpression methodExpression =
                 call.getMethodExpression();
-            final String methodName =
+            String methodName =
                 methodExpression.getReferenceName();
             if (!"put".equals(methodName) && !"set".equals(methodName) &&
                 !"add".equals(methodName)) {
                 return;
             }
-            final PsiExpression qualifier =
+            PsiExpression qualifier =
                 methodExpression.getQualifierExpression();
             if (qualifier == null) {
                 return;
@@ -70,13 +70,13 @@ public class CollectionAddedToSelfInspection extends BaseInspection {
             if (!(qualifier instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiElement referent = ((PsiReference) qualifier).resolve();
+            PsiElement referent = ((PsiReference) qualifier).resolve();
             if (!(referent instanceof PsiVariable)) {
                 return;
             }
-            final PsiExpressionList argumentList = call.getArgumentList();
+            PsiExpressionList argumentList = call.getArgumentList();
             boolean hasMatchingArg = false;
-            final PsiExpression[] args = argumentList.getExpressions();
+            PsiExpression[] args = argumentList.getExpressions();
             for (PsiExpression arg : args) {
                 if (EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(qualifier, arg)) {
                     hasMatchingArg = true;
@@ -85,12 +85,12 @@ public class CollectionAddedToSelfInspection extends BaseInspection {
             if (!hasMatchingArg) {
                 return;
             }
-            final PsiType qualifierType = qualifier.getType();
+            PsiType qualifierType = qualifier.getType();
             if (!(qualifierType instanceof PsiClassType)) {
                 return;
             }
-            final PsiClassType classType = (PsiClassType) qualifierType;
-            final PsiClass qualifierClass = classType.resolve();
+            PsiClassType classType = (PsiClassType) qualifierType;
+            PsiClass qualifierClass = classType.resolve();
             if (qualifierClass == null) {
                 return;
             }

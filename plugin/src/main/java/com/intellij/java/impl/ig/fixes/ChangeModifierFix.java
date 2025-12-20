@@ -44,13 +44,13 @@ public class ChangeModifierFix extends InspectionGadgetsFix {
 
   public void doFix(Project project, ProblemDescriptor descriptor)
     throws IncorrectOperationException {
-    final PsiElement element = descriptor.getPsiElement();
-    final PsiModifierListOwner modifierListOwner =
+    PsiElement element = descriptor.getPsiElement();
+    PsiModifierListOwner modifierListOwner =
       PsiTreeUtil.getParentOfType(element, PsiModifierListOwner.class);
     if (modifierListOwner == null) {
       return;
     }
-    final PsiModifierList modifiers = modifierListOwner.getModifierList();
+    PsiModifierList modifiers = modifierListOwner.getModifierList();
     if (modifiers == null) {
       return;
     }

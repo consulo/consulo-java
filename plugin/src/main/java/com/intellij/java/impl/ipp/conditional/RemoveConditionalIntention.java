@@ -45,18 +45,18 @@ public class RemoveConditionalIntention extends Intention {
 
     public void processIntention(PsiElement element)
         throws IncorrectOperationException {
-        final PsiConditionalExpression expression =
+        PsiConditionalExpression expression =
             (PsiConditionalExpression) element;
-        final PsiExpression condition = expression.getCondition();
-        final PsiExpression thenExpression = expression.getThenExpression();
+        PsiExpression condition = expression.getCondition();
+        PsiExpression thenExpression = expression.getThenExpression();
         assert thenExpression != null;
-        @NonNls final String thenExpressionText = thenExpression.getText();
+        @NonNls String thenExpressionText = thenExpression.getText();
         if ("true".equals(thenExpressionText)) {
-            final String newExpression = condition.getText();
+            String newExpression = condition.getText();
             replaceExpression(newExpression, expression);
         }
         else {
-            final String newExpression =
+            String newExpression =
                 BoolUtils.getNegatedExpressionText(condition);
             replaceExpression(newExpression, expression);
         }

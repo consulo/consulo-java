@@ -26,7 +26,7 @@ public class WellFormednessUtils {
 
   public static boolean isWellFormed(@Nonnull PsiAssignmentExpression expression) {
 
-    final PsiExpression rhs = expression.getRExpression();
+    PsiExpression rhs = expression.getRExpression();
     return rhs != null;
   }
 }

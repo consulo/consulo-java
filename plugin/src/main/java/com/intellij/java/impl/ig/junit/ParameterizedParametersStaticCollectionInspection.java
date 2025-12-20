@@ -59,23 +59,23 @@ public class ParameterizedParametersStaticCollectionInspection extends BaseInspe
         return new BaseInspectionVisitor() {
             @Override
             public void visitClass(PsiClass aClass) {
-                final PsiAnnotation annotation = AnnotationUtil.findAnnotation(aClass, "org.junit.runner.RunWith");
+                PsiAnnotation annotation = AnnotationUtil.findAnnotation(aClass, "org.junit.runner.RunWith");
                 if (annotation != null) {
                     for (PsiNameValuePair pair : annotation.getParameterList().getAttributes()) {
-                        final PsiAnnotationMemberValue value = pair.getValue();
+                        PsiAnnotationMemberValue value = pair.getValue();
                         if (value instanceof PsiClassObjectAccessExpression) {
-                            final PsiTypeElement typeElement = ((PsiClassObjectAccessExpression) value).getOperand();
+                            PsiTypeElement typeElement = ((PsiClassObjectAccessExpression) value).getOperand();
                             if (typeElement.getType().getCanonicalText().equals(PARAMETERIZED_FQN)) {
                                 List<MethodCandidate> candidates = new ArrayList<MethodCandidate>();
                                 for (PsiMethod method : aClass.getMethods()) {
                                     PsiType returnType = method.getReturnType();
-                                    final PsiClass returnTypeClass = PsiUtil.resolveClassInType(returnType);
-                                    final Project project = aClass.getProject();
-                                    final PsiClass collectionsClass =
+                                    PsiClass returnTypeClass = PsiUtil.resolveClassInType(returnType);
+                                    Project project = aClass.getProject();
+                                    PsiClass collectionsClass =
                                         JavaPsiFacade.getInstance(project)
                                             .findClass(Collection.class.getName(), GlobalSearchScope.allScope(project));
                                     if (AnnotationUtil.isAnnotated(method, PARAMETERS_FQN, false)) {
-                                        final PsiModifierList modifierList = method.getModifierList();
+                                        PsiModifierList modifierList = method.getModifierList();
                                         boolean hasToFixSignature = false;
                                         String message = "Make method \'" + method.getName() + "\' ";
                                         String errorString = "Method \'#ref()\' should be ";
@@ -132,15 +132,15 @@ public class ParameterizedParametersStaticCollectionInspection extends BaseInspe
     protected InspectionGadgetsFix buildFix(final Object... infos) {
         return new InspectionGadgetsFix() {
             @Override
-            protected void doFix(final Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-                final PsiElement element = descriptor.getPsiElement();
-                final PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
+            protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+                PsiElement element = descriptor.getPsiElement();
+                PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
                 if (method != null) {
                     PsiType type = (PsiType) infos[1];
                     if (type == null) {
                         type = method.getReturnType();
                     }
-                    final ChangeSignatureProcessor csp =
+                    ChangeSignatureProcessor csp =
                         new ChangeSignatureProcessor(
                             project,
                             method,
@@ -153,9 +153,9 @@ public class ParameterizedParametersStaticCollectionInspection extends BaseInspe
                     csp.run();
                 }
                 else {
-                    final PsiClass psiClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
+                    PsiClass psiClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
                     if (psiClass != null) {
-                        final CreateMethodQuickFix fix = CreateMethodQuickFix
+                        CreateMethodQuickFix fix = CreateMethodQuickFix
                             .createFix(psiClass, "@" + PARAMETERS_FQN + " public static java.util.Collection parameters()", "");
                         if (fix != null) {
                             fix.applyFix(project, descriptor);

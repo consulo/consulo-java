@@ -33,7 +33,7 @@ public abstract class DataFlowInspectionTest extends LightCodeInsightFixtureTest
   }
 
   private void doTest() {
-    final DataFlowInspection inspection = new DataFlowInspection();
+    DataFlowInspection inspection = new DataFlowInspection();
     inspection.SUGGEST_NULLABLE_ANNOTATIONS = true;
     myFixture.enableInspections(inspection);
     myFixture.testHighlighting(true, false, true, getTestName(false) + ".java");
@@ -126,7 +126,7 @@ public abstract class DataFlowInspectionTest extends LightCodeInsightFixtureTest
   }
 
   public void testSkipAssertions() {
-    final DataFlowInspection inspection = new DataFlowInspection();
+    DataFlowInspection inspection = new DataFlowInspection();
     inspection.DONT_REPORT_TRUE_ASSERT_STATEMENTS = true;
     myFixture.enableInspections(inspection);
     myFixture.testHighlighting(true, false, true, getTestName(false) + ".java");

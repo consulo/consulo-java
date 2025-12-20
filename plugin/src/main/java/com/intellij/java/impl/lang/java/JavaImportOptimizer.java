@@ -64,19 +64,19 @@ public class JavaImportOptimizer implements ImportOptimizer {
       @Override
       public void run() {
         try {
-          final PsiDocumentManager manager = PsiDocumentManager.getInstance(file.getProject());
-          final Document document = manager.getDocument(file);
+          PsiDocumentManager manager = PsiDocumentManager.getInstance(file.getProject());
+          Document document = manager.getDocument(file);
           if (document != null) {
             manager.commitDocument(document);
           }
-          final PsiImportList oldImportList = ((PsiJavaFile) file).getImportList();
+          PsiImportList oldImportList = ((PsiJavaFile) file).getImportList();
           assert oldImportList != null;
-          final Multiset<PsiElement> oldImports = HashMultiset.create();
+          Multiset<PsiElement> oldImports = HashMultiset.create();
           for (PsiImportStatement statement : oldImportList.getImportStatements()) {
             oldImports.add(statement.resolve());
           }
 
-          final Multiset<PsiElement> oldStaticImports = HashMultiset.create();
+          Multiset<PsiElement> oldStaticImports = HashMultiset.create();
           for (PsiImportStaticStatement statement : oldImportList.getImportStaticStatements()) {
             oldStaticImports.add(statement.resolve());
           }
@@ -105,7 +105,7 @@ public class JavaImportOptimizer implements ImportOptimizer {
         if (myImportsRemoved == 0) {
           return "rearranged imports";
         }
-        final StringBuilder notification = new StringBuilder("removed ").append(myImportsRemoved).append(" import");
+        StringBuilder notification = new StringBuilder("removed ").append(myImportsRemoved).append(" import");
         if (myImportsRemoved > 1) {
           notification.append('s');
         }

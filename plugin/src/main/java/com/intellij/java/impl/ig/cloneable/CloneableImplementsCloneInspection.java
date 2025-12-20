@@ -79,18 +79,18 @@ public class CloneableImplementsCloneInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = element.getParent();
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement parent = element.getParent();
             if (!(parent instanceof PsiClass)) {
                 return;
             }
-            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-            final StringBuilder cloneMethod = new StringBuilder("public ");
+            PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+            StringBuilder cloneMethod = new StringBuilder("public ");
             cloneMethod.append(element.getText());
             cloneMethod.append(" clone() throws java.lang.CloneNotSupportedException {\nreturn (");
             cloneMethod.append(element.getText());
             cloneMethod.append(") super.clone();\n}");
-            final PsiMethod method = factory.createMethodFromText(cloneMethod.toString(), element);
+            PsiMethod method = factory.createMethodFromText(cloneMethod.toString(), element);
             parent.add(method);
         }
     }
@@ -119,8 +119,8 @@ public class CloneableImplementsCloneInspection extends BaseInspection {
             else if (!CloneUtils.isCloneable(aClass)) {
                 return;
             }
-            final PsiMethod[] methods = aClass.getMethods();
-            for (final PsiMethod method : methods) {
+            PsiMethod[] methods = aClass.getMethods();
+            for (PsiMethod method : methods) {
                 if (CloneUtils.isClone(method)) {
                     return;
                 }

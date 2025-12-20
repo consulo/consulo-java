@@ -37,7 +37,7 @@ public class ExtractSuperClassProcessor extends ExtractSuperBaseProcessor {
   }
 
 
-  protected PsiClass extractSuper(final String superClassName) throws IncorrectOperationException {
+  protected PsiClass extractSuper(String superClassName) throws IncorrectOperationException {
     return ExtractSuperClassUtil.extractSuperClass(myProject, myClass.getContainingFile().getContainingDirectory(), superClassName, myClass, myMemberInfos, myJavaDocPolicy);
   }
 
@@ -52,16 +52,16 @@ public class ExtractSuperClassProcessor extends ExtractSuperBaseProcessor {
 
   protected boolean isInSuper(PsiElement member) {
     if (member instanceof PsiField) {
-      final PsiClass containingClass = ((PsiField)member).getContainingClass();
+      PsiClass containingClass = ((PsiField)member).getContainingClass();
       if (myClass.isInheritor(containingClass, true)) return true;
-      final PsiField field = ((PsiField)member);
+      PsiField field = ((PsiField)member);
       return doMemberInfosContain(field);
     }
     else if (member instanceof PsiMethod) {
       PsiMethod method = (PsiMethod) member;
-      final PsiClass currentSuperClass = myClass.getSuperClass();
+      PsiClass currentSuperClass = myClass.getSuperClass();
       if (currentSuperClass != null) {
-        final PsiMethod methodBySignature = currentSuperClass.findMethodBySignature(method, true);
+        PsiMethod methodBySignature = currentSuperClass.findMethodBySignature(method, true);
         if (methodBySignature != null) return true;
       }
       return doMemberInfosContain(method);

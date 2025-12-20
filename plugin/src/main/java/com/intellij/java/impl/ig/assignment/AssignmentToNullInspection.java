@@ -51,15 +51,15 @@ public class AssignmentToNullInspection extends BaseInspection {
 
     @Override
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final Object info = infos[0];
+        Object info = infos[0];
         if (!(info instanceof PsiReferenceExpression)) {
             return null;
         }
-        final PsiElement target = ((PsiReferenceExpression) info).resolve();
+        PsiElement target = ((PsiReferenceExpression) info).resolve();
         if (!(target instanceof PsiVariable)) {
             return null;
         }
-        final NullableNotNullManager manager = NullableNotNullManager.getInstance(target.getProject());
+        NullableNotNullManager manager = NullableNotNullManager.getInstance(target.getProject());
         return new DelegatingFix(new AddAnnotationFix(manager.getDefaultNullable(), (PsiVariable) target));
     }
 
@@ -81,7 +81,7 @@ public class AssignmentToNullInspection extends BaseInspection {
             @Nonnull PsiLiteralExpression value
         ) {
             super.visitLiteralExpression(value);
-            final String text = value.getText();
+            String text = value.getText();
             if (!PsiKeyword.NULL.equals(text)) {
                 return;
             }
@@ -94,9 +94,9 @@ public class AssignmentToNullInspection extends BaseInspection {
             if (!(parent instanceof PsiAssignmentExpression)) {
                 return;
             }
-            final PsiAssignmentExpression assignmentExpression =
+            PsiAssignmentExpression assignmentExpression =
                 (PsiAssignmentExpression) parent;
-            final PsiExpression lhs = ParenthesesUtils.stripParentheses(
+            PsiExpression lhs = ParenthesesUtils.stripParentheses(
                 assignmentExpression.getLExpression());
             if (lhs == null || isReferenceToNullableVariable(lhs)) {
                 return;
@@ -110,13 +110,13 @@ public class AssignmentToNullInspection extends BaseInspection {
             if (!(lhs instanceof PsiReferenceExpression)) {
                 return false;
             }
-            final PsiReferenceExpression referenceExpression =
+            PsiReferenceExpression referenceExpression =
                 (PsiReferenceExpression) lhs;
-            final PsiElement element = referenceExpression.resolve();
+            PsiElement element = referenceExpression.resolve();
             if (!(element instanceof PsiVariable)) {
                 return false;
             }
-            final PsiVariable variable = (PsiVariable) element;
+            PsiVariable variable = (PsiVariable) element;
             if (ignoreAssignmentsToFields && variable instanceof PsiField) {
                 return true;
             }

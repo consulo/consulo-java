@@ -39,7 +39,7 @@ public class ExpectedExceptionNeverThrownInspection extends BaseInspection {
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    final PsiMethod method = (PsiMethod)infos[0];
+    PsiMethod method = (PsiMethod)infos[0];
     return InspectionGadgetsLocalize.expectedExceptionNeverThrownProblemDescriptor(method.getName()).get();
   }
 
@@ -54,14 +54,14 @@ public class ExpectedExceptionNeverThrownInspection extends BaseInspection {
     @Override
     public void visitMethod(PsiMethod method) {
       super.visitMethod(method);
-      final PsiAnnotation annotation =
+      PsiAnnotation annotation =
         AnnotationUtil.findAnnotation(method, "org.junit.Test");
       if (annotation == null) {
         return;
       }
-      final PsiAnnotationParameterList parameterList =
+      PsiAnnotationParameterList parameterList =
         annotation.getParameterList();
-      final PsiNameValuePair[] attributes = parameterList.getAttributes();
+      PsiNameValuePair[] attributes = parameterList.getAttributes();
       PsiAnnotationMemberValue value = null;
       for (PsiNameValuePair attribute : attributes) {
         if ("expected".equals(attribute.getName())) {
@@ -72,24 +72,24 @@ public class ExpectedExceptionNeverThrownInspection extends BaseInspection {
       if (!(value instanceof PsiClassObjectAccessExpression)) {
         return;
       }
-      final PsiCodeBlock body = method.getBody();
+      PsiCodeBlock body = method.getBody();
       if (body == null) {
         return;
       }
-      final PsiClassObjectAccessExpression classObjectAccessExpression =
+      PsiClassObjectAccessExpression classObjectAccessExpression =
         (PsiClassObjectAccessExpression)value;
-      final PsiTypeElement operand =
+      PsiTypeElement operand =
         classObjectAccessExpression.getOperand();
-      final PsiType type = operand.getType();
+      PsiType type = operand.getType();
       if (!(type instanceof PsiClassType)) {
         return;
       }
-      final PsiClassType classType = (PsiClassType)type;
-      final PsiClass aClass = classType.resolve();
+      PsiClassType classType = (PsiClassType)type;
+      PsiClass aClass = classType.resolve();
       if (InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION)) {
         return;
       }
-      final Set<PsiClassType> exceptionsThrown =
+      Set<PsiClassType> exceptionsThrown =
         ExceptionUtils.calculateExceptionsThrown(body);
       if (exceptionsThrown.contains(classType)) {
         return;

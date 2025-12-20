@@ -67,7 +67,7 @@ public abstract class EmptyDirectoryInspection extends BaseGlobalInspection {
 
   @Override
   public void runInspection(
-    final AnalysisScope scope,
+    AnalysisScope scope,
     @Nonnull final InspectionManager manager,
     final GlobalInspectionContext context,
     @Nonnull final ProblemDescriptionsProcessor processor,
@@ -75,7 +75,7 @@ public abstract class EmptyDirectoryInspection extends BaseGlobalInspection {
   ) {
     final Project project = context.getProject();
     final ProjectFileIndex index = ProjectRootManager.getInstance(project).getFileIndex();
-    final SearchScope searchScope = scope.toSearchScope();
+    SearchScope searchScope = scope.toSearchScope();
     if (!(searchScope instanceof GlobalSearchScope)) {
       return;
     }
@@ -93,23 +93,23 @@ public abstract class EmptyDirectoryInspection extends BaseGlobalInspection {
         if (onlyReportDirectoriesUnderSourceRoots && !index.isInSourceContent(fileOrDir)) {
           return true;
         }
-        final VirtualFile[] children = fileOrDir.getChildren();
+        VirtualFile[] children = fileOrDir.getChildren();
         if (children.length != 0) {
           return true;
         }
-        final Application application = ApplicationManager.getApplication();
-        final PsiDirectory directory = application.runReadAction(
+        Application application = ApplicationManager.getApplication();
+        PsiDirectory directory = application.runReadAction(
           new Computable<PsiDirectory>() {
             @Override
             public PsiDirectory compute() {
               return psiManager.findDirectory(fileOrDir);
             }
           });
-        final RefElement refDirectory = context.getRefManager().getReference(directory);
+        RefElement refDirectory = context.getRefManager().getReference(directory);
         if (context.shouldCheck(refDirectory, EmptyDirectoryInspection.this)) {
           return true;
         }
-        final String relativePath = getPathRelativeToModule(fileOrDir, project);
+        String relativePath = getPathRelativeToModule(fileOrDir, project);
         if (relativePath == null) {
           return true;
         }
@@ -127,9 +127,9 @@ public abstract class EmptyDirectoryInspection extends BaseGlobalInspection {
 
   @Nullable
   private static String getPathRelativeToModule(VirtualFile file, Project project) {
-    final ProjectRootManager rootManager = ProjectRootManager.getInstance(project);
-    final Application application = ApplicationManager.getApplication();
-    final VirtualFile[] contentRoots = application.runReadAction(
+    ProjectRootManager rootManager = ProjectRootManager.getInstance(project);
+    Application application = ApplicationManager.getApplication();
+    VirtualFile[] contentRoots = application.runReadAction(
         (Supplier<VirtualFile[]>) () -> rootManager.getContentRootsFromAllModules());
     for (VirtualFile otherRoot : contentRoots) {
       if (VirtualFileUtil.isAncestor(otherRoot, file, false)) {
@@ -157,12 +157,12 @@ public abstract class EmptyDirectoryInspection extends BaseGlobalInspection {
 
     @Override
     public void applyFix(@Nonnull Project project, @Nonnull CommonProblemDescriptor descriptor) {
-      final VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(url);
+      VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(url);
       if (file == null) {
         return;
       }
-      final PsiManager psiManager = PsiManager.getInstance(project);
-      final PsiDirectory directory = psiManager.findDirectory(file);
+      PsiManager psiManager = PsiManager.getInstance(project);
+      PsiDirectory directory = psiManager.findDirectory(file);
       if (directory == null) {
         return;
       }

@@ -51,17 +51,17 @@ public class OverridableMethodCallDuringObjectConstructionInspection extends Bas
     @Override
     @Nonnull
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
-        final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) infos[0];
-        final PsiClass callClass = ClassUtils.getContainingClass(methodCallExpression);
-        final PsiMethod method = methodCallExpression.resolveMethod();
+        PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) infos[0];
+        PsiClass callClass = ClassUtils.getContainingClass(methodCallExpression);
+        PsiMethod method = methodCallExpression.resolveMethod();
         if (method == null) {
             return InspectionGadgetsFix.EMPTY_ARRAY;
         }
-        final PsiClass containingClass = method.getContainingClass();
+        PsiClass containingClass = method.getContainingClass();
         if (containingClass == null || !containingClass.equals(callClass) || MethodUtils.isOverridden(method)) {
             return InspectionGadgetsFix.EMPTY_ARRAY;
         }
-        final String methodName = method.getName();
+        String methodName = method.getName();
         return new InspectionGadgetsFix[]{
             new MakeClassFinalFix(containingClass),
             new MakeMethodFinalFix(methodName)
@@ -83,14 +83,14 @@ public class OverridableMethodCallDuringObjectConstructionInspection extends Bas
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement methodName = descriptor.getPsiElement();
-            final PsiElement methodExpression = methodName.getParent();
-            final PsiMethodCallExpression methodCall = (PsiMethodCallExpression) methodExpression.getParent();
-            final PsiMethod method = methodCall.resolveMethod();
+            PsiElement methodName = descriptor.getPsiElement();
+            PsiElement methodExpression = methodName.getParent();
+            PsiMethodCallExpression methodCall = (PsiMethodCallExpression) methodExpression.getParent();
+            PsiMethod method = methodCall.resolveMethod();
             if (method == null) {
                 return;
             }
-            final PsiModifierList modifierList = method.getModifierList();
+            PsiModifierList modifierList = method.getModifierList();
             modifierList.setModifierProperty(PsiModifier.FINAL, true);
         }
     }
@@ -108,22 +108,22 @@ public class OverridableMethodCallDuringObjectConstructionInspection extends Bas
             if (!MethodCallUtils.isCallDuringObjectConstruction(expression)) {
                 return;
             }
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
             if (qualifier != null) {
                 if (!(qualifier instanceof PsiThisExpression || qualifier instanceof PsiSuperExpression)) {
                     return;
                 }
             }
-            final PsiClass containingClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
+            PsiClass containingClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
             if (containingClass == null || containingClass.hasModifierProperty(PsiModifier.FINAL)) {
                 return;
             }
-            final PsiMethod calledMethod = expression.resolveMethod();
+            PsiMethod calledMethod = expression.resolveMethod();
             if (calledMethod == null || !PsiUtil.canBeOverriden(calledMethod)) {
                 return;
             }
-            final PsiClass calledMethodClass = calledMethod.getContainingClass();
+            PsiClass calledMethodClass = calledMethod.getContainingClass();
             if (calledMethodClass == null || !calledMethodClass.equals(containingClass)) {
                 return;
             }

@@ -43,7 +43,7 @@ public abstract class Binding {
 
   public abstract Binding reduceRecursive();
 
-  public abstract boolean binds(final PsiTypeVariable var);
+  public abstract boolean binds(PsiTypeVariable var);
 
   public abstract void merge(Binding b, boolean removeObject);
 

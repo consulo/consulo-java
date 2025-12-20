@@ -34,7 +34,7 @@ public class OverloadedVarargsMethodInspection extends BaseInspection {
 
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiMethod element = (PsiMethod) infos[0];
+        PsiMethod element = (PsiMethod) infos[0];
         return element.isConstructor()
             ? InspectionGadgetsLocalize.overloadedVarargConstructorProblemDescriptor().get()
             : InspectionGadgetsLocalize.overloadedVarargMethodProblemDescriptor().get();
@@ -50,12 +50,12 @@ public class OverloadedVarargsMethodInspection extends BaseInspection {
             if (!method.isVarArgs()) {
                 return;
             }
-            final PsiClass aClass = method.getContainingClass();
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null) {
                 return;
             }
-            final String methodName = method.getName();
-            final PsiMethod[] sameNameMethods = aClass.findMethodsByName(methodName, false);
+            String methodName = method.getName();
+            PsiMethod[] sameNameMethods = aClass.findMethodsByName(methodName, false);
             for (PsiMethod sameNameMethod : sameNameMethods) {
                 if (!sameNameMethod.equals(method)) {
                     registerMethodError(method, method);

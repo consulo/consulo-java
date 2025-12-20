@@ -101,7 +101,7 @@ public class DefaultMoveDirectoryWithClassesHelper extends MoveDirectoryWithClas
         return null;
       }
       else {
-        final ProperTextRange rangeInElement = getRangeInElement();
+        ProperTextRange rangeInElement = getRangeInElement();
         return rangeInElement != null ? element.findReferenceAt(rangeInElement.getStartOffset()) : element.getReference();
       }
     }

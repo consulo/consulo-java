@@ -51,18 +51,18 @@ public class PsiSelectionSearcher {
                                                                          Project project,
                                                                          final Class<T> filter,
                                                                          final boolean searchChildrenOfFound) {
-    final SelectionModel selectionModel = editor.getSelectionModel();
+    SelectionModel selectionModel = editor.getSelectionModel();
     if (!selectionModel.hasSelection()) {
       return Collections.emptyList();
     }
     final TextRange selection = new UnfairTextRange(selectionModel.getSelectionStart(), selectionModel.getSelectionEnd());
-    final PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
+    PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
     if (file == null || file instanceof PsiCompiledElement) {
       return Collections.emptyList();
     }
     final List<T> results = new ArrayList<T>();
 
-    final PsiElementVisitor visitor = new JavaRecursiveElementWalkingVisitor() {
+    PsiElementVisitor visitor = new JavaRecursiveElementWalkingVisitor() {
       @Override
       public void visitElement(PsiElement element) {
         if (!selection.intersects(element.getTextRange())) {

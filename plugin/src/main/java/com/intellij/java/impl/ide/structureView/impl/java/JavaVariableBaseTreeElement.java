@@ -19,10 +19,10 @@ abstract class JavaVariableBaseTreeElement<T extends PsiVariable> extends JavaCl
 
   @Override
   public @Nullable String getPresentableText() {
-    final T field = getElement();
+    T field = getElement();
     if (field == null) return "";
 
-    final boolean dumb = DumbService.isDumb(field.getProject());
+    boolean dumb = DumbService.isDumb(field.getProject());
     return StringUtil.replace(formatVariable(
       field,
       SHOW_NAME | (dumb ? 0 : SHOW_TYPE) | TYPE_AFTER | (dumb ? 0 : SHOW_INITIALIZER),
@@ -33,7 +33,7 @@ abstract class JavaVariableBaseTreeElement<T extends PsiVariable> extends JavaCl
   @Override
   @Nonnull
   public String getAlphaSortKey() {
-    final T element = getElement();
+    T element = getElement();
     if (element != null) {
       String name = element.getName();
       if (name != null) return name;

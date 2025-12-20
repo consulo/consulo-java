@@ -116,7 +116,7 @@ public abstract class JavaRefactoringFactory {
                                                                                     PsiExpression parameterInitializer,
                                                                                     PsiExpression expressionToSearchFor,
                                                                                     boolean declareFinal,
-                                                                                    final boolean replaceAllOccurences);
+                                                                                    boolean replaceAllOccurences);
 
   public abstract RenameRefactoring createRename(PsiElement element, String newName, boolean searchInComments, boolean
     searchInNonJavaFiles);

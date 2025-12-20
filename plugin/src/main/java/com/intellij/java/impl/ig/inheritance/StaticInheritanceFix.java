@@ -69,7 +69,7 @@ class StaticInheritanceFix extends InspectionGadgetsFix {
   }
 
   private void dodoFix(final Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-    final PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement)descriptor.getPsiElement();
+    PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement)descriptor.getPsiElement();
     final PsiClass iface = (PsiClass)referenceElement.resolve();
     assert iface != null;
     final PsiField[] allFields = iface.getAllFields();
@@ -83,7 +83,7 @@ class StaticInheritanceFix extends InspectionGadgetsFix {
 
       public void run(@Nonnull ProgressIndicator indicator) {
         for (final PsiField field : allFields) {
-          final Query<PsiReference> search = ReferencesSearch.search(field, implementingClass.getUseScope(), false);
+          Query<PsiReference> search = ReferencesSearch.search(field, implementingClass.getUseScope(), false);
           for (PsiReference reference : search) {
             if (!(reference instanceof PsiReferenceExpression)) {
               continue;
@@ -99,26 +99,26 @@ class StaticInheritanceFix extends InspectionGadgetsFix {
               }
               if (!isInheritor) continue;
             }
-            final Runnable runnable = new Runnable() {
+            Runnable runnable = new Runnable() {
               public void run() {
                 if (isQuickFixOnReadOnlyFile(referenceExpression)) {
                   return;
                 }
-                final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-                final PsiReferenceExpression qualified =
+                PsiElementFactory elementFactory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
+                PsiReferenceExpression qualified =
                   (PsiReferenceExpression)elementFactory
                     .createExpressionFromText("xxx." + referenceExpression.getText(), referenceExpression);
-                final PsiReferenceExpression newReference = (PsiReferenceExpression)referenceExpression.replace(qualified);
-                final PsiReferenceExpression qualifier = (PsiReferenceExpression)newReference.getQualifierExpression();
+                PsiReferenceExpression newReference = (PsiReferenceExpression)referenceExpression.replace(qualified);
+                PsiReferenceExpression qualifier = (PsiReferenceExpression)newReference.getQualifierExpression();
                 assert qualifier != null : DebugUtil.psiToString(newReference, false);
-                final PsiClass containingClass = field.getContainingClass();
+                PsiClass containingClass = field.getContainingClass();
                 qualifier.bindToElement(containingClass);
               }
             };
             invokeWriteAction(runnable, file);
           }
         }
-        final Runnable runnable = new Runnable() {
+        Runnable runnable = new Runnable() {
           public void run() {
             PsiClassType classType = JavaPsiFacade.getInstance(project).getElementFactory().createType(iface);
             IntentionAction fix = QuickFixFactory.getInstance().createExtendsListFix(implementingClass, classType, false);

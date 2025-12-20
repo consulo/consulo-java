@@ -39,35 +39,35 @@ public class ClassTypeArgumentMigrationProcessor {
 
   private final TypeMigrationLabeler myLabeler;
 
-  public ClassTypeArgumentMigrationProcessor(final TypeMigrationLabeler labeler) {
+  public ClassTypeArgumentMigrationProcessor(TypeMigrationLabeler labeler) {
     myLabeler = labeler;
   }
 
-  public void migrateClassTypeParameter(final PsiReferenceParameterList referenceParameterList, final PsiClassType migrationType) {
-    final PsiClass psiClass = PsiTreeUtil.getParentOfType(referenceParameterList, PsiClass.class);
+  public void migrateClassTypeParameter(PsiReferenceParameterList referenceParameterList, PsiClassType migrationType) {
+    PsiClass psiClass = PsiTreeUtil.getParentOfType(referenceParameterList, PsiClass.class);
     LOG.assertTrue(psiClass != null);
 
-    final PsiClass superClass = psiClass.getSuperClass();
+    PsiClass superClass = psiClass.getSuperClass();
     LOG.assertTrue(superClass != null);
 
     myLabeler.getTypeEvaluator().setType(new TypeMigrationUsageInfo(superClass), migrationType);
 
 
-    final Map<PsiElement, Pair<PsiReference[], PsiType>> roots = new HashMap<>();
+    Map<PsiElement, Pair<PsiReference[], PsiType>> roots = new HashMap<>();
 
     markTypeParameterUsages(psiClass, migrationType, referenceParameterList, roots);
 
-    final Set<PsiElement> processed = new HashSet<>();
+    Set<PsiElement> processed = new HashSet<>();
     for (Map.Entry<PsiElement, Pair<PsiReference[], PsiType>> entry : roots.entrySet()) {
-      final PsiElement member = entry.getKey();
-      final PsiType type = entry.getValue().second;
+      PsiElement member = entry.getKey();
+      PsiType type = entry.getValue().second;
 
       if (member instanceof PsiParameter && ((PsiParameter) member).getDeclarationScope() instanceof PsiMethod) {
         myLabeler.migrateMethodCallExpressions(type, (PsiParameter) member, psiClass);
       }
 
 
-      final PsiReference[] references = entry.getValue().first;
+      PsiReference[] references = entry.getValue().first;
       for (PsiReference usage : references) {
         myLabeler.migrateRootUsageExpression(usage, processed);
       }
@@ -92,16 +92,16 @@ public class ClassTypeArgumentMigrationProcessor {
       }
     });
 
-    final PsiClass resolvedClass = (PsiClass) ((PsiJavaCodeReferenceElement) referenceParameterList.getParent()).resolve();
+    PsiClass resolvedClass = (PsiClass) ((PsiJavaCodeReferenceElement) referenceParameterList.getParent()).resolve();
     LOG.assertTrue(resolvedClass != null);
-    final Set<PsiClass> superClasses = new HashSet<>();
+    Set<PsiClass> superClasses = new HashSet<>();
     superClasses.add(resolvedClass);
     InheritanceUtil.getSuperClasses(resolvedClass, superClasses, true);
     for (PsiClass superSuperClass : superClasses) {
       final Set<PsiTypeParameter> typeParameters = Set.copyOf(PsiUtil.typeParametersIterable(superSuperClass));
       superSuperClass.accept(new JavaRecursiveElementVisitor() {
         @Override
-        public void visitMethod(final PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
           super.visitMethod(method);
           processMemberType(method, typeParameters, psiClass, fullHierarchySubstitutor[0], roots);
           for (PsiParameter parameter : method.getParameterList().getParameters()) {
@@ -110,7 +110,7 @@ public class ClassTypeArgumentMigrationProcessor {
         }
 
         @Override
-        public void visitField(final PsiField field) {
+        public void visitField(PsiField field) {
           super.visitField(field);
           processMemberType(field, typeParameters, psiClass, fullHierarchySubstitutor[0], roots);
         }
@@ -119,18 +119,18 @@ public class ClassTypeArgumentMigrationProcessor {
 
   }
 
-  private void processMemberType(final PsiElement element,
-                                 final Set<PsiTypeParameter> typeParameters,
-                                 final PsiClass psiClass,
-                                 final PsiSubstitutor substitutor,
-                                 final Map<PsiElement, Pair<PsiReference[], PsiType>> roots) {
-    final PsiType elementType = TypeMigrationLabeler.getElementType(element);
+  private void processMemberType(PsiElement element,
+                                 Set<PsiTypeParameter> typeParameters,
+                                 PsiClass psiClass,
+                                 PsiSubstitutor substitutor,
+                                 Map<PsiElement, Pair<PsiReference[], PsiType>> roots) {
+    PsiType elementType = TypeMigrationLabeler.getElementType(element);
     if (elementType != null && PsiPolyExpressionUtil.mentionsTypeParameters(elementType, typeParameters)) {
-      final PsiType memberType = substitutor.substitute(elementType);
+      PsiType memberType = substitutor.substitute(elementType);
 
       prepareMethodsChangeSignature(psiClass, element, memberType);
 
-      final List<PsiReference> refs = TypeMigrationLabeler.filterReferences(psiClass, ReferencesSearch.search(element, psiClass.getUseScope()));
+      List<PsiReference> refs = TypeMigrationLabeler.filterReferences(psiClass, ReferencesSearch.search(element, psiClass.getUseScope()));
 
       roots.put(element, Pair.create(myLabeler.markRootUsages(element, memberType, refs.toArray(PsiReference.EMPTY_ARRAY)), memberType));
     }
@@ -139,18 +139,18 @@ public class ClassTypeArgumentMigrationProcessor {
   /**
    * signature should be changed for methods with type parameters
    */
-  private void prepareMethodsChangeSignature(final PsiClass currentClass, final PsiElement memberToChangeSignature, final PsiType memberType) {
+  private void prepareMethodsChangeSignature(PsiClass currentClass, PsiElement memberToChangeSignature, PsiType memberType) {
     if (memberToChangeSignature instanceof PsiMethod) {
-      final PsiMethod method = MethodSignatureUtil.findMethodBySuperMethod(currentClass, (PsiMethod) memberToChangeSignature, true);
+      PsiMethod method = MethodSignatureUtil.findMethodBySuperMethod(currentClass, (PsiMethod) memberToChangeSignature, true);
       if (method != null && method.getContainingClass() == currentClass) {
         myLabeler.addRoot(new TypeMigrationUsageInfo(method), memberType, method, false);
       }
     } else if (memberToChangeSignature instanceof PsiParameter && ((PsiParameter) memberToChangeSignature).getDeclarationScope() instanceof PsiMethod) {
-      final PsiMethod superMethod = (PsiMethod) ((PsiParameter) memberToChangeSignature).getDeclarationScope();
-      final int parameterIndex = superMethod.getParameterList().getParameterIndex((PsiParameter) memberToChangeSignature);
-      final PsiMethod method = MethodSignatureUtil.findMethodBySuperMethod(currentClass, superMethod, true);
+      PsiMethod superMethod = (PsiMethod) ((PsiParameter) memberToChangeSignature).getDeclarationScope();
+      int parameterIndex = superMethod.getParameterList().getParameterIndex((PsiParameter) memberToChangeSignature);
+      PsiMethod method = MethodSignatureUtil.findMethodBySuperMethod(currentClass, superMethod, true);
       if (method != null && method.getContainingClass() == currentClass) {
-        final PsiParameter parameter = method.getParameterList().getParameters()[parameterIndex];
+        PsiParameter parameter = method.getParameterList().getParameters()[parameterIndex];
         if (!parameter.getType().equals(memberType)) {
           myLabeler.addRoot(new TypeMigrationUsageInfo(parameter), memberType, parameter, false);
         }

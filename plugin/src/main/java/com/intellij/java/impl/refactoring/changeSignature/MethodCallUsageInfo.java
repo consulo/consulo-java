@@ -38,16 +38,16 @@ public class MethodCallUsageInfo extends UsageInfo {
     return myToChangeArguments;
   }
 
-  public MethodCallUsageInfo(final PsiElement ref, boolean isToChangeArguments, boolean isToCatchExceptions) {
+  public MethodCallUsageInfo(PsiElement ref, boolean isToChangeArguments, boolean isToCatchExceptions) {
     super(ref);
     myToChangeArguments = isToChangeArguments;
     myToCatchExceptions = isToCatchExceptions;
-    final JavaResolveResult resolveResult = resolveMethod(ref);
+    JavaResolveResult resolveResult = resolveMethod(ref);
     myReferencedMethod = (PsiMethod)resolveResult.getElement();
     mySubstitutor = resolveResult.getSubstitutor();
   }
 
-  private static JavaResolveResult resolveMethod(final PsiElement ref) {
+  private static JavaResolveResult resolveMethod(PsiElement ref) {
     if (ref instanceof PsiEnumConstant) return ((PsiEnumConstant)ref).resolveMethodGenerics();
     PsiElement parent = ref.getParent();
     if (parent instanceof PsiCall) {

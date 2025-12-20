@@ -41,7 +41,7 @@ import static consulo.language.editor.inspection.HTMLComposerBase.*;
 public class HTMLJavaHTMLComposerImpl extends HTMLJavaHTMLComposer {
   private final HTMLComposerBase myComposer;
 
-  public HTMLJavaHTMLComposerImpl(final HTMLComposerBase composer) {
+  public HTMLJavaHTMLComposerImpl(HTMLComposerBase composer) {
     myComposer = composer;
   }
 
@@ -143,7 +143,7 @@ public class HTMLJavaHTMLComposerImpl extends HTMLJavaHTMLComposer {
       HTMLComposer.appendHeading(buf, InspectionLocalize.inspectionExportResultsTypeReferences().get());
 
       myComposer.startList(buf);
-      for (final RefElement refElement : refClass.getInTypeReferences()) {
+      for (RefElement refElement : refClass.getInTypeReferences()) {
         myComposer.appendListItem(buf, refElement);
       }
       myComposer.doneList(buf);
@@ -151,7 +151,7 @@ public class HTMLJavaHTMLComposerImpl extends HTMLJavaHTMLComposer {
   }
 
   @Override
-  public void appendShortName(final RefEntity refElement, final StringBuffer buf) {
+  public void appendShortName(RefEntity refElement, final StringBuffer buf) {
     if (refElement instanceof RefJavaElement refJavaElement) {
       String modifier = refJavaElement.getAccessModifier();
       if (modifier != null && modifier != PsiModifier.PACKAGE_LOCAL) {
@@ -168,7 +168,7 @@ public class HTMLJavaHTMLComposerImpl extends HTMLJavaHTMLComposer {
 
         appendClassOrInterface(buf, refClass, false);
         buf.append(NBSP).append(HTMLComposerBase.B_OPENING).append(CODE_OPENING);
-        final String name = refClass.getName();
+        String name = refClass.getName();
         buf.append(refClass.isSyntheticJSP() ? XmlStringUtil.escapeString(name) : name);
         buf.append(CODE_CLOSING).append(HTMLComposerBase.B_CLOSING);
       }
@@ -225,14 +225,14 @@ public class HTMLJavaHTMLComposerImpl extends HTMLJavaHTMLComposer {
       @Override
       @RequiredReadAction
       public void visitFile(@Nonnull RefFile file) {
-        final PsiFile psiFile = file.getElement();
+        PsiFile psiFile = file.getElement();
         buf.append(B_OPENING).append(psiFile.getName()).append(B_CLOSING);
       }
     });
   }
 
   @Override
-  public void appendLocation(final RefEntity entity, final StringBuffer buf) {
+  public void appendLocation(RefEntity entity, StringBuffer buf) {
     RefEntity owner = entity.getOwner();
     if (owner instanceof RefPackage) {
       buf.append(InspectionLocalize.inspectionExportResultsPackage());
@@ -255,7 +255,7 @@ public class HTMLJavaHTMLComposerImpl extends HTMLJavaHTMLComposer {
 
   @Override
   @Nullable
-  public String getQualifiedName(final RefEntity refEntity) {
+  public String getQualifiedName(RefEntity refEntity) {
     if (refEntity instanceof RefJavaElement refJavaElement && refJavaElement.isSyntheticJSP()) {
       return XmlStringUtil.escapeString(refEntity.getName());
     } else if (refEntity instanceof RefMethod refMethod) {
@@ -266,7 +266,7 @@ public class HTMLJavaHTMLComposerImpl extends HTMLJavaHTMLComposer {
   }
 
   @Override
-  public void appendReferencePresentation(RefEntity refElement, final StringBuffer buf, final boolean isPackageIncluded) {
+  public void appendReferencePresentation(RefEntity refElement, StringBuffer buf, boolean isPackageIncluded) {
     if (refElement instanceof RefImplicitConstructor implicitConstructor) {
       buf.append(InspectionLocalize.inspectionExportResultsImplicitConstructor().get());
       refElement = implicitConstructor.getOwnerClass();

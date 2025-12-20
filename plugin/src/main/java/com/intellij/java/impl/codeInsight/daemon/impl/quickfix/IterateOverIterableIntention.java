@@ -51,13 +51,13 @@ public class IterateOverIterableIntention implements IntentionAction {
 
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    final Template template = getTemplate();
+    Template template = getTemplate();
     if (template != null) {
       int offset = editor.getCaretModel().getOffset();
       int startOffset = offset;
       if (editor.getSelectionModel().hasSelection()) {
-        final int selStart = editor.getSelectionModel().getSelectionStart();
-        final int selEnd = editor.getSelectionModel().getSelectionEnd();
+        int selStart = editor.getSelectionModel().getSelectionStart();
+        int selEnd = editor.getSelectionModel().getSelectionEnd();
         startOffset = (offset == selStart) ? selEnd : selStart;
       }
       PsiElement element = file.findElementAt(startOffset);
@@ -91,7 +91,7 @@ public class IterateOverIterableIntention implements IntentionAction {
   
   @Nullable
   private static PsiExpression getIterableExpression(Editor editor, PsiFile file) {
-    final SelectionModel selectionModel = editor.getSelectionModel();
+    SelectionModel selectionModel = editor.getSelectionModel();
     if (selectionModel.hasSelection()) {
       PsiElement elementAtStart = file.findElementAt(selectionModel.getSelectionStart());
       PsiElement elementAtEnd = file.findElementAt(selectionModel.getSelectionEnd() - 1);
@@ -105,7 +105,7 @@ public class IterateOverIterableIntention implements IntentionAction {
       }
       PsiElement parent = PsiTreeUtil.findCommonParent(elementAtStart, elementAtEnd);
       if (parent instanceof PsiExpression) {
-        final PsiType type = ((PsiExpression)parent).getType();
+        PsiType type = ((PsiExpression)parent).getType();
         return type instanceof PsiArrayType || InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_LANG_ITERABLE)
                ? (PsiExpression)parent
                : null;
@@ -121,10 +121,10 @@ public class IterateOverIterableIntention implements IntentionAction {
       element = ((PsiExpressionStatement)element).getExpression().getLastChild();
     }
     while ((element = PsiTreeUtil.getParentOfType(element, PsiExpression.class, true)) != null) {
-      final PsiElement parent = element.getParent();
+      PsiElement parent = element.getParent();
       if (parent instanceof PsiMethodCallExpression) continue;
       if (!(parent instanceof PsiExpressionStatement)) return null;
-      final PsiType type = ((PsiExpression)element).getType();
+      PsiType type = ((PsiExpression)element).getType();
       if (type instanceof PsiArrayType || InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_LANG_ITERABLE)) return (PsiExpression)element;
     }
     return null;
@@ -132,10 +132,10 @@ public class IterateOverIterableIntention implements IntentionAction {
 
   @Override
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
-    final Template template = getTemplate();
+    Template template = getTemplate();
     SelectionModel selectionModel = editor.getSelectionModel();
     if (!selectionModel.hasSelection()) {
-      final PsiExpression iterableExpression = getIterableExpression(editor, file);
+      PsiExpression iterableExpression = getIterableExpression(editor, file);
       LOG.assertTrue(iterableExpression != null);
       TextRange textRange = iterableExpression.getTextRange();
       selectionModel.setSelection(textRange.getStartOffset(), textRange.getEndOffset());

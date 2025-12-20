@@ -38,10 +38,10 @@ public class PointlessIndexOfComparisonInspection extends BaseInspection {
     @Override
     @Nonnull
     protected String buildErrorString(Object... infos) {
-        final PsiBinaryExpression expression = (PsiBinaryExpression) infos[0];
-        final PsiExpression lhs = expression.getLOperand();
-        final PsiJavaToken sign = expression.getOperationSign();
-        final boolean value;
+        PsiBinaryExpression expression = (PsiBinaryExpression) infos[0];
+        PsiExpression lhs = expression.getLOperand();
+        PsiJavaToken sign = expression.getOperationSign();
+        boolean value;
         if (lhs instanceof PsiMethodCallExpression) {
             value = createContainsExpressionValue(sign, false);
         }
@@ -59,7 +59,7 @@ public class PointlessIndexOfComparisonInspection extends BaseInspection {
     static boolean createContainsExpressionValue(
         @Nonnull PsiJavaToken sign, boolean flipped
     ) {
-        final IElementType tokenType = sign.getTokenType();
+        IElementType tokenType = sign.getTokenType();
         if (tokenType.equals(JavaTokenType.EQEQ)) {
             return false;
         }
@@ -94,22 +94,22 @@ public class PointlessIndexOfComparisonInspection extends BaseInspection {
             PsiBinaryExpression expression
         ) {
             super.visitBinaryExpression(expression);
-            final PsiExpression rhs = expression.getROperand();
+            PsiExpression rhs = expression.getROperand();
             if (rhs == null) {
                 return;
             }
             if (!ComparisonUtils.isComparison(expression)) {
                 return;
             }
-            final PsiExpression lhs = expression.getLOperand();
+            PsiExpression lhs = expression.getLOperand();
             if (lhs instanceof PsiMethodCallExpression) {
-                final PsiJavaToken sign = expression.getOperationSign();
+                PsiJavaToken sign = expression.getOperationSign();
                 if (isPointLess(lhs, sign, rhs, false)) {
                     registerError(expression, expression);
                 }
             }
             else if (rhs instanceof PsiMethodCallExpression) {
-                final PsiJavaToken sign = expression.getOperationSign();
+                PsiJavaToken sign = expression.getOperationSign();
                 if (isPointLess(rhs, sign, lhs, true)) {
                     registerError(expression, expression);
                 }
@@ -120,19 +120,19 @@ public class PointlessIndexOfComparisonInspection extends BaseInspection {
             PsiExpression lhs, PsiJavaToken sign,
             PsiExpression rhs, boolean flipped
         ) {
-            final PsiMethodCallExpression callExpression =
+            PsiMethodCallExpression callExpression =
                 (PsiMethodCallExpression) lhs;
             if (!isIndexOfCall(callExpression)) {
                 return false;
             }
-            final Object object =
+            Object object =
                 ExpressionUtils.computeConstantExpression(rhs);
             if (!(object instanceof Integer)) {
                 return false;
             }
-            final Integer integer = (Integer) object;
-            final int constant = integer.intValue();
-            final IElementType tokenType = sign.getTokenType();
+            Integer integer = (Integer) object;
+            int constant = integer.intValue();
+            IElementType tokenType = sign.getTokenType();
             if (tokenType == null) {
                 return false;
             }
@@ -168,9 +168,9 @@ public class PointlessIndexOfComparisonInspection extends BaseInspection {
         private static boolean isIndexOfCall(
             @Nonnull PsiMethodCallExpression expression
         ) {
-            final PsiReferenceExpression methodExpression =
+            PsiReferenceExpression methodExpression =
                 expression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            String methodName = methodExpression.getReferenceName();
             return HardcodedMethodConstants.INDEX_OF.equals(methodName);
         }
     }

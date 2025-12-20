@@ -66,13 +66,13 @@ class VariableIsModifiedVisitor extends JavaRecursiveElementVisitor {
     if (!isStringBufferUpdate(call)) {
       return;
     }
-    final PsiReferenceExpression methodExpression = call.getMethodExpression();
-    final PsiExpression qualifier = methodExpression.getQualifierExpression();
+    PsiReferenceExpression methodExpression = call.getMethodExpression();
+    PsiExpression qualifier = methodExpression.getQualifierExpression();
     if (!(qualifier instanceof PsiReferenceExpression)) {
       return;
     }
-    final PsiReferenceExpression reference = (PsiReferenceExpression)qualifier;
-    final PsiElement referent = reference.resolve();
+    PsiReferenceExpression reference = (PsiReferenceExpression)qualifier;
+    PsiElement referent = reference.resolve();
     if (variable.equals(referent)) {
       modified = true;
     }
@@ -82,8 +82,8 @@ class VariableIsModifiedVisitor extends JavaRecursiveElementVisitor {
     if (methodCallExpression == null) {
       return false;
     }
-    final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-    final String methodName = methodExpression.getReferenceName();
+    PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+    String methodName = methodExpression.getReferenceName();
     return updateNames.contains(methodName);
   }
 

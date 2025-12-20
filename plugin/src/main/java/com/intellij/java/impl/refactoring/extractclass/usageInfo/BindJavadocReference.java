@@ -33,21 +33,21 @@ public class BindJavadocReference extends FixableUsageInfo {
   private final String myQualifiedName;
   private final String myFieldName;
 
-  public BindJavadocReference(final PsiElement element, final String qualifiedName, final String fieldName) {
+  public BindJavadocReference(PsiElement element, String qualifiedName, String fieldName) {
     super(element);
     myQualifiedName = qualifiedName;
     myFieldName = fieldName;
   }
 
   public void fixUsage() throws IncorrectOperationException {
-    final PsiElement element = getElement();
+    PsiElement element = getElement();
     if (element != null && element.isValid()) {
-      final Project project = element.getProject();
-      final PsiClass psiClass = JavaPsiFacade.getInstance(project).findClass(myQualifiedName, GlobalSearchScope.projectScope(project));
+      Project project = element.getProject();
+      PsiClass psiClass = JavaPsiFacade.getInstance(project).findClass(myQualifiedName, GlobalSearchScope.projectScope(project));
       if (psiClass != null) {
-        final PsiField field = psiClass.findFieldByName(myFieldName, false);
+        PsiField field = psiClass.findFieldByName(myFieldName, false);
         if (field != null) {
-          final PsiReference reference = element.getReference();
+          PsiReference reference = element.getReference();
           if (reference != null) {
             reference.bindToElement(field);
           }

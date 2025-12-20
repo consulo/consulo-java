@@ -51,7 +51,7 @@ public abstract class ManagingContentRootsTest extends IdeaTestCase {
 
   public void testCreationOfContentRootWithUrl() throws IOException {
     VirtualFile root = dir.createChildDirectory(null, "root");
-    final String url = root.getUrl();
+    String url = root.getUrl();
     root.delete(null);
 
     addContentRoot(url);
@@ -75,7 +75,7 @@ public abstract class ManagingContentRootsTest extends IdeaTestCase {
 
   public void testCreationOfContentRootWithUrlWhenFileExists() throws IOException {
     VirtualFile root = dir.createChildDirectory(null, "root");
-    final String url = root.getUrl();
+    String url = root.getUrl();
 
     addContentRoot(url);
 

@@ -53,11 +53,11 @@ public class SimpleDateFormatWithoutLocaleInspection extends BaseInspection {
             if (!ExpressionUtils.hasType(expression, "java.text.SimpleDateFormat")) {
                 return;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpressionList argumentList = expression.getArgumentList();
             if (argumentList == null) {
                 return;
             }
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpression[] arguments = argumentList.getExpressions();
             for (PsiExpression argument : arguments) {
                 if (ExpressionUtils.hasType(argument, "java.util.Locale")) {
                     return;

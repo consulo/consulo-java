@@ -31,14 +31,14 @@ class SimplifyVariablePredicate implements PsiElementPredicate {
     if (ErrorUtil.containsError(element)) {
       return false;
     }
-    final PsiVariable var = (PsiVariable)element;
-    final PsiTypeElement typeElement = var.getTypeElement();
+    PsiVariable var = (PsiVariable)element;
+    PsiTypeElement typeElement = var.getTypeElement();
     if (typeElement == null) {
       return false; // Could be true for enum constants.
     }
 
-    final PsiType elementType = typeElement.getType();
-    final PsiType type = var.getType();
+    PsiType elementType = typeElement.getType();
+    PsiType type = var.getType();
     return elementType.getArrayDimensions() != type.getArrayDimensions();
   }
 }

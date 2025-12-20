@@ -62,7 +62,7 @@ public class StaticCollectionInspection extends BaseInspection {
             if (!field.hasModifierProperty(PsiModifier.STATIC)) {
                 return;
             }
-            final PsiType type = field.getType();
+            PsiType type = field.getType();
             if (!CollectionUtils.isCollectionClassOrInterface(type)) {
                 return;
             }

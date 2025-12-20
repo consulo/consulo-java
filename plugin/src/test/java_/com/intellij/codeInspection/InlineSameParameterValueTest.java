@@ -24,17 +24,17 @@ public abstract class InlineSameParameterValueTest extends LightQuickFixTestCase
   }
 
   @Override
-  protected void doAction(final String text, final boolean actionShouldBeAvailable, final String testFullPath, final String testName)
+  protected void doAction(String text, boolean actionShouldBeAvailable, String testFullPath, String testName)
     throws Exception {
-    final LocalQuickFix fix = (LocalQuickFix)new SameParameterValueInspection().getQuickFix(text);
+    LocalQuickFix fix = (LocalQuickFix)new SameParameterValueInspection().getQuickFix(text);
     assert fix != null;
-    final int offset = getEditor().getCaretModel().getOffset();
-    final PsiElement psiElement = getFile().findElementAt(offset);
+    int offset = getEditor().getCaretModel().getOffset();
+    PsiElement psiElement = getFile().findElementAt(offset);
     assert psiElement != null;
-    final ProblemDescriptor descriptor = InspectionManager.getInstance(getProject())
+    ProblemDescriptor descriptor = InspectionManager.getInstance(getProject())
       .createProblemDescriptor(psiElement, "", fix, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, true);
     fix.applyFix(getProject(), descriptor);
-    final String expectedFilePath = getBasePath() + "/after" + testName;
+    String expectedFilePath = getBasePath() + "/after" + testName;
     checkResultByFile("In file :" + expectedFilePath, expectedFilePath, false);
   }
 

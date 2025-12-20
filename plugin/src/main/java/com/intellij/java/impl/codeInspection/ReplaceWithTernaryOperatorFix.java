@@ -69,9 +69,9 @@ public class ReplaceWithTernaryOperatorFix implements LocalQuickFix {
         if (!(element instanceof PsiExpression)) {
             return;
         }
-        final PsiExpression expression = (PsiExpression) element;
+        PsiExpression expression = (PsiExpression) element;
 
-        final PsiFile file = expression.getContainingFile();
+        PsiFile file = expression.getContainingFile();
         PsiConditionalExpression conditionalExpression =
             replaceWithConditionalExpression(project, myText + "!=null", expression, suggestDefaultValue(expression));
 
@@ -101,15 +101,15 @@ public class ReplaceWithTernaryOperatorFix implements LocalQuickFix {
         @Nonnull PsiExpression expression,
         @Nonnull String defaultValue
     ) {
-        final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
+        PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
 
-        final PsiElement parent = expression.getParent();
-        final PsiConditionalExpression conditionalExpression = (PsiConditionalExpression) factory.createExpressionFromText(
+        PsiElement parent = expression.getParent();
+        PsiConditionalExpression conditionalExpression = (PsiConditionalExpression) factory.createExpressionFromText(
             condition + " ? " + expression.getText() + " : " + defaultValue,
             parent
         );
 
-        final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+        CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
         return (PsiConditionalExpression) expression.replace(codeStyleManager.reformat(conditionalExpression));
     }
 
@@ -152,7 +152,7 @@ public class ReplaceWithTernaryOperatorFix implements LocalQuickFix {
                 return;
             }
             String text = parameter.getName();
-            final PsiFile file = expression.getContainingFile();
+            PsiFile file = expression.getContainingFile();
             PsiConditionalExpression conditionalExpression =
                 replaceWithConditionalExpression(project, text + "!=null", expression, suggestDefaultValue(expression));
 

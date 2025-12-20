@@ -38,11 +38,11 @@ import java.util.List;
 
 public class MemberSelectionTable extends AbstractMemberSelectionTable<PsiMember, MemberInfo> {
 
-  public MemberSelectionTable(final List<MemberInfo> memberInfos, String abstractColumnHeader) {
+  public MemberSelectionTable(List<MemberInfo> memberInfos, String abstractColumnHeader) {
     this(memberInfos, null, abstractColumnHeader);
   }
 
-  public MemberSelectionTable(final List<MemberInfo> memberInfos, MemberInfoModel<PsiMember, MemberInfo> memberInfoModel, String abstractColumnHeader) {
+  public MemberSelectionTable(List<MemberInfo> memberInfos, MemberInfoModel<PsiMember, MemberInfo> memberInfoModel, String abstractColumnHeader) {
     super(memberInfos, memberInfoModel, abstractColumnHeader);
   }
 
@@ -54,7 +54,7 @@ public class MemberSelectionTable extends AbstractMemberSelectionTable<PsiMember
 
     PsiMethod method = (PsiMethod)memberInfo.getMember();
     if (method.hasModifierProperty(PsiModifier.ABSTRACT)) {
-      final Boolean fixedAbstract = myMemberInfoModel.isFixedAbstract(memberInfo);
+      Boolean fixedAbstract = myMemberInfoModel.isFixedAbstract(memberInfo);
       if (fixedAbstract != null) return fixedAbstract;
     }
 

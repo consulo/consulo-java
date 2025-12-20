@@ -59,13 +59,13 @@ class CyclomaticComplexityVisitor extends JavaRecursiveElementVisitor {
   @Override
   public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
     super.visitSwitchStatement(statement);
-    final PsiCodeBlock body = statement.getBody();
+    PsiCodeBlock body = statement.getBody();
     if (body == null) {
       return;
     }
-    final PsiStatement[] statements = body.getStatements();
+    PsiStatement[] statements = body.getStatements();
     boolean pendingLabel = false;
-    for (final PsiStatement child : statements) {
+    for (PsiStatement child : statements) {
       if (child instanceof PsiSwitchLabelStatement) {
         if (!pendingLabel) {
           m_complexity++;

@@ -57,18 +57,18 @@ public abstract class ConstructorCountInspection extends ClassMetricInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final JLabel label = new JLabel(getConfigurationLabel());
-        final JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
-        final CheckBox includeCheckBox = new CheckBox(
+        JLabel label = new JLabel(getConfigurationLabel());
+        JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
+        CheckBox includeCheckBox = new CheckBox(
             InspectionGadgetsLocalize.tooManyConstructorsIgnoreDeprecatedOption().get(),
             this,
             "ignoreDeprecatedConstructors"
         );
 
-        final GridBag bag = new GridBag();
+        GridBag bag = new GridBag();
         bag.setDefaultInsets(0, 0, 0, UIUtil.DEFAULT_HGAP);
         bag.setDefaultAnchor(GridBagConstraints.WEST);
-        final JPanel panel = new JPanel(new GridBagLayout());
+        JPanel panel = new JPanel(new GridBagLayout());
         panel.add(label, bag.nextLine().next());
         panel.add(valueField, bag.next().weightx(1.0));
         panel.add(includeCheckBox, bag.nextLine().next().coverLine().weighty(1.0).anchor(GridBagConstraints.NORTHWEST));
@@ -77,7 +77,7 @@ public abstract class ConstructorCountInspection extends ClassMetricInspection {
 
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final Integer count = (Integer) infos[0];
+        Integer count = (Integer) infos[0];
         return InspectionGadgetsLocalize.tooManyConstructorsProblemDescriptor(count).get();
     }
 
@@ -89,7 +89,7 @@ public abstract class ConstructorCountInspection extends ClassMetricInspection {
 
         @Override
         public void visitClass(@Nonnull PsiClass aClass) {
-            final int constructorCount = calculateTotalConstructorCount(aClass);
+            int constructorCount = calculateTotalConstructorCount(aClass);
             if (constructorCount <= getLimit()) {
                 return;
             }
@@ -97,7 +97,7 @@ public abstract class ConstructorCountInspection extends ClassMetricInspection {
         }
 
         private int calculateTotalConstructorCount(PsiClass aClass) {
-            final PsiMethod[] constructors = aClass.getConstructors();
+            PsiMethod[] constructors = aClass.getConstructors();
             if (!ignoreDeprecatedConstructors) {
                 return constructors.length;
             }

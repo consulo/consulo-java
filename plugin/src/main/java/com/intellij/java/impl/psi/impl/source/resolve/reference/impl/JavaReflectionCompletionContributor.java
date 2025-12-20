@@ -82,7 +82,7 @@ public class JavaReflectionCompletionContributor extends CompletionContributor {
       return;
     }
 
-    final PsiElement position = parameters.getPosition();
+    PsiElement position = parameters.getPosition();
     if (!isInJavaContext(position)) {
       return;
     }
@@ -168,7 +168,7 @@ public class JavaReflectionCompletionContributor extends CompletionContributor {
     PsiElement newElement = PsiUtilCore.getElementAtOffset(context.getFile(), context.getStartOffset());
     PsiExpressionList parameterList = PsiTreeUtil.getParentOfType(newElement, PsiExpressionList.class);
     if (parameterList != null) {
-      final TextRange range = parameterList.getTextRange();
+      TextRange range = parameterList.getTextRange();
       context.getDocument().replaceString(range.getStartOffset(), range.getEndOffset(), "(" + text + ")");
       context.commitDocument();
       shortenArgumentsClassReferences(context);

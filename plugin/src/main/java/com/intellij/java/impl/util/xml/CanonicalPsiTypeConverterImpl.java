@@ -48,7 +48,7 @@ public class CanonicalPsiTypeConverterImpl extends CanonicalPsiTypeConverter imp
   private static final String ARRAY_PREFIX = "[L";
   private static final JavaClassReferenceProvider CLASS_REFERENCE_PROVIDER = new JavaClassReferenceProvider();
 
-  public PsiType fromString(final String s, final ConvertContext context) {
+  public PsiType fromString(String s, ConvertContext context) {
     if (s == null) return null;
     try {
       return JavaPsiFacade.getInstance(context.getFile().getProject()).getElementFactory().createTypeFromText(s.replace('$', '.'), null);
@@ -57,17 +57,17 @@ public class CanonicalPsiTypeConverterImpl extends CanonicalPsiTypeConverter imp
     }
   }
 
-  public String toString(final PsiType t, final ConvertContext context) {
+  public String toString(PsiType t, ConvertContext context) {
     return t == null ? null : t.getCanonicalText();
   }
 
   @Nonnull
   public PsiReference[] createReferences(final GenericDomValue<PsiType> genericDomValue, final PsiElement element, ConvertContext context) {
-    final String str = genericDomValue.getStringValue();
+    String str = genericDomValue.getStringValue();
     if (str == null) {
       return PsiReference.EMPTY_ARRAY;
     }
-    final ElementManipulator<PsiElement> manipulator = ElementManipulators.getManipulator(element);
+    ElementManipulator<PsiElement> manipulator = ElementManipulators.getManipulator(element);
     assert manipulator != null;
     String trimmed = str.trim();
     int offset = manipulator.getRangeInElement(element).getStartOffset() + str.indexOf(trimmed);
@@ -88,7 +88,7 @@ public class CanonicalPsiTypeConverterImpl extends CanonicalPsiTypeConverter imp
           }
 
           @Nonnull
-          public JavaResolveResult advancedResolve(final boolean incompleteCode) {
+          public JavaResolveResult advancedResolve(boolean incompleteCode) {
             PsiType type = genericDomValue.getValue();
             if (type != null) {
               type = type.getDeepComponentType();
@@ -100,7 +100,7 @@ public class CanonicalPsiTypeConverterImpl extends CanonicalPsiTypeConverter imp
             return super.advancedResolve(incompleteCode);
           }
 
-          public void processVariants(final PsiScopeProcessor processor) {
+          public void processVariants(PsiScopeProcessor processor) {
             if (processor instanceof JavaCompletionProcessor) {
               ((JavaCompletionProcessor) processor).setCompletionElements(getVariants());
             } else {
@@ -110,7 +110,7 @@ public class CanonicalPsiTypeConverterImpl extends CanonicalPsiTypeConverter imp
 
           @Nonnull
           public Object[] getVariants() {
-            final Object[] variants = super.getVariants();
+            Object[] variants = super.getVariants();
             if (myIndex == 0) {
               return ArrayUtil.mergeArrays(variants, PRIMITIVES);
             }

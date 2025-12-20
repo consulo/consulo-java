@@ -36,10 +36,10 @@ public class SPIAnnotator implements Annotator {
   @Override
   @RequiredReadAction
   public void annotate(@Nonnull PsiElement element, @Nonnull AnnotationHolder holder) {
-    final VirtualFile file = PsiUtilCore.getVirtualFile(element);
+    VirtualFile file = PsiUtilCore.getVirtualFile(element);
     if (file != null) {
-      final String serviceProviderName = file.getName();
-      final PsiClass psiClass =
+      String serviceProviderName = file.getName();
+      PsiClass psiClass =
         ClassUtil.findPsiClass(element.getManager(), serviceProviderName, null, true, element.getContainingFile().getResolveScope());
       if (element instanceof SPIFile) {
         if (psiClass == null) {
@@ -49,7 +49,7 @@ public class SPIAnnotator implements Annotator {
         }
       }
       else if (element instanceof SPIClassProviderReferenceElement) {
-        final PsiElement resolve = ((SPIClassProviderReferenceElement)element).resolve();
+        PsiElement resolve = ((SPIClassProviderReferenceElement)element).resolve();
         if (resolve == null) {
           holder.newAnnotation(HighlightSeverity.ERROR, "Cannot resolve symbol " + element.getText()).range(element).create();
         }

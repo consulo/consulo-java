@@ -51,17 +51,17 @@ public abstract class CopyTest extends CodeInsightTestCase {
   public void testMultipleClasses() throws Exception {
     String rootBefore = getRoot();
     PsiTestUtil.removeAllRoots(myModule, IdeaTestUtil.getMockJdk17());
-    final VirtualFile root = PsiTestUtil.createTestProjectStructure(myProject, myModule, rootBefore, myFilesToDelete);
-    final PsiClass aClass = myJavaFacade.findClass("pack1.Klass");
+    VirtualFile root = PsiTestUtil.createTestProjectStructure(myProject, myModule, rootBefore, myFilesToDelete);
+    PsiClass aClass = myJavaFacade.findClass("pack1.Klass");
     assertNotNull(aClass);
 
-    final PsiFile containingFile = aClass.getContainingFile();
+    PsiFile containingFile = aClass.getContainingFile();
 
     assertTrue(CopyHandler.canCopy(new PsiElement[]{containingFile}));
     assertFalse(CopyHandler.canClone(new PsiElement[]{containingFile}));
 
     PsiJavaPackage pack2 = myJavaFacade.findPackage("pack2");
-    final PsiDirectory targetDirectory = pack2.getDirectories()[0];
+    PsiDirectory targetDirectory = pack2.getDirectories()[0];
     CopyHandler.doCopy(new PsiElement[]{containingFile}, targetDirectory);
 
     VirtualFile fileAfter = root.findFileByRelativePath("pack2/Klass.java");
@@ -73,21 +73,21 @@ public abstract class CopyTest extends CodeInsightTestCase {
   public void testMultipleFiles() throws Exception {
     String rootBefore = getRoot();
     PsiTestUtil.removeAllRoots(myModule, IdeaTestUtil.getMockJdk17());
-    final VirtualFile root = PsiTestUtil.createTestProjectStructure(myProject, myModule, rootBefore, myFilesToDelete);
+    VirtualFile root = PsiTestUtil.createTestProjectStructure(myProject, myModule, rootBefore, myFilesToDelete);
 
-    final VirtualFile first = root.findFileByRelativePath("from/1.txt");
+    VirtualFile first = root.findFileByRelativePath("from/1.txt");
     assertNotNull(first);
-    final VirtualFile second = root.findFileByRelativePath("from/2.txt");
+    VirtualFile second = root.findFileByRelativePath("from/2.txt");
     assertNotNull(second);
 
-    final PsiFile firstPsi = myPsiManager.findFile(first);
-    final PsiFile secondPsi = myPsiManager.findFile(second);
+    PsiFile firstPsi = myPsiManager.findFile(first);
+    PsiFile secondPsi = myPsiManager.findFile(second);
 
     assertTrue(CopyHandler.canCopy(new PsiElement[]{firstPsi, secondPsi}));
 
-    final VirtualFile toDir = root.findChild("to");
+    VirtualFile toDir = root.findChild("to");
     assertNotNull(toDir);
-    final PsiDirectory targetDirectory = myPsiManager.findDirectory(toDir);
+    PsiDirectory targetDirectory = myPsiManager.findDirectory(toDir);
 
     CopyHandler.doCopy(new PsiElement[]{firstPsi, secondPsi}, targetDirectory);
 
@@ -98,22 +98,22 @@ public abstract class CopyTest extends CodeInsightTestCase {
   public void testPackageInfo() throws Exception {
     String rootBefore = getRoot();
     PsiTestUtil.removeAllRoots(myModule, IdeaTestUtil.getMockJdk17());
-    final VirtualFile root = PsiTestUtil.createTestProjectStructure(myProject, myModule, rootBefore, myFilesToDelete);
+    VirtualFile root = PsiTestUtil.createTestProjectStructure(myProject, myModule, rootBefore, myFilesToDelete);
 
-    final VirtualFile first = root.findFileByRelativePath("from/package-info.java");
+    VirtualFile first = root.findFileByRelativePath("from/package-info.java");
     assertNotNull(first);
     
-    final PsiFile firstPsi = myPsiManager.findFile(first);
+    PsiFile firstPsi = myPsiManager.findFile(first);
     
     assertTrue(CopyHandler.canCopy(new PsiElement[]{firstPsi}));
 
-    final VirtualFile toDir = root.findChild("to");
+    VirtualFile toDir = root.findChild("to");
     assertNotNull(toDir);
-    final PsiDirectory targetDirectory = myPsiManager.findDirectory(toDir);
+    PsiDirectory targetDirectory = myPsiManager.findDirectory(toDir);
 
     CopyHandler.doCopy(new PsiElement[]{firstPsi}, targetDirectory);
 
-    final VirtualFile dest = root.findFileByRelativePath("to/package-info.java");
+    VirtualFile dest = root.findFileByRelativePath("to/package-info.java");
     assertNotNull(dest);
 
     VirtualFile fileExpected = root.findFileByRelativePath("to/package-info.expected.java");

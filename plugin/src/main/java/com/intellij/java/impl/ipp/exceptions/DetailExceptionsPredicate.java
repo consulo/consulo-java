@@ -31,7 +31,7 @@ class DetailExceptionsPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiJavaToken)) {
       return false;
     }
-    final IElementType tokenType = ((PsiJavaToken)element).getTokenType();
+    IElementType tokenType = ((PsiJavaToken)element).getTokenType();
     if (!JavaTokenType.TRY_KEYWORD.equals(tokenType) && !JavaTokenType.CATCH_KEYWORD.equals(tokenType)) {
       return false;
     }
@@ -42,18 +42,18 @@ class DetailExceptionsPredicate implements PsiElementPredicate {
     if (!(parent instanceof PsiTryStatement)) {
       return false;
     }
-    final PsiTryStatement tryStatement = (PsiTryStatement)parent;
+    PsiTryStatement tryStatement = (PsiTryStatement)parent;
     if (ErrorUtil.containsError(tryStatement)) {
       return false;
     }
-    final Set<PsiType> exceptionsThrown = new HashSet<PsiType>(10);
-    final PsiCodeBlock tryBlock = tryStatement.getTryBlock();
-    final PsiResourceList resourceList = tryStatement.getResourceList();
+    Set<PsiType> exceptionsThrown = new HashSet<PsiType>(10);
+    PsiCodeBlock tryBlock = tryStatement.getTryBlock();
+    PsiResourceList resourceList = tryStatement.getResourceList();
     if (resourceList != null) {
       ExceptionUtils.calculateExceptionsThrownForResourceList(resourceList, exceptionsThrown);
     }
     ExceptionUtils.calculateExceptionsThrownForCodeBlock(tryBlock, exceptionsThrown);
-    final Set<PsiType> exceptionsCaught = ExceptionUtils.getExceptionTypesHandled(tryStatement);
+    Set<PsiType> exceptionsCaught = ExceptionUtils.getExceptionTypesHandled(tryStatement);
     for (PsiType typeThrown : exceptionsThrown) {
       if (exceptionsCaught.contains(typeThrown)) {
         continue;

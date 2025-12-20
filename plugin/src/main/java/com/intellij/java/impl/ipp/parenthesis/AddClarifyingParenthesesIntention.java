@@ -49,15 +49,15 @@ public class AddClarifyingParenthesesIntention extends Intention {
     @Override
     protected void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiExpression expression = getTopLevelExpression(element);
+        PsiExpression expression = getTopLevelExpression(element);
         if (expression == null) {
             return;
         }
-        final StringBuilder newExpression = createReplacementText(expression, new StringBuilder());
-        final PsiElement parent = expression.getParent();
+        StringBuilder newExpression = createReplacementText(expression, new StringBuilder());
+        PsiElement parent = expression.getParent();
         if (parent instanceof PsiConditionalExpression) {
-            final PsiConditionalExpression conditionalExpression = (PsiConditionalExpression) parent;
-            final PsiExpression condition = conditionalExpression.getCondition();
+            PsiConditionalExpression conditionalExpression = (PsiConditionalExpression) parent;
+            PsiExpression condition = conditionalExpression.getCondition();
             if (expression == condition) {
                 replaceExpression('(' + newExpression.toString() + ')', expression);
                 return;
@@ -82,24 +82,24 @@ public class AddClarifyingParenthesesIntention extends Intention {
 
     private static StringBuilder createReplacementText(@Nullable PsiExpression expression, StringBuilder out) {
         if (expression instanceof PsiPolyadicExpression) {
-            final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
-            final IElementType tokenType = polyadicExpression.getOperationTokenType();
-            final PsiElement parent = expression.getParent();
+            PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
+            IElementType tokenType = polyadicExpression.getOperationTokenType();
+            PsiElement parent = expression.getParent();
             if (parent instanceof PsiPolyadicExpression) {
-                final PsiPolyadicExpression parentPolyadicExpression = (PsiPolyadicExpression) parent;
-                final IElementType parentOperationSign = parentPolyadicExpression.getOperationTokenType();
-                final boolean parentheses = !tokenType.equals(parentOperationSign);
+                PsiPolyadicExpression parentPolyadicExpression = (PsiPolyadicExpression) parent;
+                IElementType parentOperationSign = parentPolyadicExpression.getOperationTokenType();
+                boolean parentheses = !tokenType.equals(parentOperationSign);
                 appendText(polyadicExpression, parentheses, out);
             }
             else {
-                final boolean parentheses = parent instanceof PsiConditionalExpression || parent instanceof PsiInstanceOfExpression;
+                boolean parentheses = parent instanceof PsiConditionalExpression || parent instanceof PsiInstanceOfExpression;
                 appendText(polyadicExpression, parentheses, out);
             }
         }
         else if (expression instanceof PsiParenthesizedExpression) {
-            final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) expression;
-            final PsiExpression unwrappedExpression = parenthesizedExpression.getExpression();
-            final PsiElement parent = expression.getParent();
+            PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) expression;
+            PsiExpression unwrappedExpression = parenthesizedExpression.getExpression();
+            PsiElement parent = expression.getParent();
             if (!(parent instanceof PsiParenthesizedExpression)) {
                 out.append('(');
                 createReplacementText(unwrappedExpression, out);
@@ -110,21 +110,21 @@ public class AddClarifyingParenthesesIntention extends Intention {
             }
         }
         else if (expression instanceof PsiInstanceOfExpression) {
-            final PsiInstanceOfExpression instanceofExpression = (PsiInstanceOfExpression) expression;
-            final PsiElement parent = expression.getParent();
-            final boolean parentheses = mightBeConfusingExpression(parent);
+            PsiInstanceOfExpression instanceofExpression = (PsiInstanceOfExpression) expression;
+            PsiElement parent = expression.getParent();
+            boolean parentheses = mightBeConfusingExpression(parent);
             appendText(instanceofExpression, parentheses, out);
         }
         else if (expression instanceof PsiConditionalExpression) {
-            final PsiConditionalExpression conditionalExpression = (PsiConditionalExpression) expression;
-            final PsiElement parent = expression.getParent();
-            final boolean parentheses = mightBeConfusingExpression(parent);
+            PsiConditionalExpression conditionalExpression = (PsiConditionalExpression) expression;
+            PsiElement parent = expression.getParent();
+            boolean parentheses = mightBeConfusingExpression(parent);
             appendText(conditionalExpression, parentheses, out);
         }
         else if (expression instanceof PsiAssignmentExpression) {
-            final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) expression;
-            final PsiElement parent = expression.getParent();
-            final boolean parentheses = mightBeConfusingExpression(parent) && !isSimpleAssignment(assignmentExpression, parent);
+            PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) expression;
+            PsiElement parent = expression.getParent();
+            boolean parentheses = mightBeConfusingExpression(parent) && !isSimpleAssignment(assignmentExpression, parent);
             appendText(assignmentExpression, parentheses, out);
         }
         else if (expression != null) {
@@ -142,9 +142,9 @@ public class AddClarifyingParenthesesIntention extends Intention {
         if (!(parent instanceof PsiAssignmentExpression)) {
             return false;
         }
-        final PsiAssignmentExpression parentAssignmentExpression = (PsiAssignmentExpression) parent;
-        final IElementType parentTokenType = parentAssignmentExpression.getOperationTokenType();
-        final IElementType tokenType = assignmentExpression.getOperationTokenType();
+        PsiAssignmentExpression parentAssignmentExpression = (PsiAssignmentExpression) parent;
+        IElementType parentTokenType = parentAssignmentExpression.getOperationTokenType();
+        IElementType tokenType = assignmentExpression.getOperationTokenType();
         return parentTokenType.equals(tokenType);
     }
 
@@ -152,11 +152,11 @@ public class AddClarifyingParenthesesIntention extends Intention {
         if (parentheses) {
             out.append('(');
         }
-        final PsiExpression lhs = assignmentExpression.getLExpression();
+        PsiExpression lhs = assignmentExpression.getLExpression();
         out.append(lhs.getText());
-        final PsiJavaToken sign = assignmentExpression.getOperationSign();
+        PsiJavaToken sign = assignmentExpression.getOperationSign();
         out.append(sign.getText());
-        final PsiExpression rhs = assignmentExpression.getRExpression();
+        PsiExpression rhs = assignmentExpression.getRExpression();
         createReplacementText(rhs, out);
         if (parentheses) {
             out.append(')');
@@ -167,10 +167,10 @@ public class AddClarifyingParenthesesIntention extends Intention {
         if (parentheses) {
             out.append('(');
         }
-        final PsiExpression operand = instanceofExpression.getOperand();
+        PsiExpression operand = instanceofExpression.getOperand();
         createReplacementText(operand, out);
         out.append(" instanceof ");
-        final PsiTypeElement checkType = instanceofExpression.getCheckType();
+        PsiTypeElement checkType = instanceofExpression.getCheckType();
         if (checkType != null) {
             out.append(checkType.getText());
         }
@@ -183,13 +183,13 @@ public class AddClarifyingParenthesesIntention extends Intention {
         if (parentheses) {
             out.append('(');
         }
-        final PsiExpression condition = conditionalExpression.getCondition();
+        PsiExpression condition = conditionalExpression.getCondition();
         createReplacementText(condition, out);
         out.append('?');
-        final PsiExpression thenExpression = conditionalExpression.getThenExpression();
+        PsiExpression thenExpression = conditionalExpression.getThenExpression();
         createReplacementText(thenExpression, out);
         out.append(':');
-        final PsiExpression elseExpression = conditionalExpression.getElseExpression();
+        PsiExpression elseExpression = conditionalExpression.getElseExpression();
         createReplacementText(elseExpression, out);
         if (parentheses) {
             out.append(')');
@@ -200,7 +200,7 @@ public class AddClarifyingParenthesesIntention extends Intention {
         if (parentheses) {
             out.append('(');
         }
-        final PsiExpression[] operands = polyadicExpression.getOperands();
+        PsiExpression[] operands = polyadicExpression.getOperands();
         for (PsiExpression operand : operands) {
             if (operand == null) {
                 continue;
@@ -211,14 +211,14 @@ public class AddClarifyingParenthesesIntention extends Intention {
             if (operands.length == 1) {
                 createReplacementText(operand, out);
             }
-            final PsiJavaToken token = polyadicExpression.getTokenBeforeOperand(operand);
+            PsiJavaToken token = polyadicExpression.getTokenBeforeOperand(operand);
             if (token != null) {
-                final PsiElement beforeToken = token.getPrevSibling();
+                PsiElement beforeToken = token.getPrevSibling();
                 if (beforeToken instanceof PsiWhiteSpace) {
                     out.append(beforeToken.getText());
                 }
                 out.append(token.getText());
-                final PsiElement afterToken = token.getNextSibling();
+                PsiElement afterToken = token.getNextSibling();
                 if (afterToken instanceof PsiWhiteSpace) {
                     out.append(afterToken.getText());
                 }

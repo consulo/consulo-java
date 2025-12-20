@@ -73,30 +73,30 @@ public class StaticGuardedByInstanceInspection extends BaseJavaLocalInspectionTo
             if (!JCiPUtil.isGuardedByAnnotation(annotation)) {
                 return;
             }
-            final PsiMember member = PsiTreeUtil.getParentOfType(annotation, PsiMember.class);
+            PsiMember member = PsiTreeUtil.getParentOfType(annotation, PsiMember.class);
             if (member == null) {
                 return;
             }
             if (!member.hasModifierProperty(PsiModifier.STATIC)) {
                 return;
             }
-            final String guardValue = JCiPUtil.getGuardValue(annotation);
+            String guardValue = JCiPUtil.getGuardValue(annotation);
             if (guardValue == null) {
                 return;
             }
 
-            final PsiAnnotationMemberValue guardRef = annotation.findAttributeValue("value");
+            PsiAnnotationMemberValue guardRef = annotation.findAttributeValue("value");
             if (guardRef == null) {
                 return;
             }
             if ("this".equals(guardValue)) {
                 registerError(guardRef);
             }
-            final PsiClass containingClass = PsiTreeUtil.getParentOfType(annotation, PsiClass.class);
+            PsiClass containingClass = PsiTreeUtil.getParentOfType(annotation, PsiClass.class);
             if (containingClass == null) {
                 return;
             }
-            final PsiField guardField = containingClass.findFieldByName(guardValue, true);
+            PsiField guardField = containingClass.findFieldByName(guardValue, true);
             if (guardField == null) {
                 return;
             }
@@ -112,23 +112,23 @@ public class StaticGuardedByInstanceInspection extends BaseJavaLocalInspectionTo
             if (!JCiPUtil.isGuardedByTag(psiDocTag)) {
                 return;
             }
-            final PsiMember member = PsiTreeUtil.getParentOfType(psiDocTag, PsiMember.class);
+            PsiMember member = PsiTreeUtil.getParentOfType(psiDocTag, PsiMember.class);
             if (member == null) {
                 return;
             }
             if (!member.hasModifierProperty(PsiModifier.STATIC)) {
                 return;
             }
-            final String guardValue = JCiPUtil.getGuardValue(psiDocTag);
+            String guardValue = JCiPUtil.getGuardValue(psiDocTag);
 
             if ("this".equals(guardValue)) {
                 registerError(psiDocTag);
             }
-            final PsiClass containingClass = PsiTreeUtil.getParentOfType(psiDocTag, PsiClass.class);
+            PsiClass containingClass = PsiTreeUtil.getParentOfType(psiDocTag, PsiClass.class);
             if (containingClass == null) {
                 return;
             }
-            final PsiField guardField = containingClass.findFieldByName(guardValue, true);
+            PsiField guardField = containingClass.findFieldByName(guardValue, true);
             if (guardField == null) {
                 return;
             }

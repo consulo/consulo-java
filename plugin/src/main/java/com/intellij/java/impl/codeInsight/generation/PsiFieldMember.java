@@ -52,7 +52,7 @@ public class PsiFieldMember extends PsiElementClassMember<PsiField> implements P
 	@Override
 	public GenerationInfo generateGetter() throws IncorrectOperationException
 	{
-		final GenerationInfo[] infos = generateGetters(getElement().getContainingClass());
+		GenerationInfo[] infos = generateGetters(getElement().getContainingClass());
 		return infos != null && infos.length > 0 ? infos[0] : null;
 	}
 
@@ -67,7 +67,7 @@ public class PsiFieldMember extends PsiElementClassMember<PsiField> implements P
 	@Override
 	public GenerationInfo generateSetter() throws IncorrectOperationException
 	{
-		final GenerationInfo[] infos = generateSetters(getElement().getContainingClass());
+		GenerationInfo[] infos = generateSetters(getElement().getContainingClass());
 		return infos != null && infos.length > 0 ? infos[0] : null;
 	}
 
@@ -75,7 +75,7 @@ public class PsiFieldMember extends PsiElementClassMember<PsiField> implements P
 	@Nullable
 	public GenerationInfo[] generateSetters(PsiClass aClass)
 	{
-		final PsiField field = getElement();
+		PsiField field = getElement();
 		if(GetterSetterPrototypeProvider.isReadOnlyProperty(field))
 		{
 			return null;
@@ -85,10 +85,10 @@ public class PsiFieldMember extends PsiElementClassMember<PsiField> implements P
 
 	private static GenerationInfo[] createGenerateInfos(PsiClass aClass, PsiMethod[] prototypes)
 	{
-		final List<GenerationInfo> methods = new ArrayList<GenerationInfo>();
+		List<GenerationInfo> methods = new ArrayList<GenerationInfo>();
 		for(PsiMethod prototype : prototypes)
 		{
-			final PsiMethod method = createMethodIfNotExists(aClass, prototype);
+			PsiMethod method = createMethodIfNotExists(aClass, prototype);
 			if(method != null)
 			{
 				methods.add(new PsiGenerationInfo(method));
@@ -98,7 +98,7 @@ public class PsiFieldMember extends PsiElementClassMember<PsiField> implements P
 	}
 
 	@Nullable
-	private static PsiMethod createMethodIfNotExists(PsiClass aClass, final PsiMethod template)
+	private static PsiMethod createMethodIfNotExists(PsiClass aClass, PsiMethod template)
 	{
 		PsiMethod existing = aClass.findMethodBySignature(template, false);
 		return existing == null ? template : null;

@@ -58,14 +58,14 @@ public class ConcatenationToMessageFormatAction implements IntentionAction {
   @RequiredReadAction
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
-    final PsiElement element = findElementAtCaret(editor, file);
+    PsiElement element = findElementAtCaret(editor, file);
     PsiPolyadicExpression concatenation = getEnclosingLiteralConcatenation(element);
     if (concatenation == null) return;
     StringBuilder formatString = new StringBuilder();
     List<PsiExpression> args = new ArrayList<>();
     buildMessageFormatString(concatenation, formatString, args);
 
-    final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+    PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
     PsiMethodCallExpression call = (PsiMethodCallExpression)
       factory.createExpressionFromText("java.text.MessageFormat.format()", concatenation);
     PsiExpressionList argumentList = call.getArgumentList();
@@ -77,8 +77,8 @@ public class ConcatenationToMessageFormatAction implements IntentionAction {
       }
     }
     else {
-      final PsiNewExpression arrayArg = (PsiNewExpression)factory.createExpressionFromText("new java.lang.Object[]{}", null);
-      final PsiArrayInitializerExpression arrayInitializer = arrayArg.getArrayInitializer();
+      PsiNewExpression arrayArg = (PsiNewExpression)factory.createExpressionFromText("new java.lang.Object[]{}", null);
+      PsiArrayInitializerExpression arrayInitializer = arrayArg.getArrayInitializer();
       assert arrayInitializer != null;
       for (PsiExpression arg : args) {
         arrayInitializer.add(arg);
@@ -113,23 +113,23 @@ public class ConcatenationToMessageFormatAction implements IntentionAction {
     if (PsiUtil.isLanguageLevel5OrHigher(arg)) {
       return arg;
     }
-    final PsiType type = arg.getType();
+    PsiType type = arg.getType();
     if (!(type instanceof PsiPrimitiveType) || type.equals(PsiType.NULL)) {
       return arg;
     }
-    final PsiPrimitiveType primitiveType = (PsiPrimitiveType)type;
-    final String boxedQName = primitiveType.getBoxedTypeName();
+    PsiPrimitiveType primitiveType = (PsiPrimitiveType)type;
+    String boxedQName = primitiveType.getBoxedTypeName();
     if (boxedQName == null) {
       return arg;
     }
-    final GlobalSearchScope resolveScope = arg.getResolveScope();
-    final PsiElementFactory factory = JavaPsiFacade.getElementFactory(arg.getProject());
-    final PsiJavaCodeReferenceElement ref = factory.createReferenceElementByFQClassName(boxedQName, resolveScope);
-    final PsiNewExpression newExpr = (PsiNewExpression)factory.createExpressionFromText("new A(b)", null);
-    final PsiElement classRef = newExpr.getClassReference();
+    GlobalSearchScope resolveScope = arg.getResolveScope();
+    PsiElementFactory factory = JavaPsiFacade.getElementFactory(arg.getProject());
+    PsiJavaCodeReferenceElement ref = factory.createReferenceElementByFQClassName(boxedQName, resolveScope);
+    PsiNewExpression newExpr = (PsiNewExpression)factory.createExpressionFromText("new A(b)", null);
+    PsiElement classRef = newExpr.getClassReference();
     assert classRef != null;
     classRef.replace(ref);
-    final PsiExpressionList argumentList = newExpr.getArgumentList();
+    PsiExpressionList argumentList = newExpr.getArgumentList();
     assert argumentList != null;
     argumentList.getExpressions()[0].replace(arg);
     return newExpr;
@@ -139,7 +139,7 @@ public class ConcatenationToMessageFormatAction implements IntentionAction {
   @RequiredReadAction
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (PsiUtil.getLanguageLevel(file).compareTo(LanguageLevel.JDK_1_4) < 0) return false;
-    final PsiElement element = findElementAtCaret(editor, file);
+    PsiElement element = findElementAtCaret(editor, file);
     PsiPolyadicExpression binaryExpression = getEnclosingLiteralConcatenation(element);
     return binaryExpression != null && !AnnotationUtil.isInsideAnnotation(binaryExpression);
   }
@@ -151,13 +151,13 @@ public class ConcatenationToMessageFormatAction implements IntentionAction {
   }
 
   @Nullable
-  private static PsiPolyadicExpression getEnclosingLiteralConcatenation(final PsiElement element) {
+  private static PsiPolyadicExpression getEnclosingLiteralConcatenation(PsiElement element) {
     PsiPolyadicExpression binaryExpression = PsiTreeUtil.getParentOfType(element, PsiPolyadicExpression.class, false, PsiMember.class);
     if (binaryExpression == null) return null;
-    final PsiClassType stringType = PsiType.getJavaLangString(element.getManager(), element.getResolveScope());
+    PsiClassType stringType = PsiType.getJavaLangString(element.getManager(), element.getResolveScope());
     if (!stringType.equals(binaryExpression.getType())) return null;
     while (true) {
-      final PsiElement parent = binaryExpression.getParent();
+      PsiElement parent = binaryExpression.getParent();
       if (!(parent instanceof PsiPolyadicExpression)) return binaryExpression;
       PsiPolyadicExpression parentBinaryExpression = (PsiPolyadicExpression)parent;
       if (!stringType.equals(parentBinaryExpression.getType())) return binaryExpression;

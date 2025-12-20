@@ -53,34 +53,34 @@ public class CovariantCompareToInspection extends BaseInspection {
 
     @Override
     public void visitMethod(@Nonnull PsiMethod method) {
-      final String name = method.getName();
+      String name = method.getName();
       if (!HardcodedMethodConstants.COMPARE_TO.equals(name)) {
         return;
       }
       if (!method.hasModifierProperty(PsiModifier.PUBLIC)) {
         return;
       }
-      final PsiParameterList parameterList = method.getParameterList();
+      PsiParameterList parameterList = method.getParameterList();
       if (parameterList.getParametersCount() != 1) {
         return;
       }
-      final PsiParameter[] parameters = parameterList.getParameters();
-      final PsiType paramType = parameters[0].getType();
+      PsiParameter[] parameters = parameterList.getParameters();
+      PsiType paramType = parameters[0].getType();
       if (TypeUtils.isJavaLangObject(paramType)) {
         return;
       }
-      final PsiClass aClass = method.getContainingClass();
+      PsiClass aClass = method.getContainingClass();
       if (aClass == null) {
         return;
       }
-      final PsiMethod[] methods = aClass.findMethodsByName(HardcodedMethodConstants.COMPARE_TO, false);
-      final Project project = method.getProject();
-      final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-      final GlobalSearchScope scope = method.getResolveScope();
-      final PsiClass comparableClass = psiFacade.findClass(CommonClassNames.JAVA_LANG_COMPARABLE, scope);
+      PsiMethod[] methods = aClass.findMethodsByName(HardcodedMethodConstants.COMPARE_TO, false);
+      Project project = method.getProject();
+      JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+      GlobalSearchScope scope = method.getResolveScope();
+      PsiClass comparableClass = psiFacade.findClass(CommonClassNames.JAVA_LANG_COMPARABLE, scope);
       PsiType substitutedTypeParam = null;
       if (comparableClass != null && comparableClass.getTypeParameters().length == 1) {
-        final PsiSubstitutor superSubstitutor = TypeConversionUtil.getClassSubstitutor(comparableClass, aClass, PsiSubstitutor.EMPTY);
+        PsiSubstitutor superSubstitutor = TypeConversionUtil.getClassSubstitutor(comparableClass, aClass, PsiSubstitutor.EMPTY);
         //null iff aClass is not inheritor of comparableClass
         if (superSubstitutor != null) {
            substitutedTypeParam = superSubstitutor.substitute(comparableClass.getTypeParameters()[0]);
@@ -95,7 +95,7 @@ public class CovariantCompareToInspection extends BaseInspection {
     }
 
     private static boolean isNonVariantCompareTo(PsiMethod method, PsiType substitutedTypeParam) {
-      final PsiClassType objectType = TypeUtils.getObjectType(method);
+      PsiClassType objectType = TypeUtils.getObjectType(method);
       if (MethodUtils.methodMatches(method, null, PsiType.INT, HardcodedMethodConstants.COMPARE_TO, objectType)) {
         return true;
       }

@@ -107,7 +107,7 @@ public class EncapsulateFieldsDialog extends RefactoringDialog implements Encaps
     myRbFieldProtected.setFocusable(false);
   }
 
-  public EncapsulateFieldsDialog(Project project, PsiClass aClass, final Set preselectedFields, EncapsulateFieldHelper helper) {
+  public EncapsulateFieldsDialog(Project project, PsiClass aClass, Set preselectedFields, EncapsulateFieldHelper helper) {
     super(project, true);
     myProject = project;
     myClass = aClass;
@@ -585,7 +585,7 @@ public class EncapsulateFieldsDialog extends RefactoringDialog implements Encaps
       return false;
     }
 
-    public void setValueAt(final Object aValue, final int rowIndex, final int columnIndex) {
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
       if (columnIndex == CHECKED_COLUMN) {
         myCheckedMarks[rowIndex] = ((Boolean) aValue).booleanValue();
         fireTableRowsUpdated(rowIndex, rowIndex);
@@ -611,11 +611,11 @@ public class EncapsulateFieldsDialog extends RefactoringDialog implements Encaps
   }
 
   private class MyTableRenderer extends DefaultTableCellRenderer {
-    public Component getTableCellRendererComponent(JTable table, final Object value,
-                                                   boolean isSelected, boolean hasFocus, final int row,
-                                                   final int column) {
+    public Component getTableCellRendererComponent(JTable table, Object value,
+                                                   boolean isSelected, boolean hasFocus, int row,
+                                                   int column) {
       super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-      final int modelColumn = myTable.convertColumnIndexToModel(column);
+      int modelColumn = myTable.convertColumnIndexToModel(column);
 
       this.setIconTextGap(0);
       PsiField field = myFields[row];
@@ -681,7 +681,7 @@ public class EncapsulateFieldsDialog extends RefactoringDialog implements Encaps
       return this;
     }
 
-    private void configureColors(boolean isSelected, JTable table, boolean hasFocus, final int row, final int column) {
+    private void configureColors(boolean isSelected, JTable table, boolean hasFocus, int row, int column) {
       setForeground(isSelected ? UIUtil.getTableSelectionForeground() : UIUtil.getTableForeground());
       setBackground(isSelected ? UIUtil.getTableSelectionBackground() : UIUtil.getTableBackground());
       if (hasFocus) {

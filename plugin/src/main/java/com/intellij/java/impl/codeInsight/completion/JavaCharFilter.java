@@ -40,13 +40,13 @@ import consulo.language.psi.util.PsiTreeUtil;
 @ExtensionImpl(id = "java")
 public class JavaCharFilter extends CharFilter {
 
-  private static boolean isWithinLiteral(final Lookup lookup) {
+  private static boolean isWithinLiteral(Lookup lookup) {
     PsiElement psiElement = lookup.getPsiElement();
     return psiElement != null && psiElement.getParent() instanceof PsiLiteralExpression;
   }
 
   @Override
-  public Result acceptChar(char c, final int prefixLength, final Lookup lookup) {
+  public Result acceptChar(char c, int prefixLength, Lookup lookup) {
     if (!lookup.getPsiFile().getLanguage().isKindOf(JavaLanguage.INSTANCE)) {
       return null;
     }
@@ -54,13 +54,13 @@ public class JavaCharFilter extends CharFilter {
     LookupElement item = lookup.getCurrentItem();
     if (item == null) return null;
 
-    final Object o = item.getObject();
+    Object o = item.getObject();
     if (c == '!') {
       if (o instanceof PsiVariable) {
         if (PsiType.BOOLEAN.isAssignableFrom(((PsiVariable)o).getType())) return Result.SELECT_ITEM_AND_FINISH_LOOKUP;
       }
       if (o instanceof PsiMethod) {
-        final PsiType type = ((PsiMethod)o).getReturnType();
+        PsiType type = ((PsiMethod)o).getReturnType();
         if (type != null && PsiType.BOOLEAN.isAssignableFrom(type)) return Result.SELECT_ITEM_AND_FINISH_LOOKUP;
       }
 

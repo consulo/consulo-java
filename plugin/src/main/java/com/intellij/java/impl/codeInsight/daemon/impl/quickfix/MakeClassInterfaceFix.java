@@ -37,7 +37,7 @@ public class MakeClassInterfaceFix extends LocalQuickFixAndIntentionActionOnPsiE
     private final boolean myMakeInterface;
     private final String myName;
 
-    public MakeClassInterfaceFix(PsiClass aClass, final boolean makeInterface) {
+    public MakeClassInterfaceFix(PsiClass aClass, boolean makeInterface) {
         super(aClass);
         myMakeInterface = makeInterface;
         myName = aClass.getName();
@@ -58,7 +58,7 @@ public class MakeClassInterfaceFix extends LocalQuickFixAndIntentionActionOnPsiE
         @Nonnull PsiElement startElement,
         @Nonnull PsiElement endElement
     ) {
-        final PsiClass myClass = (PsiClass) startElement;
+        PsiClass myClass = (PsiClass) startElement;
 
         return myClass.isValid() && myClass.getManager().isInProject(myClass);
     }
@@ -71,13 +71,13 @@ public class MakeClassInterfaceFix extends LocalQuickFixAndIntentionActionOnPsiE
         @Nonnull PsiElement startElement,
         @Nonnull PsiElement endElement
     ) {
-        final PsiClass myClass = (PsiClass) startElement;
+        PsiClass myClass = (PsiClass) startElement;
         if (!FileModificationService.getInstance().preparePsiElementForWrite(myClass)) {
             return;
         }
         try {
-            final PsiReferenceList extendsList = myMakeInterface ? myClass.getExtendsList() : myClass.getImplementsList();
-            final PsiReferenceList implementsList = myMakeInterface ? myClass.getImplementsList() : myClass.getExtendsList();
+            PsiReferenceList extendsList = myMakeInterface ? myClass.getExtendsList() : myClass.getImplementsList();
+            PsiReferenceList implementsList = myMakeInterface ? myClass.getImplementsList() : myClass.getExtendsList();
             if (extendsList != null) {
                 for (PsiJavaCodeReferenceElement referenceElement : extendsList.getReferenceElements()) {
                     referenceElement.delete();
@@ -97,14 +97,14 @@ public class MakeClassInterfaceFix extends LocalQuickFixAndIntentionActionOnPsiE
         }
     }
 
-    private static void convertPsiClass(PsiClass aClass, final boolean makeInterface) throws IncorrectOperationException {
-        final IElementType lookFor = makeInterface ? JavaTokenType.CLASS_KEYWORD : JavaTokenType.INTERFACE_KEYWORD;
-        final PsiKeyword replaceWith = JavaPsiFacade.getInstance(aClass.getProject())
+    private static void convertPsiClass(PsiClass aClass, boolean makeInterface) throws IncorrectOperationException {
+        IElementType lookFor = makeInterface ? JavaTokenType.CLASS_KEYWORD : JavaTokenType.INTERFACE_KEYWORD;
+        PsiKeyword replaceWith = JavaPsiFacade.getInstance(aClass.getProject())
             .getElementFactory()
             .createKeyword(makeInterface ? PsiKeyword.INTERFACE : PsiKeyword.CLASS);
         for (PsiElement psiElement : aClass.getChildren()) {
             if (psiElement instanceof PsiKeyword) {
-                final PsiKeyword psiKeyword = (PsiKeyword) psiElement;
+                PsiKeyword psiKeyword = (PsiKeyword) psiElement;
                 if (psiKeyword.getTokenType() == lookFor) {
                     psiKeyword.replace(replaceWith);
                     break;

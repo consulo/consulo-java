@@ -99,9 +99,9 @@ public abstract class FixAllAnnotatorQuickfixTest extends LightQuickFixTestCase 
 
       @Override
       public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
-        final PsiElement element = descriptor.getPsiElement();
+        PsiElement element = descriptor.getPsiElement();
         if (element != null) {
-          final PsiElement parent = element.getParent();
+          PsiElement parent = element.getParent();
           if (parent instanceof PsiMethod) {
             ((PsiMethod)parent).setName(((PsiMethod)parent).getName() + "F");
           }

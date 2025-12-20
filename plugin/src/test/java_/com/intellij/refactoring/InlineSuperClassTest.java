@@ -26,15 +26,15 @@ public abstract class InlineSuperClassTest extends MultiFileTestCase {
     doTest(false);
   }
 
-  private void doTest(final boolean fail) throws Exception {
+  private void doTest(boolean fail) throws Exception {
     doTest(fail, false);
   }
 
-  private void doTest(final boolean fail, final boolean inlineOne) throws Exception {
+  private void doTest(boolean fail, final boolean inlineOne) throws Exception {
     try {
       doTest(new PerformAction() {
         @Override
-        public void performAction(final VirtualFile rootDir, final VirtualFile rootAfter) throws Exception {
+        public void performAction(VirtualFile rootDir, VirtualFile rootAfter) throws Exception {
           PsiClass aClass = myJavaFacade.findClass("Test", GlobalSearchScope.allScope(myProject));
 
           if (aClass == null) aClass = myJavaFacade.findClass("p.Test", GlobalSearchScope.allScope(myProject));
@@ -192,7 +192,7 @@ public abstract class InlineSuperClassTest extends MultiFileTestCase {
   private void doTestMultipleSubclasses() throws Exception {
     doTest(new PerformAction() {
       @Override
-      public void performAction(final VirtualFile rootDir, final VirtualFile rootAfter) throws Exception {
+      public void performAction(VirtualFile rootDir, VirtualFile rootAfter) throws Exception {
         PsiClass superClass = myJavaFacade.findClass("Super", GlobalSearchScope.allScope(myProject));
         if (superClass == null) superClass = myJavaFacade.findClass("p1.Super", GlobalSearchScope.allScope(myProject));
         assertNotNull("Class Super not found", superClass);

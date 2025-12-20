@@ -31,7 +31,7 @@ public class TextField extends JTextField
 					 @NonNls String property)
 	{
 		super(getPropertyValue(owner, property));
-		final DocumentListener documentListener =
+		DocumentListener documentListener =
 				new TextFieldDocumentListener(owner, property);
 		getDocument().addDocumentListener(documentListener);
 	}
@@ -41,9 +41,9 @@ public class TextField extends JTextField
 	{
 		try
 		{
-			final Class<? extends InspectionTool> aClass =
+			Class<? extends InspectionTool> aClass =
 					owner.getClass();
-			final Field field = aClass.getField(property);
+			Field field = aClass.getField(property);
 			return (String) field.get(owner);
 		}
 		catch(IllegalAccessException ignore)
@@ -62,9 +62,9 @@ public class TextField extends JTextField
 	{
 		try
 		{
-			final Class<? extends InspectionTool> aClass =
+			Class<? extends InspectionTool> aClass =
 					owner.getClass();
-			final Field field = aClass.getField(property);
+			Field field = aClass.getField(property);
 			field.set(owner, value);
 		}
 		catch(IllegalAccessException ignore)

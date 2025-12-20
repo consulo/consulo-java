@@ -46,8 +46,8 @@ public class ReplaceSwitchWithIfIntention extends Intention {
     @Override
     public void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiJavaToken switchToken = (PsiJavaToken) element;
-        final PsiSwitchStatement switchStatement =
+        PsiJavaToken switchToken = (PsiJavaToken) element;
+        PsiSwitchStatement switchStatement =
             (PsiSwitchStatement) switchToken.getParent();
         if (switchStatement == null) {
             return;

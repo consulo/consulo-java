@@ -64,7 +64,7 @@ public abstract class RenameClassTest extends MultiFileTestCase {
         PsiClass aClass = myJavaFacade.findClass(className, GlobalSearchScope.allScope(getProject()));
         assertNotNull("Class XX not found", aClass);
 
-        final RenameProcessor processor = new RenameProcessor(myProject, aClass, newName, true, true);
+        RenameProcessor processor = new RenameProcessor(myProject, aClass, newName, true, true);
         for (AutomaticRenamerFactory factory : Extensions.getExtensions(AutomaticRenamerFactory.EP_NAME)) {
           processor.addRenamerFactory(factory);
         }

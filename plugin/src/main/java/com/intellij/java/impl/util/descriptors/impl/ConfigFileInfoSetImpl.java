@@ -49,7 +49,7 @@ public class ConfigFileInfoSetImpl implements ConfigFileInfoSet {
   ConfigFileContainerImpl myContainer;
   private final ConfigFileMetaDataProvider myMetaDataProvider;
 
-  public ConfigFileInfoSetImpl(final ConfigFileMetaDataProvider metaDataProvider) {
+  public ConfigFileInfoSetImpl(ConfigFileMetaDataProvider metaDataProvider) {
     myMetaDataProvider = metaDataProvider;
   }
 
@@ -58,7 +58,7 @@ public class ConfigFileInfoSetImpl implements ConfigFileInfoSet {
     onChange();
   }
 
-  public void addConfigFile(final ConfigFileMetaData metaData, final String url) {
+  public void addConfigFile(ConfigFileMetaData metaData, String url) {
     addConfigFile(new ConfigFileInfo(metaData, url));
   }
 
@@ -67,7 +67,7 @@ public class ConfigFileInfoSetImpl implements ConfigFileInfoSet {
     onChange();
   }
 
-  public void replaceConfigFile(final ConfigFileMetaData metaData, final String newUrl) {
+  public void replaceConfigFile(ConfigFileMetaData metaData, String newUrl) {
     myConfigFiles.removeAll(metaData);
     addConfigFile(new ConfigFileInfo(metaData, newUrl));
   }
@@ -80,7 +80,7 @@ public class ConfigFileInfoSetImpl implements ConfigFileInfoSet {
     return info;
   }
 
-  public void removeConfigFiles(final ConfigFileMetaData... metaData) {
+  public void removeConfigFiles(ConfigFileMetaData... metaData) {
     for (ConfigFileMetaData data : metaData) {
       myConfigFiles.removeAll(data);
     }
@@ -89,7 +89,7 @@ public class ConfigFileInfoSetImpl implements ConfigFileInfoSet {
 
   @Nullable
   public ConfigFileInfo getConfigFileInfo(ConfigFileMetaData metaData) {
-    final Collection<ConfigFileInfo> descriptors = myConfigFiles.get(metaData);
+    Collection<ConfigFileInfo> descriptors = myConfigFiles.get(metaData);
     if (descriptors == null || descriptors.isEmpty()) {
       return null;
     }
@@ -97,11 +97,11 @@ public class ConfigFileInfoSetImpl implements ConfigFileInfoSet {
   }
 
   public ConfigFileInfo[] getConfigFileInfos() {
-    final Collection<ConfigFileInfo> configurations = myConfigFiles.values();
+    Collection<ConfigFileInfo> configurations = myConfigFiles.values();
     return configurations.toArray(new ConfigFileInfo[configurations.size()]);
   }
 
-  public void setConfigFileInfos(final Collection<ConfigFileInfo> descriptors) {
+  public void setConfigFileInfos(Collection<ConfigFileInfo> descriptors) {
     myConfigFiles.clear();
     for (ConfigFileInfo descriptor : descriptors) {
       myConfigFiles.put(descriptor.getMetaData(), descriptor);
@@ -120,15 +120,15 @@ public class ConfigFileInfoSetImpl implements ConfigFileInfoSet {
     return myMetaDataProvider;
   }
 
-  public void readExternal(final Element element) throws InvalidDataException {
+  public void readExternal(Element element) throws InvalidDataException {
     myConfigFiles.clear();
     List<Element> children = element.getChildren(ELEMENT_NAME);
     for (Element child : children) {
-      final String id = child.getAttributeValue(ID_ATTRIBUTE);
+      String id = child.getAttributeValue(ID_ATTRIBUTE);
       if (id != null) {
-        final ConfigFileMetaData metaData = myMetaDataProvider.findMetaData(id);
+        ConfigFileMetaData metaData = myMetaDataProvider.findMetaData(id);
         if (metaData != null) {
-          final String url = child.getAttributeValue(URL_ATTRIBUTE);
+          String url = child.getAttributeValue(URL_ATTRIBUTE);
           myConfigFiles.put(metaData, new ConfigFileInfo(metaData, url));
         }
       }
@@ -137,17 +137,17 @@ public class ConfigFileInfoSetImpl implements ConfigFileInfoSet {
   }
 
   @SuppressWarnings({"HardCodedStringLiteral"})
-  public void writeExternal(final Element element) throws WriteExternalException {
-    final TreeSet<ConfigFileInfo> sortedConfigFiles = new TreeSet<ConfigFileInfo>(new Comparator<ConfigFileInfo>() {
-      public int compare(final ConfigFileInfo o1, final ConfigFileInfo o2) {
-        final int id = Comparing.compare(o1.getMetaData().getId(), o2.getMetaData().getId());
+  public void writeExternal(Element element) throws WriteExternalException {
+    TreeSet<ConfigFileInfo> sortedConfigFiles = new TreeSet<ConfigFileInfo>(new Comparator<ConfigFileInfo>() {
+      public int compare(ConfigFileInfo o1, ConfigFileInfo o2) {
+        int id = Comparing.compare(o1.getMetaData().getId(), o2.getMetaData().getId());
         return id != 0 ? id : Comparing.compare(o1.getUrl(), o2.getUrl());
       }
     });
     sortedConfigFiles.addAll(myConfigFiles.collectValues());
     for (ConfigFileInfo configuration : sortedConfigFiles) {
-      final Element child = new Element(ELEMENT_NAME);
-      final ConfigFileMetaData metaData = configuration.getMetaData();
+      Element child = new Element(ELEMENT_NAME);
+      ConfigFileMetaData metaData = configuration.getMetaData();
       child.setAttribute(ID_ATTRIBUTE, metaData.getId());
       child.setAttribute(URL_ATTRIBUTE, configuration.getUrl());
       element.addContent(child);

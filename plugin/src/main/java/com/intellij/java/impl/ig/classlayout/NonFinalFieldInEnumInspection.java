@@ -44,13 +44,13 @@ public class NonFinalFieldInEnumInspection extends BaseInspection {
     @Override
     @RequiredReadAction
     protected String buildErrorString(Object... infos) {
-        final PsiClass enumClass = (PsiClass) infos[0];
+        PsiClass enumClass = (PsiClass) infos[0];
         return InspectionGadgetsLocalize.nonFinalFieldInEnumProblemDescriptor(enumClass.getName()).get();
     }
 
     @Nullable
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiField field = (PsiField) infos[1];
+        PsiField field = (PsiField) infos[1];
         return MakeFieldFinalFix.buildFix(field);
     }
 
@@ -64,7 +64,7 @@ public class NonFinalFieldInEnumInspection extends BaseInspection {
         @Override
         public void visitField(PsiField field) {
             super.visitField(field);
-            final PsiClass containingClass = field.getContainingClass();
+            PsiClass containingClass = field.getContainingClass();
             if (containingClass == null || !containingClass.isEnum()) {
                 return;
             }

@@ -51,8 +51,8 @@ public class NonExceptionNameEndsWithExceptionInspection
   @Override
   @Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
-    final String name = (String)infos[0];
-    final Boolean onTheFly = (Boolean)infos[1];
+    String name = (String)infos[0];
+    Boolean onTheFly = (Boolean)infos[1];
     if (onTheFly.booleanValue()) {
       return new InspectionGadgetsFix[]{new RenameFix(),
         new ExtendExceptionFix(name)};
@@ -79,22 +79,22 @@ public class NonExceptionNameEndsWithExceptionInspection
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiElement parent = element.getParent();
+      PsiElement element = descriptor.getPsiElement();
+      PsiElement parent = element.getParent();
       if (!(parent instanceof PsiClass)) {
         return;
       }
-      final PsiClass aClass = (PsiClass)parent;
-      final PsiReferenceList extendsList = aClass.getExtendsList();
+      PsiClass aClass = (PsiClass)parent;
+      PsiReferenceList extendsList = aClass.getExtendsList();
       if (extendsList == null) {
         return;
       }
-      final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-      final PsiElementFactory factory = facade.getElementFactory();
-      final GlobalSearchScope scope = aClass.getResolveScope();
-      final PsiJavaCodeReferenceElement reference =
+      JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
+      PsiElementFactory factory = facade.getElementFactory();
+      GlobalSearchScope scope = aClass.getResolveScope();
+      PsiJavaCodeReferenceElement reference =
         factory.createReferenceElementByFQClassName(CommonClassNames.JAVA_LANG_EXCEPTION, scope);
-      final PsiJavaCodeReferenceElement[] referenceElements =
+      PsiJavaCodeReferenceElement[] referenceElements =
         extendsList.getReferenceElements();
       for (PsiJavaCodeReferenceElement referenceElement :
         referenceElements) {
@@ -120,11 +120,11 @@ public class NonExceptionNameEndsWithExceptionInspection
     @Override
     public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so it doesn't drill down into inner classes
-      final String className = aClass.getName();
+      String className = aClass.getName();
       if (className == null) {
         return;
       }
-      @NonNls final String exception = "Exception";
+      @NonNls String exception = "Exception";
       if (!className.endsWith(exception)) {
         return;
       }

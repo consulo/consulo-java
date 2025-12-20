@@ -35,7 +35,7 @@ public class PsiMethodCallFilter implements ElementFilter {
   private final Set<String> myMethodNames;
 
 
-  public PsiMethodCallFilter(@NonNls final String className, @NonNls final String... methodNames) {
+  public PsiMethodCallFilter(@NonNls String className, @NonNls String... methodNames) {
     myClassName = className;
     myMethodNames = new HashSet<String>(Arrays.asList(methodNames));
   }
@@ -43,14 +43,14 @@ public class PsiMethodCallFilter implements ElementFilter {
   @Override
   public boolean isAcceptable(Object element, PsiElement context) {
     if (element instanceof PsiMethodCallExpression) {
-      final PsiMethodCallExpression callExpression = (PsiMethodCallExpression) element;
-      final PsiMethod psiMethod = callExpression.resolveMethod();
+      PsiMethodCallExpression callExpression = (PsiMethodCallExpression) element;
+      PsiMethod psiMethod = callExpression.resolveMethod();
       if (psiMethod != null) {
         if (!myMethodNames.contains(psiMethod.getName())) {
           return false;
         }
-        final PsiClass psiClass = psiMethod.getContainingClass();
-        final PsiClass expectedClass = JavaPsiFacade.getInstance(psiClass.getProject()).findClass(myClassName, psiClass.getResolveScope());
+        PsiClass psiClass = psiMethod.getContainingClass();
+        PsiClass expectedClass = JavaPsiFacade.getInstance(psiClass.getProject()).findClass(myClassName, psiClass.getResolveScope());
         return InheritanceUtil.isInheritorOrSelf(psiClass, expectedClass, true);
       }
     }

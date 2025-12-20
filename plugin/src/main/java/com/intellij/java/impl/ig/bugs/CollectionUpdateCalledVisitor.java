@@ -46,7 +46,7 @@ class CollectionUpdateCalledVisitor extends JavaRecursiveElementVisitor {
   public void visitMethodReferenceExpression(PsiMethodReferenceExpression expression) {
     super.visitMethodReferenceExpression(expression);
     if (updated) return;
-    final String methodName = expression.getReferenceName();
+    String methodName = expression.getReferenceName();
     if (checkMethodName(methodName)) return;
     checkQualifier(expression.getQualifierExpression());
   }
@@ -58,11 +58,11 @@ class CollectionUpdateCalledVisitor extends JavaRecursiveElementVisitor {
     if (updated) {
       return;
     }
-    final PsiReferenceExpression methodExpression =
+    PsiReferenceExpression methodExpression =
       call.getMethodExpression();
-    final String methodName = methodExpression.getReferenceName();
+    String methodName = methodExpression.getReferenceName();
     if (checkMethodName(methodName)) return;
-    final PsiExpression qualifier = methodExpression.getQualifierExpression();
+    PsiExpression qualifier = methodExpression.getQualifierExpression();
     checkQualifier(qualifier);
   }
 
@@ -91,9 +91,9 @@ class CollectionUpdateCalledVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     if (variable != null && expression instanceof PsiReferenceExpression) {
-      final PsiReferenceExpression referenceExpression =
+      PsiReferenceExpression referenceExpression =
         (PsiReferenceExpression)expression;
-      final PsiElement referent = referenceExpression.resolve();
+      PsiElement referent = referenceExpression.resolve();
       if (referent == null) {
         return;
       }
@@ -102,17 +102,17 @@ class CollectionUpdateCalledVisitor extends JavaRecursiveElementVisitor {
       }
     }
     else if (expression instanceof PsiParenthesizedExpression) {
-      final PsiParenthesizedExpression parenthesizedExpression =
+      PsiParenthesizedExpression parenthesizedExpression =
         (PsiParenthesizedExpression)expression;
       checkQualifier(parenthesizedExpression.getExpression());
     }
     else if (expression instanceof PsiConditionalExpression) {
-      final PsiConditionalExpression conditionalExpression =
+      PsiConditionalExpression conditionalExpression =
         (PsiConditionalExpression)expression;
-      final PsiExpression thenExpression =
+      PsiExpression thenExpression =
         conditionalExpression.getThenExpression();
       checkQualifier(thenExpression);
-      final PsiExpression elseExpression =
+      PsiExpression elseExpression =
         conditionalExpression.getElseExpression();
       checkQualifier(elseExpression);
     }

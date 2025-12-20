@@ -41,9 +41,9 @@ public class FlipComparisonIntention extends MutablyNamedIntention {
     public LocalizeValue getTextForElement(PsiElement element) {
         String operatorText = "";
         String flippedOperatorText = "";
-        final PsiBinaryExpression expression = (PsiBinaryExpression) element;
+        PsiBinaryExpression expression = (PsiBinaryExpression) element;
         if (expression != null) {
-            final PsiJavaToken sign = expression.getOperationSign();
+            PsiJavaToken sign = expression.getOperationSign();
             operatorText = sign.getText();
             flippedOperatorText = ComparisonUtils.getFlippedComparison(sign.getTokenType());
         }
@@ -69,12 +69,12 @@ public class FlipComparisonIntention extends MutablyNamedIntention {
 
     @Override
     public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-        final PsiBinaryExpression expression = (PsiBinaryExpression) element;
-        final PsiExpression lhs = expression.getLOperand();
-        final PsiExpression rhs = expression.getROperand();
-        final IElementType tokenType = expression.getOperationTokenType();
+        PsiBinaryExpression expression = (PsiBinaryExpression) element;
+        PsiExpression lhs = expression.getLOperand();
+        PsiExpression rhs = expression.getROperand();
+        IElementType tokenType = expression.getOperationTokenType();
         assert rhs != null;
-        final String expString = rhs.getText() +
+        String expString = rhs.getText() +
             ComparisonUtils.getFlippedComparison(tokenType) +
             lhs.getText();
         PsiReplacementUtil.replaceExpression(expression, expString);

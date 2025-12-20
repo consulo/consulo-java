@@ -45,7 +45,7 @@ import org.jetbrains.annotations.NonNls;
 public class ReplaceAddAllArrayToCollectionFix implements SyntheticIntentionAction {
   private final PsiMethodCallExpression myMethodCall;
 
-  public ReplaceAddAllArrayToCollectionFix(final PsiMethodCallExpression methodCall) {
+  public ReplaceAddAllArrayToCollectionFix(PsiMethodCallExpression methodCall) {
     myMethodCall = methodCall;
   }
 
@@ -56,28 +56,28 @@ public class ReplaceAddAllArrayToCollectionFix implements SyntheticIntentionActi
   }
 
   @Override
-  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (myMethodCall == null || !myMethodCall.isValid()) return false;
 
-    final Module module = file.getModule();
+    Module module = file.getModule();
     if (module == null) return false;
-    final Sdk jdk = ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
+    Sdk jdk = ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
     if (jdk == null || !JavaSdkTypeUtil.isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_5)) return false;
 
-    final PsiReferenceExpression expression = myMethodCall.getMethodExpression();
-    final PsiElement element = expression.resolve();
+    PsiReferenceExpression expression = myMethodCall.getMethodExpression();
+    PsiElement element = expression.resolve();
     if (element instanceof PsiMethod) {
-      final PsiMethod method = (PsiMethod)element;
-      final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-      final PsiClass collectionsClass = psiFacade.findClass(CommonClassNames.JAVA_UTIL_COLLECTION, GlobalSearchScope.allScope(project));
+      PsiMethod method = (PsiMethod)element;
+      JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+      PsiClass collectionsClass = psiFacade.findClass(CommonClassNames.JAVA_UTIL_COLLECTION, GlobalSearchScope.allScope(project));
       if (collectionsClass != null && InheritanceUtil.isInheritorOrSelf(method.getContainingClass(), collectionsClass, true)) {
         if (Comparing.strEqual(method.getName(), "addAll") && PsiType.BOOLEAN.equals(method.getReturnType())) {
-          final PsiParameter[] psiParameters = method.getParameterList().getParameters();
+          PsiParameter[] psiParameters = method.getParameterList().getParameters();
           if (psiParameters.length == 1 &&
               psiParameters[0].getType() instanceof PsiClassType &&
               InheritanceUtil.isInheritorOrSelf(((PsiClassType)psiParameters[0].getType()).resolve(), collectionsClass, true)) {
-            final PsiExpressionList list = myMethodCall.getArgumentList();
-            final PsiExpression[] expressions = list.getExpressions();
+            PsiExpressionList list = myMethodCall.getArgumentList();
+            PsiExpression[] expressions = list.getExpressions();
             if (expressions.length == 1) {
               if (expressions[0].getType() instanceof PsiArrayType) {
                 return true;
@@ -91,16 +91,16 @@ public class ReplaceAddAllArrayToCollectionFix implements SyntheticIntentionActi
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
-    final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
-    final PsiExpression toReplace = elementFactory.createExpressionFromText(getCollectionsMethodCall(), myMethodCall);
+    PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
+    PsiExpression toReplace = elementFactory.createExpressionFromText(getCollectionsMethodCall(), myMethodCall);
     JavaCodeStyleManager.getInstance(project).shortenClassReferences(myMethodCall.replace(toReplace));
   }
 
   @NonNls
   private String getCollectionsMethodCall() {
-    final PsiExpression qualifierExpression = myMethodCall.getMethodExpression().getQualifierExpression();
+    PsiExpression qualifierExpression = myMethodCall.getMethodExpression().getQualifierExpression();
     PsiExpression[] expressions = myMethodCall.getArgumentList().getExpressions();
     return "java.util.Collections.addAll(" +
            (qualifierExpression != null ? qualifierExpression.getText() : "this") +

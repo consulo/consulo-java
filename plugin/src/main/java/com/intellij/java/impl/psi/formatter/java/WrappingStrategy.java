@@ -25,7 +25,7 @@ public abstract class WrappingStrategy
 	public static final WrappingStrategy DO_NOT_WRAP = new WrappingStrategy(null)
 	{
 		@Override
-		protected boolean shouldWrap(final IElementType type)
+		protected boolean shouldWrap(IElementType type)
 		{
 			return false;
 		}
@@ -36,7 +36,7 @@ public abstract class WrappingStrategy
 		return new WrappingStrategy(wrap)
 		{
 			@Override
-			protected boolean shouldWrap(final IElementType type)
+			protected boolean shouldWrap(IElementType type)
 			{
 				return type != JavaTokenType.COMMA && type != JavaTokenType.SEMICOLON;
 			}
@@ -45,7 +45,7 @@ public abstract class WrappingStrategy
 
 	private final Wrap myWrap;
 
-	public WrappingStrategy(final Wrap wrap)
+	public WrappingStrategy(Wrap wrap)
 	{
 		myWrap = wrap;
 	}
@@ -62,5 +62,5 @@ public abstract class WrappingStrategy
 		}
 	}
 
-	protected abstract boolean shouldWrap(final IElementType type);
+	protected abstract boolean shouldWrap(IElementType type);
 }

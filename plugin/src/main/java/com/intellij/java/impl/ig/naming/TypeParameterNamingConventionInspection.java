@@ -50,7 +50,7 @@ public class TypeParameterNamingConventionInspection extends ConventionInspectio
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final String parameterName = (String) infos[0];
+        String parameterName = (String) infos[0];
         if (parameterName.length() < getMinLength()) {
             return InspectionGadgetsLocalize.typeParameterNamingConventionProblemDescriptorShort().get();
         }
@@ -85,14 +85,14 @@ public class TypeParameterNamingConventionInspection extends ConventionInspectio
         @Override
         public void visitTypeParameter(PsiTypeParameter parameter) {
             super.visitTypeParameter(parameter);
-            final String name = parameter.getName();
+            String name = parameter.getName();
             if (name == null) {
                 return;
             }
             if (isValid(name)) {
                 return;
             }
-            final PsiIdentifier nameIdentifier = parameter.getNameIdentifier();
+            PsiIdentifier nameIdentifier = parameter.getNameIdentifier();
             if (nameIdentifier == null) {
                 return;
             }

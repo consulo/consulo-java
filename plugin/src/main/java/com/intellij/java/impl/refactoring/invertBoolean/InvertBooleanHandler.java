@@ -62,8 +62,8 @@ public class InvertBooleanHandler implements RefactoringActionHandler {
   }
 
   @RequiredUIAccess
-  private static void invoke(PsiVariable var, final Project project, Editor editor) {
-    final PsiType returnType = var.getType();
+  private static void invoke(PsiVariable var, Project project, Editor editor) {
+    PsiType returnType = var.getType();
     if (!PsiType.BOOLEAN.equals(returnType)) {
       CommonRefactoringUtil.showErrorHint(
         project,
@@ -77,7 +77,7 @@ public class InvertBooleanHandler implements RefactoringActionHandler {
 
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, var)) return;
     if (var instanceof PsiParameter parameter && parameter.getDeclarationScope() instanceof PsiMethod method) {
-      final PsiMethod superMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringLocalize.toRefactor().get());
+      PsiMethod superMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringLocalize.toRefactor().get());
        if (superMethod != null) {
          var = superMethod.getParameterList().getParameters()[method.getParameterList().getParameterIndex((PsiParameter)var)];
        }
@@ -94,8 +94,8 @@ public class InvertBooleanHandler implements RefactoringActionHandler {
   }
 
   @RequiredUIAccess
-  private static void invoke(PsiMethod method, final Project project, Editor editor) {
-    final PsiType returnType = method.getReturnType();
+  private static void invoke(PsiMethod method, Project project, Editor editor) {
+    PsiType returnType = method.getReturnType();
     if (!PsiType.BOOLEAN.equals(returnType)) {
       CommonRefactoringUtil.showErrorHint(
         project,
@@ -107,7 +107,7 @@ public class InvertBooleanHandler implements RefactoringActionHandler {
       return;
     }
 
-    final PsiMethod superMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringLocalize.toRefactor().get());
+    PsiMethod superMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringLocalize.toRefactor().get());
     if (superMethod != null) method = superMethod;
 
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, method)) return;

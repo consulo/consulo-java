@@ -53,18 +53,18 @@ public class NotifyNotInSynchronizedContextInspection
     @Override
     public void visitMethodCallExpression(
       @Nonnull PsiMethodCallExpression expression) {
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
+      String methodName = methodExpression.getReferenceName();
       if (!HardcodedMethodConstants.NOTIFY.equals(methodName) &&
           !HardcodedMethodConstants.NOTIFY_ALL.equals(methodName)) {
         return;
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return;
       }
-      final PsiParameterList parameterList = method.getParameterList();
+      PsiParameterList parameterList = method.getParameterList();
       if (parameterList.getParametersCount() != 0) {
         return;
       }

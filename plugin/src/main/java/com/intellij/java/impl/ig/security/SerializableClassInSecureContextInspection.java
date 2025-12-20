@@ -71,8 +71,8 @@ public class SerializableClassInSecureContextInspection extends BaseInspection {
             if (aClass instanceof PsiTypeParameter || !SerializationUtils.isSerializable(aClass)) {
                 return;
             }
-            final PsiMethod[] methods = aClass.findMethodsByName("writeObject", true);
-            for (final PsiMethod method : methods) {
+            PsiMethod[] methods = aClass.findMethodsByName("writeObject", true);
+            for (PsiMethod method : methods) {
                 if (!SerializationUtils.isWriteObject(method)) {
                     continue;
                 }

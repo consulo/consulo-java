@@ -48,12 +48,12 @@ public abstract class IntroduceParameterTest extends LightRefactoringTestCase
 		return JavaTestUtil.getJavaTestDataPath();
 	}
 
-	private void doTest(int replaceFieldsWithGetters, boolean removeUnusedParameters, boolean searchForSuper, boolean declareFinal, final boolean generateDelegate) throws Exception
+	private void doTest(int replaceFieldsWithGetters, boolean removeUnusedParameters, boolean searchForSuper, boolean declareFinal, boolean generateDelegate) throws Exception
 	{
 		doTest(replaceFieldsWithGetters, removeUnusedParameters, searchForSuper, declareFinal, generateDelegate, null);
 	}
 
-	private void doTest(int replaceFieldsWithGetters, boolean removeUnusedParameters, boolean searchForSuper, boolean declareFinal, final boolean generateDelegate, String conflict) throws Exception
+	private void doTest(int replaceFieldsWithGetters, boolean removeUnusedParameters, boolean searchForSuper, boolean declareFinal, boolean generateDelegate, String conflict) throws Exception
 	{
 		boolean enabled = true;
 		try
@@ -351,7 +351,7 @@ public abstract class IntroduceParameterTest extends LightRefactoringTestCase
 
 	public void testDiamondOccurrences() throws Exception
 	{
-		final LanguageLevel oldLevel = getLanguageLevel();
+		LanguageLevel oldLevel = getLanguageLevel();
 		try
 		{
 			setLanguageLevel(LanguageLevel.JDK_1_7);
@@ -441,8 +441,8 @@ public abstract class IntroduceParameterTest extends LightRefactoringTestCase
 			@NonNls String parameterName,
 			boolean searchForSuper,
 			boolean declareFinal,
-			final boolean removeUnusedParameters,
-			final boolean generateDelegate)
+			boolean removeUnusedParameters,
+			boolean generateDelegate)
 	{
 		return perform(replaceAllOccurences, replaceFieldsWithGetters, parameterName, searchForSuper, declareFinal, removeUnusedParameters, generateDelegate, 0);
 	}
@@ -452,8 +452,8 @@ public abstract class IntroduceParameterTest extends LightRefactoringTestCase
 			@NonNls String parameterName,
 			boolean searchForSuper,
 			boolean declareFinal,
-			final boolean removeUnusedParameters,
-			final boolean generateDelegate,
+			boolean removeUnusedParameters,
+			boolean generateDelegate,
 			int enclosingLevel)
 	{
 		final ElementToWorkOn[] elementToWorkOn = new ElementToWorkOn[1];
@@ -466,7 +466,7 @@ public abstract class IntroduceParameterTest extends LightRefactoringTestCase
 			}
 
 			@Override
-			public void pass(final ElementToWorkOn e)
+			public void pass(ElementToWorkOn e)
 			{
 				if(e == null)
 				{
@@ -477,8 +477,8 @@ public abstract class IntroduceParameterTest extends LightRefactoringTestCase
 			}
 		});
 
-		final PsiExpression expr = elementToWorkOn[0].getExpression();
-		final PsiLocalVariable localVar = elementToWorkOn[0].getLocalVariable();
+		PsiExpression expr = elementToWorkOn[0].getExpression();
+		PsiLocalVariable localVar = elementToWorkOn[0].getLocalVariable();
 
 		PsiElement context = expr == null ? localVar : expr;
 		PsiMethod method = Util.getContainingMethod(context);
@@ -487,11 +487,11 @@ public abstract class IntroduceParameterTest extends LightRefactoringTestCase
 			return false;
 		}
 
-		final List<PsiMethod> methods = IntroduceParameterHandler.getEnclosingMethods(method);
+		List<PsiMethod> methods = IntroduceParameterHandler.getEnclosingMethods(method);
 		assertTrue(methods.size() > enclosingLevel);
 		method = methods.get(enclosingLevel);
 
-		final PsiMethod methodToSearchFor;
+		PsiMethod methodToSearchFor;
 		if(searchForSuper)
 		{
 			methodToSearchFor = method.findDeepestSuperMethod();
@@ -520,16 +520,16 @@ public abstract class IntroduceParameterTest extends LightRefactoringTestCase
 		return true;
 	}
 
-	private static void performForLocal(boolean searchForSuper, boolean removeLocalVariable, boolean replaceAllOccurrences, boolean declareFinal, final boolean removeUnusedParameters)
+	private static void performForLocal(boolean searchForSuper, boolean removeLocalVariable, boolean replaceAllOccurrences, boolean declareFinal, boolean removeUnusedParameters)
 	{
-		final int offset = myEditor.getCaretModel().getOffset();
-		final PsiElement element = myFile.findElementAt(offset).getParent();
+		int offset = myEditor.getCaretModel().getOffset();
+		PsiElement element = myFile.findElementAt(offset).getParent();
 		assertTrue(element instanceof PsiLocalVariable);
 		PsiMethod method = Util.getContainingMethod(element);
-		final PsiMethod methodToSearchFor;
+		PsiMethod methodToSearchFor;
 		if(searchForSuper)
 		{
-			final PsiMethod deepestSuperMethod = method.findDeepestSuperMethod();
+			PsiMethod deepestSuperMethod = method.findDeepestSuperMethod();
 			methodToSearchFor = deepestSuperMethod != null ? deepestSuperMethod : method;
 		}
 		else
@@ -538,8 +538,8 @@ public abstract class IntroduceParameterTest extends LightRefactoringTestCase
 		}
 		assertNotNull(method);
 		assertNotNull(methodToSearchFor);
-		final PsiLocalVariable localVariable = (PsiLocalVariable) element;
-		final PsiExpression parameterInitializer = localVariable.getInitializer();
+		PsiLocalVariable localVariable = (PsiLocalVariable) element;
+		PsiExpression parameterInitializer = localVariable.getInitializer();
 		IntList parametersToRemove = removeUnusedParameters ? Util.findParametersToRemove(method, parameterInitializer, null) : IntLists.newArrayList();
 
 		new IntroduceParameterProcessor(getProject(), method, methodToSearchFor, parameterInitializer, null, localVariable, removeLocalVariable, localVariable.getName(), replaceAllOccurrences,

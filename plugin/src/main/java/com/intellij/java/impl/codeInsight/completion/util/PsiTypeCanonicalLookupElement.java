@@ -37,7 +37,7 @@ public class PsiTypeCanonicalLookupElement extends LookupElement {
   private final PsiType myType;
   private final String myPresentableText;
 
-  public PsiTypeCanonicalLookupElement(@Nonnull final PsiType type) {
+  public PsiTypeCanonicalLookupElement(@Nonnull PsiType type) {
     myType = type;
     myPresentableText = myType.getPresentableText();
   }
@@ -45,7 +45,7 @@ public class PsiTypeCanonicalLookupElement extends LookupElement {
   @Nonnull
   @Override
   public Object getObject() {
-    final PsiClass psiClass = getPsiClass();
+    PsiClass psiClass = getPsiClass();
     if (psiClass != null) {
       return psiClass;
     }
@@ -78,11 +78,11 @@ public class PsiTypeCanonicalLookupElement extends LookupElement {
   }
 
   @Override
-  public boolean equals(final Object o) {
+  public boolean equals(Object o) {
     if (this == o) return true;
     if (!(o instanceof PsiTypeCanonicalLookupElement)) return false;
 
-    final PsiTypeCanonicalLookupElement that = (PsiTypeCanonicalLookupElement)o;
+    PsiTypeCanonicalLookupElement that = (PsiTypeCanonicalLookupElement)o;
 
     if (!myType.equals(that.myType)) return false;
 
@@ -96,12 +96,12 @@ public class PsiTypeCanonicalLookupElement extends LookupElement {
 
   @Override
   public void renderElement(LookupElementPresentation presentation) {
-    final PsiClass psiClass = getPsiClass();
+    PsiClass psiClass = getPsiClass();
     if (psiClass != null) {
       presentation.setIcon(presentation.isReal() ? IconDescriptorUpdaters.getIcon(psiClass, 0) : EMPTY_ICON);
       presentation.setTailText(" " + PsiFormatUtil.getPackageDisplayName(psiClass), true);
     }
-    final PsiType type = getPsiType();
+    PsiType type = getPsiType();
     presentation.setItemText(type.getPresentableText());
     presentation.setItemTextBold(type instanceof PsiPrimitiveType);
   }

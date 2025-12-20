@@ -52,8 +52,8 @@ public class JavaWithRunnableSurrounder extends JavaStatementsSurrounder{
     PsiManager manager = container.getManager();
     PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
     CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
-    final String baseName = "runnable";
-    final String uniqueName = JavaCodeStyleManager.getInstance(project).suggestUniqueVariableName(baseName, container, false);
+    String baseName = "runnable";
+    String uniqueName = JavaCodeStyleManager.getInstance(project).suggestUniqueVariableName(baseName, container, false);
 
     @NonNls String text = "Runnable runnable = new Runnable(){\npublic void run(){\n}};";
     PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement)factory.createStatementFromText(text, null);
@@ -77,7 +77,7 @@ public class JavaWithRunnableSurrounder extends JavaStatementsSurrounder{
 
     makeVariablesFinal(body, body);
 
-    final int textOffset = variable.getNameIdentifier().getTextOffset();
+    int textOffset = variable.getNameIdentifier().getTextOffset();
     PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(editor.getDocument());
     editor.getCaretModel().moveToOffset(textOffset);
     editor.getSelectionModel().removeSelection();
@@ -92,7 +92,7 @@ public class JavaWithRunnableSurrounder extends JavaStatementsSurrounder{
       protected void moveOffsetAfter(boolean success) {
         super.moveOffsetAfter(success);
         if (success) {
-          final PsiNamedElement renamedVariable = getVariable();
+          PsiNamedElement renamedVariable = getVariable();
           if (renamedVariable != null) {
             editor.getCaretModel().moveToOffset(renamedVariable.getTextRange().getEndOffset());
           }
@@ -118,7 +118,7 @@ public class JavaWithRunnableSurrounder extends JavaStatementsSurrounder{
         PsiElement refElement = referenceExpression.resolve();
         if (refElement instanceof PsiLocalVariable || refElement instanceof PsiParameter) {
           PsiVariable variable = (PsiVariable) refElement;
-          final PsiModifierList modifierList = variable.getModifierList();
+          PsiModifierList modifierList = variable.getModifierList();
           if ((modifierList != null) && (modifierList.hasModifierProperty(PsiModifier.FINAL))) {
             continue;
           }
@@ -141,11 +141,11 @@ public class JavaWithRunnableSurrounder extends JavaStatementsSurrounder{
     }
   }
 
-  private static boolean canBeDeclaredFinal(@Nonnull final PsiVariable variable, @Nullable final PsiElement scope) {
+  private static boolean canBeDeclaredFinal(@Nonnull PsiVariable variable, @Nullable PsiElement scope) {
     if (scope == null) {
       return false;
     }
-    final Collection<PsiReference> references = ReferencesSearch.search(variable, new LocalSearchScope(scope)).findAll();
+    Collection<PsiReference> references = ReferencesSearch.search(variable, new LocalSearchScope(scope)).findAll();
     boolean foundOnce = variable instanceof PsiParameter || variable.getInitializer() != null;
     for (PsiReference reference : references) {
       if (reference instanceof PsiReferenceExpression referenceExpression) {

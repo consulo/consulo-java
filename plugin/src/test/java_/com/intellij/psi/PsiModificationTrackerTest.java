@@ -85,7 +85,7 @@ public abstract class PsiModificationTrackerTest extends LightPlatformCodeInsigh
              @Override
              public boolean process(PsiFile psiFile) {
                try {
-                 final VirtualFile vFile = psiFile.getVirtualFile();
+                 VirtualFile vFile = psiFile.getVirtualFile();
                  assert vFile != null : psiFile;
                  FileEditorManager.getInstance(getProject()).closeFile(vFile);
                  vFile.delete(this);

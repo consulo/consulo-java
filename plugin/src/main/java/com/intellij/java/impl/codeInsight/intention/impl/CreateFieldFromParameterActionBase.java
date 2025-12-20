@@ -47,7 +47,7 @@ public abstract class CreateFieldFromParameterActionBase extends BaseIntentionAc
 
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    final PsiParameter parameter = FieldFromParameterUtils.findParameterAtCursor(file, editor);
+    PsiParameter parameter = FieldFromParameterUtils.findParameterAtCursor(file, editor);
     if (parameter == null || !isAvailable(parameter)) {
       return false;
     }
@@ -62,7 +62,7 @@ public abstract class CreateFieldFromParameterActionBase extends BaseIntentionAc
   @Override
   @RequiredUIAccess
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
-    final PsiParameter myParameter = FieldFromParameterUtils.findParameterAtCursor(file, editor);
+    PsiParameter myParameter = FieldFromParameterUtils.findParameterAtCursor(file, editor);
     if (myParameter == null || !FileModificationService.getInstance().prepareFileForWrite(file)) return;
 
     IdeDocumentHistory.getInstance(project).includeCurrentPlaceAsChangePlace();
@@ -75,21 +75,21 @@ public abstract class CreateFieldFromParameterActionBase extends BaseIntentionAc
 
   @RequiredUIAccess
   private void processParameter(
-    final @Nonnull Project project,
-    final @Nonnull PsiParameter myParameter,
-    final boolean isInteractive
+    @Nonnull Project project,
+    @Nonnull PsiParameter myParameter,
+    boolean isInteractive
   ) {
-    final PsiType type = getSubstitutedType(myParameter);
-    final JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(project);
-    final String parameterName = myParameter.getName();
+    PsiType type = getSubstitutedType(myParameter);
+    JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(project);
+    String parameterName = myParameter.getName();
     String propertyName = styleManager.variableNameToPropertyName(parameterName, VariableKind.PARAMETER);
 
     String fieldNameToCalc;
     boolean isFinalToCalc;
-    final PsiClass targetClass = PsiTreeUtil.getParentOfType(myParameter, PsiClass.class);
-    final PsiMethod method = (PsiMethod) myParameter.getDeclarationScope();
+    PsiClass targetClass = PsiTreeUtil.getParentOfType(myParameter, PsiClass.class);
+    PsiMethod method = (PsiMethod) myParameter.getDeclarationScope();
 
-    final boolean isMethodStatic = method.hasModifierProperty(PsiModifier.STATIC);
+    boolean isMethodStatic = method.hasModifierProperty(PsiModifier.STATIC);
 
     VariableKind kind = isMethodStatic ? VariableKind.STATIC_FIELD : VariableKind.FIELD;
     SuggestedNameInfo suggestedNameInfo = styleManager.suggestVariableName(kind, propertyName, null, type);
@@ -106,7 +106,7 @@ public abstract class CreateFieldFromParameterActionBase extends BaseIntentionAc
       }
       names = ArrayUtil.toStringArray(namesList);
 
-      final CreateFieldFromParameterDialog dialog =
+      CreateFieldFromParameterDialog dialog =
         new CreateFieldFromParameterDialog(project, names, targetClass, method.isConstructor(), type);
       dialog.show();
 
@@ -120,8 +120,8 @@ public abstract class CreateFieldFromParameterActionBase extends BaseIntentionAc
       fieldNameToCalc = names[0];
     }
 
-    final boolean isFinal = isFinalToCalc;
-    final String fieldName = fieldNameToCalc;
+    boolean isFinal = isFinalToCalc;
+    String fieldName = fieldNameToCalc;
     project.getApplication().runWriteAction(() -> {
       try {
         performRefactoring(project, targetClass, method, myParameter, type, fieldName, isMethodStatic, isFinal);

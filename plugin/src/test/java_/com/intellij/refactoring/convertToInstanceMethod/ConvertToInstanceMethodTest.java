@@ -52,14 +52,14 @@ public abstract class ConvertToInstanceMethodTest extends LightRefactoringTestCa
     }
   }
 
-  private void doTest(final int targetParameter) throws Exception {
+  private void doTest(int targetParameter) throws Exception {
     doTest(targetParameter, VisibilityUtil.ESCALATE_VISIBILITY);
   }
 
-  private void doTest(final int targetParameter, final String visibility) throws Exception {
-    final String filePath = "/refactoring/convertToInstanceMethod/" + getTestName(false) + ".java";
+  private void doTest(int targetParameter, String visibility) throws Exception {
+    String filePath = "/refactoring/convertToInstanceMethod/" + getTestName(false) + ".java";
     configureByFile(filePath);
-    final PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
+    PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue("<caret> is not on method name", targetElement instanceof PsiMethod);
     PsiMethod method = (PsiMethod) targetElement;
     new ConvertToInstanceMethodProcessor(getProject(),

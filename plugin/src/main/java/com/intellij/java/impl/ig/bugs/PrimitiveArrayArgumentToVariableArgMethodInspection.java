@@ -57,31 +57,31 @@ public class PrimitiveArrayArgumentToVariableArgMethodInspection extends BaseIns
             if (!PsiUtil.isLanguageLevel5OrHigher(call)) {
                 return;
             }
-            final PsiExpressionList argumentList = call.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = call.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length == 0) {
                 return;
             }
-            final PsiExpression lastArgument = arguments[arguments.length - 1];
-            final PsiType argumentType = lastArgument.getType();
+            PsiExpression lastArgument = arguments[arguments.length - 1];
+            PsiType argumentType = lastArgument.getType();
             if (!isPrimitiveArrayType(argumentType)) {
                 return;
             }
-            final JavaResolveResult result = call.resolveMethodGenerics();
-            final PsiMethod method = (PsiMethod) result.getElement();
+            JavaResolveResult result = call.resolveMethodGenerics();
+            PsiMethod method = (PsiMethod) result.getElement();
             if (method == null) {
                 return;
             }
-            final PsiParameterList parameterList = method.getParameterList();
+            PsiParameterList parameterList = method.getParameterList();
             if (parameterList.getParametersCount() != arguments.length) {
                 return;
             }
-            final PsiParameter[] parameters = parameterList.getParameters();
-            final PsiParameter lastParameter = parameters[parameters.length - 1];
+            PsiParameter[] parameters = parameterList.getParameters();
+            PsiParameter lastParameter = parameters[parameters.length - 1];
             if (!lastParameter.isVarArgs()) {
                 return;
             }
-            final PsiType parameterType = lastParameter.getType();
+            PsiType parameterType = lastParameter.getType();
             if (isDeepPrimitiveArrayType(parameterType, result.getSubstitutor())) {
                 return;
             }
@@ -93,7 +93,7 @@ public class PrimitiveArrayArgumentToVariableArgMethodInspection extends BaseIns
         if (!(type instanceof PsiArrayType)) {
             return false;
         }
-        final PsiType componentType = ((PsiArrayType) type).getComponentType();
+        PsiType componentType = ((PsiArrayType) type).getComponentType();
         return TypeConversionUtil.isPrimitiveAndNotNull(componentType);
     }
 
@@ -101,8 +101,8 @@ public class PrimitiveArrayArgumentToVariableArgMethodInspection extends BaseIns
         if (!(type instanceof PsiEllipsisType)) {
             return false;
         }
-        final PsiType componentType = type.getDeepComponentType();
-        final PsiType substitute = substitutor.substitute(componentType);
+        PsiType componentType = type.getDeepComponentType();
+        PsiType substitute = substitutor.substitute(componentType);
         return TypeConversionUtil.isPrimitiveAndNotNull(substitute.getDeepComponentType());
     }
 }

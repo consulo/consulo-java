@@ -55,22 +55,22 @@ public class OverriddenMethodCallDuringObjectConstructionInspection extends Base
             if (!MethodCallUtils.isCallDuringObjectConstruction(expression)) {
                 return;
             }
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
             if (qualifier != null) {
                 if (!(qualifier instanceof PsiThisExpression || qualifier instanceof PsiSuperExpression)) {
                     return;
                 }
             }
-            final PsiClass containingClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
+            PsiClass containingClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
             if (containingClass == null || containingClass.hasModifierProperty(PsiModifier.FINAL)) {
                 return;
             }
-            final PsiMethod calledMethod = expression.resolveMethod();
+            PsiMethod calledMethod = expression.resolveMethod();
             if (calledMethod == null || !PsiUtil.canBeOverriden(calledMethod)) {
                 return;
             }
-            final PsiClass calledMethodClass = calledMethod.getContainingClass();
+            PsiClass calledMethodClass = calledMethod.getContainingClass();
             if (!InheritanceUtil.isInheritorOrSelf(containingClass, calledMethodClass, true)) {
                 return;
             }

@@ -57,25 +57,25 @@ public class StringCompareToInspection extends BaseInspection {
   @Override
   @Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
-    final PsiMethodCallExpression methodCallExpression =
+    PsiMethodCallExpression methodCallExpression =
       (PsiMethodCallExpression)infos[0];
-    final List<InspectionGadgetsFix> result = new ArrayList();
-    final PsiReferenceExpression methodExpression =
+    List<InspectionGadgetsFix> result = new ArrayList();
+    PsiReferenceExpression methodExpression =
       methodCallExpression.getMethodExpression();
-    final PsiModifierListOwner annotatableQualifier =
+    PsiModifierListOwner annotatableQualifier =
       NonNlsUtils.getAnnotatableQualifier(
         methodExpression);
     if (annotatableQualifier != null) {
-      final InspectionGadgetsFix fix = new DelegatingFix(
+      InspectionGadgetsFix fix = new DelegatingFix(
         new AddAnnotationFix(AnnotationUtil.NON_NLS,
                              annotatableQualifier));
       result.add(fix);
     }
-    final PsiModifierListOwner annotatableArgument =
+    PsiModifierListOwner annotatableArgument =
       NonNlsUtils.getAnnotatableArgument(
         methodCallExpression);
     if (annotatableArgument != null) {
-      final InspectionGadgetsFix fix = new DelegatingFix(
+      InspectionGadgetsFix fix = new DelegatingFix(
         new AddAnnotationFix(AnnotationUtil.NON_NLS,
                              annotatableArgument));
       result.add(fix);
@@ -97,15 +97,15 @@ public class StringCompareToInspection extends BaseInspection {
       if (!isStringCompareTo(expression)) {
         return;
       }
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      final PsiExpression qualifier =
+      PsiExpression qualifier =
         methodExpression.getQualifierExpression();
       if (NonNlsUtils.isNonNlsAnnotated(qualifier)) {
         return;
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
+      PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpression[] arguments = argumentList.getExpressions();
       if (arguments.length != 1) {
         return;
       }
@@ -117,31 +117,31 @@ public class StringCompareToInspection extends BaseInspection {
 
     private static boolean isStringCompareTo(
       PsiMethodCallExpression expression) {
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      final String name = methodExpression.getReferenceName();
+      String name = methodExpression.getReferenceName();
       if (!HardcodedMethodConstants.COMPARE_TO.equals(name)) {
         return false;
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return false;
       }
       if (!MethodUtils.isCompareTo(method)) {
         return false;
       }
-      final PsiParameterList parameterList = method.getParameterList();
-      final PsiParameter[] parameters = parameterList.getParameters();
-      final PsiType parameterType = parameters[0].getType();
+      PsiParameterList parameterList = method.getParameterList();
+      PsiParameter[] parameters = parameterList.getParameters();
+      PsiType parameterType = parameters[0].getType();
       if (!TypeUtils.isJavaLangObject(parameterType) &&
           !TypeUtils.isJavaLangString(parameterType)) {
         return false;
       }
-      final PsiClass aClass = method.getContainingClass();
+      PsiClass aClass = method.getContainingClass();
       if (aClass == null) {
         return false;
       }
-      final String className = aClass.getQualifiedName();
+      String className = aClass.getQualifiedName();
       return CommonClassNames.JAVA_LANG_STRING.equals(className);
     }
   }

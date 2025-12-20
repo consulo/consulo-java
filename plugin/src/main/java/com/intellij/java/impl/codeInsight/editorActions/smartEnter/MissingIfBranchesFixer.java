@@ -39,9 +39,9 @@ public class MissingIfBranchesFixer implements Fixer
 		}
 
 		PsiIfStatement ifStatement = (PsiIfStatement) psiElement;
-		final Document doc = editor.getDocument();
-		final PsiStatement elseBranch = ifStatement.getElseBranch();
-		final PsiKeyword elseElement = ifStatement.getElseElement();
+		Document doc = editor.getDocument();
+		PsiStatement elseBranch = ifStatement.getElseBranch();
+		PsiKeyword elseElement = ifStatement.getElseElement();
 		if(elseElement != null && (elseBranch == null || !(elseBranch instanceof PsiBlockStatement) && startLine(doc, elseBranch) > startLine(doc, elseElement)))
 		{
 			doc.insertString(elseElement.getTextRange().getEndOffset(), "{}");
@@ -63,7 +63,7 @@ public class MissingIfBranchesFixer implements Fixer
 			transformingOneLiner = true;
 		}
 
-		final PsiJavaToken rParenth = ifStatement.getRParenth();
+		PsiJavaToken rParenth = ifStatement.getRParenth();
 		assert rParenth != null;
 
 		if(elseBranch == null && !transformingOneLiner || thenBranch == null)

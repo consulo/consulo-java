@@ -65,12 +65,12 @@ public class UnnecessaryInheritDocInspection extends BaseInspection {
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
+            PsiElement element = descriptor.getPsiElement();
             if (!(element instanceof PsiDocTag)) {
                 return;
             }
-            final PsiDocTag docTag = (PsiDocTag) element;
-            final PsiDocComment docComment = docTag.getContainingComment();
+            PsiDocTag docTag = (PsiDocTag) element;
+            PsiDocComment docComment = docTag.getContainingComment();
             docComment.delete();
         }
     }
@@ -88,21 +88,21 @@ public class UnnecessaryInheritDocInspection extends BaseInspection {
             if (!(tag instanceof PsiInlineDocTag)) {
                 return;
             }
-            @NonNls final String name = tag.getName();
+            @NonNls String name = tag.getName();
             if (!"inheritDoc".equals(name)) {
                 return;
             }
-            final PsiDocComment docComment = tag.getContainingComment();
+            PsiDocComment docComment = tag.getContainingComment();
             if (docComment == null) {
                 return;
             }
-            final PsiDocToken[] docTokens = PsiTreeUtil.getChildrenOfType(
+            PsiDocToken[] docTokens = PsiTreeUtil.getChildrenOfType(
                 docComment, PsiDocToken.class);
             if (docTokens == null) {
                 return;
             }
             for (PsiDocToken docToken : docTokens) {
-                final IElementType tokenType = docToken.getTokenType();
+                IElementType tokenType = docToken.getTokenType();
                 if (!JavaDocTokenType.DOC_COMMENT_DATA.equals(tokenType)) {
                     continue;
                 }

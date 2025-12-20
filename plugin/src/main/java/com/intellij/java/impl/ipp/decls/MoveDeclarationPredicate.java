@@ -32,22 +32,22 @@ class MoveDeclarationPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiLocalVariable)) {
       return false;
     }
-    final PsiLocalVariable variable = (PsiLocalVariable)element;
-    final PsiExpression initializer = variable.getInitializer();
+    PsiLocalVariable variable = (PsiLocalVariable)element;
+    PsiExpression initializer = variable.getInitializer();
     if (initializer != null) {
       return false;
     }
-    final PsiCodeBlock variableBlock =
+    PsiCodeBlock variableBlock =
       PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
     if (variableBlock == null) {
       return false;
     }
-    final PsiManager manager = variable.getManager();
-    final PsiReference[] references = ReferencesSearch.search(variable, variable.getUseScope(), false).toArray(PsiReference.EMPTY_ARRAY);
+    PsiManager manager = variable.getManager();
+    PsiReference[] references = ReferencesSearch.search(variable, variable.getUseScope(), false).toArray(PsiReference.EMPTY_ARRAY);
     if (references.length == 0) {
       return false;
     }
-    final PsiElement tightestBlock = getTightestBlock(references);
+    PsiElement tightestBlock = getTightestBlock(references);
     if (tightestBlock == null) {
       return false;
     }
@@ -55,12 +55,12 @@ class MoveDeclarationPredicate implements PsiElementPredicate {
       return true;
     }
 
-    final PsiReference firstReference = references[0];
-    final PsiElement referenceElement = firstReference.getElement();
+    PsiReference firstReference = references[0];
+    PsiElement referenceElement = firstReference.getElement();
     if (referenceElement == null) {
       return false;
     }
-    final PsiElement child = getChildWhichContainsElement(variableBlock,
+    PsiElement child = getChildWhichContainsElement(variableBlock,
                                                           referenceElement);
     if (child == null) {
       return false;
@@ -94,15 +94,15 @@ class MoveDeclarationPredicate implements PsiElementPredicate {
     @Nonnull PsiReference[] references) {
     PsiCodeBlock commonParentBlock = null;
     for (PsiReference reference : references) {
-      final PsiElement referenceElement = reference.getElement();
-      final PsiCodeBlock block =
+      PsiElement referenceElement = reference.getElement();
+      PsiCodeBlock block =
         PsiTreeUtil.getParentOfType(referenceElement,
                                     PsiCodeBlock.class);
       if (block == null) {
         return commonParentBlock;
       }
       if (commonParentBlock != null && !commonParentBlock.equals(block)) {
-        final PsiElement commonParent =
+        PsiElement commonParent =
           PsiTreeUtil.findCommonParent(commonParentBlock, block);
         if (commonParent instanceof PsiCodeBlock) {
           commonParentBlock = (PsiCodeBlock)commonParent;

@@ -41,28 +41,28 @@ public class JavaInspectionExtensionsFactory extends InspectionExtensionsFactory
   }
 
   @Override
-  public RefManagerExtension createRefManagerExtension(final RefManager refManager) {
+  public RefManagerExtension createRefManagerExtension(RefManager refManager) {
     return new RefJavaManagerImpl((RefManagerImpl) refManager);
   }
 
   @Override
-  public HTMLComposerExtension createHTMLComposerExtension(final HTMLComposer composer) {
+  public HTMLComposerExtension createHTMLComposerExtension(HTMLComposer composer) {
     return new HTMLJavaHTMLComposerImpl((HTMLComposerBase) composer);
   }
 
   @Override
-  public boolean isToCheckMember(final PsiElement element, final String id) {
+  public boolean isToCheckMember(PsiElement element, String id) {
     return BatchSuppressManager.getInstance().getElementToolSuppressedIn(element, id) == null;
   }
 
   @Override
   @Nullable
-  public String getSuppressedInspectionIdsIn(final PsiElement element) {
+  public String getSuppressedInspectionIdsIn(PsiElement element) {
     return BatchSuppressManager.getInstance().getSuppressedInspectionIdsIn(element);
   }
 
   @Override
-  public boolean isProjectConfiguredToRunInspections(final Project project, final boolean online) {
+  public boolean isProjectConfiguredToRunInspections(Project project, boolean online) {
     return GlobalJavaInspectionContextImpl.isInspectionsEnabled(online, project);
   }
 }

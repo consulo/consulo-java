@@ -73,8 +73,8 @@ public abstract class ExtractSuperBaseProcessor extends TurnRefsToSuperProcessor
   }
 
   protected boolean doesAnyExtractedInterfaceExtends(PsiClass aClass) {
-    for (final MemberInfo memberInfo : myMemberInfos) {
-      final PsiElement member = memberInfo.getMember();
+    for (MemberInfo memberInfo : myMemberInfos) {
+      PsiElement member = memberInfo.getMember();
       if (member instanceof PsiClass && memberInfo.getOverrides() != null) {
         if (InheritanceUtil.isInheritorOrSelf((PsiClass)member, aClass, true)) {
           return true;
@@ -85,12 +85,12 @@ public abstract class ExtractSuperBaseProcessor extends TurnRefsToSuperProcessor
   }
 
   protected boolean doMemberInfosContain(PsiMethod method) {
-    for (final MemberInfo info : myMemberInfos) {
+    for (MemberInfo info : myMemberInfos) {
       if (info.getMember() instanceof PsiMethod) {
         if (MethodSignatureUtil.areSignaturesEqual(method, (PsiMethod)info.getMember())) return true;
       }
       else if (info.getMember() instanceof PsiClass && info.getOverrides() != null) {
-        final PsiMethod methodBySignature = ((PsiClass)info.getMember()).findMethodBySignature(method, true);
+        PsiMethod methodBySignature = ((PsiClass)info.getMember()).findMethodBySignature(method, true);
         if (methodBySignature != null) {
           return true;
         }
@@ -99,8 +99,8 @@ public abstract class ExtractSuperBaseProcessor extends TurnRefsToSuperProcessor
     return false;
   }
 
-  protected boolean doMemberInfosContain(final PsiField field) {
-    for (final MemberInfo info : myMemberInfos) {
+  protected boolean doMemberInfosContain(PsiField field) {
+    for (MemberInfo info : myMemberInfos) {
       if (myManager.areElementsEquivalent(field, info.getMember())) return true;
     }
     return false;
@@ -109,14 +109,14 @@ public abstract class ExtractSuperBaseProcessor extends TurnRefsToSuperProcessor
   @Nonnull
   protected UsageInfo[] findUsages() {
     PsiReference[] refs = ReferencesSearch.search(myClass, GlobalSearchScope.projectScope(myProject), false).toArray(new PsiReference[0]);
-    final ArrayList<UsageInfo> result = new ArrayList<UsageInfo>();
+    ArrayList<UsageInfo> result = new ArrayList<UsageInfo>();
     detectTurnToSuperRefs(refs, result);
-    final PsiJavaPackage originalPackage = JavaDirectoryService.getInstance().getPackage(myClass.getContainingFile().getContainingDirectory());
+    PsiJavaPackage originalPackage = JavaDirectoryService.getInstance().getPackage(myClass.getContainingFile().getContainingDirectory());
     if (Comparing.equal(JavaDirectoryService.getInstance().getPackage(myTargetDirectory), originalPackage)) {
       result.clear();
     }
-    for (final PsiReference ref : refs) {
-      final PsiElement element = ref.getElement();
+    for (PsiReference ref : refs) {
+      PsiElement element = ref.getElement();
       if (!canTurnToSuper(element) && !RefactoringUtil.inImportStatement(ref, element)) {
         result.add(new BindToOldUsageInfo(element, ref, myClass));
       }
@@ -127,11 +127,11 @@ public abstract class ExtractSuperBaseProcessor extends TurnRefsToSuperProcessor
 
   protected void performRefactoring(UsageInfo[] usages) {
     try {
-      final String superClassName = myClass.getName();
-      final String oldQualifiedName = myClass.getQualifiedName();
+      String superClassName = myClass.getName();
+      String oldQualifiedName = myClass.getQualifiedName();
       myClass.setName(myNewClassName);
       PsiClass superClass = extractSuper(superClassName);
-      final PsiDirectory initialDirectory = myClass.getContainingFile().getContainingDirectory();
+      PsiDirectory initialDirectory = myClass.getContainingFile().getContainingDirectory();
       try {
         if (myTargetDirectory != initialDirectory) {
           myTargetDirectory.add(myClass.getContainingFile().copy());
@@ -141,9 +141,9 @@ public abstract class ExtractSuperBaseProcessor extends TurnRefsToSuperProcessor
       catch (IncorrectOperationException e) {
         RefactoringUIUtil.processIncorrectOperation(myProject, e);
       }
-      for (final UsageInfo usage : usages) {
+      for (UsageInfo usage : usages) {
         if (usage instanceof BindToOldUsageInfo) {
-          final PsiReference reference = usage.getReference();
+          PsiReference reference = usage.getReference();
           if (reference != null && reference.getElement().isValid()) {
             reference.bindToElement(myClass);
           }
@@ -152,7 +152,7 @@ public abstract class ExtractSuperBaseProcessor extends TurnRefsToSuperProcessor
       if (!Comparing.equal(oldQualifiedName, superClass.getQualifiedName())) {
         processTurnToSuperRefs(usages, superClass);
       }
-      final PsiFile containingFile = myClass.getContainingFile();
+      PsiFile containingFile = myClass.getContainingFile();
       if (containingFile instanceof PsiJavaFile) {
         JavaCodeStyleManager.getInstance(myProject).removeRedundantImports((PsiJavaFile) containingFile);
       }
@@ -170,7 +170,7 @@ public abstract class ExtractSuperBaseProcessor extends TurnRefsToSuperProcessor
     myClass = (PsiClass)elements[0];
     myTargetDirectory = (PsiDirectory)elements[1];
     for (int i = 0; i < myMemberInfos.length; i++) {
-      final MemberInfo info = myMemberInfos[i];
+      MemberInfo info = myMemberInfos[i];
       info.updateMember((PsiMember)elements[i + 2]);
     }
   }
@@ -181,7 +181,7 @@ public abstract class ExtractSuperBaseProcessor extends TurnRefsToSuperProcessor
 
   @Nonnull
   @Override
-  protected Collection<? extends PsiElement> getElementsToWrite(@Nonnull final UsageViewDescriptor descriptor) {
+  protected Collection<? extends PsiElement> getElementsToWrite(@Nonnull UsageViewDescriptor descriptor) {
     return ((ExtractSuperClassViewDescriptor) descriptor).getMembersToMakeWritable();
   }
 }

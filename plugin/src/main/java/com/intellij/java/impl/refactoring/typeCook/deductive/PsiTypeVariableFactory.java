@@ -39,10 +39,10 @@ public class PsiTypeVariableFactory {
     return myCurrent;
   }
 
-  public final void registerCluster(final HashSet<PsiTypeVariable> cluster) {
+  public final void registerCluster(HashSet<PsiTypeVariable> cluster) {
     myClusters.add(cluster);
 
-    for (final PsiTypeVariable aCluster : cluster) {
+    for (PsiTypeVariable aCluster : cluster) {
       myVarCluster.put(new Integer(aCluster.getIndex()), cluster);
     }
   }
@@ -51,7 +51,7 @@ public class PsiTypeVariableFactory {
     return myClusters;
   }
 
-  public final HashSet<PsiTypeVariable> getClusterOf(final int var) {
+  public final HashSet<PsiTypeVariable> getClusterOf(int var) {
     return myVarCluster.get(new Integer(var));
   }
 
@@ -64,7 +64,7 @@ public class PsiTypeVariableFactory {
       private final int myIndex = myCurrent++;
       private final PsiElement myContext = context;
 
-      public boolean isValidInContext(final PsiType type) {
+      public boolean isValidInContext(PsiType type) {
         if (myContext == null) {
           return true;
         }
@@ -74,16 +74,16 @@ public class PsiTypeVariableFactory {
         }
 
         return type.accept(new PsiTypeVisitor<Boolean>() {
-          public Boolean visitType(final PsiType type) {
+          public Boolean visitType(PsiType type) {
             return Boolean.TRUE;
           }
 
-          public Boolean visitArrayType(final PsiArrayType arrayType) {
+          public Boolean visitArrayType(PsiArrayType arrayType) {
             return arrayType.getDeepComponentType().accept(this);
           }
 
-          public Boolean visitWildcardType(final PsiWildcardType wildcardType) {
-            final PsiType bound = wildcardType.getBound();
+          public Boolean visitWildcardType(PsiWildcardType wildcardType) {
+            PsiType bound = wildcardType.getBound();
 
             if (bound != null) {
               bound.accept(this);
@@ -92,17 +92,17 @@ public class PsiTypeVariableFactory {
             return Boolean.TRUE;
           }
 
-          public Boolean visitClassType(final PsiClassType classType) {
-            final PsiClassType.ClassResolveResult result = classType.resolveGenerics();
-            final PsiClass aClass = result.getElement();
-            final PsiSubstitutor aSubst = result.getSubstitutor();
+          public Boolean visitClassType(PsiClassType classType) {
+            PsiClassType.ClassResolveResult result = classType.resolveGenerics();
+            PsiClass aClass = result.getElement();
+            PsiSubstitutor aSubst = result.getSubstitutor();
 
             if (aClass != null) {
-              final PsiManager manager = aClass.getManager();
-              final JavaPsiFacade facade = JavaPsiFacade.getInstance(manager.getProject());
+              PsiManager manager = aClass.getManager();
+              JavaPsiFacade facade = JavaPsiFacade.getInstance(manager.getProject());
 
               if (aClass instanceof PsiTypeParameter) {
-                final PsiTypeParameterListOwner owner = PsiTreeUtil.getParentOfType(myContext, PsiTypeParameterListOwner.class);
+                PsiTypeParameterListOwner owner = PsiTreeUtil.getParentOfType(myContext, PsiTypeParameterListOwner.class);
 
                 if (owner != null) {
                   boolean found = false;
@@ -125,10 +125,10 @@ public class PsiTypeVariableFactory {
               }
 
               for (PsiTypeParameter parm : PsiUtil.typeParametersIterable(aClass)) {
-                final PsiType type = aSubst.substitute(parm);
+                PsiType type = aSubst.substitute(parm);
 
                 if (type != null) {
-                  final Boolean b = type.accept(this);
+                  Boolean b = type.accept(this);
 
                   if (!b.booleanValue()) {
                     return Boolean.FALSE;
@@ -178,7 +178,7 @@ public class PsiTypeVariableFactory {
         if (this == o) return true;
         if (!(o instanceof PsiTypeVariable)) return false;
 
-        final PsiTypeVariable psiTypeVariable = (PsiTypeVariable)o;
+        PsiTypeVariable psiTypeVariable = (PsiTypeVariable)o;
 
         if (myIndex != psiTypeVariable.getIndex()) return false;
 

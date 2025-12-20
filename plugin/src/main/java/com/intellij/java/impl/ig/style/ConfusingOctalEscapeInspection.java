@@ -58,7 +58,7 @@ public class ConfusingOctalEscapeInspection extends BaseInspection {
       if (!ExpressionUtils.hasStringType(expression)) {
         return;
       }
-      final String text = expression.getText();
+      String text = expression.getText();
       int escapeStart = -1;
       while (true) {
         escapeStart = text.indexOf((int)'\\', escapeStart + 1);
@@ -69,7 +69,7 @@ public class ConfusingOctalEscapeInspection extends BaseInspection {
           continue;
         }
         boolean isEscape = true;
-        final int textLength = text.length();
+        int textLength = text.length();
         int nextChar = escapeStart + 1;
         while (nextChar < textLength && text.charAt(nextChar) == '\\') {
           isEscape = !isEscape;
@@ -81,7 +81,7 @@ public class ConfusingOctalEscapeInspection extends BaseInspection {
         escapeStart = nextChar - 1;
         int length = 1;
         while (escapeStart + length < textLength) {
-          final char c = text.charAt(escapeStart + length);
+          char c = text.charAt(escapeStart + length);
           if (!Character.isDigit(c)) {
             break;
           }

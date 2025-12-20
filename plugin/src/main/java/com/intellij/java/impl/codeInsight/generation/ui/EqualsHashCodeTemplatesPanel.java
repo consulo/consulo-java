@@ -144,18 +144,18 @@ public class EqualsHashCodeTemplatesPanel extends NamedItemsListEditor<Couple<Te
       @Nullable
       @Override
       public JComponent createComponent() {
-        final Splitter splitter = new Splitter(true);
+        Splitter splitter = new Splitter(true);
 
-        final JPanel eqPanel = new JPanel(new BorderLayout());
+        JPanel eqPanel = new JPanel(new BorderLayout());
         eqPanel.add(new TitledSeparator("Equals Template:"), BorderLayout.NORTH);
-        final JComponent eqPane = equalsConfigurable.createComponent();
+        JComponent eqPane = equalsConfigurable.createComponent();
         eqPane.setPreferredSize(JBUI.size(300, 200));
         eqPanel.add(eqPane, BorderLayout.CENTER);
         splitter.setFirstComponent(eqPanel);
 
-        final JPanel hcPanel = new JPanel(new BorderLayout());
+        JPanel hcPanel = new JPanel(new BorderLayout());
         hcPanel.add(new TitledSeparator("HashCode Template:"), BorderLayout.NORTH);
-        final JComponent hcPane = hashCodeConfigurable.createComponent();
+        JComponent hcPane = hashCodeConfigurable.createComponent();
         hcPane.setPreferredSize(JBUI.size(300, 200));
         hcPanel.add(hcPane, BorderLayout.CENTER);
         splitter.setSecondComponent(hcPanel);
@@ -198,7 +198,7 @@ public class EqualsHashCodeTemplatesPanel extends NamedItemsListEditor<Couple<Te
     }
     myManager.setTemplates(resources);
 
-    final Couple<TemplateResource> selection = getSelectedItem();
+    Couple<TemplateResource> selection = getSelectedItem();
     if (selection != null) {
       myManager.setDefaultTemplate(selection.first);
     }

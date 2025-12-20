@@ -47,14 +47,14 @@ public class MoveAnonymousToInnerClassFix extends InspectionGadgetsFix {
   }
 
   public void doFix(@Nonnull final Project project, ProblemDescriptor descriptor) {
-    final PsiElement nameElement = descriptor.getPsiElement();
+    PsiElement nameElement = descriptor.getPsiElement();
     final PsiAnonymousClass aClass = (PsiAnonymousClass)nameElement.getParent();
-    final JavaRefactoringActionHandlerFactory factory = JavaRefactoringActionHandlerFactory.getInstance();
+    JavaRefactoringActionHandlerFactory factory = JavaRefactoringActionHandlerFactory.getInstance();
     final RefactoringActionHandler anonymousToInner =
       factory.createAnonymousToInnerHandler();
-    final DataManager dataManager = DataManager.getInstance();
+    DataManager dataManager = DataManager.getInstance();
     final DataContext dataContext = dataManager.getDataContext();
-    final Runnable runnable = new Runnable() {
+    Runnable runnable = new Runnable() {
       public void run() {
         anonymousToInner.invoke(project, new PsiElement[]{aClass}, dataContext);
       }

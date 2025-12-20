@@ -47,12 +47,12 @@ public class ResultOfObjectAllocationIgnoredInspection extends BaseInspection {
         @Override
         public void visitExpressionStatement(@Nonnull PsiExpressionStatement statement) {
             super.visitExpressionStatement(statement);
-            final PsiExpression expression = statement.getExpression();
+            PsiExpression expression = statement.getExpression();
             if (!(expression instanceof PsiNewExpression)) {
                 return;
             }
-            final PsiNewExpression newExpression = (PsiNewExpression) expression;
-            final PsiExpression[] arrayDimensions = newExpression.getArrayDimensions();
+            PsiNewExpression newExpression = (PsiNewExpression) expression;
+            PsiExpression[] arrayDimensions = newExpression.getArrayDimensions();
             if (arrayDimensions.length != 0) {
                 return;
             }

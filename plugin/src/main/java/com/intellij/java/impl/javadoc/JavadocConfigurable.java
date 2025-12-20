@@ -80,7 +80,7 @@ public final class JavadocConfigurable implements Configurable {
     public boolean isModified() {
         boolean isModified;
 
-        final JavadocConfiguration configuration = myConfiguration;
+        JavadocConfiguration configuration = myConfiguration;
         isModified = !compareStrings(myPanel.myTfOutputDir.getText(), toUserSystemFormat(configuration.OUTPUT_DIRECTORY));
         isModified |= !compareStrings(myPanel.myOtherOptionsField.getText(), configuration.OTHER_OPTIONS);
         isModified |= !compareStrings(myPanel.myHeapSizeField.getText(), configuration.HEAP_SIZE);

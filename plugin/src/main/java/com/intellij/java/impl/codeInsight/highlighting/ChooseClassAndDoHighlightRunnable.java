@@ -30,11 +30,11 @@ public abstract class ChooseClassAndDoHighlightRunnable extends ChooseOneOrAllRu
     super(resolveClasses(classTypes), editor, title, PsiClass.class);
   }
 
-  protected ChooseClassAndDoHighlightRunnable(final List<PsiClass> classes, final Editor editor, final String title) {
+  protected ChooseClassAndDoHighlightRunnable(List<PsiClass> classes, Editor editor, String title) {
     super(classes, editor, title, PsiClass.class);
   }
 
-  public static List<PsiClass> resolveClasses(final PsiClassType[] classTypes) {
+  public static List<PsiClass> resolveClasses(PsiClassType[] classTypes) {
     List<PsiClass> classes = new ArrayList<PsiClass>();
     for (PsiClassType classType : classTypes) {
       PsiClass aClass = classType.resolve();

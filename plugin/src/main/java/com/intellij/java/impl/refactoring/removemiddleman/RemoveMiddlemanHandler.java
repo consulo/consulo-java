@@ -51,9 +51,9 @@ public class RemoveMiddlemanHandler implements RefactoringActionHandler {
     @Override
     @RequiredUIAccess
     public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
-        final ScrollingModel scrollingModel = editor.getScrollingModel();
+        ScrollingModel scrollingModel = editor.getScrollingModel();
         scrollingModel.scrollToCaret(ScrollType.MAKE_VISIBLE);
-        final PsiElement element = dataContext.getData(PsiElement.KEY);
+        PsiElement element = dataContext.getData(PsiElement.KEY);
         if (element instanceof PsiField field) {
             invoke(field, editor);
         }
@@ -83,9 +83,9 @@ public class RemoveMiddlemanHandler implements RefactoringActionHandler {
     }
 
     @RequiredUIAccess
-    private static void invoke(final PsiField field, Editor editor) {
-        final Project project = field.getProject();
-        final Set<PsiMethod> delegating = DelegationUtils.getDelegatingMethodsForField(field);
+    private static void invoke(PsiField field, Editor editor) {
+        Project project = field.getProject();
+        Set<PsiMethod> delegating = DelegationUtils.getDelegatingMethodsForField(field);
         if (delegating.isEmpty()) {
             LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
                 JavaRefactoringLocalize.fieldSelectedIsNotUsedAsADelegate()
@@ -97,7 +97,7 @@ public class RemoveMiddlemanHandler implements RefactoringActionHandler {
         MemberInfo[] infos = new MemberInfo[delegating.size()];
         int i = 0;
         for (PsiMethod method : delegating) {
-            final MemberInfo memberInfo = new MemberInfo(method);
+            MemberInfo memberInfo = new MemberInfo(method);
             memberInfo.setChecked(true);
             memberInfo.setToAbstract(method.findDeepestSuperMethods().length == 0);
             infos[i++] = memberInfo;

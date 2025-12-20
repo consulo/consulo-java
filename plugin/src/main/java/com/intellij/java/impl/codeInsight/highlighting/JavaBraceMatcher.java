@@ -45,12 +45,12 @@ public class JavaBraceMatcher implements PairedBraceMatcher {
   }
 
   @Override
-  public boolean isPairedBracesAllowedBeforeType(@Nonnull final IElementType lbraceType, @Nullable final IElementType contextType) {
+  public boolean isPairedBracesAllowedBeforeType(@Nonnull IElementType lbraceType, @Nullable IElementType contextType) {
     if (contextType instanceof IJavaElementType) return isPairedBracesAllowedBeforeTypeInJava(contextType);
     return true;
   }
 
-  private static boolean isPairedBracesAllowedBeforeTypeInJava(final IElementType tokenType) {
+  private static boolean isPairedBracesAllowedBeforeTypeInJava(IElementType tokenType) {
     return ElementType.JAVA_COMMENT_OR_WHITESPACE_BIT_SET.contains(tokenType)
             || tokenType == JavaTokenType.SEMICOLON
             || tokenType == JavaTokenType.COMMA
@@ -61,7 +61,7 @@ public class JavaBraceMatcher implements PairedBraceMatcher {
   }
 
   @Override
-  public int getCodeConstructStart(final PsiFile file, int openingBraceOffset) {
+  public int getCodeConstructStart(PsiFile file, int openingBraceOffset) {
     PsiElement element = file.findElementAt(openingBraceOffset);
     if (element == null || element instanceof PsiFile) return openingBraceOffset;
     PsiElement parent = element.getParent();

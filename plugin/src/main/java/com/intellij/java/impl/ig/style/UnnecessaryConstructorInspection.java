@@ -81,8 +81,8 @@ public class UnnecessaryConstructorInspection extends BaseInspection {
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement nameIdentifier = descriptor.getPsiElement();
-            final PsiElement constructor = nameIdentifier.getParent();
+            PsiElement nameIdentifier = descriptor.getPsiElement();
+            PsiElement constructor = nameIdentifier.getParent();
             assert constructor != null;
             deleteElement(constructor);
         }
@@ -91,11 +91,11 @@ public class UnnecessaryConstructorInspection extends BaseInspection {
     private class UnnecessaryConstructorVisitor extends BaseInspectionVisitor {
         @Override
         public void visitClass(@Nonnull PsiClass aClass) {
-            final PsiMethod[] constructors = aClass.getConstructors();
+            PsiMethod[] constructors = aClass.getConstructors();
             if (constructors.length != 1) {
                 return;
             }
-            final PsiMethod constructor = constructors[0];
+            PsiMethod constructor = constructors[0];
             if (!constructor.hasModifierProperty(PsiModifier.PRIVATE) &&
                 aClass.hasModifierProperty(PsiModifier.PRIVATE)) {
                 return;
@@ -112,32 +112,32 @@ public class UnnecessaryConstructorInspection extends BaseInspection {
                 aClass.hasModifierProperty(PsiModifier.PUBLIC)) {
                 return;
             }
-            final PsiParameterList parameterList = constructor.getParameterList();
+            PsiParameterList parameterList = constructor.getParameterList();
             if (parameterList.getParametersCount() != 0) {
                 return;
             }
             if (ignoreAnnotations) {
-                final PsiModifierList modifierList = constructor.getModifierList();
-                final PsiAnnotation[] annotations = modifierList.getAnnotations();
+                PsiModifierList modifierList = constructor.getModifierList();
+                PsiAnnotation[] annotations = modifierList.getAnnotations();
                 if (annotations.length > 0) {
                     return;
                 }
             }
-            final PsiReferenceList throwsList = constructor.getThrowsList();
-            final PsiJavaCodeReferenceElement[] elements = throwsList.getReferenceElements();
+            PsiReferenceList throwsList = constructor.getThrowsList();
+            PsiJavaCodeReferenceElement[] elements = throwsList.getReferenceElements();
             if (elements.length != 0) {
                 return;
             }
-            final PsiCodeBlock body = constructor.getBody();
+            PsiCodeBlock body = constructor.getBody();
             if (body == null) {
                 return;
             }
-            final PsiStatement[] statements = body.getStatements();
+            PsiStatement[] statements = body.getStatements();
             if (statements.length == 0) {
                 registerMethodError(constructor);
             }
             else if (statements.length == 1) {
-                final PsiStatement statement = statements[0];
+                PsiStatement statement = statements[0];
                 if (SUPER_CALL_TEXT.equals(statement.getText())) {
                     registerMethodError(constructor);
                 }

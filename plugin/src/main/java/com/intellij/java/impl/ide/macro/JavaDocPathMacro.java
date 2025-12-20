@@ -36,7 +36,7 @@ public final class JavaDocPathMacro extends Macro {
   }
 
   public String expand(DataContext dataContext) {
-    final Project project = dataContext.getData(Project.KEY);
+    Project project = dataContext.getData(Project.KEY);
     if (project == null) {
       return null;
     }
@@ -44,7 +44,7 @@ public final class JavaDocPathMacro extends Macro {
     if (manager == null) {
       return null;
     }
-    final JavadocConfiguration configuration = manager.getConfiguration();
+    JavadocConfiguration configuration = manager.getConfiguration();
     return configuration.OUTPUT_DIRECTORY == null ? null : configuration.OUTPUT_DIRECTORY.replace('/', File.separatorChar);
   }
 }

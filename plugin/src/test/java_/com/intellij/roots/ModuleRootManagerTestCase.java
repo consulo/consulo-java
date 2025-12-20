@@ -28,8 +28,8 @@ public abstract class ModuleRootManagerTestCase extends ModuleTestCase
 
   @Override
   protected Sdk getTestProjectJdk() {
-    final Sdk jdk = super.getTestProjectJdk();
-    final SdkModificator modificator = jdk.getSdkModificator();
+    Sdk jdk = super.getTestProjectJdk();
+    SdkModificator modificator = jdk.getSdkModificator();
     VirtualFile rtJar = null;
     for (VirtualFile root : modificator.getRoots(OrderRootType.CLASSES)) {
       if (root.getName().equals("rt.jar")) {
@@ -57,29 +57,29 @@ public abstract class ModuleRootManagerTestCase extends ModuleTestCase
   }
 
 
-  protected VirtualFile getJarFromLibDir(final String name) {
-    final VirtualFile file = getVirtualFile(ContainerPathManager.get().findFileInLibDirectory(name));
+  protected VirtualFile getJarFromLibDir(String name) {
+    VirtualFile file = getVirtualFile(ContainerPathManager.get().findFileInLibDirectory(name));
     assertNotNull(name + " not found", file);
-    final VirtualFile jarFile = ArchiveVfsUtil.getJarRootForLocalFile(file);
+    VirtualFile jarFile = ArchiveVfsUtil.getJarRootForLocalFile(file);
     assertNotNull(name + " is not jar", jarFile);
     return jarFile;
   }
 
   protected VirtualFile addSourceRoot(Module module, boolean testSource) throws IOException {
-    final VirtualFile root = getVirtualFile(createTempDir(module.getName() + (testSource ? "Test" : "Prod") + "Src"));
+    VirtualFile root = getVirtualFile(createTempDir(module.getName() + (testSource ? "Test" : "Prod") + "Src"));
     PsiTestUtil.addSourceContentToRoots(module, root, testSource);
     return root;
   }
 
-  protected VirtualFile setModuleOutput(final Module module, final boolean test) throws IOException {
-    final VirtualFile output = getVirtualFile(createTempDir(module.getName() + (test ? "Test" : "Prod") + "Output"));
+  protected VirtualFile setModuleOutput(Module module, boolean test) throws IOException {
+    VirtualFile output = getVirtualFile(createTempDir(module.getName() + (test ? "Test" : "Prod") + "Output"));
     PsiTestUtil.setCompilerOutputPath(module, output != null ? output.getUrl() : null, test);
     return output;
   }
 
-  protected Library createLibrary(final String name, final VirtualFile classesRoot, final VirtualFile sourceRoot) {
-    final Library library = LibraryTablesRegistrar.getInstance().getLibraryTable(myProject).createLibrary(name);
-    final Library.ModifiableModel model = library.getModifiableModel();
+  protected Library createLibrary(String name, VirtualFile classesRoot, VirtualFile sourceRoot) {
+    Library library = LibraryTablesRegistrar.getInstance().getLibraryTable(myProject).createLibrary(name);
+    Library.ModifiableModel model = library.getModifiableModel();
     model.addRoot(classesRoot, OrderRootType.CLASSES);
     if (sourceRoot != null) {
       model.addRoot(sourceRoot, OrderRootType.SOURCES);

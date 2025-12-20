@@ -31,15 +31,15 @@ public class AllClassesGetter {
   private static final Logger LOG = Logger.getInstance(AllClassesGetter.class);
   public static final InsertHandler<JavaPsiClassReferenceElement> TRY_SHORTENING = new InsertHandler<JavaPsiClassReferenceElement>() {
 
-    private void _handleInsert(final InsertionContext context, final JavaPsiClassReferenceElement item) {
-      final Editor editor = context.getEditor();
-      final PsiClass psiClass = item.getObject();
+    private void _handleInsert(InsertionContext context, JavaPsiClassReferenceElement item) {
+      Editor editor = context.getEditor();
+      PsiClass psiClass = item.getObject();
       if (!psiClass.isValid()) {
         return;
       }
 
       int endOffset = editor.getCaretModel().getOffset();
-      final String qname = psiClass.getQualifiedName();
+      String qname = psiClass.getQualifiedName();
       if (qname == null) {
         return;
       }
@@ -48,41 +48,41 @@ public class AllClassesGetter {
         return;
       }
 
-      final Document document = editor.getDocument();
-      final PsiDocumentManager psiDocumentManager = PsiDocumentManager.getInstance(psiClass.getProject());
-      final PsiFile file = context.getFile();
+      Document document = editor.getDocument();
+      PsiDocumentManager psiDocumentManager = PsiDocumentManager.getInstance(psiClass.getProject());
+      PsiFile file = context.getFile();
       if (file.findElementAt(endOffset - 1) == null) {
         return;
       }
 
-      final OffsetKey key = OffsetKey.create("endOffset", false);
+      OffsetKey key = OffsetKey.create("endOffset", false);
       context.getOffsetMap().addOffset(key, endOffset);
       PostprocessReformattingAspect.getInstance(context.getProject()).doPostponedFormatting();
 
-      final int newOffset = context.getOffsetMap().getOffset(key);
+      int newOffset = context.getOffsetMap().getOffset(key);
       if (newOffset >= 0) {
         endOffset = newOffset;
       } else {
         LOG.error(endOffset + " became invalid: " + context.getOffsetMap() + "; inserting " + qname);
       }
 
-      final RangeMarker toDelete = JavaCompletionUtil.insertTemporary(endOffset, document, " ");
+      RangeMarker toDelete = JavaCompletionUtil.insertTemporary(endOffset, document, " ");
       psiDocumentManager.commitAllDocuments();
       PsiReference psiReference = file.findReferenceAt(endOffset - 1);
 
       boolean insertFqn = true;
       if (psiReference != null) {
-        final PsiManager psiManager = file.getManager();
+        PsiManager psiManager = file.getManager();
         if (psiManager.areElementsEquivalent(psiClass, JavaCompletionUtil.resolveReference(psiReference))) {
           insertFqn = false;
         } else if (psiClass.isValid()) {
           try {
             context.setTailOffset(psiReference.getRangeInElement().getEndOffset() + psiReference.getElement().getTextRange().getStartOffset());
-            final PsiElement newUnderlying = psiReference.bindToElement(psiClass);
+            PsiElement newUnderlying = psiReference.bindToElement(psiClass);
             if (newUnderlying != null) {
-              final PsiElement psiElement = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(newUnderlying);
+              PsiElement psiElement = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(newUnderlying);
               if (psiElement != null) {
-                for (final PsiReference reference : psiElement.getReferences()) {
+                for (PsiReference reference : psiElement.getReferences()) {
                   if (psiManager.areElementsEquivalent(psiClass, JavaCompletionUtil.resolveReference(reference))) {
                     insertFqn = false;
                     break;
@@ -106,7 +106,7 @@ public class AllClassesGetter {
     }
 
     @Override
-    public void handleInsert(@Nonnull final InsertionContext context, @Nonnull final JavaPsiClassReferenceElement item) {
+    public void handleInsert(@Nonnull InsertionContext context, @Nonnull JavaPsiClassReferenceElement item) {
       _handleInsert(context, item);
       item.getTailType().processTail(context.getEditor(), context.getEditor().getCaretModel().getOffset());
     }
@@ -114,7 +114,7 @@ public class AllClassesGetter {
   };
 
   public static final InsertHandler<JavaPsiClassReferenceElement> INSERT_FQN = (context, item) -> {
-    final String qName = item.getQualifiedName();
+    String qName = item.getQualifiedName();
     if (qName != null) {
       int start = JavaCompletionUtil.findQualifiedNameStart(context);
       context.getDocument().replaceString(start, context.getTailOffset(), qName);
@@ -122,13 +122,13 @@ public class AllClassesGetter {
     }
   };
 
-  public static void processJavaClasses(@Nonnull final CompletionParameters parameters,
-                                        @Nonnull final PrefixMatcher prefixMatcher,
-                                        final boolean filterByScope,
-                                        @Nonnull final Consumer<? super PsiClass> consumer) {
-    final PsiElement context = parameters.getPosition();
-    final Project project = context.getProject();
-    final GlobalSearchScope scope = filterByScope ? context.getContainingFile().getResolveScope() : GlobalSearchScope.allScope(project);
+  public static void processJavaClasses(@Nonnull CompletionParameters parameters,
+                                        @Nonnull PrefixMatcher prefixMatcher,
+                                        boolean filterByScope,
+                                        @Nonnull Consumer<? super PsiClass> consumer) {
+    PsiElement context = parameters.getPosition();
+    Project project = context.getProject();
+    GlobalSearchScope scope = filterByScope ? context.getContainingFile().getResolveScope() : GlobalSearchScope.allScope(project);
 
     processJavaClasses(prefixMatcher, project, scope, new LimitedAccessibleClassPreprocessor(parameters, filterByScope, c -> {
       consumer.accept(c);
@@ -136,11 +136,11 @@ public class AllClassesGetter {
     }));
   }
 
-  public static void processJavaClasses(@Nonnull final PrefixMatcher prefixMatcher,
+  public static void processJavaClasses(@Nonnull PrefixMatcher prefixMatcher,
                                         @Nonnull Project project,
                                         @Nonnull GlobalSearchScope scope,
                                         @Nonnull Processor<? super PsiClass> processor) {
-    final Set<String> names = new HashSet<>(10000);
+    Set<String> names = new HashSet<>(10000);
     AllClassesSearchExecutor.processClassNames(project, scope, s -> {
       if (prefixMatcher.prefixMatches(s)) {
         names.add(s);
@@ -151,16 +151,16 @@ public class AllClassesGetter {
     AllClassesSearchExecutor.processClassesByNames(project, scope, sorted, processor);
   }
 
-  public static boolean isAcceptableInContext(@Nonnull final PsiElement context,
-                                              @Nonnull final PsiClass psiClass,
-                                              final boolean filterByScope, final boolean pkgContext) {
+  public static boolean isAcceptableInContext(@Nonnull PsiElement context,
+                                              @Nonnull PsiClass psiClass,
+                                              boolean filterByScope, boolean pkgContext) {
     ProgressManager.checkCanceled();
 
     if (JavaCompletionUtil.isInExcludedPackage(psiClass, false)) {
       return false;
     }
 
-    final String qualifiedName = psiClass.getQualifiedName();
+    String qualifiedName = psiClass.getQualifiedName();
     if (qualifiedName == null) {
       return false;
     }
@@ -172,9 +172,9 @@ public class AllClassesGetter {
     return JavaCompletionUtil.isSourceLevelAccessible(context, psiClass, pkgContext);
   }
 
-  public static JavaPsiClassReferenceElement createLookupItem(@Nonnull final PsiClass psiClass,
-                                                              final InsertHandler<JavaPsiClassReferenceElement> insertHandler) {
-    final JavaPsiClassReferenceElement item = new JavaPsiClassReferenceElement(psiClass);
+  public static JavaPsiClassReferenceElement createLookupItem(@Nonnull PsiClass psiClass,
+                                                              InsertHandler<JavaPsiClassReferenceElement> insertHandler) {
+    JavaPsiClassReferenceElement item = new JavaPsiClassReferenceElement(psiClass);
     item.setInsertHandler(insertHandler);
     return item;
   }

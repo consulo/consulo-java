@@ -43,18 +43,18 @@ class CatchTypeProvider implements CompletionProvider
 	static final ElementPattern<PsiElement> CATCH_CLAUSE_TYPE = psiElement().insideStarting(psiElement(PsiTypeElement.class).withParent(psiElement(PsiCatchSection.class)));
 
 	@Override
-	public void addCompletions(@Nonnull final CompletionParameters parameters, final ProcessingContext context, @Nonnull final CompletionResultSet result)
+	public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull CompletionResultSet result)
 	{
 		PsiTryStatement tryStatement = PsiTreeUtil.getParentOfType(parameters.getPosition(), PsiTryStatement.class);
-		final PsiCodeBlock tryBlock = tryStatement == null ? null : tryStatement.getTryBlock();
+		PsiCodeBlock tryBlock = tryStatement == null ? null : tryStatement.getTryBlock();
 		if(tryBlock == null)
 		{
 			return;
 		}
 
-		final JavaCompletionSession session = new JavaCompletionSession(result);
+		JavaCompletionSession session = new JavaCompletionSession(result);
 
-		for(final PsiClassType type : ExceptionUtil.getThrownExceptions(tryBlock.getStatements()))
+		for(PsiClassType type : ExceptionUtil.getThrownExceptions(tryBlock.getStatements()))
 		{
 			PsiClass typeClass = type.resolve();
 			if(typeClass != null)
@@ -64,12 +64,12 @@ class CatchTypeProvider implements CompletionProvider
 			}
 		}
 
-		final Collection<PsiClassType> expectedClassTypes = Collections.singletonList(
+		Collection<PsiClassType> expectedClassTypes = Collections.singletonList(
 			JavaPsiFacade.getElementFactory(tryBlock.getProject()).createTypeByFQClassName(CommonClassNames.JAVA_LANG_THROWABLE)
 		);
 		JavaInheritorsGetter.processInheritors(parameters, expectedClassTypes, result.getPrefixMatcher(), type ->
 		{
-			final PsiClass psiClass = type instanceof PsiClassType ? ((PsiClassType) type).resolve() : null;
+			PsiClass psiClass = type instanceof PsiClassType ? ((PsiClassType) type).resolve() : null;
 			if(psiClass == null || psiClass instanceof PsiTypeParameter)
 			{
 				return;

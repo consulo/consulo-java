@@ -29,12 +29,12 @@ class OnDemandImportPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiImportStatement)) {
       return false;
     }
-    final PsiImportStatementBase importStatementBase =
+    PsiImportStatementBase importStatementBase =
       (PsiImportStatementBase)element;
     if (!importStatementBase.isOnDemand()) {
       return false;
     }
-    final PsiFile file = importStatementBase.getContainingFile();
+    PsiFile file = importStatementBase.getContainingFile();
     return file instanceof PsiJavaFile;
   }
 }

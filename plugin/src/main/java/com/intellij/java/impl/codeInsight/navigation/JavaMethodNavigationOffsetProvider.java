@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public class JavaMethodNavigationOffsetProvider implements MethodNavigationOffsetProvider {
   @Override
   @Nullable
-  public int[] getMethodNavigationOffsets(final PsiFile file, final int caretOffset) {
+  public int[] getMethodNavigationOffsets(PsiFile file, int caretOffset) {
     if (file instanceof PsiJavaFile) {
       ArrayList<PsiElement> array = new ArrayList<PsiElement>();
       addNavigationElements(array, file);

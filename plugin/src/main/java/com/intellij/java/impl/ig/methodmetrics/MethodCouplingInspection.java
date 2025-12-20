@@ -53,7 +53,7 @@ public class MethodCouplingInspection extends MethodMetricInspection {
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final Integer coupling = (Integer)infos[0];
+    Integer coupling = (Integer)infos[0];
     return InspectionGadgetsLocalize.methodCouplingProblemDescriptor(coupling).get();
   }
 
@@ -69,13 +69,13 @@ public class MethodCouplingInspection extends MethodMetricInspection {
 
   @Override
   public JComponent createOptionsPanel() {
-    final JPanel panel = new JPanel(new GridBagLayout());
-    final String configurationLabel = getConfigurationLabel();
-    final JLabel label = new JLabel(configurationLabel);
+    JPanel panel = new JPanel(new GridBagLayout());
+    String configurationLabel = getConfigurationLabel();
+    JLabel label = new JLabel(configurationLabel);
 
-    final JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
+    JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
 
-    final GridBagConstraints constraints = new GridBagConstraints();
+    GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 0;
     constraints.gridy = 0;
     constraints.weightx = 0.0;
@@ -89,12 +89,12 @@ public class MethodCouplingInspection extends MethodMetricInspection {
     constraints.fill = GridBagConstraints.NONE;
     panel.add(valueField, constraints);
 
-    final CheckBox arrayCheckBox = new CheckBox(
+    CheckBox arrayCheckBox = new CheckBox(
       InspectionGadgetsLocalize.includeJavaSystemClassesOption().get(),
       this,
       "m_includeJavaClasses"
     );
-    final CheckBox objectCheckBox = new CheckBox(
+    CheckBox objectCheckBox = new CheckBox(
       InspectionGadgetsLocalize.includeLibraryClassesOption().get(),
       this,
       "m_includeLibraryClasses"
@@ -126,10 +126,10 @@ public class MethodCouplingInspection extends MethodMetricInspection {
       if (method.getNameIdentifier() == null) {
         return;
       }
-      final CouplingVisitor visitor = new CouplingVisitor(
+      CouplingVisitor visitor = new CouplingVisitor(
         method, m_includeJavaClasses, m_includeLibraryClasses);
       method.accept(visitor);
-      final int coupling = visitor.getNumDependencies();
+      int coupling = visitor.getNumDependencies();
 
       if (coupling <= getLimit()) {
         return;

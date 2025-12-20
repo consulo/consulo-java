@@ -39,7 +39,7 @@ import java.util.Set;
 
 public class JavaMethodNode extends MethodNodeBase<PsiMethod> {
 
-  protected JavaMethodNode(final PsiMethod method, Set<PsiMethod> called, Project project, Runnable cancelCallback) {
+  protected JavaMethodNode(PsiMethod method, Set<PsiMethod> called, Project project, Runnable cancelCallback) {
     super(method, called, project, cancelCallback);
   }
 
@@ -50,21 +50,21 @@ public class JavaMethodNode extends MethodNodeBase<PsiMethod> {
 
   @Override
   protected List<PsiMethod> computeCallers() {
-    final PsiReference[] refs =
+    PsiReference[] refs =
       MethodReferencesSearch.search(myMethod, GlobalSearchScope.allScope(myProject), true).toArray(PsiReference.EMPTY_ARRAY);
 
     List<PsiMethod> result = new ArrayList<PsiMethod>();
     for (PsiReference ref : refs) {
-      final PsiElement element = ref.getElement();
+      PsiElement element = ref.getElement();
       if (!(element instanceof PsiReferenceExpression) ||
           !(((PsiReferenceExpression)element).getQualifierExpression() instanceof PsiSuperExpression)) {
-        final PsiElement enclosingContext = PsiTreeUtil.getParentOfType(element, PsiMethod.class, PsiClass.class);
+        PsiElement enclosingContext = PsiTreeUtil.getParentOfType(element, PsiMethod.class, PsiClass.class);
         if (enclosingContext instanceof PsiMethod &&
             !myMethod.equals(enclosingContext) && !myCalled.contains(myMethod)) { //do not add recursive methods
           result.add((PsiMethod)enclosingContext);
         }
         else if (element instanceof PsiClass) {
-          final PsiClass aClass = (PsiClass)element;
+          PsiClass aClass = (PsiClass)element;
           result.add(JavaPsiFacade.getElementFactory(myProject).createMethodFromText(aClass.getName() + "(){}", aClass));
         }
       }
@@ -74,33 +74,33 @@ public class JavaMethodNode extends MethodNodeBase<PsiMethod> {
 
   @Override
   protected void customizeRendererText(ColoredTreeCellRenderer renderer) {
-    final StringBuffer buffer = new StringBuffer(128);
-    final PsiClass containingClass = myMethod.getContainingClass();
+    StringBuffer buffer = new StringBuffer(128);
+    PsiClass containingClass = myMethod.getContainingClass();
     if (containingClass != null) {
       buffer.append(ClassPresentationUtil.getNameForClass(containingClass, false));
       buffer.append('.');
     }
-    final String methodText = PsiFormatUtil.formatMethod(
+    String methodText = PsiFormatUtil.formatMethod(
       myMethod,
       PsiSubstitutor.EMPTY, PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_PARAMETERS,
       PsiFormatUtil.SHOW_TYPE
     );
     buffer.append(methodText);
 
-    final SimpleTextAttributes attributes = isEnabled() ?
+    SimpleTextAttributes attributes = isEnabled() ?
                                             new SimpleTextAttributes(SimpleTextAttributes.STYLE_PLAIN, UIUtil.getTreeForeground()) :
                                             SimpleTextAttributes.EXCLUDED_ATTRIBUTES;
     renderer.append(buffer.toString(), attributes);
 
     if (containingClass != null) {
-      final String packageName = getPackageName(containingClass);
+      String packageName = getPackageName(containingClass);
       renderer.append("  (" + packageName + ")", new SimpleTextAttributes(SimpleTextAttributes.STYLE_ITALIC, JBColor.GRAY));
     }
   }
 
   @Nullable
-  private static String getPackageName(final PsiClass aClass) {
-    final PsiFile file = aClass.getContainingFile();
+  private static String getPackageName(PsiClass aClass) {
+    PsiFile file = aClass.getContainingFile();
     if (file instanceof PsiJavaFile) {
       return ((PsiJavaFile)file).getPackageName();
     }

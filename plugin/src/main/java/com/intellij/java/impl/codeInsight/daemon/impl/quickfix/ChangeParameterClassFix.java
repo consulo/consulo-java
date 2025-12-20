@@ -98,7 +98,7 @@ public class ChangeParameterClassFix extends ExtendsListFix {
                             Collection<PsiMethodMember> members =
                                 ContainerUtil.map2List(toImplement, new Function<CandidateInfo, PsiMethodMember>() {
                                     @Override
-                                    public PsiMethodMember apply(final CandidateInfo s) {
+                                    public PsiMethodMember apply(CandidateInfo s) {
                                         return new PsiMethodMember(s);
                                     }
                                 });

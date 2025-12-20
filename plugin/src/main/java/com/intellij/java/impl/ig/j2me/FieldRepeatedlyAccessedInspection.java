@@ -55,7 +55,7 @@ public class FieldRepeatedlyAccessedInspection extends BaseInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... arg) {
-        final String fieldName = ((PsiNamedElement) arg[0]).getName();
+        String fieldName = ((PsiNamedElement) arg[0]).getName();
         return InspectionGadgetsLocalize.fieldRepeatedlyAccessedInMethodProblemDescriptor(fieldName).get();
     }
 
@@ -74,13 +74,13 @@ public class FieldRepeatedlyAccessedInspection extends BaseInspection {
 
         @Override
         public void visitMethod(@Nonnull PsiMethod method) {
-            final PsiIdentifier nameIdentifier = method.getNameIdentifier();
+            PsiIdentifier nameIdentifier = method.getNameIdentifier();
             if (nameIdentifier == null) {
                 return;
             }
-            final VariableAccessVisitor visitor = new VariableAccessVisitor();
+            VariableAccessVisitor visitor = new VariableAccessVisitor();
             method.accept(visitor);
-            final Set<PsiField> fields = visitor.getOveraccessedFields();
+            Set<PsiField> fields = visitor.getOveraccessedFields();
             for (PsiField field : fields) {
                 if (ExpressionUtils.isConstant(field)) {
                     continue;

@@ -77,28 +77,28 @@ public class IntegerDivisionInFloatingPointContextInspection
     public void visitBinaryExpression(
       @Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
-      final IElementType tokenType = expression.getOperationTokenType();
+      IElementType tokenType = expression.getOperationTokenType();
       if (!tokenType.equals(JavaTokenType.DIV)) {
         return;
       }
-      final PsiExpression lhs = expression.getLOperand();
-      final PsiType lhsType = lhs.getType();
+      PsiExpression lhs = expression.getLOperand();
+      PsiType lhsType = lhs.getType();
       if (!isIntegral(lhsType)) {
         return;
       }
-      final PsiExpression rhs = expression.getROperand();
+      PsiExpression rhs = expression.getROperand();
       if (rhs == null) {
         return;
       }
-      final PsiType rhsType = rhs.getType();
+      PsiType rhsType = rhs.getType();
       if (!isIntegral(rhsType)) {
         return;
       }
-      final PsiExpression context = getContainingExpression(expression);
+      PsiExpression context = getContainingExpression(expression);
       if (context == null) {
         return;
       }
-      final PsiType contextType =
+      PsiType contextType =
         ExpectedTypeUtils.findExpectedType(context, true);
       if (contextType == null) {
         return;
@@ -114,13 +114,13 @@ public class IntegerDivisionInFloatingPointContextInspection
       if (type == null) {
         return false;
       }
-      final String text = type.getCanonicalText();
+      String text = type.getCanonicalText();
       return text != null && s_integralTypes.contains(text);
     }
 
     private static PsiExpression getContainingExpression(
       PsiExpression expression) {
-      final PsiElement parent = expression.getParent();
+      PsiElement parent = expression.getParent();
       if (parent instanceof PsiBinaryExpression ||
           parent instanceof PsiParenthesizedExpression ||
           parent instanceof PsiPrefixExpression ||

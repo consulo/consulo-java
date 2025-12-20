@@ -35,13 +35,13 @@ public class PsiMethodTreeElement extends JavaClassTreeElementBase<PsiMethod> im
   @Override
   @Nonnull
   public Collection<StructureViewTreeElement> getChildrenBase() {
-    final List<StructureViewTreeElement> emptyResult = Collections.emptyList();
-    final PsiMethod element = getElement();
+    List<StructureViewTreeElement> emptyResult = Collections.emptyList();
+    PsiMethod element = getElement();
     if (element == null || element instanceof SyntheticElement || element instanceof LightElement) {
       return emptyResult;
     }
 
-    final PsiFile psiFile = element.getContainingFile();
+    PsiFile psiFile = element.getContainingFile();
     if (psiFile == null || psiFile instanceof PsiCompiledElement) {
       return emptyResult;
     }
@@ -61,11 +61,11 @@ public class PsiMethodTreeElement extends JavaClassTreeElementBase<PsiMethod> im
 
   @Override
   public String getPresentableText() {
-    final PsiMethod psiMethod = getElement();
+    PsiMethod psiMethod = getElement();
     if (psiMethod == null) {
       return "";
     }
-    final boolean dumb = DumbService.isDumb(psiMethod.getProject());
+    boolean dumb = DumbService.isDumb(psiMethod.getProject());
     String method = PsiFormatUtil.formatMethod(psiMethod,
         PsiSubstitutor.EMPTY,
         SHOW_NAME | TYPE_AFTER | SHOW_PARAMETERS | (dumb ? 0 : SHOW_TYPE),
@@ -79,13 +79,13 @@ public class PsiMethodTreeElement extends JavaClassTreeElementBase<PsiMethod> im
     if (!Registry.is("show.method.base.class.in.java.file.structure")) {
       return null;
     }
-    final PsiMethod method = getElement();
+    PsiMethod method = getElement();
     if (myLocation == null && method != null && !DumbService.isDumb(method.getProject())) {
       if (isInherited()) {
         return super.getLocationString();
       } else {
         try {
-          final MethodSignatureBackedByPsiMethod baseMethod = SuperMethodsSearch.search(method, null, true, false).findFirst();
+          MethodSignatureBackedByPsiMethod baseMethod = SuperMethodsSearch.search(method, null, true, false).findFirst();
           if (baseMethod != null && !method.isEquivalentTo(baseMethod.getMethod())) {
             PsiMethod base = baseMethod.getMethod();
             PsiClass baseClass = base.getContainingClass();
@@ -125,7 +125,7 @@ public class PsiMethodTreeElement extends JavaClassTreeElementBase<PsiMethod> im
   @Nonnull
   @Override
   public String getAlphaSortKey() {
-    final PsiMethod method = getElement();
+    PsiMethod method = getElement();
     if (method != null) {
       return method.getName() + " " + StringUtil.join(method.getParameterList().getParameters(), psiParameter -> {
         PsiTypeElement typeElement = psiParameter.getTypeElement();

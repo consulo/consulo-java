@@ -80,10 +80,10 @@ public class CommentFormatter {
     try {
       PsiComment newComment = JavaPsiFacade.getInstance(myProject).getElementFactory().createCommentFromText(
           newCommentText, null);
-      final ASTNode oldNode = oldComment.getNode();
-      final ASTNode newNode = newComment.getNode();
+      ASTNode oldNode = oldComment.getNode();
+      ASTNode newNode = newComment.getNode();
       assert oldNode != null && newNode != null;
-      final ASTNode parent = oldNode.getTreeParent();
+      ASTNode parent = oldNode.getTreeParent();
       parent.replaceChild(oldNode, newNode); //important to replace with tree operation to avoid resolve and repository update
     } catch (IncorrectOperationException e) {
       LOG.error(e);

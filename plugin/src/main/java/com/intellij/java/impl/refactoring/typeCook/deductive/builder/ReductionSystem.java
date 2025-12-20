@@ -44,11 +44,11 @@ public class ReductionSystem {
 
   HashSet<PsiTypeVariable> myBoundVariables;
 
-  public ReductionSystem(final Project project,
-                         final HashSet<PsiElement> elements,
-                         final HashMap<PsiElement, PsiType> types,
-                         final PsiTypeVariableFactory factory,
-                         final Settings settings) {
+  public ReductionSystem(Project project,
+                         HashSet<PsiElement> elements,
+                         HashMap<PsiElement, PsiType> types,
+                         PsiTypeVariableFactory factory,
+                         Settings settings) {
     myProject = project;
     myElements = elements;
     myTypes = types;
@@ -66,7 +66,7 @@ public class ReductionSystem {
     return myConstraints;
   }
 
-  public void addCast(final PsiTypeCastExpression cast, final PsiType operandType){
+  public void addCast(PsiTypeCastExpression cast, PsiType operandType){
     myCastToOperandType.put(cast, operandType);
   }
 
@@ -79,19 +79,19 @@ public class ReductionSystem {
 
     if ((Util.bindsTypeVariables(left) || Util.bindsTypeVariables(right))
     ) {
-      final Subtype c = new Subtype(left, right);
+      Subtype c = new Subtype(left, right);
       if (!myConstraints.contains(c)) {
         myConstraints.add(c);
       }
     }
   }
 
-  private static String memberString(final PsiMember member) {
+  private static String memberString(PsiMember member) {
     return member.getContainingClass().getQualifiedName() + "." + member.getName();
   }
 
-  private static String variableString(final PsiLocalVariable var) {
-    final PsiMethod method = PsiTreeUtil.getParentOfType(var, PsiMethod.class);
+  private static String variableString(PsiLocalVariable var) {
+    PsiMethod method = PsiTreeUtil.getParentOfType(var, PsiMethod.class);
 
     return memberString(method) + "#" + var.getName();
   }
@@ -102,18 +102,18 @@ public class ReductionSystem {
 
     buffer.append("Victims:\n");
 
-    for (final PsiElement element : myElements) {
-      final PsiType type = myTypes.get(element);
+    for (PsiElement element : myElements) {
+      PsiType type = myTypes.get(element);
 
       if (type == null) {
         continue;
       }
 
       if (element instanceof PsiParameter) {
-        final PsiParameter parm = (PsiParameter)element;
-        final PsiElement declarationScope = parm.getDeclarationScope();
+        PsiParameter parm = (PsiParameter)element;
+        PsiElement declarationScope = parm.getDeclarationScope();
         if (declarationScope instanceof PsiMethod) {
-          final PsiMethod method = (PsiMethod)declarationScope;
+          PsiMethod method = (PsiMethod)declarationScope;
 
           buffer.append("   parameter " + method.getParameterList().getParameterIndex(parm) + " of " + memberString(method));
         }
@@ -150,14 +150,14 @@ public class ReductionSystem {
       buffer.append(" not specified\n");
     }
     else {
-      for (final PsiTypeVariable boundVariable : myBoundVariables) {
+      for (PsiTypeVariable boundVariable : myBoundVariables) {
         buffer.append(boundVariable.getIndex() + ", ");
       }
     }
 
     buffer.append("Constraints: " + myConstraints.size() + "\n");
 
-    for (final Constraint constraint : myConstraints) {
+    for (Constraint constraint : myConstraints) {
       buffer.append("   " + constraint + "\n");
     }
 
@@ -174,7 +174,7 @@ public class ReductionSystem {
         myConstraint = null;
       }
 
-      public Node(final Constraint c) {
+      public Node(Constraint c) {
         myConstraint = c;
       }
 
@@ -182,7 +182,7 @@ public class ReductionSystem {
         return myConstraint;
       }
 
-      public void addEdge(final Node n) {
+      public void addEdge(Node n) {
         if (!myNeighbours.contains(n)) {
           myNeighbours.add(n);
           n.addEdge(this);
@@ -190,9 +190,9 @@ public class ReductionSystem {
       }
     }
 
-    final Node[] typeVariableNodes = new Node[myTypeVariableFactory.getNumber()];
-    final Node[] constraintNodes = new Node[myConstraints.size()];
-    final HashMap<Constraint, HashSet<PsiTypeVariable>> boundVariables = new HashMap<Constraint, HashSet<PsiTypeVariable>>();
+    Node[] typeVariableNodes = new Node[myTypeVariableFactory.getNumber()];
+    Node[] constraintNodes = new Node[myConstraints.size()];
+    HashMap<Constraint, HashSet<PsiTypeVariable>> boundVariables = new HashMap<Constraint, HashSet<PsiTypeVariable>>();
 
     for (int i = 0; i < typeVariableNodes.length; i++) {
       typeVariableNodes[i] = new Node();
@@ -201,7 +201,7 @@ public class ReductionSystem {
     {
       int j = 0;
 
-      for (final Constraint constraint : myConstraints) {
+      for (Constraint constraint : myConstraints) {
         constraintNodes[j++] = new Node(constraint);
       }
     }
@@ -209,17 +209,17 @@ public class ReductionSystem {
     {
       int l = 0;
 
-      for (final Constraint constraint : myConstraints) {
+      for (Constraint constraint : myConstraints) {
         final HashSet<PsiTypeVariable> boundVars = new HashSet<PsiTypeVariable>();
-        final Node constraintNode = constraintNodes[l++];
+        Node constraintNode = constraintNodes[l++];
 
         new Object() {
-          void visit(final Constraint c) {
+          void visit(Constraint c) {
             visit(c.getLeft());
             visit(c.getRight());
           }
 
-          private void visit(final PsiType t) {
+          private void visit(PsiType t) {
             if (t instanceof PsiTypeVariable) {
               boundVars.add((PsiTypeVariable)t);
             }
@@ -227,21 +227,21 @@ public class ReductionSystem {
               visit(t.getDeepComponentType());
             }
             else if (t instanceof PsiClassType) {
-              final PsiSubstitutor subst = Util.resolveType(t).getSubstitutor();
+              PsiSubstitutor subst = Util.resolveType(t).getSubstitutor();
 
-              for (final PsiType type : subst.getSubstitutionMap().values()) {
+              for (PsiType type : subst.getSubstitutionMap().values()) {
                 visit(type);
               }
             }
             else if (t instanceof PsiIntersectionType) {
-              final PsiType[] conjuncts = ((PsiIntersectionType)t).getConjuncts();
+              PsiType[] conjuncts = ((PsiIntersectionType)t).getConjuncts();
               for (PsiType conjunct : conjuncts) {
                 visit(conjunct);
 
               }
             }
             else if (t instanceof PsiWildcardType) {
-              final PsiType bound = ((PsiWildcardType)t).getBound();
+              PsiType bound = ((PsiWildcardType)t).getBound();
 
               if (bound != null) {
                 visit(bound);
@@ -250,16 +250,16 @@ public class ReductionSystem {
           }
         }.visit(constraint);
 
-        final PsiTypeVariable[] bound = boundVars.toArray(new PsiTypeVariable[]{});
+        PsiTypeVariable[] bound = boundVars.toArray(new PsiTypeVariable[]{});
 
         for (int j = 0; j < bound.length; j++) {
-          final int x = bound[j].getIndex();
-          final Node typeVariableNode = typeVariableNodes[x];
+          int x = bound[j].getIndex();
+          Node typeVariableNode = typeVariableNodes[x];
 
           typeVariableNode.addEdge(constraintNode);
 
           for (int k = j + 1; k < bound.length; k++) {
-            final int y = bound[k].getIndex();
+            int y = bound[k].getIndex();
 
             typeVariableNode.addEdge(typeVariableNodes[y]);
           }
@@ -269,13 +269,13 @@ public class ReductionSystem {
       }
     }
 
-    final LinkedList<HashSet<PsiTypeVariable>> clusters = myTypeVariableFactory.getClusters();
+    LinkedList<HashSet<PsiTypeVariable>> clusters = myTypeVariableFactory.getClusters();
 
-    for (final HashSet<PsiTypeVariable> cluster : clusters) {
+    for (HashSet<PsiTypeVariable> cluster : clusters) {
       Node prev = null;
 
-      for (final PsiTypeVariable variable : cluster) {
-        final Node curr = typeVariableNodes[variable.getIndex()];
+      for (PsiTypeVariable variable : cluster) {
+        Node curr = typeVariableNodes[variable.getIndex()];
 
         if (prev != null) {
           prev.addEdge(curr);
@@ -287,21 +287,21 @@ public class ReductionSystem {
 
     int currComponent = 0;
 
-    for (final Node node : typeVariableNodes) {
+    for (Node node : typeVariableNodes) {
       if (node.myComponent == -1) {
         final int component = currComponent;
         new Object() {
-          void selectComponent(final Node n) {
-            final LinkedList<Node> frontier = new LinkedList<Node>();
+          void selectComponent(Node n) {
+            LinkedList<Node> frontier = new LinkedList<Node>();
 
             frontier.addFirst(n);
 
             while (frontier.size() > 0) {
-              final Node curr = frontier.removeFirst();
+              Node curr = frontier.removeFirst();
 
               curr.myComponent = component;
 
-              for (final Node p : curr.myNeighbours) {
+              for (Node p : curr.myNeighbours) {
                 if (p.myComponent == -1) {
                   frontier.addFirst(p);
                 }
@@ -314,11 +314,11 @@ public class ReductionSystem {
       }
     }
 
-    final ReductionSystem[] systems = new ReductionSystem[currComponent];
+    ReductionSystem[] systems = new ReductionSystem[currComponent];
 
-    for (final Node node : constraintNodes) {
-      final Constraint constraint = node.getConstraint();
-      final int index = node.myComponent;
+    for (Node node : constraintNodes) {
+      Constraint constraint = node.getConstraint();
+      int index = node.myComponent;
 
       if (systems[index] == null) {
         systems[index] = new ReductionSystem(myProject, myElements, myTypes, myTypeVariableFactory, mySettings);
@@ -330,7 +330,7 @@ public class ReductionSystem {
     return systems;
   }
 
-  private void addConstraint(final Constraint constraint, final HashSet<PsiTypeVariable> vars) {
+  private void addConstraint(Constraint constraint, HashSet<PsiTypeVariable> vars) {
     if (myBoundVariables == null) {
       myBoundVariables = vars;
     }
@@ -350,11 +350,11 @@ public class ReductionSystem {
   }
 
   public @NonNls String dumpString() {
-    final @NonNls String[] data = new String[myElements.size()];
+    @NonNls String[] data = new String[myElements.size()];
 
     int i = 0;
 
-    for (final PsiElement element : myElements) {
+    for (PsiElement element : myElements) {
       data[i++] = Util.getType(element).getCanonicalText() + "\\n" + elementString(element);
     }
 
@@ -366,7 +366,7 @@ public class ReductionSystem {
                 });
 
 
-    final StringBuffer repr = new StringBuffer();
+    StringBuffer repr = new StringBuffer();
 
     for (String aData : data) {
       repr.append(aData);
@@ -377,16 +377,16 @@ public class ReductionSystem {
   }
 
   @NonNls private static
-  String elementString(final PsiElement element) {
+  String elementString(PsiElement element) {
     if (element instanceof PsiNewExpression) {
       return "new";
     }
 
     if (element instanceof PsiParameter) {
-      final PsiElement scope = ((PsiParameter)element).getDeclarationScope();
+      PsiElement scope = ((PsiParameter)element).getDeclarationScope();
 
       if (scope instanceof PsiMethod) {
-        final PsiMethod method = (PsiMethod)scope;
+        PsiMethod method = (PsiMethod)scope;
         return "parameter " + (method.getParameterList().getParameterIndex(((PsiParameter)element))) + " of " + method.getName();
       }
     }
@@ -399,27 +399,27 @@ public class ReductionSystem {
   }
 
   public String dumpResult(final Binding bestBinding) {
-    final @NonNls String[] data = new String[myElements.size()];
+    @NonNls String[] data = new String[myElements.size()];
 
     class Substitutor {
-      PsiType substitute(final PsiType t) {
+      PsiType substitute(PsiType t) {
         if (t instanceof PsiWildcardType) {
-          final PsiWildcardType wcType = (PsiWildcardType)t;
-          final PsiType bound = wcType.getBound();
+          PsiWildcardType wcType = (PsiWildcardType)t;
+          PsiType bound = wcType.getBound();
 
           if (bound == null) {
             return t;
           }
 
-          final PsiManager manager = PsiManager.getInstance(myProject);
-          final PsiType subst = substitute(bound);
+          PsiManager manager = PsiManager.getInstance(myProject);
+          PsiType subst = substitute(bound);
           return subst == null || subst instanceof PsiWildcardType ? subst : wcType.isExtends()
                                                                              ? PsiWildcardType.createExtends(manager, subst)
                                                                              : PsiWildcardType.createSuper(manager, subst);
         }
         else if (t instanceof PsiTypeVariable) {
           if (bestBinding != null) {
-            final PsiType b = bestBinding.apply(t);
+            PsiType b = bestBinding.apply(t);
 
             if (b instanceof Bottom || b instanceof PsiTypeVariable) {
               return null;
@@ -437,10 +437,10 @@ public class ReductionSystem {
           return substitute(((PsiArrayType)t).getComponentType()).createArrayType();
         }
         else if (t instanceof PsiClassType) {
-          final PsiClassType.ClassResolveResult result = ((PsiClassType)t).resolveGenerics();
+          PsiClassType.ClassResolveResult result = ((PsiClassType)t).resolveGenerics();
 
-          final PsiClass aClass = result.getElement();
-          final PsiSubstitutor aSubst = result.getSubstitutor();
+          PsiClass aClass = result.getElement();
+          PsiSubstitutor aSubst = result.getSubstitutor();
 
           if (aClass == null) {
             return t;
@@ -448,8 +448,8 @@ public class ReductionSystem {
 
           PsiSubstitutor theSubst = PsiSubstitutor.EMPTY;
 
-          for (final PsiTypeParameter parm : aSubst.getSubstitutionMap().keySet()) {
-            final PsiType type = aSubst.substitute(parm);
+          for (PsiTypeParameter parm : aSubst.getSubstitutionMap().keySet()) {
+            PsiType type = aSubst.substitute(parm);
 
             theSubst = theSubst.put(parm, substitute(type));
           }
@@ -462,11 +462,11 @@ public class ReductionSystem {
       }
     }
 
-    final Substitutor binding = new Substitutor();
+    Substitutor binding = new Substitutor();
     int i = 0;
 
-    for (final PsiElement element : myElements) {
-      final PsiType t = myTypes.get(element);
+    for (PsiElement element : myElements) {
+      PsiType t = myTypes.get(element);
       if (t != null) {
         data[i++] = binding.substitute(t).getCanonicalText() + "\\n" + elementString(element);
       }
@@ -483,7 +483,7 @@ public class ReductionSystem {
                 });
 
 
-    final StringBuffer repr = new StringBuffer();
+    StringBuffer repr = new StringBuffer();
 
     for (String aData : data) {
       repr.append(aData);

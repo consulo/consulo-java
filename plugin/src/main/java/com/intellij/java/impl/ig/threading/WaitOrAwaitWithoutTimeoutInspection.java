@@ -47,28 +47,28 @@ public class WaitOrAwaitWithoutTimeoutInspection extends BaseInspection {
     public void visitMethodCallExpression(
       @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
+      String methodName = methodExpression.getReferenceName();
       if (!"wait".equals(methodName) && !"await".equals(methodName)) {
         return;
       }
-      final PsiExpressionList argList = expression.getArgumentList();
-      final PsiExpression[] args = argList.getExpressions();
-      final int numParams = args.length;
+      PsiExpressionList argList = expression.getArgumentList();
+      PsiExpression[] args = argList.getExpressions();
+      int numParams = args.length;
       if (numParams != 0) {
         return;
       }
       if ("await".equals(methodName)) {
-        final PsiMethod method = expression.resolveMethod();
+        PsiMethod method = expression.resolveMethod();
         if (method == null) {
           return;
         }
-        final PsiClass containingClass = method.getContainingClass();
+        PsiClass containingClass = method.getContainingClass();
         if (containingClass == null) {
           return;
         }
-        final String className = containingClass.getName();
+        String className = containingClass.getName();
         if (!"java.util.concurrent.locks.Condition".equals(className)) {
           return;
         }

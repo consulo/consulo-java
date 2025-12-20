@@ -176,7 +176,7 @@ public class JavaDocCommentFixer implements DocCommentFixer {
    * @param project  current project
    */
   @SuppressWarnings("unchecked")
-  private static void fixCommonProblems(@Nonnull ProblemDescriptor[] problems, @Nonnull PsiComment comment, @Nonnull final Document document, @Nonnull Project project) {
+  private static void fixCommonProblems(@Nonnull ProblemDescriptor[] problems, @Nonnull PsiComment comment, @Nonnull Document document, @Nonnull Project project) {
     List<PsiElement> toRemove = new ArrayList<>();
     for (ProblemDescriptor problem : problems) {
       PsiElement element = problem.getPsiElement();

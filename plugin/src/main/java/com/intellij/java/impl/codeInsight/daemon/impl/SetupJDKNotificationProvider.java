@@ -65,7 +65,7 @@ public class SetupJDKNotificationProvider implements EditorNotificationProvider 
       return null;
     }
 
-    final PsiFile psiFile = PsiManager.getInstance(myProject).findFile(file);
+    PsiFile psiFile = PsiManager.getInstance(myProject).findFile(file);
     if (psiFile == null) {
       return null;
     }
@@ -74,11 +74,11 @@ public class SetupJDKNotificationProvider implements EditorNotificationProvider 
       return null;
     }
 
-    final Module moduleForPsiElement = ModuleUtilCore.findModuleForPsiElement(psiFile);
+    Module moduleForPsiElement = ModuleUtilCore.findModuleForPsiElement(psiFile);
     if (moduleForPsiElement == null) {
       return null;
     }
-    final JavaModuleExtension extension = ModuleUtilCore.getExtension(moduleForPsiElement, JavaModuleExtension.class);
+    JavaModuleExtension extension = ModuleUtilCore.getExtension(moduleForPsiElement, JavaModuleExtension.class);
     if (extension == null) {
       return null;
     }
@@ -91,11 +91,11 @@ public class SetupJDKNotificationProvider implements EditorNotificationProvider 
     return null;
   }
 
-  private static void createPanel(final @Nonnull Project project, final @Nonnull PsiFile file, EditorNotificationBuilder builder) {
+  private static void createPanel(@Nonnull Project project, @Nonnull PsiFile file, EditorNotificationBuilder builder) {
     builder.withText(LocalizeValue.localizeTODO(JavaCoreBundle.message("module.jdk.not.defined")));
     builder.withAction(LocalizeValue.localizeTODO(JavaCoreBundle.message("module.jdk.setup")), (e) ->
     {
-      final Module moduleForPsiElement = ModuleUtilCore.findModuleForPsiElement(file);
+      Module moduleForPsiElement = ModuleUtilCore.findModuleForPsiElement(file);
       if (moduleForPsiElement == null) {
         return;
       }

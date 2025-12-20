@@ -110,8 +110,8 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
     }
 
     @Override
-    public int getElementProblemCount(@Nonnull final RefJavaElement refElement) {
-      final int problemCount = super.getElementProblemCount(refElement);
+    public int getElementProblemCount(@Nonnull RefJavaElement refElement) {
+      int problemCount = super.getElementProblemCount(refElement);
       if (problemCount > -1) {
         return problemCount;
       }
@@ -138,11 +138,11 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   }
 
   @Override
-  public void exportResults(@Nonnull final Element parentNode, @Nonnull RefEntity refEntity) {
+  public void exportResults(@Nonnull Element parentNode, @Nonnull RefEntity refEntity) {
     if (!(refEntity instanceof RefJavaElement)) {
       return;
     }
-    final RefFilter filter = getFilter();
+    RefFilter filter = getFilter();
     if (!getIgnoredRefElements().contains(refEntity) && filter.accepts((RefJavaElement)refEntity)) {
       refEntity = getRefManager().getRefinedElement(refEntity);
       Element element = refEntity.getRefManager().export(refEntity, parentNode, -1);
@@ -151,9 +151,9 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
       }
       Element problemClassElement = new Element(InspectionLocalize.inspectionExportResultsProblemElementTag().get());
 
-      final RefElement refElement = (RefElement)refEntity;
-      final HighlightSeverity severity = getSeverity(refElement);
-      final String attributeKey = getTextAttributeKey(
+      RefElement refElement = (RefElement)refEntity;
+      HighlightSeverity severity = getSeverity(refElement);
+      String attributeKey = getTextAttributeKey(
         refElement.getRefManager().getProject(),
         severity,
         ProblemHighlightType.LIKE_UNUSED_SYMBOL
@@ -182,7 +182,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   }
 
   @Override
-  public QuickFixAction[] getQuickFixes(@Nonnull final RefEntity[] refElements) {
+  public QuickFixAction[] getQuickFixes(@Nonnull RefEntity[] refElements) {
     return myQuickFixActions;
   }
 
@@ -208,11 +208,11 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
     }
 
     @Override
-    protected boolean applyFix(@Nonnull final RefEntity[] refElements) {
+    protected boolean applyFix(@Nonnull RefEntity[] refElements) {
       if (!super.applyFix(refElements)) {
         return false;
       }
-      final ArrayList<PsiElement> psiElements = new ArrayList<>();
+      ArrayList<PsiElement> psiElements = new ArrayList<>();
       for (RefEntity refEntity : refElements) {
         PsiElement psiElement = refEntity instanceof RefElement refElement ? refElement.getElement() : null;
         if (psiElement == null) {
@@ -225,7 +225,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
       }
 
       Application.get().invokeLater(() -> {
-        final Project project = getContext().getProject();
+        Project project = getContext().getProject();
         if (isDisposed() || project.isDisposed()) {
           return;
         }
@@ -258,7 +258,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
 
     @Override
     protected boolean applyFix(@Nonnull RefEntity[] refElements) {
-      final EntryPointsManager entryPointsManager = getEntryPointsManager();
+      EntryPointsManager entryPointsManager = getEntryPointsManager();
       for (RefEntity refEntity : refElements) {
         if (refEntity instanceof RefElement refElement) {
           entryPointsManager.addEntryPoint(refElement, true);
@@ -310,7 +310,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   private static class CommentOutFix implements SyntheticIntentionAction {
     private final PsiElement myElement;
 
-    private CommentOutFix(final PsiElement element) {
+    private CommentOutFix(PsiElement element) {
       myElement = element;
     }
 
@@ -391,7 +391,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
     @Nonnull InspectionTreeNode parentNode,
     boolean showStructure
   ) {
-    final EntryPointsNode entryPointsNode = new EntryPointsNode(context);
+    EntryPointsNode entryPointsNode = new EntryPointsNode(context);
     InspectionToolWrapper dummyToolWrapper = entryPointsNode.getToolWrapper();
     InspectionToolPresentation presentation = context.getPresentation(dummyToolWrapper);
     presentation.updateContent();
@@ -428,7 +428,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
 
   @Override
   public boolean hasReportedProblems() {
-    final GlobalInspectionContextImpl context = (GlobalInspectionContextImpl)getContext();
+    GlobalInspectionContextImpl context = (GlobalInspectionContextImpl)getContext();
     if (!isDisposed() && context.getUIOptions().SHOW_ONLY_DIFF) {
       return containsOnlyDiff(myPackageContents) || myOldPackageContents != null && containsOnlyDiff(myOldPackageContents);
     }
@@ -437,7 +437,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
 
   private boolean containsOnlyDiff(@Nonnull Map<String, Set<RefEntity>> packageContents) {
     for (String packageName : packageContents.keySet()) {
-      final Set<RefEntity> refElements = packageContents.get(packageName);
+      Set<RefEntity> refElements = packageContents.get(packageName);
       if (refElements != null) {
         for (RefEntity refElement : refElements) {
           if (getElementStatus(refElement) != FileStatus.NOT_CHANGED) {
@@ -494,7 +494,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   }
 
   @Override
-  public boolean isElementIgnored(final RefEntity element) {
+  public boolean isElementIgnored(RefEntity element) {
     for (RefEntity entity : myIgnoreElements) {
       if (Comparing.equal(entity, element)) {
         return true;
@@ -506,12 +506,12 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
 
   @Nonnull
   @Override
-  public FileStatus getElementStatus(final RefEntity element) {
-    final GlobalInspectionContextImpl context = (GlobalInspectionContextImpl)getContext();
+  public FileStatus getElementStatus(RefEntity element) {
+    GlobalInspectionContextImpl context = (GlobalInspectionContextImpl)getContext();
     if (!isDisposed() && context.getUIOptions().SHOW_DIFF_WITH_PREVIOUS_RUN) {
       if (myOldPackageContents != null) {
-        final boolean old = RefUtil.contains(element, collectRefElements(myOldPackageContents));
-        final boolean current = RefUtil.contains(element, collectRefElements(myPackageContents));
+        boolean old = RefUtil.contains(element, collectRefElements(myOldPackageContents));
+        boolean current = RefUtil.contains(element, collectRefElements(myPackageContents));
         return calcStatus(old, current);
       }
       return FileStatus.ADDED;
@@ -536,7 +536,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   @Override
   @Nullable
   @RequiredReadAction
-  public IntentionAction findQuickFixes(@Nonnull final CommonProblemDescriptor descriptor, final String hint) {
+  public IntentionAction findQuickFixes(@Nonnull CommonProblemDescriptor descriptor, String hint) {
     if (descriptor instanceof ProblemDescriptor problemDescriptor) {
       if (DELETE.equals(hint)) {
         return new PermanentDeleteFix(problemDescriptor.getPsiElement());
@@ -551,7 +551,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   private static class PermanentDeleteFix implements SyntheticIntentionAction {
     private final PsiElement myElement;
 
-    private PermanentDeleteFix(final PsiElement element) {
+    private PermanentDeleteFix(PsiElement element) {
       myElement = element;
     }
 

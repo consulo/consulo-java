@@ -95,8 +95,8 @@ public class SliceLeafValueRootNode extends SliceNode implements MyColoredTreeCe
   }
 
   private static void appendElementText(@Nonnull UsageInfo2UsageAdapter usage,
-                                        @Nonnull final PsiElement element,
-                                        @Nonnull final SliceUsageCellRenderer renderer) {
+                                        @Nonnull PsiElement element,
+                                        @Nonnull SliceUsageCellRenderer renderer) {
     PsiFile file = element.getContainingFile();
     List<TextChunk> result = new ArrayList<TextChunk>();
     ChunkExtractor.getExtractor(element.getContainingFile()).createTextChunks(usage, file.getText(), element.getTextRange().getStartOffset(),

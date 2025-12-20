@@ -67,7 +67,7 @@ public abstract class RenameMethodMultiTest extends MultiFileTestCase {
     doTest("void test123(int i, int j)", "test123asd");
   }
 
-  private void doTest(final String methodSignature, final String newName) throws Exception {
+  private void doTest(String methodSignature, String newName) throws Exception {
     doTest(getTestName(false), methodSignature, newName);
   }
 
@@ -75,13 +75,13 @@ public abstract class RenameMethodMultiTest extends MultiFileTestCase {
     doTest(new PerformAction() {
       @Override
       public void performAction(VirtualFile rootDir, VirtualFile rootAfter) throws Exception {
-        final JavaPsiFacade manager = getJavaFacade();
-        final PsiClass aClass = manager.findClass(className, GlobalSearchScope.moduleScope(myModule));
+        JavaPsiFacade manager = getJavaFacade();
+        PsiClass aClass = manager.findClass(className, GlobalSearchScope.moduleScope(myModule));
         assertNotNull(aClass);
-        final PsiMethod methodBySignature = aClass.findMethodBySignature(manager.getElementFactory().createMethodFromText(
+        PsiMethod methodBySignature = aClass.findMethodBySignature(manager.getElementFactory().createMethodFromText(
                   methodSignature + "{}", null), false);
         assertNotNull(methodBySignature);
-        final RenameProcessor renameProcessor = new RenameProcessor(myProject, methodBySignature, newName, false, false);
+        RenameProcessor renameProcessor = new RenameProcessor(myProject, methodBySignature, newName, false, false);
         renameProcessor.run();
         FileDocumentManager.getInstance().saveAllDocuments();
       }

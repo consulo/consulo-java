@@ -51,22 +51,22 @@ public class PublicFieldAccessedInSynchronizedContextInspection extends BaseInsp
 
     @Override
     public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
-      final PsiExpression qualifier = expression.getQualifierExpression();
+      PsiExpression qualifier = expression.getQualifierExpression();
       if (qualifier != null && !(qualifier instanceof PsiThisExpression) && !(qualifier instanceof PsiSuperExpression)) {
         return;
       }
-      final PsiElement element = expression.resolve();
+      PsiElement element = expression.resolve();
       if (!(element instanceof PsiField)) {
         return;
       }
-      final PsiField field = (PsiField)element;
+      PsiField field = (PsiField)element;
       if (field.hasModifierProperty(PsiModifier.PRIVATE) || field.hasModifierProperty(PsiModifier.FINAL)) {
         return;
       }
       if (!SynchronizationUtil.isInSynchronizedContext(expression)) {
         return;
       }
-      final PsiClass containingClass = field.getContainingClass();
+      PsiClass containingClass = field.getContainingClass();
       if (containingClass == null || containingClass.hasModifierProperty(PsiModifier.PRIVATE)) {
         return;
       }

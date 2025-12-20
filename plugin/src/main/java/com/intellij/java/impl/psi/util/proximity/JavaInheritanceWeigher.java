@@ -42,7 +42,7 @@ public class JavaInheritanceWeigher extends ProximityWeigher {
         @Nonnull
         @Override
         public Set<String> apply(ProximityLocation location) {
-            final HashSet<String> result = new HashSet<>();
+            HashSet<String> result = new HashSet<>();
             PsiClass contextClass = PsiTreeUtil.getContextOfType(location.getPosition(), PsiClass.class, false);
             Predicate<PsiClass> processor = psiClass ->  {
                 ContainerUtil.addIfNotNull(result, psiClass.getQualifiedName());
@@ -57,7 +57,7 @@ public class JavaInheritanceWeigher extends ProximityWeigher {
     });
 
     @Override
-    public Comparable weigh(@Nonnull final PsiElement element, @Nonnull final ProximityLocation location) {
+    public Comparable weigh(@Nonnull PsiElement element, @Nonnull ProximityLocation location) {
         if (location.getPosition() == null || !(element instanceof PsiClass)) {
             return null;
         }
@@ -70,7 +70,7 @@ public class JavaInheritanceWeigher extends ProximityWeigher {
             return false;
         }
 
-        final PsiElement position = location.getPosition();
+        PsiElement position = location.getPosition();
         PsiClass placeClass = findPlaceClass(element, position);
         if (placeClass == null) {
             return false;
@@ -90,11 +90,11 @@ public class JavaInheritanceWeigher extends ProximityWeigher {
     @Nullable
     private static PsiClass findPlaceClass(PsiElement element, PsiElement position) {
         if (position.getParent() instanceof PsiReferenceExpression) {
-            final PsiExpression qualifierExpression = ((PsiReferenceExpression) position.getParent()).getQualifierExpression();
+            PsiExpression qualifierExpression = ((PsiReferenceExpression) position.getParent()).getQualifierExpression();
             if (qualifierExpression != null) {
-                final PsiType type = qualifierExpression.getType();
+                PsiType type = qualifierExpression.getType();
                 if (type instanceof PsiClassType) {
-                    final PsiClass psiClass = ((PsiClassType) type).resolve();
+                    PsiClass psiClass = ((PsiClassType) type).resolve();
                     if (psiClass != null) {
                         return psiClass;
                     }
@@ -104,12 +104,12 @@ public class JavaInheritanceWeigher extends ProximityWeigher {
         return PsiTreeUtil.getContextOfType(element, PsiClass.class, false);
     }
 
-    private static boolean isTooGeneral(@Nullable final PsiClass element) {
+    private static boolean isTooGeneral(@Nullable PsiClass element) {
         if (element == null) {
             return true;
         }
 
-        @NonNls final String qname = element.getQualifiedName();
+        @NonNls String qname = element.getQualifiedName();
         return qname == null || qname.startsWith("java.lang.");
     }
 }

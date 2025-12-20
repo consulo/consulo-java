@@ -87,12 +87,12 @@ public class ConfusingElseInspection extends BaseInspection {
 
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement ifKeyword = descriptor.getPsiElement();
-      final PsiIfStatement ifStatement = (PsiIfStatement)ifKeyword.getParent();
+      PsiElement ifKeyword = descriptor.getPsiElement();
+      PsiIfStatement ifStatement = (PsiIfStatement)ifKeyword.getParent();
       if (ifStatement == null) {
         return;
       }
-      final PsiStatement elseBranch = ifStatement.getElseBranch();
+      PsiStatement elseBranch = ifStatement.getElseBranch();
       if (elseBranch == null) {
         return;
       }
@@ -103,9 +103,9 @@ public class ConfusingElseInspection extends BaseInspection {
         parent = anchor.getParent();
       }
       if (elseBranch instanceof PsiBlockStatement) {
-        final PsiBlockStatement elseBlock = (PsiBlockStatement)elseBranch;
-        final PsiCodeBlock block = elseBlock.getCodeBlock();
-        final PsiElement[] children = block.getChildren();
+        PsiBlockStatement elseBlock = (PsiBlockStatement)elseBranch;
+        PsiCodeBlock block = elseBlock.getCodeBlock();
+        PsiElement[] children = block.getChildren();
         if (children.length > 2) {
           parent.addRangeAfter(children[1], children[children.length - 2], anchor);
         }
@@ -122,11 +122,11 @@ public class ConfusingElseInspection extends BaseInspection {
     @Override
     public void visitIfStatement(@Nonnull PsiIfStatement statement) {
       super.visitIfStatement(statement);
-      final PsiStatement thenBranch = statement.getThenBranch();
+      PsiStatement thenBranch = statement.getThenBranch();
       if (thenBranch == null) {
         return;
       }
-      final PsiStatement elseBranch = statement.getElseBranch();
+      PsiStatement elseBranch = statement.getElseBranch();
       if (elseBranch == null) {
         return;
       }
@@ -134,7 +134,7 @@ public class ConfusingElseInspection extends BaseInspection {
         return;
       }
       if (!reportWhenNoStatementFollow) {
-        final PsiStatement nextStatement = getNextStatement(statement);
+        PsiStatement nextStatement = getNextStatement(statement);
         if (nextStatement == null) {
           return;
         }
@@ -144,7 +144,7 @@ public class ConfusingElseInspection extends BaseInspection {
           // and are followed by a case label
         }
       }
-      final PsiElement elseToken = statement.getElseElement();
+      PsiElement elseToken = statement.getElseElement();
       if (elseToken == null) {
         return;
       }
@@ -157,12 +157,12 @@ public class ConfusingElseInspection extends BaseInspection {
     private boolean parentCompletesNormally(PsiElement element) {
       PsiElement parent = element.getParent();
       while (parent instanceof PsiIfStatement) {
-        final PsiIfStatement ifStatement = (PsiIfStatement)parent;
-        final PsiStatement elseBranch = ifStatement.getElseBranch();
+        PsiIfStatement ifStatement = (PsiIfStatement)parent;
+        PsiStatement elseBranch = ifStatement.getElseBranch();
         if (elseBranch != element) {
           return true;
         }
-        final PsiStatement thenBranch = ifStatement.getThenBranch();
+        PsiStatement thenBranch = ifStatement.getThenBranch();
         if (ControlFlowUtils.statementMayCompleteNormally(thenBranch)) {
           return true;
         }
@@ -175,10 +175,10 @@ public class ConfusingElseInspection extends BaseInspection {
     @Nullable
     private PsiStatement getNextStatement(PsiIfStatement statement) {
       while (true) {
-        final PsiElement parent = statement.getParent();
+        PsiElement parent = statement.getParent();
         if (parent instanceof PsiIfStatement) {
-          final PsiIfStatement parentIfStatement = (PsiIfStatement)parent;
-          final PsiStatement elseBranch = parentIfStatement.getElseBranch();
+          PsiIfStatement parentIfStatement = (PsiIfStatement)parent;
+          PsiStatement elseBranch = parentIfStatement.getElseBranch();
           if (elseBranch == statement) {
             statement = parentIfStatement;
             continue;

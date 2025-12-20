@@ -79,7 +79,7 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
 
   @Nonnull
   private static List<TypeParameterInfo> initTypeParameterInfos(int length) {
-    final List<TypeParameterInfo> result = new ArrayList<TypeParameterInfo>();
+    List<TypeParameterInfo> result = new ArrayList<TypeParameterInfo>();
     for (int i = 0; i < length; i++) {
       result.add(new TypeParameterInfo(i));
     }
@@ -88,7 +88,7 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
 
   @Nonnull
   private static List<PsiTypeCodeFragment> initTypeCodeFragment(int length) {
-    final List<PsiTypeCodeFragment> result = new ArrayList<PsiTypeCodeFragment>();
+    List<PsiTypeCodeFragment> result = new ArrayList<PsiTypeCodeFragment>();
     for (int i = 0; i < length; i++) {
       result.add(null);
     }
@@ -118,7 +118,7 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
   }
 
   private PsiTypeCodeFragment createValueCodeFragment() {
-    final JavaCodeFragmentFactory factory = JavaCodeFragmentFactory.getInstance(myProject);
+    JavaCodeFragmentFactory factory = JavaCodeFragmentFactory.getInstance(myProject);
     return factory.createTypeCodeFragment("", myClass.getLBrace(), true);
   }
 
@@ -162,7 +162,7 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
         public void tableChanged(TableModelEvent e) {
           if (e.getType() == TableModelEvent.INSERT) {
             myTable.getModel().removeTableModelListener(this);
-            final TableColumnAnimator animator = new TableColumnAnimator(myTable);
+            TableColumnAnimator animator = new TableColumnAnimator(myTable);
             animator.setStep(20);
             animator.addColumn(defaultValue, myTable.getWidth() / 2);
             animator.startAndDoWhenDone(new Runnable() {
@@ -177,7 +177,7 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
       });
     }
 
-    final JPanel panel = new JPanel(new BorderLayout());
+    JPanel panel = new JPanel(new BorderLayout());
     panel.add(SeparatorFactory.createSeparator(RefactoringLocalize.changeclasssignatureParametersPanelBorderTitle().get(), myTable), BorderLayout.NORTH);
     panel.add(ToolbarDecorator.createDecorator(myTable).createPanel(), BorderLayout.CENTER);
     return panel;
@@ -198,14 +198,14 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
   }
 
   private String validateAndCommitData() {
-    final PsiTypeParameter[] parameters = myClass.getTypeParameters();
-    final Map<String, TypeParameterInfo> infos = new HashMap<String, TypeParameterInfo>();
-    for (final TypeParameterInfo info : myTypeParameterInfos) {
+    PsiTypeParameter[] parameters = myClass.getTypeParameters();
+    Map<String, TypeParameterInfo> infos = new HashMap<String, TypeParameterInfo>();
+    for (TypeParameterInfo info : myTypeParameterInfos) {
       if (!info.isForExistingParameter() &&
           !PsiNameHelper.getInstance(myClass.getProject()).isIdentifier(info.getNewName())) {
         return RefactoringLocalize.errorWrongNameInput(info.getNewName()).get();
       }
-      final String newName = info.isForExistingParameter() ? parameters[info.getOldParameterIndex()].getName() : info.getNewName();
+      String newName = info.isForExistingParameter() ? parameters[info.getOldParameterIndex()].getName() : info.getNewName();
       TypeParameterInfo existing = infos.get(newName);
       if (existing != null) {
         return myClass.getName() + " already contains type parameter " + newName;
@@ -214,7 +214,7 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
     }
     LOG.assertTrue(myTypeCodeFragments.size() == myTypeParameterInfos.size());
     for (int i = 0; i < myTypeCodeFragments.size(); i++) {
-      final PsiTypeCodeFragment codeFragment = myTypeCodeFragments.get(i);
+      PsiTypeCodeFragment codeFragment = myTypeCodeFragments.get(i);
       TypeParameterInfo info = myTypeParameterInfos.get(i);
       if (info.getOldParameterIndex() >= 0) continue;
       PsiType type;
@@ -298,7 +298,7 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
       TableUtil.stopEditing(myTable);
       myTypeParameterInfos.add(new TypeParameterInfo("", null));
       myTypeCodeFragments.add(createValueCodeFragment());
-      final int row = myTypeCodeFragments.size() - 1;
+      int row = myTypeCodeFragments.size() - 1;
       fireTableRowsInserted(row, row);
     }
 

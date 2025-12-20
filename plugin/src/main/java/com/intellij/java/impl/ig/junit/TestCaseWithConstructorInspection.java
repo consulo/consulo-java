@@ -56,11 +56,11 @@ public class TestCaseWithConstructorInspection extends BaseInspection {
       if (!method.isConstructor()) {
         return;
       }
-      final PsiClass aClass = method.getContainingClass();
+      PsiClass aClass = method.getContainingClass();
       if (!TestUtils.isJUnitTestClass(aClass)) {
         return;
       }
-      final PsiCodeBlock body = method.getBody();
+      PsiCodeBlock body = method.getBody();
       if (isTrivial(body)) {
         return;
       }
@@ -72,7 +72,7 @@ public class TestCaseWithConstructorInspection extends BaseInspection {
       if (initializer.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }
-      final PsiClass aClass = initializer.getContainingClass();
+      PsiClass aClass = initializer.getContainingClass();
       if (!TestUtils.isJUnitTestClass(aClass)) {
         return;
       }
@@ -83,29 +83,29 @@ public class TestCaseWithConstructorInspection extends BaseInspection {
       if (codeBlock == null) {
         return true;
       }
-      final PsiStatement[] statements = codeBlock.getStatements();
+      PsiStatement[] statements = codeBlock.getStatements();
       if (statements.length == 0) {
         return true;
       }
       if (statements.length > 1) {
         return false;
       }
-      final PsiStatement statement = statements[0];
+      PsiStatement statement = statements[0];
       if (!(statement instanceof PsiExpressionStatement)) {
         return false;
       }
-      final PsiExpressionStatement expressionStatement =
+      PsiExpressionStatement expressionStatement =
         (PsiExpressionStatement)statement;
-      final PsiExpression expression =
+      PsiExpression expression =
         expressionStatement.getExpression();
       if (!(expression instanceof PsiMethodCallExpression)) {
         return false;
       }
-      final PsiMethodCallExpression methodCallExpression =
+      PsiMethodCallExpression methodCallExpression =
         (PsiMethodCallExpression)expression;
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         methodCallExpression.getMethodExpression();
-      final String text = methodExpression.getText();
+      String text = methodExpression.getText();
       return PsiKeyword.SUPER.equals(text);
     }
   }

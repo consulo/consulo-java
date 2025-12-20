@@ -45,7 +45,7 @@ public class SimpleFieldChooser extends DialogWrapper {
 
   @Override
   protected JComponent createCenterPanel() {
-    final DefaultListModel model = new DefaultListModel ();
+    DefaultListModel model = new DefaultListModel ();
     for (PsiField member : myFields) {
       model.addElement(member);
     }
@@ -78,7 +78,7 @@ public class SimpleFieldChooser extends DialogWrapper {
       if (value instanceof PsiField) {
         PsiField field = (PsiField)value;
         icon = TargetAWT.to(IconDescriptorUpdaters.getIcon(field, 0));
-        final String text = PsiFormatUtil.formatVariable(field, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_TYPE, PsiSubstitutor.EMPTY);
+        String text = PsiFormatUtil.formatVariable(field, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_TYPE, PsiSubstitutor.EMPTY);
         setText(text);
       }
       super.setIcon(icon);

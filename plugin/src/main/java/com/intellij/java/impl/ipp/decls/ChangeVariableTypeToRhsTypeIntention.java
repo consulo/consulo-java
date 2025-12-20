@@ -52,32 +52,32 @@ public class ChangeVariableTypeToRhsTypeIntention extends MutablyNamedIntention 
 
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
-        final PsiVariable variable = (PsiVariable) element.getParent();
-        final PsiExpression initializer = variable.getInitializer();
+        PsiVariable variable = (PsiVariable) element.getParent();
+        PsiExpression initializer = variable.getInitializer();
         assert initializer != null;
-        final PsiType type = initializer.getType();
+        PsiType type = initializer.getType();
         assert type != null;
         return IntentionPowerPackLocalize.changeVariableTypeToRhsTypeIntentionName(variable.getName(), type.getPresentableText());
     }
 
     @Override
     protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-        final PsiElement parent = element.getParent();
+        PsiElement parent = element.getParent();
         if (!(parent instanceof PsiVariable)) {
             return;
         }
-        final PsiVariable variable = (PsiVariable) parent;
-        final PsiExpression initializer = variable.getInitializer();
+        PsiVariable variable = (PsiVariable) parent;
+        PsiExpression initializer = variable.getInitializer();
         if (initializer == null) {
             return;
         }
-        final PsiType type = initializer.getType();
+        PsiType type = initializer.getType();
         if (type == null) {
             return;
         }
-        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
-        final PsiTypeElement typeElement = factory.createTypeElement(type);
-        final PsiTypeElement variableTypeElement = variable.getTypeElement();
+        PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
+        PsiTypeElement typeElement = factory.createTypeElement(type);
+        PsiTypeElement variableTypeElement = variable.getTypeElement();
         if (variableTypeElement == null) {
             return;
         }

@@ -34,12 +34,12 @@ import consulo.language.editor.TargetElementUtil;
 @ExtensionImpl
 public class HighlightSuppressedWarningsFactory implements HighlightUsagesHandlerFactory {
   @Override
-  public HighlightUsagesHandlerBase createHighlightUsagesHandler(final Editor editor, final PsiFile file) {
+  public HighlightUsagesHandlerBase createHighlightUsagesHandler(Editor editor, PsiFile file) {
     int offset = TargetElementUtil.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
-    final PsiElement target = file.findElementAt(offset);
-    final PsiAnnotation annotation = PsiTreeUtil.getParentOfType(target, PsiAnnotation.class);
+    PsiElement target = file.findElementAt(offset);
+    PsiAnnotation annotation = PsiTreeUtil.getParentOfType(target, PsiAnnotation.class);
     if (annotation != null && Comparing.strEqual(SuppressWarnings.class.getName(), annotation.getQualifiedName())) {
-      final VirtualFile virtualFile = file.getVirtualFile();
+      VirtualFile virtualFile = file.getVirtualFile();
       if (virtualFile != null && !virtualFile.getFileType().isBinary()) {
         return new HighlightSuppressedWarningsHandler(editor, file, annotation, PsiTreeUtil.getParentOfType(target, PsiLiteralExpression.class));
       }

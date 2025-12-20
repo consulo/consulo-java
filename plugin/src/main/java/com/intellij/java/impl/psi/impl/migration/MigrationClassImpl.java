@@ -325,7 +325,7 @@ public class MigrationClassImpl extends LightElement implements PsiClass{
   }
 
   @Override
-  public boolean isEquivalentTo(final PsiElement another) {
+  public boolean isEquivalentTo(PsiElement another) {
     return PsiClassImplUtil.isClassEquivalentTo(this, another);
   }
 

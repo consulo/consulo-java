@@ -59,11 +59,11 @@ public class MisspelledCompareToInspection extends BaseInspection {
         @Override
         public void visitMethod(@Nonnull PsiMethod method) {
             //note: no call to super
-            @NonNls final String methodName = method.getName();
+            @NonNls String methodName = method.getName();
             if (!"compareto".equals(methodName)) {
                 return;
             }
-            final PsiParameterList parameterList = method.getParameterList();
+            PsiParameterList parameterList = method.getParameterList();
             if (parameterList.getParametersCount() != 1) {
                 return;
             }

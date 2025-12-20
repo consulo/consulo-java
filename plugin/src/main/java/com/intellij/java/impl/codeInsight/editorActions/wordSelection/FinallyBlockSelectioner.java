@@ -38,10 +38,10 @@ public class FinallyBlockSelectioner extends BasicSelectioner {
   public List<TextRange> select(PsiElement e, CharSequence editorText, int cursorOffset, Editor editor) {
     List<TextRange> result = new ArrayList<TextRange>();
 
-    final PsiElement parent = e.getParent();
+    PsiElement parent = e.getParent();
     if (parent instanceof PsiTryStatement) {
-      final PsiTryStatement tryStatement = (PsiTryStatement)parent;
-      final PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
+      PsiTryStatement tryStatement = (PsiTryStatement)parent;
+      PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
       if (finallyBlock != null) {
         result.add(new TextRange(e.getTextRange().getStartOffset(), finallyBlock.getTextRange().getEndOffset()));
       }

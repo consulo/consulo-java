@@ -59,7 +59,7 @@ public class MoveBoundClassToFrontFix extends ExtendsListFix {
         @Nonnull PsiElement startElement,
         @Nonnull PsiElement endElement
     ) {
-        final PsiClass myClass = (PsiClass) startElement;
+        PsiClass myClass = (PsiClass) startElement;
         if (!FileModificationService.getInstance().prepareFileForWrite(myClass.getContainingFile())) {
             return;
         }
@@ -84,7 +84,7 @@ public class MoveBoundClassToFrontFix extends ExtendsListFix {
         @Nonnull PsiElement startElement,
         @Nonnull PsiElement endElement
     ) {
-        final PsiClass myClass = (PsiClass) startElement;
+        PsiClass myClass = (PsiClass) startElement;
         return
             myClass.isValid()
                 && myClass.getManager().isInProject(myClass)

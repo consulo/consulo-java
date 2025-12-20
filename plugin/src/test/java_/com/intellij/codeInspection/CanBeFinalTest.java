@@ -19,14 +19,14 @@ public abstract class CanBeFinalTest extends InspectionTestCase {
   }
 
   private void doTest() throws Exception {
-    final CanBeFinalInspection tool = new CanBeFinalInspection();
+    CanBeFinalInspection tool = new CanBeFinalInspection();
     tool.REPORT_CLASSES = true;
     tool.REPORT_FIELDS = true;
     tool.REPORT_METHODS = true;
     doTest(tool);
   }
 
-  private void doTest(final CanBeFinalInspection tool) throws Exception {
+  private void doTest(CanBeFinalInspection tool) throws Exception {
     doTest("canBeFinal/" + getTestName(false), tool);
   }
 

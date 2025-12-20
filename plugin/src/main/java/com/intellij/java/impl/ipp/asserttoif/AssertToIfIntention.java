@@ -50,13 +50,13 @@ public class AssertToIfIntention extends Intention {
     @Override
     public void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiAssertStatement assertStatement = (PsiAssertStatement) element;
-        final PsiExpression condition = assertStatement.getAssertCondition();
-        final PsiExpression description =
+        PsiAssertStatement assertStatement = (PsiAssertStatement) element;
+        PsiExpression condition = assertStatement.getAssertCondition();
+        PsiExpression description =
             assertStatement.getAssertDescription();
-        final String negatedConditionString =
+        String negatedConditionString =
             BoolUtils.getNegatedExpressionText(condition);
-        @NonNls final String newStatement;
+        @NonNls String newStatement;
         if (description == null) {
             newStatement = "if(" + negatedConditionString +
                 "){ throw new java.lang.AssertionError();}";

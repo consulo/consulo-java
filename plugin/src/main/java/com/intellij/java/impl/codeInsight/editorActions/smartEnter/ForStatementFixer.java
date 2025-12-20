@@ -63,24 +63,24 @@ public class ForStatementFixer implements Fixer
 		}
 
 		PsiForStatement forStatement = (PsiForStatement) psiElement;
-		final PsiJavaToken lParenth = forStatement.getLParenth();
-		final PsiJavaToken rParenth = forStatement.getRParenth();
+		PsiJavaToken lParenth = forStatement.getLParenth();
+		PsiJavaToken rParenth = forStatement.getRParenth();
 		if(lParenth == null || rParenth == null)
 		{
-			final TextRange textRange = forStatement.getTextRange();
+			TextRange textRange = forStatement.getTextRange();
 			editor.getDocument().replaceString(textRange.getStartOffset(), textRange.getEndOffset(), "for () {\n}");
 			processor.registerUnresolvedError(textRange.getStartOffset() + "for (".length());
 			return;
 		}
 
-		final PsiStatement initialization = forStatement.getInitialization();
+		PsiStatement initialization = forStatement.getInitialization();
 		if(initialization == null)
 		{
 			processor.registerUnresolvedError(lParenth.getTextRange().getEndOffset());
 			return;
 		}
 
-		final PsiExpression condition = forStatement.getCondition();
+		PsiExpression condition = forStatement.getCondition();
 		if(condition == null)
 		{
 			registerErrorOffset(editor, processor, initialization, forStatement);
@@ -104,7 +104,7 @@ public class ForStatementFixer implements Fixer
 	 */
 	private static void registerErrorOffset(@Nonnull Editor editor, @Nonnull JavaSmartEnterProcessor processor, @Nonnull PsiElement lastValidForPart, @Nonnull PsiForStatement forStatement)
 	{
-		final Project project = editor.getProject();
+		Project project = editor.getProject();
 		int offset = lastValidForPart.getTextRange().getEndOffset();
 		if(project != null && CodeStyleSettingsManager.getSettings(project).SPACE_AFTER_COMMA)
 		{
@@ -115,7 +115,7 @@ public class ForStatementFixer implements Fixer
 			for(PsiElement element = lastValidForPart.getNextSibling(); element != null && element != forStatement.getRParenth() && element.getParent() == forStatement; element = element
 					.getNextSibling())
 			{
-				final ASTNode node = element.getNode();
+				ASTNode node = element.getNode();
 				if(node != null && JavaJspElementType.WHITE_SPACE_BIT_SET.contains(node.getElementType()) && element.getTextLength() > 0)
 				{
 					offset++;

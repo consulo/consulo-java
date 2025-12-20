@@ -60,12 +60,12 @@ class IfStatementBranch {
   }
 
   public boolean topLevelDeclarationsConflictWith(IfStatementBranch testBranch) {
-    final Set<String> topLevel = testBranch.topLevelVariables;
+    Set<String> topLevel = testBranch.topLevelVariables;
     return intersects(topLevelVariables, topLevel);
   }
 
   private static boolean intersects(Set<String> set1, Set<String> set2) {
-    for (final String s : set1) {
+    for (String s : set1) {
       if (set2.contains(s)) {
         return true;
       }
@@ -86,18 +86,18 @@ class IfStatementBranch {
       return;
     }
     if (statement instanceof PsiDeclarationStatement) {
-      final PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement)statement;
-      final PsiElement[] elements = declarationStatement.getDeclaredElements();
+      PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement)statement;
+      PsiElement[] elements = declarationStatement.getDeclaredElements();
       for (PsiElement element : elements) {
-        final PsiVariable variable = (PsiVariable)element;
-        final String varName = variable.getName();
+        PsiVariable variable = (PsiVariable)element;
+        String varName = variable.getName();
         topLevelVariables.add(varName);
       }
     }
     else if (statement instanceof PsiBlockStatement) {
-      final PsiBlockStatement block = (PsiBlockStatement)statement;
-      final PsiCodeBlock codeBlock = block.getCodeBlock();
-      final PsiStatement[] statements = codeBlock.getStatements();
+      PsiBlockStatement block = (PsiBlockStatement)statement;
+      PsiCodeBlock codeBlock = block.getCodeBlock();
+      PsiStatement[] statements = codeBlock.getStatements();
       for (PsiStatement statement1 : statements) {
         calculateVariablesDeclared(statement1);
       }

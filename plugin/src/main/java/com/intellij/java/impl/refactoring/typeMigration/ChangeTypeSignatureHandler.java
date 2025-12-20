@@ -34,12 +34,12 @@ public class ChangeTypeSignatureHandler implements RefactoringActionHandler
 	public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext)
 	{
 		editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
-		final int offset = TargetElementUtil.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
-		final PsiElement element = file.findElementAt(offset);
+		int offset = TargetElementUtil.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
+		PsiElement element = file.findElementAt(offset);
 		PsiTypeElement typeElement = PsiTreeUtil.getParentOfType(element, PsiTypeElement.class);
 		while(typeElement != null)
 		{
-			final PsiElement parent = typeElement.getParent();
+			PsiElement parent = typeElement.getParent();
 			PsiElement[] toMigrate = null;
 			if(parent instanceof PsiVariable)
 			{
@@ -61,14 +61,14 @@ public class ChangeTypeSignatureHandler implements RefactoringActionHandler
 	}
 
 	@Override
-	public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, final DataContext dataContext)
+	public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext)
 	{
 		LOG.assertTrue(elements.length == 1);
-		final PsiElement element = elements[0];
+		PsiElement element = elements[0];
 		invokeOnElement(project, element);
 	}
 
-	private static void invokeOnElement(final Project project, final PsiElement element)
+	private static void invokeOnElement(Project project, PsiElement element)
 	{
 		if(element instanceof PsiVariable || (element instanceof PsiMember && !(element instanceof PsiClass)) || element instanceof PsiFile || isClassArgument(element))
 		{
@@ -80,15 +80,15 @@ public class ChangeTypeSignatureHandler implements RefactoringActionHandler
 	{
 		if(element instanceof PsiReferenceParameterList)
 		{
-			final PsiMember member = PsiTreeUtil.getParentOfType(element, PsiMember.class);
+			PsiMember member = PsiTreeUtil.getParentOfType(element, PsiMember.class);
 			if(member instanceof PsiAnonymousClass)
 			{
 				return ((PsiAnonymousClass) member).getBaseClassReference().getParameterList() == element;
 			}
 			if(member instanceof PsiClass)
 			{
-				final PsiReferenceList implementsList = ((PsiClass) member).getImplementsList();
-				final PsiReferenceList extendsList = ((PsiClass) member).getExtendsList();
+				PsiReferenceList implementsList = ((PsiClass) member).getImplementsList();
+				PsiReferenceList extendsList = ((PsiClass) member).getExtendsList();
 				return PsiTreeUtil.isAncestor(implementsList, element, false) || PsiTreeUtil.isAncestor(extendsList, element, false);
 			}
 		}
@@ -116,7 +116,7 @@ public class ChangeTypeSignatureHandler implements RefactoringActionHandler
 	@Nonnull
 	private static PsiElement[] extractReferencedVariables(@Nonnull PsiTypeElement typeElement)
 	{
-		final PsiElement parent = typeElement.getParent();
+		PsiElement parent = typeElement.getParent();
 		if(parent instanceof PsiVariable)
 		{
 			if(parent instanceof PsiField)
@@ -135,7 +135,7 @@ public class ChangeTypeSignatureHandler implements RefactoringActionHandler
 			}
 			else if(parent instanceof PsiLocalVariable)
 			{
-				final PsiDeclarationStatement declaration = PsiTreeUtil.getParentOfType(parent, PsiDeclarationStatement.class);
+				PsiDeclarationStatement declaration = PsiTreeUtil.getParentOfType(parent, PsiDeclarationStatement.class);
 				if(declaration != null)
 				{
 					return Arrays.stream(declaration.getDeclaredElements()).filter(PsiVariable.class::isInstance).toArray(PsiVariable[]::new);

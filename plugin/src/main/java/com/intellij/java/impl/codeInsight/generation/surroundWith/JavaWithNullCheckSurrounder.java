@@ -39,7 +39,7 @@ class JavaWithNullCheckSurrounder extends JavaExpressionSurrounder{
     if (expr.getParent() instanceof PsiExpressionStatement) return false;
     PsiElement parent = PsiTreeUtil.getParentOfType(expr, PsiExpressionStatement.class);
     if (parent == null) return false;
-    final PsiElement element = parent.getParent();
+    PsiElement element = parent.getParent();
     if (!(element instanceof PsiCodeBlock)/* && !(JspPsiUtil.isInJspFile(element) */ && element instanceof PsiFile/*)*/) return false;
     return true;
   }

@@ -50,8 +50,8 @@ public class AssignmentToDateFieldFromParameterInspection extends BaseInspection
     @Override
     @RequiredReadAction
     public String buildErrorString(Object... infos) {
-        final String type = (String) infos[0];
-        final PsiExpression rhs = (PsiExpression) infos[1];
+        String type = (String) infos[0];
+        PsiExpression rhs = (PsiExpression) infos[1];
         return InspectionGadgetsLocalize.assignmentToDateCalendarFieldFromParameterProblemDescriptor(type, rhs.getText()).get();
     }
 
@@ -75,28 +75,28 @@ public class AssignmentToDateFieldFromParameterInspection extends BaseInspection
             @Nonnull PsiAssignmentExpression expression
         ) {
             super.visitAssignmentExpression(expression);
-            final IElementType tokenType = expression.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (!JavaTokenType.EQ.equals(tokenType)) {
                 return;
             }
-            final PsiExpression lhs = expression.getLExpression();
+            PsiExpression lhs = expression.getLExpression();
             if (!(lhs instanceof PsiReferenceExpression)) {
                 return;
             }
-            final String type =
+            String type =
                 TypeUtils.expressionHasTypeOrSubtype(lhs, CommonClassNames.JAVA_UTIL_DATE, CommonClassNames.JAVA_UTIL_CALENDAR);
             if (type == null) {
                 return;
             }
-            final PsiExpression rhs = expression.getRExpression();
+            PsiExpression rhs = expression.getRExpression();
             if (!(rhs instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiElement lhsReferent = ((PsiReference) lhs).resolve();
+            PsiElement lhsReferent = ((PsiReference) lhs).resolve();
             if (!(lhsReferent instanceof PsiField)) {
                 return;
             }
-            final PsiElement rhsReferent = ((PsiReference) rhs).resolve();
+            PsiElement rhsReferent = ((PsiReference) rhs).resolve();
             if (!(rhsReferent instanceof PsiParameter)) {
                 return;
             }
@@ -104,7 +104,7 @@ public class AssignmentToDateFieldFromParameterInspection extends BaseInspection
                 return;
             }
             if (ignorePrivateMethods) {
-                final PsiMethod containingMethod =
+                PsiMethod containingMethod =
                     PsiTreeUtil.getParentOfType(
                         expression,
                         PsiMethod.class

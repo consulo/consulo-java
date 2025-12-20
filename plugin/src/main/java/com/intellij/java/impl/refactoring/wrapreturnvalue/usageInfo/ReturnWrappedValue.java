@@ -32,13 +32,13 @@ public class ReturnWrappedValue extends FixableUsageInfo {
     }
 
     public void fixUsage() throws IncorrectOperationException{
-        final PsiMethodCallExpression returnValue =
+        PsiMethodCallExpression returnValue =
                 (PsiMethodCallExpression) statement.getReturnValue();
         assert returnValue != null;
-        final PsiExpression qualifier =
+        PsiExpression qualifier =
                 returnValue.getMethodExpression().getQualifierExpression();
         assert qualifier != null;
-        @NonNls final String newExpression = qualifier.getText();
+        @NonNls String newExpression = qualifier.getText();
         MutationUtils.replaceExpression(newExpression, returnValue);
     }
 }

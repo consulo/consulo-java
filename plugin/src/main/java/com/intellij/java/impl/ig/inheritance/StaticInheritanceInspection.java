@@ -59,14 +59,14 @@ public class StaticInheritanceInspection extends BaseInspection {
         @Override
         public void visitClass(@Nonnull PsiClass aClass) {
             // no call to super, so it doesn't drill down
-            final PsiReferenceList implementsList = aClass.getImplementsList();
+            PsiReferenceList implementsList = aClass.getImplementsList();
             if (implementsList == null) {
                 return;
             }
-            final PsiJavaCodeReferenceElement[] references =
+            PsiJavaCodeReferenceElement[] references =
                 implementsList.getReferenceElements();
-            for (final PsiJavaCodeReferenceElement reference : references) {
-                final PsiClass iface = (PsiClass) reference.resolve();
+            for (PsiJavaCodeReferenceElement reference : references) {
+                PsiClass iface = (PsiClass) reference.resolve();
                 if (iface != null) {
                     if (interfaceContainsOnlyConstants(iface, new HashSet<PsiClass>())) {
                         registerError(reference);
@@ -88,8 +88,8 @@ public class StaticInheritanceInspection extends BaseInspection {
             if (iface.getMethods().length != 0) {
                 return false;
             }
-            final PsiClass[] parentInterfaces = iface.getInterfaces();
-            for (final PsiClass parentInterface : parentInterfaces) {
+            PsiClass[] parentInterfaces = iface.getInterfaces();
+            for (PsiClass parentInterface : parentInterfaces) {
                 if (!interfaceContainsOnlyConstants(
                     parentInterface,
                     visitedIntefaces

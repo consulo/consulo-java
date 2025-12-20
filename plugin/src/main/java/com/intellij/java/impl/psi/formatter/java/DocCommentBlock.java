@@ -49,7 +49,7 @@ public class DocCommentBlock extends AbstractJavaBlock
 	@Override
 	protected List<Block> buildChildren()
 	{
-		final ArrayList<Block> result = new ArrayList<>();
+		ArrayList<Block> result = new ArrayList<>();
 
 		ASTNode child = myNode.getFirstChildNode();
 		while(child != null)
@@ -70,7 +70,7 @@ public class DocCommentBlock extends AbstractJavaBlock
 
 	@Override
 	@Nonnull
-	public ChildAttributes getChildAttributes(final int newChildIndex)
+	public ChildAttributes getChildAttributes(int newChildIndex)
 	{
 		return new ChildAttributes(Indent.getSpaceIndent(1), null);
 	}

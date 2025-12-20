@@ -51,13 +51,13 @@ public class ComparisonOfShortAndCharInspection extends BaseInspection {
       if (!ComparisonUtils.isEqualityComparison(expression)) {
         return;
       }
-      final PsiExpression lhs = expression.getLOperand();
-      final PsiType lhsType = lhs.getType();
-      final PsiExpression rhs = expression.getROperand();
+      PsiExpression lhs = expression.getLOperand();
+      PsiType lhsType = lhs.getType();
+      PsiExpression rhs = expression.getROperand();
       if (rhs == null) {
         return;
       }
-      final PsiType rhsType = rhs.getType();
+      PsiType rhsType = rhs.getType();
       if (PsiType.SHORT.equals(lhsType) && PsiType.CHAR.equals(rhsType)) {
         registerError(expression);
       }

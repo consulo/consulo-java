@@ -48,11 +48,11 @@ public class CreateClassFromUsageFix extends CreateClassFromUsageBaseFix impleme
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) {
+  public void invoke(@Nonnull final Project project, Editor editor, PsiFile file) {
     final PsiJavaCodeReferenceElement element = getRefElement();
     assert element != null;
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
-    final String superClassName = getSuperClassName(element);
+    String superClassName = getSuperClassName(element);
     final PsiClass aClass = CreateFromUsageUtils.createClass(element, myKind, superClassName);
     if (aClass == null) return;
 

@@ -36,8 +36,8 @@ public class SafeDeleteFieldWriteReference extends SafeDeleteReferenceUsageInfo 
   }
 
   private static boolean safeRemoveRHS(PsiAssignmentExpression expression) {
-    final PsiExpression rExpression = expression.getRExpression();
-    final PsiElement parent = expression.getParent();
+    PsiExpression rExpression = expression.getRExpression();
+    PsiElement parent = expression.getParent();
     return RefactoringUtil.verifySafeCopyExpression(rExpression) == RefactoringUtil.EXPR_COPY_SAFE
         && parent instanceof PsiExpressionStatement
         && ((PsiExpressionStatement) parent).getExpression() == expression;

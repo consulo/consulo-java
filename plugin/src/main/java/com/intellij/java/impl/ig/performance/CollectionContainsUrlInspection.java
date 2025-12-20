@@ -42,7 +42,7 @@ public class CollectionContainsUrlInspection extends BaseInspection {
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    final ClassType type = (ClassType)infos[0];
+    ClassType type = (ClassType)infos[0];
     return InspectionGadgetsLocalize.collectionContainsUrlProblemDecriptor(type).get();
   }
 
@@ -57,36 +57,36 @@ public class CollectionContainsUrlInspection extends BaseInspection {
     @Override
     public void visitVariable(PsiVariable variable) {
       super.visitVariable(variable);
-      final PsiTypeElement typeElement = variable.getTypeElement();
+      PsiTypeElement typeElement = variable.getTypeElement();
       if (typeElement == null) {
         return;
       }
-      final PsiType type = typeElement.getType();
+      PsiType type = typeElement.getType();
       if (!(type instanceof PsiClassType)) {
         return;
       }
-      final PsiJavaCodeReferenceElement referenceElement =
+      PsiJavaCodeReferenceElement referenceElement =
         typeElement.getInnermostComponentReferenceElement();
       if (referenceElement == null) {
         return;
       }
-      final PsiClassType classType = (PsiClassType)type;
-      final PsiClass aClass = classType.resolve();
+      PsiClassType classType = (PsiClassType)type;
+      PsiClass aClass = classType.resolve();
 
-      final ClassType collectionType = getClassType(aClass);
+      ClassType collectionType = getClassType(aClass);
       if (collectionType == ClassType.OTHER) {
         return;
       }
-      final PsiReferenceParameterList parameterList =
+      PsiReferenceParameterList parameterList =
         referenceElement.getParameterList();
       if (parameterList == null ||
           parameterList.getTypeParameterElements().length == 0) {
-        final PsiMember member =
+        PsiMember member =
           PsiTreeUtil.getParentOfType(variable, PsiMember.class);
         if (member == null) {
           return;
         }
-        final UrlAddedVisitor visitor =
+        UrlAddedVisitor visitor =
           new UrlAddedVisitor(variable, collectionType);
         member.accept(visitor);
         if (visitor.isUrlAdded()) {
@@ -94,7 +94,7 @@ public class CollectionContainsUrlInspection extends BaseInspection {
         }
         return;
       }
-      final PsiType[] typeArguments = parameterList.getTypeArguments();
+      PsiType[] typeArguments = parameterList.getTypeArguments();
       boolean containsUrl = false;
       for (PsiType typeArgument : typeArguments) {
         if (typeArgument.equalsToText("java.net.URL")) {
@@ -120,16 +120,16 @@ public class CollectionContainsUrlInspection extends BaseInspection {
       if (!visitedClasses.add(aClass)) {
         return ClassType.OTHER;
       }
-      @NonNls final String className = aClass.getQualifiedName();
+      @NonNls String className = aClass.getQualifiedName();
       if (CommonClassNames.JAVA_UTIL_SET.equals(className)) {
         return ClassType.SET;
       }
       else if (CommonClassNames.JAVA_UTIL_MAP.equals(className)) {
         return ClassType.MAP;
       }
-      final PsiClass[] supers = aClass.getSupers();
+      PsiClass[] supers = aClass.getSupers();
       for (PsiClass aSuper : supers) {
-        final ClassType classType =
+        ClassType classType =
           isMapOrSet(aSuper, visitedClasses);
         if (classType != ClassType.OTHER) {
           return classType;
@@ -159,16 +159,16 @@ public class CollectionContainsUrlInspection extends BaseInspection {
         return;
       }
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      final PsiExpression qualifierExpression =
+      PsiExpression qualifierExpression =
         methodExpression.getQualifierExpression();
       if (!(qualifierExpression instanceof PsiReferenceExpression)) {
         return;
       }
-      final PsiReferenceExpression referenceExpression =
+      PsiReferenceExpression referenceExpression =
         (PsiReferenceExpression)qualifierExpression;
-      @NonNls final String methodName =
+      @NonNls String methodName =
         methodExpression.getReferenceName();
       if (collectionType == ClassType.SET &&
           !"add".equals(methodName)) {
@@ -178,18 +178,18 @@ public class CollectionContainsUrlInspection extends BaseInspection {
           !"put".equals(methodName)) {
         return;
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
+      PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpression[] arguments = argumentList.getExpressions();
       if (arguments.length != 1) {
         return;
       }
-      final PsiExpression argument = arguments[0];
-      final PsiType argumentType = argument.getType();
+      PsiExpression argument = arguments[0];
+      PsiType argumentType = argument.getType();
       if (argumentType == null ||
           !argumentType.equalsToText("java.net.URL")) {
         return;
       }
-      final PsiElement element = referenceExpression.resolve();
+      PsiElement element = referenceExpression.resolve();
       if (!variable.equals(element)) {
         return;
       }
@@ -206,7 +206,7 @@ public class CollectionContainsUrlInspection extends BaseInspection {
     SET, MAP, OTHER;
 
     public String toString() {
-      final String string = super.toString();
+      String string = super.toString();
       return string.charAt(0) + string.substring(1).toLowerCase();
     }
   }

@@ -31,19 +31,19 @@ class ConstantExpressionPredicate implements PsiElementPredicate {
     if (element instanceof PsiLiteralExpression || element instanceof PsiClassObjectAccessExpression) {
       return false;
     }
-    final PsiPolyadicExpression expression = (PsiPolyadicExpression)element;
-    final PsiType expressionType = expression.getType();
+    PsiPolyadicExpression expression = (PsiPolyadicExpression)element;
+    PsiType expressionType = expression.getType();
     if (expressionType == null || expressionType.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
       // intention disabled for string concatenations because of performance issues on
       // relatively common large string expressions.
       return false;
     }
-    final PsiExpression[] operands = expression.getOperands();
+    PsiExpression[] operands = expression.getOperands();
     for (PsiExpression operand : operands) {
       if (operand == null) {
         return false;
       }
-      final PsiType type = operand.getType();
+      PsiType type = operand.getType();
       if (type == null || type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
         return false;
       }
@@ -52,7 +52,7 @@ class ConstantExpressionPredicate implements PsiElementPredicate {
       return false;
     }
     try {
-      final Object value = ExpressionUtils.computeConstantExpression(expression, true);
+      Object value = ExpressionUtils.computeConstantExpression(expression, true);
       if (value == null) {
         return false;
       }
@@ -60,7 +60,7 @@ class ConstantExpressionPredicate implements PsiElementPredicate {
     catch (ConstantEvaluationOverflowException ignore) {
       return false;
     }
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     return !(parent instanceof PsiExpression) || !PsiUtil.isConstantExpression((PsiExpression)parent);
   }
 }

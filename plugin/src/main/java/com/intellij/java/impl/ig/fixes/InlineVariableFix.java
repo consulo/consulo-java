@@ -41,19 +41,19 @@ public class InlineVariableFix extends InspectionGadgetsFix {
   }
 
   @Override
-  public void doFix(@Nonnull final Project project, final ProblemDescriptor descriptor) {
-    final PsiElement nameElement = descriptor.getPsiElement();
-    final PsiLocalVariable variable =
+  public void doFix(@Nonnull Project project, ProblemDescriptor descriptor) {
+    PsiElement nameElement = descriptor.getPsiElement();
+    PsiLocalVariable variable =
       (PsiLocalVariable)nameElement.getParent();
     PsiExpression initializer = variable.getInitializer();
     if (initializer == null) {
       return;
     }
     if (initializer instanceof PsiArrayInitializerExpression) {
-      final PsiElementFactory factory =
+      PsiElementFactory factory =
         JavaPsiFacade.getElementFactory(project);
-      final PsiType type = initializer.getType();
-      final String typeText;
+      PsiType type = initializer.getType();
+      String typeText;
       if (type == null) {
         typeText = "";
       }
@@ -63,14 +63,14 @@ public class InlineVariableFix extends InspectionGadgetsFix {
       initializer = factory.createExpressionFromText("new " + typeText +
                                                      initializer.getText(), variable);
     }
-    final PsiMember member =
+    PsiMember member =
       PsiTreeUtil.getParentOfType(variable, PsiMember.class);
-    final Query<PsiReference> search =
+    Query<PsiReference> search =
       ReferencesSearch.search(variable, new LocalSearchScope(member));
-    final Collection<PsiElement> replacedElements = new ArrayList<PsiElement>();
-    final Collection<PsiReference> references = search.findAll();
+    Collection<PsiElement> replacedElements = new ArrayList<PsiElement>();
+    Collection<PsiReference> references = search.findAll();
     for (PsiReference reference : references) {
-      final PsiElement replacedElement =
+      PsiElement replacedElement =
         reference.getElement().replace(initializer);
       replacedElements.add(replacedElement);
     }

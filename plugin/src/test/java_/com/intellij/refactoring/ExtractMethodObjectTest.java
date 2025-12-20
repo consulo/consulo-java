@@ -29,12 +29,12 @@ public abstract class ExtractMethodObjectTest extends LightRefactoringTestCase {
     doTest(true);
   }
 
-  private void doTest(final boolean createInnerClass) throws Exception {
-    final String testName = getTestName(false);
+  private void doTest(boolean createInnerClass) throws Exception {
+    String testName = getTestName(false);
     configureByFile("/refactoring/extractMethodObject/" + testName + ".java");
     PsiElement element = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue(element instanceof PsiMethod);
-    final PsiMethod method = (PsiMethod) element;
+    PsiMethod method = (PsiMethod) element;
 
     final ExtractMethodObjectProcessor processor =
       new ExtractMethodObjectProcessor(getProject(), getEditor(), method.getBody().getStatements(), "InnerClass");

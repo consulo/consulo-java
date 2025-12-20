@@ -79,7 +79,7 @@ class SuperMethodWarningDialog extends DialogWrapper {
     String methodString = IdeLocalize.elementMethod().get();
     labelsPanel.add(new JLabel(IdeLocalize.labelMethod(myName).get()));
     if (myClassNames.length == 1) {
-      final String className = myClassNames[0];
+      String className = myClassNames[0];
       labelsPanel.add(new JLabel(
         myIsContainedInInterface || !myIsSuperAbstract
           ? IdeLocalize.labelOverridesMethodOf_class_or_interfaceName(methodString, classType, className).get()
@@ -87,7 +87,7 @@ class SuperMethodWarningDialog extends DialogWrapper {
       ));
     } else {
       labelsPanel.add(new JLabel(IdeLocalize.labelImplementsMethodOf_interfaces().get()));
-      for (final String className : myClassNames) {
+      for (String className : myClassNames) {
         labelsPanel.add(new JLabel("    " + className));
       }
     }

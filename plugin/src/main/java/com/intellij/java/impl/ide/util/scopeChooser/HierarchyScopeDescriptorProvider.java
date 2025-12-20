@@ -29,7 +29,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class HierarchyScopeDescriptorProvider implements ScopeDescriptorProvider {
   @Nonnull
-  public ScopeDescriptor[] getScopeDescriptors(final Project project) {
+  public ScopeDescriptor[] getScopeDescriptors(Project project) {
     return new ScopeDescriptor[]{new ClassHierarchyScopeDescriptor(project)};
   }
 }

@@ -70,17 +70,17 @@ public class StringConcatenationMissingWhitespaceInspection extends BaseInspecti
         @Override
         public void visitPolyadicExpression(PsiPolyadicExpression expression) {
             super.visitPolyadicExpression(expression);
-            final IElementType tokenType = expression.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (!JavaTokenType.PLUS.equals(tokenType) || !ExpressionUtils.hasStringType(expression)) {
                 return;
             }
-            final boolean formatCall = FormatUtils.isFormatCallArgument(expression);
-            final PsiExpression[] operands = expression.getOperands();
+            boolean formatCall = FormatUtils.isFormatCallArgument(expression);
+            PsiExpression[] operands = expression.getOperands();
             PsiExpression lhs = operands[0];
             for (int i = 1; i < operands.length; i++) {
-                final PsiExpression rhs = operands[i];
+                PsiExpression rhs = operands[i];
                 if (isMissingWhitespace(lhs, rhs, formatCall)) {
-                    final PsiJavaToken token = expression.getTokenBeforeOperand(rhs);
+                    PsiJavaToken token = expression.getTokenBeforeOperand(rhs);
                     if (token != null) {
                         registerError(token);
                     }
@@ -90,16 +90,16 @@ public class StringConcatenationMissingWhitespaceInspection extends BaseInspecti
         }
 
         private boolean isMissingWhitespace(PsiExpression lhs, PsiExpression rhs, boolean formatCall) {
-            @NonNls final String lhsLiteral = ExpressionUtils.getLiteralString(lhs);
+            @NonNls String lhsLiteral = ExpressionUtils.getLiteralString(lhs);
             if (lhsLiteral != null) {
-                final int length = lhsLiteral.length();
+                int length = lhsLiteral.length();
                 if (length == 0) {
                     return false;
                 }
                 if (formatCall && lhsLiteral.endsWith("%n")) {
                     return false;
                 }
-                final char c = lhsLiteral.charAt(length - 1);
+                char c = lhsLiteral.charAt(length - 1);
                 if (Character.isWhitespace(c) || !Character.isLetterOrDigit(c)) {
                     return false;
                 }
@@ -107,7 +107,7 @@ public class StringConcatenationMissingWhitespaceInspection extends BaseInspecti
             else if (ignoreNonStringLiterals) {
                 return false;
             }
-            @NonNls final String rhsLiteral = ExpressionUtils.getLiteralString(rhs);
+            @NonNls String rhsLiteral = ExpressionUtils.getLiteralString(rhs);
             if (rhsLiteral != null) {
                 if (rhsLiteral.isEmpty()) {
                     return false;
@@ -115,7 +115,7 @@ public class StringConcatenationMissingWhitespaceInspection extends BaseInspecti
                 if (formatCall && rhsLiteral.startsWith("%n")) {
                     return false;
                 }
-                final char c = rhsLiteral.charAt(0);
+                char c = rhsLiteral.charAt(0);
                 if (Character.isWhitespace(c) || !Character.isLetterOrDigit(c)) {
                     return false;
                 }

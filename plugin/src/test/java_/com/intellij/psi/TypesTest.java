@@ -50,121 +50,121 @@ public abstract class TypesTest extends GenericsTestCase {
   }
 
   public void testSimpleStuff() throws Exception {
-    final JavaPsiFacadeEx psiManager = getJavaFacade();
-    final PsiElementFactory factory = psiManager.getElementFactory();
-    final PsiClass classA = psiManager.findClass("A");
+    JavaPsiFacadeEx psiManager = getJavaFacade();
+    PsiElementFactory factory = psiManager.getElementFactory();
+    PsiClass classA = psiManager.findClass("A");
     assertNotNull(classA);
 
-    final PsiMethod method = classA.getMethods()[0];
-    final PsiStatement[] methodStatements = method.getBody().getStatements();
-    final PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement) methodStatements[0];
-    final PsiVariable varList = (PsiVariable) declarationStatement.getDeclaredElements()[0];
-    final PsiType typeListOfA = factory.createTypeFromText("test.List<java.lang.String>", null);
+    PsiMethod method = classA.getMethods()[0];
+    PsiStatement[] methodStatements = method.getBody().getStatements();
+    PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement) methodStatements[0];
+    PsiVariable varList = (PsiVariable) declarationStatement.getDeclaredElements()[0];
+    PsiType typeListOfA = factory.createTypeFromText("test.List<java.lang.String>", null);
     assertEquals(varList.getType(), typeListOfA);
-    final PsiType typeListOfObject = factory.createTypeFromText("test.List<java.lang.Object>", null);
+    PsiType typeListOfObject = factory.createTypeFromText("test.List<java.lang.Object>", null);
     assertFalse(varList.getType().equals(typeListOfObject));
 
-    final PsiReferenceExpression methodExpression
+    PsiReferenceExpression methodExpression
             = ((PsiMethodCallExpression) ((PsiExpressionStatement) methodStatements[1]).getExpression()).getMethodExpression();
-    final JavaResolveResult resolveResult = methodExpression.advancedResolve(false);
+    JavaResolveResult resolveResult = methodExpression.advancedResolve(false);
     assertTrue(resolveResult.getElement() instanceof PsiMethod);
-    final PsiMethod methodFromList = (PsiMethod) resolveResult.getElement();
-    final PsiType typeOfFirstParameterOfAdd = methodFromList.getParameterList().getParameters()[0].getType();
-    final PsiType substitutedType = resolveResult.getSubstitutor().substitute(typeOfFirstParameterOfAdd);
-    final PsiClassType typeA = factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_STRING);
+    PsiMethod methodFromList = (PsiMethod) resolveResult.getElement();
+    PsiType typeOfFirstParameterOfAdd = methodFromList.getParameterList().getParameters()[0].getType();
+    PsiType substitutedType = resolveResult.getSubstitutor().substitute(typeOfFirstParameterOfAdd);
+    PsiClassType typeA = factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_STRING);
     assertEquals(typeA, substitutedType);
     assertTrue(typeA.equalsToText(CommonClassNames.JAVA_LANG_STRING));
 
-    final PsiType aListIteratorType = ((PsiExpressionStatement) methodStatements[2]).getExpression().getType();
-    final PsiType aIteratorType = factory.createTypeFromText("test.Iterator<java.lang.String>", null);
+    PsiType aListIteratorType = ((PsiExpressionStatement) methodStatements[2]).getExpression().getType();
+    PsiType aIteratorType = factory.createTypeFromText("test.Iterator<java.lang.String>", null);
     assertEquals(aIteratorType, aListIteratorType);
-    final PsiType objectIteratorType = factory.createTypeFromText("test.Iterator<java.lang.Object>", null);
+    PsiType objectIteratorType = factory.createTypeFromText("test.Iterator<java.lang.Object>", null);
     assertFalse(objectIteratorType.equals(aListIteratorType));
   }
 
   public void testRawTypes() throws Exception {
-    final JavaPsiFacadeEx psiManager = getJavaFacade();
-    final PsiElementFactory factory = psiManager.getElementFactory();
-    final PsiClass classA = psiManager.findClass("A");
+    JavaPsiFacadeEx psiManager = getJavaFacade();
+    PsiElementFactory factory = psiManager.getElementFactory();
+    PsiClass classA = psiManager.findClass("A");
     assertNotNull(classA);
 
-    final PsiMethod method = classA.getMethods()[0];
-    final PsiStatement[] methodStatements = method.getBody().getStatements();
-    final PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement) methodStatements[0];
-    final PsiVariable varList = (PsiVariable) declarationStatement.getDeclaredElements()[0];
-    final PsiType typeFromText = factory.createTypeFromText("test.List", null);
+    PsiMethod method = classA.getMethods()[0];
+    PsiStatement[] methodStatements = method.getBody().getStatements();
+    PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement) methodStatements[0];
+    PsiVariable varList = (PsiVariable) declarationStatement.getDeclaredElements()[0];
+    PsiType typeFromText = factory.createTypeFromText("test.List", null);
     assertEquals(varList.getType(), typeFromText);
 
-    final PsiReferenceExpression methodExpression = ((PsiMethodCallExpression) ((PsiExpressionStatement) methodStatements[1]).getExpression()).getMethodExpression();
-    final JavaResolveResult resolveResult = methodExpression.advancedResolve(false);
+    PsiReferenceExpression methodExpression = ((PsiMethodCallExpression) ((PsiExpressionStatement) methodStatements[1]).getExpression()).getMethodExpression();
+    JavaResolveResult resolveResult = methodExpression.advancedResolve(false);
     assertTrue(resolveResult.getElement() instanceof PsiMethod);
-    final PsiMethod methodFromList = (PsiMethod) resolveResult.getElement();
-    final PsiType typeOfFirstParameterOfAdd = methodFromList.getParameterList().getParameters()[0].getType();
-    final PsiType substitutedType = resolveResult.getSubstitutor().substitute(typeOfFirstParameterOfAdd);
+    PsiMethod methodFromList = (PsiMethod) resolveResult.getElement();
+    PsiType typeOfFirstParameterOfAdd = methodFromList.getParameterList().getParameters()[0].getType();
+    PsiType substitutedType = resolveResult.getSubstitutor().substitute(typeOfFirstParameterOfAdd);
     assertEquals(PsiType.getJavaLangObject(getPsiManager(), method.getResolveScope()), substitutedType);
 
-    final PsiType methodCallType = ((PsiExpressionStatement) methodStatements[2]).getExpression().getType();
-    final PsiType rawIteratorType = factory.createTypeFromText("test.Iterator", null);
+    PsiType methodCallType = ((PsiExpressionStatement) methodStatements[2]).getExpression().getType();
+    PsiType rawIteratorType = factory.createTypeFromText("test.Iterator", null);
     assertEquals(rawIteratorType, methodCallType);
   }
 
   public void testSubstWithInheritor() throws Exception {
-    final JavaPsiFacadeEx psiManager = getJavaFacade();
-    final PsiElementFactory factory = psiManager.getElementFactory();
-    final PsiClass classA = psiManager.findClass("A");
+    JavaPsiFacadeEx psiManager = getJavaFacade();
+    PsiElementFactory factory = psiManager.getElementFactory();
+    PsiClass classA = psiManager.findClass("A");
     assertNotNull(classA);
 
-    final PsiMethod method = classA.getMethods()[0];
-    final PsiStatement[] methodStatements = method.getBody().getStatements();
-    final PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement) methodStatements[0];
-    final PsiVariable varList = (PsiVariable) declarationStatement.getDeclaredElements()[0];
-    final PsiType typeFromText = factory.createTypeFromText("test.IntList", null);
+    PsiMethod method = classA.getMethods()[0];
+    PsiStatement[] methodStatements = method.getBody().getStatements();
+    PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement) methodStatements[0];
+    PsiVariable varList = (PsiVariable) declarationStatement.getDeclaredElements()[0];
+    PsiType typeFromText = factory.createTypeFromText("test.IntList", null);
     assertEquals(varList.getType(), typeFromText);
 
-    final PsiReferenceExpression methodExpression
+    PsiReferenceExpression methodExpression
             = ((PsiMethodCallExpression) ((PsiExpressionStatement) methodStatements[1]).getExpression()).getMethodExpression();
-    final JavaResolveResult resolveResult = methodExpression.advancedResolve(false);
+    JavaResolveResult resolveResult = methodExpression.advancedResolve(false);
     assertTrue(resolveResult.getElement() instanceof PsiMethod);
-    final PsiMethod methodFromList = (PsiMethod) resolveResult.getElement();
-    final PsiType typeOfFirstParameterOfAdd = methodFromList.getParameterList().getParameters()[0].getType();
-    final PsiType substitutedType = resolveResult.getSubstitutor().substitute(typeOfFirstParameterOfAdd);
-    final PsiType javaLangInteger = factory.createTypeFromText(CommonClassNames.JAVA_LANG_INTEGER, null);
+    PsiMethod methodFromList = (PsiMethod) resolveResult.getElement();
+    PsiType typeOfFirstParameterOfAdd = methodFromList.getParameterList().getParameters()[0].getType();
+    PsiType substitutedType = resolveResult.getSubstitutor().substitute(typeOfFirstParameterOfAdd);
+    PsiType javaLangInteger = factory.createTypeFromText(CommonClassNames.JAVA_LANG_INTEGER, null);
     assertEquals(javaLangInteger, substitutedType);
 
-    final PsiType intListIteratorReturnType = ((PsiExpressionStatement) methodStatements[2]).getExpression().getType();
-    final PsiType integerIteratorType = factory.createTypeFromText("test.Iterator<java.lang.Integer>", null);
+    PsiType intListIteratorReturnType = ((PsiExpressionStatement) methodStatements[2]).getExpression().getType();
+    PsiType integerIteratorType = factory.createTypeFromText("test.Iterator<java.lang.Integer>", null);
     assertEquals(integerIteratorType, intListIteratorReturnType);
-    final PsiType objectIteratorType = factory.createTypeFromText("test.Iterator<java.lang.Object>", null);
+    PsiType objectIteratorType = factory.createTypeFromText("test.Iterator<java.lang.Object>", null);
     assertFalse(objectIteratorType.equals(integerIteratorType));
   }
 
   public void testSimpleRawTypeInMethodArg() throws Exception {
-    final JavaPsiFacadeEx psiManager = getJavaFacade();
-    final PsiElementFactory factory = psiManager.getElementFactory();
-    final PsiClass classA = psiManager.findClass("A");
+    JavaPsiFacadeEx psiManager = getJavaFacade();
+    PsiElementFactory factory = psiManager.getElementFactory();
+    PsiClass classA = psiManager.findClass("A");
     assertNotNull(classA);
 
-    final PsiMethod method = classA.getMethods()[0];
-    final PsiStatement[] methodStatements = method.getBody().getStatements();
+    PsiMethod method = classA.getMethods()[0];
+    PsiStatement[] methodStatements = method.getBody().getStatements();
 
-    final PsiVariable variable = (PsiVariable) ((PsiDeclarationStatement) methodStatements[0]).getDeclaredElements()[0];
-    final PsiClassType type = (PsiClassType) variable.getType();
-    final PsiClassType.ClassResolveResult resolveClassTypeResult = type.resolveGenerics();
+    PsiVariable variable = (PsiVariable) ((PsiDeclarationStatement) methodStatements[0]).getDeclaredElements()[0];
+    PsiClassType type = (PsiClassType) variable.getType();
+    PsiClassType.ClassResolveResult resolveClassTypeResult = type.resolveGenerics();
     assertNotNull(resolveClassTypeResult.getElement());
 
-    final PsiReferenceExpression methodExpression
+    PsiReferenceExpression methodExpression
             = ((PsiMethodCallExpression) ((PsiExpressionStatement) methodStatements[2]).getExpression()).getMethodExpression();
-    final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
-    final PsiClassType qualifierType = (PsiClassType) qualifierExpression.getType();
+    PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
+    PsiClassType qualifierType = (PsiClassType) qualifierExpression.getType();
     assertFalse(qualifierType.hasParameters());
-    final PsiType typeFromText = factory.createTypeFromText("test.List", null);
+    PsiType typeFromText = factory.createTypeFromText("test.List", null);
     assertEquals(qualifierType, typeFromText);
 
-    final PsiElement psiElement = ((PsiReferenceExpression) qualifierExpression).resolve();
+    PsiElement psiElement = ((PsiReferenceExpression) qualifierExpression).resolve();
     assertTrue(psiElement instanceof PsiVariable);
-    final JavaResolveResult resolveResult = methodExpression.advancedResolve(false);
+    JavaResolveResult resolveResult = methodExpression.advancedResolve(false);
     assertTrue(resolveResult.getElement() instanceof PsiMethod);
-    final PsiMethod methodFromList = (PsiMethod) resolveResult.getElement();
+    PsiMethod methodFromList = (PsiMethod) resolveResult.getElement();
     assertEquals("add", methodFromList.getName());
     assertEquals("test.List", methodFromList.getContainingClass().getQualifiedName());
   }
@@ -172,210 +172,210 @@ public abstract class TypesTest extends GenericsTestCase {
 
 
   public void testRawTypeInMethodArg() throws Exception {
-    final PsiClass classA = getJavaFacade().findClass("A");
+    PsiClass classA = getJavaFacade().findClass("A");
     assertNotNull(classA);
 
-    final PsiMethod method = classA.getMethods()[0];
-    final PsiStatement[] methodStatements = method.getBody().getStatements();
-    final PsiReferenceExpression methodExpression
+    PsiMethod method = classA.getMethods()[0];
+    PsiStatement[] methodStatements = method.getBody().getStatements();
+    PsiReferenceExpression methodExpression
             = ((PsiMethodCallExpression) ((PsiExpressionStatement) methodStatements[2]).getExpression()).getMethodExpression();
-    final JavaResolveResult resolveResult = methodExpression.advancedResolve(false);
+    JavaResolveResult resolveResult = methodExpression.advancedResolve(false);
     assertTrue(resolveResult.getElement() instanceof PsiMethod);
-    final PsiMethod methodFromList = (PsiMethod) resolveResult.getElement();
+    PsiMethod methodFromList = (PsiMethod) resolveResult.getElement();
     assertEquals("putAll", methodFromList.getName());
     assertEquals("test.List", methodFromList.getContainingClass().getQualifiedName());
   }
 
   public void testBoundedParams() throws Exception {
-    final JavaPsiFacadeEx psiManager = getJavaFacade();
-    final PsiElementFactory factory = psiManager.getElementFactory();
-    final PsiClass classA = psiManager.findClass("A");
+    JavaPsiFacadeEx psiManager = getJavaFacade();
+    PsiElementFactory factory = psiManager.getElementFactory();
+    PsiClass classA = psiManager.findClass("A");
     assertNotNull(classA);
 
-    final PsiMethod method = classA.getMethods()[0];
-    final PsiStatement[] statements = method.getBody().getStatements();
+    PsiMethod method = classA.getMethods()[0];
+    PsiStatement[] statements = method.getBody().getStatements();
 
-    final PsiVariable var = (PsiVariable) ((PsiDeclarationStatement) statements[0]).getDeclaredElements()[0];
-    final PsiType varType = var.getType();
-    final PsiType typeRawIterator = factory.createTypeFromText("test.Iterator", null);
+    PsiVariable var = (PsiVariable) ((PsiDeclarationStatement) statements[0]).getDeclaredElements()[0];
+    PsiType varType = var.getType();
+    PsiType typeRawIterator = factory.createTypeFromText("test.Iterator", null);
     assertEquals(varType, typeRawIterator);
 
-    final PsiType initializerType = var.getInitializer().getType();
+    PsiType initializerType = var.getInitializer().getType();
     assertEquals(initializerType, typeRawIterator);
     assertTrue(varType.isAssignableFrom(initializerType));
   }
 
   public void testRawTypeExtension() throws Exception {
-    final JavaPsiFacadeEx psiManager = getJavaFacade();
-    final PsiElementFactory factory = psiManager.getElementFactory();
-    final PsiClass classA = psiManager.findClass("A");
+    JavaPsiFacadeEx psiManager = getJavaFacade();
+    PsiElementFactory factory = psiManager.getElementFactory();
+    PsiClass classA = psiManager.findClass("A");
     assertNotNull(classA);
 
-    final PsiMethod method = classA.getMethods()[0];
-    final PsiStatement[] statements = method.getBody().getStatements();
+    PsiMethod method = classA.getMethods()[0];
+    PsiStatement[] statements = method.getBody().getStatements();
 
-    final PsiVariable var = (PsiVariable) ((PsiDeclarationStatement) statements[0]).getDeclaredElements()[0];
-    final PsiType varType = var.getType();
-    final PsiType typeRawIterator = factory.createTypeFromText("test.Iterator", null);
+    PsiVariable var = (PsiVariable) ((PsiDeclarationStatement) statements[0]).getDeclaredElements()[0];
+    PsiType varType = var.getType();
+    PsiType typeRawIterator = factory.createTypeFromText("test.Iterator", null);
     assertEquals(varType, typeRawIterator);
 
-    final PsiType initializerType = var.getInitializer().getType();
+    PsiType initializerType = var.getInitializer().getType();
     assertEquals(initializerType, typeRawIterator);
     assertTrue(varType.isAssignableFrom(initializerType));
   }
 
   public void testTypesInGenericClass() {
-    final JavaPsiFacadeEx psiManager = getJavaFacade();
-    final PsiElementFactory factory = psiManager.getElementFactory();
-    final PsiClass classA = psiManager.findClass("A");
+    JavaPsiFacadeEx psiManager = getJavaFacade();
+    PsiElementFactory factory = psiManager.getElementFactory();
+    PsiClass classA = psiManager.findClass("A");
     assertNotNull(classA);
 
-    final PsiTypeParameter parameterT = classA.getTypeParameters()[0];
+    PsiTypeParameter parameterT = classA.getTypeParameters()[0];
     assertEquals("T", parameterT.getName());
 
-    final PsiMethod method = classA.findMethodsByName("method", false)[0];
-    final PsiType type = ((PsiExpressionStatement) method.getBody().getStatements()[0]).getExpression().getType();
-    final PsiClassType typeT = factory.createType(parameterT);
+    PsiMethod method = classA.findMethodsByName("method", false)[0];
+    PsiType type = ((PsiExpressionStatement) method.getBody().getStatements()[0]).getExpression().getType();
+    PsiClassType typeT = factory.createType(parameterT);
     assertEquals("T", typeT.getPresentableText());
 
     assertEquals(typeT, type);
   }
 
   public void testAssignableSubInheritor() throws Exception {
-    final JavaPsiFacadeEx psiManager = getJavaFacade();
-    final PsiElementFactory factory = psiManager.getElementFactory();
-    final PsiClass classCollection = psiManager.findClass("test.Collection");
-    final PsiClass classList = psiManager.findClass("test.List");
-    final PsiType collectionType = factory.createType(classCollection, PsiSubstitutor.EMPTY);
-    final PsiType listType = factory.createType(classList, PsiSubstitutor.EMPTY);
+    JavaPsiFacadeEx psiManager = getJavaFacade();
+    PsiElementFactory factory = psiManager.getElementFactory();
+    PsiClass classCollection = psiManager.findClass("test.Collection");
+    PsiClass classList = psiManager.findClass("test.List");
+    PsiType collectionType = factory.createType(classCollection, PsiSubstitutor.EMPTY);
+    PsiType listType = factory.createType(classList, PsiSubstitutor.EMPTY);
     assertEquals(collectionType.getCanonicalText(), "test.Collection<E>");
     assertEquals(listType.getCanonicalText(), "test.List<T>");
 
-    final PsiType typeListOfString = factory.createTypeFromText("test.List<java.lang.String>", null);
-    final PsiType typeCollectionOfString = factory.createTypeFromText("test.Collection<java.lang.String>", null);
+    PsiType typeListOfString = factory.createTypeFromText("test.List<java.lang.String>", null);
+    PsiType typeCollectionOfString = factory.createTypeFromText("test.Collection<java.lang.String>", null);
     assertTrue(typeCollectionOfString.isAssignableFrom(typeListOfString));
   }
 
   public void testComplexInheritance() throws Exception {
-    final JavaPsiFacadeEx psiManager = getJavaFacade();
-    final PsiElementFactory factory = psiManager.getElementFactory();
-    final PsiClass classA = psiManager.findClass("A");
+    JavaPsiFacadeEx psiManager = getJavaFacade();
+    PsiElementFactory factory = psiManager.getElementFactory();
+    PsiClass classA = psiManager.findClass("A");
     assertNotNull(classA);
 
-    final PsiMethod method = classA.findMethodsByName("method", false)[0];
-    final PsiExpression expression = ((PsiExpressionStatement) method.getBody().getStatements()[1]).getExpression();
+    PsiMethod method = classA.findMethodsByName("method", false)[0];
+    PsiExpression expression = ((PsiExpressionStatement) method.getBody().getStatements()[1]).getExpression();
     assertEquals("l.get(0)", expression.getText());
 
-    final PsiType type = expression.getType();
-    final PsiType listOfInteger = factory.createTypeFromText("test.List<java.lang.Integer>", null);
+    PsiType type = expression.getType();
+    PsiType listOfInteger = factory.createTypeFromText("test.List<java.lang.Integer>", null);
     assertEquals(listOfInteger, type);
-    final PsiType collectionOfInteger = factory.createTypeFromText("test.Collection<java.lang.Integer>", null);
+    PsiType collectionOfInteger = factory.createTypeFromText("test.Collection<java.lang.Integer>", null);
     assertTrue(collectionOfInteger.isAssignableFrom(type));
   }
 
   public void testListListInheritance() throws Exception {
-    final JavaPsiFacadeEx psiManager = getJavaFacade();
-    final PsiElementFactory factory = psiManager.getElementFactory();
-    final PsiClass classA = psiManager.findClass("A");
+    JavaPsiFacadeEx psiManager = getJavaFacade();
+    PsiElementFactory factory = psiManager.getElementFactory();
+    PsiClass classA = psiManager.findClass("A");
     assertNotNull(classA);
 
-    final PsiMethod method = classA.findMethodsByName("method", false)[0];
+    PsiMethod method = classA.findMethodsByName("method", false)[0];
 
-    final PsiExpression expression1 = ((PsiExpressionStatement) method.getBody().getStatements()[1]).getExpression();
+    PsiExpression expression1 = ((PsiExpressionStatement) method.getBody().getStatements()[1]).getExpression();
     assertEquals("l.get(0)", expression1.getText());
-    final PsiType type1 = expression1.getType();
-    final PsiType typeListOfInteger = factory.createTypeFromText("test.List<java.lang.Integer>", null);
+    PsiType type1 = expression1.getType();
+    PsiType typeListOfInteger = factory.createTypeFromText("test.List<java.lang.Integer>", null);
     assertEquals(typeListOfInteger, type1);
     assertTrue(typeListOfInteger.isAssignableFrom(type1));
 
-    final PsiExpression expression2 = ((PsiExpressionStatement) method.getBody().getStatements()[3]).getExpression();
+    PsiExpression expression2 = ((PsiExpressionStatement) method.getBody().getStatements()[3]).getExpression();
     assertEquals("b.get(0)", expression2.getText());
-    final PsiType type2 = expression2.getType();
+    PsiType type2 = expression2.getType();
     assertEquals(typeListOfInteger, type2);
   }
 
   public void testSpaceInTypeParameterList() throws Exception {
-    final JavaPsiFacadeEx psiManager = getJavaFacade();
-    final PsiElementFactory factory = psiManager.getElementFactory();
-    final PsiClass classA = psiManager.findClass("A");
+    JavaPsiFacadeEx psiManager = getJavaFacade();
+    PsiElementFactory factory = psiManager.getElementFactory();
+    PsiClass classA = psiManager.findClass("A");
     assertNotNull(classA);
 
-    final PsiMethod method = classA.findMethodsByName("method", false)[0];
+    PsiMethod method = classA.findMethodsByName("method", false)[0];
 
-    final PsiVariable variable = (PsiVariable) ((PsiDeclarationStatement) method.getBody().getStatements()[0]).getDeclaredElements()[0];
-    final PsiType type = variable.getType();
-    final PsiType typeListOfListOfInteger = factory.createTypeFromText("test.List<test.List<java.lang.Integer>>", null);
+    PsiVariable variable = (PsiVariable) ((PsiDeclarationStatement) method.getBody().getStatements()[0]).getDeclaredElements()[0];
+    PsiType type = variable.getType();
+    PsiType typeListOfListOfInteger = factory.createTypeFromText("test.List<test.List<java.lang.Integer>>", null);
     assertEquals(typeListOfListOfInteger, type);
   }
 
   public void testMethodTypeParameter() throws Exception {
-    final JavaPsiFacadeEx psiManager = getJavaFacade();
-    final PsiElementFactory factory = psiManager.getElementFactory();
-    final PsiClass classA = psiManager.findClass("A");
+    JavaPsiFacadeEx psiManager = getJavaFacade();
+    PsiElementFactory factory = psiManager.getElementFactory();
+    PsiClass classA = psiManager.findClass("A");
     assertNotNull(classA);
 
-    final PsiMethod method = classA.findMethodsByName("method", false)[0];
-    final PsiStatement[] statements = method.getBody().getStatements();
+    PsiMethod method = classA.findMethodsByName("method", false)[0];
+    PsiStatement[] statements = method.getBody().getStatements();
 
-    final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) ((PsiExpressionStatement) statements[1]).getExpression();
+    PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) ((PsiExpressionStatement) statements[1]).getExpression();
     isCollectionUtilSort(methodCallExpression, factory.createTypeFromText(CommonClassNames.JAVA_LANG_INTEGER, null));
 
-    final PsiMethodCallExpression methodCallExpression1 = (PsiMethodCallExpression) ((PsiExpressionStatement) statements[3]).getExpression();
+    PsiMethodCallExpression methodCallExpression1 = (PsiMethodCallExpression) ((PsiExpressionStatement) statements[3]).getExpression();
     isCollectionUtilSort(methodCallExpression1, null);
   }
 
-  private static void isCollectionUtilSort(final PsiMethodCallExpression methodCallExpression,
-                                    final PsiType typeParameterValue) {
-    final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-    final JavaResolveResult methodResolve = methodExpression.advancedResolve(false);
+  private static void isCollectionUtilSort(PsiMethodCallExpression methodCallExpression,
+                                           PsiType typeParameterValue) {
+    PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+    JavaResolveResult methodResolve = methodExpression.advancedResolve(false);
     assertTrue(methodResolve.getElement() instanceof PsiMethod);
-    final PsiMethod methodSort = (PsiMethod) methodResolve.getElement();
+    PsiMethod methodSort = (PsiMethod) methodResolve.getElement();
     assertEquals("sort", methodSort.getName());
     assertEquals("test.CollectionUtil", methodSort.getContainingClass().getQualifiedName());
-    final PsiTypeParameter methodSortTypeParameter = methodSort.getTypeParameters()[0];
-    final PsiType sortParameterActualType = methodResolve.getSubstitutor().substitute(methodSortTypeParameter);
+    PsiTypeParameter methodSortTypeParameter = methodSort.getTypeParameters()[0];
+    PsiType sortParameterActualType = methodResolve.getSubstitutor().substitute(methodSortTypeParameter);
     assertTrue(Comparing.equal(sortParameterActualType, typeParameterValue));
     assertTrue(
             PsiUtil.isApplicable(methodSort, methodResolve.getSubstitutor(), methodCallExpression.getArgumentList()));
   }
 
   public void testRawArrayTypes() throws Exception {
-    final JavaPsiFacadeEx psiManager = getJavaFacade();
-    final PsiElementFactory factory = psiManager.getElementFactory();
-    final PsiClass classA = psiManager.findClass("A");
+    JavaPsiFacadeEx psiManager = getJavaFacade();
+    PsiElementFactory factory = psiManager.getElementFactory();
+    PsiClass classA = psiManager.findClass("A");
     assertNotNull(classA);
 
-    final PsiMethod method = classA.findMethodsByName("method", false)[0];
-    final PsiStatement[] statements = method.getBody().getStatements();
+    PsiMethod method = classA.findMethodsByName("method", false)[0];
+    PsiStatement[] statements = method.getBody().getStatements();
 
-    final PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement) statements[0];
-    final PsiClassType typeOfL = (PsiClassType) ((PsiVariable) declarationStatement.getDeclaredElements()[0]).getType();
-    final PsiType typeRawList = factory.createTypeFromText("test.List", null);
+    PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement) statements[0];
+    PsiClassType typeOfL = (PsiClassType) ((PsiVariable) declarationStatement.getDeclaredElements()[0]).getType();
+    PsiType typeRawList = factory.createTypeFromText("test.List", null);
     assertTrue(Comparing.equal(typeOfL, typeRawList));
-    final PsiSubstitutor typeOfLSubstitutor = typeOfL.resolveGenerics().getSubstitutor();
+    PsiSubstitutor typeOfLSubstitutor = typeOfL.resolveGenerics().getSubstitutor();
 
-    final PsiMethodCallExpression exprGetArray = (PsiMethodCallExpression) ((PsiExpressionStatement) statements[1]).getExpression();
-    final PsiType typeOfGetArrayCall = exprGetArray.getType();
-    final PsiType objectArrayType = factory.createTypeFromText("java.lang.Object[]", null);
+    PsiMethodCallExpression exprGetArray = (PsiMethodCallExpression) ((PsiExpressionStatement) statements[1]).getExpression();
+    PsiType typeOfGetArrayCall = exprGetArray.getType();
+    PsiType objectArrayType = factory.createTypeFromText("java.lang.Object[]", null);
     assertTrue(Comparing.equal(typeOfGetArrayCall, objectArrayType));
-    final PsiMethod methodGetArray = (PsiMethod) exprGetArray.getMethodExpression().resolve();
-    final PsiType subtitutedGetArrayReturnType = typeOfLSubstitutor.substitute(methodGetArray.getReturnType());
+    PsiMethod methodGetArray = (PsiMethod) exprGetArray.getMethodExpression().resolve();
+    PsiType subtitutedGetArrayReturnType = typeOfLSubstitutor.substitute(methodGetArray.getReturnType());
     assertTrue(Comparing.equal(subtitutedGetArrayReturnType, objectArrayType));
 
 
-    final PsiMethodCallExpression exprGetListOfArray = (PsiMethodCallExpression) ((PsiExpressionStatement) statements[2]).getExpression();
-    final PsiMethod methodGetListOfArray = (PsiMethod) exprGetListOfArray.getMethodExpression().resolve();
-    final PsiType returnType = methodGetListOfArray.getReturnType();
-    final PsiType substitutedReturnType = typeOfLSubstitutor.substitute(returnType);
+    PsiMethodCallExpression exprGetListOfArray = (PsiMethodCallExpression) ((PsiExpressionStatement) statements[2]).getExpression();
+    PsiMethod methodGetListOfArray = (PsiMethod) exprGetListOfArray.getMethodExpression().resolve();
+    PsiType returnType = methodGetListOfArray.getReturnType();
+    PsiType substitutedReturnType = typeOfLSubstitutor.substitute(returnType);
     assertTrue(Comparing.equal(substitutedReturnType, typeRawList));
 
-    final PsiType typeOfGetListOfArrayCall = exprGetListOfArray.getType();
+    PsiType typeOfGetListOfArrayCall = exprGetListOfArray.getType();
     assertTrue(Comparing.equal(typeOfGetListOfArrayCall, typeRawList));
   }
 
   public void testWildcardTypeParsing() throws Exception{
-    final GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule);
-    final PsiClassType javaLangObject = PsiType.getJavaLangObject(myPsiManager, scope);
+    GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule);
+    PsiClassType javaLangObject = PsiType.getJavaLangObject(myPsiManager, scope);
 
     PsiElement element = ((PsiDeclarationStatement)myJavaFacade.getElementFactory().createStatementFromText("X<? extends Y, ? super Z<A,B>, ?> x;", null)).getDeclaredElements()[0];
     PsiJavaCodeReferenceElement referenceElement = ((PsiVariable) element).getTypeElement().getInnermostComponentReferenceElement();
@@ -440,20 +440,20 @@ public abstract class TypesTest extends GenericsTestCase {
 
   public void testBinaryNumericPromotion() throws Exception {
     PsiElementFactory factory = myJavaFacade.getElementFactory();
-    final PsiExpression conditional = factory.createExpressionFromText("b ? new Integer (0) : new Double(0.0)", null);
+    PsiExpression conditional = factory.createExpressionFromText("b ? new Integer (0) : new Double(0.0)", null);
     assertEquals(PsiType.DOUBLE, conditional.getType());
-    final PsiExpression shift = factory.createExpressionFromText("Integer.valueOf(0) << 2", null);
+    PsiExpression shift = factory.createExpressionFromText("Integer.valueOf(0) << 2", null);
     assertEquals(PsiType.INT, shift.getType());
   }
 
   public void testUnaryExpressionType() throws Exception {
-    final PsiElementFactory factory = myJavaFacade.getElementFactory();
-    final PsiExpression plusPrefix = factory.createExpressionFromText("+Integer.valueOf(1)", null);
+    PsiElementFactory factory = myJavaFacade.getElementFactory();
+    PsiExpression plusPrefix = factory.createExpressionFromText("+Integer.valueOf(1)", null);
     assertEquals(PsiType.INT, plusPrefix.getType());
-    final PsiExpression plusBytePrefix = factory.createExpressionFromText("+Byte.valueOf(1)", null);
+    PsiExpression plusBytePrefix = factory.createExpressionFromText("+Byte.valueOf(1)", null);
     assertEquals(PsiType.INT, plusBytePrefix.getType());
-    final PsiStatement declaration = factory.createStatementFromText("Byte b = 1;", null);
-    final PsiExpression plusPlusPostfix = factory.createExpressionFromText("b++", declaration);
+    PsiStatement declaration = factory.createStatementFromText("Byte b = 1;", null);
+    PsiExpression plusPlusPostfix = factory.createExpressionFromText("b++", declaration);
     assertEquals(PsiType.BYTE.getBoxedType(declaration), plusPlusPostfix.getType());
   }
 }

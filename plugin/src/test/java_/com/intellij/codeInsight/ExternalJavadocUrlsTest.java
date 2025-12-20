@@ -30,10 +30,10 @@ import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 public abstract class ExternalJavadocUrlsTest extends LightCodeInsightFixtureTestCase {
   private void doTest(String text, String... expectedSignature) {
     myFixture.configureByText("Test.java", text);
-    final PsiElement elementAtCaret = myFixture.getElementAtCaret();
-    final PsiMethod member = PsiTreeUtil.getParentOfType(elementAtCaret, PsiMethod.class, false);
+    PsiElement elementAtCaret = myFixture.getElementAtCaret();
+    PsiMethod member = PsiTreeUtil.getParentOfType(elementAtCaret, PsiMethod.class, false);
     assertNotNull(member);
-    final String signature = JavaDocumentationProvider.formatMethodSignature(member, true, false);
+    String signature = JavaDocumentationProvider.formatMethodSignature(member, true, false);
     assertNotNull(signature);
     assertEquals("found:" + signature, expectedSignature[0], signature);
   }

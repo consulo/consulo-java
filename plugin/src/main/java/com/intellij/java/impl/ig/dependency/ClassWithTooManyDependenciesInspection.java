@@ -54,7 +54,7 @@ public abstract class ClassWithTooManyDependenciesInspection extends BaseGlobalI
 			final ProblemDescriptionsProcessor problemDescriptionsProcessor,
 			Object state)
 	{
-		final RefManager refManager = globalInspectionContext.getRefManager();
+		RefManager refManager = globalInspectionContext.getRefManager();
 		refManager.iterate(new RefJavaVisitor()
 		{
 
@@ -66,19 +66,19 @@ public abstract class ClassWithTooManyDependenciesInspection extends BaseGlobalI
 				{
 					return;
 				}
-				final Set<RefClass> dependencies =
+				Set<RefClass> dependencies =
 						DependencyUtils.calculateDependenciesForClass(refClass);
-				final int numDependencies = dependencies.size();
+				int numDependencies = dependencies.size();
 				if(numDependencies <= limit)
 				{
 					return;
 				}
-				final String errorString = InspectionGadgetsLocalize.classWithTooManyDependenciesProblemDescriptor(
+				String errorString = InspectionGadgetsLocalize.classWithTooManyDependenciesProblemDescriptor(
 					refClass.getName(),
 					numDependencies,
 					limit
 				).get();
-				final CommonProblemDescriptor[] descriptors = {
+				CommonProblemDescriptor[] descriptors = {
 					inspectionManager.createProblemDescriptor(errorString)
 				};
 				problemDescriptionsProcessor.addProblemElement(refClass, descriptors);

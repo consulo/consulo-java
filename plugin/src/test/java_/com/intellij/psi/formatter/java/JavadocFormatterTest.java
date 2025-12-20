@@ -65,7 +65,7 @@ public abstract class JavadocFormatterTest extends AbstractJavaFormatterTest {
   }
   
   public void testSCR11296() throws Exception {
-    final CommonCodeStyleSettings settings = getSettings();
+    CommonCodeStyleSettings settings = getSettings();
     settings.getRootSettings().RIGHT_MARGIN = 50;
     settings.getRootSettings().WRAP_COMMENTS = true;
     settings.getRootSettings().ENABLE_JAVADOC_FORMATTING = true;

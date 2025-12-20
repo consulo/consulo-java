@@ -49,32 +49,32 @@ public class CastToIncompatibleInterfaceInspection extends BaseInspection {
             @Nonnull PsiTypeCastExpression expression
         ) {
             super.visitTypeCastExpression(expression);
-            final PsiTypeElement castTypeElement = expression.getCastType();
+            PsiTypeElement castTypeElement = expression.getCastType();
             if (castTypeElement == null) {
                 return;
             }
-            final PsiType castType = castTypeElement.getType();
+            PsiType castType = castTypeElement.getType();
             if (!(castType instanceof PsiClassType)) {
                 return;
             }
-            final PsiClassType castClassType = (PsiClassType) castType;
-            final PsiExpression operand = expression.getOperand();
+            PsiClassType castClassType = (PsiClassType) castType;
+            PsiExpression operand = expression.getOperand();
             if (operand == null) {
                 return;
             }
-            final PsiType operandType = operand.getType();
+            PsiType operandType = operand.getType();
             if (!(operandType instanceof PsiClassType)) {
                 return;
             }
-            final PsiClassType operandClassType = (PsiClassType) operandType;
-            final PsiClass castClass = castClassType.resolve();
+            PsiClassType operandClassType = (PsiClassType) operandType;
+            PsiClass castClass = castClassType.resolve();
             if (castClass == null) {
                 return;
             }
             if (!castClass.isInterface()) {
                 return;
             }
-            final PsiClass operandClass = operandClassType.resolve();
+            PsiClass operandClass = operandClassType.resolve();
             if (operandClass == null) {
                 return;
             }

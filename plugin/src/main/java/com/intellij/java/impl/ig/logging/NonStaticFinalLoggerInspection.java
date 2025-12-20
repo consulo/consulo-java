@@ -66,7 +66,7 @@ public class NonStaticFinalLoggerInspection extends BaseInspection {
 
     @Override
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiField field = (PsiField) infos[0];
+        PsiField field = (PsiField) infos[0];
         return MakeFieldStaticFinalFix.buildFixUnconditional(field);
     }
 
@@ -84,7 +84,7 @@ public class NonStaticFinalLoggerInspection extends BaseInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final ListTable table =
+        ListTable table =
             new ListTable(new ListWrappingTableModel(loggerClassNames, InspectionGadgetsLocalize.loggerClassName().get()));
         return UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsLocalize.chooseLoggerClass().get());
     }
@@ -107,8 +107,8 @@ public class NonStaticFinalLoggerInspection extends BaseInspection {
             if (aClass.getContainingClass() != null) {
                 return;
             }
-            final PsiField[] fields = aClass.getFields();
-            for (final PsiField field : fields) {
+            PsiField[] fields = aClass.getFields();
+            for (PsiField field : fields) {
                 if (!isLogger(field)) {
                     continue;
                 }
@@ -120,8 +120,8 @@ public class NonStaticFinalLoggerInspection extends BaseInspection {
         }
 
         private boolean isLogger(PsiVariable variable) {
-            final PsiType type = variable.getType();
-            final String text = type.getCanonicalText();
+            PsiType type = variable.getType();
+            String text = type.getCanonicalText();
             return loggerClassNames.contains(text);
         }
     }

@@ -48,7 +48,7 @@ public class SimplifiableConditionalExpressionInspection extends BaseInspection 
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiConditionalExpression expression = (PsiConditionalExpression) infos[0];
+        PsiConditionalExpression expression = (PsiConditionalExpression) infos[0];
         return InspectionGadgetsLocalize.simplifiableConditionalExpressionProblemDescriptor(
             calculateReplacementExpression(expression)
         ).get();
@@ -69,8 +69,8 @@ public class SimplifiableConditionalExpressionInspection extends BaseInspection 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
-            final PsiConditionalExpression expression = (PsiConditionalExpression) descriptor.getPsiElement();
-            final String newExpression = calculateReplacementExpression(expression);
+            PsiConditionalExpression expression = (PsiConditionalExpression) descriptor.getPsiElement();
+            String newExpression = calculateReplacementExpression(expression);
             replaceExpression(expression, newExpression);
         }
     }
@@ -84,16 +84,16 @@ public class SimplifiableConditionalExpressionInspection extends BaseInspection 
     static String calculateReplacementExpression(
         PsiConditionalExpression expression
     ) {
-        final PsiExpression thenExpression = expression.getThenExpression();
-        final PsiExpression elseExpression = expression.getElseExpression();
-        final PsiExpression condition = expression.getCondition();
+        PsiExpression thenExpression = expression.getThenExpression();
+        PsiExpression elseExpression = expression.getElseExpression();
+        PsiExpression condition = expression.getCondition();
         assert thenExpression != null;
         assert elseExpression != null;
 
-        final String elseText = elseExpression.getText();
+        String elseText = elseExpression.getText();
         String conditionText = condition.getText();
         if (BoolUtils.isTrue(thenExpression)) {
-            @NonNls final String elseExpressionText;
+            @NonNls String elseExpressionText;
             if (ParenthesesUtils.getPrecedence(elseExpression) >
                 ParenthesesUtils.OR_PRECEDENCE) {
                 elseExpressionText = '(' + elseText + ')';
@@ -107,7 +107,7 @@ public class SimplifiableConditionalExpressionInspection extends BaseInspection 
             return conditionText + " || " + elseExpressionText;
         }
         else if (BoolUtils.isFalse(thenExpression)) {
-            @NonNls final String elseExpressionText;
+            @NonNls String elseExpressionText;
             if (ParenthesesUtils.getPrecedence(elseExpression) >
                 ParenthesesUtils.AND_PRECEDENCE) {
                 elseExpressionText = '(' + elseText + ')';
@@ -118,9 +118,9 @@ public class SimplifiableConditionalExpressionInspection extends BaseInspection 
             return BoolUtils.getNegatedExpressionText(condition) + " && " +
                 elseExpressionText;
         }
-        final String thenText = thenExpression.getText();
+        String thenText = thenExpression.getText();
         if (BoolUtils.isFalse(elseExpression)) {
-            @NonNls final String thenExpressionText;
+            @NonNls String thenExpressionText;
             if (ParenthesesUtils.getPrecedence(thenExpression) >
                 ParenthesesUtils.AND_PRECEDENCE) {
                 thenExpressionText = '(' + thenText + ')';
@@ -134,7 +134,7 @@ public class SimplifiableConditionalExpressionInspection extends BaseInspection 
             return conditionText + " && " + thenExpressionText;
         }
         else {
-            @NonNls final String thenExpressionText;
+            @NonNls String thenExpressionText;
             if (ParenthesesUtils.getPrecedence(thenExpression) >
                 ParenthesesUtils.OR_PRECEDENCE) {
                 thenExpressionText = '(' + thenText + ')';
@@ -155,25 +155,25 @@ public class SimplifiableConditionalExpressionInspection extends BaseInspection 
             PsiConditionalExpression expression
         ) {
             super.visitConditionalExpression(expression);
-            final PsiExpression thenExpression = expression.getThenExpression();
+            PsiExpression thenExpression = expression.getThenExpression();
             if (thenExpression == null) {
                 return;
             }
-            final PsiType thenType = thenExpression.getType();
+            PsiType thenType = thenExpression.getType();
             if (!PsiType.BOOLEAN.equals(thenType)) {
                 return;
             }
-            final PsiExpression elseExpression = expression.getElseExpression();
+            PsiExpression elseExpression = expression.getElseExpression();
             if (elseExpression == null) {
                 return;
             }
-            final PsiType elseType = elseExpression.getType();
+            PsiType elseType = elseExpression.getType();
             if (!PsiType.BOOLEAN.equals(elseType)) {
                 return;
             }
-            final boolean thenConstant = BoolUtils.isFalse(thenExpression) ||
+            boolean thenConstant = BoolUtils.isFalse(thenExpression) ||
                 BoolUtils.isTrue(thenExpression);
-            final boolean elseConstant = BoolUtils.isFalse(elseExpression) ||
+            boolean elseConstant = BoolUtils.isFalse(elseExpression) ||
                 BoolUtils.isTrue(elseExpression);
             if (thenConstant == elseConstant) {
                 return;

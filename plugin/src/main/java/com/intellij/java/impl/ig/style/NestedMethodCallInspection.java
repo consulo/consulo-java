@@ -84,11 +84,11 @@ public class NestedMethodCallInspection extends BaseInspection {
       if (outerExpression == null) {
         return;
       }
-      final PsiElement parent = outerExpression.getParent();
+      PsiElement parent = outerExpression.getParent();
       if (!(parent instanceof PsiExpressionList)) {
         return;
       }
-      final PsiElement grandParent = parent.getParent();
+      PsiElement grandParent = parent.getParent();
       if (!(grandParent instanceof PsiCallExpression)) {
         return;
       }
@@ -98,7 +98,7 @@ public class NestedMethodCallInspection extends BaseInspection {
         return;
       }
       if (m_ignoreFieldInitializations) {
-        final PsiElement field = PsiTreeUtil.getParentOfType(expression, PsiField.class);
+        PsiElement field = PsiTreeUtil.getParentOfType(expression, PsiField.class);
         if (field != null) {
           return;
         }

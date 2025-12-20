@@ -27,7 +27,7 @@ public class ParenthesizedFixer implements Fixer
 	{
 		if(psiElement instanceof PsiParenthesizedExpression)
 		{
-			final PsiElement lastChild = psiElement.getLastChild();
+			PsiElement lastChild = psiElement.getLastChild();
 			if(lastChild != null && !")".equals(lastChild.getText()))
 			{
 				editor.getDocument().insertString(psiElement.getTextRange().getEndOffset(), ")");

@@ -62,12 +62,12 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore {
     }
 
     PsiElement leaf = context.getElement().getFirstChild(); // the same proximity weighers are used in completion, where the leafness is critical
-    final Comparator<T> comparator = createSortIdenticalNamedMembersComparator(leaf);
+    Comparator<T> comparator = createSortIdenticalNamedMembersComparator(leaf);
     Arrays.sort(members, comparator);
   }
 
   public static <T extends PsiMember & PsiDocCommentOwner> Comparator<T> createSortIdenticalNamedMembersComparator(PsiElement place) {
-    final PsiProximityComparator proximityComparator = new PsiProximityComparator(place);
+    PsiProximityComparator proximityComparator = new PsiProximityComparator(place);
     return (o1, o2) ->
     {
       boolean deprecated1 = JavaCompletionUtil.isEffectivelyDeprecated(o1);
@@ -144,12 +144,12 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore {
     }
   }
 
-  public static Editor positionCursorAtLBrace(final Project project, PsiFile targetFile, @Nonnull PsiClass psiClass) {
-    final PsiElement lBrace = psiClass.getLBrace();
+  public static Editor positionCursorAtLBrace(Project project, PsiFile targetFile, @Nonnull PsiClass psiClass) {
+    PsiElement lBrace = psiClass.getLBrace();
     return positionCursor(project, targetFile, lBrace != null ? lBrace : psiClass);
   }
 
-  public static Editor positionCursor(final Project project, PsiFile targetFile, @Nonnull PsiElement element) {
+  public static Editor positionCursor(Project project, PsiFile targetFile, @Nonnull PsiElement element) {
     TextRange range = element.getTextRange();
     LOG.assertTrue(range != null, "element: " + element + "; valid: " + element.isValid());
     int textOffset = range.getStartOffset();
@@ -162,7 +162,7 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore {
     return FileModificationService.getInstance().preparePsiElementsForWrite(Arrays.asList(elements));
   }
 
-  public static void processSubTypes(PsiType psiType, final PsiElement context, boolean getRawSubtypes, @Nonnull final PrefixMatcher matcher, Consumer<PsiType> consumer) {
+  public static void processSubTypes(PsiType psiType, PsiElement context, boolean getRawSubtypes, @Nonnull PrefixMatcher matcher, Consumer<PsiType> consumer) {
     int arrayDim = psiType.getArrayDimensions();
 
     psiType = psiType.getDeepComponentType();
@@ -261,7 +261,7 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore {
       PsiSubstitutor inheritorSubstitutor = PsiSubstitutor.EMPTY;
       for (PsiTypeParameter inheritorParameter : PsiUtil.typeParametersIterable(inheritor)) {
         for (PsiTypeParameter baseParameter : PsiUtil.typeParametersIterable(baseClass)) {
-          final PsiType substituted = superSubstitutor.substitute(baseParameter);
+          PsiType substituted = superSubstitutor.substitute(baseParameter);
           PsiType arg = baseSubstitutor.substitute(baseParameter);
           if (arg instanceof PsiWildcardType) {
             PsiType bound = ((PsiWildcardType) arg).getBound();
@@ -289,7 +289,7 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore {
   }
 
   private static PsiType createType(PsiClass cls, PsiSubstitutor currentSubstitutor, int arrayDim) {
-    final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(cls.getProject()).getElementFactory();
+    PsiElementFactory elementFactory = JavaPsiFacade.getInstance(cls.getProject()).getElementFactory();
     PsiType newType = elementFactory.createType(cls, currentSubstitutor);
     for (int i = 0; i < arrayDim; i++) {
       newType = newType.createArrayType();

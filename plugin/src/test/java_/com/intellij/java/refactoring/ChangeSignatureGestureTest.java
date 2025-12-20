@@ -40,7 +40,7 @@ import static org.junit.Assert.assertTrue;
 public abstract class ChangeSignatureGestureTest extends LightCodeInsightFixtureTestCase
 {
 
-	private void doTest(final Runnable run)
+	private void doTest(Runnable run)
 	{
 		myFixture.configureByFile("/refactoring/changeSignatureGesture/" + getTestName(false) + ".java");
 		myFixture.enableInspections(new UnusedDeclarationInspection());
@@ -116,7 +116,7 @@ public abstract class ChangeSignatureGestureTest extends LightCodeInsightFixture
 		doTypingTest(", int param");
 	}
 
-	private void doTypingTest(final String param)
+	private void doTypingTest(String param)
 	{
 		doTest(() -> myFixture.type(param));
 	}
@@ -140,10 +140,10 @@ public abstract class ChangeSignatureGestureTest extends LightCodeInsightFixture
 	{
 		doTest(() ->
 		{
-			final Editor editor = myFixture.getEditor();
-			final Document document = editor.getDocument();
-			final int selectionStart = editor.getSelectionModel().getSelectionStart();
-			final int selectionEnd = editor.getSelectionModel().getSelectionEnd();
+			Editor editor = myFixture.getEditor();
+			Document document = editor.getDocument();
+			int selectionStart = editor.getSelectionModel().getSelectionStart();
+			int selectionEnd = editor.getSelectionModel().getSelectionEnd();
 			WriteCommandAction.runWriteCommandAction(getProject(), () -> document.deleteString(selectionStart, selectionEnd));
 			editor.getCaretModel().moveToOffset(selectionStart);
 		});

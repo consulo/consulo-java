@@ -71,7 +71,7 @@ public class NoExplicitFinalizeCallsInspection extends BaseInspection {
             )) {
                 return;
             }
-            final PsiMethod containingMethod =
+            PsiMethod containingMethod =
                 PsiTreeUtil.getParentOfType(expression, PsiMethod.class);
             if (containingMethod == null) {
                 return;

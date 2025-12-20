@@ -39,21 +39,21 @@ public class JavaCopyPasteReferenceProcessor extends CopyPasteReferenceProcessor
   protected void addReferenceData(PsiFile file, int startOffset, PsiElement element, ArrayList<ReferenceData> to) {
     if (element instanceof PsiJavaCodeReferenceElement) {
       if (!((PsiJavaCodeReferenceElement)element).isQualified()) {
-        final JavaResolveResult resolveResult = ((PsiJavaCodeReferenceElement)element).advancedResolve(false);
-        final PsiElement refElement = resolveResult.getElement();
+        JavaResolveResult resolveResult = ((PsiJavaCodeReferenceElement)element).advancedResolve(false);
+        PsiElement refElement = resolveResult.getElement();
         if (refElement != null) {
 
           if (refElement instanceof PsiClass) {
             if (refElement.getContainingFile() != element.getContainingFile()) {
-              final String qName = ((PsiClass)refElement).getQualifiedName();
+              String qName = ((PsiClass)refElement).getQualifiedName();
               if (qName != null) {
                 addReferenceData(element, to, startOffset, qName, null);
               }
             }
           }
           else if (resolveResult.getCurrentFileResolveScope() instanceof PsiImportStaticStatement) {
-            final String classQName = ((PsiMember)refElement).getContainingClass().getQualifiedName();
-            final String name = ((PsiNamedElement)refElement).getName();
+            String classQName = ((PsiMember)refElement).getContainingClass().getQualifiedName();
+            String name = ((PsiNamedElement)refElement).getName();
             if (classQName != null && name != null) {
               addReferenceData(element, to, startOffset, classQName, name);
             }
@@ -67,7 +67,7 @@ public class JavaCopyPasteReferenceProcessor extends CopyPasteReferenceProcessor
   @Override
   protected PsiJavaCodeReferenceElement[] findReferencesToRestore(PsiFile file, RangeMarker bounds, ReferenceData[] referenceData) {
     PsiManager manager = file.getManager();
-    final JavaPsiFacade facade = JavaPsiFacade.getInstance(manager.getProject());
+    JavaPsiFacade facade = JavaPsiFacade.getInstance(manager.getProject());
     PsiResolveHelper helper = facade.getResolveHelper();
     PsiJavaCodeReferenceElement[] refs = new PsiJavaCodeReferenceElement[referenceData.length];
     for (int i = 0; i < referenceData.length; i++) {

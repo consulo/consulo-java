@@ -61,15 +61,15 @@ public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler 
         if (extension == null) {
             extension = JavaFileType.INSTANCE.getDefaultExtension();
         }
-        final String name = "myClass" + "." + extension;
-        final PsiFile psiFile = PsiFileFactory.getInstance(project)
+        String name = "myClass" + "." + extension;
+        PsiFile psiFile = PsiFileFactory.getInstance(project)
             .createFileFromText(name, JavaFileType.INSTANCE, content, System.currentTimeMillis(), false, false);
         psiFile.putUserData(PsiUtil.FILE_LANGUAGE_LEVEL_KEY, LanguageLevel.JDK_16);
         if (!(psiFile instanceof PsiJavaFile)) {
             throw new IncorrectOperationException("This template did not produce a Java class or an interface\n" + psiFile.getText());
         }
         PsiJavaFile psiJavaFile = (PsiJavaFile)psiFile;
-        final PsiClass[] classes = psiJavaFile.getClasses();
+        PsiClass[] classes = psiJavaFile.getClasses();
         if (classes.length == 0) {
             throw new IncorrectOperationException("This template did not produce a Java class or an interface\n" + psiFile.getText());
         }
@@ -80,7 +80,7 @@ public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler 
         String className = createdClass.getName();
         JavaDirectoryServiceImpl.checkCreateClassOrInterface(directory, className);
 
-        final LanguageLevel ll = JavaDirectoryService.getInstance().getLanguageLevel(directory);
+        LanguageLevel ll = JavaDirectoryService.getInstance().getLanguageLevel(directory);
         if (ll.compareTo(LanguageLevel.JDK_1_5) < 0) {
             if (createdClass.isAnnotationType()) {
                 throw new IncorrectOperationException("Annotations only supported at language level 1.5 and higher");
@@ -149,7 +149,7 @@ public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler 
     }
 
     @Override
-    public boolean canCreate(final PsiDirectory[] dirs) {
+    public boolean canCreate(PsiDirectory[] dirs) {
         for (PsiDirectory dir : dirs) {
             if (canCreate(dir)) {
                 return true;

@@ -75,7 +75,7 @@ public class ClassSmartPointerNode extends BaseSmartPointerPsiNode<SmartPsiEleme
   
   @Override
   public void updateImpl(PresentationData data) {
-    final PsiClass aClass = getPsiClass();
+    PsiClass aClass = getPsiClass();
     if (aClass != null) {
       data.setPresentableText(aClass.getName());
     }

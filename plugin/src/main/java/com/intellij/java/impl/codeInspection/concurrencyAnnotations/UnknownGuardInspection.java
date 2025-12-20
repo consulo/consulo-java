@@ -78,11 +78,11 @@ public class UnknownGuardInspection extends BaseJavaLocalInspectionTool {
             if (!JCiPUtil.isGuardedByAnnotation(annotation)) {
                 return;
             }
-            final String guardValue = JCiPUtil.getGuardValue(annotation);
+            String guardValue = JCiPUtil.getGuardValue(annotation);
             if (guardValue == null || "this".equals(guardValue) || "itself".equals(guardValue)) {
                 return;
             }
-            final PsiClass containingClass = PsiTreeUtil.getParentOfType(annotation, PsiClass.class);
+            PsiClass containingClass = PsiTreeUtil.getParentOfType(annotation, PsiClass.class);
             if (containingClass == null) {
                 return;
             }
@@ -92,18 +92,18 @@ public class UnknownGuardInspection extends BaseJavaLocalInspectionTool {
             }
 
             //class-name.class
-            final Project project = containingClass.getProject();
-            final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
+            Project project = containingClass.getProject();
+            JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
             if (guardValue.endsWith(".class") &&
                 facade.findClass(StringUtil.getPackageName(guardValue), GlobalSearchScope.allScope(project)) != null) {
                 return;
             }
 
             //class-name.field-name
-            final String classFQName = StringUtil.getPackageName(guardValue);
-            final PsiClass gClass = facade.findClass(classFQName, GlobalSearchScope.allScope(project));
+            String classFQName = StringUtil.getPackageName(guardValue);
+            PsiClass gClass = facade.findClass(classFQName, GlobalSearchScope.allScope(project));
             if (gClass != null) {
-                final String fieldName = StringUtil.getShortName(guardValue);
+                String fieldName = StringUtil.getShortName(guardValue);
                 if (gClass.findFieldByName(fieldName, true) != null) {
                     return;
                 }
@@ -114,26 +114,26 @@ public class UnknownGuardInspection extends BaseJavaLocalInspectionTool {
             }
 
             //class-name.this.field-name/method-name
-            final int thisIdx = guardValue.indexOf("this");
+            int thisIdx = guardValue.indexOf("this");
             if (thisIdx > -1 && thisIdx + 1 < guardValue.length()) {
-                final PsiClass lockClass;
+                PsiClass lockClass;
                 if (thisIdx == 0) {
                     lockClass = containingClass;
                 }
                 else {
-                    final String fqn = guardValue.substring(0, thisIdx - 1);
+                    String fqn = guardValue.substring(0, thisIdx - 1);
                     lockClass = facade.findClass(fqn, GlobalSearchScope.allScope(project));
                 }
 
                 if (lockClass != null) {
-                    final String fieldName = guardValue.substring(thisIdx + "this".length() + 1);
+                    String fieldName = guardValue.substring(thisIdx + "this".length() + 1);
                     if (containsFieldOrMethod(lockClass, fieldName)) {
                         return;
                     }
                 }
             }
 
-            final PsiAnnotationMemberValue member = annotation.findAttributeValue("value");
+            PsiAnnotationMemberValue member = annotation.findAttributeValue("value");
             if (member == null) {
                 return;
             }
@@ -148,7 +148,7 @@ public class UnknownGuardInspection extends BaseJavaLocalInspectionTool {
 
             //method-name
             if (fieldOrMethod.endsWith("()")) {
-                final PsiMethod[] methods = containingClass.findMethodsByName(StringUtil.trimEnd(fieldOrMethod, "()"), true);
+                PsiMethod[] methods = containingClass.findMethodsByName(StringUtil.trimEnd(fieldOrMethod, "()"), true);
                 for (PsiMethod method : methods) {
                     if (method.getParameterList().getParameters().length == 0) {
                         return true;
@@ -164,15 +164,15 @@ public class UnknownGuardInspection extends BaseJavaLocalInspectionTool {
             if (!JCiPUtil.isGuardedByTag(psiDocTag)) {
                 return;
             }
-            final String guardValue = JCiPUtil.getGuardValue(psiDocTag);
+            String guardValue = JCiPUtil.getGuardValue(psiDocTag);
             if ("this".equals(guardValue)) {
                 return;
             }
-            final PsiClass containingClass = PsiTreeUtil.getParentOfType(psiDocTag, PsiClass.class);
+            PsiClass containingClass = PsiTreeUtil.getParentOfType(psiDocTag, PsiClass.class);
             if (containingClass == null) {
                 return;
             }
-            final PsiField guardField = containingClass.findFieldByName(guardValue, true);
+            PsiField guardField = containingClass.findFieldByName(guardValue, true);
             if (guardField != null) {
                 return;
             }

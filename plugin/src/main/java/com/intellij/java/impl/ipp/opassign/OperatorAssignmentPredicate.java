@@ -47,9 +47,9 @@ class OperatorAssignmentPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiAssignmentExpression)) {
       return false;
     }
-    final PsiAssignmentExpression assignmentExpression =
+    PsiAssignmentExpression assignmentExpression =
       (PsiAssignmentExpression)element;
-    final IElementType tokenType =
+    IElementType tokenType =
       assignmentExpression.getOperationTokenType();
     return OPERATOR_ASSIGNMENT_TOKENS.contains(tokenType);
   }

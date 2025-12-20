@@ -57,8 +57,8 @@ public abstract class JarFileSystemTest extends IdeaTestCase
 	{
 		VirtualFile file = StandardFileSystems.jar().findFileByPath(path);
 		assertNotNull(file);
-		final String filePath = file.getPath();
-		final String message = "paths are not equal, path1 = " + path + " found: " + filePath;
+		String filePath = file.getPath();
+		String message = "paths are not equal, path1 = " + path + " found: " + filePath;
 		if(SystemInfo.isFileSystemCaseSensitive)
 		{
 			assertEquals(message, path, file.getPath());

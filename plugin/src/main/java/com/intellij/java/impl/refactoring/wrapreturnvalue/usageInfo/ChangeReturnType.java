@@ -36,7 +36,7 @@ public class ChangeReturnType extends FixableUsageInfo {
     }
 
     public void fixUsage() throws IncorrectOperationException {
-        final PsiTypeElement returnType = method.getReturnTypeElement();
+        PsiTypeElement returnType = method.getReturnTypeElement();
         MutationUtils.replaceType(type, returnType);
     }
 }

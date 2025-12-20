@@ -56,13 +56,13 @@ import java.util.HashSet;
 public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBaseIntentionAction implements Iconable, LowPriorityAction {
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
-    final PsiParameter parameter = PsiTreeUtil.getParentOfType(element, PsiParameter.class);
+    PsiParameter parameter = PsiTreeUtil.getParentOfType(element, PsiParameter.class);
     if (parameter != null) {
       if (!parameter.getLanguage().isKindOf(JavaLanguage.INSTANCE)) return false;
-      final PsiElement declarationScope = parameter.getDeclarationScope();
+      PsiElement declarationScope = parameter.getDeclarationScope();
       if (declarationScope instanceof PsiMethod) {
-        final PsiMethod method = (PsiMethod)declarationScope;
-        final PsiClass containingClass = method.getContainingClass();
+        PsiMethod method = (PsiMethod)declarationScope;
+        PsiClass containingClass = method.getContainingClass();
         if (containingClass != null && !containingClass.isInterface()) {
           return containingClass.findMethodBySignature(generateMethodPrototype(method, parameter), false) == null;
         }
@@ -77,9 +77,9 @@ public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBase
   }
 
   private static PsiMethod generateMethodPrototype(PsiMethod method, PsiParameter... params) {
-    final PsiMethod prototype = (PsiMethod)method.copy();
-    final PsiCodeBlock body = prototype.getBody();
-    final PsiCodeBlock emptyBody = JavaPsiFacade.getElementFactory(method.getProject()).createMethodFromText("void foo(){}", prototype).getBody();
+    PsiMethod prototype = (PsiMethod)method.copy();
+    PsiCodeBlock body = prototype.getBody();
+    PsiCodeBlock emptyBody = JavaPsiFacade.getElementFactory(method.getProject()).createMethodFromText("void foo(){}", prototype).getBody();
     assert emptyBody != null;
     if (body != null) {
       body.replace(emptyBody);
@@ -89,7 +89,7 @@ public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBase
     }
     for (int i = params.length - 1; i >= 0; i--) {
       PsiParameter param = params[i];
-      final int parameterIndex = method.getParameterList().getParameterIndex(param);
+      int parameterIndex = method.getParameterList().getParameterIndex(param);
       prototype.getParameterList().getParameters()[parameterIndex].delete();
     }
     return prototype;
@@ -101,7 +101,7 @@ public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBase
     if (parameters == null || parameters.length == 0) return;
     final PsiMethod method = (PsiMethod)parameters[0].getDeclarationScope();
     final PsiMethod methodPrototype = generateMethodPrototype(method, parameters);
-    final PsiMethod existingMethod = method.getContainingClass().findMethodBySignature(methodPrototype, false);
+    PsiMethod existingMethod = method.getContainingClass().findMethodBySignature(methodPrototype, false);
     if (existingMethod != null) {
       editor.getCaretModel().moveToOffset(existingMethod.getTextOffset());
       HintManager.getInstance().showErrorHint(editor, "Method with the chosen signature already exist");
@@ -112,17 +112,17 @@ public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBase
       @Override
       public void run() {
         
-        final PsiMethod prototype = (PsiMethod)method.getContainingClass().addBefore(methodPrototype, method);
+        PsiMethod prototype = (PsiMethod)method.getContainingClass().addBefore(methodPrototype, method);
         RefactoringUtil.fixJavadocsForParams(prototype, new HashSet<PsiParameter>(Arrays.asList(prototype.getParameterList().getParameters())));
         TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(prototype);
 
         PsiCodeBlock body = prototype.getBody();
-        final String callArgs =
+        String callArgs =
           "(" + StringUtil.join(method.getParameterList().getParameters(), psiParameter -> {
             if (ArrayUtil.find(parameters, psiParameter) > -1) return "IntelliJIDEARulezzz";
             return psiParameter.getName();
           }, ",") + ");";
-        final String methodCall;
+        String methodCall;
         if (method.getReturnType() == null) {
           methodCall = "this";
         } else if (!PsiType.VOID.equals(method.getReturnType())) {
@@ -132,7 +132,7 @@ public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBase
         }
         body.add(JavaPsiFacade.getElementFactory(project).createStatementFromText(methodCall + callArgs, method));
         body = (PsiCodeBlock)CodeStyleManager.getInstance(project).reformat(body);
-        final PsiStatement stmt = body.getStatements()[0];
+        PsiStatement stmt = body.getStatements()[0];
         PsiExpression expr = null;
         if (stmt instanceof PsiReturnStatement) {
           expr = ((PsiReturnStatement)stmt).getReturnValue();
@@ -143,7 +143,7 @@ public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBase
           PsiMethodCallExpression methodCallExp = (PsiMethodCallExpression)expr;
           RangeMarker rangeMarker = editor.getDocument().createRangeMarker(prototype.getTextRange());
           for (PsiParameter parameter : parameters) {
-            final PsiExpression exprToBeDefault =
+            PsiExpression exprToBeDefault =
               methodCallExp.getArgumentList().getExpressions()[method.getParameterList().getParameterIndex(parameter)];
             builder.replaceElement(exprToBeDefault, new TextExpression(""));
           }

@@ -32,7 +32,7 @@ public class MissingTryBodyFixer implements Fixer
 		}
 		PsiTryStatement tryStatement = (PsiTryStatement) psiElement;
 
-		final Document doc = editor.getDocument();
+		Document doc = editor.getDocument();
 
 		PsiElement body = tryStatement.getTryBlock();
 		if(body != null)

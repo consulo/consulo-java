@@ -40,13 +40,13 @@ import java.util.Collections;
  */
 public abstract class AbstractMemberResolveConverter extends ResolvingConverter<PsiMember> {
   @Nullable
-  protected abstract PsiClass getTargetClass(final ConvertContext context);
+  protected abstract PsiClass getTargetClass(ConvertContext context);
 
   @Nonnull
-  protected abstract PropertyMemberType[] getMemberTypes(final ConvertContext context);
+  protected abstract PropertyMemberType[] getMemberTypes(ConvertContext context);
 
   @Nonnull
-  protected PsiType getPsiType(final ConvertContext context) {
+  protected PsiType getPsiType(ConvertContext context) {
     return PsiType.getJavaLangObject(context.getPsiManager(), (GlobalSearchScope) ProjectScopes.getAllScope(context.getPsiManager().getProject()));
   }
 
@@ -54,26 +54,26 @@ public abstract class AbstractMemberResolveConverter extends ResolvingConverter<
     return true;
   }
 
-  protected String getPropertyName(final String s, final ConvertContext context) {
+  protected String getPropertyName(String s, ConvertContext context) {
     return s;
   }
 
-  public PsiMember fromString(final String s, final ConvertContext context) {
+  public PsiMember fromString(String s, ConvertContext context) {
     if (s == null) return null;
-    final PsiClass psiClass = getTargetClass(context);
+    PsiClass psiClass = getTargetClass(context);
     if (psiClass == null) return null;
     for (PropertyMemberType type : getMemberTypes(context)) {
       switch (type) {
         case FIELD:
-          final PsiField field = psiClass.findFieldByName(s, isLookDeep());
+          PsiField field = psiClass.findFieldByName(s, isLookDeep());
           if (field != null) return field;
           break;
         case GETTER:
-          final PsiMethod getter = PropertyUtil.findPropertyGetter(psiClass, getPropertyName(s, context), false, isLookDeep());
+          PsiMethod getter = PropertyUtil.findPropertyGetter(psiClass, getPropertyName(s, context), false, isLookDeep());
           if (getter != null) return getter;
           break;
         case SETTER:
-          final PsiMethod setter = PropertyUtil.findPropertySetter(psiClass, getPropertyName(s, context), false, isLookDeep());
+          PsiMethod setter = PropertyUtil.findPropertySetter(psiClass, getPropertyName(s, context), false, isLookDeep());
           if (setter != null) return setter;
           break;
       }
@@ -82,22 +82,22 @@ public abstract class AbstractMemberResolveConverter extends ResolvingConverter<
   }
 
 
-  public String toString(final PsiMember t, final ConvertContext context) {
+  public String toString(PsiMember t, ConvertContext context) {
     return t == null? null : getPropertyName(t.getName(), context);
   }
 
-  public String getErrorMessage(final String s, final ConvertContext context) {
-    final DomElement parent = context.getInvocationElement().getParent();
+  public String getErrorMessage(String s, ConvertContext context) {
+    DomElement parent = context.getInvocationElement().getParent();
     assert parent != null;
     return CodeInsightLocalize.errorCannotResolve01(TypePresentationService.getInstance().getTypeName(parent), s).get();
   }
 
   @Nonnull
-  public Collection<? extends PsiMember> getVariants(final ConvertContext context) {
-    final PsiClass psiClass = getTargetClass(context);
+  public Collection<? extends PsiMember> getVariants(ConvertContext context) {
+    PsiClass psiClass = getTargetClass(context);
     if (psiClass == null) return Collections.emptyList();
 
-    final ArrayList<PsiMember> list = new ArrayList<>();
+    ArrayList<PsiMember> list = new ArrayList<>();
     for (PsiField psiField : isLookDeep()? psiClass.getAllFields() : psiClass.getFields()) {
       if (fieldSuits(psiField)) {
         list.add(psiField);
@@ -111,33 +111,33 @@ public abstract class AbstractMemberResolveConverter extends ResolvingConverter<
     return list;
   }
 
-  protected boolean methodSuits(final PsiMethod psiMethod) {
+  protected boolean methodSuits(PsiMethod psiMethod) {
     return !psiMethod.isConstructor() && !psiMethod.hasModifierProperty(PsiModifier.STATIC) && PropertyUtil.getPropertyName(psiMethod) != null;
   }
 
-  protected boolean fieldSuits(final PsiField psiField) {
+  protected boolean fieldSuits(PsiField psiField) {
     return !psiField.hasModifierProperty(PsiModifier.STATIC);
   }
 
-  public LocalQuickFix[] getQuickFixes(final ConvertContext context) {
-    final String targetName = ((GenericValue)context.getInvocationElement()).getStringValue();
+  public LocalQuickFix[] getQuickFixes(ConvertContext context) {
+    String targetName = ((GenericValue)context.getInvocationElement()).getStringValue();
     if (!PsiNameHelper.getInstance(context.getProject()).isIdentifier(targetName)) return super.getQuickFixes(context);
-    final PsiClass targetClass = getTargetClass(context);
+    PsiClass targetClass = getTargetClass(context);
     if (targetClass == null) return super.getQuickFixes(context);
-    final PropertyMemberType memberType = getMemberTypes(context)[0];
+    PropertyMemberType memberType = getMemberTypes(context)[0];
 
-    final PsiType psiType = getPsiType(context);
-    final IntentionAction fix = QuickFixFactory.getInstance().createCreateFieldOrPropertyFix(targetClass, targetName, psiType, memberType);
+    PsiType psiType = getPsiType(context);
+    IntentionAction fix = QuickFixFactory.getInstance().createCreateFieldOrPropertyFix(targetClass, targetName, psiType, memberType);
     return fix instanceof LocalQuickFix localQuickFix ? new LocalQuickFix[] {localQuickFix} : super.getQuickFixes(context);
   }
 
-  public void handleElementRename(final GenericDomValue<PsiMember> genericValue, final ConvertContext context, final String newElementName) {
+  public void handleElementRename(GenericDomValue<PsiMember> genericValue, ConvertContext context, String newElementName) {
     super.handleElementRename(genericValue, context, getPropertyName(newElementName, context));
   }
 
-  public void bindReference(final GenericDomValue<PsiMember> genericValue, final ConvertContext context, final PsiElement newTarget) {
+  public void bindReference(GenericDomValue<PsiMember> genericValue, ConvertContext context, PsiElement newTarget) {
     if (newTarget instanceof PsiMember member) {
-      final String elementName = member.getName();
+      String elementName = member.getName();
       genericValue.setStringValue(getPropertyName(elementName, context));
     }
   }

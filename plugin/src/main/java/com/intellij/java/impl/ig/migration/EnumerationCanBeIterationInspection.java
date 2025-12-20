@@ -95,27 +95,27 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiReferenceExpression methodExpression =
+      PsiElement element = descriptor.getPsiElement();
+      PsiReferenceExpression methodExpression =
         (PsiReferenceExpression)element.getParent();
-      final PsiMethodCallExpression methodCallExpression =
+      PsiMethodCallExpression methodCallExpression =
         (PsiMethodCallExpression)methodExpression.getParent();
-      final PsiElement parent =
+      PsiElement parent =
         methodCallExpression.getParent();
-      final PsiVariable variable;
+      PsiVariable variable;
       if (parent instanceof PsiVariable) {
         variable = (PsiVariable)parent;
       }
       else if (parent instanceof PsiAssignmentExpression) {
-        final PsiAssignmentExpression assignmentExpression =
+        PsiAssignmentExpression assignmentExpression =
           (PsiAssignmentExpression)parent;
-        final PsiExpression lhs = assignmentExpression.getLExpression();
+        PsiExpression lhs = assignmentExpression.getLExpression();
         if (!(lhs instanceof PsiReferenceExpression)) {
           return;
         }
-        final PsiReferenceExpression referenceExpression =
+        PsiReferenceExpression referenceExpression =
           (PsiReferenceExpression)lhs;
-        final PsiElement target = referenceExpression.resolve();
+        PsiElement target = referenceExpression.resolve();
         if (!(target instanceof PsiVariable)) {
           return;
         }
@@ -124,28 +124,28 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
       else {
         return;
       }
-      final String variableName = createVariableName(element);
-      final PsiStatement statement =
+      String variableName = createVariableName(element);
+      PsiStatement statement =
         PsiTreeUtil.getParentOfType(element, PsiStatement.class);
       if (statement == null) {
         return;
       }
-      final int result = replaceMethodCalls(variable,
+      int result = replaceMethodCalls(variable,
                                             statement.getTextOffset(), variableName);
-      final PsiType variableType = variable.getType();
+      PsiType variableType = variable.getType();
       if (!(variableType instanceof PsiClassType)) {
         return;
       }
-      final PsiClassType classType = (PsiClassType)variableType;
-      final PsiType[] parameterTypes = classType.getParameters();
-      final PsiType parameterType;
+      PsiClassType classType = (PsiClassType)variableType;
+      PsiType[] parameterTypes = classType.getParameters();
+      PsiType parameterType;
       if (parameterTypes.length > 0) {
         parameterType = parameterTypes[0];
       }
       else {
         parameterType = null;
       }
-      final PsiStatement newStatement =
+      PsiStatement newStatement =
         createDeclaration(methodCallExpression, variableName,
                           parameterType);
       if (newStatement == null) {
@@ -158,7 +158,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
         else {
           insertNewStatement(statement, newStatement);
           if (result != KEEP_INITIALIZATION) {
-            final PsiExpression initializer =
+            PsiExpression initializer =
               variable.getInitializer();
             if (initializer != null) {
               initializer.delete();
@@ -179,9 +179,9 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
     private static void insertNewStatement(PsiStatement anchor,
                                            PsiStatement newStatement)
       throws IncorrectOperationException {
-      final PsiElement statementParent = anchor.getParent();
+      PsiElement statementParent = anchor.getParent();
       if (statementParent instanceof PsiForStatement) {
-        final PsiElement statementGrandParent =
+        PsiElement statementGrandParent =
           statementParent.getParent();
         statementGrandParent.addBefore(newStatement,
                                        statementParent);
@@ -196,16 +196,16 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
       PsiMethodCallExpression methodCallExpression,
       String variableName, PsiType parameterType)
       throws IncorrectOperationException {
-      @NonNls final StringBuilder newStatementText = new StringBuilder();
-      final Project project = methodCallExpression.getProject();
-      final JavaCodeStyleSettings codeStyleSettings =
+      @NonNls StringBuilder newStatementText = new StringBuilder();
+      Project project = methodCallExpression.getProject();
+      JavaCodeStyleSettings codeStyleSettings =
         CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
       if (codeStyleSettings.GENERATE_FINAL_LOCALS) {
         newStatementText.append("final ");
       }
       newStatementText.append(CommonClassNames.JAVA_UTIL_ITERATOR);
       if (parameterType != null) {
-        final String typeText = parameterType.getCanonicalText();
+        String typeText = parameterType.getCanonicalText();
         newStatementText.append('<');
         newStatementText.append(typeText);
         newStatementText.append('>');
@@ -213,11 +213,11 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
       newStatementText.append(' ');
       newStatementText.append(variableName);
       newStatementText.append('=');
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         methodCallExpression.getMethodExpression();
-      final PsiExpression qualifier =
+      PsiExpression qualifier =
         methodExpression.getQualifierExpression();
-      final String qualifierText;
+      String qualifierText;
       if (qualifier == null) {
         qualifierText = "";
       }
@@ -225,7 +225,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
         qualifierText = qualifier.getText() + '.';
       }
       newStatementText.append(qualifierText);
-      @NonNls final String methodName =
+      @NonNls String methodName =
         methodExpression.getReferenceName();
       if ("elements".equals(methodName)) {
         if (TypeUtils.expressionHasTypeOrSubtype(qualifier,
@@ -253,12 +253,12 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
         return null;
       }
       newStatementText.append(';');
-      final PsiElementFactory factory =
+      PsiElementFactory factory =
         JavaPsiFacade.getElementFactory(project);
-      final PsiStatement statement =
+      PsiStatement statement =
         factory.createStatementFromText(newStatementText.toString(),
                                         methodExpression);
-      final JavaCodeStyleManager styleManager =
+      JavaCodeStyleManager styleManager =
         JavaCodeStyleManager.getInstance(project);
       styleManager.shortenClassReferences(statement);
       return statement;
@@ -273,15 +273,15 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
       int startOffset,
       String newVariableName)
       throws IncorrectOperationException {
-      final PsiManager manager = enumerationVariable.getManager();
-      final Project project = manager.getProject();
-      final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-      final PsiElementFactory factory = facade.getElementFactory();
-      final Query<PsiReference> query = ReferencesSearch.search(
+      PsiManager manager = enumerationVariable.getManager();
+      Project project = manager.getProject();
+      JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
+      PsiElementFactory factory = facade.getElementFactory();
+      Query<PsiReference> query = ReferencesSearch.search(
         enumerationVariable);
-      final List<PsiElement> referenceElements = new ArrayList();
+      List<PsiElement> referenceElements = new ArrayList();
       for (PsiReference reference : query) {
-        final PsiElement referenceElement = reference.getElement();
+        PsiElement referenceElement = reference.getElement();
         referenceElements.add(referenceElement);
       }
       Collections.sort(referenceElements,
@@ -296,9 +296,9 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
           result = KEEP_DECLARATION;
           continue;
         }
-        final PsiReferenceExpression referenceExpression =
+        PsiReferenceExpression referenceExpression =
           (PsiReferenceExpression)referenceElement;
-        final PsiElement referenceParent =
+        PsiElement referenceParent =
           referenceExpression.getParent();
         if (!(referenceParent instanceof PsiReferenceExpression)) {
           if (referenceParent instanceof PsiAssignmentExpression) {
@@ -308,19 +308,19 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
           result = KEEP_INITIALIZATION;
           continue;
         }
-        final PsiElement referenceGrandParent =
+        PsiElement referenceGrandParent =
           referenceParent.getParent();
         if (!(referenceGrandParent instanceof PsiMethodCallExpression)) {
           result = KEEP_INITIALIZATION;
           continue;
         }
-        final PsiMethodCallExpression callExpression =
+        PsiMethodCallExpression callExpression =
           (PsiMethodCallExpression)referenceGrandParent;
-        final PsiReferenceExpression foundReferenceExpression =
+        PsiReferenceExpression foundReferenceExpression =
           callExpression.getMethodExpression();
-        @NonNls final String foundName =
+        @NonNls String foundName =
           foundReferenceExpression.getReferenceName();
-        @NonNls final String newExpressionText;
+        @NonNls String newExpressionText;
         if ("hasMoreElements".equals(foundName)) {
           newExpressionText = newVariableName + ".hasNext()";
         }
@@ -331,7 +331,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
           result = KEEP_INITIALIZATION;
           continue;
         }
-        final PsiExpression newExpression =
+        PsiExpression newExpression =
           factory.createExpressionFromText(newExpressionText,
                                            callExpression);
         callExpression.replace(newExpression);
@@ -341,22 +341,22 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
 
     @NonNls
     private static String createVariableName(PsiElement context) {
-      final Project project = context.getProject();
-      final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-      final PsiElementFactory factory = facade.getElementFactory();
-      final GlobalSearchScope scope = GlobalSearchScope.allScope(project);
-      final PsiClass iteratorClass = facade.findClass(CommonClassNames.JAVA_UTIL_ITERATOR, scope);
+      Project project = context.getProject();
+      JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
+      PsiElementFactory factory = facade.getElementFactory();
+      GlobalSearchScope scope = GlobalSearchScope.allScope(project);
+      PsiClass iteratorClass = facade.findClass(CommonClassNames.JAVA_UTIL_ITERATOR, scope);
       if (iteratorClass == null) {
         return "iterator";
       }
-      final JavaCodeStyleManager codeStyleManager =
+      JavaCodeStyleManager codeStyleManager =
         JavaCodeStyleManager.getInstance(project);
-      final PsiType iteratorType = factory.createType(iteratorClass);
-      final SuggestedNameInfo baseNameInfo =
+      PsiType iteratorType = factory.createType(iteratorClass);
+      SuggestedNameInfo baseNameInfo =
         codeStyleManager.suggestVariableName(
           VariableKind.LOCAL_VARIABLE, null, null,
           iteratorType);
-      final SuggestedNameInfo nameInfo =
+      SuggestedNameInfo nameInfo =
         codeStyleManager.suggestUniqueVariableName(baseNameInfo,
                                                    context, true);
       if (nameInfo.names.length <= 0) {
@@ -378,11 +378,11 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
     public void visitMethodCallExpression(
       PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      @NonNls final String methodName =
+      @NonNls String methodName =
         methodExpression.getReferenceName();
-      final boolean isElements;
+      boolean isElements;
       if ("elements".equals(methodName)) {
         isElements = true;
       }
@@ -396,21 +396,21 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
                                                 "java.util.Enumeration")) {
         return;
       }
-      final PsiElement parent = expression.getParent();
-      final PsiVariable variable;
+      PsiElement parent = expression.getParent();
+      PsiVariable variable;
       if (parent instanceof PsiLocalVariable) {
         variable = (PsiVariable)parent;
       }
       else if (parent instanceof PsiAssignmentExpression) {
-        final PsiAssignmentExpression assignmentExpression =
+        PsiAssignmentExpression assignmentExpression =
           (PsiAssignmentExpression)parent;
-        final PsiExpression lhs = assignmentExpression.getLExpression();
+        PsiExpression lhs = assignmentExpression.getLExpression();
         if (!(lhs instanceof PsiReferenceExpression)) {
           return;
         }
-        final PsiReferenceExpression referenceExpression =
+        PsiReferenceExpression referenceExpression =
           (PsiReferenceExpression)lhs;
-        final PsiElement element = referenceExpression.resolve();
+        PsiElement element = referenceExpression.resolve();
         if (!(element instanceof PsiVariable)) {
           return;
         }
@@ -419,7 +419,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
       else {
         return;
       }
-      final PsiMethod containingMethod = PsiTreeUtil.getParentOfType(
+      PsiMethod containingMethod = PsiTreeUtil.getParentOfType(
         expression, PsiMethod.class);
       if (containingMethod == null) {
         return;
@@ -428,11 +428,11 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
         return;
       }
       if (isElements) {
-        final PsiMethod method = expression.resolveMethod();
+        PsiMethod method = expression.resolveMethod();
         if (method == null) {
           return;
         }
-        final PsiClass containingClass = method.getContainingClass();
+        PsiClass containingClass = method.getContainingClass();
         if (InheritanceUtil.isInheritor(containingClass,
                                         "java.util.Vector")) {
           registerMethodCallError(expression, ITERATOR_TEXT);
@@ -443,11 +443,11 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
         }
       }
       else {
-        final PsiMethod method = expression.resolveMethod();
+        PsiMethod method = expression.resolveMethod();
         if (method == null) {
           return;
         }
-        final PsiClass containingClass = method.getContainingClass();
+        PsiClass containingClass = method.getContainingClass();
         if (InheritanceUtil.isInheritor(containingClass,
                                         "java.util.Hashtable")) {
           registerMethodCallError(expression, KEY_SET_ITERATOR_TEXT);
@@ -457,7 +457,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
 
     private static boolean isEnumerationMethodCalled(
       @Nonnull PsiVariable variable, @Nonnull PsiElement context) {
-      final EnumerationMethodCalledVisitor visitor =
+      EnumerationMethodCalledVisitor visitor =
         new EnumerationMethodCalledVisitor(variable);
       context.accept(visitor);
       return visitor.isEnumerationMethodCalled();
@@ -480,26 +480,26 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
           return;
         }
         super.visitMethodCallExpression(expression);
-        final PsiReferenceExpression methodExpression =
+        PsiReferenceExpression methodExpression =
           expression.getMethodExpression();
-        @NonNls final String methodName =
+        @NonNls String methodName =
           methodExpression.getReferenceName();
         if (!"hasMoreElements".equals(methodName) &&
             !"nextElement".equals(methodName)) {
           return;
         }
-        final PsiExpression qualifierExpression =
+        PsiExpression qualifierExpression =
           methodExpression.getQualifierExpression();
         if (!(qualifierExpression instanceof PsiReferenceExpression)) {
           return;
         }
-        final PsiReferenceExpression referenceExpression =
+        PsiReferenceExpression referenceExpression =
           (PsiReferenceExpression)qualifierExpression;
-        final PsiElement element = referenceExpression.resolve();
+        PsiElement element = referenceExpression.resolve();
         if (!(element instanceof PsiVariable)) {
           return;
         }
-        final PsiVariable variable = (PsiVariable)element;
+        PsiVariable variable = (PsiVariable)element;
         enumerationMethodCalled = this.variable.equals(variable);
       }
 

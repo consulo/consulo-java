@@ -64,8 +64,8 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
   }
 
   @Override
-  protected InspectionGadgetsFix buildFix(final Object... infos) {
-    final PsiField field = (PsiField)infos[0];
+  protected InspectionGadgetsFix buildFix(Object... infos) {
+    PsiField field = (PsiField)infos[0];
     if (field == null) {
       return null;
     }
@@ -88,7 +88,7 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiModifierList modifierList = field.getModifierList();
+      PsiModifierList modifierList = field.getModifierList();
       if (modifierList == null) {
         return;
       }
@@ -108,7 +108,7 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
     public void visitIfStatement(
       @Nonnull PsiIfStatement statement) {
       super.visitIfStatement(statement);
-      final PsiExpression outerCondition = statement.getCondition();
+      PsiExpression outerCondition = statement.getCondition();
       if (outerCondition == null) {
         return;
       }
@@ -120,27 +120,27 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
       if (!(thenBranch instanceof PsiSynchronizedStatement)) {
         return;
       }
-      final PsiSynchronizedStatement synchronizedStatement =
+      PsiSynchronizedStatement synchronizedStatement =
         (PsiSynchronizedStatement)thenBranch;
-      final PsiCodeBlock body = synchronizedStatement.getBody();
+      PsiCodeBlock body = synchronizedStatement.getBody();
       if (body == null) {
         return;
       }
-      final PsiStatement[] statements = body.getStatements();
+      PsiStatement[] statements = body.getStatements();
       if (statements.length != 1) {
         return;
       }
-      final PsiStatement firstStatement = statements[0];
+      PsiStatement firstStatement = statements[0];
       if (!(firstStatement instanceof PsiIfStatement)) {
         return;
       }
-      final PsiIfStatement innerIf = (PsiIfStatement)firstStatement;
-      final PsiExpression innerCondition = innerIf.getCondition();
+      PsiIfStatement innerIf = (PsiIfStatement)firstStatement;
+      PsiExpression innerCondition = innerIf.getCondition();
       if (!EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(innerCondition,
                                                        outerCondition)) {
         return;
       }
-      final PsiField field;
+      PsiField field;
       if (ignoreOnVolatileVariables) {
         field = findCheckedField(innerCondition);
         if (field != null &&
@@ -157,35 +157,35 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
     @Nullable
     private PsiField findCheckedField(PsiExpression expression) {
       if (expression instanceof PsiReferenceExpression) {
-        final PsiReferenceExpression referenceExpression =
+        PsiReferenceExpression referenceExpression =
           (PsiReferenceExpression)expression;
-        final PsiElement target = referenceExpression.resolve();
+        PsiElement target = referenceExpression.resolve();
         if (!(target instanceof PsiField)) {
           return null;
         }
         return (PsiField)target;
       }
       else if (expression instanceof PsiBinaryExpression) {
-        final PsiBinaryExpression binaryExpression =
+        PsiBinaryExpression binaryExpression =
           (PsiBinaryExpression)expression;
-        final IElementType tokenType =
+        IElementType tokenType =
           binaryExpression.getOperationTokenType();
         if (!JavaTokenType.EQEQ.equals(tokenType)
             && !JavaTokenType.NE.equals(tokenType)) {
           return null;
         }
-        final PsiExpression lhs = binaryExpression.getLOperand();
-        final PsiExpression rhs = binaryExpression.getROperand();
-        final PsiField field = findCheckedField(lhs);
+        PsiExpression lhs = binaryExpression.getLOperand();
+        PsiExpression rhs = binaryExpression.getROperand();
+        PsiField field = findCheckedField(lhs);
         if (field != null) {
           return field;
         }
         return findCheckedField(rhs);
       }
       else if (expression instanceof PsiPrefixExpression) {
-        final PsiPrefixExpression prefixExpression =
+        PsiPrefixExpression prefixExpression =
           (PsiPrefixExpression)expression;
-        final IElementType tokenType =
+        IElementType tokenType =
           prefixExpression.getOperationTokenType();
         if (!JavaTokenType.EXCL.equals(tokenType)) {
           return null;

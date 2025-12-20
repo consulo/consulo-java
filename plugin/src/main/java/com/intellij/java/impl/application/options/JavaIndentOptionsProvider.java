@@ -106,7 +106,7 @@ public class JavaIndentOptionsProvider implements FileTypeIndentOptionsProvider 
             "}";
     }
 
-    public void prepareForReformat(final PsiFile psiFile) {
+    public void prepareForReformat(PsiFile psiFile) {
         psiFile.putUserData(PsiUtil.FILE_LANGUAGE_LEVEL_KEY, LanguageLevel.HIGHEST);
     }
 }

@@ -16,8 +16,8 @@ public class MoveJavaClassesInFileHandler extends MoveAllClassesInFileHandler {
   @Override
   public void processMoveAllClassesInFile(@Nonnull Map<PsiClass, Boolean> allClasses, PsiClass psiClass, PsiElement... elementsToMove) {
     if (psiClass instanceof LightClass) return;
-    final PsiClassOwner containingFile = (PsiClassOwner)psiClass.getContainingFile();
-    final PsiClass[] classes = containingFile.getClasses();
+    PsiClassOwner containingFile = (PsiClassOwner)psiClass.getContainingFile();
+    PsiClass[] classes = containingFile.getClasses();
     boolean all = true;
     for (PsiClass aClass : classes) {
       if (ArrayUtil.find(elementsToMove, aClass) == -1) {

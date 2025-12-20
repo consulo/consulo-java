@@ -49,14 +49,14 @@ public class FloatingPointEqualityInspection extends BaseInspection {
     @Override
     public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
-      final PsiExpression rhs = expression.getROperand();
+      PsiExpression rhs = expression.getROperand();
       if (rhs == null) {
         return;
       }
       if (!ComparisonUtils.isEqualityComparison(expression)) {
         return;
       }
-      final PsiExpression lhs = expression.getLOperand();
+      PsiExpression lhs = expression.getLOperand();
       if (!TypeUtils.hasFloatingPointType(lhs) && !TypeUtils.hasFloatingPointType(rhs)) {
         return;
       }

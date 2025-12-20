@@ -67,7 +67,7 @@ public abstract class JavaCommandLineTest extends LightIdeaTestCase
 		String commandLineString;
 
 		javaParameters = new OwnJavaParameters();
-		final Sdk internalJdk = JavaTestUtil.getTestJdk();
+		Sdk internalJdk = JavaTestUtil.getTestJdk();
 		javaParameters.setJdk(internalJdk);
 		javaParameters.setMainClass("Main");
 		commandLineString =javaParameters.toCommandLine().getCommandLineString();

@@ -51,9 +51,9 @@ public class AddMissingRequiredAnnotationParametersFix implements SyntheticInten
     private final PsiMethod[] myAnnotationMethods;
     private final Collection<String> myMissedElements;
 
-    public AddMissingRequiredAnnotationParametersFix(final PsiAnnotation annotation,
-                                                     final PsiMethod[] annotationMethods,
-                                                     final Collection<String> missedElements) {
+    public AddMissingRequiredAnnotationParametersFix(PsiAnnotation annotation,
+                                                     PsiMethod[] annotationMethods,
+                                                     Collection<String> missedElements) {
         if (missedElements.isEmpty()) {
             throw new IllegalArgumentException("missedElements can't be empty");
         }
@@ -74,27 +74,27 @@ public class AddMissingRequiredAnnotationParametersFix implements SyntheticInten
     }
 
     @Override
-    public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
+    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
         return myAnnotation.isValid();
     }
 
     @Override
-    public void invoke(@Nonnull final Project project,
-                       final Editor editor,
-                       final PsiFile file) throws IncorrectOperationException {
-        final PsiNameValuePair[] addedParameters = myAnnotation.getParameterList().getAttributes();
+    public void invoke(@Nonnull Project project,
+                       Editor editor,
+                       PsiFile file) throws IncorrectOperationException {
+        PsiNameValuePair[] addedParameters = myAnnotation.getParameterList().getAttributes();
 
-        final ObjectIntMap<String> annotationsOrderMap = getAnnotationsOrderMap();
-        final SortedSet<Pair<String, PsiAnnotationMemberValue>> newParameters = new TreeSet<Pair<String,
+        ObjectIntMap<String> annotationsOrderMap = getAnnotationsOrderMap();
+        SortedSet<Pair<String, PsiAnnotationMemberValue>> newParameters = new TreeSet<Pair<String,
             PsiAnnotationMemberValue>>((o1, o2) -> annotationsOrderMap.getInt(o1.getFirst()) - annotationsOrderMap.getInt(o2.getFirst()));
-        final boolean order = isAlreadyAddedOrdered(annotationsOrderMap, addedParameters);
+        boolean order = isAlreadyAddedOrdered(annotationsOrderMap, addedParameters);
         if (order) {
             if (addedParameters.length != 0) {
-                final PsiAnnotationParameterList parameterList = myAnnotation.getParameterList();
+                PsiAnnotationParameterList parameterList = myAnnotation.getParameterList();
                 parameterList.deleteChildRange(addedParameters[0], addedParameters[addedParameters.length - 1]);
-                for (final PsiNameValuePair addedParameter : addedParameters) {
-                    final String name = addedParameter.getName();
-                    final PsiAnnotationMemberValue value = addedParameter.getValue();
+                for (PsiNameValuePair addedParameter : addedParameters) {
+                    String name = addedParameter.getName();
+                    PsiAnnotationMemberValue value = addedParameter.getValue();
                     if (name == null || value == null) {
                         LOG.error(String.format("Invalid annotation parameter name = %s, value = %s", name, value));
                         continue;
@@ -104,15 +104,15 @@ public class AddMissingRequiredAnnotationParametersFix implements SyntheticInten
             }
         }
 
-        final PsiExpression nullValue = JavaPsiFacade.getElementFactory(project).createExpressionFromText(PsiKeyword
+        PsiExpression nullValue = JavaPsiFacade.getElementFactory(project).createExpressionFromText(PsiKeyword
             .NULL, null);
-        for (final String misssedParameter : myMissedElements) {
+        for (String misssedParameter : myMissedElements) {
             newParameters.add(Pair.<String, PsiAnnotationMemberValue>create(misssedParameter, nullValue));
         }
 
         TemplateBuilder builder = null;
-        for (final Pair<String, PsiAnnotationMemberValue> newParameter : newParameters) {
-            final PsiAnnotationMemberValue value = myAnnotation.setDeclaredAttributeValue(newParameter.getFirst(),
+        for (Pair<String, PsiAnnotationMemberValue> newParameter : newParameters) {
+            PsiAnnotationMemberValue value = myAnnotation.setDeclaredAttributeValue(newParameter.getFirst(),
                 newParameter.getSecond());
             if (myMissedElements.contains(newParameter.getFirst())) {
                 if (builder == null) {
@@ -123,8 +123,8 @@ public class AddMissingRequiredAnnotationParametersFix implements SyntheticInten
         }
 
         editor.getCaretModel().moveToOffset(myAnnotation.getParameterList().getTextRange().getStartOffset());
-        final PsiDocumentManager documentManager = PsiDocumentManager.getInstance(project);
-        final Document document = documentManager.getDocument(file);
+        PsiDocumentManager documentManager = PsiDocumentManager.getInstance(project);
+        Document document = documentManager.getDocument(file);
         if (document == null) {
             throw new IllegalStateException();
         }
@@ -138,20 +138,20 @@ public class AddMissingRequiredAnnotationParametersFix implements SyntheticInten
     }
 
     private ObjectIntMap<String> getAnnotationsOrderMap() {
-        final ObjectIntMap<String> map = ObjectMaps.newObjectIntHashMap();
+        ObjectIntMap<String> map = ObjectMaps.newObjectIntHashMap();
         for (int i = 0; i < myAnnotationMethods.length; i++) {
             map.putInt(myAnnotationMethods[i].getName(), i);
         }
         return map;
     }
 
-    private static boolean isAlreadyAddedOrdered(final ObjectIntMap<String> orderMap, final PsiNameValuePair[] addedParameters) {
+    private static boolean isAlreadyAddedOrdered(ObjectIntMap<String> orderMap, PsiNameValuePair[] addedParameters) {
         if (addedParameters.length <= 1) {
             return true;
         }
         int previousOrder = orderMap.getInt(addedParameters[0].getName());
         for (int i = 1; i < addedParameters.length; i++) {
-            final int currentOrder = orderMap.getInt(addedParameters[i].getName());
+            int currentOrder = orderMap.getInt(addedParameters[i].getName());
             if (currentOrder < previousOrder) {
                 return false;
             }

@@ -40,8 +40,8 @@ public abstract class InvertBooleanTest extends LightRefactoringTestCase {
     PsiElement element = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue(element instanceof PsiNamedElement);
 
-    final PsiNamedElement namedElement = (PsiNamedElement)element;
-    final String name = namedElement.getName();
+    PsiNamedElement namedElement = (PsiNamedElement)element;
+    String name = namedElement.getName();
     new InvertBooleanProcessor(namedElement, name + "Inverted").run();
     checkResultByFile(TEST_ROOT + getTestName(true) + "_after.java");
   }

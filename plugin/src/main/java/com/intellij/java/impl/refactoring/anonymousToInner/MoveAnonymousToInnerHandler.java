@@ -38,8 +38,8 @@ public class MoveAnonymousToInnerHandler extends MoveHandlerDelegate {
     return super.canMove(elements, targetContainer);
   }
 
-  public boolean tryToMove(final PsiElement element, final Project project, final DataContext dataContext, final PsiReference reference,
-                           final Editor editor) {
+  public boolean tryToMove(PsiElement element, Project project, DataContext dataContext, PsiReference reference,
+                           Editor editor) {
     if (element instanceof PsiAnonymousClass) {
       new AnonymousToInnerHandler().invoke(project, editor, (PsiAnonymousClass)element);
       return true;

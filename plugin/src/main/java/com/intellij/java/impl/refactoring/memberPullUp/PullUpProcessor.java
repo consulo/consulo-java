@@ -89,9 +89,9 @@ public class PullUpProcessor extends BaseRefactoringProcessor implements PullUpD
   @Override
   @Nonnull
   protected UsageInfo[] findUsages() {
-    final List<UsageInfo> result = new ArrayList<UsageInfo>();
+    List<UsageInfo> result = new ArrayList<UsageInfo>();
     for (MemberInfo memberInfo : myMembersToMove) {
-      final PsiMember member = memberInfo.getMember();
+      PsiMember member = memberInfo.getMember();
       if (member.hasModifierProperty(PsiModifier.STATIC)) {
         for (PsiReference reference : ReferencesSearch.search(member)) {
           result.add(new UsageInfo(reference));
@@ -165,18 +165,18 @@ public class PullUpProcessor extends BaseRefactoringProcessor implements PullUpD
             if (!myTargetSuperClass.isValid()) {
               return;
             }
-            final Query<PsiClass> search = ClassInheritorsSearch.search(myTargetSuperClass);
-            final Set<VirtualFile> hierarchyFiles = new HashSet<VirtualFile>();
+            Query<PsiClass> search = ClassInheritorsSearch.search(myTargetSuperClass);
+            Set<VirtualFile> hierarchyFiles = new HashSet<VirtualFile>();
             for (PsiClass aClass : search) {
-              final PsiFile containingFile = aClass.getContainingFile();
+              PsiFile containingFile = aClass.getContainingFile();
               if (containingFile != null) {
-                final VirtualFile virtualFile = containingFile.getVirtualFile();
+                VirtualFile virtualFile = containingFile.getVirtualFile();
                 if (virtualFile != null) {
                   hierarchyFiles.add(virtualFile);
                 }
               }
             }
-            final Set<PsiMember> methodsToSearchDuplicates = new HashSet<PsiMember>();
+            Set<PsiMember> methodsToSearchDuplicates = new HashSet<PsiMember>();
             for (PsiMember psiMember : myMembersAfterMove) {
               if (psiMember instanceof PsiMethod && psiMember.isValid() && ((PsiMethod) psiMember)
                   .getBody() != null) {
@@ -206,7 +206,7 @@ public class PullUpProcessor extends BaseRefactoringProcessor implements PullUpD
       myMovedMembers.add(info.getMember());
     }
 
-    final PsiSubstitutor substitutor = upDownSuperClassSubstitutor();
+    PsiSubstitutor substitutor = upDownSuperClassSubstitutor();
 
     for (MemberInfo info : myMembersToMove) {
       PullUpHelper<MemberInfo> processor = getProcessor(info);
@@ -222,7 +222,7 @@ public class PullUpProcessor extends BaseRefactoringProcessor implements PullUpD
     for (PsiMember member : myMembersAfterMove) {
       getProcessor(member).postProcessMember(member);
 
-      final JavaRefactoringListenerManager listenerManager = JavaRefactoringListenerManager.getInstance
+      JavaRefactoringListenerManager listenerManager = JavaRefactoringListenerManager.getInstance
           (myProject);
       ((JavaRefactoringListenerManagerImpl) listenerManager).fireMemberMoved(mySourceClass, member);
     }
@@ -255,11 +255,11 @@ public class PullUpProcessor extends BaseRefactoringProcessor implements PullUpD
     for (PsiTypeParameter parameter : PsiUtil.typeParametersIterable(mySourceClass)) {
       substitutor = substitutor.put(parameter, null);
     }
-    final Map<PsiTypeParameter, PsiType> substitutionMap = TypeConversionUtil.getSuperClassSubstitutor
+    Map<PsiTypeParameter, PsiType> substitutionMap = TypeConversionUtil.getSuperClassSubstitutor
         (myTargetSuperClass, mySourceClass, PsiSubstitutor.EMPTY).getSubstitutionMap();
     for (PsiTypeParameter parameter : substitutionMap.keySet()) {
-      final PsiType type = substitutionMap.get(parameter);
-      final PsiClass resolvedClass = PsiUtil.resolveClassInType(type);
+      PsiType type = substitutionMap.get(parameter);
+      PsiClass resolvedClass = PsiUtil.resolveClassInType(type);
       if (resolvedClass instanceof PsiTypeParameter) {
         substitutor = substitutor.put((PsiTypeParameter) resolvedClass, JavaPsiFacade.getElementFactory
             (myProject).createType(parameter));
@@ -271,7 +271,7 @@ public class PullUpProcessor extends BaseRefactoringProcessor implements PullUpD
   public void moveFieldInitializations() throws IncorrectOperationException {
     LOG.assertTrue(myMembersAfterMove != null);
 
-    final LinkedHashSet<PsiField> movedFields = new LinkedHashSet<PsiField>();
+    LinkedHashSet<PsiField> movedFields = new LinkedHashSet<PsiField>();
     for (PsiMember member : myMembersAfterMove) {
       if (member instanceof PsiField) {
         movedFields.add((PsiField) member);

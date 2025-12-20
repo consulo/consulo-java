@@ -46,9 +46,9 @@ public class TypeParameterExtendsFinalClassInspection extends BaseInspection {
     @Override
     @Nonnull
     protected String buildErrorString(Object... infos) {
-        final Integer problemType = (Integer) infos[1];
-        final PsiNamedElement namedElement = (PsiNamedElement) infos[0];
-        final String name = namedElement.getName();
+        Integer problemType = (Integer) infos[1];
+        PsiNamedElement namedElement = (PsiNamedElement) infos[0];
+        String name = namedElement.getName();
         return problemType == 1
             ? InspectionGadgetsLocalize.typeParameterExtendsFinalClassProblemDescriptor1(name).get()
             : InspectionGadgetsLocalize.typeParameterExtendsFinalClassProblemDescriptor2(name).get();
@@ -69,15 +69,15 @@ public class TypeParameterExtendsFinalClassInspection extends BaseInspection {
 
         @Override
         protected void doFix(@Nonnull Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = element.getParent();
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement parent = element.getParent();
             if (parent instanceof PsiTypeParameter) {
-                final PsiTypeParameter typeParameter = (PsiTypeParameter) parent;
+                PsiTypeParameter typeParameter = (PsiTypeParameter) parent;
                 replaceTypeParameterAndReferencesWithType(typeParameter);
             }
             else if (parent instanceof PsiTypeElement) {
-                final PsiTypeElement typeElement = (PsiTypeElement) parent;
-                final PsiElement lastChild = typeElement.getLastChild();
+                PsiTypeElement typeElement = (PsiTypeElement) parent;
+                PsiElement lastChild = typeElement.getLastChild();
                 if (lastChild == null) {
                     return;
                 }
@@ -86,21 +86,21 @@ public class TypeParameterExtendsFinalClassInspection extends BaseInspection {
         }
 
         private static void replaceTypeParameterAndReferencesWithType(PsiTypeParameter typeParameter) {
-            final PsiReferenceList extendsList = typeParameter.getExtendsList();
-            final PsiClassType[] referenceElements = extendsList.getReferencedTypes();
+            PsiReferenceList extendsList = typeParameter.getExtendsList();
+            PsiClassType[] referenceElements = extendsList.getReferencedTypes();
             if (referenceElements.length < 1) {
                 return;
             }
-            final PsiClass finalClass = referenceElements[0].resolve();
+            PsiClass finalClass = referenceElements[0].resolve();
             if (finalClass == null) {
                 return;
             }
-            final Project project = typeParameter.getProject();
-            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-            final PsiJavaCodeReferenceElement classReference = factory.createClassReferenceElement(finalClass);
-            final Query<PsiReference> query = ReferencesSearch.search(typeParameter, typeParameter.getUseScope());
+            Project project = typeParameter.getProject();
+            PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+            PsiJavaCodeReferenceElement classReference = factory.createClassReferenceElement(finalClass);
+            Query<PsiReference> query = ReferencesSearch.search(typeParameter, typeParameter.getUseScope());
             for (PsiReference reference : query) {
-                final PsiElement referenceElement = reference.getElement();
+                PsiElement referenceElement = reference.getElement();
                 referenceElement.replace(classReference);
             }
             typeParameter.delete();
@@ -117,19 +117,19 @@ public class TypeParameterExtendsFinalClassInspection extends BaseInspection {
         @Override
         public void visitTypeParameter(PsiTypeParameter classParameter) {
             super.visitTypeParameter(classParameter);
-            final PsiClassType[] extendsListTypes = classParameter.getExtendsListTypes();
+            PsiClassType[] extendsListTypes = classParameter.getExtendsListTypes();
             if (extendsListTypes.length < 1) {
                 return;
             }
-            final PsiClassType extendsType = extendsListTypes[0];
-            final PsiClass aClass = extendsType.resolve();
+            PsiClassType extendsType = extendsListTypes[0];
+            PsiClass aClass = extendsType.resolve();
             if (aClass == null) {
                 return;
             }
             if (!aClass.hasModifierProperty(PsiModifier.FINAL)) {
                 return;
             }
-            final PsiIdentifier nameIdentifier = classParameter.getNameIdentifier();
+            PsiIdentifier nameIdentifier = classParameter.getNameIdentifier();
             if (nameIdentifier != null) {
                 registerError(nameIdentifier, aClass, Integer.valueOf(1));
             }
@@ -138,17 +138,17 @@ public class TypeParameterExtendsFinalClassInspection extends BaseInspection {
         @Override
         public void visitTypeElement(PsiTypeElement typeElement) {
             super.visitTypeElement(typeElement);
-            final PsiType type = typeElement.getType();
+            PsiType type = typeElement.getType();
             if (!(type instanceof PsiWildcardType)) {
                 return;
             }
-            final PsiWildcardType wildcardType = (PsiWildcardType) type;
-            final PsiType extendsBound = wildcardType.getExtendsBound();
+            PsiWildcardType wildcardType = (PsiWildcardType) type;
+            PsiType extendsBound = wildcardType.getExtendsBound();
             if (!(extendsBound instanceof PsiClassType)) {
                 return;
             }
-            final PsiClassType classType = (PsiClassType) extendsBound;
-            final PsiClass aClass = classType.resolve();
+            PsiClassType classType = (PsiClassType) extendsBound;
+            PsiClass aClass = classType.resolve();
             if (aClass == null || !aClass.hasModifierProperty(PsiModifier.FINAL)) {
                 return;
             }
@@ -159,11 +159,11 @@ public class TypeParameterExtendsFinalClassInspection extends BaseInspection {
         }
 
         private static boolean isPartOfOverriddenMethod(PsiTypeElement typeElement) {
-            final PsiMethod method = PsiTreeUtil.getParentOfType(typeElement, PsiMethod.class);
+            PsiMethod method = PsiTreeUtil.getParentOfType(typeElement, PsiMethod.class);
             if (method == null) {
                 return false;
             }
-            final PsiCodeBlock body = method.getBody();
+            PsiCodeBlock body = method.getBody();
             if (PsiTreeUtil.isAncestor(body, typeElement, true)) {
                 return false;
             }

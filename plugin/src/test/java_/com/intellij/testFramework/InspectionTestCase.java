@@ -90,35 +90,35 @@ public abstract class InspectionTestCase extends PsiTestCase {
     doTest(folderName, tool, "java 1.4");
   }
 
-  public void doTest(@NonNls String folderName, InspectionToolWrapper tool, final boolean checkRange) {
+  public void doTest(@NonNls String folderName, InspectionToolWrapper tool, boolean checkRange) {
     doTest(folderName, tool, "java 1.4", checkRange);
   }
 
-  public void doTest(@NonNls String folderName, LocalInspectionTool tool, @NonNls final String jdkName) {
+  public void doTest(@NonNls String folderName, LocalInspectionTool tool, @NonNls String jdkName) {
     doTest(folderName, new LocalInspectionToolWrapper(tool), jdkName);
   }
 
-  public void doTest(@NonNls String folderName, InspectionToolWrapper tool, @NonNls final String jdkName) {
+  public void doTest(@NonNls String folderName, InspectionToolWrapper tool, @NonNls String jdkName) {
     doTest(folderName, tool, jdkName, false);
   }
 
-  public void doTest(@NonNls String folderName, InspectionToolWrapper tool, @NonNls final String jdkName, boolean checkRange) {
+  public void doTest(@NonNls String folderName, InspectionToolWrapper tool, @NonNls String jdkName, boolean checkRange) {
     doTest(folderName, tool, jdkName, checkRange, false);
   }
 
   public void doTest(@NonNls String folderName,
                      InspectionToolWrapper toolWrapper,
-                     @NonNls final String jdkName,
+                     @NonNls String jdkName,
                      boolean checkRange,
                      boolean runDeadCodeFirst,
                      InspectionToolWrapper... additional) {
-    final String testDir = getTestDataPath() + "/" + folderName;
+    String testDir = getTestDataPath() + "/" + folderName;
     GlobalInspectionContextImpl context = runTool(testDir, jdkName, runDeadCodeFirst, toolWrapper, additional);
 
     InspectionTestUtil.compareToolResults(context, toolWrapper, checkRange, testDir);
   }
 
-  protected void runTool(@NonNls final String testDir, @NonNls final String jdkName, final InspectionToolWrapper tool) {
+  protected void runTool(@NonNls String testDir, @NonNls String jdkName, InspectionToolWrapper tool) {
     runTool(testDir, jdkName, false, tool);
   }
 
@@ -144,7 +144,7 @@ public abstract class InspectionTestCase extends PsiTestCase {
     InspectionManagerEx inspectionManager = (InspectionManagerEx)InspectionManager.getInstance(getProject());
     InspectionToolWrapper[] toolWrappers = runDeadCodeFirst ? new InspectionToolWrapper []{getUnusedDeclarationWrapper(), toolWrapper} : new InspectionToolWrapper []{toolWrapper};
     toolWrappers = ArrayUtil.mergeArrays(toolWrappers, additional);
-    final GlobalInspectionContextImpl globalContext =
+    GlobalInspectionContextImpl globalContext =
       CodeInsightTestFixtureImpl.createGlobalContextForTool(scope, getProject(), inspectionManager, toolWrappers);
 
     InspectionTestUtil.runTool(toolWrapper, scope, globalContext, inspectionManager);
@@ -157,7 +157,7 @@ public abstract class InspectionTestCase extends PsiTestCase {
     return new AnalysisScope(psiManager.findDirectory(sourceDir));
   }
 
-  protected void setupRootModel(final String testDir, final VirtualFile[] sourceDir, final String sdkName) {
+  protected void setupRootModel(String testDir, VirtualFile[] sourceDir, String sdkName) {
     VirtualFile projectDir = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(new File(testDir));
     assertNotNull("could not find project dir " + testDir, projectDir);
     sourceDir[0] = projectDir.findChild("src");

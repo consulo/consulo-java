@@ -19,9 +19,9 @@ public abstract class UnusedImportsTest extends DaemonAnalyzerTestCase {
 
   public void testWithHighlightingOff() throws Exception {
     configureByFile(BASE_PATH + "/" + getTestName(false) + ".java");
-    final PsiFile file = getFile();
-    final HighlightingSettingsPerFile settingsPerFile = HighlightingSettingsPerFile.getInstance(myProject);
-    final FileHighlightingSetting oldSetting = settingsPerFile.getHighlightingSettingForRoot(file);
+    PsiFile file = getFile();
+    HighlightingSettingsPerFile settingsPerFile = HighlightingSettingsPerFile.getInstance(myProject);
+    FileHighlightingSetting oldSetting = settingsPerFile.getHighlightingSettingForRoot(file);
     try {
       settingsPerFile.setHighlightingSettingForRoot(file, FileHighlightingSetting.NONE);
       doDoTest(true, false, false);

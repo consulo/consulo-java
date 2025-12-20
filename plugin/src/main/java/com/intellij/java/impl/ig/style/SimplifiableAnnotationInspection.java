@@ -41,13 +41,13 @@ public class SimplifiableAnnotationInspection extends BaseInspection {
     @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
-        final String replacement = (String) infos[0];
+        String replacement = (String) infos[0];
         return InspectionGadgetsLocalize.simplifiableAnnotationProblemDescriptor(replacement).get();
     }
 
     @Override
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final String replacement = (String) infos[0];
+        String replacement = (String) infos[0];
         return new SimplifiableAnnotationFix(replacement);
     }
 
@@ -66,12 +66,12 @@ public class SimplifiableAnnotationInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
+            PsiElement element = descriptor.getPsiElement();
             if (!(element instanceof PsiAnnotation)) {
                 return;
             }
-            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-            final PsiAnnotation annotation = factory.createAnnotationFromText(replacement, element);
+            PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+            PsiAnnotation annotation = factory.createAnnotationFromText(replacement, element);
             element.replace(annotation);
         }
     }
@@ -86,18 +86,18 @@ public class SimplifiableAnnotationInspection extends BaseInspection {
         @Override
         public void visitAnnotation(PsiAnnotation annotation) {
             super.visitAnnotation(annotation);
-            final PsiAnnotationParameterList parameterList = annotation.getParameterList();
-            final PsiJavaCodeReferenceElement nameReferenceElement = annotation.getNameReferenceElement();
+            PsiAnnotationParameterList parameterList = annotation.getParameterList();
+            PsiJavaCodeReferenceElement nameReferenceElement = annotation.getNameReferenceElement();
             if (nameReferenceElement == null) {
                 return;
             }
-            final PsiNameValuePair[] attributes = parameterList.getAttributes();
-            final PsiElement[] annotationChildren = annotation.getChildren();
+            PsiNameValuePair[] attributes = parameterList.getAttributes();
+            PsiElement[] annotationChildren = annotation.getChildren();
             if (annotationChildren.length >= 2) {
-                final PsiElement child = annotationChildren[1];
+                PsiElement child = annotationChildren[1];
                 if (child instanceof PsiWhiteSpace) {
-                    final String annotationName = nameReferenceElement.getText();
-                    final String replacementText;
+                    String annotationName = nameReferenceElement.getText();
+                    String replacementText;
                     if (attributes.length > 0) {
                         replacementText = '@' + annotationName + parameterList.getText();
                     }
@@ -109,27 +109,27 @@ public class SimplifiableAnnotationInspection extends BaseInspection {
                 }
             }
             if (attributes.length == 0) {
-                final PsiElement[] children = parameterList.getChildren();
+                PsiElement[] children = parameterList.getChildren();
                 if (children.length <= 0) {
                     return;
                 }
-                final String annotationName = nameReferenceElement.getText();
+                String annotationName = nameReferenceElement.getText();
                 registerError(annotation, '@' + annotationName);
             }
             else if (attributes.length == 1) {
-                final PsiNameValuePair attribute = attributes[0];
-                @NonNls final String name = attribute.getName();
-                final PsiAnnotationMemberValue attributeValue = attribute.getValue();
+                PsiNameValuePair attribute = attributes[0];
+                @NonNls String name = attribute.getName();
+                PsiAnnotationMemberValue attributeValue = attribute.getValue();
                 if (attributeValue == null) {
                     return;
                 }
-                final String attributeValueText;
+                String attributeValueText;
                 if (!"value".equals(name)) {
                     if (!(attributeValue instanceof PsiArrayInitializerMemberValue)) {
                         return;
                     }
-                    final PsiArrayInitializerMemberValue arrayValue = (PsiArrayInitializerMemberValue) attributeValue;
-                    final PsiAnnotationMemberValue[] initializers = arrayValue.getInitializers();
+                    PsiArrayInitializerMemberValue arrayValue = (PsiArrayInitializerMemberValue) attributeValue;
+                    PsiAnnotationMemberValue[] initializers = arrayValue.getInitializers();
                     if (initializers.length != 1) {
                         return;
                     }
@@ -143,16 +143,16 @@ public class SimplifiableAnnotationInspection extends BaseInspection {
                 else {
                     attributeValueText = getAttributeValueText(attributeValue);
                 }
-                final String annotationName = nameReferenceElement.getText();
-                final String replacementText = '@' + annotationName + '(' + attributeValueText + ')';
+                String annotationName = nameReferenceElement.getText();
+                String replacementText = '@' + annotationName + '(' + attributeValueText + ')';
                 registerError(annotation, replacementText);
             }
         }
 
         private static String getAttributeValueText(PsiAnnotationMemberValue value) {
             if (value instanceof PsiArrayInitializerMemberValue) {
-                final PsiArrayInitializerMemberValue arrayValue = (PsiArrayInitializerMemberValue) value;
-                final PsiAnnotationMemberValue[] initializers = arrayValue.getInitializers();
+                PsiArrayInitializerMemberValue arrayValue = (PsiArrayInitializerMemberValue) value;
+                PsiAnnotationMemberValue[] initializers = arrayValue.getInitializers();
                 if (initializers.length == 1) {
                     return initializers[0].getText();
                 }

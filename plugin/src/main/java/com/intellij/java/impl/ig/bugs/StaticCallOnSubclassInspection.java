@@ -48,8 +48,8 @@ public class StaticCallOnSubclassInspection extends BaseInspection {
 
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiClass declaringClass = (PsiClass) infos[0];
-        final PsiClass referencedClass = (PsiClass) infos[1];
+        PsiClass declaringClass = (PsiClass) infos[0];
+        PsiClass referencedClass = (PsiClass) infos[1];
         return InspectionGadgetsLocalize.staticMethodViaSubclassProblemDescriptor(
             declaringClass.getQualifiedName(),
             referencedClass.getQualifiedName()
@@ -69,27 +69,27 @@ public class StaticCallOnSubclassInspection extends BaseInspection {
 
         public void doFix(Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
-            final PsiIdentifier name = (PsiIdentifier) descriptor.getPsiElement();
-            final PsiReferenceExpression expression = (PsiReferenceExpression) name.getParent();
+            PsiIdentifier name = (PsiIdentifier) descriptor.getPsiElement();
+            PsiReferenceExpression expression = (PsiReferenceExpression) name.getParent();
             if (expression == null) {
                 return;
             }
-            final PsiMethodCallExpression call = (PsiMethodCallExpression) expression.getParent();
-            final String methodName = expression.getReferenceName();
+            PsiMethodCallExpression call = (PsiMethodCallExpression) expression.getParent();
+            String methodName = expression.getReferenceName();
             if (call == null) {
                 return;
             }
-            final PsiMethod method = call.resolveMethod();
+            PsiMethod method = call.resolveMethod();
             if (method == null) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
-            final PsiExpressionList argumentList = call.getArgumentList();
+            PsiClass containingClass = method.getContainingClass();
+            PsiExpressionList argumentList = call.getArgumentList();
             if (containingClass == null) {
                 return;
             }
-            final String containingClassName = containingClass.getQualifiedName();
-            final String argText = argumentList.getText();
+            String containingClassName = containingClass.getQualifiedName();
+            String argText = argumentList.getText();
             replaceExpressionAndShorten(call, containingClassName + '.' + methodName + argText);
         }
     }
@@ -104,32 +104,32 @@ public class StaticCallOnSubclassInspection extends BaseInspection {
             @Nonnull PsiMethodCallExpression call
         ) {
             super.visitMethodCallExpression(call);
-            final PsiReferenceExpression methodExpression =
+            PsiReferenceExpression methodExpression =
                 call.getMethodExpression();
-            final PsiElement qualifier = methodExpression.getQualifier();
+            PsiElement qualifier = methodExpression.getQualifier();
             if (!(qualifier instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiMethod method = call.resolveMethod();
+            PsiMethod method = call.resolveMethod();
             if (method == null) {
                 return;
             }
             if (!method.hasModifierProperty(PsiModifier.STATIC)) {
                 return;
             }
-            final PsiElement referent = ((PsiReference) qualifier).resolve();
+            PsiElement referent = ((PsiReference) qualifier).resolve();
             if (!(referent instanceof PsiClass)) {
                 return;
             }
-            final PsiClass referencedClass = (PsiClass) referent;
-            final PsiClass declaringClass = method.getContainingClass();
+            PsiClass referencedClass = (PsiClass) referent;
+            PsiClass declaringClass = method.getContainingClass();
             if (declaringClass == null) {
                 return;
             }
             if (declaringClass.equals(referencedClass)) {
                 return;
             }
-            final PsiClass containingClass =
+            PsiClass containingClass =
                 ClassUtils.getContainingClass(call);
             if (!ClassUtils.isClassVisibleFromClass(
                 containingClass,

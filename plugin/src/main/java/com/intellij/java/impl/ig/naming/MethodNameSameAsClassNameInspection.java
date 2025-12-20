@@ -49,7 +49,7 @@ public class MethodNameSameAsClassNameInspection extends BaseInspection {
   @Override
   @Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
-    final Boolean onTheFly = (Boolean)infos[0];
+    Boolean onTheFly = (Boolean)infos[0];
     if (onTheFly.booleanValue()) {
       return new InspectionGadgetsFix[]{
         new RenameFix(), new MethodNameSameAsClassNameFix()};
@@ -77,13 +77,13 @@ public class MethodNameSameAsClassNameInspection extends BaseInspection {
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiElement parent = element.getParent();
+      PsiElement element = descriptor.getPsiElement();
+      PsiElement parent = element.getParent();
       if (!(parent instanceof PsiMethod)) {
         return;
       }
-      final PsiMethod method = (PsiMethod)parent;
-      final PsiTypeElement returnTypeElement =
+      PsiMethod method = (PsiMethod)parent;
+      PsiTypeElement returnTypeElement =
         method.getReturnTypeElement();
       if (returnTypeElement == null) {
         return;
@@ -106,12 +106,12 @@ public class MethodNameSameAsClassNameInspection extends BaseInspection {
       if (method.isConstructor()) {
         return;
       }
-      final String methodName = method.getName();
-      final PsiClass containingClass = method.getContainingClass();
+      String methodName = method.getName();
+      PsiClass containingClass = method.getContainingClass();
       if (containingClass == null) {
         return;
       }
-      final String className = containingClass.getName();
+      String className = containingClass.getName();
       if (className == null) {
         return;
       }

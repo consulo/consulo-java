@@ -93,7 +93,7 @@ public class GenerateToStringWorker
 		body = StringUtil.convertLineSeparators(body);
 
 		// create psi newMethod named toString()
-		final JVMElementFactory topLevelFactory = JVMElementFactories.getFactory(clazz.getLanguage(), clazz.getProject());
+		JVMElementFactory topLevelFactory = JVMElementFactories.getFactory(clazz.getLanguage(), clazz.getProject());
 		if(topLevelFactory == null)
 		{
 			return null;
@@ -191,7 +191,7 @@ public class GenerateToStringWorker
 	 */
 	protected ConflictResolutionPolicy exitsMethodDialog(TemplateResource template)
 	{
-		final DuplicationPolicy dupPolicy = config.getReplaceDialogInitialOption();
+		DuplicationPolicy dupPolicy = config.getReplaceDialogInitialOption();
 		if(dupPolicy == DuplicationPolicy.ASK)
 		{
 			PsiMethod existingMethod = PsiAdapter.findMethodByName(clazz, template.getTargetMethodName());
@@ -242,7 +242,7 @@ public class GenerateToStringWorker
 		PsiFile containingFile = clazz.getContainingFile();
 		if(containingFile instanceof PsiJavaFile)
 		{
-			final PsiJavaFile javaFile = (PsiJavaFile) containingFile;
+			PsiJavaFile javaFile = (PsiJavaFile) containingFile;
 			if(params.get("autoImportPackages") != null)
 			{
 				// keep this for old user templates

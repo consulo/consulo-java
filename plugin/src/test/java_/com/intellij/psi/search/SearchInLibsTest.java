@@ -37,15 +37,15 @@ public abstract class SearchInLibsTest extends PsiTestCase {
     String root = JavaTestUtil.getJavaTestDataPath() + "/psi/search/searchInLibs";
     VirtualFile rootFile = PsiTestUtil.createTestProjectStructure(myProject, myModule, root, myFilesToDelete, false);
 
-    final VirtualFile projectRoot = rootFile.findChild("project");
+    VirtualFile projectRoot = rootFile.findChild("project");
     assertNotNull(projectRoot);
 
-    final VirtualFile innerSourceRoot = projectRoot.findChild("src2");
+    VirtualFile innerSourceRoot = projectRoot.findChild("src2");
     assertNotNull(innerSourceRoot);
 
     VirtualFile libRoot = rootFile.findChild("lib");
-    final VirtualFile libClassesRoot = libRoot.findChild("classes");
-    final VirtualFile libSrcRoot = libRoot.findChild("src");
+    VirtualFile libClassesRoot = libRoot.findChild("classes");
+    VirtualFile libSrcRoot = libRoot.findChild("src");
     assertNotNull(libRoot);
 
     PsiTestUtil.removeAllRoots(myModule, null);
@@ -53,7 +53,7 @@ public abstract class SearchInLibsTest extends PsiTestCase {
     PsiTestUtil.addSourceRoot(myModule, innerSourceRoot);
     ModuleRootModificationUtil.addModuleLibrary(myModule, "lib", Collections.singletonList(libClassesRoot.getUrl()), Collections.singletonList(libSrcRoot.getUrl()));
 
-    final PsiClass aClass = myJavaFacade.findClass(classNameToSearch);
+    PsiClass aClass = myJavaFacade.findClass(classNameToSearch);
     assertNotNull(aClass);
 
     PsiReference[] refs = ReferencesSearch.search(aClass, scope, false).toArray(new PsiReference[0]);

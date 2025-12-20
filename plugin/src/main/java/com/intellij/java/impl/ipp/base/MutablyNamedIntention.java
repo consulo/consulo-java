@@ -38,7 +38,7 @@ public abstract class MutablyNamedIntention extends Intention {
 
     @Override
     public final boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement node) {
-        final PsiElement element = findMatchingElement(node, editor);
+        PsiElement element = findMatchingElement(node, editor);
         if (element == null) {
             return false;
         }

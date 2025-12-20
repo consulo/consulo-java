@@ -109,7 +109,7 @@ public abstract class OverlyComplexArithmeticExpressionInspection extends BaseIn
             if (!isArithmetic(expression)) {
                 return;
             }
-            final int numTerms = countTerms(expression);
+            int numTerms = countTerms(expression);
             if (numTerms <= m_limit) {
                 return;
             }
@@ -121,26 +121,26 @@ public abstract class OverlyComplexArithmeticExpressionInspection extends BaseIn
                 return 1;
             }
             if (expression instanceof PsiBinaryExpression) {
-                final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) expression;
-                final PsiExpression lhs = binaryExpression.getLOperand();
-                final PsiExpression rhs = binaryExpression.getROperand();
+                PsiBinaryExpression binaryExpression = (PsiBinaryExpression) expression;
+                PsiExpression lhs = binaryExpression.getLOperand();
+                PsiExpression rhs = binaryExpression.getROperand();
                 return countTerms(lhs) + countTerms(rhs);
             }
             else if (expression instanceof PsiPrefixExpression) {
-                final PsiPrefixExpression prefixExpression = (PsiPrefixExpression) expression;
-                final PsiExpression operand = prefixExpression.getOperand();
+                PsiPrefixExpression prefixExpression = (PsiPrefixExpression) expression;
+                PsiExpression operand = prefixExpression.getOperand();
                 return countTerms(operand);
             }
             else if (expression instanceof PsiParenthesizedExpression) {
-                final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) expression;
-                final PsiExpression contents = parenthesizedExpression.getExpression();
+                PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) expression;
+                PsiExpression contents = parenthesizedExpression.getExpression();
                 return countTerms(contents);
             }
             return 1;
         }
 
         private boolean isParentArithmetic(PsiExpression expression) {
-            final PsiElement parent = expression.getParent();
+            PsiElement parent = expression.getParent();
             if (!(parent instanceof PsiExpression)) {
                 return false;
             }
@@ -149,20 +149,20 @@ public abstract class OverlyComplexArithmeticExpressionInspection extends BaseIn
 
         private boolean isArithmetic(PsiExpression expression) {
             if (expression instanceof PsiBinaryExpression) {
-                final PsiType type = expression.getType();
+                PsiType type = expression.getType();
                 if (TypeUtils.isJavaLangString(type)) {
                     return false; //ignore string concatenations
                 }
-                final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) expression;
+                PsiBinaryExpression binaryExpression = (PsiBinaryExpression) expression;
                 return arithmeticTokens.contains(binaryExpression.getOperationTokenType());
             }
             else if (expression instanceof PsiPrefixExpression) {
-                final PsiPrefixExpression prefixExpression = (PsiPrefixExpression) expression;
+                PsiPrefixExpression prefixExpression = (PsiPrefixExpression) expression;
                 return arithmeticTokens.contains(prefixExpression.getOperationTokenType());
             }
             else if (expression instanceof PsiParenthesizedExpression) {
-                final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) expression;
-                final PsiExpression contents = parenthesizedExpression.getExpression();
+                PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) expression;
+                PsiExpression contents = parenthesizedExpression.getExpression();
                 return isArithmetic(contents);
             }
             return false;

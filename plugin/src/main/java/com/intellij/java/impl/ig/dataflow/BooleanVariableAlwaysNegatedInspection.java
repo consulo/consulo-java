@@ -46,7 +46,7 @@ public class BooleanVariableAlwaysNegatedInspection extends BaseInspection {
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    final PsiVariable variable = (PsiVariable)infos[0];
+    PsiVariable variable = (PsiVariable)infos[0];
     return variable instanceof PsiField
         ? InspectionGadgetsLocalize.booleanFieldAlwaysInvertedProblemDescriptor().get()
         : InspectionGadgetsLocalize.booleanVariableAlwaysInvertedProblemDescriptor().get();
@@ -54,7 +54,7 @@ public class BooleanVariableAlwaysNegatedInspection extends BaseInspection {
 
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiVariable variable = (PsiVariable)infos[0];
+    PsiVariable variable = (PsiVariable)infos[0];
     return new BooleanVariableIsAlwaysNegatedFix(variable.getName());
   }
 
@@ -76,13 +76,13 @@ public class BooleanVariableAlwaysNegatedInspection extends BaseInspection {
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiVariable variable =
+      PsiElement element = descriptor.getPsiElement();
+      PsiVariable variable =
         PsiTreeUtil.getParentOfType(element, PsiVariable.class);
       if (variable == null) {
         return;
       }
-      final InvertBooleanDialog dialog = new InvertBooleanDialog(variable);
+      InvertBooleanDialog dialog = new InvertBooleanDialog(variable);
       dialog.show();
     }
   }
@@ -110,7 +110,7 @@ public class BooleanVariableAlwaysNegatedInspection extends BaseInspection {
     @Override
     public void visitLocalVariable(PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
-      final PsiCodeBlock codeBlock =
+      PsiCodeBlock codeBlock =
         PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
       if (!isAlwaysInvertedBoolean(variable, codeBlock)) {
         return;
@@ -120,11 +120,11 @@ public class BooleanVariableAlwaysNegatedInspection extends BaseInspection {
 
     private static boolean isAlwaysInvertedBoolean(PsiVariable field,
                                                    PsiElement context) {
-      final PsiType type = field.getType();
+      PsiType type = field.getType();
       if (!PsiType.BOOLEAN.equals(type)) {
         return false;
       }
-      final AlwaysNegatedVisitor visitor =
+      AlwaysNegatedVisitor visitor =
         new AlwaysNegatedVisitor(field);
       context.accept(visitor);
       return visitor.isRead() && visitor.isAlwaysNegated();
@@ -149,14 +149,14 @@ public class BooleanVariableAlwaysNegatedInspection extends BaseInspection {
       if (!alwaysNegated) {
         return;
       }
-      final String referenceName = expression.getReferenceName();
+      String referenceName = expression.getReferenceName();
       if (referenceName == null) {
         return;
       }
       if (!referenceName.equals(variable.getName())) {
         return;
       }
-      final PsiElement target = expression.resolve();
+      PsiElement target = expression.resolve();
       if (!variable.equals(target)) {
         return;
       }
@@ -172,9 +172,9 @@ public class BooleanVariableAlwaysNegatedInspection extends BaseInspection {
         alwaysNegated = false;
         return;
       }
-      final PsiPrefixExpression prefixExpression =
+      PsiPrefixExpression prefixExpression =
         (PsiPrefixExpression)parent;
-      final IElementType tokenType =
+      IElementType tokenType =
         prefixExpression.getOperationTokenType();
       if (!JavaTokenType.EXCL.equals(tokenType)) {
         alwaysNegated = false;

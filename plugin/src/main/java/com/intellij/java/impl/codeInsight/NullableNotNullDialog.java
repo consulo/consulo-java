@@ -85,7 +85,7 @@ public class NullableNotNullDialog extends DialogWrapper {
 
   @Override
   protected JComponent createCenterPanel() {
-    final Splitter splitter = new Splitter(true);
+    Splitter splitter = new Splitter(true);
     splitter.setFirstComponent(myNullablePanel.getComponent());
     splitter.setSecondComponent(myNotNullPanel.getComponent());
     splitter.setHonorComponentsMinimumSize(true);
@@ -95,7 +95,7 @@ public class NullableNotNullDialog extends DialogWrapper {
 
   @Override
   protected void doOKAction() {
-    final NullableNotNullManager manager = NullableNotNullManager.getInstance(myProject);
+    NullableNotNullManager manager = NullableNotNullManager.getInstance(myProject);
 
     manager.setNotNulls(myNotNullPanel.getAnnotations());
     manager.setDefaultNotNull(myNotNullPanel.getDefaultAnnotation());

@@ -63,23 +63,23 @@ public class StringEqualityInspection extends BaseInspection {
             if (!ComparisonUtils.isEqualityComparison(expression)) {
                 return;
             }
-            final PsiExpression lhs = expression.getLOperand();
+            PsiExpression lhs = expression.getLOperand();
             if (!ExpressionUtils.hasStringType(lhs)) {
                 return;
             }
-            final PsiExpression rhs = expression.getROperand();
+            PsiExpression rhs = expression.getROperand();
             if (rhs == null || !ExpressionUtils.hasStringType(rhs)) {
                 return;
             }
-            final String lhsText = lhs.getText();
+            String lhsText = lhs.getText();
             if (PsiKeyword.NULL.equals(lhsText)) {
                 return;
             }
-            final String rhsText = rhs.getText();
+            String rhsText = rhs.getText();
             if (PsiKeyword.NULL.equals(rhsText)) {
                 return;
             }
-            final PsiJavaToken sign = expression.getOperationSign();
+            PsiJavaToken sign = expression.getOperationSign();
             registerError(sign);
         }
     }

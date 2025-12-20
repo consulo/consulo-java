@@ -66,13 +66,13 @@ public class NonSerializableObjectBoundToHttpSessionInspection extends BaseInspe
             )) {
                 return;
             }
-            final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length != 2) {
                 return;
             }
-            final PsiExpression argument = arguments[1];
-            final PsiType argumentType = argument.getType();
+            PsiExpression argument = arguments[1];
+            PsiType argumentType = argument.getType();
             if (argumentType == null) {
                 return;
             }

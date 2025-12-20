@@ -60,13 +60,13 @@ public class PublicFieldInspection extends BaseInspection {
     @Override
     @Nullable
     public JComponent createOptionsPanel() {
-        final JPanel panel = new JPanel(new BorderLayout());
-        final JPanel annotationsListControl = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
+        JPanel panel = new JPanel(new BorderLayout());
+        JPanel annotationsListControl = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
             ignorableAnnotations,
             InspectionGadgetsLocalize.ignoreIfAnnotatedBy().get()
         );
         panel.add(annotationsListControl, BorderLayout.CENTER);
-        final CheckBox checkBox =
+        CheckBox checkBox =
             new CheckBox(InspectionGadgetsLocalize.publicFieldIgnoreEnumTypeFieldsOption().get(), this, "ignoreEnums");
         panel.add(checkBox, BorderLayout.SOUTH);
         return panel;
@@ -75,8 +75,8 @@ public class PublicFieldInspection extends BaseInspection {
     @Nonnull
     @Override
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
-        final List<InspectionGadgetsFix> fixes = new ArrayList();
-        final PsiField field = (PsiField) infos[0];
+        List<InspectionGadgetsFix> fixes = new ArrayList();
+        PsiField field = (PsiField) infos[0];
         fixes.add(new EncapsulateVariableFix(field.getName()));
         AddToIgnoreIfAnnotatedByListQuickFix.build(field, ignorableAnnotations, fixes);
         return fixes.toArray(new InspectionGadgetsFix[fixes.size()]);
@@ -106,14 +106,14 @@ public class PublicFieldInspection extends BaseInspection {
                 if (field.hasModifierProperty(PsiModifier.STATIC)) {
                     return;
                 }
-                final PsiType type = field.getType();
+                PsiType type = field.getType();
                 if (ClassUtils.isImmutable(type)) {
                     return;
                 }
                 if (ignoreEnums) {
                     if (type instanceof PsiClassType) {
-                        final PsiClassType classType = (PsiClassType) type;
-                        final PsiClass aClass = classType.resolve();
+                        PsiClassType classType = (PsiClassType) type;
+                        PsiClass aClass = classType.resolve();
                         if (aClass != null && aClass.isEnum()) {
                             return;
                         }

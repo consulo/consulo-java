@@ -37,9 +37,9 @@ class RemoveLeadingZeroFix extends InspectionGadgetsFix {
   @Override
   protected void doFix(Project project, ProblemDescriptor descriptor)
     throws IncorrectOperationException {
-    final PsiElement element = descriptor.getPsiElement();
-    final String text = element.getText();
-    final int max = text.length() - 1;
+    PsiElement element = descriptor.getPsiElement();
+    String text = element.getText();
+    int max = text.length() - 1;
     if (max < 1) {
       return;
     }
@@ -47,10 +47,10 @@ class RemoveLeadingZeroFix extends InspectionGadgetsFix {
     while (index < max && (text.charAt(index) == '0' || text.charAt(index) == '_')) {
       index++;
     }
-    final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-    final PsiElementFactory factory = psiFacade.getElementFactory();
-    final String textWithoutLeadingZeros = text.substring(index);
-    final PsiExpression decimalNumber =
+    JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+    PsiElementFactory factory = psiFacade.getElementFactory();
+    String textWithoutLeadingZeros = text.substring(index);
+    PsiExpression decimalNumber =
       factory.createExpressionFromText(textWithoutLeadingZeros,
                                        element);
     element.replace(decimalNumber);

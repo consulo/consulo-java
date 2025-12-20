@@ -47,11 +47,11 @@ public class InstantiationOfUtilityClassInspection extends BaseInspection {
     private static class InstantiationOfUtilityClassVisitor extends BaseInspectionVisitor {
         @Override
         public void visitNewExpression(@Nonnull PsiNewExpression expression) {
-            final PsiType type = expression.getType();
+            PsiType type = expression.getType();
             if (!(type instanceof PsiClassType)) {
                 return;
             }
-            final PsiClass aClass = ((PsiClassType) type).resolve();
+            PsiClass aClass = ((PsiClassType) type).resolve();
             if (aClass == null) {
                 return;
             }

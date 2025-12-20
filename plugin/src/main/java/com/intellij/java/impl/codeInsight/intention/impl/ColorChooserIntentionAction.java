@@ -62,7 +62,7 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     return super.isAvailable(project, editor, element) || isInsideDecodeOrGetColorMethod(element);
   }
 
@@ -82,7 +82,7 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction {
       return;
     }
 
-    final JComponent editorComponent = editor.getComponent();
+    JComponent editorComponent = editor.getComponent();
     if (isInsideDecodeOrGetColorMethod(element)) {
       invokeForMethodParam(editorComponent, element);
     } else {
@@ -92,13 +92,13 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction {
 
   @RequiredReadAction
   private void invokeForMethodParam(JComponent editorComponent, PsiElement element) {
-    final PsiLiteralExpression literal = PsiTreeUtil.getParentOfType(element, PsiLiteralExpression.class);
+    PsiLiteralExpression literal = PsiTreeUtil.getParentOfType(element, PsiLiteralExpression.class);
     if (literal == null) {
       return;
     }
-    final String text = StringUtil.unquoteString(literal.getText());
-    final int radix = text.startsWith("0x") || text.startsWith("0X") || text.startsWith("#") ? 16 : text.startsWith("0") ? 8 : 10;
-    final String hexPrefix = radix == 16 ? text.startsWith("#") ? "#" : text.substring(0, 2) : null;
+    String text = StringUtil.unquoteString(literal.getText());
+    int radix = text.startsWith("0x") || text.startsWith("0X") || text.startsWith("#") ? 16 : text.startsWith("0") ? 8 : 10;
+    String hexPrefix = radix == 16 ? text.startsWith("#") ? "#" : text.substring(0, 2) : null;
 
     Color oldColor;
     try {
@@ -107,7 +107,7 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction {
       oldColor = JBColor.GRAY;
     }
 
-    final Color temp = oldColor;
+    Color temp = oldColor;
 
     ColorChooser.chooseColor(editorComponent, getText().get(), temp, color ->
     {
@@ -117,12 +117,12 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction {
 
       WriteCommandAction.runWriteCommandAction(element.getProject(), () ->
       {
-        final int rgb = color.getRGB() - ((255 & 0xFF) << 24);
+        int rgb = color.getRGB() - ((255 & 0xFF) << 24);
         if (rgb != temp.getRGB()) {
-          final String newText = radix == 16 ? hexPrefix + String.format("%6s", Integer.toHexString(rgb)).replace(' ', '0') : radix == 8 ? "0" + Integer.toOctalString(rgb) : Integer.toString(rgb);
-          final PsiManager manager = literal.getManager();
-          final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-          final PsiExpression newLiteral = factory.createExpressionFromText("\"" + newText + "\"", literal);
+          String newText = radix == 16 ? hexPrefix + String.format("%6s", Integer.toHexString(rgb)).replace(' ', '0') : radix == 8 ? "0" + Integer.toOctalString(rgb) : Integer.toString(rgb);
+          PsiManager manager = literal.getManager();
+          PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
+          PsiExpression newLiteral = factory.createExpressionFromText("\"" + newText + "\"", literal);
           literal.replace(newLiteral);
         }
       });
@@ -130,23 +130,23 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction {
   }
 
   private void invokeForConstructor(JComponent editorComponent, PsiElement element) {
-    final PsiNewExpression expression = PsiTreeUtil.getParentOfType(element, PsiNewExpression.class);
+    PsiNewExpression expression = PsiTreeUtil.getParentOfType(element, PsiNewExpression.class);
     if (expression == null) {
       return;
     }
 
     Color c = null;
 
-    final PsiExpressionList argumentList = expression.getArgumentList();
+    PsiExpressionList argumentList = expression.getArgumentList();
     if (argumentList != null) {
-      final PsiExpression[] expressions = argumentList.getExpressions();
+      PsiExpression[] expressions = argumentList.getExpressions();
       int[] values = new int[expressions.length];
       float[] values2 = new float[expressions.length];
       int i = 0;
       int j = 0;
-      for (final PsiExpression each : expressions) {
+      for (PsiExpression each : expressions) {
         if (each instanceof PsiLiteralExpression literalExpression) {
-          final Object o = literalExpression.getValue();
+          Object o = literalExpression.getValue();
           if (o instanceof Integer intValue) {
             values[i] = intValue;
             i++;
@@ -203,11 +203,11 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction {
 
       WriteCommandAction.runWriteCommandAction(expression.getProject(), () ->
       {
-        final PsiManager manager = expression.getManager();
-        final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-        final PsiExpression newCall = factory.createExpressionFromText("new " + JAVA_AWT_COLOR + "(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + (color.getAlpha() < 255 ? ", " + color.getAlpha() : "") + ")", expression);
-        final PsiElement insertedElement = expression.replace(newCall);
-        final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(manager.getProject());
+        PsiManager manager = expression.getManager();
+        PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
+        PsiExpression newCall = factory.createExpressionFromText("new " + JAVA_AWT_COLOR + "(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + (color.getAlpha() < 255 ? ", " + color.getAlpha() : "") + ")", expression);
+        PsiElement insertedElement = expression.replace(newCall);
+        CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(manager.getProject());
         codeStyleManager.reformat(insertedElement);
       });
     });

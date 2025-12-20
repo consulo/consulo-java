@@ -34,7 +34,7 @@ import jakarta.annotation.Nullable;
 public class JavaChangeLocalityDetector implements ChangeLocalityDetector {
   @Override
   @Nullable
-  public PsiElement getChangeHighlightingDirtyScopeFor(@Nonnull final PsiElement element) {
+  public PsiElement getChangeHighlightingDirtyScopeFor(@Nonnull PsiElement element) {
     // optimization
     PsiElement parent = element.getParent();
     PsiElement grand;

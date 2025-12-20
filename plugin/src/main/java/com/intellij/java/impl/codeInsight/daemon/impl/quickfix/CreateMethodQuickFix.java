@@ -41,7 +41,7 @@ public class CreateMethodQuickFix extends LocalQuickFixAndIntentionActionOnPsiEl
     protected final String mySignature;
     protected final String myBody;
 
-    private CreateMethodQuickFix(final PsiClass targetClass, String signature, String body) {
+    private CreateMethodQuickFix(PsiClass targetClass, String signature, String body) {
         super(targetClass);
         mySignature = signature;
         myBody = body;

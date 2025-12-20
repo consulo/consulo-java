@@ -37,7 +37,7 @@ public class ConstantExpressionIntention extends MutablyNamedIntention {
     @Nonnull
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
-        final String text = HighlightUtil.getPresentableText(element);
+        String text = HighlightUtil.getPresentableText(element);
         return IntentionPowerPackLocalize.constantExpressionIntentionName(text);
     }
 
@@ -55,11 +55,11 @@ public class ConstantExpressionIntention extends MutablyNamedIntention {
 
     @Override
     public void processIntention(PsiElement element) throws IncorrectOperationException {
-        final PsiExpression expression = (PsiExpression) element;
-        final Object value = ExpressionUtils.computeConstantExpression(expression);
-        @NonNls final String newExpression;
+        PsiExpression expression = (PsiExpression) element;
+        Object value = ExpressionUtils.computeConstantExpression(expression);
+        @NonNls String newExpression;
         if (value instanceof String) {
-            final String string = (String) value;
+            String string = (String) value;
             newExpression = '"' + StringUtil.escapeStringCharacters(string) + '"';
         }
         else if (value instanceof Character) {
@@ -69,7 +69,7 @@ public class ConstantExpressionIntention extends MutablyNamedIntention {
             newExpression = value.toString() + 'L';
         }
         else if (value instanceof Double) {
-            final double v = ((Double) value).doubleValue();
+            double v = ((Double) value).doubleValue();
             if (Double.isNaN(v)) {
                 newExpression = "java.lang.Double.NaN";
             }
@@ -86,7 +86,7 @@ public class ConstantExpressionIntention extends MutablyNamedIntention {
             }
         }
         else if (value instanceof Float) {
-            final float v = ((Float) value).floatValue();
+            float v = ((Float) value).floatValue();
             if (Float.isNaN(v)) {
                 newExpression = "java.lang.Float.NaN";
             }

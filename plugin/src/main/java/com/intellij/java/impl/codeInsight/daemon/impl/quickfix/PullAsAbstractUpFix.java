@@ -87,14 +87,14 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
 
         PsiManager manager = containingClass.getManager();
         if (containingClass instanceof PsiAnonymousClass) {
-            final PsiClassType baseClassType = ((PsiAnonymousClass) containingClass).getBaseClassType();
-            final PsiClass baseClass = baseClassType.resolve();
+            PsiClassType baseClassType = ((PsiAnonymousClass) containingClass).getBaseClassType();
+            PsiClass baseClass = baseClassType.resolve();
             if (baseClass != null && manager.isInProject(baseClass)) {
                 pullUp(method, containingClass, baseClass);
             }
         }
         else {
-            final LinkedHashSet<PsiClass> classesToPullUp = new LinkedHashSet<PsiClass>();
+            LinkedHashSet<PsiClass> classesToPullUp = new LinkedHashSet<PsiClass>();
             collectClassesToPullUp(manager, classesToPullUp, containingClass.getExtendsListTypes());
             collectClassesToPullUp(manager, classesToPullUp, containingClass.getImplementsListTypes());
 
@@ -142,7 +142,7 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
         if (!FileModificationService.getInstance().prepareFileForWrite(baseClass.getContainingFile())) {
             return;
         }
-        final MemberInfo memberInfo = new MemberInfo(method);
+        MemberInfo memberInfo = new MemberInfo(method);
         memberInfo.setChecked(true);
         memberInfo.setToAbstract(true);
         new PullUpProcessor(containingClass, baseClass, new MemberInfo[]{memberInfo}, new DocCommentPolicy(DocCommentPolicy.ASIS)).run();
@@ -158,13 +158,13 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
         if (containingClass == null) {
             return;
         }
-        final PsiManager manager = containingClass.getManager();
+        PsiManager manager = containingClass.getManager();
 
         boolean canBePulledUp = true;
         LocalizeValue name = LocalizeValue.localizeTODO("Pull method \'" + methodWithOverrides.getName() + "\' up");
         if (containingClass instanceof PsiAnonymousClass) {
-            final PsiClassType baseClassType = ((PsiAnonymousClass) containingClass).getBaseClassType();
-            final PsiClass baseClass = baseClassType.resolve();
+            PsiClassType baseClassType = ((PsiAnonymousClass) containingClass).getBaseClassType();
+            PsiClass baseClass = baseClassType.resolve();
             if (baseClass == null) {
                 return;
             }
@@ -176,7 +176,7 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
             }
         }
         else {
-            final LinkedHashSet<PsiClass> classesToPullUp = new LinkedHashSet<PsiClass>();
+            LinkedHashSet<PsiClass> classesToPullUp = new LinkedHashSet<PsiClass>();
             collectClassesToPullUp(manager, classesToPullUp, containingClass.getExtendsListTypes());
             collectClassesToPullUp(manager, classesToPullUp, containingClass.getImplementsListTypes());
             if (classesToPullUp.size() == 0) {
@@ -184,7 +184,7 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
                 canBePulledUp = false;
             }
             else if (classesToPullUp.size() == 1) {
-                final PsiClass baseClass = classesToPullUp.iterator().next();
+                PsiClass baseClass = classesToPullUp.iterator().next();
                 name = LocalizeValue.localizeTODO(
                     "Pull method \'" + methodWithOverrides.getName() + "\' to \'" + baseClass.getName() + "\'" +
                         (baseClass.isAbstract() ? "" : " and make it abstract")

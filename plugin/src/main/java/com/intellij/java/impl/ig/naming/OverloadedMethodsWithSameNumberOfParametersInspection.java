@@ -65,25 +65,25 @@ public class OverloadedMethodsWithSameNumberOfParametersInspection extends BaseI
             if (method.getNameIdentifier() == null) {
                 return;
             }
-            final PsiParameterList parameterList = method.getParameterList();
-            final int parameterCount = parameterList.getParametersCount();
+            PsiParameterList parameterList = method.getParameterList();
+            int parameterCount = parameterList.getParametersCount();
             if (parameterCount == 0) {
                 return;
             }
-            final PsiClass aClass = method.getContainingClass();
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null) {
                 return;
             }
             if (MethodUtils.hasSuper(method)) {
                 return;
             }
-            final String methodName = method.getName();
-            final PsiMethod[] sameNameMethods = aClass.findMethodsByName(methodName, false);
+            String methodName = method.getName();
+            PsiMethod[] sameNameMethods = aClass.findMethodsByName(methodName, false);
             for (PsiMethod sameNameMethod : sameNameMethods) {
                 if (method.equals(sameNameMethod)) {
                     continue;
                 }
-                final PsiParameterList otherParameterList = sameNameMethod.getParameterList();
+                PsiParameterList otherParameterList = sameNameMethod.getParameterList();
                 if (parameterCount == otherParameterList.getParametersCount()) {
                     if (ignoreInconvertibleTypes && !areParameterTypesConvertible(parameterList, otherParameterList)) {
                         return;
@@ -95,11 +95,11 @@ public class OverloadedMethodsWithSameNumberOfParametersInspection extends BaseI
         }
 
         private boolean areParameterTypesConvertible(PsiParameterList parameterList, PsiParameterList otherParameterList) {
-            final PsiParameter[] parameters = parameterList.getParameters();
-            final PsiParameter[] otherParameters = otherParameterList.getParameters();
+            PsiParameter[] parameters = parameterList.getParameters();
+            PsiParameter[] otherParameters = otherParameterList.getParameters();
             for (int i = 0; i < parameters.length; i++) {
-                final PsiType type = parameters[i].getType();
-                final PsiType otherType = otherParameters[i].getType();
+                PsiType type = parameters[i].getType();
+                PsiType otherType = otherParameters[i].getType();
                 if (!type.isAssignableFrom(otherType) && !otherType.isAssignableFrom(type)) {
                     return false;
                 }

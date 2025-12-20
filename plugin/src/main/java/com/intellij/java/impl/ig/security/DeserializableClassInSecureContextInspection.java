@@ -73,8 +73,8 @@ public class DeserializableClassInSecureContextInspection extends BaseInspection
       if (aClass instanceof PsiTypeParameter || !SerializationUtils.isSerializable(aClass)) {
         return;
       }
-      final PsiMethod[] methods = aClass.getMethods();
-      for (final PsiMethod method : methods) {
+      PsiMethod[] methods = aClass.getMethods();
+      for (PsiMethod method : methods) {
         if (!SerializationUtils.isReadObject(method)) {
           continue;
         }

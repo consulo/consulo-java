@@ -50,7 +50,7 @@ public class AddMethodQualifierFix implements SyntheticIntentionAction {
   private final SmartPsiElementPointer<PsiMethodCallExpression> myMethodCall;
   private List<PsiVariable> myCandidates = null;
 
-  public AddMethodQualifierFix(final PsiMethodCallExpression methodCallExpression) {
+  public AddMethodQualifierFix(PsiMethodCallExpression methodCallExpression) {
     myMethodCall = SmartPointerManager.getInstance(methodCallExpression.getProject()).createSmartPsiElementPointer(methodCallExpression);
   }
 
@@ -58,7 +58,7 @@ public class AddMethodQualifierFix implements SyntheticIntentionAction {
   @Override
   @RequiredReadAction
   public LocalizeValue getText() {
-    final List<PsiVariable> candidates = getOrFindCandidates();
+    List<PsiVariable> candidates = getOrFindCandidates();
     if (candidates.isEmpty()) {
       return JavaQuickFixLocalize.addMethodQualifierFixFamily();
     }
@@ -71,8 +71,8 @@ public class AddMethodQualifierFix implements SyntheticIntentionAction {
 
   @Override
   @RequiredReadAction
-  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
-    final PsiMethodCallExpression element = myMethodCall.getElement();
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    PsiMethodCallExpression element = myMethodCall.getElement();
     if (element == null || !element.isValid()) {
       return false;
     }
@@ -90,21 +90,21 @@ public class AddMethodQualifierFix implements SyntheticIntentionAction {
   @RequiredReadAction
   private void findCandidates() {
     myCandidates = new ArrayList<>();
-    final PsiMethodCallExpression methodCallElement = myMethodCall.getElement();
-    final String methodName = methodCallElement.getMethodExpression().getReferenceName();
+    PsiMethodCallExpression methodCallElement = myMethodCall.getElement();
+    String methodName = methodCallElement.getMethodExpression().getReferenceName();
     if (methodName == null) {
       return;
     }
 
-    for (final PsiVariable var : CreateFromUsageUtils.guessMatchingVariables(methodCallElement)) {
+    for (PsiVariable var : CreateFromUsageUtils.guessMatchingVariables(methodCallElement)) {
       if (var.getName() == null) {
         continue;
       }
-      final PsiType type = var.getType();
+      PsiType type = var.getType();
       if (!(type instanceof PsiClassType)) {
         continue;
       }
-      final PsiClass resolvedClass = ((PsiClassType)type).resolve();
+      PsiClass resolvedClass = ((PsiClassType)type).resolve();
       if (resolvedClass == null) {
         continue;
       }
@@ -122,7 +122,7 @@ public class AddMethodQualifierFix implements SyntheticIntentionAction {
 
   @Override
   @RequiredWriteAction
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementsForWrite(file)) {
       return;
     }
@@ -136,10 +136,10 @@ public class AddMethodQualifierFix implements SyntheticIntentionAction {
   }
 
   private void chooseAndQualify(final Editor editor) {
-    final BaseListPopupStep<PsiVariable> step =
+    BaseListPopupStep<PsiVariable> step =
       new BaseListPopupStep<PsiVariable>(JavaQuickFixLocalize.addQualifier().get(), myCandidates) {
         @Override
-        public PopupStep onChosen(final PsiVariable selectedValue, final boolean finalChoice) {
+        public PopupStep onChosen(final PsiVariable selectedValue, boolean finalChoice) {
           if (selectedValue != null && finalChoice) {
             WriteCommandAction.runWriteCommandAction(selectedValue.getProject(), new Runnable() {
               @Override
@@ -153,29 +153,29 @@ public class AddMethodQualifierFix implements SyntheticIntentionAction {
 
         @Nonnull
         @Override
-        public String getTextFor(final PsiVariable value) {
+        public String getTextFor(PsiVariable value) {
           return value.getName();
         }
 
         @Override
-        public Image getIconFor(final PsiVariable aValue) {
+        public Image getIconFor(PsiVariable aValue) {
           return IconDescriptorUpdaters.getIcon(aValue, 0);
         }
       };
 
-    final ListPopup popup = JBPopupFactory.getInstance().createListPopup(step);
+    ListPopup popup = JBPopupFactory.getInstance().createListPopup(step);
     EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, popup);
   }
 
   @RequiredWriteAction
-  private void qualify(final PsiVariable qualifier, final Editor editor) {
-    final String qualifierPresentableText = qualifier.getName();
-    final PsiMethodCallExpression oldExpression = myMethodCall.getElement();
-    final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(qualifier.getProject());
-    final PsiExpression expression =
+  private void qualify(PsiVariable qualifier, Editor editor) {
+    String qualifierPresentableText = qualifier.getName();
+    PsiMethodCallExpression oldExpression = myMethodCall.getElement();
+    PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(qualifier.getProject());
+    PsiExpression expression =
       elementFactory.createExpressionFromText(qualifierPresentableText + "." + oldExpression.getMethodExpression()
                                                                                             .getReferenceName() + "()", null);
-    final PsiElement replacedExpression = oldExpression.replace(expression);
+    PsiElement replacedExpression = oldExpression.replace(expression);
     editor.getCaretModel().moveToOffset(replacedExpression.getTextOffset() + replacedExpression.getTextLength());
   }
 

@@ -62,14 +62,14 @@ public class ConfusingFloatingPointLiteralInspection
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiExpression literalExpression = (PsiExpression)descriptor.getPsiElement();
-      final String text = literalExpression.getText();
-      final String newText = getCanonicalForm(text);
+      PsiExpression literalExpression = (PsiExpression)descriptor.getPsiElement();
+      String text = literalExpression.getText();
+      String newText = getCanonicalForm(text);
       replaceExpression(literalExpression, newText);
     }
 
     private static String getCanonicalForm(String text) {
-      final boolean isHexadecimal = text.startsWith("0x") || text.startsWith("0X");
+      boolean isHexadecimal = text.startsWith("0x") || text.startsWith("0X");
       int breakPoint = text.indexOf((int)'e');
       if (breakPoint < 0) {
         breakPoint = text.indexOf((int)'E');
@@ -92,8 +92,8 @@ public class ConfusingFloatingPointLiteralInspection
       if (breakPoint < 0) {
         breakPoint = text.indexOf((int)'D');
       }
-      final String suffix;
-      final String prefix;
+      String suffix;
+      String prefix;
       if (breakPoint < 0) {
         suffix = "";
         prefix = text;
@@ -102,7 +102,7 @@ public class ConfusingFloatingPointLiteralInspection
         suffix = text.substring(breakPoint);
         prefix = text.substring(0, breakPoint);
       }
-      final int indexPoint = prefix.indexOf((int)'.');
+      int indexPoint = prefix.indexOf((int)'.');
       if (indexPoint < 0) {
         return prefix + ".0" + suffix;
       }
@@ -130,14 +130,14 @@ public class ConfusingFloatingPointLiteralInspection
     public void visitLiteralExpression(
       @Nonnull PsiLiteralExpression literal) {
       super.visitLiteralExpression(literal);
-      final PsiType type = literal.getType();
+      PsiType type = literal.getType();
       if (type == null) {
         return;
       }
       if (!(type.equals(PsiType.FLOAT) || type.equals(PsiType.DOUBLE))) {
         return;
       }
-      final String text = literal.getText();
+      String text = literal.getText();
       if (text == null) {
         return;
       }
@@ -152,19 +152,19 @@ public class ConfusingFloatingPointLiteralInspection
       if (text == null) {
         return false;
       }
-      final int length = text.length();
+      int length = text.length();
       if (length < 3) {
         return true;
       }
       boolean hexadecimal = true;
-      final char firstChar = text.charAt(0);
+      char firstChar = text.charAt(0);
       if (firstChar != '0') {
         hexadecimal = false;
       }
       else if (firstChar < '0' && firstChar > '9') {
         return true;
       }
-      final char secondChar = text.charAt(1);
+      char secondChar = text.charAt(1);
       if (hexadecimal) {
         if (secondChar != 'x' && secondChar != 'X') {
           hexadecimal = false;

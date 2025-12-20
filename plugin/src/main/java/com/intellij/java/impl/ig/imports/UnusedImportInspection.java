@@ -62,20 +62,20 @@ public class UnusedImportInspection extends BaseInspection {
     /*  if (JspPsiUtil.isInJspFile(file)) {
         return;
       }    */
-            final PsiImportList importList = file.getImportList();
+            PsiImportList importList = file.getImportList();
             if (importList == null) {
                 return;
             }
-            final PsiClass[] classes = file.getClasses();
-            final PsiPackageStatement packageStatement = file.getPackageStatement();
-            final PsiModifierList annotationList;
+            PsiClass[] classes = file.getClasses();
+            PsiPackageStatement packageStatement = file.getPackageStatement();
+            PsiModifierList annotationList;
             if (packageStatement != null) {
                 annotationList = packageStatement.getAnnotationList();
             }
             else {
                 annotationList = null;
             }
-            final PsiImportStatementBase[] importStatements = importList.getAllImportStatements();
+            PsiImportStatementBase[] importStatements = importList.getAllImportStatements();
             checkImports(importStatements, classes, annotationList);
         }
 
@@ -83,14 +83,14 @@ public class UnusedImportInspection extends BaseInspection {
             if (importStatements.length == 0) {
                 return;
             }
-            final ImportsAreUsedVisitor visitor = new ImportsAreUsedVisitor(importStatements);
+            ImportsAreUsedVisitor visitor = new ImportsAreUsedVisitor(importStatements);
             for (PsiClass aClass : classes) {
                 aClass.accept(visitor);
             }
             if (annotationList != null) {
                 annotationList.accept(visitor);
             }
-            final PsiImportStatementBase[] unusedImportStatements = visitor.getUnusedImportStatements();
+            PsiImportStatementBase[] unusedImportStatements = visitor.getUnusedImportStatements();
             for (PsiImportStatementBase unusedImportStatement : unusedImportStatements) {
                 registerError(unusedImportStatement);
             }

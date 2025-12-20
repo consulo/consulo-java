@@ -40,9 +40,9 @@ public class NegateComparisonIntention extends MutablyNamedIntention {
     public LocalizeValue getTextForElement(PsiElement element) {
         String operatorText = "";
         String negatedOperatorText = "";
-        final PsiBinaryExpression exp = (PsiBinaryExpression) element;
+        PsiBinaryExpression exp = (PsiBinaryExpression) element;
         if (exp != null) {
-            final PsiJavaToken sign = exp.getOperationSign();
+            PsiJavaToken sign = exp.getOperationSign();
             operatorText = sign.getText();
             negatedOperatorText =
                 ComparisonUtils.getNegatedComparison(sign.getTokenType());
@@ -70,15 +70,15 @@ public class NegateComparisonIntention extends MutablyNamedIntention {
     @Override
     public void processIntention(PsiElement element)
         throws IncorrectOperationException {
-        final PsiBinaryExpression expression =
+        PsiBinaryExpression expression =
             (PsiBinaryExpression) element;
-        final PsiExpression lhs = expression.getLOperand();
-        final PsiExpression rhs = expression.getROperand();
-        final String negatedOperator =
+        PsiExpression lhs = expression.getLOperand();
+        PsiExpression rhs = expression.getROperand();
+        String negatedOperator =
             ComparisonUtils.getNegatedComparison(expression.getOperationTokenType());
-        final String lhsText = lhs.getText();
+        String lhsText = lhs.getText();
         assert rhs != null;
-        final String rhsText = rhs.getText();
+        String rhsText = rhs.getText();
         replaceExpressionWithNegatedExpressionString(lhsText +
             negatedOperator + rhsText, expression);
     }

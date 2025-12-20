@@ -61,7 +61,7 @@ public class AssignmentToForLoopParameterInspection extends BaseInspection {
 
     @Override
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final Boolean foreachLoop = (Boolean) infos[0];
+        Boolean foreachLoop = (Boolean) infos[0];
         if (!foreachLoop.booleanValue()) {
             return null;
         }
@@ -84,7 +84,7 @@ public class AssignmentToForLoopParameterInspection extends BaseInspection {
             if (!WellFormednessUtils.isWellFormed(expression)) {
                 return;
             }
-            final PsiExpression lhs = expression.getLExpression();
+            PsiExpression lhs = expression.getLExpression();
             checkForForLoopParam(lhs);
             checkForForeachLoopParam(lhs);
         }
@@ -94,12 +94,12 @@ public class AssignmentToForLoopParameterInspection extends BaseInspection {
             @Nonnull PsiPrefixExpression expression
         ) {
             super.visitPrefixExpression(expression);
-            final IElementType tokenType = expression.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&
                 !tokenType.equals(JavaTokenType.MINUSMINUS)) {
                 return;
             }
-            final PsiExpression operand = expression.getOperand();
+            PsiExpression operand = expression.getOperand();
             if (operand == null) {
                 return;
             }
@@ -112,12 +112,12 @@ public class AssignmentToForLoopParameterInspection extends BaseInspection {
             @Nonnull PsiPostfixExpression expression
         ) {
             super.visitPostfixExpression(expression);
-            final IElementType tokenType = expression.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&
                 !tokenType.equals(JavaTokenType.MINUSMINUS)) {
                 return;
             }
-            final PsiExpression operand = expression.getOperand();
+            PsiExpression operand = expression.getOperand();
             checkForForLoopParam(operand);
             checkForForeachLoopParam(operand);  //sensible due to autoboxing/unboxing
         }
@@ -126,25 +126,25 @@ public class AssignmentToForLoopParameterInspection extends BaseInspection {
             if (!(expression instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiReferenceExpression referenceExpression =
+            PsiReferenceExpression referenceExpression =
                 (PsiReferenceExpression) expression;
-            final PsiElement element = referenceExpression.resolve();
+            PsiElement element = referenceExpression.resolve();
             if (!(element instanceof PsiLocalVariable)) {
                 return;
             }
-            final PsiLocalVariable variable = (PsiLocalVariable) element;
-            final PsiElement variableParent = variable.getParent();
+            PsiLocalVariable variable = (PsiLocalVariable) element;
+            PsiElement variableParent = variable.getParent();
             if (!(variableParent instanceof PsiDeclarationStatement)) {
                 return;
             }
-            final PsiDeclarationStatement declarationStatement =
+            PsiDeclarationStatement declarationStatement =
                 (PsiDeclarationStatement) variableParent;
-            final PsiElement parent = declarationStatement.getParent();
+            PsiElement parent = declarationStatement.getParent();
             if (!(parent instanceof PsiForStatement)) {
                 return;
             }
-            final PsiForStatement forStatement = (PsiForStatement) parent;
-            final PsiStatement initialization =
+            PsiForStatement forStatement = (PsiForStatement) parent;
+            PsiStatement initialization =
                 forStatement.getInitialization();
             if (initialization == null) {
                 return;
@@ -165,13 +165,13 @@ public class AssignmentToForLoopParameterInspection extends BaseInspection {
             if (!(expression instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiReferenceExpression referenceExpression =
+            PsiReferenceExpression referenceExpression =
                 (PsiReferenceExpression) expression;
-            final PsiElement element = referenceExpression.resolve();
+            PsiElement element = referenceExpression.resolve();
             if (!(element instanceof PsiParameter)) {
                 return;
             }
-            final PsiParameter parameter = (PsiParameter) element;
+            PsiParameter parameter = (PsiParameter) element;
             if (!(parameter.getParent() instanceof PsiForeachStatement)) {
                 return;
             }
@@ -182,7 +182,7 @@ public class AssignmentToForLoopParameterInspection extends BaseInspection {
             PsiExpression expression,
             PsiForStatement statement
         ) {
-            final PsiStatement body = statement.getBody();
+            PsiStatement body = statement.getBody();
             if (body == null) {
                 return false;
             }

@@ -46,7 +46,7 @@ public class EnumeratedClassNamingConventionInspection
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final String className = (String)infos[0];
+    String className = (String)infos[0];
     if (className.length() < getMinLength()) {
       return InspectionGadgetsLocalize.enumeratedClassNamingConventionProblemDescriptorShort().get();
     }
@@ -79,7 +79,7 @@ public class EnumeratedClassNamingConventionInspection
       if (!aClass.isEnum()) {
         return;
       }
-      final String name = aClass.getName();
+      String name = aClass.getName();
       if (name == null) {
         return;
       }

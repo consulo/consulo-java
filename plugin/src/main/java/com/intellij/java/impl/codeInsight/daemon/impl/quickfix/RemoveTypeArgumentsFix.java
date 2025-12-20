@@ -65,12 +65,12 @@ public class RemoveTypeArgumentsFix extends LocalQuickFixAndIntentionActionOnPsi
         @Nonnull PsiElement startElement,
         @Nonnull PsiElement endElement
     ) {
-        final PsiVariable psiVariable = (PsiVariable) startElement;
-        final PsiTypeElement typeElement = psiVariable.getTypeElement();
+        PsiVariable psiVariable = (PsiVariable) startElement;
+        PsiTypeElement typeElement = psiVariable.getTypeElement();
         LOGGER.assertTrue(typeElement != null);
-        final PsiJavaCodeReferenceElement referenceElement = typeElement.getInnermostComponentReferenceElement();
+        PsiJavaCodeReferenceElement referenceElement = typeElement.getInnermostComponentReferenceElement();
         if (referenceElement != null) {
-            final PsiReferenceParameterList parameterList = referenceElement.getParameterList();
+            PsiReferenceParameterList parameterList = referenceElement.getParameterList();
             if (parameterList != null) {
                 parameterList.delete();
             }

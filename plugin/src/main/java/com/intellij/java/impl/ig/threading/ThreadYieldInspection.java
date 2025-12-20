@@ -63,22 +63,22 @@ public class ThreadYieldInspection extends BaseInspection {
 
     private static boolean isThreadYield(
       PsiMethodCallExpression expression) {
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      @NonNls final String methodName =
+      @NonNls String methodName =
         methodExpression.getReferenceName();
       if (!"yield".equals(methodName)) {
         return false;
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return false;
       }
-      final PsiClass aClass = method.getContainingClass();
+      PsiClass aClass = method.getContainingClass();
       if (aClass == null) {
         return false;
       }
-      final String className = aClass.getQualifiedName();
+      String className = aClass.getQualifiedName();
       if (className == null) {
         return false;
       }

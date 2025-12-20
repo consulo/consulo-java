@@ -37,13 +37,13 @@ class EndOfLineCommentPredicate implements PsiElementPredicate {
     if (element instanceof PsiDocComment) {
       return false;
     }
-    final PsiComment comment = (PsiComment)element;
-    final IElementType type = comment.getTokenType();
+    PsiComment comment = (PsiComment)element;
+    IElementType type = comment.getTokenType();
     if (!JavaTokenType.END_OF_LINE_COMMENT.equals(type)) {
       return false;
     }
-    final String text = comment.getText();
-    final Matcher matcher = NO_INSPECTION_PATTERN.matcher(text);
+    String text = comment.getText();
+    Matcher matcher = NO_INSPECTION_PATTERN.matcher(text);
     return !matcher.matches();
   }
 }

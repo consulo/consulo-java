@@ -44,10 +44,10 @@ public class CharToStringIntention extends Intention {
     @Override
     public void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiLiteralExpression charLiteral =
+        PsiLiteralExpression charLiteral =
             (PsiLiteralExpression) element;
-        final String charLiteralText = charLiteral.getText();
-        final String stringLiteral = stringForCharLiteral(charLiteralText);
+        String charLiteralText = charLiteral.getText();
+        String stringLiteral = stringForCharLiteral(charLiteralText);
         replaceExpression(stringLiteral, charLiteral);
     }
 

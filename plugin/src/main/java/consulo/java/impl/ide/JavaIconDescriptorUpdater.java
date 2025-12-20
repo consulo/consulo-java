@@ -57,7 +57,7 @@ public class JavaIconDescriptorUpdater implements IconDescriptorUpdater {
         iconDescriptor.setMainIcon(AllIcons.Nodes.TypeAlias);
         return;
       }
-      final PsiClass psiClass = (PsiClass) element;
+      PsiClass psiClass = (PsiClass) element;
       if (psiClass.isEnum()) {
         iconDescriptor.setMainIcon(AllIcons.Nodes.Enum);
       } else if (psiClass.isAnnotationType()) {
@@ -69,13 +69,13 @@ public class JavaIconDescriptorUpdater implements IconDescriptorUpdater {
       } else if (psiClass instanceof PsiAnonymousClass) {
         iconDescriptor.setMainIcon(AllIcons.Nodes.AnonymousClass);
       } else {
-        final boolean abst = psiClass.hasModifierProperty(PsiModifier.ABSTRACT);
+        boolean abst = psiClass.hasModifierProperty(PsiModifier.ABSTRACT);
         iconDescriptor.setMainIcon(abst ? AllIcons.Nodes.AbstractClass : AllIcons.Nodes.Class);
 
         if (!DumbService.getInstance(element.getProject()).isDumb()) {
-          final PsiManager manager = psiClass.getManager();
-          final PsiClass javaLangThrowable = JavaPsiFacade.getInstance(manager.getProject()).findClass(CommonClassNames.JAVA_LANG_THROWABLE, psiClass.getResolveScope());
-          final boolean isException = javaLangThrowable != null && InheritanceUtil.isInheritorOrSelf(psiClass, javaLangThrowable, true);
+          PsiManager manager = psiClass.getManager();
+          PsiClass javaLangThrowable = JavaPsiFacade.getInstance(manager.getProject()).findClass(CommonClassNames.JAVA_LANG_THROWABLE, psiClass.getResolveScope());
+          boolean isException = javaLangThrowable != null && InheritanceUtil.isInheritorOrSelf(psiClass, javaLangThrowable, true);
           if (isException) {
             iconDescriptor.setMainIcon(abst ? AllIcons.Nodes.AbstractException : AllIcons.Nodes.ExceptionClass);
           }
@@ -96,7 +96,7 @@ public class JavaIconDescriptorUpdater implements IconDescriptorUpdater {
         return;
       }
 
-      final PsiClass[] classes = ((PsiJavaFile) element).getClasses();
+      PsiClass[] classes = ((PsiJavaFile) element).getClasses();
       if (classes.length == 1) {
         IconDescriptorUpdaters.processExistingDescriptor(iconDescriptor, classes[0], flags);
       }
@@ -141,16 +141,16 @@ public class JavaIconDescriptorUpdater implements IconDescriptorUpdater {
   }
 
   private static boolean processedFile(PsiElement element, IconDescriptor iconDescriptor) {
-    final PsiFile containingFile = element.getContainingFile();
+    PsiFile containingFile = element.getContainingFile();
     if (containingFile == null) {
       return false;
     }
-    final FileType fileType = containingFile.getFileType();
+    FileType fileType = containingFile.getFileType();
     if (fileType != JavaFileType.INSTANCE && fileType != JavaClassFileType.INSTANCE) {
       return false;
     }
 
-    final VirtualFile virtualFile = containingFile.getVirtualFile();
+    VirtualFile virtualFile = containingFile.getVirtualFile();
     if (virtualFile == null) {
       return false;
     }

@@ -57,15 +57,15 @@ public class TeardownIsPublicVoidNoArgInspection extends BaseInspection {
     @Override
     public void visitMethod(@Nonnull PsiMethod method) {
       //note: no call to super;
-      @NonNls final String methodName = method.getName();
+      @NonNls String methodName = method.getName();
       if (!"tearDown".equals(methodName)) {
         return;
       }
-      final PsiType returnType = method.getReturnType();
+      PsiType returnType = method.getReturnType();
       if (returnType == null) {
         return;
       }
-      final PsiClass targetClass = method.getContainingClass();
+      PsiClass targetClass = method.getContainingClass();
       if (targetClass == null) {
         return;
       }
@@ -73,7 +73,7 @@ public class TeardownIsPublicVoidNoArgInspection extends BaseInspection {
                                        "junit.framework.TestCase")) {
         return;
       }
-      final PsiParameterList parameterList = method.getParameterList();
+      PsiParameterList parameterList = method.getParameterList();
       if (parameterList.getParametersCount() != 0 ||
           !returnType.equals(PsiType.VOID) ||
           !method.hasModifierProperty(PsiModifier.PUBLIC) &&

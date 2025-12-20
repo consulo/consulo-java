@@ -74,18 +74,18 @@ public class ReplaceMethodRefWithLambdaIntention extends Intention {
         final PsiMethodReferenceExpression referenceExpression = PsiTreeUtil.getParentOfType(element,
             PsiMethodReferenceExpression.class);
         LOG.assertTrue(referenceExpression != null);
-        final PsiElement resolve = referenceExpression.resolve();
-        final PsiType functionalInterfaceType = referenceExpression.getFunctionalInterfaceType();
-        final PsiClassType.ClassResolveResult functionalInterfaceResolveResult = PsiUtil.resolveGenericsClassInType
+        PsiElement resolve = referenceExpression.resolve();
+        PsiType functionalInterfaceType = referenceExpression.getFunctionalInterfaceType();
+        PsiClassType.ClassResolveResult functionalInterfaceResolveResult = PsiUtil.resolveGenericsClassInType
             (functionalInterfaceType);
-        final PsiMethod interfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(functionalInterfaceType);
+        PsiMethod interfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(functionalInterfaceType);
         LOG.assertTrue(interfaceMethod != null);
         final PsiSubstitutor psiSubstitutor = LambdaUtil.getSubstitutor(interfaceMethod,
             functionalInterfaceResolveResult);
-        final MethodSignature signature = interfaceMethod.getSignature(psiSubstitutor);
+        MethodSignature signature = interfaceMethod.getSignature(psiSubstitutor);
         final boolean isReceiver;
         if (resolve instanceof PsiMethod) {
-            final PsiMethod method = (PsiMethod) resolve;
+            PsiMethod method = (PsiMethod) resolve;
             isReceiver = PsiMethodReferenceUtil.isResolvedBySecondSearch(referenceExpression, signature,
                 method.isVarArgs(), method.hasModifierProperty(PsiModifier.STATIC),
                 method.getParameterList().getParametersCount());
@@ -96,27 +96,27 @@ public class ReplaceMethodRefWithLambdaIntention extends Intention {
         final PsiParameter[] psiParameters = resolve instanceof PsiMethod ? ((PsiMethod) resolve).getParameterList()
             .getParameters() : null;
 
-        final StringBuilder buf = new StringBuilder("(");
+        StringBuilder buf = new StringBuilder("(");
         LOG.assertTrue(functionalInterfaceType != null);
         buf.append(functionalInterfaceType.getCanonicalText()).append(")(");
         final PsiParameterList parameterList = interfaceMethod.getParameterList();
-        final PsiParameter[] parameters = parameterList.getParameters();
+        PsiParameter[] parameters = parameterList.getParameters();
 
         final Map<PsiParameter, String> map = new HashMap<PsiParameter, String>();
         final UniqueNameGenerator nameGenerator = new UniqueNameGenerator();
         final JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(element.getProject());
-        final String paramsString = StringUtil.join(parameters, new Function<PsiParameter, String>() {
+        String paramsString = StringUtil.join(parameters, new Function<PsiParameter, String>() {
             @Override
             public String apply(PsiParameter parameter) {
-                final int parameterIndex = parameterList.getParameterIndex(parameter);
+                int parameterIndex = parameterList.getParameterIndex(parameter);
                 String baseName;
                 if (isReceiver && parameterIndex == 0) {
-                    final SuggestedNameInfo nameInfo = codeStyleManager.suggestVariableName(VariableKind.PARAMETER,
+                    SuggestedNameInfo nameInfo = codeStyleManager.suggestVariableName(VariableKind.PARAMETER,
                         null, null, psiSubstitutor.substitute(parameter.getType()));
                     baseName = nameInfo.names.length > 0 ? nameInfo.names[0] : parameter.getName();
                 }
                 else {
-                    final String initialName = psiParameters != null ? psiParameters[parameterIndex - (isReceiver ? 1
+                    String initialName = psiParameters != null ? psiParameters[parameterIndex - (isReceiver ? 1
                         : 0)].getName() : parameter.getName();
                     baseName = codeStyleManager.variableNameToPropertyName(initialName, VariableKind.PARAMETER);
                 }
@@ -134,8 +134,8 @@ public class ReplaceMethodRefWithLambdaIntention extends Intention {
         buf.append(") -> ");
 
 
-        final JavaResolveResult resolveResult = referenceExpression.advancedResolve(false);
-        final PsiElement resolveElement = resolveResult.getElement();
+        JavaResolveResult resolveResult = referenceExpression.advancedResolve(false);
+        PsiElement resolveElement = resolveResult.getElement();
         if (resolveElement instanceof PsiMember) {
 
             buf.append("{");
@@ -143,7 +143,7 @@ public class ReplaceMethodRefWithLambdaIntention extends Intention {
             if (!PsiType.VOID.equals(interfaceMethod.getReturnType())) {
                 buf.append("return ");
             }
-            final PsiElement qualifier = referenceExpression.getQualifier();
+            PsiElement qualifier = referenceExpression.getQualifier();
             PsiClass containingClass = null;
             if (resolveElement instanceof PsiMethod) {
                 containingClass = ((PsiMember) resolveElement).getContainingClass();
@@ -153,17 +153,17 @@ public class ReplaceMethodRefWithLambdaIntention extends Intention {
                 containingClass = (PsiClass) resolveElement;
             }
 
-            final boolean onArrayRef = JavaPsiFacade.getElementFactory(element.getProject()).getArrayClass(PsiUtil
+            boolean onArrayRef = JavaPsiFacade.getElementFactory(element.getProject()).getArrayClass(PsiUtil
                 .getLanguageLevel(element)) == containingClass;
 
-            final PsiElement referenceNameElement = referenceExpression.getReferenceNameElement();
+            PsiElement referenceNameElement = referenceExpression.getReferenceNameElement();
             if (isReceiver) {
                 buf.append(map.get(parameters[0])).append(".");
             }
             else {
                 if (!(referenceNameElement instanceof PsiKeyword)) {
                     if (qualifier instanceof PsiTypeElement) {
-                        final PsiJavaCodeReferenceElement referenceElement = ((PsiTypeElement) qualifier)
+                        PsiJavaCodeReferenceElement referenceElement = ((PsiTypeElement) qualifier)
                             .getInnermostComponentReferenceElement();
                         LOG.assertTrue(referenceElement != null);
                         buf.append(referenceElement.getReferenceName()).append(".");
@@ -183,7 +183,7 @@ public class ReplaceMethodRefWithLambdaIntention extends Intention {
                 buf.append(" ");
                 if (onArrayRef) {
                     if (qualifier instanceof PsiTypeElement) {
-                        final PsiType type = ((PsiTypeElement) qualifier).getType();
+                        PsiType type = ((PsiTypeElement) qualifier).getType();
                         int dim = type.getArrayDimensions();
                         buf.append(type.getDeepComponentType().getCanonicalText());
                         buf.append("[");
@@ -205,7 +205,7 @@ public class ReplaceMethodRefWithLambdaIntention extends Intention {
                             new Function<PsiTypeParameter, String>() {
                                 @Override
                                 public String apply(PsiTypeParameter parameter) {
-                                    final PsiType psiType = substitutor.substitute(parameter);
+                                    PsiType psiType = substitutor.substitute(parameter);
                                     LOG.assertTrue(psiType != null);
                                     return psiType.getCanonicalText();
                                 }
@@ -235,28 +235,28 @@ public class ReplaceMethodRefWithLambdaIntention extends Intention {
         }
 
 
-        final PsiTypeCastExpression typeCastExpression = (PsiTypeCastExpression) referenceExpression.replace
+        PsiTypeCastExpression typeCastExpression = (PsiTypeCastExpression) referenceExpression.replace
             (JavaPsiFacade.getElementFactory(element.getProject()).createExpressionFromText(buf.toString(),
                 referenceExpression));
         PsiLambdaExpression lambdaExpression = (PsiLambdaExpression) typeCastExpression.getOperand();
         if (RedundantCastUtil.isCastRedundant(typeCastExpression)) {
-            final PsiExpression operand = typeCastExpression.getOperand();
+            PsiExpression operand = typeCastExpression.getOperand();
             LOG.assertTrue(operand != null);
             lambdaExpression = (PsiLambdaExpression) typeCastExpression.replace(operand);
-            final PsiElement body = lambdaExpression.getBody();
-            final PsiExpression singleExpression = RedundantLambdaCodeBlockInspection.isCodeBlockRedundant(lambdaExpression);
+            PsiElement body = lambdaExpression.getBody();
+            PsiExpression singleExpression = RedundantLambdaCodeBlockInspection.isCodeBlockRedundant(lambdaExpression);
             if (singleExpression != null) {
                 body.replace(singleExpression);
             }
         }
 
         final PsiLambdaExpression expr = lambdaExpression;
-        final Runnable runnable = new Runnable() {
+        Runnable runnable = new Runnable() {
             public void run() {
                 introduceQualifierAsLocalVariable(editor, expr);
             }
         };
-        final Application application = ApplicationManager.getApplication();
+        Application application = ApplicationManager.getApplication();
         if (application.isUnitTestMode()) {
             runnable.run();
         }
@@ -267,12 +267,12 @@ public class ReplaceMethodRefWithLambdaIntention extends Intention {
 
     private static void introduceQualifierAsLocalVariable(Editor editor, PsiLambdaExpression lambdaExpression) {
         if (lambdaExpression != null && lambdaExpression.isValid()) {
-            final PsiElement body = lambdaExpression.getBody();
+            PsiElement body = lambdaExpression.getBody();
             PsiExpression methodCall = null;
             if (body instanceof PsiCodeBlock) {
-                final PsiStatement[] statements = ((PsiCodeBlock) body).getStatements();
+                PsiStatement[] statements = ((PsiCodeBlock) body).getStatements();
                 LOG.assertTrue(statements.length == 1);
-                final PsiStatement statement = statements[0];
+                PsiStatement statement = statements[0];
                 if (statement instanceof PsiReturnStatement) {
                     methodCall = ((PsiReturnStatement) statement).getReturnValue();
                 }
@@ -293,7 +293,7 @@ public class ReplaceMethodRefWithLambdaIntention extends Intention {
             }
 
             if (qualifierExpression != null) {
-                final List<PsiElement> sideEffects = new ArrayList<PsiElement>();
+                List<PsiElement> sideEffects = new ArrayList<PsiElement>();
                 SideEffectChecker.checkSideEffects(qualifierExpression, sideEffects);
                 if (!sideEffects.isEmpty()) {
                     //ensure introduced before lambda
@@ -308,10 +308,10 @@ public class ReplaceMethodRefWithLambdaIntention extends Intention {
     private static class MethodRefPredicate implements PsiElementPredicate {
         @Override
         public boolean satisfiedBy(PsiElement element) {
-            final PsiMethodReferenceExpression methodReferenceExpression = PsiTreeUtil.getParentOfType(element,
+            PsiMethodReferenceExpression methodReferenceExpression = PsiTreeUtil.getParentOfType(element,
                 PsiMethodReferenceExpression.class);
             if (methodReferenceExpression != null) {
-                final PsiType interfaceType = methodReferenceExpression.getFunctionalInterfaceType();
+                PsiType interfaceType = methodReferenceExpression.getFunctionalInterfaceType();
                 if (interfaceType != null &&
                     LambdaUtil.getFunctionalInterfaceMethod(interfaceType) != null &&
                     methodReferenceExpression.resolve() != null) {

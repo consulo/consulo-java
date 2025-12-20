@@ -60,41 +60,41 @@ public abstract class ExtendsBoundListTest extends LightCodeInsightTestCase {
   }
 
   public void testAddBoundInTheMiddle() throws Exception {
-    final PsiTypeParameter typeParameter = getTypeParameter();
-    final PsiReferenceList extendsList = typeParameter.getExtendsList();
-    final PsiClass cloneableClass = getJavaFacade().findClass(CommonClassNames.JAVA_LANG_CLONEABLE);
+    PsiTypeParameter typeParameter = getTypeParameter();
+    PsiReferenceList extendsList = typeParameter.getExtendsList();
+    PsiClass cloneableClass = getJavaFacade().findClass(CommonClassNames.JAVA_LANG_CLONEABLE);
     assertNotNull(cloneableClass);
-    final PsiJavaCodeReferenceElement reference = getJavaFacade().getElementFactory().createClassReferenceElement(cloneableClass);
+    PsiJavaCodeReferenceElement reference = getJavaFacade().getElementFactory().createClassReferenceElement(cloneableClass);
     extendsList.addAfter(reference, extendsList.getReferenceElements()[0]);
     check();
   }
 
   public void testAddBoundInFront() throws Exception {
-    final PsiTypeParameter typeParameter = getTypeParameter();
-    final PsiReferenceList extendsList = typeParameter.getExtendsList();
-    final PsiClass cloneableClass = getJavaFacade().findClass(CommonClassNames.JAVA_LANG_CLONEABLE);
+    PsiTypeParameter typeParameter = getTypeParameter();
+    PsiReferenceList extendsList = typeParameter.getExtendsList();
+    PsiClass cloneableClass = getJavaFacade().findClass(CommonClassNames.JAVA_LANG_CLONEABLE);
     assertNotNull(cloneableClass);
-    final PsiJavaCodeReferenceElement reference = getJavaFacade().getElementFactory().createClassReferenceElement(cloneableClass);
+    PsiJavaCodeReferenceElement reference = getJavaFacade().getElementFactory().createClassReferenceElement(cloneableClass);
     extendsList.addBefore(reference, extendsList.getReferenceElements()[0]);
     check();
   }
 
   public void testAddBoundInEnd() throws Exception {
-    final PsiTypeParameter typeParameter = getTypeParameter();
-    final PsiReferenceList extendsList = typeParameter.getExtendsList();
-    final PsiClass cloneableClass = getJavaFacade().findClass(CommonClassNames.JAVA_LANG_CLONEABLE);
+    PsiTypeParameter typeParameter = getTypeParameter();
+    PsiReferenceList extendsList = typeParameter.getExtendsList();
+    PsiClass cloneableClass = getJavaFacade().findClass(CommonClassNames.JAVA_LANG_CLONEABLE);
     assertNotNull(cloneableClass);
-    final PsiJavaCodeReferenceElement reference = getJavaFacade().getElementFactory().createClassReferenceElement(cloneableClass);
+    PsiJavaCodeReferenceElement reference = getJavaFacade().getElementFactory().createClassReferenceElement(cloneableClass);
     extendsList.addBefore(reference, null);
     check();
   }
 
   public void testAddBound() throws Exception {
-    final PsiTypeParameter typeParameter = getTypeParameter();
-    final PsiReferenceList extendsList = typeParameter.getExtendsList();
-    final PsiClass cloneableClass = getJavaFacade().findClass(CommonClassNames.JAVA_LANG_RUNNABLE);
+    PsiTypeParameter typeParameter = getTypeParameter();
+    PsiReferenceList extendsList = typeParameter.getExtendsList();
+    PsiClass cloneableClass = getJavaFacade().findClass(CommonClassNames.JAVA_LANG_RUNNABLE);
     assertNotNull(cloneableClass);
-    final PsiJavaCodeReferenceElement reference = getJavaFacade().getElementFactory().createClassReferenceElement(cloneableClass);
+    PsiJavaCodeReferenceElement reference = getJavaFacade().getElementFactory().createClassReferenceElement(cloneableClass);
     extendsList.add(reference);
     check();
   }
@@ -105,7 +105,7 @@ public abstract class ExtendsBoundListTest extends LightCodeInsightTestCase {
 
   private PsiTypeParameter getTypeParameter() throws Exception {
     inputFile(getTestName(true) + ".java");
-    final PsiClass aClass = ((PsiJavaFile)getFile()).getClasses()[0];
+    PsiClass aClass = ((PsiJavaFile)getFile()).getClasses()[0];
     return aClass.getTypeParameters()[0];
   }
 

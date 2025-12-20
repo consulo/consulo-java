@@ -53,21 +53,21 @@ public class SleepWhileHoldingLockInspection extends BaseInspection {
     public void visitMethodCallExpression(
       @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      @NonNls final String methodName =
+      @NonNls String methodName =
         methodExpression.getReferenceName();
       if (!"sleep".equals(methodName)) {
         return;
       }
-      final PsiMethod containingMethod =
+      PsiMethod containingMethod =
         PsiTreeUtil.getParentOfType(expression, PsiMethod.class);
       boolean isSynced = false;
       if (containingMethod != null && containingMethod
         .hasModifierProperty(PsiModifier.SYNCHRONIZED)) {
         isSynced = true;
       }
-      final PsiSynchronizedStatement containingSyncStatement =
+      PsiSynchronizedStatement containingSyncStatement =
         PsiTreeUtil.getParentOfType(expression,
                                     PsiSynchronizedStatement.class);
       if (containingSyncStatement != null) {
@@ -76,11 +76,11 @@ public class SleepWhileHoldingLockInspection extends BaseInspection {
       if (!isSynced) {
         return;
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return;
       }
-      final PsiClass methodClass = method.getContainingClass();
+      PsiClass methodClass = method.getContainingClass();
       if (methodClass == null ||
           !InheritanceUtil.isInheritor(methodClass,
                                        "java.lang.Thread")) {

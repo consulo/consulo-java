@@ -51,7 +51,7 @@ public abstract class ImplementationsViewTest extends LightCodeInsightFixtureTes
       TargetElementUtil.findTargetElement(myFixture.getEditor(), TargetElementUtil.getAllAccepted());
 
     assert element != null;
-    final String newText = ImplementationViewComponent.getNewText(element);
+    String newText = ImplementationViewComponent.getNewText(element);
 
     assertEquals("    @Override\n" +
                  "    public String toString() {\n" +
@@ -79,7 +79,7 @@ public abstract class ImplementationsViewTest extends LightCodeInsightFixtureTes
 			TargetElementUtil.findTargetElement(myFixture.getEditor(), TargetElementUtil.getAllAccepted());
 
     assert element != null;
-    final String newText = ImplementationViewComponent.getNewText(element);
+    String newText = ImplementationViewComponent.getNewText(element);
 
     assertEquals("    @Override\n" +
                  "    public String toString() {\n" +
@@ -114,14 +114,14 @@ public abstract class ImplementationsViewTest extends LightCodeInsightFixtureTes
       (PsiClass)TargetElementUtil.findTargetElement(myFixture.getEditor(), TargetElementUtil.getAllAccepted());
 
     assert psiClass != null;
-    final Collection<PsiClass> classes = ClassInheritorsSearch.search(psiClass).findAll();
+    Collection<PsiClass> classes = ClassInheritorsSearch.search(psiClass).findAll();
     List<PsiClass> all = new ArrayList<PsiClass>();
     all.add(psiClass);
     all.addAll(classes);
-    final ImplementationViewComponent component =
+    ImplementationViewComponent component =
       new ImplementationViewComponent(all.toArray(new PsiElement[all.size()]), 0);
     try {
-      final String[] visibleFiles = component.getVisibleFiles();
+      String[] visibleFiles = component.getVisibleFiles();
       Assert.assertArrayEquals(Arrays.toString(visibleFiles),
                                new String[]{"a.java (AFoo)", "a.java (AFoo1 in AFoo)", "a.java (AFoo3 in AFoo)", "a.java (AFoo2 in AFoo)"}, visibleFiles);
     }
@@ -157,7 +157,7 @@ public abstract class ImplementationsViewTest extends LightCodeInsightFixtureTes
         (PsiMethod)TargetElementUtil.findTargetElement(myFixture.getEditor(), TargetElementUtil.getAllAccepted());
 
     assert psiMethod != null;
-    final Collection<PsiMethod> methods = OverridingMethodsSearch.search(psiMethod).findAll();
+    Collection<PsiMethod> methods = OverridingMethodsSearch.search(psiMethod).findAll();
     List<PsiMethod> all = new ArrayList<PsiMethod>();
     all.add(psiMethod);
     all.addAll(methods);
@@ -170,10 +170,10 @@ public abstract class ImplementationsViewTest extends LightCodeInsightFixtureTes
           .compareTo(o2.getContainingClass().getQualifiedName());
       }
     });
-    final ImplementationViewComponent component =
+    ImplementationViewComponent component =
       new ImplementationViewComponent(all.toArray(new PsiElement[all.size()]), 0);
     try {
-      final String[] visibleFiles = component.getVisibleFiles();
+      String[] visibleFiles = component.getVisibleFiles();
       Assert.assertArrayEquals(Arrays.toString(visibleFiles),
                                new String[]{"a.java (AFoo)", "a.java (AFoo1 in AFoo)", "a.java (AFoo2 in AFoo)", "a.java (AFoo3 in AFoo)"}, visibleFiles);
     }

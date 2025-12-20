@@ -27,7 +27,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class JavaFileTypeFactory extends FileTypeFactory {
   @Override
-  public void createFileTypes(@Nonnull final FileTypeConsumer consumer) {
+  public void createFileTypes(@Nonnull FileTypeConsumer consumer) {
     consumer.consume(JarArchiveFileType.INSTANCE, "jar;war;apk");
     consumer.consume(JavaClassFileType.INSTANCE);
     consumer.consume(JavaFileType.INSTANCE);

@@ -30,27 +30,27 @@ class StringConcatPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiJavaToken)) {
       return false;
     }
-    final PsiJavaToken token = (PsiJavaToken)element;
-    final IElementType tokenType = token.getTokenType();
+    PsiJavaToken token = (PsiJavaToken)element;
+    IElementType tokenType = token.getTokenType();
     if (!tokenType.equals(JavaTokenType.PLUS)) {
       return false;
     }
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!(parent instanceof PsiPolyadicExpression)) {
       return false;
     }
-    final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)parent;
-    final PsiType type = polyadicExpression.getType();
+    PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)parent;
+    PsiType type = polyadicExpression.getType();
     if (type == null || !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
       return false;
     }
-    final PsiExpression[] operands = polyadicExpression.getOperands();
+    PsiExpression[] operands = polyadicExpression.getOperands();
     PsiExpression previous = null;
     boolean stringTypeSeen = false;
     for (int i = 0, length = operands.length; i < length; i++) {
-      final PsiExpression operand = operands[i];
-      final PsiType operandType = operand.getType();
-      final PsiJavaToken currentToken = polyadicExpression.getTokenBeforeOperand(operand);
+      PsiExpression operand = operands[i];
+      PsiType operandType = operand.getType();
+      PsiJavaToken currentToken = polyadicExpression.getTokenBeforeOperand(operand);
       if (token == currentToken) {
         if (!(previous instanceof PsiLiteralExpression) || !(operand instanceof PsiLiteralExpression)) {
           return false;

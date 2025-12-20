@@ -70,16 +70,16 @@ class FormatDecode {
   }
 
   public static Validator[] decode(String formatString, int argumentCount) {
-    final ArrayList<Validator> parameters = new ArrayList<Validator>();
+    ArrayList<Validator> parameters = new ArrayList<Validator>();
 
-    final Matcher matcher = fsPattern.matcher(formatString);
+    Matcher matcher = fsPattern.matcher(formatString);
     int implicit = 0;
     int pos = 0;
     for (int i = 0; matcher.find(i); i = matcher.end()) {
-      final String posSpec = matcher.group(1);
-      final String flags = matcher.group(2);
-      final String dateSpec = matcher.group(5);
-      final String spec = matcher.group(6);
+      String posSpec = matcher.group(1);
+      String flags = matcher.group(2);
+      String dateSpec = matcher.group(5);
+      String spec = matcher.group(6);
 
       // check this first because it should not affect "implicit"
       if ("n".equals(spec) || "%".equals(spec)) {
@@ -87,7 +87,7 @@ class FormatDecode {
       }
 
       if (posSpec != null) {
-        final String num = posSpec.substring(0, posSpec.length() - 1);
+        String num = posSpec.substring(0, posSpec.length() - 1);
         pos = Integer.parseInt(num) - 1;
       }
       else if (flags == null || flags.indexOf('<') < 0) {
@@ -95,7 +95,7 @@ class FormatDecode {
       }
       // else if the flag has "<" reuse the last pos
 
-      final Validator allowed;
+      Validator allowed;
       if (dateSpec != null) {  // a t or T
         allowed = DATE_VALIDATOR;
       }
@@ -134,7 +134,7 @@ class FormatDecode {
                             ArrayList<Validator> parameters,
                             int argumentCount) {
     if (pos < parameters.size()) {
-      final Validator old = parameters.get(pos);
+      Validator old = parameters.get(pos);
       Set<String> replaceableTypes = REPLACEABLE_VALIDATOR_TYPES.get(old.type());
       if (replaceableTypes != null && replaceableTypes.contains(val.type())) {
         parameters.set(pos, val);
@@ -183,7 +183,7 @@ class FormatDecode {
   private static class DateValidator implements Validator {
 
     public boolean valid(PsiType type) {
-      final String text = type.getCanonicalText();
+      String text = type.getCanonicalText();
 
       return PsiType.LONG.equals(type) ||
              CommonClassNames.JAVA_LANG_LONG.equals(text) ||
@@ -199,7 +199,7 @@ class FormatDecode {
   private static class CharValidator implements Validator {
 
     public boolean valid(PsiType type) {
-      final String text = type.getCanonicalText();
+      String text = type.getCanonicalText();
       return PsiType.CHAR.equals(type) ||
              CommonClassNames.JAVA_LANG_CHARACTER.equals(text);
     }
@@ -212,7 +212,7 @@ class FormatDecode {
   private static class IntValidator implements Validator {
 
     public boolean valid(PsiType type) {
-      final String text = type.getCanonicalText();
+      String text = type.getCanonicalText();
       return PsiType.INT.equals(type) ||
              CommonClassNames.JAVA_LANG_INTEGER.equals(text) ||
              PsiType.LONG.equals(type) ||
@@ -232,7 +232,7 @@ class FormatDecode {
   private static class FloatValidator implements Validator {
 
     public boolean valid(PsiType type) {
-      final String text = type.getCanonicalText();
+      String text = type.getCanonicalText();
       return PsiType.DOUBLE.equals(type) ||
              CommonClassNames.JAVA_LANG_DOUBLE.equals(text) ||
              PsiType.FLOAT.equals(type) ||

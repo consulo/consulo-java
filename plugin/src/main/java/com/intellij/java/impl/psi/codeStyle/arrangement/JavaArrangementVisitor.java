@@ -407,7 +407,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
   @Override
   public void visitMethod(PsiMethod method) {
     boolean isSectionCommentsDetected = registerSectionComments(method);
-    final TextRange range = isSectionCommentsDetected ? getElementRangeWithoutComments(method) : method.getTextRange();
+    TextRange range = isSectionCommentsDetected ? getElementRangeWithoutComments(method) : method.getTextRange();
 
     ArrangementSettingsToken type = method.isConstructor() ? CONSTRUCTOR : METHOD;
     JavaElementArrangementEntry entry = createNewEntry(method, range, type, method.getName(), true);

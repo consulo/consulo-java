@@ -26,7 +26,7 @@ import java.io.Serializable;
 public class ReferenceTransferableData implements TextBlockTransferableData, Cloneable, Serializable {
   private final ReferenceData[] myReferenceDatas;
 
-  public ReferenceTransferableData(final ReferenceData[] referenceDatas) {
+  public ReferenceTransferableData(ReferenceData[] referenceDatas) {
     myReferenceDatas = referenceDatas;
   }
 
@@ -41,7 +41,7 @@ public class ReferenceTransferableData implements TextBlockTransferableData, Clo
   }
 
   @Override
-  public int getOffsets(final int[] offsets, int index) {
+  public int getOffsets(int[] offsets, int index) {
     for (ReferenceData data : myReferenceDatas) {
       offsets[index++] = data.startOffset;
       offsets[index++] = data.endOffset;
@@ -50,7 +50,7 @@ public class ReferenceTransferableData implements TextBlockTransferableData, Clo
   }
 
   @Override
-  public int setOffsets(final int[] offsets, int index) {
+  public int setOffsets(int[] offsets, int index) {
     for (ReferenceData data : myReferenceDatas) {
       data.startOffset = offsets[index++];
       data.endOffset = offsets[index++];

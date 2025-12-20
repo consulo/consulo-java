@@ -27,7 +27,7 @@ public abstract class AbstractDependencyVisitor extends ClassVisitor {
 
   protected abstract void addClassName(String name);
 
-  public void processFile(final File file) {
+  public void processFile(File file) {
     try (InputStream is = new BufferedInputStream(new FileInputStream(file))) {
       processStream(is);
     }
@@ -73,7 +73,7 @@ public abstract class AbstractDependencyVisitor extends ClassVisitor {
     String result = mySlotNames.get(name);
     if (result == null) {
       result = name.replace("/", ".");
-      final int idx = result.indexOf("$");
+      int idx = result.indexOf("$");
       if (idx >= 0) {
         result = result.substring(0, idx);
       }

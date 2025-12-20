@@ -87,16 +87,16 @@ public class NegatedConditionalInspection extends BaseInspection {
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiConditionalExpression conditionalExpression = (PsiConditionalExpression) element.getParent();
+            PsiElement element = descriptor.getPsiElement();
+            PsiConditionalExpression conditionalExpression = (PsiConditionalExpression) element.getParent();
             assert conditionalExpression != null;
-            final PsiExpression elseBranch = conditionalExpression.getElseExpression();
-            final PsiExpression thenBranch = conditionalExpression.getThenExpression();
-            final PsiExpression condition = conditionalExpression.getCondition();
-            final String negatedCondition = BoolUtils.getNegatedExpressionText(condition);
+            PsiExpression elseBranch = conditionalExpression.getElseExpression();
+            PsiExpression thenBranch = conditionalExpression.getThenExpression();
+            PsiExpression condition = conditionalExpression.getCondition();
+            String negatedCondition = BoolUtils.getNegatedExpressionText(condition);
             assert elseBranch != null;
             assert thenBranch != null;
-            final String newStatement = negatedCondition + '?' + elseBranch.getText() + ':' + thenBranch.getText();
+            String newStatement = negatedCondition + '?' + elseBranch.getText() + ':' + thenBranch.getText();
             replaceExpression(conditionalExpression, newStatement);
         }
     }
@@ -106,15 +106,15 @@ public class NegatedConditionalInspection extends BaseInspection {
         @Override
         public void visitConditionalExpression(PsiConditionalExpression expression) {
             super.visitConditionalExpression(expression);
-            final PsiExpression thenBranch = expression.getThenExpression();
+            PsiExpression thenBranch = expression.getThenExpression();
             if (thenBranch == null) {
                 return;
             }
-            final PsiExpression elseBranch = expression.getElseExpression();
+            PsiExpression elseBranch = expression.getElseExpression();
             if (elseBranch == null) {
                 return;
             }
-            final PsiExpression condition = expression.getCondition();
+            PsiExpression condition = expression.getCondition();
             if (!ExpressionUtils.isNegation(condition, m_ignoreNegatedNullComparison, false)) {
                 return;
             }

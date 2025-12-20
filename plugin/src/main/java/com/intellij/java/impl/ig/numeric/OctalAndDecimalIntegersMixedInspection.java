@@ -65,12 +65,12 @@ public class OctalAndDecimalIntegersMixedInspection extends BaseInspection {
         @Override
         public void visitArrayInitializerExpression(PsiArrayInitializerExpression expression) {
             super.visitArrayInitializerExpression(expression);
-            final PsiExpression[] initializers = expression.getInitializers();
+            PsiExpression[] initializers = expression.getInitializers();
             boolean hasDecimalLiteral = false;
             boolean hasOctalLiteral = false;
-            for (final PsiExpression initializer : initializers) {
+            for (PsiExpression initializer : initializers) {
                 if (initializer instanceof PsiLiteralExpression) {
-                    final PsiLiteralExpression literal = (PsiLiteralExpression) initializer;
+                    PsiLiteralExpression literal = (PsiLiteralExpression) initializer;
                     if (isDecimalLiteral(literal)) {
                         hasDecimalLiteral = true;
                     }
@@ -85,11 +85,11 @@ public class OctalAndDecimalIntegersMixedInspection extends BaseInspection {
         }
 
         private static boolean isDecimalLiteral(PsiLiteralExpression literal) {
-            final PsiType type = literal.getType();
+            PsiType type = literal.getType();
             if (!PsiType.INT.equals(type) && !PsiType.LONG.equals(type)) {
                 return false;
             }
-            final String text = literal.getText();
+            String text = literal.getText();
             if ("0".equals(text)) {
                 return false;
             }
@@ -97,11 +97,11 @@ public class OctalAndDecimalIntegersMixedInspection extends BaseInspection {
         }
 
         private static boolean isOctalLiteral(PsiLiteralExpression literal) {
-            final PsiType type = literal.getType();
+            PsiType type = literal.getType();
             if (!PsiType.INT.equals(type) && !PsiType.LONG.equals(type)) {
                 return false;
             }
-            final String text = literal.getText();
+            String text = literal.getText();
             if ("0".equals(text) || "0L".equals(text)) {
                 return false;
             }

@@ -26,10 +26,10 @@ class ExpandToNormalAnnotationPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiNameValuePair)) {
       return false;
     }
-    final PsiNameValuePair attribute = (PsiNameValuePair)element;
+    PsiNameValuePair attribute = (PsiNameValuePair)element;
     if (attribute.getName() != null) return false;
 
-    final PsiAnnotationMemberValue value = attribute.getValue();
+    PsiAnnotationMemberValue value = attribute.getValue();
     if (value == null) {
       return false;
     }

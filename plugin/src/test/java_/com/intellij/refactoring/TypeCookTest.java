@@ -716,11 +716,11 @@ public abstract class TypeCookTest extends MultiFileTestCase {
                                           }
                                         });
 
-    final ReductionSystem commonSystem = b.build(aClass);
+    ReductionSystem commonSystem = b.build(aClass);
 
     //System.out.println("System built:\n" + commonSystem);
 
-    final ReductionSystem[] systems = commonSystem.isolate();
+    ReductionSystem[] systems = commonSystem.isolate();
 
     //System.out.println("Systems isolated:\n" + commonSystem);
 
@@ -736,7 +736,7 @@ public abstract class TypeCookTest extends MultiFileTestCase {
     Binding binding = null;
 
     if (system != null) {
-      final ResolverTree tree = new ResolverTree(system);
+      ResolverTree tree = new ResolverTree(system);
 
       tree.resolve();
 

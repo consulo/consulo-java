@@ -30,20 +30,20 @@ class AutomaticResourceManagementPredicate
     if (!(element instanceof PsiJavaToken)) {
       return false;
     }
-    final PsiJavaToken javaToken = (PsiJavaToken)element;
-    final IElementType tokenType = javaToken.getTokenType();
+    PsiJavaToken javaToken = (PsiJavaToken)element;
+    IElementType tokenType = javaToken.getTokenType();
     if (!JavaTokenType.TRY_KEYWORD.equals(tokenType)) {
       return false;
     }
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!(parent instanceof PsiTryStatement)) {
       return false;
     }
-    final PsiTryStatement tryStatement = (PsiTryStatement)parent;
+    PsiTryStatement tryStatement = (PsiTryStatement)parent;
     if (tryStatement.getTryBlock() == null) {
       return false;
     }
-    final PsiResourceList resourceList = tryStatement.getResourceList();
+    PsiResourceList resourceList = tryStatement.getResourceList();
     return resourceList != null;
   }
 }

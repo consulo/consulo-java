@@ -48,28 +48,28 @@ public class DeleteMultiCatchFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return myTypeElement.isValid() && PsiManager.getInstance(project).isInProject(myTypeElement.getContainingFile());
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(myTypeElement.getContainingFile())) return;
 
-    final PsiElement parentType = myTypeElement.getParent();
+    PsiElement parentType = myTypeElement.getParent();
     if (!(parentType instanceof PsiTypeElement)) return;
 
-    final PsiElement first;
-    final PsiElement last;
-    final PsiElement right = PsiTreeUtil.skipSiblingsForward(myTypeElement, PsiWhiteSpace.class, PsiComment.class);
+    PsiElement first;
+    PsiElement last;
+    PsiElement right = PsiTreeUtil.skipSiblingsForward(myTypeElement, PsiWhiteSpace.class, PsiComment.class);
     if (right instanceof PsiJavaToken && ((PsiJavaToken)right).getTokenType() == JavaTokenType.OR) {
       first = myTypeElement;
       last = right;
     }
     else if (right == null) {
-      final PsiElement left = PsiTreeUtil.skipSiblingsBackward(myTypeElement, PsiWhiteSpace.class, PsiComment.class);
+      PsiElement left = PsiTreeUtil.skipSiblingsBackward(myTypeElement, PsiWhiteSpace.class, PsiComment.class);
       if (!(left instanceof PsiJavaToken)) return;
-      final IElementType leftType = ((PsiJavaToken)left).getTokenType();
+      IElementType leftType = ((PsiJavaToken)left).getTokenType();
       if (leftType != JavaTokenType.OR) return;
       first = left;
       last = myTypeElement;
@@ -80,9 +80,9 @@ public class DeleteMultiCatchFix implements SyntheticIntentionAction {
 
     parentType.deleteChildRange(first, last);
 
-    final List<PsiTypeElement> typeElements = PsiTreeUtil.getChildrenOfTypeAsList(parentType, PsiTypeElement.class);
+    List<PsiTypeElement> typeElements = PsiTreeUtil.getChildrenOfTypeAsList(parentType, PsiTypeElement.class);
     if (typeElements.size() == 1) {
-      final PsiElement parameter = parentType.getParent();
+      PsiElement parameter = parentType.getParent();
       parameter.addRangeAfter(parentType.getFirstChild(), parentType.getLastChild(), parentType);
       parentType.delete();
     }

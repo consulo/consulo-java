@@ -73,12 +73,12 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
-    final TestFixtureBuilder<IdeaProjectTestFixture> projectBuilder = IdeaTestFixtureFactory.getFixtureFactory().createFixtureBuilder(getTestName(false));
+    TestFixtureBuilder<IdeaProjectTestFixture> projectBuilder = IdeaTestFixtureFactory.getFixtureFactory().createFixtureBuilder(getTestName(false));
 
     myFixture = JavaTestFixtureFactory.getFixtureFactory().createCodeInsightFixture(projectBuilder.getFixture());
-    final String dataPath = "/codeInsight/externalAnnotations";
+    String dataPath = "/codeInsight/externalAnnotations";
     myFixture.setTestDataPath(dataPath);
-    final JavaModuleFixtureBuilder builder = projectBuilder.addModule(JavaModuleFixtureBuilder.class);
+    JavaModuleFixtureBuilder builder = projectBuilder.addModule(JavaModuleFixtureBuilder.class);
     builder.setMockJdkLevel(JavaModuleFixtureBuilder.MockJdkLevel.jdk15);
 
     myFixture.setUp();
@@ -104,11 +104,11 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
     ApplicationManager.getApplication().runWriteAction(new Runnable() {
       @Override
       public void run() {
-        final ModifiableRootModel model = ModuleRootManager.getInstance(myModule).getModifiableModel();
-        final LibraryTable libraryTable = model.getModuleLibraryTable();
-        final Library library = libraryTable.createLibrary("test");
+        ModifiableRootModel model = ModuleRootManager.getInstance(myModule).getModifiableModel();
+        LibraryTable libraryTable = model.getModuleLibraryTable();
+        Library library = libraryTable.createLibrary("test");
 
-        final Library.ModifiableModel libraryModel = library.getModifiableModel();
+        Library.ModifiableModel libraryModel = library.getModifiableModel();
         libraryModel.addRoot(VfsUtil.pathToUrl(myFixture.getTempDirPath() + "/lib"), OrderRootType.SOURCES);
         for (String annotationsDir : annotationsDirs) {
           libraryModel.addRoot(VfsUtil.pathToUrl(myFixture.getTempDirPath() + annotationsDir), AnnotationOrderRootType.getInstance());
@@ -150,8 +150,8 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
     });
   }
 
-  private void startListening(@Nonnull final PsiModifierListOwner expectedOwner, @Nonnull final String expectedAnnotationFQName,
-                              final boolean expectedSuccessful) {
+  private void startListening(@Nonnull PsiModifierListOwner expectedOwner, @Nonnull String expectedAnnotationFQName,
+                              boolean expectedSuccessful) {
     startListening(Arrays.asList(Trinity.create(expectedOwner, expectedAnnotationFQName, expectedSuccessful)));
   }
 
@@ -205,16 +205,16 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
     startListening(expectedSequence);
     new WriteCommandAction(myProject){
       @Override
-      protected void run(final Result result) throws Throwable {
+      protected void run(Result result) throws Throwable {
         fix.invoke(myProject, editor, file);
       }
     }.execute();
 
     FileDocumentManager.getInstance().saveAllDocuments();
 
-    final PsiElement psiElement = file.findElementAt(editor.getCaretModel().getOffset());
+    PsiElement psiElement = file.findElementAt(editor.getCaretModel().getOffset());
     assertNotNull(psiElement);
-    final PsiModifierListOwner listOwner = PsiTreeUtil.getParentOfType(psiElement, PsiModifierListOwner.class);
+    PsiModifierListOwner listOwner = PsiTreeUtil.getParentOfType(psiElement, PsiModifierListOwner.class);
     assertNotNull(listOwner);
     assertNotNull(ExternalAnnotationsManager.getInstance(myProject).findExternalAnnotation(listOwner, AnnotationUtil.NOT_NULL));
     stopListeningAndCheckEvents();
@@ -237,12 +237,12 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
   public void testAnnotated() throws Throwable {
     PsiFile psiFile = myFixture.configureByFile("lib/p/TestAnnotated.java");
     PsiTestUtil.addSourceRoot(myModule, psiFile.getVirtualFile().getParent());
-    final PsiFile file = myFixture.getFile();
-    final Editor editor = myFixture.getEditor();
+    PsiFile file = myFixture.getFile();
+    Editor editor = myFixture.getEditor();
     assertNotAvailable("Annotate method 'get' as @NotNull");
     assertNotAvailable("Annotate method 'get' as @Nullable");
 
-    final DeannotateIntentionAction deannotateFix = new DeannotateIntentionAction();
+    DeannotateIntentionAction deannotateFix = new DeannotateIntentionAction();
     assertFalse(deannotateFix.isAvailable(myProject, editor, file));
   }
 
@@ -260,22 +260,22 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
     myFixture.checkResultByFile("content/anno/p/annotations.xml", "content/anno/p/annotationsDeannotation1_after.xml", false);
   }
 
-  private void doDeannotate(@NonNls final String testPath, String hint1, String hint2) throws Throwable {
+  private void doDeannotate(@NonNls String testPath, String hint1, String hint2) throws Throwable {
     myFixture.configureByFile(testPath);
-    final PsiFile file = myFixture.getFile();
-    final Editor editor = myFixture.getEditor();
+    PsiFile file = myFixture.getFile();
+    Editor editor = myFixture.getEditor();
 
     assertNotAvailable(hint1);
     assertNotAvailable(hint2);
 
-    final DeannotateIntentionAction deannotateFix = new DeannotateIntentionAction();
+    DeannotateIntentionAction deannotateFix = new DeannotateIntentionAction();
     assertTrue(deannotateFix.isAvailable(myProject, editor, file));
 
     final PsiModifierListOwner container = DeannotateIntentionAction.getContainer(editor, file);
     startListening(container, AnnotationUtil.NOT_NULL, true);
     new WriteCommandAction(myProject){
       @Override
-      protected void run(final Result result) throws Throwable {
+      protected void run(Result result) throws Throwable {
         ExternalAnnotationsManager.getInstance(myProject).deannotate(container, AnnotationUtil.NOT_NULL);
       }
     }.execute();
@@ -342,7 +342,7 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
     startListening(method, AnnotationUtil.NULLABLE, true);
     new WriteCommandAction(myProject) {
       @Override
-      protected void run(final Result result) throws Throwable {
+      protected void run(Result result) throws Throwable {
         manager.editExternalAnnotation(method, AnnotationUtil.NULLABLE, annotationFromText.getParameterList().getAttributes());
       }
     }.execute();
@@ -351,7 +351,7 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
     startListening(parameter, AnnotationUtil.NOT_NULL, true);
     new WriteCommandAction(myProject) {
       @Override
-      protected void run(final Result result) throws Throwable {
+      protected void run(Result result) throws Throwable {
         manager.editExternalAnnotation(parameter, AnnotationUtil.NOT_NULL, annotationFromText.getParameterList().getAttributes());
       }
     }.execute();
@@ -373,7 +373,7 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
     startListening(method, AnnotationUtil.NOT_NULL, false);
     new WriteCommandAction(myProject){
       @Override
-      protected void run(final Result result) throws Throwable {
+      protected void run(Result result) throws Throwable {
         ExternalAnnotationsManager.getInstance(myProject).annotateExternally(method, AnnotationUtil.NOT_NULL, myFixture.getFile(), null);
       }
     }.execute();
@@ -382,7 +382,7 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
     startListening(method, AnnotationUtil.NOT_NULL, false);
     new WriteCommandAction(myProject){
       @Override
-      protected void run(final Result result) throws Throwable {
+      protected void run(Result result) throws Throwable {
         ExternalAnnotationsManager.getInstance(myProject).editExternalAnnotation(method, AnnotationUtil.NOT_NULL, null);
       }
     }.execute();
@@ -391,7 +391,7 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
     startListening(method, AnnotationUtil.NOT_NULL, false);
     new WriteCommandAction(myProject){
       @Override
-      protected void run(final Result result) throws Throwable {
+      protected void run(Result result) throws Throwable {
         ExternalAnnotationsManager.getInstance(myProject).deannotate(method, AnnotationUtil.NOT_NULL);
       }
     }.execute();
@@ -408,7 +408,7 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
     startListeningForExternalChanges();
     new WriteCommandAction(myProject){
       @Override
-      protected void run(final Result result) throws Throwable {
+      protected void run(Result result) throws Throwable {
         VirtualFile file = LocalFileSystem.getInstance().findFileByPath(myFixture.getTempDirPath() + "/content/anno/p/annotations.xml");
         assert file != null;
         String newText = "  " + StreamUtil.readText(file.getInputStream()) + "      "; // adding newspace to the beginning and end of file

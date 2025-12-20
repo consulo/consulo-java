@@ -72,7 +72,7 @@ public class CreateConstructorFromCallFix extends CreateFromUsageBaseFix {
       Template template = templateBuilder.buildTemplate();
       final Editor editor = positionCursor(project, targetClass.getContainingFile(), targetClass);
       if (editor == null) return;
-      final TextRange textRange = constructor.getTextRange();
+      TextRange textRange = constructor.getTextRange();
       editor.getDocument().deleteString(textRange.getStartOffset(), textRange.getEndOffset());
       editor.getCaretModel().moveToOffset(textRange.getStartOffset());
 
@@ -84,7 +84,7 @@ public class CreateConstructorFromCallFix extends CreateFromUsageBaseFix {
             public void run() {
               try {
                 PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
-                final int offset = editor.getCaretModel().getOffset();
+                int offset = editor.getCaretModel().getOffset();
                 PsiMethod constructor = PsiTreeUtil.findElementOfClassAtOffset(file, offset, PsiMethod.class, false);
                 if (superConstructor == null) {
                   CreateFromUsageUtils.setupMethodBody(constructor);
@@ -107,7 +107,7 @@ public class CreateConstructorFromCallFix extends CreateFromUsageBaseFix {
   }
 
   private static PsiFile getTargetFile(PsiElement element) {
-    final PsiConstructorCall constructorCall = (PsiConstructorCall)element;
+    PsiConstructorCall constructorCall = (PsiConstructorCall)element;
 
     //Enum constants constructors are file local
     if (constructorCall instanceof PsiEnumConstant) return constructorCall.getContainingFile();

@@ -49,93 +49,93 @@ public class ReplaceIfWithConditionalIntention extends Intention {
     @Override
     public void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiIfStatement ifStatement = (PsiIfStatement) element.getParent();
+        PsiIfStatement ifStatement = (PsiIfStatement) element.getParent();
         if (ifStatement == null) {
             return;
         }
         if (ReplaceIfWithConditionalPredicate.isReplaceableAssignment(ifStatement)) {
-            final PsiExpression condition = ifStatement.getCondition();
+            PsiExpression condition = ifStatement.getCondition();
             if (condition == null) {
                 return;
             }
-            final PsiStatement thenBranch = ifStatement.getThenBranch();
-            final PsiExpressionStatement strippedThenBranch = (PsiExpressionStatement) ConditionalUtils.stripBraces(thenBranch);
-            final PsiStatement elseBranch = ifStatement.getElseBranch();
-            final PsiExpressionStatement strippedElseBranch = (PsiExpressionStatement) ConditionalUtils.stripBraces(elseBranch);
-            final PsiAssignmentExpression thenAssign = (PsiAssignmentExpression) strippedThenBranch.getExpression();
-            final PsiAssignmentExpression elseAssign = (PsiAssignmentExpression) strippedElseBranch.getExpression();
-            final PsiExpression lhs = thenAssign.getLExpression();
-            final String lhsText = lhs.getText();
-            final PsiJavaToken sign = thenAssign.getOperationSign();
-            final String operator = sign.getText();
-            final PsiExpression thenRhs = thenAssign.getRExpression();
+            PsiStatement thenBranch = ifStatement.getThenBranch();
+            PsiExpressionStatement strippedThenBranch = (PsiExpressionStatement) ConditionalUtils.stripBraces(thenBranch);
+            PsiStatement elseBranch = ifStatement.getElseBranch();
+            PsiExpressionStatement strippedElseBranch = (PsiExpressionStatement) ConditionalUtils.stripBraces(elseBranch);
+            PsiAssignmentExpression thenAssign = (PsiAssignmentExpression) strippedThenBranch.getExpression();
+            PsiAssignmentExpression elseAssign = (PsiAssignmentExpression) strippedElseBranch.getExpression();
+            PsiExpression lhs = thenAssign.getLExpression();
+            String lhsText = lhs.getText();
+            PsiJavaToken sign = thenAssign.getOperationSign();
+            String operator = sign.getText();
+            PsiExpression thenRhs = thenAssign.getRExpression();
             if (thenRhs == null) {
                 return;
             }
-            final PsiExpression elseRhs = elseAssign.getRExpression();
+            PsiExpression elseRhs = elseAssign.getRExpression();
             if (elseRhs == null) {
                 return;
             }
-            final String conditional = getConditionalText(condition, thenRhs, elseRhs, thenAssign.getType());
+            String conditional = getConditionalText(condition, thenRhs, elseRhs, thenAssign.getType());
             replaceStatement(lhsText + operator + conditional + ';', ifStatement);
         }
         else if (ReplaceIfWithConditionalPredicate.isReplaceableReturn(ifStatement)) {
-            final PsiExpression condition = ifStatement.getCondition();
+            PsiExpression condition = ifStatement.getCondition();
             if (condition == null) {
                 return;
             }
-            final PsiStatement thenBranch = ifStatement.getThenBranch();
-            final PsiReturnStatement thenReturn = (PsiReturnStatement) ConditionalUtils.stripBraces(thenBranch);
-            final PsiStatement elseBranch = ifStatement.getElseBranch();
-            final PsiReturnStatement elseReturn = (PsiReturnStatement) ConditionalUtils.stripBraces(elseBranch);
-            final PsiExpression thenReturnValue = thenReturn.getReturnValue();
+            PsiStatement thenBranch = ifStatement.getThenBranch();
+            PsiReturnStatement thenReturn = (PsiReturnStatement) ConditionalUtils.stripBraces(thenBranch);
+            PsiStatement elseBranch = ifStatement.getElseBranch();
+            PsiReturnStatement elseReturn = (PsiReturnStatement) ConditionalUtils.stripBraces(elseBranch);
+            PsiExpression thenReturnValue = thenReturn.getReturnValue();
             if (thenReturnValue == null) {
                 return;
             }
-            final PsiExpression elseReturnValue = elseReturn.getReturnValue();
+            PsiExpression elseReturnValue = elseReturn.getReturnValue();
             if (elseReturnValue == null) {
                 return;
             }
-            final PsiMethod method = PsiTreeUtil.getParentOfType(thenReturn, PsiMethod.class);
+            PsiMethod method = PsiTreeUtil.getParentOfType(thenReturn, PsiMethod.class);
             if (method == null) {
                 return;
             }
-            final PsiType returnType = method.getReturnType();
-            final String conditional = getConditionalText(condition, thenReturnValue, elseReturnValue, returnType);
+            PsiType returnType = method.getReturnType();
+            String conditional = getConditionalText(condition, thenReturnValue, elseReturnValue, returnType);
             replaceStatement("return " + conditional + ';', ifStatement);
         }
         else if (ReplaceIfWithConditionalPredicate.isReplaceableMethodCall(ifStatement)) {
-            final PsiExpression condition = ifStatement.getCondition();
+            PsiExpression condition = ifStatement.getCondition();
             if (condition == null) {
                 return;
             }
-            final PsiExpressionStatement thenBranch = (PsiExpressionStatement) ConditionalUtils.stripBraces(ifStatement.getThenBranch());
-            final PsiExpressionStatement elseBranch = (PsiExpressionStatement) ConditionalUtils.stripBraces(ifStatement.getElseBranch());
-            final PsiMethodCallExpression thenMethodCallExpression = (PsiMethodCallExpression) thenBranch.getExpression();
-            final PsiMethodCallExpression elseMethodCallExpression = (PsiMethodCallExpression) elseBranch.getExpression();
-            final StringBuilder replacementText = new StringBuilder(thenMethodCallExpression.getMethodExpression().getText());
+            PsiExpressionStatement thenBranch = (PsiExpressionStatement) ConditionalUtils.stripBraces(ifStatement.getThenBranch());
+            PsiExpressionStatement elseBranch = (PsiExpressionStatement) ConditionalUtils.stripBraces(ifStatement.getElseBranch());
+            PsiMethodCallExpression thenMethodCallExpression = (PsiMethodCallExpression) thenBranch.getExpression();
+            PsiMethodCallExpression elseMethodCallExpression = (PsiMethodCallExpression) elseBranch.getExpression();
+            StringBuilder replacementText = new StringBuilder(thenMethodCallExpression.getMethodExpression().getText());
             replacementText.append('(');
-            final PsiExpressionList thenArgumentList = thenMethodCallExpression.getArgumentList();
-            final PsiExpression[] thenArguments = thenArgumentList.getExpressions();
-            final PsiExpressionList elseArgumentList = elseMethodCallExpression.getArgumentList();
-            final PsiExpression[] elseArguments = elseArgumentList.getExpressions();
+            PsiExpressionList thenArgumentList = thenMethodCallExpression.getArgumentList();
+            PsiExpression[] thenArguments = thenArgumentList.getExpressions();
+            PsiExpressionList elseArgumentList = elseMethodCallExpression.getArgumentList();
+            PsiExpression[] elseArguments = elseArgumentList.getExpressions();
             for (int i = 0, length = thenArguments.length; i < length; i++) {
                 if (i > 0) {
                     replacementText.append(',');
                 }
-                final PsiExpression thenArgument = thenArguments[i];
-                final PsiExpression elseArgument = elseArguments[i];
+                PsiExpression thenArgument = thenArguments[i];
+                PsiExpression elseArgument = elseArguments[i];
                 if (EquivalenceChecker.expressionsAreEquivalent(thenArgument, elseArgument)) {
                     replacementText.append(thenArgument.getText());
                 }
                 else {
-                    final PsiMethod method = thenMethodCallExpression.resolveMethod();
+                    PsiMethod method = thenMethodCallExpression.resolveMethod();
                     if (method == null) {
                         return;
                     }
-                    final PsiParameterList parameterList = method.getParameterList();
-                    final PsiType requiredType = parameterList.getParameters()[i].getType();
-                    final String conditionalText = getConditionalText(condition, thenArgument, elseArgument, requiredType);
+                    PsiParameterList parameterList = method.getParameterList();
+                    PsiType requiredType = parameterList.getParameters()[i].getType();
+                    String conditionalText = getConditionalText(condition, thenArgument, elseArgument, requiredType);
                     if (conditionalText == null) {
                         return;
                     }
@@ -146,29 +146,29 @@ public class ReplaceIfWithConditionalIntention extends Intention {
             replaceStatement(replacementText.toString(), ifStatement);
         }
         else if (ReplaceIfWithConditionalPredicate.isReplaceableImplicitReturn(ifStatement)) {
-            final PsiExpression condition = ifStatement.getCondition();
+            PsiExpression condition = ifStatement.getCondition();
             if (condition == null) {
                 return;
             }
-            final PsiReturnStatement thenBranch = (PsiReturnStatement) ConditionalUtils.stripBraces(ifStatement.getThenBranch());
-            final PsiExpression thenReturnValue = thenBranch.getReturnValue();
+            PsiReturnStatement thenBranch = (PsiReturnStatement) ConditionalUtils.stripBraces(ifStatement.getThenBranch());
+            PsiExpression thenReturnValue = thenBranch.getReturnValue();
             if (thenReturnValue == null) {
                 return;
             }
-            final PsiReturnStatement elseBranch = PsiTreeUtil.getNextSiblingOfType(ifStatement, PsiReturnStatement.class);
+            PsiReturnStatement elseBranch = PsiTreeUtil.getNextSiblingOfType(ifStatement, PsiReturnStatement.class);
             if (elseBranch == null) {
                 return;
             }
-            final PsiExpression elseReturnValue = elseBranch.getReturnValue();
+            PsiExpression elseReturnValue = elseBranch.getReturnValue();
             if (elseReturnValue == null) {
                 return;
             }
-            final PsiMethod method = PsiTreeUtil.getParentOfType(thenBranch, PsiMethod.class);
+            PsiMethod method = PsiTreeUtil.getParentOfType(thenBranch, PsiMethod.class);
             if (method == null) {
                 return;
             }
-            final PsiType methodType = method.getReturnType();
-            final String conditional = getConditionalText(condition, thenReturnValue, elseReturnValue, methodType);
+            PsiType methodType = method.getReturnType();
+            String conditional = getConditionalText(condition, thenReturnValue, elseReturnValue, methodType);
             if (conditional == null) {
                 return;
             }
@@ -193,18 +193,18 @@ public class ReplaceIfWithConditionalIntention extends Intention {
         if (elseValue == null) {
             return null;
         }
-        final StringBuilder conditional = new StringBuilder();
-        final String conditionText = getExpressionText(condition);
+        StringBuilder conditional = new StringBuilder();
+        String conditionText = getExpressionText(condition);
         conditional.append(conditionText);
         conditional.append('?');
-        final PsiType thenType = thenValue.getType();
-        final PsiType elseType = elseValue.getType();
+        PsiType thenType = thenValue.getType();
+        PsiType elseType = elseValue.getType();
         if (thenType instanceof PsiPrimitiveType &&
             !PsiType.NULL.equals(thenType) &&
             !(elseType instanceof PsiPrimitiveType) &&
             !(requiredType instanceof PsiPrimitiveType)) {
             // prevent unboxing of boxed value to preserve semantics (IDEADEV-36008)
-            final PsiPrimitiveType primitiveType = (PsiPrimitiveType) thenType;
+            PsiPrimitiveType primitiveType = (PsiPrimitiveType) thenType;
             conditional.append(primitiveType.getBoxedTypeName());
             conditional.append(".valueOf(");
             conditional.append(thenValue.getText());
@@ -218,7 +218,7 @@ public class ReplaceIfWithConditionalIntention extends Intention {
             // prevent unboxing of boxed value to preserve semantics (IDEADEV-36008)
             conditional.append(getExpressionText(thenValue));
             conditional.append(':');
-            final PsiPrimitiveType primitiveType = (PsiPrimitiveType) elseType;
+            PsiPrimitiveType primitiveType = (PsiPrimitiveType) elseType;
             conditional.append(primitiveType.getBoxedTypeName());
             conditional.append(".valueOf(");
             conditional.append(elseValue.getText());

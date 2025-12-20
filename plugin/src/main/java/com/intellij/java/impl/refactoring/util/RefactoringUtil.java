@@ -70,17 +70,17 @@ public class RefactoringUtil {
     private RefactoringUtil() {
     }
 
-    public static boolean isSourceRoot(final PsiDirectory directory) {
+    public static boolean isSourceRoot(PsiDirectory directory) {
         if (directory.getManager() == null) {
             return false;
         }
-        final Project project = directory.getProject();
-        final VirtualFile virtualFile = directory.getVirtualFile();
-        final VirtualFile sourceRootForFile = ProjectRootManager.getInstance(project).getFileIndex().getSourceRootForFile(virtualFile);
+        Project project = directory.getProject();
+        VirtualFile virtualFile = directory.getVirtualFile();
+        VirtualFile sourceRootForFile = ProjectRootManager.getInstance(project).getFileIndex().getSourceRootForFile(virtualFile);
         return Comparing.equal(virtualFile, sourceRootForFile);
     }
 
-    public static boolean isInStaticContext(PsiElement element, @Nullable final PsiClass aClass) {
+    public static boolean isInStaticContext(PsiElement element, @Nullable PsiClass aClass) {
         return PsiUtil.getEnclosingStaticElement(element, aClass) != null;
     }
 
@@ -119,17 +119,17 @@ public class RefactoringUtil {
 
     public static PsiElement replaceOccurenceWithFieldRef(PsiExpression occurrence, PsiField newField, PsiClass destinationClass)
         throws IncorrectOperationException {
-        final PsiManager manager = destinationClass.getManager();
-        final String fieldName = newField.getName();
-        final JavaPsiFacade facade = JavaPsiFacade.getInstance(manager.getProject());
-        final PsiElement element = occurrence.getUserData(ElementToWorkOn.PARENT);
-        final PsiVariable psiVariable = facade.getResolveHelper().resolveAccessibleReferencedVariable(fieldName, element != null ? element : occurrence);
-        final PsiElementFactory factory = facade.getElementFactory();
+        PsiManager manager = destinationClass.getManager();
+        String fieldName = newField.getName();
+        JavaPsiFacade facade = JavaPsiFacade.getInstance(manager.getProject());
+        PsiElement element = occurrence.getUserData(ElementToWorkOn.PARENT);
+        PsiVariable psiVariable = facade.getResolveHelper().resolveAccessibleReferencedVariable(fieldName, element != null ? element : occurrence);
+        PsiElementFactory factory = facade.getElementFactory();
         if (psiVariable != null && psiVariable.equals(newField)) {
             return IntroduceVariableBase.replace(occurrence, factory.createExpressionFromText(fieldName, null), manager.getProject());
         }
         else {
-            final PsiReferenceExpression ref = (PsiReferenceExpression) factory.createExpressionFromText("this." + fieldName, null);
+            PsiReferenceExpression ref = (PsiReferenceExpression) factory.createExpressionFromText("this." + fieldName, null);
             if (!occurrence.isValid()) {
                 return null;
             }
@@ -149,7 +149,7 @@ public class RefactoringUtil {
         while (true) {
             final String name = index > 0 ? baseName + index : baseName;
             index++;
-            final PsiManager manager = place.getManager();
+            PsiManager manager = place.getManager();
             PsiResolveHelper helper = JavaPsiFacade.getInstance(manager.getProject()).getResolveHelper();
             PsiVariable refVar = helper.resolveAccessibleReferencedVariable(name, place);
             if (refVar != null && !manager.areElementsEquivalent(refVar, fieldToReplace)) {
@@ -201,7 +201,7 @@ public class RefactoringUtil {
             else {
                 newOverriderName += newBaseName;
             }
-            final int j = i + oldBaseName.length();
+            int j = i + oldBaseName.length();
             if (j < oldOverriderName.length()) {
                 newOverriderName += oldOverriderName.substring(j);
             }
@@ -211,11 +211,11 @@ public class RefactoringUtil {
         return null;
     }
 
-    public static boolean hasOnDemandStaticImport(final PsiElement element, final PsiClass aClass) {
+    public static boolean hasOnDemandStaticImport(PsiElement element, PsiClass aClass) {
         if (element.getContainingFile() instanceof PsiJavaFile) {
-            final PsiImportList importList = ((PsiJavaFile) element.getContainingFile()).getImportList();
+            PsiImportList importList = ((PsiJavaFile) element.getContainingFile()).getImportList();
             if (importList != null) {
-                final PsiImportStaticStatement[] importStaticStatements = importList.getImportStaticStatements();
+                PsiImportStaticStatement[] importStaticStatements = importList.getImportStaticStatements();
                 for (PsiImportStaticStatement stmt : importStaticStatements) {
                     if (stmt.isOnDemand() && stmt.resolveTargetClass() == aClass) {
                         return true;
@@ -226,14 +226,14 @@ public class RefactoringUtil {
         return false;
     }
 
-    public static boolean hasStaticImportOn(final PsiElement expr, final PsiMember member) {
+    public static boolean hasStaticImportOn(PsiElement expr, PsiMember member) {
         if (expr.getContainingFile() instanceof PsiJavaFile) {
-            final PsiImportList importList = ((PsiJavaFile) expr.getContainingFile()).getImportList();
+            PsiImportList importList = ((PsiJavaFile) expr.getContainingFile()).getImportList();
             if (importList != null) {
-                final PsiImportStaticStatement[] importStaticStatements = importList.getImportStaticStatements();
+                PsiImportStaticStatement[] importStaticStatements = importList.getImportStaticStatements();
                 for (PsiImportStaticStatement stmt : importStaticStatements) {
-                    final PsiClass containingClass = member.getContainingClass();
-                    final String referenceName = stmt.getReferenceName();
+                    PsiClass containingClass = member.getContainingClass();
+                    String referenceName = stmt.getReferenceName();
                     if (!stmt.isOnDemand() && stmt.resolveTargetClass() == containingClass && Comparing.strEqual(referenceName, member.getName())) {
                         if (member instanceof PsiMethod) {
                             return containingClass.findMethodsByName(referenceName, false).length == 1;
@@ -246,7 +246,7 @@ public class RefactoringUtil {
         return false;
     }
 
-    public static PsiElement replaceElementsWithMap(PsiElement replaceIn, final Map<PsiElement, PsiElement> elementsToReplace) throws IncorrectOperationException {
+    public static PsiElement replaceElementsWithMap(PsiElement replaceIn, Map<PsiElement, PsiElement> elementsToReplace) throws IncorrectOperationException {
         for (Map.Entry<PsiElement, PsiElement> e : elementsToReplace.entrySet()) {
             if (e.getKey() == replaceIn) {
                 return e.getKey().replace(e.getValue());
@@ -357,7 +357,7 @@ public class RefactoringUtil {
             outermost = (PsiExpression) outermost.getParent();
         }
         if (outermost.getParent() instanceof PsiForStatement) {
-            final PsiForStatement forStatement = (PsiForStatement) outermost.getParent();
+            PsiForStatement forStatement = (PsiForStatement) outermost.getParent();
             if (forStatement.getCondition() == outermost) {
                 return forStatement;
             }
@@ -366,7 +366,7 @@ public class RefactoringUtil {
             }
         }
         if (outermost.getParent() instanceof PsiExpressionStatement && outermost.getParent().getParent() instanceof PsiForStatement) {
-            final PsiForStatement forStatement = (PsiForStatement) outermost.getParent().getParent();
+            PsiForStatement forStatement = (PsiForStatement) outermost.getParent().getParent();
             if (forStatement.getUpdate() == outermost.getParent()) {
                 return forStatement;
             }
@@ -383,9 +383,9 @@ public class RefactoringUtil {
         return null;
     }
 
-    public static PsiClass getThisResolveClass(final PsiReferenceExpression place) {
-        final JavaResolveResult resolveResult = place.advancedResolve(false);
-        final PsiElement scope = resolveResult.getCurrentFileResolveScope();
+    public static PsiClass getThisResolveClass(PsiReferenceExpression place) {
+        JavaResolveResult resolveResult = place.advancedResolve(false);
+        PsiElement scope = resolveResult.getCurrentFileResolveScope();
         if (scope instanceof PsiClass) {
             return (PsiClass) scope;
         }
@@ -406,7 +406,7 @@ public class RefactoringUtil {
     }
 
     public static PsiMethod getEnclosingMethod(PsiElement element) {
-        final PsiElement container = PsiTreeUtil.getParentOfType(element, PsiMethod.class, PsiClass.class);
+        PsiElement container = PsiTreeUtil.getParentOfType(element, PsiMethod.class, PsiClass.class);
         return container instanceof PsiMethod ? (PsiMethod) container : null;
     }
 
@@ -417,7 +417,7 @@ public class RefactoringUtil {
     public static void renameVariableReferences(PsiVariable variable,
                                                 String newName,
                                                 SearchScope scope,
-                                                final boolean ignoreAccessScope) throws IncorrectOperationException {
+                                                boolean ignoreAccessScope) throws IncorrectOperationException {
         for (PsiReference reference : ReferencesSearch.search(variable, scope, ignoreAccessScope)) {
             reference.handleElementRename(newName);
         }
@@ -425,7 +425,7 @@ public class RefactoringUtil {
 
     public static boolean canBeDeclaredFinal(PsiVariable variable) {
         LOG.assertTrue(variable instanceof PsiLocalVariable || variable instanceof PsiParameter);
-        final boolean isReassigned = HighlightControlFlowUtil
+        boolean isReassigned = HighlightControlFlowUtil
             .isReassigned(variable, new HashMap<>());
         return !isReassigned;
     }
@@ -478,7 +478,7 @@ public class RefactoringUtil {
         return getTypeByExpression(expr, factory);
     }
 
-    private static PsiType getTypeByExpression(PsiExpression expr, final PsiElementFactory factory) {
+    private static PsiType getTypeByExpression(PsiExpression expr, PsiElementFactory factory) {
         PsiType type = expr.getType();
         if (type == null) {
             if (expr instanceof PsiArrayInitializerExpression) {
@@ -578,7 +578,7 @@ public class RefactoringUtil {
                         while (!parent.getParent().equals(commonParent)) {
                             parent = parent.getParent();
                         }
-                        final PsiElement newAnchor = getParentExpressionAnchorElement(parent);
+                        PsiElement newAnchor = getParentExpressionAnchorElement(parent);
                         if (newAnchor != null) {
                             anchor = newAnchor;
                         }
@@ -676,13 +676,13 @@ public class RefactoringUtil {
         HighlightManager highlightManager = HighlightManager.getInstance(project);
         if (occurrences.length > 1) {
             for (PsiElement occurrence : occurrences) {
-                final RangeMarker rangeMarker = occurrence.getUserData(ElementToWorkOn.TEXT_RANGE);
+                RangeMarker rangeMarker = occurrence.getUserData(ElementToWorkOn.TEXT_RANGE);
                 if (rangeMarker != null && rangeMarker.isValid()) {
                     highlightManager
                         .addRangeHighlight(editor, rangeMarker.getStartOffset(), rangeMarker.getEndOffset(), EditorColors.SEARCH_RESULT_ATTRIBUTES, true, highlighters);
                 }
                 else {
-                    final TextRange textRange = occurrence.getTextRange();
+                    TextRange textRange = occurrence.getTextRange();
                     highlightManager.addRangeHighlight(editor, textRange.getStartOffset(), textRange.getEndOffset(), EditorColors.SEARCH_RESULT_ATTRIBUTES, true, highlighters);
                 }
             }
@@ -697,8 +697,8 @@ public class RefactoringUtil {
         Project project = expr.getProject();
         String[] suggestedNames =
             JavaCodeStyleManager.getInstance(project).suggestVariableName(VariableKind.LOCAL_VARIABLE, null, expr, null).names;
-        final String prefix = suggestedNames[0];
-        final String id = JavaCodeStyleManager.getInstance(project).suggestUniqueVariableName(prefix, context, true);
+        String prefix = suggestedNames[0];
+        String id = JavaCodeStyleManager.getInstance(project).suggestUniqueVariableName(prefix, context, true);
 
         PsiElementFactory factory = JavaPsiFacade.getInstance(expr.getProject()).getElementFactory();
 
@@ -836,7 +836,7 @@ public class RefactoringUtil {
 
     public static PsiExpression unparenthesizeExpression(PsiExpression expression) {
         while (expression instanceof PsiParenthesizedExpression) {
-            final PsiExpression innerExpression = ((PsiParenthesizedExpression) expression).getExpression();
+            PsiExpression innerExpression = ((PsiParenthesizedExpression) expression).getExpression();
             if (innerExpression == null) {
                 return expression;
             }
@@ -862,13 +862,13 @@ public class RefactoringUtil {
     }
 
     public static void visitImplicitSuperConstructorUsages(PsiClass subClass,
-                                                           final ImplicitConstructorUsageVisitor implicitConstructorUsageVistor,
+                                                           ImplicitConstructorUsageVisitor implicitConstructorUsageVistor,
                                                            PsiClass superClass) {
-        final PsiMethod baseDefaultConstructor = findDefaultConstructor(superClass);
-        final PsiMethod[] constructors = subClass.getConstructors();
+        PsiMethod baseDefaultConstructor = findDefaultConstructor(superClass);
+        PsiMethod[] constructors = subClass.getConstructors();
         if (constructors.length > 0) {
             for (PsiMethod constructor : constructors) {
-                final PsiStatement[] statements = constructor.getBody().getStatements();
+                PsiStatement[] statements = constructor.getBody().getStatements();
                 if (statements.length < 1 || !JavaHighlightUtil.isSuperOrThisCall(statements[0], true, true)) {
                     implicitConstructorUsageVistor.visitConstructor(constructor, baseDefaultConstructor);
                 }
@@ -879,8 +879,8 @@ public class RefactoringUtil {
         }
     }
 
-    private static PsiMethod findDefaultConstructor(final PsiClass aClass) {
-        final PsiMethod[] constructors = aClass.getConstructors();
+    private static PsiMethod findDefaultConstructor(PsiClass aClass) {
+        PsiMethod[] constructors = aClass.getConstructors();
         for (PsiMethod constructor : constructors) {
             if (constructor.getParameterList().getParametersCount() == 0) {
                 return constructor;
@@ -890,19 +890,19 @@ public class RefactoringUtil {
         return null;
     }
 
-    public static void replaceMovedMemberTypeParameters(final PsiElement member,
-                                                        final Iterable<PsiTypeParameter> parametersIterable,
-                                                        final PsiSubstitutor substitutor,
-                                                        final PsiElementFactory factory) {
-        final Map<PsiElement, PsiElement> replacement = new LinkedHashMap<>();
+    public static void replaceMovedMemberTypeParameters(PsiElement member,
+                                                        Iterable<PsiTypeParameter> parametersIterable,
+                                                        PsiSubstitutor substitutor,
+                                                        PsiElementFactory factory) {
+        Map<PsiElement, PsiElement> replacement = new LinkedHashMap<>();
         for (PsiTypeParameter parameter : parametersIterable) {
             PsiType substitutedType = substitutor.substitute(parameter);
             if (substitutedType == null) {
                 substitutedType = TypeConversionUtil.erasure(factory.createType(parameter));
             }
             for (PsiReference reference : ReferencesSearch.search(parameter, new LocalSearchScope(member))) {
-                final PsiElement element = reference.getElement();
-                final PsiElement parent = element.getParent();
+                PsiElement element = reference.getElement();
+                PsiElement parent = element.getParent();
                 if (parent instanceof PsiTypeElement) {
                     replacement.put(parent, factory.createTypeElement(substitutedType));
                 }
@@ -920,16 +920,16 @@ public class RefactoringUtil {
 
     @Nullable
     public static PsiMethod getChainedConstructor(PsiMethod constructor) {
-        final PsiCodeBlock constructorBody = constructor.getBody();
+        PsiCodeBlock constructorBody = constructor.getBody();
         if (constructorBody == null) {
             return null;
         }
-        final PsiStatement[] statements = constructorBody.getStatements();
+        PsiStatement[] statements = constructorBody.getStatements();
         if (statements.length == 1 && statements[0] instanceof PsiExpressionStatement) {
-            final PsiExpression expression = ((PsiExpressionStatement) statements[0]).getExpression();
+            PsiExpression expression = ((PsiExpressionStatement) statements[0]).getExpression();
             if (expression instanceof PsiMethodCallExpression) {
-                final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
-                final PsiReferenceExpression methodExpr = methodCallExpression.getMethodExpression();
+                PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
+                PsiReferenceExpression methodExpr = methodCallExpression.getMethodExpression();
                 if ("this".equals(methodExpr.getReferenceName())) {
                     return (PsiMethod) methodExpr.resolve();
                 }
@@ -951,13 +951,13 @@ public class RefactoringUtil {
         if (PsiTreeUtil.getParentOfType(element, PsiImportStatement.class) != null) {
             return true;
         }
-        final PsiFile containingFile = element.getContainingFile();
+        PsiFile containingFile = element.getContainingFile();
         if (containingFile instanceof PsiJavaFile) {
-            final PsiImportList importList = ((PsiJavaFile) containingFile).getImportList();
+            PsiImportList importList = ((PsiJavaFile) containingFile).getImportList();
             if (importList != null) {
-                final TextRange refRange = ref.getRangeInElement().shiftRight(element.getTextRange().getStartOffset());
+                TextRange refRange = ref.getRangeInElement().shiftRight(element.getTextRange().getStartOffset());
                 for (PsiImportStatementBase importStatementBase : importList.getAllImportStatements()) {
-                    final TextRange textRange = importStatementBase.getTextRange();
+                    TextRange textRange = importStatementBase.getTextRange();
                     if (textRange.contains(refRange)) {
                         return true;
                     }
@@ -969,22 +969,22 @@ public class RefactoringUtil {
 
     public static PsiStatement putStatementInLoopBody(PsiStatement declaration, PsiElement container, PsiElement finalAnchorStatement)
         throws IncorrectOperationException {
-        final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(container.getProject()).getElementFactory();
+        PsiElementFactory elementFactory = JavaPsiFacade.getInstance(container.getProject()).getElementFactory();
         if (isLoopOrIf(container)) {
             PsiStatement loopBody = getLoopBody(container, finalAnchorStatement);
             PsiStatement loopBodyCopy = loopBody != null ? (PsiStatement) loopBody.copy() : null;
             PsiBlockStatement blockStatement = (PsiBlockStatement) elementFactory
                 .createStatementFromText("{}", null);
             blockStatement = (PsiBlockStatement) CodeStyleManager.getInstance(container.getProject()).reformat(blockStatement);
-            final PsiElement prevSibling = loopBody.getPrevSibling();
+            PsiElement prevSibling = loopBody.getPrevSibling();
             if (prevSibling instanceof PsiWhiteSpace) {
-                final PsiElement pprev = prevSibling.getPrevSibling();
+                PsiElement pprev = prevSibling.getPrevSibling();
                 if (!(pprev instanceof PsiComment) || !((PsiComment) pprev).getTokenType().equals(JavaTokenType.END_OF_LINE_COMMENT)) {
                     prevSibling.delete();
                 }
             }
             blockStatement = (PsiBlockStatement) loopBody.replace(blockStatement);
-            final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
+            PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
             declaration = (PsiStatement) codeBlock.add(declaration);
             JavaCodeStyleManager.getInstance(declaration.getProject()).shortenClassReferences(declaration);
             if (loopBodyCopy != null) {
@@ -992,30 +992,30 @@ public class RefactoringUtil {
             }
         }
         else if (container instanceof PsiLambdaExpression) {
-            final PsiLambdaExpression lambdaExpression = (PsiLambdaExpression) container;
-            final PsiElement lambdaExpressionBody = lambdaExpression.getBody();
+            PsiLambdaExpression lambdaExpression = (PsiLambdaExpression) container;
+            PsiElement lambdaExpressionBody = lambdaExpression.getBody();
             LOG.assertTrue(lambdaExpressionBody != null);
 
-            final PsiLambdaExpression expressionFromText = (PsiLambdaExpression) elementFactory
+            PsiLambdaExpression expressionFromText = (PsiLambdaExpression) elementFactory
                 .createExpressionFromText(lambdaExpression.getParameterList().getText() + " -> {}", lambdaExpression);
             PsiCodeBlock newBody = (PsiCodeBlock) expressionFromText.getBody();
             LOG.assertTrue(newBody != null);
             newBody.add(declaration);
 
-            final PsiStatement lastBodyStatement;
+            PsiStatement lastBodyStatement;
             if (PsiType.VOID.equals(LambdaUtil.getFunctionalInterfaceReturnType(lambdaExpression))) {
                 lastBodyStatement = elementFactory.createStatementFromText("a;", lambdaExpression);
                 ((PsiExpressionStatement) lastBodyStatement).getExpression().replace(lambdaExpressionBody);
             }
             else {
                 lastBodyStatement = elementFactory.createStatementFromText("return a;", lambdaExpression);
-                final PsiExpression returnValue = ((PsiReturnStatement) lastBodyStatement).getReturnValue();
+                PsiExpression returnValue = ((PsiReturnStatement) lastBodyStatement).getReturnValue();
                 LOG.assertTrue(returnValue != null);
                 returnValue.replace(lambdaExpressionBody);
             }
             newBody.add(lastBodyStatement);
 
-            final PsiLambdaExpression copy = (PsiLambdaExpression) lambdaExpression.replace(expressionFromText);
+            PsiLambdaExpression copy = (PsiLambdaExpression) lambdaExpression.replace(expressionFromText);
             newBody = (PsiCodeBlock) copy.getBody();
             LOG.assertTrue(newBody != null);
             declaration = newBody.getStatements()[0];
@@ -1030,11 +1030,11 @@ public class RefactoringUtil {
             return ((PsiLoopStatement) container).getBody();
         }
         else if (container instanceof PsiIfStatement) {
-            final PsiStatement thenBranch = ((PsiIfStatement) container).getThenBranch();
+            PsiStatement thenBranch = ((PsiIfStatement) container).getThenBranch();
             if (thenBranch != null && PsiTreeUtil.isAncestor(thenBranch, anchorStatement, false)) {
                 return thenBranch;
             }
-            final PsiStatement elseBranch = ((PsiIfStatement) container).getElseBranch();
+            PsiStatement elseBranch = ((PsiIfStatement) container).getElseBranch();
             if (elseBranch != null && PsiTreeUtil.isAncestor(elseBranch, anchorStatement, false)) {
                 return elseBranch;
             }
@@ -1073,7 +1073,7 @@ public class RefactoringUtil {
     public static <T> Set<T> transitiveClosure(Graph<T> graph, Condition<T> initialRelation) {
         Set<T> result = new HashSet<>();
 
-        final Set<T> vertices = graph.getVertices();
+        Set<T> vertices = graph.getVertices();
         boolean anyChanged;
         do {
             anyChanged = false;
@@ -1120,11 +1120,11 @@ public class RefactoringUtil {
         scope.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
             public void visitReferenceExpression(PsiReferenceExpression expression) {
-                final PsiElement element = expression.resolve();
+                PsiElement element = expression.resolve();
                 if (element instanceof PsiVariable) {
                     result.add((PsiVariable) element);
                 }
-                final PsiExpression qualifier = expression.getQualifierExpression();
+                PsiExpression qualifier = expression.getQualifierExpression();
                 if (qualifier != null) {
                     qualifier.accept(this);
                 }
@@ -1144,7 +1144,7 @@ public class RefactoringUtil {
 
     private static String getNameOfReferencedParameter(PsiDocTag tag) {
         LOG.assertTrue("param".equals(tag.getName()));
-        final PsiElement[] dataElements = tag.getDataElements();
+        PsiElement[] dataElements = tag.getDataElements();
         if (dataElements.length < 1) {
             return null;
         }
@@ -1158,12 +1158,12 @@ public class RefactoringUtil {
     public static void fixJavadocsForParams(PsiMethod method,
                                             Set<PsiParameter> newParameters,
                                             Condition<Pair<PsiParameter, String>> eqCondition) throws IncorrectOperationException {
-        final PsiDocComment docComment = method.getDocComment();
+        PsiDocComment docComment = method.getDocComment();
         if (docComment == null) {
             return;
         }
-        final PsiParameter[] parameters = method.getParameterList().getParameters();
-        final PsiDocTag[] paramTags = docComment.findTagsByName("param");
+        PsiParameter[] parameters = method.getParameterList().getParameters();
+        PsiDocTag[] paramTags = docComment.findTagsByName("param");
         if (parameters.length > 0 && newParameters.size() < parameters.length && paramTags.length == 0) {
             return;
         }
@@ -1179,7 +1179,7 @@ public class RefactoringUtil {
             }
             if (!found) {
                 for (PsiDocTag paramTag : paramTags) {
-                    final String paramName = getNameOfReferencedParameter(paramTag);
+                    String paramName = getNameOfReferencedParameter(paramTag);
                     if (eqCondition.value(new Pair<>(parameter, paramName))) {
                         tagForParam.put(parameter, paramTag);
                         found = true;
@@ -1195,10 +1195,10 @@ public class RefactoringUtil {
         List<PsiDocTag> newTags = new ArrayList<>();
         for (PsiParameter parameter : parameters) {
             if (tagForParam.containsKey(parameter)) {
-                final PsiDocTag psiDocTag = tagForParam.get(parameter);
+                PsiDocTag psiDocTag = tagForParam.get(parameter);
                 if (psiDocTag != null) {
-                    final PsiDocTag copy = (PsiDocTag) psiDocTag.copy();
-                    final PsiDocTagValue valueElement = copy.getValueElement();
+                    PsiDocTag copy = (PsiDocTag) psiDocTag.copy();
+                    PsiDocTagValue valueElement = copy.getValueElement();
                     if (valueElement != null) {
                         valueElement.replace(createParamTag(parameter).getValueElement());
                     }
@@ -1222,16 +1222,16 @@ public class RefactoringUtil {
         return JavaPsiFacade.getInstance(parameter.getProject()).getElementFactory().createParamTag(parameter.getName(), "");
     }
 
-    public static PsiDirectory createPackageDirectoryInSourceRoot(PackageWrapper aPackage, final VirtualFile sourceRoot)
+    public static PsiDirectory createPackageDirectoryInSourceRoot(PackageWrapper aPackage, VirtualFile sourceRoot)
         throws IncorrectOperationException {
-        final PsiDirectory[] directories = aPackage.getDirectories();
+        PsiDirectory[] directories = aPackage.getDirectories();
         for (PsiDirectory directory : directories) {
             if (VirtualFileUtil.isAncestor(sourceRoot, directory.getVirtualFile(), false)) {
                 return directory;
             }
         }
         String qNameToCreate = qNameToCreateInSourceRoot(aPackage, sourceRoot);
-        final String[] shortNames = qNameToCreate.split("\\.");
+        String[] shortNames = qNameToCreate.split("\\.");
         PsiDirectory current = aPackage.getManager().findDirectory(sourceRoot);
         LOG.assertTrue(current != null);
         for (String shortName : shortNames) {
@@ -1244,7 +1244,7 @@ public class RefactoringUtil {
         return current;
     }
 
-    public static String qNameToCreateInSourceRoot(PackageWrapper aPackage, final VirtualFile sourceRoot) throws IncorrectOperationException {
+    public static String qNameToCreateInSourceRoot(PackageWrapper aPackage, VirtualFile sourceRoot) throws IncorrectOperationException {
         String targetQName = aPackage.getQualifiedName();
         String sourceRootPackage =
             ProjectRootManager.getInstance(aPackage.getManager().getProject()).getFileIndex().getPackageNameByDirectory(sourceRoot);
@@ -1259,7 +1259,7 @@ public class RefactoringUtil {
         return result;
     }
 
-    public static boolean canCreateInSourceRoot(final String sourceRootPackage, final String targetQName) {
+    public static boolean canCreateInSourceRoot(String sourceRootPackage, String targetQName) {
         if (sourceRootPackage == null || !targetQName.startsWith(sourceRootPackage)) {
             return false;
         }
@@ -1271,8 +1271,8 @@ public class RefactoringUtil {
 
 
     @Nullable
-    public static PsiDirectory findPackageDirectoryInSourceRoot(PackageWrapper aPackage, final VirtualFile sourceRoot) {
-        final PsiDirectory[] directories = aPackage.getDirectories();
+    public static PsiDirectory findPackageDirectoryInSourceRoot(PackageWrapper aPackage, VirtualFile sourceRoot) {
+        PsiDirectory[] directories = aPackage.getDirectories();
         for (PsiDirectory directory : directories) {
             if (VirtualFileUtil.isAncestor(sourceRoot, directory.getVirtualFile(), false)) {
                 return directory;
@@ -1285,7 +1285,7 @@ public class RefactoringUtil {
         catch (IncorrectOperationException e) {
             return null;
         }
-        final String[] shortNames = qNameToCreate.split("\\.");
+        String[] shortNames = qNameToCreate.split("\\.");
         PsiDirectory current = aPackage.getManager().findDirectory(sourceRoot);
         LOG.assertTrue(current != null);
         for (String shortName : shortNames) {
@@ -1310,7 +1310,7 @@ public class RefactoringUtil {
         public boolean value(T object) {
             if (!myProcessedSet.contains(object)) {
                 myProcessedSet.add(object);
-                final boolean value = myCondition.value(object);
+                boolean value = myCondition.value(object);
                 if (value) {
                     myTrueSet.add(object);
                     return true;
@@ -1340,25 +1340,25 @@ public class RefactoringUtil {
     }
 
     @Nullable
-    public static PsiTypeParameterList createTypeParameterListWithUsedTypeParameters(@Nonnull final PsiElement... elements) {
+    public static PsiTypeParameterList createTypeParameterListWithUsedTypeParameters(@Nonnull PsiElement... elements) {
         return createTypeParameterListWithUsedTypeParameters(null, elements);
     }
 
     @Nullable
-    public static PsiTypeParameterList createTypeParameterListWithUsedTypeParameters(@Nullable final PsiTypeParameterList fromList,
-                                                                                     @Nonnull final PsiElement... elements) {
+    public static PsiTypeParameterList createTypeParameterListWithUsedTypeParameters(@Nullable PsiTypeParameterList fromList,
+                                                                                     @Nonnull PsiElement... elements) {
         return createTypeParameterListWithUsedTypeParameters(fromList, Condition.TRUE, elements);
     }
 
     @Nullable
-    public static PsiTypeParameterList createTypeParameterListWithUsedTypeParameters(@Nullable final PsiTypeParameterList fromList,
+    public static PsiTypeParameterList createTypeParameterListWithUsedTypeParameters(@Nullable PsiTypeParameterList fromList,
                                                                                      Condition<PsiTypeParameter> filter,
-                                                                                     @Nonnull final PsiElement... elements) {
+                                                                                     @Nonnull PsiElement... elements) {
         if (elements.length == 0) {
             return null;
         }
-        final Set<PsiTypeParameter> used = new HashSet<>();
-        for (final PsiElement element : elements) {
+        Set<PsiTypeParameter> used = new HashSet<>();
+        for (PsiElement element : elements) {
             if (element == null) {
                 continue;
             }
@@ -1373,17 +1373,17 @@ public class RefactoringUtil {
         PsiTypeParameter[] typeParameters = used.toArray(new PsiTypeParameter[used.size()]);
 
         Arrays.sort(typeParameters, new Comparator<>() {
-            public int compare(final PsiTypeParameter tp1, final PsiTypeParameter tp2) {
+            public int compare(PsiTypeParameter tp1, PsiTypeParameter tp2) {
                 return tp1.getTextRange().getStartOffset() - tp2.getTextRange().getStartOffset();
             }
         });
 
-        final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(elements[0].getProject()).getElementFactory();
+        PsiElementFactory elementFactory = JavaPsiFacade.getInstance(elements[0].getProject()).getElementFactory();
         try {
-            final PsiClass aClass = elementFactory.createClassFromText("class A {}", null);
+            PsiClass aClass = elementFactory.createClassFromText("class A {}", null);
             PsiTypeParameterList list = aClass.getTypeParameterList();
             assert list != null;
-            for (final PsiTypeParameter typeParameter : typeParameters) {
+            for (PsiTypeParameter typeParameter : typeParameters) {
                 list.add(typeParameter);
             }
             return list;
@@ -1395,7 +1395,7 @@ public class RefactoringUtil {
         }
     }
 
-    public static void collectTypeParameters(final Set<PsiTypeParameter> used, final PsiElement element) {
+    public static void collectTypeParameters(Set<PsiTypeParameter> used, PsiElement element) {
         collectTypeParameters(used, element, Condition.TRUE);
     }
 
@@ -1406,9 +1406,9 @@ public class RefactoringUtil {
             public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
                 super.visitReferenceElement(reference);
                 if (!reference.isQualified()) {
-                    final PsiElement resolved = reference.resolve();
+                    PsiElement resolved = reference.resolve();
                     if (resolved instanceof PsiTypeParameter) {
-                        final PsiTypeParameter typeParameter = (PsiTypeParameter) resolved;
+                        PsiTypeParameter typeParameter = (PsiTypeParameter) resolved;
                         if (PsiTreeUtil.isAncestor(typeParameter.getOwner(), element, false) && filter.value(typeParameter)) {
                             used.add(typeParameter);
                         }
@@ -1417,11 +1417,11 @@ public class RefactoringUtil {
             }
 
             @Override
-            public void visitExpression(final PsiExpression expression) {
+            public void visitExpression(PsiExpression expression) {
                 super.visitExpression(expression);
-                final PsiType type = expression.getType();
+                PsiType type = expression.getType();
                 if (type != null) {
-                    final TypeParameterSearcher searcher = new TypeParameterSearcher();
+                    TypeParameterSearcher searcher = new TypeParameterSearcher();
                     type.accept(searcher);
                     for (PsiTypeParameter typeParam : searcher.myTypeParams) {
                         if (PsiTreeUtil.isAncestor(typeParam.getOwner(), element, false) && filter.value(typeParam)) {
@@ -1434,29 +1434,29 @@ public class RefactoringUtil {
             class TypeParameterSearcher extends PsiTypeVisitor<Boolean> {
                 private final Set<PsiTypeParameter> myTypeParams = new HashSet<>();
 
-                public Boolean visitType(final PsiType type) {
+                public Boolean visitType(PsiType type) {
                     return false;
                 }
 
-                public Boolean visitArrayType(final PsiArrayType arrayType) {
+                public Boolean visitArrayType(PsiArrayType arrayType) {
                     return arrayType.getComponentType().accept(this);
                 }
 
-                public Boolean visitClassType(final PsiClassType classType) {
-                    final PsiClass aClass = classType.resolve();
+                public Boolean visitClassType(PsiClassType classType) {
+                    PsiClass aClass = classType.resolve();
                     if (aClass instanceof PsiTypeParameter) {
                         myTypeParams.add((PsiTypeParameter) aClass);
                     }
 
-                    final PsiType[] types = classType.getParameters();
-                    for (final PsiType psiType : types) {
+                    PsiType[] types = classType.getParameters();
+                    for (PsiType psiType : types) {
                         psiType.accept(this);
                     }
                     return false;
                 }
 
-                public Boolean visitWildcardType(final PsiWildcardType wildcardType) {
-                    final PsiType bound = wildcardType.getBound();
+                public Boolean visitWildcardType(PsiWildcardType wildcardType) {
+                    PsiType bound = wildcardType.getBound();
                     if (bound != null) {
                         bound.accept(this);
                     }
@@ -1467,7 +1467,7 @@ public class RefactoringUtil {
     }
 
     public static PsiCodeBlock expandExpressionLambdaToCodeBlock(@Nonnull PsiLambdaExpression lambdaExpression) {
-        final PsiElement body = lambdaExpression.getBody();
+        PsiElement body = lambdaExpression.getBody();
         if (!(body instanceof PsiExpression)) {
             return (PsiCodeBlock) body;
         }
@@ -1478,8 +1478,8 @@ public class RefactoringUtil {
         }
         newLambdaText += "a;}";
 
-        final Project project = lambdaExpression.getProject();
-        final PsiCodeBlock codeBlock = JavaPsiFacade.getElementFactory(project).createCodeBlockFromText(newLambdaText, lambdaExpression);
+        Project project = lambdaExpression.getProject();
+        PsiCodeBlock codeBlock = JavaPsiFacade.getElementFactory(project).createCodeBlockFromText(newLambdaText, lambdaExpression);
         PsiStatement statement = codeBlock.getStatements()[0];
         if (statement instanceof PsiReturnStatement) {
             PsiExpression value = ((PsiReturnStatement) statement).getReturnValue();

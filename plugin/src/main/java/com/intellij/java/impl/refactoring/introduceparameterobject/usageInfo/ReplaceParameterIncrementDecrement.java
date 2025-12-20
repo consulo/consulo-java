@@ -36,7 +36,7 @@ public class ReplaceParameterIncrementDecrement extends FixableUsageInfo {
     this.parameterSetterName = parameterSetterName;
     this.parameterGetterName = parameterGetterName;
     this.newParameterName = newParameterName;
-    final PsiPrefixExpression prefixExpr = PsiTreeUtil.getParentOfType(element, PsiPrefixExpression.class);
+    PsiPrefixExpression prefixExpr = PsiTreeUtil.getParentOfType(element, PsiPrefixExpression.class);
     if (prefixExpr != null) {
       expression = prefixExpr;
     }
@@ -46,16 +46,16 @@ public class ReplaceParameterIncrementDecrement extends FixableUsageInfo {
   }
 
   public void fixUsage() throws IncorrectOperationException {
-    final PsiJavaToken sign = expression instanceof PsiPrefixExpression
+    PsiJavaToken sign = expression instanceof PsiPrefixExpression
                               ? ((PsiPrefixExpression)expression).getOperationSign()
                               : ((PsiPostfixExpression)expression).getOperationSign();
-    final String operator = sign.getText();
-    final String strippedOperator = operator.substring(0, operator.length() - 1);
-    final String newExpression =
+    String operator = sign.getText();
+    String strippedOperator = operator.substring(0, operator.length() - 1);
+    String newExpression =
       newParameterName + '.' + parameterSetterName + '(' + newParameterName + '.' + parameterGetterName + "()" + strippedOperator + "1)";
     if (expression.getParent() instanceof PsiBinaryExpression) {
-      final PsiElementFactory factory = JavaPsiFacade.getInstance(expression.getProject()).getElementFactory();
-      final PsiStatement statement = PsiTreeUtil.getParentOfType(expression, PsiStatement.class);
+      PsiElementFactory factory = JavaPsiFacade.getInstance(expression.getProject()).getElementFactory();
+      PsiStatement statement = PsiTreeUtil.getParentOfType(expression, PsiStatement.class);
       statement.getParent().addBefore(factory.createStatementFromText(newExpression + ";", expression), statement);
       expression.replace(factory.createExpressionFromText(newParameterName + "." + parameterGetterName + "()", expression));
     } else {

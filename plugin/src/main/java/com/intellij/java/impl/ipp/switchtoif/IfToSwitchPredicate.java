@@ -29,15 +29,15 @@ class IfToSwitchPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiJavaToken)) {
       return false;
     }
-    final PsiJavaToken token = (PsiJavaToken)element;
+    PsiJavaToken token = (PsiJavaToken)element;
     if (token.getTokenType() != JavaTokenType.IF_KEYWORD) {
       return false;
     }
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!(parent instanceof PsiIfStatement)) {
       return false;
     }
-    final PsiIfStatement statement = (PsiIfStatement)parent;
+    PsiIfStatement statement = (PsiIfStatement)parent;
     if (ErrorUtil.containsError(statement)) {
       return false;
     }

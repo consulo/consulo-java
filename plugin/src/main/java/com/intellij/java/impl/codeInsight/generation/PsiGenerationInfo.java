@@ -39,7 +39,7 @@ public class PsiGenerationInfo<T extends PsiMember> extends GenerationInfoBase i
 	private final boolean myMergeIfExists;
 	private static final Logger LOG = Logger.getInstance(PsiGenerationInfo.class);
 
-	public PsiGenerationInfo(@Nonnull final T member)
+	public PsiGenerationInfo(@Nonnull T member)
 	{
 		myMember = member;
 		myMergeIfExists = true;
@@ -58,9 +58,9 @@ public class PsiGenerationInfo<T extends PsiMember> extends GenerationInfoBase i
 	}
 
 	@Override
-	public void insert(@Nonnull final PsiClass aClass, @Nullable PsiElement anchor, boolean before) throws IncorrectOperationException
+	public void insert(@Nonnull PsiClass aClass, @Nullable PsiElement anchor, boolean before) throws IncorrectOperationException
 	{
-		final PsiMember existingMember;
+		PsiMember existingMember;
 		if(myMember instanceof PsiField)
 		{
 			existingMember = aClass.findFieldByName(myMember.getName(), false);
@@ -81,17 +81,17 @@ public class PsiGenerationInfo<T extends PsiMember> extends GenerationInfoBase i
 		}
 		else
 		{
-			final PsiModifierList modifierList = myMember.getModifierList();
-			final PsiModifierList existingModifierList = existingMember.getModifierList();
+			PsiModifierList modifierList = myMember.getModifierList();
+			PsiModifierList existingModifierList = existingMember.getModifierList();
 			if(modifierList != null && existingModifierList != null)
 			{
-				final PsiAnnotation[] psiAnnotations = modifierList.getAnnotations();
+				PsiAnnotation[] psiAnnotations = modifierList.getAnnotations();
 				PsiElement annoAnchor = existingModifierList.getAnnotations().length > 0 ? existingModifierList.getAnnotations()[0] : existingModifierList.getFirstChild();
 				if(psiAnnotations.length > 0)
 				{
 					for(PsiAnnotation annotation : psiAnnotations)
 					{
-						final PsiAnnotation existingAnno = existingModifierList.findAnnotation(annotation.getQualifiedName());
+						PsiAnnotation existingAnno = existingModifierList.findAnnotation(annotation.getQualifiedName());
 						if(existingAnno != null)
 						{
 							annoAnchor = existingAnno.replace(annotation);

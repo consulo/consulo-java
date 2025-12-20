@@ -69,16 +69,16 @@ public class ComparatorMethodParameterNotUsedInspection
             )) {
                 return;
             }
-            final PsiCodeBlock body = method.getBody();
+            PsiCodeBlock body = method.getBody();
             if (body == null) {
                 return;
             }
-            final PsiParameterList parameterList = method.getParameterList();
-            final PsiParameter[] parameters = parameterList.getParameters();
-            final ParameterAccessVisitor visitor =
+            PsiParameterList parameterList = method.getParameterList();
+            PsiParameter[] parameters = parameterList.getParameters();
+            ParameterAccessVisitor visitor =
                 new ParameterAccessVisitor(parameters);
             body.accept(visitor);
-            final Collection<PsiParameter> unusedParameters =
+            Collection<PsiParameter> unusedParameters =
                 visitor.getUnusedParameters();
             for (PsiParameter unusedParameter : unusedParameters) {
                 registerVariableError(unusedParameter);
@@ -106,11 +106,11 @@ public class ComparatorMethodParameterNotUsedInspection
                     // references to parameters are never qualified
                     return;
                 }
-                final PsiElement target = expression.resolve();
+                PsiElement target = expression.resolve();
                 if (!(target instanceof PsiParameter)) {
                     return;
                 }
-                final PsiParameter parameter = (PsiParameter) target;
+                PsiParameter parameter = (PsiParameter) target;
                 parameters.remove(parameter);
             }
 

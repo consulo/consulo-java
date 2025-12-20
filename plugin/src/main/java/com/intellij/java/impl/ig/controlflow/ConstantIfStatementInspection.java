@@ -73,12 +73,12 @@ public class ConstantIfStatementInspection extends BaseInspection {
 
         public void doFix(Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
-            final PsiElement ifKeyword = descriptor.getPsiElement();
-            final PsiIfStatement statement = (PsiIfStatement) ifKeyword.getParent();
+            PsiElement ifKeyword = descriptor.getPsiElement();
+            PsiIfStatement statement = (PsiIfStatement) ifKeyword.getParent();
             assert statement != null;
-            final PsiStatement thenBranch = statement.getThenBranch();
-            final PsiStatement elseBranch = statement.getElseBranch();
-            final PsiExpression condition = statement.getCondition();
+            PsiStatement thenBranch = statement.getThenBranch();
+            PsiStatement elseBranch = statement.getElseBranch();
+            PsiExpression condition = statement.getCondition();
             if (BoolUtils.isFalse(condition)) {
                 if (elseBranch != null) {
                     replaceStatementWithUnwrapping(elseBranch, statement);
@@ -97,29 +97,29 @@ public class ConstantIfStatementInspection extends BaseInspection {
             PsiIfStatement statement
         ) throws IncorrectOperationException {
             if (branch instanceof PsiBlockStatement && !(statement.getParent() instanceof PsiIfStatement)) {
-                final PsiCodeBlock parentBlock = PsiTreeUtil.getParentOfType(branch, PsiCodeBlock.class);
+                PsiCodeBlock parentBlock = PsiTreeUtil.getParentOfType(branch, PsiCodeBlock.class);
                 if (parentBlock == null) {
-                    final String elseText = branch.getText();
+                    String elseText = branch.getText();
                     replaceStatement(statement, elseText);
                     return;
                 }
-                final PsiCodeBlock block = ((PsiBlockStatement) branch).getCodeBlock();
-                final boolean hasConflicts = VariableSearchUtils.containsConflictingDeclarations(block, parentBlock);
+                PsiCodeBlock block = ((PsiBlockStatement) branch).getCodeBlock();
+                boolean hasConflicts = VariableSearchUtils.containsConflictingDeclarations(block, parentBlock);
                 if (hasConflicts) {
-                    final String elseText = branch.getText();
+                    String elseText = branch.getText();
                     replaceStatement(statement, elseText);
                 }
                 else {
-                    final PsiElement containingElement = statement.getParent();
-                    final PsiStatement[] statements = block.getStatements();
+                    PsiElement containingElement = statement.getParent();
+                    PsiStatement[] statements = block.getStatements();
                     if (statements.length > 0) {
                         assert containingElement != null;
-                        final PsiJavaToken lBrace = block.getLBrace();
-                        final PsiJavaToken rBrace = block.getRBrace();
+                        PsiJavaToken lBrace = block.getLBrace();
+                        PsiJavaToken rBrace = block.getRBrace();
                         PsiElement added = null;
                         if (lBrace != null && rBrace != null) {
-                            final PsiElement firstNonBrace = lBrace.getNextSibling();
-                            final PsiElement lastNonBrace = rBrace.getPrevSibling();
+                            PsiElement firstNonBrace = lBrace.getNextSibling();
+                            PsiElement lastNonBrace = rBrace.getPrevSibling();
                             if (firstNonBrace != null && lastNonBrace != null) {
                                 added = containingElement.addRangeBefore(firstNonBrace, lastNonBrace, statement);
                             }
@@ -127,15 +127,15 @@ public class ConstantIfStatementInspection extends BaseInspection {
                         if (added == null) {
                             added = containingElement.addRangeBefore(statements[0], statements[statements.length - 1], statement);
                         }
-                        final Project project = statement.getProject();
-                        final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+                        Project project = statement.getProject();
+                        CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
                         codeStyleManager.reformat(added);
                     }
                     statement.delete();
                 }
             }
             else {
-                final String elseText = branch.getText();
+                String elseText = branch.getText();
                 replaceStatement(statement, elseText);
             }
         }
@@ -145,11 +145,11 @@ public class ConstantIfStatementInspection extends BaseInspection {
         @Override
         public void visitIfStatement(PsiIfStatement statement) {
             super.visitIfStatement(statement);
-            final PsiExpression condition = statement.getCondition();
+            PsiExpression condition = statement.getCondition();
             if (condition == null) {
                 return;
             }
-            final PsiStatement thenBranch = statement.getThenBranch();
+            PsiStatement thenBranch = statement.getThenBranch();
             if (thenBranch == null) {
                 return;
             }

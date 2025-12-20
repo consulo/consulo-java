@@ -28,7 +28,7 @@ public class SynchronizationUtil {
   }
 
   public static boolean isInSynchronizedContext(PsiElement element) {
-    final PsiElement context =
+    PsiElement context =
       PsiTreeUtil.getParentOfType(element, PsiMethod.class,
                                   PsiSynchronizedStatement.class);
     if (context instanceof PsiSynchronizedStatement) {
@@ -37,7 +37,7 @@ public class SynchronizationUtil {
     if (context == null) {
       return false;
     }
-    final PsiModifierListOwner modifierListOwner =
+    PsiModifierListOwner modifierListOwner =
       (PsiModifierListOwner)context;
     return modifierListOwner.hasModifierProperty(PsiModifier.SYNCHRONIZED);
   }

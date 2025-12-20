@@ -52,15 +52,15 @@ public abstract class DndMoveTest extends CodeInsightTestCase {
     }, false);
   }
 
-  private void doTest(final String targetDirName, final Computable<PsiElement> source, final boolean expected) throws Exception {
+  private void doTest(String targetDirName, Computable<PsiElement> source, boolean expected) throws Exception {
     String testName = getTestName(true);
     String root = getTestDataPath() + getTestRoot() + testName;
     VirtualFile rootDir = PsiTestUtil.createTestProjectStructure(myProject, myModule, root, myFilesToDelete, false);
     PsiTestUtil.addSourceContentToRoots(myModule, rootDir);
     PsiDocumentManager.getInstance(myProject).commitAllDocuments();
-    final VirtualFile child1 = rootDir.findChild(targetDirName);
+    VirtualFile child1 = rootDir.findChild(targetDirName);
     assertNotNull("File " + targetDirName + " not found", child1);
-    final PsiDirectory targetDirectory = myPsiManager.findDirectory(child1);
+    PsiDirectory targetDirectory = myPsiManager.findDirectory(child1);
     assertEquals(expected, MoveHandler.isMoveRedundant(source.compute(), targetDirectory));
   }
 }

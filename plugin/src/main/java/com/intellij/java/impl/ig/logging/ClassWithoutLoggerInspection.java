@@ -85,10 +85,10 @@ public class ClassWithoutLoggerInspection extends BaseInspection {
 
   @Override
   public JComponent createOptionsPanel() {
-    final JComponent panel = new JPanel(new BorderLayout());
-    final ListTable table = new ListTable(new ListWrappingTableModel(loggerNames, InspectionGadgetsLocalize.loggerClassName().get()));
-    final JPanel tablePanel = UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsLocalize.chooseLoggerClass().get());
-    final CheckBox checkBox = new CheckBox(InspectionGadgetsLocalize.superClassLoggerOption().get(), this, "ignoreSuperLoggers");
+    JComponent panel = new JPanel(new BorderLayout());
+    ListTable table = new ListTable(new ListWrappingTableModel(loggerNames, InspectionGadgetsLocalize.loggerClassName().get()));
+    JPanel tablePanel = UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsLocalize.chooseLoggerClass().get());
+    CheckBox checkBox = new CheckBox(InspectionGadgetsLocalize.superClassLoggerOption().get(), this, "ignoreSuperLoggers");
     panel.add(tablePanel, BorderLayout.CENTER);
     panel.add(checkBox, BorderLayout.SOUTH);
     return panel;
@@ -115,7 +115,7 @@ public class ClassWithoutLoggerInspection extends BaseInspection {
       if (aClass.getContainingClass() != null) {
         return;
       }
-      final PsiField[] fields;
+      PsiField[] fields;
       if (ignoreSuperLoggers) {
         fields = aClass.getAllFields();
       }
@@ -133,8 +133,8 @@ public class ClassWithoutLoggerInspection extends BaseInspection {
     }
 
     private boolean isLogger(PsiVariable variable) {
-      final PsiType type = variable.getType();
-      final String text = type.getCanonicalText();
+      PsiType type = variable.getType();
+      String text = type.getCanonicalText();
       return loggerNames.contains(text);
     }
   }

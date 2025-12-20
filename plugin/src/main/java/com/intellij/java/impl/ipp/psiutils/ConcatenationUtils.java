@@ -27,16 +27,16 @@ public class ConcatenationUtils {
     if (!(element instanceof PsiPolyadicExpression)) {
       return false;
     }
-    final PsiPolyadicExpression expression = (PsiPolyadicExpression)element;
-    final IElementType tokenType = expression.getOperationTokenType();
+    PsiPolyadicExpression expression = (PsiPolyadicExpression)element;
+    IElementType tokenType = expression.getOperationTokenType();
     if (!tokenType.equals(JavaTokenType.PLUS)) {
       return false;
     }
-    final PsiExpression[] operands = expression.getOperands();
+    PsiExpression[] operands = expression.getOperands();
     if (operands.length <= 1) {
       return false;
     }
-    final PsiType type = expression.getType();
+    PsiType type = expression.getType();
     if (type == null) {
       for (PsiExpression operand : operands) {
         if (hasStringType(operand)) {
@@ -49,7 +49,7 @@ public class ConcatenationUtils {
   }
 
   private static boolean hasStringType(PsiExpression expression) {
-    final PsiType type = expression.getType();
+    PsiType type = expression.getType();
     return type != null && type.equalsToText(CommonClassNames.JAVA_LANG_STRING);
   }
 }

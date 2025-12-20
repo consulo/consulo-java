@@ -47,9 +47,9 @@ public class CloneCallsConstructorsInspection extends BaseInspection {
 
         @Override
         public void visitMethod(@Nonnull PsiMethod method) {
-            final String methodName = method.getName();
-            final PsiParameterList parameterList = method.getParameterList();
-            final boolean isClone =
+            String methodName = method.getName();
+            PsiParameterList parameterList = method.getParameterList();
+            boolean isClone =
                 HardcodedMethodConstants.CLONE.equals(methodName) &&
                     parameterList.getParametersCount() == 0;
             if (isClone) {
@@ -60,7 +60,7 @@ public class CloneCallsConstructorsInspection extends BaseInspection {
                         @Nonnull PsiNewExpression newExpression
                     ) {
                         super.visitNewExpression(newExpression);
-                        final PsiExpression[] arrayDimensions =
+                        PsiExpression[] arrayDimensions =
                             newExpression.getArrayDimensions();
                         if (arrayDimensions.length != 0) {
                             return;

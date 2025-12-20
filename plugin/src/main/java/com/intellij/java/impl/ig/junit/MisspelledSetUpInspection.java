@@ -63,8 +63,8 @@ public class MisspelledSetUpInspection extends BaseInspection {
     @Override
     public void visitMethod(@Nonnull PsiMethod method) {
       //note: no call to super
-      final PsiClass aClass = method.getContainingClass();
-      @NonNls final String methodName = method.getName();
+      PsiClass aClass = method.getContainingClass();
+      @NonNls String methodName = method.getName();
       if (!"setup".equals(methodName)) {
         return;
       }

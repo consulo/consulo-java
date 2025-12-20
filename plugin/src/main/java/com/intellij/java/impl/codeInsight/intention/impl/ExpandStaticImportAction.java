@@ -59,14 +59,14 @@ public class ExpandStaticImportAction extends PsiElementBaseIntentionAction {
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (!PsiUtil.isLanguageLevel5OrHigher(element)) return false;
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!(element instanceof PsiIdentifier) || !(parent instanceof PsiJavaCodeReferenceElement)) {
       return false;
     }
-    final PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement)parent;
-    final PsiElement resolveScope = referenceElement.advancedResolve(true).getCurrentFileResolveScope();
+    PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement)parent;
+    PsiElement resolveScope = referenceElement.advancedResolve(true).getCurrentFileResolveScope();
     if (resolveScope instanceof PsiImportStaticStatement) {
-      final PsiClass targetClass = ((PsiImportStaticStatement)resolveScope).resolveTargetClass();
+      PsiClass targetClass = ((PsiImportStaticStatement)resolveScope).resolveTargetClass();
       if (targetClass == null) return false;
       setText(LocalizeValue.localizeTODO("Expand static import to " + targetClass.getName() + "." + referenceElement.getReferenceName()));
       return true;
@@ -74,7 +74,7 @@ public class ExpandStaticImportAction extends PsiElementBaseIntentionAction {
     return false;
   }
 
-  public void invoke(final Project project, final PsiFile file, final Editor editor, PsiElement element) {
+  public void invoke(final Project project, PsiFile file, Editor editor, PsiElement element) {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
 
     final PsiJavaCodeReferenceElement refExpr = (PsiJavaCodeReferenceElement)element.getParent();
@@ -90,7 +90,7 @@ public class ExpandStaticImportAction extends PsiElementBaseIntentionAction {
         replaceAllAndDeleteImport(expressionToExpand, refExpr, staticImport);
       }
       else {
-        final BaseListPopupStep<String> step =
+        BaseListPopupStep<String> step =
           new BaseListPopupStep<String>("Multiple Similar Calls Found",
                                         new String[]{REPLACE_THIS_OCCURRENCE, REPLACE_ALL_AND_DELETE_IMPORT}) {
             @Override

@@ -70,10 +70,10 @@ public abstract class PushDownTest extends LightRefactoringTestCase {
   private void doTest(final boolean failure) {
     configureByFile(BASE_PATH + getTestName(false) + ".java");
 
-    final PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
+    PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue("<caret> is not on member name", targetElement instanceof PsiMember);
 
-    final PsiMember psiMember = (PsiMember)targetElement;
+    PsiMember psiMember = (PsiMember)targetElement;
 
     final PsiClass currentClass = psiMember.getContainingClass();
 
@@ -81,14 +81,14 @@ public abstract class PushDownTest extends LightRefactoringTestCase {
 
     final List<MemberInfo> membersToMove = new ArrayList<MemberInfo>();
 
-    final PsiField fieldByName = currentClass.findFieldByName("fieldToMove", false);
+    PsiField fieldByName = currentClass.findFieldByName("fieldToMove", false);
     if (fieldByName != null) {
-      final MemberInfo memberInfo = new MemberInfo(fieldByName);
+      MemberInfo memberInfo = new MemberInfo(fieldByName);
       memberInfo.setChecked(true);
       membersToMove.add(memberInfo);
     }
 
-    final MemberInfo memberInfo = new MemberInfo(psiMember);
+    MemberInfo memberInfo = new MemberInfo(psiMember);
     memberInfo.setChecked(true);
     membersToMove.add(memberInfo);
 

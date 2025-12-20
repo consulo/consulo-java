@@ -42,18 +42,18 @@ public class ReplaceConstructorWithSettersChainInfo extends FixableUsageInfo {
   }
 
   public void fixUsage() throws IncorrectOperationException {
-    final PsiNewExpression expr = (PsiNewExpression)getElement();
+    PsiNewExpression expr = (PsiNewExpression)getElement();
     if (expr != null) {
-      final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(expr.getProject()).getElementFactory();
-      final PsiMethod constructor = expr.resolveConstructor();
+      PsiElementFactory elementFactory = JavaPsiFacade.getInstance(expr.getProject()).getElementFactory();
+      PsiMethod constructor = expr.resolveConstructor();
       if (constructor != null) {
         StringBuffer buf = new StringBuffer();
-        final PsiExpressionList argumentList = expr.getArgumentList();
+        PsiExpressionList argumentList = expr.getArgumentList();
         if (argumentList != null) {
-          final PsiExpression[] args = argumentList.getExpressions();
-          final PsiParameter[] parameters = constructor.getParameterList().getParameters();
+          PsiExpression[] args = argumentList.getExpressions();
+          PsiParameter[] parameters = constructor.getParameterList().getParameters();
 
-          final JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(constructor.getProject());
+          JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(constructor.getProject());
           for (int i = 0; i < Math.min(constructor.getParameterList().getParametersCount(), args.length); i++) {
             String arg = args[i].getText();
             if (parameters[i].isVarArgs()) {
@@ -62,14 +62,14 @@ public class ReplaceConstructorWithSettersChainInfo extends FixableUsageInfo {
               }
             }
 
-            final String pureParamName = styleManager.variableNameToPropertyName(parameters[i].getName(), VariableKind.PARAMETER);
-            final ParameterData data = myParametersMap.get(pureParamName);
+            String pureParamName = styleManager.variableNameToPropertyName(parameters[i].getName(), VariableKind.PARAMETER);
+            ParameterData data = myParametersMap.get(pureParamName);
             if (!Comparing.strEqual(arg, data.getDefaultValue()) || data.isInsertSetter()) {
               buf.append(data.getSetterName()).append("(").append(arg).append(").");
             }
           }
 
-          final PsiExpression settersChain = elementFactory.createExpressionFromText(
+          PsiExpression settersChain = elementFactory.createExpressionFromText(
             "new " + myBuilderClass + "()." + buf.toString() + "create" + StringUtil.capitalize(constructor.getName()) + "()",
             null);
 

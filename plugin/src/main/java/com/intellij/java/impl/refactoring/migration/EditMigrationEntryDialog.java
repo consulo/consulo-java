@@ -101,11 +101,11 @@ public class EditMigrationEntryDialog extends DialogWrapper {
     gbConstraints.gridwidth = GridBagConstraints.REMAINDER;
     gbConstraints.fill = GridBagConstraints.HORIZONTAL;
     gbConstraints.weightx = 1;
-    final LanguageTextField.DocumentCreator documentCreator = new LanguageTextField.DocumentCreator() {
+    LanguageTextField.DocumentCreator documentCreator = new LanguageTextField.DocumentCreator() {
       @Override
       public Document createDocument(String value, @Nullable Language language, Project project) {
         PsiPackage defaultPackage = JavaPsiFacade.getInstance(project).findPackage("");
-        final JavaCodeFragment fragment = JavaCodeFragmentFactory.getInstance(project).createReferenceCodeFragment("", defaultPackage, true, true);
+        JavaCodeFragment fragment = JavaCodeFragmentFactory.getInstance(project).createReferenceCodeFragment("", defaultPackage, true, true);
         return PsiDocumentManager.getInstance(project).getDocument(fragment);
       }
     };
@@ -125,7 +125,7 @@ public class EditMigrationEntryDialog extends DialogWrapper {
     panel.setPreferredSize(new Dimension(300, panel.getPreferredSize().height));
     panel.add(myNewNameField, gbConstraints);
 
-    final DocumentListener documentAdapter = new DocumentListener() {
+    DocumentListener documentAdapter = new DocumentListener() {
       @Override
       public void documentChanged(DocumentEvent e) {
         validateOKButton();

@@ -55,7 +55,7 @@ public class JavaCompletionSorting {
   private JavaCompletionSorting() {
   }
 
-  public static CompletionResultSet addJavaSorting(final CompletionParameters parameters, CompletionResultSet result) {
+  public static CompletionResultSet addJavaSorting(CompletionParameters parameters, CompletionResultSet result) {
     PsiElement position = parameters.getPosition();
     ExpectedTypeInfo[] expectedTypes = getExpectedTypesWithDfa(parameters, position);
     CompletionType type = parameters.getCompletionType();
@@ -76,7 +76,7 @@ public class JavaCompletionSorting {
       sorter = sorter.weighAfter("priority", new PreferDefaultTypeWeigher(expectedTypes, parameters));
     }
 
-    final PreferMostUsedWeigher preferMostUsedWeigher = PreferMostUsedWeigher.create(position);
+    PreferMostUsedWeigher preferMostUsedWeigher = PreferMostUsedWeigher.create(position);
     List<LookupElementWeigher> afterStats = ContainerUtil.newArrayList();
     afterStats.add(new PreferByKindWeigher(type, position, expectedTypes));
     if (!smart) {
@@ -117,10 +117,10 @@ public class JavaCompletionSorting {
   }
 
   @Nullable
-  private static LookupElementWeigher recursion(CompletionParameters parameters, final ExpectedTypeInfo[] expectedInfos) {
-    final PsiElement position = parameters.getPosition();
-    final PsiMethodCallExpression expression = PsiTreeUtil.getParentOfType(position, PsiMethodCallExpression.class, true, PsiClass.class);
-    final PsiReferenceExpression reference = expression != null ? expression.getMethodExpression() : PsiTreeUtil.getParentOfType(position, PsiReferenceExpression.class);
+  private static LookupElementWeigher recursion(CompletionParameters parameters, ExpectedTypeInfo[] expectedInfos) {
+    PsiElement position = parameters.getPosition();
+    PsiMethodCallExpression expression = PsiTreeUtil.getParentOfType(position, PsiMethodCallExpression.class, true, PsiClass.class);
+    PsiReferenceExpression reference = expression != null ? expression.getMethodExpression() : PsiTreeUtil.getParentOfType(position, PsiReferenceExpression.class);
     if (reference == null) {
       return null;
     }
@@ -134,8 +134,8 @@ public class JavaCompletionSorting {
       return null;
     }
     if (position.getParent() instanceof PsiReferenceExpression) {
-      final PsiReferenceExpression refExpr = (PsiReferenceExpression) position.getParent();
-      final PsiElement qualifier = refExpr.getQualifier();
+      PsiReferenceExpression refExpr = (PsiReferenceExpression) position.getParent();
+      PsiElement qualifier = refExpr.getQualifier();
       if (qualifier == null) {
         return null;
       }
@@ -148,7 +148,7 @@ public class JavaCompletionSorting {
       @Nonnull
       @Override
       public Comparable weigh(@Nonnull LookupElement element) {
-        final Object o = element.getObject();
+        Object o = element.getObject();
         if (o instanceof PsiKeyword) {
           return -3;
         }
@@ -181,7 +181,7 @@ public class JavaCompletionSorting {
     if (itemType != null) {
       PsiUtil.ensureValidType(itemType);
 
-      for (final ExpectedTypeInfo expectedInfo : expectedInfos) {
+      for (ExpectedTypeInfo expectedInfo : expectedInfos) {
         PsiType expectedType = expectedInfo.getType();
 
         if (expectedInfo.getKind() == ExpectedTypeInfo.TYPE_OR_SUPERTYPE) {
@@ -242,7 +242,7 @@ public class JavaCompletionSorting {
   @Nullable
   private static String getLookupObjectName(Object o) {
     if (o instanceof PsiVariable) {
-      final PsiVariable variable = (PsiVariable) o;
+      PsiVariable variable = (PsiVariable) o;
       JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(variable.getProject());
       VariableKind variableKind = codeStyleManager.getVariableKind(variable);
       return codeStyleManager.variableNameToPropertyName(variable.getName(), variableKind);
@@ -253,11 +253,11 @@ public class JavaCompletionSorting {
     return null;
   }
 
-  private static int getNameEndMatchingDegree(final String name, ExpectedTypeInfo[] expectedInfos) {
+  private static int getNameEndMatchingDegree(String name, ExpectedTypeInfo[] expectedInfos) {
     int res = 0;
     if (name != null && expectedInfos != null) {
-      final List<String> words = NameUtil.nameToWordsLowerCase(name);
-      final List<String> wordsNoDigits = NameUtil.nameToWordsLowerCase(truncDigits(name));
+      List<String> words = NameUtil.nameToWordsLowerCase(name);
+      List<String> wordsNoDigits = NameUtil.nameToWordsLowerCase(truncDigits(name));
       int max1 = calcMatch(words, 0, expectedInfos);
       max1 = calcMatch(wordsNoDigits, max1, expectedInfos);
       res = max1;
@@ -278,7 +278,7 @@ public class JavaCompletionSorting {
     return name.substring(0, count + 1);
   }
 
-  private static int calcMatch(final List<String> words, int max, ExpectedTypeInfo[] myExpectedInfos) {
+  private static int calcMatch(List<String> words, int max, ExpectedTypeInfo[] myExpectedInfos) {
     for (ExpectedTypeInfo myExpectedInfo : myExpectedInfos) {
       String expectedName = ((ExpectedTypeInfoImpl) myExpectedInfo).getExpectedName();
       if (expectedName == null) {
@@ -290,7 +290,7 @@ public class JavaCompletionSorting {
     return max;
   }
 
-  private static int calcMatch(final String expectedName, final List<String> words, int max) {
+  private static int calcMatch(String expectedName, List<String> words, int max) {
     if (expectedName == null) {
       return max;
     }
@@ -328,7 +328,7 @@ public class JavaCompletionSorting {
       });
       myParameters = parameters;
 
-      final Pair<PsiTypeParameterListOwner, Integer> pair = TypeArgumentCompletionProvider.getTypeParameterInfo(parameters.getPosition());
+      Pair<PsiTypeParameterListOwner, Integer> pair = TypeArgumentCompletionProvider.getTypeParameterInfo(parameters.getPosition());
       myTypeParameter = pair == null ? null : pair.first.getTypeParameters()[pair.second.intValue()];
       myLocation = new CompletionLocation(myParameters);
     }
@@ -336,7 +336,7 @@ public class JavaCompletionSorting {
     @Nonnull
     @Override
     public MyResult weigh(@Nonnull LookupElement item) {
-      final Object object = item.getObject();
+      Object object = item.getObject();
 
       if (object instanceof PsiClass) {
         if (object instanceof PsiTypeParameter) {
@@ -358,16 +358,16 @@ public class JavaCompletionSorting {
       }
 
       if (object instanceof PsiClass) {
-        for (final ExpectedTypeInfo info : myExpectedTypes) {
+        for (ExpectedTypeInfo info : myExpectedTypes) {
           if (TypeConversionUtil.erasure(info.getType().getDeepComponentType()).equals(TypeConversionUtil.erasure(itemType))) {
             return AbstractExpectedTypeSkipper.skips(item, myLocation) ? MyResult.expectedNoSelect : MyResult.exactlyExpected;
           }
         }
       }
 
-      for (final ExpectedTypeInfo expectedInfo : myExpectedTypes) {
-        final PsiType defaultType = expectedInfo.getDefaultType();
-        final PsiType expectedType = expectedInfo.getType();
+      for (ExpectedTypeInfo expectedInfo : myExpectedTypes) {
+        PsiType defaultType = expectedInfo.getDefaultType();
+        PsiType expectedType = expectedInfo.getType();
         if (!expectedType.isValid()) {
           return MyResult.normal;
         }
@@ -391,7 +391,7 @@ public class JavaCompletionSorting {
 
     private static PsiType removeClassWildcard(PsiType type) {
       if (type instanceof PsiClassType) {
-        final PsiClass psiClass = ((PsiClassType) type).resolve();
+        PsiClass psiClass = ((PsiClassType) type).resolve();
         if (psiClass != null && CommonClassNames.JAVA_LANG_CLASS.equals(psiClass.getQualifiedName())) {
           PsiClassType erased = (PsiClassType) GenericsUtil.eliminateWildcards(type);
           PsiType[] parameters = erased.getParameters();
@@ -439,9 +439,9 @@ public class JavaCompletionSorting {
     @Nonnull
     @Override
     public Comparable weigh(@Nonnull LookupElement element) {
-      final Object object = element.getObject();
+      Object object = element.getObject();
       if (object instanceof PsiDocCommentOwner) {
-        final PsiDocCommentOwner member = (PsiDocCommentOwner) object;
+        PsiDocCommentOwner member = (PsiDocCommentOwner) object;
         if (!JavaPsiFacade.getInstance(member.getProject()).getResolveHelper().isAccessible(member, myPosition, null)) {
           return MyEnum.INACCESSIBLE;
         }
@@ -461,10 +461,10 @@ public class JavaCompletionSorting {
     @Nonnull
     @Override
     public Comparable weigh(@Nonnull LookupElement element) {
-      final Object object = element.getObject();
+      Object object = element.getObject();
       if (object instanceof PsiMethod) {
         PsiType type = ((PsiMethod) object).getReturnType();
-        final JavaMethodCallElement callItem = element.as(JavaMethodCallElement.CLASS_CONDITION_KEY);
+        JavaMethodCallElement callItem = element.as(JavaMethodCallElement.CLASS_CONDITION_KEY);
         if (callItem != null) {
           type = callItem.getSubstitutor().substitute(type);
         }
@@ -486,7 +486,7 @@ public class JavaCompletionSorting {
     @Nonnull
     @Override
     public Comparable weigh(@Nonnull LookupElement element) {
-      final PsiTypeLookupItem lookupItem = element.as(PsiTypeLookupItem.CLASS_CONDITION_KEY);
+      PsiTypeLookupItem lookupItem = element.as(PsiTypeLookupItem.CLASS_CONDITION_KEY);
       if (lookupItem != null) {
         return lookupItem.getBracketsCount() * 10 + (lookupItem.isAddArrayInitializer() ? 1 : 0);
       }
@@ -555,7 +555,7 @@ public class JavaCompletionSorting {
     @Nonnull
     @Override
     public Comparable weigh(@Nonnull LookupElement element) {
-      final String name = getLookupObjectName(element.getObject());
+      String name = getLookupObjectName(element.getObject());
       return -getNameEndMatchingDegree(name, myExpectedTypes);
     }
   }
@@ -571,16 +571,16 @@ public class JavaCompletionSorting {
     @Nonnull
     @Override
     public Comparable weigh(@Nonnull LookupElement element) {
-      final Object object = element.getObject();
+      Object object = element.getObject();
 
-      final String name = getLookupObjectName(object);
+      String name = getLookupObjectName(object);
       if (name != null) {
         int max = 0;
-        final List<String> wordsNoDigits = NameUtil.nameToWordsLowerCase(truncDigits(name));
+        List<String> wordsNoDigits = NameUtil.nameToWordsLowerCase(truncDigits(name));
         for (ExpectedTypeInfo myExpectedInfo : myExpectedTypes) {
           String expectedName = ((ExpectedTypeInfoImpl) myExpectedInfo).getExpectedName();
           if (expectedName != null) {
-            final Set<String> set = new HashSet<>(NameUtil.nameToWordsLowerCase(truncDigits(expectedName)));
+            Set<String> set = new HashSet<>(NameUtil.nameToWordsLowerCase(truncDigits(expectedName)));
             set.retainAll(wordsNoDigits);
             max = Math.max(max, set.size());
           }
@@ -602,8 +602,8 @@ public class JavaCompletionSorting {
     @Nonnull
     @Override
     public Comparable weigh(@Nonnull LookupElement element) {
-      final Object object = element.getObject();
-      final String name = getLookupObjectName(object);
+      Object object = element.getObject();
+      String name = getLookupObjectName(object);
 
       if (name != null && getNameEndMatchingDegree(name, myExpectedTypes) != 0) {
         return NameUtil.nameToWords(name).length - 1000;

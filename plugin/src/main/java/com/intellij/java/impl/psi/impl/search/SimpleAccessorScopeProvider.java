@@ -26,7 +26,7 @@ import consulo.xml.ide.highlighter.XmlFileType;
 @ExtensionImpl
 public class SimpleAccessorScopeProvider implements CustomPropertyScopeProvider {
   @Override
-  public SearchScope getScope(final Project project) {
+  public SearchScope getScope(Project project) {
     return GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.allScope(project),
         //StdFileTypes.JSP, StdFileTypes.JSPX,
         XmlFileType.INSTANCE, XHtmlFileType.INSTANCE);

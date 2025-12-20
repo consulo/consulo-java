@@ -34,11 +34,11 @@ public abstract class SuppressExternalTest extends UsefulTestCase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
-    final IdeaTestFixtureFactory fixtureFactory = IdeaTestFixtureFactory.getFixtureFactory();
-    final TestFixtureBuilder<IdeaProjectTestFixture> testFixtureBuilder = fixtureFactory.createFixtureBuilder(getTestName(false));
+    IdeaTestFixtureFactory fixtureFactory = IdeaTestFixtureFactory.getFixtureFactory();
+    TestFixtureBuilder<IdeaProjectTestFixture> testFixtureBuilder = fixtureFactory.createFixtureBuilder(getTestName(false));
     myFixture = JavaTestFixtureFactory.getFixtureFactory().createCodeInsightFixture(testFixtureBuilder.getFixture());
     myFixture.setTestDataPath("/codeInsight/externalAnnotations");
-    final JavaModuleFixtureBuilder builder = testFixtureBuilder.addModule(JavaModuleFixtureBuilder.class);
+    JavaModuleFixtureBuilder builder = testFixtureBuilder.addModule(JavaModuleFixtureBuilder.class);
     new File(myFixture.getTempDirPath() + "/src/").mkdir();
     builder.addContentRoot(myFixture.getTempDirPath()).addSourceRoot("src");
     builder.setMockJdkLevel(JavaModuleFixtureBuilder.MockJdkLevel.jdk15);
@@ -47,7 +47,7 @@ public abstract class SuppressExternalTest extends UsefulTestCase {
 
     addAnnotationsModuleRoot();
 
-    final JavaPsiFacade facade = JavaPsiFacade.getInstance(myFixture.getProject());
+    JavaPsiFacade facade = JavaPsiFacade.getInstance(myFixture.getProject());
     myLanguageLevel = LanguageLevel.HIGHEST; // LanguageLevelProjectExtension.getInstance(facade.getProject()).getLanguageLevel();
     //LanguageLevelProjectExtension.getInstance(facade.getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
   }
@@ -57,9 +57,9 @@ public abstract class SuppressExternalTest extends UsefulTestCase {
     ApplicationManager.getApplication().runWriteAction(new Runnable() {
       @Override
       public void run() {
-        final Module module = myFixture.getModule();
-        final ModifiableRootModel model = ModuleRootManager.getInstance(module).getModifiableModel();
-        final String url = VfsUtilCore.pathToUrl(myFixture.getTempDirPath() + "/content/anno");
+        Module module = myFixture.getModule();
+        ModifiableRootModel model = ModuleRootManager.getInstance(module).getModifiableModel();
+        String url = VfsUtilCore.pathToUrl(myFixture.getTempDirPath() + "/content/anno");
         //model.getModuleExtensionOld(JavaModuleExternalPaths.class).setExternalAnnotationUrls(new String[]{url});
         model.commit();
       }
@@ -77,7 +77,7 @@ public abstract class SuppressExternalTest extends UsefulTestCase {
 
 
   private void doTest(String testName) throws Exception {
-    final IntentionAction action = myFixture.getAvailableIntention("Suppress for method", "src/suppressed/" + testName + ".java");
+    IntentionAction action = myFixture.getAvailableIntention("Suppress for method", "src/suppressed/" + testName + ".java");
     assertNotNull(action);
     myFixture.launchAction(action);
     myFixture.checkResultByFile("content/anno/suppressed/annotations.xml", "content/anno/suppressed/annotations" + testName + "_after.xml", true);

@@ -62,18 +62,18 @@ public class GenerateTemplateConfigurable implements UnnamedConfigurable {
 
   public GenerateTemplateConfigurable(TemplateResource template, Map<String, PsiType> contextMap, Project project, boolean multipleFields) {
     this.template = template;
-    final EditorFactory factory = EditorFactory.getInstance();
+    EditorFactory factory = EditorFactory.getInstance();
     Document doc = factory.createDocument(template.getTemplate());
-    final FileType ftl = FileTypeManager.getInstance().findFileTypeByName("VTL");
+    FileType ftl = FileTypeManager.getInstance().findFileTypeByName("VTL");
     if (project != null && ftl != null) {
-      final PsiFile file = PsiFileFactory.getInstance(project)
+      PsiFile file = PsiFileFactory.getInstance(project)
                                          .createFileFromText(template.getFileName(),
                                                              ftl,
                                                              template.getTemplate(),
                                                              LocalTimeCounter.currentTime(),
                                                              true);
       if (!template.isDefault()) {
-        final HashMap<String, PsiType> map = new LinkedHashMap<String, PsiType>();
+        HashMap<String, PsiType> map = new LinkedHashMap<String, PsiType>();
         map.put("java_version", PsiType.INT);
         map.put("class", TemplatesManager.createElementType(project, ClassElement.class));
         if (multipleFields) {
@@ -88,7 +88,7 @@ public class GenerateTemplateConfigurable implements UnnamedConfigurable {
         myAvailableImplicits.addAll(map.keySet());
         file.getViewProvider().putUserData(TemplatesManager.TEMPLATE_IMPLICITS, map);
       }
-      final Document document = PsiDocumentManager.getInstance(project).getDocument(file);
+      Document document = PsiDocumentManager.getInstance(project).getDocument(file);
       if (document != null) {
         doc = document;
       }
@@ -98,11 +98,11 @@ public class GenerateTemplateConfigurable implements UnnamedConfigurable {
 
   @Override
   public JComponent createComponent() {
-    final JComponent component = myEditor.getComponent();
+    JComponent component = myEditor.getComponent();
     if (myAvailableImplicits.isEmpty()) {
       return component;
     }
-    final JPanel panel = new JPanel(new BorderLayout());
+    JPanel panel = new JPanel(new BorderLayout());
     panel.add(component, BorderLayout.CENTER);
     MultiLineLabel label =
       new MultiLineLabel("<html>Available implicit variables:\n" + StringUtil.join(myAvailableImplicits, ", ") + "</html>");

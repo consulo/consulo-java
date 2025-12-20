@@ -26,7 +26,7 @@ class FlipConditionalPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiConditionalExpression)) {
       return false;
     }
-    final PsiConditionalExpression condition =
+    PsiConditionalExpression condition =
       (PsiConditionalExpression)element;
     if (condition.getThenExpression() == null ||
         condition.getElseExpression() == null) {

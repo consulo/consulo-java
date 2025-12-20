@@ -60,7 +60,7 @@ public abstract class JavaClassTreeElementBase<Value extends PsiElement> extends
 		{
 			return PsiUtil.ACCESS_LEVEL_PUBLIC;
 		}
-		final PsiModifierList modifierList = ((PsiModifierListOwner) element).getModifierList();
+		PsiModifierList modifierList = ((PsiModifierListOwner) element).getModifierList();
 		if(modifierList == null)
 		{
 			return PsiUtil.ACCESS_LEVEL_PUBLIC;
@@ -85,10 +85,10 @@ public abstract class JavaClassTreeElementBase<Value extends PsiElement> extends
 		{
 			if(myLocation == null)
 			{
-				final Value element = getElement();
+				Value element = getElement();
 				if(element instanceof PsiMember)
 				{
-					final PsiClass cls = ((PsiMember) element).getContainingClass();
+					PsiClass cls = ((PsiMember) element).getContainingClass();
 					if(cls == null)
 					{
 						myLocation = "";
@@ -121,13 +121,13 @@ public abstract class JavaClassTreeElementBase<Value extends PsiElement> extends
 		return isInherited() ? "" : DEFAULT_LOCATION_SUFFIX;
 	}
 
-	public boolean equals(final Object o)
+	public boolean equals(Object o)
 	{
 		if(!super.equals(o))
 		{
 			return false;
 		}
-		final JavaClassTreeElementBase that = (JavaClassTreeElementBase) o;
+		JavaClassTreeElementBase that = (JavaClassTreeElementBase) o;
 
 		if(myIsInherited != that.myIsInherited)
 		{
@@ -152,7 +152,7 @@ public abstract class JavaClassTreeElementBase<Value extends PsiElement> extends
 
 	private boolean isDeprecated()
 	{
-		final Value element = getElement();
+		Value element = getElement();
 		return element instanceof PsiDocCommentOwner && ((PsiDocCommentOwner) element).isDeprecated();
 	}
 }

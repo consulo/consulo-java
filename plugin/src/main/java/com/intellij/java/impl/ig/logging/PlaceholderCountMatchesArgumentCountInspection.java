@@ -41,8 +41,8 @@ public class PlaceholderCountMatchesArgumentCountInspection extends BaseInspecti
     @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
-        final int argumentCount = (Integer) infos[0];
-        final int placeholderCount = (Integer) infos[1];
+        int argumentCount = (Integer) infos[0];
+        int placeholderCount = (Integer) infos[1];
         return argumentCount > placeholderCount
             ? InspectionGadgetsLocalize.placeholderCountMatchesArgumentCountMoreProblemDescriptor(argumentCount, placeholderCount).get()
             : InspectionGadgetsLocalize.placeholderCountMatchesArgumentCountFewerProblemDescriptor(argumentCount, placeholderCount).get();
@@ -58,28 +58,28 @@ public class PlaceholderCountMatchesArgumentCountInspection extends BaseInspecti
         @Override
         public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final String name = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            String name = methodExpression.getReferenceName();
             if (!loggingMethodNames.contains(name)) {
                 return;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length == 0) {
                 return;
             }
-            final PsiExpression firstArgument = arguments[0];
-            final int placeholderCount;
-            final int argumentCount;
+            PsiExpression firstArgument = arguments[0];
+            int placeholderCount;
+            int argumentCount;
             if (InheritanceUtil.isInheritor(firstArgument.getType(), "org.slf4j.Marker")) {
                 if (arguments.length < 2) {
                     return;
                 }
-                final PsiExpression secondArgument = arguments[1];
+                PsiExpression secondArgument = arguments[1];
                 if (!ExpressionUtils.hasStringType(secondArgument)) {
                     return;
                 }
-                final String value = (String) ExpressionUtils.computeConstantExpression(secondArgument);
+                String value = (String) ExpressionUtils.computeConstantExpression(secondArgument);
                 if (value == null) {
                     return;
                 }
@@ -87,7 +87,7 @@ public class PlaceholderCountMatchesArgumentCountInspection extends BaseInspecti
                 argumentCount = hasThrowableType(arguments[arguments.length - 1]) ? arguments.length - 3 : arguments.length - 2;
             }
             else if (ExpressionUtils.hasStringType(firstArgument)) {
-                final String value = (String) ExpressionUtils.computeConstantExpression(firstArgument);
+                String value = (String) ExpressionUtils.computeConstantExpression(firstArgument);
                 if (value == null) {
                     return;
                 }

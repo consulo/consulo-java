@@ -35,13 +35,13 @@ class BackpointerUsageVisitor extends JavaRecursiveElementWalkingVisitor {
   private final boolean myCheckThisExpression;
 
 
-  public BackpointerUsageVisitor(final List<PsiField> fields,
-                          final List<PsiClass> innerClasses, final List<PsiMethod> methods, final PsiClass sourceClass) {
+  public BackpointerUsageVisitor(List<PsiField> fields,
+                                 List<PsiClass> innerClasses, List<PsiMethod> methods, PsiClass sourceClass) {
     this(fields, innerClasses, methods, sourceClass, true);
   }
 
   public BackpointerUsageVisitor(List<PsiField> fields, List<PsiClass> innerClasses, List<PsiMethod> methods, PsiClass sourceClass,
-                                 final boolean checkThisExpression) {
+                                 boolean checkThisExpression) {
     myFields = fields;
     myInnerClasses = innerClasses;
     myMethods = methods;
@@ -61,13 +61,13 @@ class BackpointerUsageVisitor extends JavaRecursiveElementWalkingVisitor {
       return;
     }
     super.visitReferenceExpression(expression);
-    final PsiExpression qualifier = expression.getQualifierExpression();
+    PsiExpression qualifier = expression.getQualifierExpression();
 
-    final PsiElement referent = expression.resolve();
+    PsiElement referent = expression.resolve();
     if (!(referent instanceof PsiField)) {
       return;
     }
-    final PsiField field = (PsiField)referent;
+    PsiField field = (PsiField)referent;
     if (myFields.contains(field) || myInnerClasses.contains(field.getContainingClass())) {
       return;
     }
@@ -84,12 +84,12 @@ class BackpointerUsageVisitor extends JavaRecursiveElementWalkingVisitor {
       return;
     }
     super.visitMethodCallExpression(expression);
-    final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-    final PsiMethod method = expression.resolveMethod();
+    PsiReferenceExpression methodExpression = expression.getMethodExpression();
+    PsiMethod method = expression.resolveMethod();
     if (method == null) {
       return;
     }
-    final PsiClass containingClass = method.getContainingClass();
+    PsiClass containingClass = method.getContainingClass();
     if (myMethods.contains(method) || myInnerClasses.contains(containingClass)) {
       return;
     }
@@ -99,7 +99,7 @@ class BackpointerUsageVisitor extends JavaRecursiveElementWalkingVisitor {
     if (!containingClass.equals(mySourceClass)) {
       return;
     }
-    final PsiExpression qualifier = methodExpression.getQualifierExpression();
+    PsiExpression qualifier = methodExpression.getQualifierExpression();
     if (qualifier == null || (myCheckThisExpression && (qualifier instanceof PsiThisExpression || qualifier instanceof PsiSuperExpression))) {
       myCause = method;
     }

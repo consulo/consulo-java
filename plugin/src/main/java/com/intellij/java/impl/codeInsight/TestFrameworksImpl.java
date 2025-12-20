@@ -44,7 +44,7 @@ public class TestFrameworksImpl extends TestFrameworks {
   }
 
   @Override
-  public boolean isTestClass(final PsiClass psiClass) {
+  public boolean isTestClass(PsiClass psiClass) {
     ExtensionPoint<TestFramework> point = myApplication.getExtensionPoint(TestFramework.class);
     return point.findFirstSafe(it -> it.isTestClass(psiClass)) != null;
   }
@@ -57,13 +57,13 @@ public class TestFrameworksImpl extends TestFrameworks {
 
   @Override
   @Nullable
-  public PsiMethod findOrCreateSetUpMethod(final PsiClass psiClass) {
+  public PsiMethod findOrCreateSetUpMethod(PsiClass psiClass) {
     ExtensionPoint<TestFramework> point = myApplication.getExtensionPoint(TestFramework.class);
 
     return point.computeSafeIfAny(framework -> {
       if (framework.isTestClass(psiClass)) {
         try {
-          final PsiMethod setUpMethod = (PsiMethod)framework.findOrCreateSetUpMethod(psiClass);
+          PsiMethod setUpMethod = (PsiMethod)framework.findOrCreateSetUpMethod(psiClass);
           if (setUpMethod != null) {
             return setUpMethod;
           }
@@ -78,12 +78,12 @@ public class TestFrameworksImpl extends TestFrameworks {
 
   @Override
   @Nullable
-  public PsiMethod findSetUpMethod(final PsiClass psiClass) {
+  public PsiMethod findSetUpMethod(PsiClass psiClass) {
     ExtensionPoint<TestFramework> point = myApplication.getExtensionPoint(TestFramework.class);
 
     return point.computeSafeIfAny(framework -> {
       if (framework.isTestClass(psiClass)) {
-        final PsiMethod setUpMethod = (PsiMethod)framework.findSetUpMethod(psiClass);
+        PsiMethod setUpMethod = (PsiMethod)framework.findSetUpMethod(psiClass);
         if (setUpMethod != null) {
           return setUpMethod;
         }
@@ -95,12 +95,12 @@ public class TestFrameworksImpl extends TestFrameworks {
 
   @Override
   @Nullable
-  public PsiMethod findTearDownMethod(final PsiClass psiClass) {
+  public PsiMethod findTearDownMethod(PsiClass psiClass) {
     ExtensionPoint<TestFramework> point = myApplication.getExtensionPoint(TestFramework.class);
 
     return point.computeSafeIfAny(framework -> {
       if (framework.isTestClass(psiClass)) {
-        final PsiMethod setUpMethod = (PsiMethod)framework.findTearDownMethod(psiClass);
+        PsiMethod setUpMethod = (PsiMethod)framework.findTearDownMethod(psiClass);
         if (setUpMethod != null) {
           return setUpMethod;
         }

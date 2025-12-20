@@ -93,7 +93,7 @@ public class ControlFlowWrapper {
     return myFirstExitStatementCopy;
   }
 
-  public Collection<PsiStatement> prepareExitStatements(final PsiElement[] elements) throws ExitStatementsNotSameException {
+  public Collection<PsiStatement> prepareExitStatements(PsiElement[] elements) throws ExitStatementsNotSameException {
     myExitPoints = IntLists.newArrayList();
     myExitStatements = ControlFlowUtil.findExitPointsAndStatements(myControlFlow, myFlowStart, myFlowEnd, myExitPoints, ControlFlowUtil.DEFAULT_EXIT_STATEMENTS_CLASSES);
     if (LOG.isDebugEnabled()) {
@@ -166,17 +166,17 @@ public class ControlFlowWrapper {
           @Override
           public void visitReferenceExpression(PsiReferenceExpression expression) {
             super.visitReferenceExpression(expression);
-            final PsiElement resolved = expression.resolve();
+            PsiElement resolved = expression.resolve();
             if (resolved instanceof PsiVariable) {
-              final PsiVariable variable = (PsiVariable) resolved;
+              PsiVariable variable = (PsiVariable) resolved;
               if (isWrittenInside(variable)) {
                 outputVariables.add(variable);
               }
             }
           }
 
-          private boolean isWrittenInside(final PsiVariable variable) {
-            final List<Instruction> instructions = myControlFlow.getInstructions();
+          private boolean isWrittenInside(PsiVariable variable) {
+            List<Instruction> instructions = myControlFlow.getInstructions();
             for (int i = myFlowStart; i < myFlowEnd; i++) {
               Instruction instruction = instructions.get(i);
               if (instruction instanceof WriteVariableInstruction && variable.equals(((WriteVariableInstruction) instruction).variable)) {
@@ -213,9 +213,9 @@ public class ControlFlowWrapper {
           }
         }
         if (elementOffset == -1) { //references in local/anonymous classes should not be skipped
-          final PsiClass psiClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
+          PsiClass psiClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
           if (psiClass != null) {
-            final TextRange textRange = psiClass.getTextRange();
+            TextRange textRange = psiClass.getTextRange();
             if (myControlFlow.getElement(myFlowStart).getTextOffset() <= textRange.getStartOffset() && textRange.getEndOffset() <= myControlFlow.getElement(myFlowEnd).getTextRange()
                 .getEndOffset()) {
               continue Variables;
@@ -237,7 +237,7 @@ public class ControlFlowWrapper {
     return false;
   }
 
-  private boolean needExitStatement(final PsiStatement exitStatement) {
+  private boolean needExitStatement(PsiStatement exitStatement) {
     if (exitStatement instanceof PsiContinueStatement) {
       //IDEADEV-11748
       PsiStatement statement = ((PsiContinueStatement) exitStatement).findContinuedStatement();
@@ -253,8 +253,8 @@ public class ControlFlowWrapper {
     return true;
   }
 
-  public List<PsiVariable> getInputVariables(final PsiElement codeFragment, PsiElement[] elements, PsiVariable[] outputVariables) {
-    final List<PsiVariable> inputVariables = ControlFlowUtil.getInputVariables(myControlFlow, myFlowStart, myFlowEnd);
+  public List<PsiVariable> getInputVariables(PsiElement codeFragment, PsiElement[] elements, PsiVariable[] outputVariables) {
+    List<PsiVariable> inputVariables = ControlFlowUtil.getInputVariables(myControlFlow, myFlowStart, myFlowEnd);
     List<PsiVariable> myInputVariables;
     if (skipVariablesFromExitStatements(outputVariables)) {
       List<PsiVariable> inputVariableList = new ArrayList<PsiVariable>(inputVariables);
@@ -275,7 +275,7 @@ public class ControlFlowWrapper {
     }
     //varargs variables go last, otherwise order is induced by original ordering
     Collections.sort(myInputVariables, new Comparator<PsiVariable>() {
-      public int compare(final PsiVariable v1, final PsiVariable v2) {
+      public int compare(PsiVariable v1, PsiVariable v2) {
         if (v1.getType() instanceof PsiEllipsisType) {
           return 1;
         }
@@ -288,7 +288,7 @@ public class ControlFlowWrapper {
     return myInputVariables;
   }
 
-  public PsiStatement getExitStatementCopy(PsiElement returnStatement, final PsiElement[] elements) {
+  public PsiStatement getExitStatementCopy(PsiElement returnStatement, PsiElement[] elements) {
     PsiStatement exitStatementCopy = null;
     // replace all exit-statements such as break's or continue's with appropriate return
     for (PsiStatement exitStatement : myExitStatements) {
@@ -358,7 +358,7 @@ public class ControlFlowWrapper {
   }
 
   public List<PsiVariable> getUsedVariablesInBody(PsiElement codeFragment, PsiVariable[] outputVariables) {
-    final List<PsiVariable> variables = getUsedVariables(myFlowStart, myFlowEnd);
+    List<PsiVariable> variables = getUsedVariables(myFlowStart, myFlowEnd);
     if (skipVariablesFromExitStatements(outputVariables)) {
       removeParametersUsedInExitsOnly(codeFragment, variables);
     }

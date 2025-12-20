@@ -31,8 +31,8 @@ public class JavaTryUnwrapper extends JavaUnwrapper {
   }
 
   @Override
-  protected void doUnwrap(final PsiElement element, final Context context) throws IncorrectOperationException {
-    final PsiTryStatement trySt = (PsiTryStatement)element;
+  protected void doUnwrap(PsiElement element, Context context) throws IncorrectOperationException {
+    PsiTryStatement trySt = (PsiTryStatement)element;
 
     context.extractFromCodeBlock(trySt.getTryBlock(), trySt);
     context.extractFromCodeBlock(trySt.getFinallyBlock(), trySt);

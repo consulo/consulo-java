@@ -53,15 +53,15 @@ public abstract class DependenciesPanelTest extends TestSourceBasedTestCase{
   public void testDependencies(){
     DependenciesPanel dependenciesPanel = null;
     try {
-      final PsiDirectory psiDirectory = getPackageDirectory("com/package1");
+      PsiDirectory psiDirectory = getPackageDirectory("com/package1");
       Assert.assertNotNull(psiDirectory);
-      final PsiJavaPackage psiPackage = JavaDirectoryService.getInstance().getPackage(psiDirectory);
+      PsiJavaPackage psiPackage = JavaDirectoryService.getInstance().getPackage(psiDirectory);
       Assert.assertNotNull(psiPackage);
-      final PsiClass[] classes = psiPackage.getClasses();
+      PsiClass[] classes = psiPackage.getClasses();
       sortClassesByName(classes);
-      final PsiFile file = classes[0].getContainingFile();
-      final AnalysisScope scope = new AnalysisScope(file);
-      final DependenciesBuilder builder = new ForwardDependenciesBuilder(myProject, scope);
+      PsiFile file = classes[0].getContainingFile();
+      AnalysisScope scope = new AnalysisScope(file);
+      DependenciesBuilder builder = new ForwardDependenciesBuilder(myProject, scope);
       builder.analyze();
       DependencyUISettings.getInstance().SCOPE_TYPE = PackagePatternProvider.PACKAGES;
       dependenciesPanel = new DependenciesPanel(myProject, builder);

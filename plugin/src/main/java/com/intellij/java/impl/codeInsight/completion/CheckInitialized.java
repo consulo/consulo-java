@@ -52,14 +52,14 @@ class CheckInitialized implements ElementFilter {
   private static boolean isInitializedImplicitly(PsiField field) {
     field = CompletionUtilCore.getOriginalOrSelf(field);
 
-    final PsiField finalField = field;
+    PsiField finalField = field;
     return field.getProject().getExtensionPoint(ImplicitUsageProvider.class).findFirstSafe(it -> it.isImplicitWrite(finalField)) != null;
   }
 
   static Set<PsiField> getNonInitializedFields(PsiElement element) {
     final PsiStatement statement = PsiTreeUtil.getParentOfType(element, PsiStatement.class);
     //noinspection SSBasedInspection
-    final PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class, true, PsiClass.class);
+    PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class, true, PsiClass.class);
     if (statement == null || method == null || !method.isConstructor()) {
       return Collections.emptySet();
     }
@@ -84,7 +84,7 @@ class CheckInitialized implements ElementFilter {
     }
 
     final Set<PsiField> fields = new HashSet<>();
-    final PsiClass containingClass = method.getContainingClass();
+    PsiClass containingClass = method.getContainingClass();
     assert containingClass != null;
     for (PsiField field : containingClass.getFields()) {
       if (!field.hasModifierProperty(PsiModifier.STATIC) && field.getInitializer() == null && !isInitializedImplicitly(field)) {
@@ -96,7 +96,7 @@ class CheckInitialized implements ElementFilter {
       @Override
       public void visitAssignmentExpression(PsiAssignmentExpression expression) {
         if (expression.getTextRange().getStartOffset() < statement.getTextRange().getStartOffset()) {
-          final PsiExpression lExpression = expression.getLExpression();
+          PsiExpression lExpression = expression.getLExpression();
           if (lExpression instanceof PsiReferenceExpression) {
             //noinspection SuspiciousMethodCalls
             fields.remove(((PsiReferenceExpression)lExpression).resolve());
@@ -108,7 +108,7 @@ class CheckInitialized implements ElementFilter {
       @Override
       public void visitMethodCallExpression(PsiMethodCallExpression expression) {
         if (expression.getTextRange().getStartOffset() < statement.getTextRange().getStartOffset()) {
-          final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+          PsiReferenceExpression methodExpression = expression.getMethodExpression();
           if (methodExpression.textMatches(PsiKeyword.THIS)) {
             fields.clear();
           }

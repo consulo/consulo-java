@@ -94,8 +94,8 @@ public abstract class OverlappingSourceRootsTest extends PsiTestCase {
   }
 
   private PsiDirectory findSourceRootDirectory(PsiElement element) {
-    final VirtualFile virtualFile = PsiUtilBase.getVirtualFile(element);
-    final VirtualFile sourceRoot = ProjectRootManager.getInstance(myProject).getFileIndex().getSourceRootForFile(virtualFile);
+    VirtualFile virtualFile = PsiUtilBase.getVirtualFile(element);
+    VirtualFile sourceRoot = ProjectRootManager.getInstance(myProject).getFileIndex().getSourceRootForFile(virtualFile);
     return myPsiManager.findDirectory(sourceRoot);
   }
 

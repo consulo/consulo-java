@@ -62,7 +62,7 @@ public class TurnRefsToSuperHandler implements RefactoringActionHandler {
     }
   }
 
-  public void invoke(@Nonnull final Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length != 1) {
       return;
     }

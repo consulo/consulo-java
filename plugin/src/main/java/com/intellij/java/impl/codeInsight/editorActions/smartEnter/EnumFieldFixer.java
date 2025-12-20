@@ -31,8 +31,8 @@ public class EnumFieldFixer implements Fixer
 		{
 			int insertionOffset = psiElement.getTextRange().getEndOffset();
 			Document doc = editor.getDocument();
-			final CharSequence text = doc.getCharsSequence();
-			final int probableCommaOffset = CharArrayUtil.shiftForward(text, insertionOffset, " \t");
+			CharSequence text = doc.getCharsSequence();
+			int probableCommaOffset = CharArrayUtil.shiftForward(text, insertionOffset, " \t");
 			if(probableCommaOffset >= text.length() || text.charAt(probableCommaOffset) != ',')
 			{
 				doc.insertString(insertionOffset, ",");

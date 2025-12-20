@@ -17,7 +17,7 @@ public abstract class EnableOptimizeImportsOnTheFlyTest extends LightQuickFixTes
   public void test() throws Exception { doAllTests(); }
 
   @Override
-  protected void doAction(final String text, final boolean actionShouldBeAvailable, final String testFullPath, final String testName)
+  protected void doAction(String text, boolean actionShouldBeAvailable, String testFullPath, String testName)
     throws Exception {
     boolean old = CodeInsightSettings.getInstance().OPTIMIZE_IMPORTS_ON_THE_FLY;
 

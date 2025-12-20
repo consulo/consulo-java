@@ -38,11 +38,11 @@ public abstract class IntroduceHandlerBase implements RefactoringActionHandler {
 
   public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     LOG.assertTrue(elements.length >= 1 && elements[0] instanceof PsiExpression, "incorrect invoke() parameters");
-    final PsiElement tempExpr = elements[0];
-    final Editor editor;
+    PsiElement tempExpr = elements[0];
+    Editor editor;
     if (dataContext != null) {
-      final Editor editorFromDC = dataContext.getData(Editor.KEY);
-      final PsiFile cachedPsiFile = editorFromDC != null ? PsiDocumentManager.getInstance(project).getCachedPsiFile(editorFromDC.getDocument()) : null;
+      Editor editorFromDC = dataContext.getData(Editor.KEY);
+      PsiFile cachedPsiFile = editorFromDC != null ? PsiDocumentManager.getInstance(project).getCachedPsiFile(editorFromDC.getDocument()) : null;
       if (cachedPsiFile != null && PsiTreeUtil.isAncestor(cachedPsiFile, tempExpr, false)) {
         editor = editorFromDC;
       } else {

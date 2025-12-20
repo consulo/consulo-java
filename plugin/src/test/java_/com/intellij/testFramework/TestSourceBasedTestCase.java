@@ -35,10 +35,10 @@ import consulo.language.psi.PsiDirectory;
     super.setUp();
     myTempDirectory = FileUtil.createTempDirectory(getTestName(true), "test",false);
     myFilesToDelete.add(myTempDirectory);
-    final File testRoot = new File(getTestDataPath(), getTestPath());
+    File testRoot = new File(getTestDataPath(), getTestPath());
     assertTrue(testRoot.getAbsolutePath(), testRoot.isDirectory());
 
-    final File currentTestRoot = new File(testRoot, getTestDirectoryName());
+    File currentTestRoot = new File(testRoot, getTestDirectoryName());
     assertTrue(currentTestRoot.getAbsolutePath(), currentTestRoot.isDirectory());
 
     FileUtil.copyDir(currentTestRoot, new File(myTempDirectory, getTestDirectoryName()));
@@ -81,7 +81,7 @@ import consulo.language.psi.PsiDirectory;
   }
 
 
-  protected PsiDirectory getPackageDirectory(final String packageRelativePath) {
+  protected PsiDirectory getPackageDirectory(String packageRelativePath) {
     return getPsiManager().findDirectory(getContentRoot().findFileByRelativePath("src/" + packageRelativePath));
   }
 

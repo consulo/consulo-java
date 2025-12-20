@@ -51,7 +51,7 @@ public class IteratorHasNextCallsIteratorNextInspection extends BaseInspection {
         @Override
         public void visitMethod(@Nonnull PsiMethod method) {
             // note: no call to super
-            @NonNls final String name = method.getName();
+            @NonNls String name = method.getName();
             if (!MethodUtils.methodMatches(method, CommonClassNames.JAVA_UTIL_ITERATOR, null, HardcodedMethodConstants.HAS_NEXT)) {
                 return;
             }

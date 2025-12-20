@@ -53,11 +53,11 @@ public class NegationBroadScopeFix implements SyntheticIntentionAction {
 
         String rop;
         if (parent instanceof PsiInstanceOfExpression) {
-            final PsiTypeElement type = ((PsiInstanceOfExpression) parent).getCheckType();
+            PsiTypeElement type = ((PsiInstanceOfExpression) parent).getCheckType();
             rop = type == null ? "" : type.getText();
         }
         else {
-            final PsiExpression rOperand = ((PsiBinaryExpression) parent).getROperand();
+            PsiExpression rOperand = ((PsiBinaryExpression) parent).getROperand();
             rop = rOperand == null ? "" : rOperand.getText();
         }
 

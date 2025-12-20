@@ -54,7 +54,7 @@ public abstract class ModuleWithTooManyClassesInspection extends BaseGlobalInspe
         if (!(refEntity instanceof RefModule)) {
             return null;
         }
-        final List<RefEntity> children = refEntity.getChildren();
+        List<RefEntity> children = refEntity.getChildren();
         if (children == null) {
             return null;
         }
@@ -67,7 +67,7 @@ public abstract class ModuleWithTooManyClassesInspection extends BaseGlobalInspe
         if (numClasses <= limit) {
             return null;
         }
-        final LocalizeValue errorString =
+        LocalizeValue errorString =
             InspectionGadgetsLocalize.moduleWithTooManyClassesProblemDescriptor(refEntity.getName(), numClasses, limit);
         return new CommonProblemDescriptor[]{
             inspectionManager.createProblemDescriptor(errorString.get())

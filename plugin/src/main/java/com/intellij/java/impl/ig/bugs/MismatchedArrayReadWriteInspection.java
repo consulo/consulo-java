@@ -48,7 +48,7 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final boolean written = (Boolean) infos[0];
+        boolean written = (Boolean) infos[0];
         return written
             ? InspectionGadgetsLocalize.mismatchedReadWriteArrayProblemDescriptorWriteNotRead().get()
             : InspectionGadgetsLocalize.mismatchedReadWriteArrayProblemDescriptorReadNotWrite().get();
@@ -78,13 +78,13 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
             if (!field.hasModifierProperty(PsiModifier.PRIVATE)) {
                 return;
             }
-            final PsiClass containingClass = PsiUtil.getTopLevelClass(field);
+            PsiClass containingClass = PsiUtil.getTopLevelClass(field);
             if (!checkVariable(field, containingClass)) {
                 return;
             }
-            final boolean written =
+            boolean written =
                 arrayContentsAreWritten(field, containingClass);
-            final boolean read = arrayContentsAreRead(field, containingClass);
+            boolean read = arrayContentsAreRead(field, containingClass);
             if (written == read) {
                 return;
             }
@@ -96,14 +96,14 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
             @Nonnull PsiLocalVariable variable
         ) {
             super.visitLocalVariable(variable);
-            final PsiCodeBlock codeBlock =
+            PsiCodeBlock codeBlock =
                 PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
             if (!checkVariable(variable, codeBlock)) {
                 return;
             }
-            final boolean written =
+            boolean written =
                 arrayContentsAreWritten(variable, codeBlock);
-            final boolean read = arrayContentsAreRead(variable, codeBlock);
+            boolean read = arrayContentsAreRead(variable, codeBlock);
             if (written == read) {
                 return;
             }
@@ -117,7 +117,7 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
             if (context == null) {
                 return false;
             }
-            final PsiType type = variable.getType();
+            PsiType type = variable.getType();
             if (type.getArrayDimensions() == 0) {
                 return false;
             }
@@ -141,7 +141,7 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
             if (VariableAccessUtils.arrayContentsAreAssigned(variable, context)) {
                 return true;
             }
-            final PsiExpression initializer = variable.getInitializer();
+            PsiExpression initializer = variable.getInitializer();
             if (initializer != null && !isDefaultArrayInitializer(initializer)) {
                 return true;
             }
@@ -162,17 +162,17 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
             PsiExpression initializer
         ) {
             if (initializer instanceof PsiNewExpression) {
-                final PsiNewExpression newExpression =
+                PsiNewExpression newExpression =
                     (PsiNewExpression) initializer;
-                final PsiArrayInitializerExpression arrayInitializer =
+                PsiArrayInitializerExpression arrayInitializer =
                     newExpression.getArrayInitializer();
                 return arrayInitializer == null ||
                     isDefaultArrayInitializer(arrayInitializer);
             }
             else if (initializer instanceof PsiArrayInitializerExpression) {
-                final PsiArrayInitializerExpression arrayInitializerExpression =
+                PsiArrayInitializerExpression arrayInitializerExpression =
                     (PsiArrayInitializerExpression) initializer;
-                final PsiExpression[] initializers =
+                PsiExpression[] initializers =
                     arrayInitializerExpression.getInitializers();
                 return initializers.length == 0;
             }
@@ -180,14 +180,14 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
         }
 
         public static boolean variableIsWritten(@Nonnull PsiVariable variable, @Nonnull PsiElement context) {
-            final VariableReadWriteVisitor visitor =
+            VariableReadWriteVisitor visitor =
                 new VariableReadWriteVisitor(variable, true);
             context.accept(visitor);
             return visitor.isPassed();
         }
 
         public static boolean variableIsRead(@Nonnull PsiVariable variable, @Nonnull PsiElement context) {
-            final VariableReadWriteVisitor visitor =
+            VariableReadWriteVisitor visitor =
                 new VariableReadWriteVisitor(variable, false);
             context.accept(visitor);
             return visitor.isPassed();
@@ -218,17 +218,17 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
                 if (write || passed) {
                     return;
                 }
-                final IElementType tokenType = expression.getOperationTokenType();
+                IElementType tokenType = expression.getOperationTokenType();
                 if (!JavaTokenType.EQEQ.equals(tokenType) && !JavaTokenType.NE.equals(tokenType)) {
                     return;
                 }
-                final PsiExpression lhs = expression.getLOperand();
+                PsiExpression lhs = expression.getLOperand();
                 if (!(lhs instanceof PsiBinaryExpression)) {
                     if (VariableAccessUtils.mayEvaluateToVariable(lhs, variable)) {
                         passed = true;
                     }
                 }
-                final PsiExpression rhs = expression.getROperand();
+                PsiExpression rhs = expression.getROperand();
                 if (!(rhs instanceof PsiBinaryExpression)) {
                     if (VariableAccessUtils.mayEvaluateToVariable(rhs, variable)) {
                         passed = true;
@@ -244,10 +244,10 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
                     return;
                 }
                 super.visitMethodCallExpression(call);
-                final PsiExpressionList argumentList = call.getArgumentList();
-                final PsiExpression[] arguments = argumentList.getExpressions();
+                PsiExpressionList argumentList = call.getArgumentList();
+                PsiExpression[] arguments = argumentList.getExpressions();
                 for (int i = 0; i < arguments.length; i++) {
-                    final PsiExpression argument = arguments[i];
+                    PsiExpression argument = arguments[i];
                     if (VariableAccessUtils.mayEvaluateToVariable(
                         argument,
                         variable
@@ -266,27 +266,27 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
             private static boolean isCallToSystemArraycopy(
                 PsiMethodCallExpression call
             ) {
-                final PsiReferenceExpression methodExpression =
+                PsiReferenceExpression methodExpression =
                     call.getMethodExpression();
-                @NonNls final String name =
+                @NonNls String name =
                     methodExpression.getReferenceName();
                 if (!"arraycopy".equals(name)) {
                     return false;
                 }
-                final PsiExpression qualifier =
+                PsiExpression qualifier =
                     methodExpression.getQualifierExpression();
                 if (!(qualifier instanceof PsiReferenceExpression)) {
                     return false;
                 }
-                final PsiReferenceExpression referenceExpression =
+                PsiReferenceExpression referenceExpression =
                     (PsiReferenceExpression) qualifier;
-                final PsiElement element =
+                PsiElement element =
                     referenceExpression.resolve();
                 if (!(element instanceof PsiClass)) {
                     return false;
                 }
-                final PsiClass aClass = (PsiClass) element;
-                final String qualifiedName =
+                PsiClass aClass = (PsiClass) element;
+                String qualifiedName =
                     aClass.getQualifiedName();
                 return "java.lang.System".equals(qualifiedName);
             }
@@ -299,13 +299,13 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
                     return;
                 }
                 super.visitNewExpression(newExpression);
-                final PsiExpressionList argumentList =
+                PsiExpressionList argumentList =
                     newExpression.getArgumentList();
                 if (argumentList == null) {
                     return;
                 }
-                final PsiExpression[] arguments = argumentList.getExpressions();
-                for (final PsiExpression argument : arguments) {
+                PsiExpression[] arguments = argumentList.getExpressions();
+                for (PsiExpression argument : arguments) {
                     if (VariableAccessUtils.mayEvaluateToVariable(
                         argument,
                         variable

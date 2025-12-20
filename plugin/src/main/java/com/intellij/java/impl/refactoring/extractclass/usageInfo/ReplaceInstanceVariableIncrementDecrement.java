@@ -42,7 +42,7 @@ public class ReplaceInstanceVariableIncrementDecrement extends FixableUsageInfo 
     this.setterName = setterName;
     this.delegateName = delegateName;
     fieldName = name;
-    final PsiPrefixExpression prefixExpr = PsiTreeUtil.getParentOfType(reference, PsiPrefixExpression.class);
+    PsiPrefixExpression prefixExpr = PsiTreeUtil.getParentOfType(reference, PsiPrefixExpression.class);
     if (prefixExpr != null) {
       this.reference = prefixExpr;
     }
@@ -53,8 +53,8 @@ public class ReplaceInstanceVariableIncrementDecrement extends FixableUsageInfo 
 
   public void fixUsage() throws IncorrectOperationException {
 
-    final PsiReferenceExpression lhs;
-    final PsiJavaToken sign;
+    PsiReferenceExpression lhs;
+    PsiJavaToken sign;
     if (reference instanceof PsiPrefixExpression) {
       lhs = (PsiReferenceExpression)((PsiPrefixExpression)reference).getOperand();
       sign = ((PsiPrefixExpression)reference).getOperationSign();
@@ -63,12 +63,12 @@ public class ReplaceInstanceVariableIncrementDecrement extends FixableUsageInfo 
       lhs = (PsiReferenceExpression)((PsiPostfixExpression)reference).getOperand();
       sign = ((PsiPostfixExpression)reference).getOperationSign();
     }
-    final PsiElement qualifier = lhs.getQualifier();
-    final String operator = sign.getText();
-    final String newExpression;
-    final String strippedOperator = getStrippedOperator(operator);
+    PsiElement qualifier = lhs.getQualifier();
+    String operator = sign.getText();
+    String newExpression;
+    String strippedOperator = getStrippedOperator(operator);
     if (qualifier != null) {
-      final String qualifierText = qualifier.getText();
+      String qualifierText = qualifier.getText();
       newExpression = qualifierText + '.' + delegateName + '.' +
                       callSetter(qualifierText + '.' + delegateName + '.' + callGetter() + strippedOperator + "1");
     }

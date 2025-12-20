@@ -45,8 +45,8 @@ public class ExtendsUtilityClassInspection extends BaseInspection {
     @Nonnull
     @RequiredReadAction
     protected String buildErrorString(Object... infos) {
-        final PsiClass superClass = (PsiClass) infos[0];
-        final String superClassName = superClass.getName();
+        PsiClass superClass = (PsiClass) infos[0];
+        String superClassName = superClass.getName();
         return InspectionGadgetsLocalize.classExtendsUtilityClassProblemDescriptor(superClassName).get();
     }
 
@@ -69,7 +69,7 @@ public class ExtendsUtilityClassInspection extends BaseInspection {
             if (aClass.isInterface() || aClass.isAnnotationType()) {
                 return;
             }
-            final PsiClass superClass = aClass.getSuperClass();
+            PsiClass superClass = aClass.getSuperClass();
             if (superClass == null) {
                 return;
             }

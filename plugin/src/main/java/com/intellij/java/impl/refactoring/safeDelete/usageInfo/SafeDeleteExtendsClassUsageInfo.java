@@ -31,7 +31,7 @@ public class SafeDeleteExtendsClassUsageInfo extends SafeDeleteReferenceUsageInf
   private final PsiClass myExtendingClass;
   private final PsiSubstitutor mySubstitutor;
 
-  public SafeDeleteExtendsClassUsageInfo(final PsiJavaCodeReferenceElement reference, PsiClass refClass, PsiClass extendingClass) {
+  public SafeDeleteExtendsClassUsageInfo(PsiJavaCodeReferenceElement reference, PsiClass refClass, PsiClass extendingClass) {
     super(reference, refClass, true);
     myExtendingClass = extendingClass;
     mySubstitutor = TypeConversionUtil.getClassSubstitutor(refClass, myExtendingClass, PsiSubstitutor.EMPTY);
@@ -43,26 +43,26 @@ public class SafeDeleteExtendsClassUsageInfo extends SafeDeleteReferenceUsageInf
   }
 
   public void deleteElement() throws IncorrectOperationException {
-    final PsiElement parent = getElement().getParent();
+    PsiElement parent = getElement().getParent();
     LOG.assertTrue(parent instanceof PsiReferenceList);
-    final PsiClass refClass = getReferencedElement();
-    final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(refClass.getProject()).getElementFactory();
+    PsiClass refClass = getReferencedElement();
+    PsiElementFactory elementFactory = JavaPsiFacade.getInstance(refClass.getProject()).getElementFactory();
 
-    final PsiReferenceList extendsList = refClass.getExtendsList();
-    final PsiReferenceList extendingImplementsList = myExtendingClass.getImplementsList();
+    PsiReferenceList extendsList = refClass.getExtendsList();
+    PsiReferenceList extendingImplementsList = myExtendingClass.getImplementsList();
     if (extendsList != null) {
-      final PsiClassType[] referenceTypes = extendsList.getReferencedTypes();
-      final PsiReferenceList listToAddExtends = refClass.isInterface() == myExtendingClass.isInterface() ? myExtendingClass.getExtendsList() : extendingImplementsList;
-      final PsiClassType[] existingRefTypes = listToAddExtends.getReferencedTypes();
+      PsiClassType[] referenceTypes = extendsList.getReferencedTypes();
+      PsiReferenceList listToAddExtends = refClass.isInterface() == myExtendingClass.isInterface() ? myExtendingClass.getExtendsList() : extendingImplementsList;
+      PsiClassType[] existingRefTypes = listToAddExtends.getReferencedTypes();
       for (PsiClassType referenceType : referenceTypes) {
         if (ArrayUtil.find(existingRefTypes, referenceType) > -1) continue;
         listToAddExtends.add(elementFactory.createReferenceElementByType((PsiClassType) mySubstitutor.substitute(referenceType)));
       }
     }
 
-    final PsiReferenceList implementsList = refClass.getImplementsList();
+    PsiReferenceList implementsList = refClass.getImplementsList();
     if (implementsList != null) {
-      final PsiClassType[] existingRefTypes = extendingImplementsList.getReferencedTypes();
+      PsiClassType[] existingRefTypes = extendingImplementsList.getReferencedTypes();
       PsiClassType[] referenceTypes = implementsList.getReferencedTypes();
       for (PsiClassType referenceType : referenceTypes) {
         if (ArrayUtil.find(existingRefTypes, referenceType) > -1) continue;
@@ -75,9 +75,9 @@ public class SafeDeleteExtendsClassUsageInfo extends SafeDeleteReferenceUsageInf
 
   public boolean isSafeDelete() {
     if (getElement() == null) return false;
-    final PsiClass refClass = getReferencedElement();
+    PsiClass refClass = getReferencedElement();
     if (refClass.getExtendsListTypes().length > 0) {
-      final PsiReferenceList listToAddExtends = refClass.isInterface() == myExtendingClass.isInterface() ? myExtendingClass.getExtendsList() :
+      PsiReferenceList listToAddExtends = refClass.isInterface() == myExtendingClass.isInterface() ? myExtendingClass.getExtendsList() :
           myExtendingClass.getImplementsList();
       if (listToAddExtends == null) return false;
     }

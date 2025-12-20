@@ -60,7 +60,7 @@ public class PublicMethodWithoutLoggingInspection extends BaseInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final ListTable table = new ListTable(
+        ListTable table = new ListTable(
             new ListWrappingTableModel(loggerClassNames, InspectionGadgetsLocalize.loggerClassName().get()));
         return UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsLocalize.chooseLoggerClass().get());
     }
@@ -93,7 +93,7 @@ public class PublicMethodWithoutLoggingInspection extends BaseInspection {
             if (!method.hasModifierProperty(PsiModifier.PUBLIC)) {
                 return;
             }
-            final PsiCodeBlock body = method.getBody();
+            PsiCodeBlock body = method.getBody();
             if (body == null) {
                 return;
             }
@@ -110,7 +110,7 @@ public class PublicMethodWithoutLoggingInspection extends BaseInspection {
         }
 
         private boolean containsLoggingCall(PsiCodeBlock block) {
-            final ContainsLoggingCallVisitor visitor = new ContainsLoggingCallVisitor();
+            ContainsLoggingCallVisitor visitor = new ContainsLoggingCallVisitor();
             block.accept(visitor);
             return visitor.containsLoggingCall();
         }
@@ -134,15 +134,15 @@ public class PublicMethodWithoutLoggingInspection extends BaseInspection {
                 return;
             }
             super.visitMethodCallExpression(expression);
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return;
             }
-            final String containingClassName = containingClass.getQualifiedName();
+            String containingClassName = containingClass.getQualifiedName();
             if (containingClassName == null) {
                 return;
             }

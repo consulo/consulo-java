@@ -27,15 +27,15 @@ public abstract class RootsTest extends PsiTestCase {
         LocalFileSystem.getInstance().refreshAndFindFileByPath(rootPath.replace(File.separatorChar, '/'));
       }
     });
-    final VirtualFile rootFile = rootFileBox[0];
-    final VirtualFile classesFile = rootFile.findChild("classes");
+    VirtualFile rootFile = rootFileBox[0];
+    VirtualFile classesFile = rootFile.findChild("classes");
     assertNotNull(classesFile);
-    final VirtualFile childOfContent = rootFile.findChild("x.txt");
+    VirtualFile childOfContent = rootFile.findChild("x.txt");
     assertNotNull(childOfContent);
-    final VirtualFile childOfClasses = classesFile.findChild("y.txt");
+    VirtualFile childOfClasses = classesFile.findChild("y.txt");
     assertNotNull(childOfClasses);
 
-    final ModuleRootManager rootManager = ModuleRootManager.getInstance(myModule);
+    ModuleRootManager rootManager = ModuleRootManager.getInstance(myModule);
 
 
     PsiTestUtil.addContentRoot(myModule, rootFile);

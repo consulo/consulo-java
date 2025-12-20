@@ -54,7 +54,7 @@ public class AddAssertStatementFix implements LocalQuickFix {
         PsiElement element = descriptor.getPsiElement();
         PsiElement anchorElement = RefactoringUtil.getParentStatement(element, false);
         LOG.assertTrue(anchorElement != null);
-        final PsiElement tempParent = anchorElement.getParent();
+        PsiElement tempParent = anchorElement.getParent();
         if (tempParent instanceof PsiForStatement forStatement && !PsiTreeUtil.isAncestor(forStatement.getBody(), anchorElement, false)) {
             anchorElement = tempParent;
         }
@@ -64,11 +64,11 @@ public class AddAssertStatementFix implements LocalQuickFix {
         }
 
         try {
-            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
+            PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
             String text = "assert " + myText + ";";
             PsiAssertStatement assertStatement = (PsiAssertStatement) factory.createStatementFromText(text, null);
 
-            final PsiElement parent = anchorElement.getParent();
+            PsiElement parent = anchorElement.getParent();
             if (parent instanceof PsiCodeBlock) {
                 parent.addBefore(assertStatement, anchorElement);
             }

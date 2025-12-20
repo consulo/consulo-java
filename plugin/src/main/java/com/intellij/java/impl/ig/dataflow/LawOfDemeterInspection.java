@@ -75,40 +75,40 @@ public class LawOfDemeterInspection extends BaseInspection {
         }
 
         public void checkParents(PsiExpression expression, Integer count) {
-            final PsiElement parent = expression.getParent();
+            PsiElement parent = expression.getParent();
             if (parent instanceof PsiLocalVariable) {
-                final Integer localCount = expression.getUserData(key);
+                Integer localCount = expression.getUserData(key);
                 parent.putUserData(key, localCount);
             }
             else if (parent instanceof PsiAssignmentExpression) {
-                final PsiAssignmentExpression assignmentExpression =
+                PsiAssignmentExpression assignmentExpression =
                     (PsiAssignmentExpression) parent;
-                final PsiExpression lhs = assignmentExpression.getLExpression();
+                PsiExpression lhs = assignmentExpression.getLExpression();
                 if (!(lhs instanceof PsiReferenceExpression)) {
                     return;
                 }
-                final PsiReferenceExpression referenceExpression =
+                PsiReferenceExpression referenceExpression =
                     (PsiReferenceExpression) lhs;
-                final PsiElement element = referenceExpression.resolve();
+                PsiElement element = referenceExpression.resolve();
                 if (!(element instanceof PsiLocalVariable)) {
                     return;
                 }
-                final Integer localCount = expression.getUserData(key);
+                Integer localCount = expression.getUserData(key);
                 element.putUserData(key, localCount);
             }
             else if (parent instanceof PsiReferenceExpression) {
-                final PsiElement grandParent = parent.getParent();
+                PsiElement grandParent = parent.getParent();
                 if (!(grandParent instanceof PsiMethodCallExpression)) {
                     return;
                 }
-                final PsiMethodCallExpression methodCallExpression =
+                PsiMethodCallExpression methodCallExpression =
                     (PsiMethodCallExpression) grandParent;
-                final Integer userData = grandParent.getUserData(key);
+                Integer userData = grandParent.getUserData(key);
                 if (userData == null) {
                     return;
                 }
-                final int localCount = userData.intValue();
-                final int newCount = localCount + count.intValue();
+                int localCount = userData.intValue();
+                int newCount = localCount + count.intValue();
                 if (newCount == threshold) {
                     registerMethodCallError(methodCallExpression);
                 }
@@ -122,15 +122,15 @@ public class LawOfDemeterInspection extends BaseInspection {
             PsiReferenceExpression expression
         ) {
             super.visitReferenceExpression(expression);
-            final PsiElement parent = expression.getParent();
+            PsiElement parent = expression.getParent();
             if (!(parent instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiElement element = expression.resolve();
+            PsiElement element = expression.resolve();
             if (!(element instanceof PsiLocalVariable)) {
                 return;
             }
-            final Integer count = element.getUserData(key);
+            Integer count = element.getUserData(key);
             if (count != null) {
                 checkParents(expression, count);
             }

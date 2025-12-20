@@ -39,12 +39,12 @@ public class FlipExpressionIntention extends MutablyNamedIntention {
     @Nonnull
     @Override
     public LocalizeValue getTextForElement(PsiElement element) {
-        final PsiPolyadicExpression expression = (PsiPolyadicExpression) element.getParent();
-        final PsiExpression[] operands = expression.getOperands();
-        final PsiJavaToken sign = expression.getTokenBeforeOperand(operands[1]);
-        final String operatorText = sign == null ? "" : sign.getText();
-        final IElementType tokenType = expression.getOperationTokenType();
-        final boolean commutative = ParenthesesUtils.isCommutativeOperator(tokenType);
+        PsiPolyadicExpression expression = (PsiPolyadicExpression) element.getParent();
+        PsiExpression[] operands = expression.getOperands();
+        PsiJavaToken sign = expression.getTokenBeforeOperand(operands[1]);
+        String operatorText = sign == null ? "" : sign.getText();
+        IElementType tokenType = expression.getOperationTokenType();
+        boolean commutative = ParenthesesUtils.isCommutativeOperator(tokenType);
         if (commutative && !ConcatenationUtils.isConcatenation(expression)) {
             return IntentionPowerPackLocalize.flipSmthIntentionName(operatorText);
         }
@@ -67,18 +67,18 @@ public class FlipExpressionIntention extends MutablyNamedIntention {
 
     @Override
     public void processIntention(@Nonnull PsiElement element) {
-        final PsiJavaToken token = (PsiJavaToken) element;
-        final PsiElement parent = token.getParent();
+        PsiJavaToken token = (PsiJavaToken) element;
+        PsiElement parent = token.getParent();
         if (!(parent instanceof PsiPolyadicExpression)) {
             return;
         }
-        final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) parent;
-        final PsiExpression[] operands = polyadicExpression.getOperands();
-        final StringBuilder newExpression = new StringBuilder();
+        PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) parent;
+        PsiExpression[] operands = polyadicExpression.getOperands();
+        StringBuilder newExpression = new StringBuilder();
         String prevOperand = null;
-        final String tokenText = token.getText() + ' '; // 2- -1 without the space is not legal
+        String tokenText = token.getText() + ' '; // 2- -1 without the space is not legal
         for (PsiExpression operand : operands) {
-            final PsiJavaToken token1 = polyadicExpression.getTokenBeforeOperand(operand);
+            PsiJavaToken token1 = polyadicExpression.getTokenBeforeOperand(operand);
             if (token == token1) {
                 newExpression.append(operand.getText()).append(tokenText);
                 continue;
@@ -94,8 +94,8 @@ public class FlipExpressionIntention extends MutablyNamedIntention {
 
     @Override
     protected void processIntention(Editor editor, @Nonnull PsiElement element) {
-        final CaretModel caretModel = editor.getCaretModel();
-        final int offset = caretModel.getOffset();
+        CaretModel caretModel = editor.getCaretModel();
+        int offset = caretModel.getOffset();
         super.processIntention(editor, element);
         caretModel.moveToOffset(offset);
     }

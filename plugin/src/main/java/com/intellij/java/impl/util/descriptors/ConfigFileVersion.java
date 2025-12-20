@@ -25,7 +25,7 @@ public class ConfigFileVersion {
   private final String myName;
   private @NonNls final String myTemplateName;
 
-  public ConfigFileVersion(final String name, final @NonNls String templateName) {
+  public ConfigFileVersion(String name, @NonNls String templateName) {
     myName = name;
     myTemplateName = templateName;
   }

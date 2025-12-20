@@ -36,23 +36,23 @@ import jakarta.annotation.Nonnull;
 public class GenerateCreateUIHandler implements CodeInsightActionHandler {
   @Override
   public void invoke(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
-    final PsiElement element = PsiUtilBase.getElementAtCaret(editor);
-    final PsiClass psiClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
+    PsiElement element = PsiUtilBase.getElementAtCaret(editor);
+    PsiClass psiClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
     if (psiClass == null) return;
 
-    final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+    PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
     String annotation = "";
     if (PsiUtil.getLanguageLevel(file).isAtLeast(LanguageLevel.JDK_1_5)) {
       annotation = "@SuppressWarnings({\"MethodOverridesStaticMethodOfSuperclass\", \"UnusedDeclaration\"})";
     }
-    final PsiMethod createUI = factory.createMethodFromText(annotation +
+    PsiMethod createUI = factory.createMethodFromText(annotation +
                                                             "\npublic static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent c) {" +
                                                         "\n  return new " + psiClass.getName() + "();\n}", psiClass);
-    final PsiMethod newMethod = (PsiMethod)psiClass.add(CodeStyleManager.getInstance(project).reformat(createUI));
+    PsiMethod newMethod = (PsiMethod)psiClass.add(CodeStyleManager.getInstance(project).reformat(createUI));
     JavaCodeStyleManager.getInstance(project).shortenClassReferences(newMethod);
-    final PsiReturnStatement returnStatement = PsiTreeUtil.findChildOfType(newMethod, PsiReturnStatement.class);
+    PsiReturnStatement returnStatement = PsiTreeUtil.findChildOfType(newMethod, PsiReturnStatement.class);
     if (returnStatement != null) {
-      final int offset = returnStatement.getTextRange().getEndOffset();
+      int offset = returnStatement.getTextRange().getEndOffset();
       editor.getCaretModel().moveToOffset(offset - 2);
     }
   }

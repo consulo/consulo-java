@@ -64,7 +64,7 @@ public class InstanceofExpressionPostfixTemplate extends PostfixTemplate {
     throws IncorrectOperationException {
     assert expr.isValid();
     PsiType[] types = GuessManager.getInstance(project).guessTypeToCast(expr);
-    final boolean parenthesesNeeded = expr instanceof PsiPolyadicExpression ||
+    boolean parenthesesNeeded = expr instanceof PsiPolyadicExpression ||
                                       expr instanceof PsiConditionalExpression ||
                                       expr instanceof PsiAssignmentExpression;
     String exprText = parenthesesNeeded ? "(" + expr.getText() + ")" : expr.getText();

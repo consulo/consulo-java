@@ -35,46 +35,46 @@ class ReverseForLoopDirectionPredicate implements PsiElementPredicate
 		{
 			return false;
 		}
-		final PsiJavaToken keyword = (PsiJavaToken) element;
-		final IElementType tokenType = keyword.getTokenType();
+		PsiJavaToken keyword = (PsiJavaToken) element;
+		IElementType tokenType = keyword.getTokenType();
 		if(!JavaTokenType.FOR_KEYWORD.equals(tokenType))
 		{
 			return false;
 		}
-		final PsiElement parent = keyword.getParent();
+		PsiElement parent = keyword.getParent();
 		if(!(parent instanceof PsiForStatement))
 		{
 			return false;
 		}
-		final PsiForStatement forStatement = (PsiForStatement) parent;
-		final PsiStatement initialization = forStatement.getInitialization();
+		PsiForStatement forStatement = (PsiForStatement) parent;
+		PsiStatement initialization = forStatement.getInitialization();
 		if(!(initialization instanceof PsiDeclarationStatement))
 		{
 			return false;
 		}
-		final PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement) initialization;
-		final PsiElement[] declaredElements = declarationStatement.getDeclaredElements();
+		PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement) initialization;
+		PsiElement[] declaredElements = declarationStatement.getDeclaredElements();
 		if(declaredElements.length != 1)
 		{
 			return false;
 		}
-		final PsiElement declaredElement = declaredElements[0];
+		PsiElement declaredElement = declaredElements[0];
 		if(!(declaredElement instanceof PsiLocalVariable))
 		{
 			return false;
 		}
-		final PsiVariable variable = (PsiVariable) declaredElement;
-		final PsiType type = variable.getType();
+		PsiVariable variable = (PsiVariable) declaredElement;
+		PsiType type = variable.getType();
 		if(!PsiType.INT.equals(type) && !PsiType.LONG.equals(type))
 		{
 			return false;
 		}
-		final PsiExpression condition = forStatement.getCondition();
+		PsiExpression condition = forStatement.getCondition();
 		if(!isVariableCompared(variable, condition))
 		{
 			return false;
 		}
-		final PsiStatement update = forStatement.getUpdate();
+		PsiStatement update = forStatement.getUpdate();
 		return isVariableIncrementOrDecremented(variable, update);
 	}
 
@@ -84,14 +84,14 @@ class ReverseForLoopDirectionPredicate implements PsiElementPredicate
 		{
 			return false;
 		}
-		final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) expression;
-		final IElementType tokenType = binaryExpression.getOperationTokenType();
+		PsiBinaryExpression binaryExpression = (PsiBinaryExpression) expression;
+		IElementType tokenType = binaryExpression.getOperationTokenType();
 		if(!ComparisonUtils.isComparisonOperation(tokenType))
 		{
 			return false;
 		}
-		final PsiExpression lhs = binaryExpression.getLOperand();
-		final PsiExpression rhs = binaryExpression.getROperand();
+		PsiExpression lhs = binaryExpression.getLOperand();
+		PsiExpression rhs = binaryExpression.getROperand();
 		if(rhs == null)
 		{
 			return false;
@@ -113,35 +113,35 @@ class ReverseForLoopDirectionPredicate implements PsiElementPredicate
 		{
 			return false;
 		}
-		final PsiExpressionStatement expressionStatement = (PsiExpressionStatement) statement;
+		PsiExpressionStatement expressionStatement = (PsiExpressionStatement) statement;
 		PsiExpression expression = expressionStatement.getExpression();
 		expression = ParenthesesUtils.stripParentheses(expression);
 		if(expression instanceof PsiPrefixExpression)
 		{
-			final PsiPrefixExpression prefixExpression = (PsiPrefixExpression) expression;
-			final IElementType tokenType = prefixExpression.getOperationTokenType();
+			PsiPrefixExpression prefixExpression = (PsiPrefixExpression) expression;
+			IElementType tokenType = prefixExpression.getOperationTokenType();
 			if(!tokenType.equals(JavaTokenType.PLUSPLUS) && !tokenType.equals(JavaTokenType.MINUSMINUS))
 			{
 				return false;
 			}
-			final PsiExpression operand = prefixExpression.getOperand();
+			PsiExpression operand = prefixExpression.getOperand();
 			return VariableAccessUtils.evaluatesToVariable(operand, variable);
 		}
 		else if(expression instanceof PsiPostfixExpression)
 		{
-			final PsiPostfixExpression postfixExpression = (PsiPostfixExpression) expression;
-			final IElementType tokenType = postfixExpression.getOperationTokenType();
+			PsiPostfixExpression postfixExpression = (PsiPostfixExpression) expression;
+			IElementType tokenType = postfixExpression.getOperationTokenType();
 			if(!tokenType.equals(JavaTokenType.PLUSPLUS) && !tokenType.equals(JavaTokenType.MINUSMINUS))
 			{
 				return false;
 			}
-			final PsiExpression operand = postfixExpression.getOperand();
+			PsiExpression operand = postfixExpression.getOperand();
 			return VariableAccessUtils.evaluatesToVariable(operand, variable);
 		}
 		else if(expression instanceof PsiAssignmentExpression)
 		{
-			final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) expression;
-			final IElementType tokenType = assignmentExpression.getOperationTokenType();
+			PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) expression;
+			IElementType tokenType = assignmentExpression.getOperationTokenType();
 			PsiExpression lhs = assignmentExpression.getLExpression();
 			lhs = ParenthesesUtils.stripParentheses(lhs);
 			if(!VariableAccessUtils.evaluatesToVariable(lhs, variable))
@@ -156,8 +156,8 @@ class ReverseForLoopDirectionPredicate implements PsiElementPredicate
 				{
 					return false;
 				}
-				final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) rhs;
-				final IElementType token = binaryExpression.getOperationTokenType();
+				PsiBinaryExpression binaryExpression = (PsiBinaryExpression) rhs;
+				IElementType token = binaryExpression.getOperationTokenType();
 				if(!token.equals(JavaTokenType.PLUS) && !token.equals(JavaTokenType.MINUS))
 				{
 					return false;

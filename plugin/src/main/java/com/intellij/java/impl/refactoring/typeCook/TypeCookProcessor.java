@@ -53,20 +53,20 @@ public class TypeCookProcessor extends BaseRefactoringProcessor {
 
   @Nonnull
   protected UsageInfo[] findUsages() {
-    final SystemBuilder systemBuilder = new SystemBuilder(myProject, mySettings);
+    SystemBuilder systemBuilder = new SystemBuilder(myProject, mySettings);
 
-    final ReductionSystem commonSystem = systemBuilder.build(myElements);
+    ReductionSystem commonSystem = systemBuilder.build(myElements);
     myResult = new Result(commonSystem);
 
-    final ReductionSystem[] systems = commonSystem.isolate();
+    ReductionSystem[] systems = commonSystem.isolate();
 
-    for (final ReductionSystem system : systems) {
+    for (ReductionSystem system : systems) {
       if (system != null) {
-        final ResolverTree tree = new ResolverTree(system);
+        ResolverTree tree = new ResolverTree(system);
 
         tree.resolve();
 
-        final Binding solution = tree.getBestSolution();
+        Binding solution = tree.getBestSolution();
 
         if (solution != null) {
           myResult.incorporateSolution(solution);
@@ -74,8 +74,8 @@ public class TypeCookProcessor extends BaseRefactoringProcessor {
       }
     }
 
-    final HashSet<PsiElement> changedItems = myResult.getCookedElements();
-    final UsageInfo[] usages = new UsageInfo[changedItems.size()];
+    HashSet<PsiElement> changedItems = myResult.getCookedElements();
+    UsageInfo[] usages = new UsageInfo[changedItems.size()];
 
     int i = 0;
     for (final PsiElement element : changedItems) {
@@ -99,7 +99,7 @@ public class TypeCookProcessor extends BaseRefactoringProcessor {
   }
 
   protected void performRefactoring(UsageInfo[] usages) {
-    final HashSet<PsiElement> victims = new HashSet<PsiElement>();
+    HashSet<PsiElement> victims = new HashSet<PsiElement>();
 
     for (UsageInfo usage : usages) {
       victims.add(usage.getElement());

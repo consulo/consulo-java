@@ -26,14 +26,14 @@ import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 class ConvertCatchToThrowsPredicate implements PsiElementPredicate {
 
   public boolean satisfiedBy(PsiElement element) {
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!(parent instanceof PsiCatchSection)) {
       return false;
     }
     if (element instanceof PsiCodeBlock) {
       return false;
     }
-    final PsiMethod method = PsiTreeUtil.getParentOfType(parent, PsiMethod.class, true, PsiClass.class);
+    PsiMethod method = PsiTreeUtil.getParentOfType(parent, PsiMethod.class, true, PsiClass.class);
     return method != null;
   }
 }

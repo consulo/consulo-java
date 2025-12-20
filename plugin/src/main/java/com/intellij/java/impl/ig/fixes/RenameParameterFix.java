@@ -40,11 +40,11 @@ public class RenameParameterFix extends InspectionGadgetsFix {
   }
 
   public void doFix(Project project, ProblemDescriptor descriptor) {
-    final PsiElement nameIdentifier = descriptor.getPsiElement();
-    final PsiElement elementToRename = nameIdentifier.getParent();
-    final RefactoringFactory factory =
+    PsiElement nameIdentifier = descriptor.getPsiElement();
+    PsiElement elementToRename = nameIdentifier.getParent();
+    RefactoringFactory factory =
       RefactoringFactory.getInstance(project);
-    final RenameRefactoring renameRefactoring =
+    RenameRefactoring renameRefactoring =
       factory.createRename(elementToRename, m_targetName);
     renameRefactoring.setSearchInComments(false);
     renameRefactoring.setSearchInNonJavaFiles(false);

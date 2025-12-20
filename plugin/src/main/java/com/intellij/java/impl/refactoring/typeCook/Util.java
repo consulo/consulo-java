@@ -48,10 +48,10 @@ public class Util {
   }
 
   public static PsiClassType.ClassResolveResult resolveType(PsiType type) {
-    final PsiClassType.ClassResolveResult resolveResult = PsiUtil.resolveGenericsClassInType(type);
-    final PsiClass aClass = resolveResult.getElement();
+    PsiClassType.ClassResolveResult resolveResult = PsiUtil.resolveGenericsClassInType(type);
+    PsiClass aClass = resolveResult.getElement();
     if (aClass instanceof PsiAnonymousClass) {
-      final PsiClassType baseClassType = ((PsiAnonymousClass)aClass).getBaseClassType();
+      PsiClassType baseClassType = ((PsiAnonymousClass)aClass).getBaseClassType();
       return resolveType(resolveResult.getSubstitutor().substitute(baseClassType));
     }
     return resolveResult;
@@ -108,13 +108,13 @@ public class Util {
     }
   }
 
-  public static boolean isRaw(PsiType t, final Settings settings) {
+  public static boolean isRaw(PsiType t, Settings settings) {
     return isRaw(t, settings, true);
   }
 
-  private static boolean isRaw(PsiType t, final Settings settings, final boolean upper) {
+  private static boolean isRaw(PsiType t, Settings settings, boolean upper) {
     if (t instanceof PsiClassType) {
-      final PsiClassType.ClassResolveResult resolveResult = resolveType(t);
+      PsiClassType.ClassResolveResult resolveResult = resolveType(t);
 
       if (resolveResult.getElement() == null) {
         return false;
@@ -124,9 +124,9 @@ public class Util {
         return true;
       }
 
-      final PsiSubstitutor subst = resolveResult.getSubstitutor();
-      final PsiClass element = resolveResult.getElement();
-      final PsiManager manager = element.getManager();
+      PsiSubstitutor subst = resolveResult.getSubstitutor();
+      PsiClass element = resolveResult.getElement();
+      PsiManager manager = element.getManager();
 
       if (settings.cookObjects() && upper &&
           t.equals(PsiType.getJavaLangObject(manager, GlobalSearchScope.allScope(manager.getProject())))) {
@@ -134,7 +134,7 @@ public class Util {
       }
 
       for (PsiTypeParameter parameter : PsiUtil.typeParametersIterable(element)) {
-        final PsiType actual = subst.substitute(parameter);
+        PsiType actual = subst.substitute(parameter);
         if (isRaw(actual, settings, false)) return true;
       }
 
@@ -150,35 +150,35 @@ public class Util {
   /**
    * convert external raw types to types explicitly parameterized by Bottom
    */
-  public static PsiType banalize(final PsiType t) {
+  public static PsiType banalize(PsiType t) {
     if (t instanceof PsiClassType) {
-      final PsiClassType.ClassResolveResult result = resolveType(t);
-      final PsiClass theClass = result.getElement();
+      PsiClassType.ClassResolveResult result = resolveType(t);
+      PsiClass theClass = result.getElement();
 
       if (theClass == null) {
         return t;
       }
 
-      final PsiSubstitutor theSubst = result.getSubstitutor();
-      final PsiManager theManager = theClass.getManager();
+      PsiSubstitutor theSubst = result.getSubstitutor();
+      PsiManager theManager = theClass.getManager();
 
       PsiSubstitutor subst = PsiSubstitutor.EMPTY;
 
-      for (final PsiTypeParameter theParm : theSubst.getSubstitutionMap().keySet()) {
-        final PsiType actualType = theSubst.substitute(theParm);
+      for (PsiTypeParameter theParm : theSubst.getSubstitutionMap().keySet()) {
+        PsiType actualType = theSubst.substitute(theParm);
 
         if (actualType == null /*|| actualType instanceof PsiWildcardType*/) {
           subst = subst.put(theParm, Bottom.BOTTOM);
         }
         else if (actualType instanceof PsiWildcardType) {
-          final PsiWildcardType wctype = (PsiWildcardType)actualType;
-          final PsiType bound = wctype.getBound();
+          PsiWildcardType wctype = (PsiWildcardType)actualType;
+          PsiType bound = wctype.getBound();
 
           if (bound == null) {
             subst = subst.put(theParm, actualType);
           }
           else {
-            final PsiType banabound = banalize(bound);
+            PsiType banabound = banalize(bound);
 
             subst = subst.put(theParm, wctype.isExtends()
                                        ? PsiWildcardType.createExtends(theManager, banabound)
@@ -186,7 +186,7 @@ public class Util {
           }
         }
         else {
-          final PsiType banType = banalize(actualType);
+          PsiType banType = banalize(actualType);
 
           if (banType == null) {
             return t;
@@ -223,15 +223,15 @@ public class Util {
 
   public static boolean bindsTypeParameters(PsiType t, HashSet<PsiTypeParameter> params) {
     if (t instanceof PsiWildcardType) {
-      final PsiWildcardType wct = ((PsiWildcardType)t);
-      final PsiType bound = wct.getBound();
+      PsiWildcardType wct = ((PsiWildcardType)t);
+      PsiType bound = wct.getBound();
 
       return bound != null && wct.isExtends() && bindsTypeParameters(bound, params);
     }
 
-    final PsiClassType.ClassResolveResult result = Util.resolveType(t);
-    final PsiClass theClass = result.getElement();
-    final PsiSubstitutor theSubst = result.getSubstitutor();
+    PsiClassType.ClassResolveResult result = Util.resolveType(t);
+    PsiClass theClass = result.getElement();
+    PsiSubstitutor theSubst = result.getSubstitutor();
 
     if (theClass == null) {
       return false;
@@ -267,33 +267,33 @@ public class Util {
     return null;
   }
 
-  public static PsiType createParameterizedType(final PsiType t, final PsiTypeVariableFactory factory, final PsiElement context) {
+  public static PsiType createParameterizedType(PsiType t, PsiTypeVariableFactory factory, PsiElement context) {
     return createParameterizedType(t, factory, true, context);
   }
 
-  public static PsiType createParameterizedType(final PsiType t, final PsiTypeVariableFactory factory) {
+  public static PsiType createParameterizedType(PsiType t, PsiTypeVariableFactory factory) {
     return createParameterizedType(t, factory, true, null);
   }
 
-  private static PsiType createParameterizedType(final PsiType t,
-                                                 final PsiTypeVariableFactory factory,
-                                                 final boolean upper,
-                                                 final PsiElement context) {
+  private static PsiType createParameterizedType(PsiType t,
+                                                 PsiTypeVariableFactory factory,
+                                                 boolean upper,
+                                                 PsiElement context) {
     if (t == null || (upper && t.getCanonicalText().equals(CommonClassNames.JAVA_LANG_OBJECT))) {
       return factory.create(context);
     }
 
     if (t instanceof PsiClassType) {
-      final PsiClassType.ClassResolveResult result = resolveType(t);
-      final PsiSubstitutor aSubst = result.getSubstitutor();
-      final PsiClass aClass = result.getElement();
+      PsiClassType.ClassResolveResult result = resolveType(t);
+      PsiSubstitutor aSubst = result.getSubstitutor();
+      PsiClass aClass = result.getElement();
 
       PsiSubstitutor theSubst = PsiSubstitutor.EMPTY;
 
-      final HashSet<PsiTypeVariable> cluster = new HashSet<PsiTypeVariable>();
+      HashSet<PsiTypeVariable> cluster = new HashSet<PsiTypeVariable>();
 
-      for (final PsiTypeParameter parm : aSubst.getSubstitutionMap().keySet()) {
-        final PsiType type = createParameterizedType(aSubst.substitute(parm), factory, false, context);
+      for (PsiTypeParameter parm : aSubst.getSubstitutionMap().keySet()) {
+        PsiType type = createParameterizedType(aSubst.substitute(parm), factory, false, context);
 
         if (type instanceof PsiTypeVariable) {
           cluster.add((PsiTypeVariable)type);
@@ -315,7 +315,7 @@ public class Util {
     return t;
   }
 
-  public static boolean bindsTypeVariables(final PsiType t) {
+  public static boolean bindsTypeVariables(PsiType t) {
     if (t == null) {
       return false;
     }
@@ -333,19 +333,19 @@ public class Util {
     }
 
     if (t instanceof PsiIntersectionType) {
-      final PsiType[] conjuncts = ((PsiIntersectionType)t).getConjuncts();
+      PsiType[] conjuncts = ((PsiIntersectionType)t).getConjuncts();
       for (PsiType conjunct : conjuncts) {
         if (bindsTypeVariables(conjunct)) return true;
       }
       return false;
     }
 
-    final PsiClassType.ClassResolveResult result = resolveType(t);
+    PsiClassType.ClassResolveResult result = resolveType(t);
 
     if (result.getElement() != null) {
-      final PsiSubstitutor subst = result.getSubstitutor();
+      PsiSubstitutor subst = result.getSubstitutor();
 
-      for (final PsiType psiType : subst.getSubstitutionMap().values()) {
+      for (PsiType psiType : subst.getSubstitutionMap().values()) {
         if (bindsTypeVariables(psiType)) {
           return true;
         }
@@ -355,34 +355,34 @@ public class Util {
     return false;
   }
 
-  public static void changeType(final PsiElement element, final PsiType type) {
+  public static void changeType(PsiElement element, PsiType type) {
     try {
       if (element instanceof PsiTypeCastExpression) {
-        final PsiTypeCastExpression cast = ((PsiTypeCastExpression)element);
+        PsiTypeCastExpression cast = ((PsiTypeCastExpression)element);
 
         cast.getCastType().replace(JavaPsiFacade.getInstance(cast.getProject()).getElementFactory().createTypeElement(type));
       }
       else if (element instanceof PsiVariable) {
-        final PsiVariable field = ((PsiVariable)element);
+        PsiVariable field = ((PsiVariable)element);
 
         field.normalizeDeclaration();
         field.getTypeElement().replace(JavaPsiFacade.getInstance(field.getProject()).getElementFactory().createTypeElement(type));
       }
       else if (element instanceof PsiMethod) {
-        final PsiMethod method = ((PsiMethod)element);
+        PsiMethod method = ((PsiMethod)element);
 
         method.getReturnTypeElement().replace(JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createTypeElement(type));
       }
       else if (element instanceof PsiNewExpression) {
-        final PsiNewExpression newx = (PsiNewExpression)element;
-        final PsiClassType.ClassResolveResult result = Util.resolveType(type);
+        PsiNewExpression newx = (PsiNewExpression)element;
+        PsiClassType.ClassResolveResult result = Util.resolveType(type);
 
         if (result == null) {
           return;
         }
 
-        final PsiSubstitutor subst = result.getSubstitutor();
-        final PsiTypeParameter[] parms = result.getElement().getTypeParameters();
+        PsiSubstitutor subst = result.getSubstitutor();
+        PsiTypeParameter[] parms = result.getElement().getTypeParameters();
 
         if (parms.length > 0 && subst.substitute(parms[0]) != null) {
           PsiJavaCodeReferenceElement classReference = newx.getClassOrAnonymousClassReference();
@@ -392,7 +392,7 @@ public class Util {
             return;
           }
 
-          final PsiElementFactory factory = JavaPsiFacade.getInstance(newx.getProject()).getElementFactory();
+          PsiElementFactory factory = JavaPsiFacade.getInstance(newx.getProject()).getElementFactory();
 
           PsiTypeElement[] elements = list.getTypeParameterElements();
           for (PsiTypeElement element1 : elements) {

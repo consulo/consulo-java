@@ -45,10 +45,10 @@ public class RecordStoreResourceInspection extends BaseInspection {
 
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiExpression expression = (PsiExpression) infos[0];
-        final PsiType type = expression.getType();
+        PsiExpression expression = (PsiExpression) infos[0];
+        PsiType type = expression.getType();
         assert type != null;
-        final String text = type.getPresentableText();
+        String text = type.getPresentableText();
         return InspectionGadgetsLocalize.resourceOpenedNotClosedProblemDescriptor(text).get();
     }
 
@@ -67,26 +67,26 @@ public class RecordStoreResourceInspection extends BaseInspection {
             if (!isRecordStoreFactoryMethod(expression)) {
                 return;
             }
-            final PsiElement parent = expression.getParent();
+            PsiElement parent = expression.getParent();
             if (!(parent instanceof PsiAssignmentExpression)) {
                 registerError(expression, expression);
                 return;
             }
-            final PsiAssignmentExpression assignment =
+            PsiAssignmentExpression assignment =
                 (PsiAssignmentExpression) parent;
-            final PsiExpression lhs = assignment.getLExpression();
+            PsiExpression lhs = assignment.getLExpression();
             if (!(lhs instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiElement referent =
+            PsiElement referent =
                 ((PsiReference) lhs).resolve();
             if (!(referent instanceof PsiVariable)) {
                 return;
             }
-            final PsiVariable boundVariable = (PsiVariable) referent;
+            PsiVariable boundVariable = (PsiVariable) referent;
             PsiElement currentContext = expression;
             while (true) {
-                final PsiTryStatement tryStatement =
+                PsiTryStatement tryStatement =
                     PsiTreeUtil.getParentOfType(
                         currentContext,
                         PsiTryStatement.class
@@ -110,11 +110,11 @@ public class RecordStoreResourceInspection extends BaseInspection {
             PsiTryStatement tryStatement, PsiExpression lhs,
             PsiVariable boundVariable
         ) {
-            final PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
+            PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
             if (finallyBlock == null) {
                 return false;
             }
-            final PsiCodeBlock tryBlock = tryStatement.getTryBlock();
+            PsiCodeBlock tryBlock = tryStatement.getTryBlock();
             if (tryBlock == null) {
                 return false;
             }
@@ -128,7 +128,7 @@ public class RecordStoreResourceInspection extends BaseInspection {
             PsiCodeBlock finallyBlock,
             PsiVariable boundVariable
         ) {
-            final CloseVisitor visitor =
+            CloseVisitor visitor =
                 new CloseVisitor(boundVariable);
             finallyBlock.accept(visitor);
             return visitor.containsStreamClose();
@@ -137,23 +137,23 @@ public class RecordStoreResourceInspection extends BaseInspection {
         private static boolean isRecordStoreFactoryMethod(
             @Nonnull PsiMethodCallExpression expression
         ) {
-            final PsiReferenceExpression methodExpression =
+            PsiReferenceExpression methodExpression =
                 expression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
-            @NonNls final String openStore = "openRecordStore";
+            String methodName = methodExpression.getReferenceName();
+            @NonNls String openStore = "openRecordStore";
             if (!openStore.equals(methodName)) {
                 return false;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return false;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return false;
             }
-            final String className = containingClass.getQualifiedName();
-            @NonNls final String recordStore =
+            String className = containingClass.getQualifiedName();
+            @NonNls String recordStore =
                 "javax.microedition.rms.RecordStore";
             return recordStore.equals(className);
         }
@@ -184,19 +184,19 @@ public class RecordStoreResourceInspection extends BaseInspection {
                 return;
             }
             super.visitMethodCallExpression(call);
-            final PsiReferenceExpression methodExpression =
+            PsiReferenceExpression methodExpression =
                 call.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
-            @NonNls final String closeStore = "closeRecordStore";
+            String methodName = methodExpression.getReferenceName();
+            @NonNls String closeStore = "closeRecordStore";
             if (!closeStore.equals(methodName)) {
                 return;
             }
-            final PsiExpression qualifier =
+            PsiExpression qualifier =
                 methodExpression.getQualifierExpression();
             if (!(qualifier instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiElement referent =
+            PsiElement referent =
                 ((PsiReference) qualifier).resolve();
             if (referent == null) {
                 return;

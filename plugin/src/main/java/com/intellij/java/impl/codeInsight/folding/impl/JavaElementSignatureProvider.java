@@ -37,7 +37,7 @@ public class JavaElementSignatureProvider extends AbstractElementSignatureProvid
 
   @Override
   @Nullable
-  public String getSignature(@Nonnull final PsiElement element) {
+  public String getSignature(@Nonnull PsiElement element) {
     PsiFile file = element.getContainingFile();
     if (!(file instanceof PsiJavaFile)) {
       return null;

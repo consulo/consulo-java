@@ -75,11 +75,11 @@ public class ComponentTypeOfMacro extends Macro {
 
   @Override
   @RequiredReadAction
-  public Result calculateResult(@Nonnull Expression[] params, final ExpressionContext context) {
+  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
     if (params.length != 1) {
       return null;
     }
-    final Result result = params[0].calculateResult(context);
+    Result result = params[0].calculateResult(context);
     if (result == null) {
       return null;
     }

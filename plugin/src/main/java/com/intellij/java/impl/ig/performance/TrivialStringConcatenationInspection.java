@@ -55,15 +55,15 @@ public class TrivialStringConcatenationInspection extends BaseInspection {
 
     @NonNls
     static String calculateReplacementExpression(PsiLiteralExpression expression) {
-        final PsiElement parent = ParenthesesUtils.getParentSkipParentheses(expression);
+        PsiElement parent = ParenthesesUtils.getParentSkipParentheses(expression);
         if (!(parent instanceof PsiPolyadicExpression)) {
             return null;
         }
         if (parent instanceof PsiBinaryExpression) {
-            final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) parent;
-            final PsiExpression lOperand = ParenthesesUtils.stripParentheses(binaryExpression.getLOperand());
-            final PsiExpression rOperand = ParenthesesUtils.stripParentheses(binaryExpression.getROperand());
-            final PsiExpression replacement;
+            PsiBinaryExpression binaryExpression = (PsiBinaryExpression) parent;
+            PsiExpression lOperand = ParenthesesUtils.stripParentheses(binaryExpression.getLOperand());
+            PsiExpression rOperand = ParenthesesUtils.stripParentheses(binaryExpression.getROperand());
+            PsiExpression replacement;
             if (ExpressionUtils.isEmptyStringLiteral(lOperand)) {
                 replacement = rOperand;
             }
@@ -72,14 +72,14 @@ public class TrivialStringConcatenationInspection extends BaseInspection {
             }
             return replacement == null ? "" : buildReplacement(replacement, false);
         }
-        final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) parent;
-        final PsiExpression[] operands = polyadicExpression.getOperands();
-        final PsiClassType stringType = TypeUtils.getStringType(expression);
+        PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) parent;
+        PsiExpression[] operands = polyadicExpression.getOperands();
+        PsiClassType stringType = TypeUtils.getStringType(expression);
         boolean seenString = false;
         boolean seenEmpty = false;
         boolean replaced = false;
         PsiExpression operandToReplace = null;
-        final StringBuilder text = new StringBuilder();
+        StringBuilder text = new StringBuilder();
         for (PsiExpression operand : operands) {
             if (operandToReplace != null && !replaced) {
                 if (ExpressionUtils.hasStringType(operand)) {
@@ -152,12 +152,12 @@ public class TrivialStringConcatenationInspection extends BaseInspection {
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiLiteralExpression expression = (PsiLiteralExpression) descriptor.getPsiElement();
-            final PsiElement parent = ParenthesesUtils.getParentSkipParentheses(expression);
+            PsiLiteralExpression expression = (PsiLiteralExpression) descriptor.getPsiElement();
+            PsiElement parent = ParenthesesUtils.getParentSkipParentheses(expression);
             if (!(parent instanceof PsiExpression)) {
                 return;
             }
-            final String newExpression = calculateReplacementExpression(expression);
+            String newExpression = calculateReplacementExpression(expression);
             replaceExpression((PsiExpression) parent, newExpression);
         }
     }
@@ -174,7 +174,7 @@ public class TrivialStringConcatenationInspection extends BaseInspection {
             if (!ExpressionUtils.hasStringType(expression)) {
                 return;
             }
-            final PsiExpression[] operands = expression.getOperands();
+            PsiExpression[] operands = expression.getOperands();
             for (PsiExpression operand : operands) {
                 operand = ParenthesesUtils.stripParentheses(operand);
                 if (operand == null) {

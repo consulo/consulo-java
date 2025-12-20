@@ -72,10 +72,10 @@ public class UnnecessarySemicolonInspection extends BaseInspection {
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement semicolonElement = descriptor.getPsiElement();
-            final PsiElement parent = semicolonElement.getParent();
+            PsiElement semicolonElement = descriptor.getPsiElement();
+            PsiElement parent = semicolonElement.getParent();
             if (parent instanceof PsiEmptyStatement) {
-                final PsiElement lastChild = parent.getLastChild();
+                PsiElement lastChild = parent.getLastChild();
                 if (lastChild instanceof PsiComment) {
                     parent.replace(lastChild);
                 }
@@ -95,12 +95,12 @@ public class UnnecessarySemicolonInspection extends BaseInspection {
          */
         @Override
         public void visitFile(PsiFile file) {
-            final PsiElement firstChild = file.getFirstChild();
+            PsiElement firstChild = file.getFirstChild();
             PsiElement sibling = skipForwardWhiteSpacesAndComments(firstChild);
             while (sibling != null) {
                 if (sibling instanceof PsiJavaToken) {
-                    final PsiJavaToken token = (PsiJavaToken) sibling;
-                    final IElementType tokenType = token.getTokenType();
+                    PsiJavaToken token = (PsiJavaToken) sibling;
+                    IElementType tokenType = token.getTokenType();
                     if (tokenType.equals(JavaTokenType.SEMICOLON)) {
                         registerError(sibling);
                     }
@@ -118,28 +118,28 @@ public class UnnecessarySemicolonInspection extends BaseInspection {
             if (!aClass.isEnum()) {
                 return;
             }
-            final PsiField[] fields = aClass.getFields();
-            final PsiElement element;
+            PsiField[] fields = aClass.getFields();
+            PsiElement element;
             if (fields.length > 0) {
-                final PsiField lastField = fields[fields.length - 1];
+                PsiField lastField = fields[fields.length - 1];
                 if (!(lastField instanceof PsiEnumConstant)) {
                     return;
                 }
                 element = skipForwardWhiteSpacesAndComments(lastField);
             }
             else {
-                final PsiElement lBrace = aClass.getLBrace();
+                PsiElement lBrace = aClass.getLBrace();
                 element = skipForwardWhiteSpacesAndComments(lBrace);
             }
             if (!(element instanceof PsiJavaToken)) {
                 return;
             }
-            final PsiJavaToken token = (PsiJavaToken) element;
-            final IElementType tokenType = token.getTokenType();
+            PsiJavaToken token = (PsiJavaToken) element;
+            IElementType tokenType = token.getTokenType();
             if (!tokenType.equals(JavaTokenType.SEMICOLON)) {
                 return;
             }
-            final PsiElement next = skipForwardWhiteSpacesAndComments(element);
+            PsiElement next = skipForwardWhiteSpacesAndComments(element);
             if (next == null || !next.equals(aClass.getRBrace())) {
                 return;
             }
@@ -150,14 +150,14 @@ public class UnnecessarySemicolonInspection extends BaseInspection {
             PsiElement child = aClass.getFirstChild();
             while (child != null) {
                 if (child instanceof PsiJavaToken) {
-                    final PsiJavaToken token = (PsiJavaToken) child;
-                    final IElementType tokenType = token.getTokenType();
+                    PsiJavaToken token = (PsiJavaToken) child;
+                    IElementType tokenType = token.getTokenType();
                     if (tokenType.equals(JavaTokenType.SEMICOLON)) {
-                        final PsiElement prevSibling = skipBackwardWhiteSpacesAndComments(child);
+                        PsiElement prevSibling = skipBackwardWhiteSpacesAndComments(child);
                         if (!(prevSibling instanceof PsiEnumConstant)) {
                             if (prevSibling instanceof PsiJavaToken) {
-                                final PsiJavaToken javaToken = (PsiJavaToken) prevSibling;
-                                final IElementType prevTokenType = javaToken.getTokenType();
+                                PsiJavaToken javaToken = (PsiJavaToken) prevSibling;
+                                IElementType prevTokenType = javaToken.getTokenType();
                                 if (!JavaTokenType.COMMA.equals(prevTokenType)
                                     && !JavaTokenType.LBRACE.equals(prevTokenType)) {
                                     registerError(child);
@@ -186,9 +186,9 @@ public class UnnecessarySemicolonInspection extends BaseInspection {
         @Override
         public void visitEmptyStatement(PsiEmptyStatement statement) {
             super.visitEmptyStatement(statement);
-            final PsiElement parent = statement.getParent();
+            PsiElement parent = statement.getParent();
             if (parent instanceof PsiCodeBlock) {
-                final PsiElement semicolon = statement.getFirstChild();
+                PsiElement semicolon = statement.getFirstChild();
                 if (semicolon == null) {
                     return;
                 }
@@ -197,11 +197,11 @@ public class UnnecessarySemicolonInspection extends BaseInspection {
         }
 
         @Override
-        public void visitResourceList(final PsiResourceList resourceList) {
+        public void visitResourceList(PsiResourceList resourceList) {
             super.visitResourceList(resourceList);
-            final PsiElement last = resourceList.getLastChild();
+            PsiElement last = resourceList.getLastChild();
             if (last instanceof PsiJavaToken && ((PsiJavaToken) last).getTokenType() == JavaTokenType.RPARENTH) {
-                final PsiElement prev = skipBackwardWhiteSpacesAndComments(last);
+                PsiElement prev = skipBackwardWhiteSpacesAndComments(last);
                 if (prev instanceof PsiJavaToken && ((PsiJavaToken) prev).getTokenType() == JavaTokenType.SEMICOLON) {
                     registerError(prev);
                 }

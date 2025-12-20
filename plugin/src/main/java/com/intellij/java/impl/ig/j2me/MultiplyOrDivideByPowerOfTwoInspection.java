@@ -62,14 +62,14 @@ public class MultiplyOrDivideByPowerOfTwoInspection extends BaseInspection {
     }
 
     static String calculateReplacementShift(PsiExpression expression) {
-        final PsiExpression lhs;
-        final PsiExpression rhs;
-        final String operator;
+        PsiExpression lhs;
+        PsiExpression rhs;
+        String operator;
         if (expression instanceof PsiAssignmentExpression) {
-            final PsiAssignmentExpression exp = (PsiAssignmentExpression) expression;
+            PsiAssignmentExpression exp = (PsiAssignmentExpression) expression;
             lhs = exp.getLExpression();
             rhs = exp.getRExpression();
-            final IElementType tokenType = exp.getOperationTokenType();
+            IElementType tokenType = exp.getOperationTokenType();
             if (tokenType.equals(JavaTokenType.ASTERISKEQ)) {
                 operator = "<<=";
             }
@@ -78,10 +78,10 @@ public class MultiplyOrDivideByPowerOfTwoInspection extends BaseInspection {
             }
         }
         else {
-            final PsiBinaryExpression exp = (PsiBinaryExpression) expression;
+            PsiBinaryExpression exp = (PsiBinaryExpression) expression;
             lhs = exp.getLOperand();
             rhs = exp.getROperand();
-            final IElementType tokenType = exp.getOperationTokenType();
+            IElementType tokenType = exp.getOperationTokenType();
             if (tokenType.equals(JavaTokenType.ASTERISK)) {
                 operator = "<<";
             }
@@ -89,7 +89,7 @@ public class MultiplyOrDivideByPowerOfTwoInspection extends BaseInspection {
                 operator = ">>";
             }
         }
-        final String lhsText;
+        String lhsText;
         if (ParenthesesUtils.getPrecedence(lhs) >
             ParenthesesUtils.SHIFT_PRECEDENCE) {
             lhsText = '(' + lhs.getText() + ')';
@@ -99,7 +99,7 @@ public class MultiplyOrDivideByPowerOfTwoInspection extends BaseInspection {
         }
         String expString =
             lhsText + operator + ShiftUtils.getLogBaseTwo(rhs);
-        final PsiElement parent = expression.getParent();
+        PsiElement parent = expression.getParent();
         if (parent instanceof PsiExpression) {
             if (!(parent instanceof PsiParenthesizedExpression) &&
                 ParenthesesUtils.getPrecedence((PsiExpression) parent) <
@@ -111,20 +111,20 @@ public class MultiplyOrDivideByPowerOfTwoInspection extends BaseInspection {
     }
 
     public InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiExpression expression = (PsiExpression) infos[0];
+        PsiExpression expression = (PsiExpression) infos[0];
         if (expression instanceof PsiBinaryExpression) {
-            final PsiBinaryExpression binaryExpression =
+            PsiBinaryExpression binaryExpression =
                 (PsiBinaryExpression) expression;
-            final IElementType operationTokenType =
+            IElementType operationTokenType =
                 binaryExpression.getOperationTokenType();
             if (JavaTokenType.DIV.equals(operationTokenType)) {
                 return null;
             }
         }
         else if (expression instanceof PsiAssignmentExpression) {
-            final PsiAssignmentExpression assignmentExpression =
+            PsiAssignmentExpression assignmentExpression =
                 (PsiAssignmentExpression) expression;
-            final IElementType operationTokenType =
+            IElementType operationTokenType =
                 assignmentExpression.getOperationTokenType();
             if (JavaTokenType.DIVEQ.equals(operationTokenType)) {
                 return null;
@@ -141,8 +141,8 @@ public class MultiplyOrDivideByPowerOfTwoInspection extends BaseInspection {
         }
 
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiExpression expression = (PsiExpression) descriptor.getPsiElement();
-            final String newExpression = calculateReplacementShift(expression);
+            PsiExpression expression = (PsiExpression) descriptor.getPsiElement();
+            String newExpression = calculateReplacementShift(expression);
             replaceExpression(expression, newExpression);
         }
     }
@@ -158,12 +158,12 @@ public class MultiplyOrDivideByPowerOfTwoInspection extends BaseInspection {
             @Nonnull PsiBinaryExpression expression
         ) {
             super.visitBinaryExpression(expression);
-            final PsiExpression rhs = expression.getROperand();
+            PsiExpression rhs = expression.getROperand();
             if (rhs == null) {
                 return;
             }
 
-            final IElementType tokenType = expression.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (!tokenType.equals(JavaTokenType.ASTERISK)) {
                 if (!checkDivision || !tokenType.equals(JavaTokenType.DIV)) {
                     return;
@@ -172,7 +172,7 @@ public class MultiplyOrDivideByPowerOfTwoInspection extends BaseInspection {
             if (!ShiftUtils.isPowerOfTwo(rhs)) {
                 return;
             }
-            final PsiType type = expression.getType();
+            PsiType type = expression.getType();
             if (type == null) {
                 return;
             }
@@ -190,17 +190,17 @@ public class MultiplyOrDivideByPowerOfTwoInspection extends BaseInspection {
             if (!WellFormednessUtils.isWellFormed(expression)) {
                 return;
             }
-            final IElementType tokenType = expression.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (!tokenType.equals(JavaTokenType.ASTERISKEQ)) {
                 if (!checkDivision || !tokenType.equals(JavaTokenType.DIVEQ)) {
                     return;
                 }
             }
-            final PsiExpression rhs = expression.getRExpression();
+            PsiExpression rhs = expression.getRExpression();
             if (!ShiftUtils.isPowerOfTwo(rhs)) {
                 return;
             }
-            final PsiType type = expression.getType();
+            PsiType type = expression.getType();
             if (type == null) {
                 return;
             }

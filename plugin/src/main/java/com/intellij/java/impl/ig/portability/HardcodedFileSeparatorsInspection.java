@@ -147,16 +147,16 @@ public class HardcodedFileSeparatorsInspection extends BaseInspection {
     public void visitLiteralExpression(
         @Nonnull PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
-      final PsiType type = expression.getType();
+      PsiType type = expression.getType();
       if (TypeUtils.isJavaLangString(type)) {
-        final String value = (String) expression.getValue();
+        String value = (String) expression.getValue();
         if (!isHardcodedFilenameString(value)) {
           return;
         }
-        final PsiElement parent = expression.getParent();
-        final PsiElement grandParent = parent.getParent();
+        PsiElement parent = expression.getParent();
+        PsiElement grandParent = parent.getParent();
         if (grandParent instanceof PsiMethodCallExpression) {
-          final PsiMethodCallExpression methodCallExpression =
+          PsiMethodCallExpression methodCallExpression =
               (PsiMethodCallExpression) grandParent;
           if (MethodCallUtils.isCallToRegexMethod(
               methodCallExpression)) {
@@ -165,11 +165,11 @@ public class HardcodedFileSeparatorsInspection extends BaseInspection {
         }
         registerError(expression);
       } else if (type != null && type.equals(PsiType.CHAR)) {
-        final Character value = (Character) expression.getValue();
+        Character value = (Character) expression.getValue();
         if (value == null) {
           return;
         }
-        final char unboxedValue = value.charValue();
+        char unboxedValue = value.charValue();
         if (unboxedValue == BACKSLASH || unboxedValue == SLASH) {
           registerError(expression);
         }
@@ -196,7 +196,7 @@ public class HardcodedFileSeparatorsInspection extends BaseInspection {
           string.indexOf((int) '\\') == -1) {
         return false;
       }
-      final char startChar = string.charAt(0);
+      char startChar = string.charAt(0);
       if (Character.isLetter(startChar) && string.charAt(1) == ':') {
         return true;
       }
@@ -240,9 +240,9 @@ public class HardcodedFileSeparatorsInspection extends BaseInspection {
         // A string this short is very unlikely to be a date format.
         return false;
       }
-      final int strLength = string.length();
-      final char startChar = string.charAt(0);
-      final char endChar = string.charAt(strLength - 1);
+      int strLength = string.length();
+      char startChar = string.charAt(0);
+      char endChar = string.charAt(strLength - 1);
       if (startChar == '/' || endChar == '/') {
         // Most likely it's a filename if the string starts or ends
         // with a slash.
@@ -251,7 +251,7 @@ public class HardcodedFileSeparatorsInspection extends BaseInspection {
         // Most likely this is a Windows-style full file name.
         return false;
       }
-      final Matcher dateFormatMatcher = DATE_FORMAT_PATTERN.matcher(string);
+      Matcher dateFormatMatcher = DATE_FORMAT_PATTERN.matcher(string);
       return dateFormatMatcher.find();
     }
 
@@ -264,7 +264,7 @@ public class HardcodedFileSeparatorsInspection extends BaseInspection {
      * <code>false</code> if not.
      */
     private boolean isURLString(String string) {
-      final Matcher urlMatcher = URL_PATTERN.matcher(string);
+      Matcher urlMatcher = URL_PATTERN.matcher(string);
       return urlMatcher.find();
     }
 

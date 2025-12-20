@@ -37,14 +37,14 @@ public class RemoveAssignmentFix extends RemoveInitializerFix {
   @Override
   @RequiredWriteAction
   public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
-    final PsiElement element = descriptor.getPsiElement();
-    final PsiElement parent;
+    PsiElement element = descriptor.getPsiElement();
+    PsiElement parent;
     parent = element instanceof PsiReferenceExpression ? element.getParent() : element;
     if (!(parent instanceof PsiAssignmentExpression)) {
       return;
     }
-    final PsiExpression rExpression = ((PsiAssignmentExpression) parent).getRExpression();
-    final PsiElement gParent = parent.getParent();
+    PsiExpression rExpression = ((PsiAssignmentExpression) parent).getRExpression();
+    PsiElement gParent = parent.getParent();
     if ((gParent instanceof PsiExpression || gParent instanceof PsiExpressionList) && rExpression != null) {
       if (!FileModificationService.getInstance().prepareFileForWrite(gParent.getContainingFile())) {
         return;
@@ -61,7 +61,7 @@ public class RemoveAssignmentFix extends RemoveInitializerFix {
     if (element instanceof PsiReferenceExpression referenceExpression) {
       resolve = referenceExpression.resolve();
     } else {
-      final PsiExpression lExpr = PsiUtil.deparenthesizeExpression(((PsiAssignmentExpression) parent).getLExpression());
+      PsiExpression lExpr = PsiUtil.deparenthesizeExpression(((PsiAssignmentExpression) parent).getLExpression());
       if (lExpr instanceof PsiReferenceExpression referenceExpression) {
         resolve = referenceExpression.resolve();
       }

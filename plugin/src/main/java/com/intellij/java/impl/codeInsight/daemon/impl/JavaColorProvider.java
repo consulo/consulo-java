@@ -52,9 +52,9 @@ public class JavaColorProvider implements ElementColorProvider {
 
   public static boolean isColorType(@Nullable PsiType type) {
     if (type != null) {
-      final PsiClass aClass = PsiTypesUtil.getPsiClass(type);
+      PsiClass aClass = PsiTypesUtil.getPsiClass(type);
       if (aClass != null) {
-        final String fqn = aClass.getQualifiedName();
+        String fqn = aClass.getQualifiedName();
         if ("java.awt.Color".equals(fqn) || "javax.swing.plaf.ColorUIResource".equals(fqn)) {
           return true;
         }
@@ -66,7 +66,7 @@ public class JavaColorProvider implements ElementColorProvider {
   @Nullable
   public static ColorValue getJavaColorFromExpression(@Nullable PsiElement element) {
     if (element instanceof PsiNewExpression) {
-      final PsiNewExpression expr = (PsiNewExpression) element;
+      PsiNewExpression expr = (PsiNewExpression) element;
       if (isColorType(expr.getType())) {
         return getColor(expr.getArgumentList());
       }
@@ -77,8 +77,8 @@ public class JavaColorProvider implements ElementColorProvider {
   @Nullable
   private static ColorValue getColor(PsiExpressionList list) {
     try {
-      final PsiExpression[] args = list.getExpressions();
-      final PsiType[] types = list.getExpressionTypes();
+      PsiExpression[] args = list.getExpressions();
+      PsiType[] types = list.getExpressionTypes();
       ColorConstructors type = getConstructorType(types);
       if (type != null) {
         switch (type) {

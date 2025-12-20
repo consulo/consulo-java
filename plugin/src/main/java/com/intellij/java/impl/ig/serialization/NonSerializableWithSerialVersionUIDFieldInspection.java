@@ -52,7 +52,7 @@ public class NonSerializableWithSerialVersionUIDFieldInspection
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final PsiClass aClass = (PsiClass)infos[0];
+    PsiClass aClass = (PsiClass)infos[0];
     if (aClass.isAnnotationType()) {
       return InspectionGadgetsLocalize.nonSerializableInterfaceWithSerialversionuidProblemDescriptor().get();
     }
@@ -70,7 +70,7 @@ public class NonSerializableWithSerialVersionUIDFieldInspection
   @Override
   @Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
-    final PsiClass aClass = (PsiClass)infos[0];
+    PsiClass aClass = (PsiClass)infos[0];
     if (aClass.isAnnotationType() || aClass.isInterface() ||
         aClass instanceof PsiAnonymousClass) {
       return new InspectionGadgetsFix[]{new RemoveSerialVersionUIDFix()};
@@ -89,9 +89,9 @@ public class NonSerializableWithSerialVersionUIDFieldInspection
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement nameElement = descriptor.getPsiElement();
-      final PsiClass aClass = (PsiClass)nameElement.getParent();
-      final PsiField field = aClass.findFieldByName(
+      PsiElement nameElement = descriptor.getPsiElement();
+      PsiClass aClass = (PsiClass)nameElement.getParent();
+      PsiField field = aClass.findFieldByName(
         HardcodedMethodConstants.SERIAL_VERSION_UID, false);
       if (field == null) {
         return;
@@ -111,7 +111,7 @@ public class NonSerializableWithSerialVersionUIDFieldInspection
     @Override
     public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so it doesn't drill down
-      final PsiField field = aClass.findFieldByName(
+      PsiField field = aClass.findFieldByName(
         HardcodedMethodConstants.SERIAL_VERSION_UID, false);
       if (field == null) {
         return;

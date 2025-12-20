@@ -39,7 +39,7 @@ public class ReadonlyWhitespaceBlock implements Block
 	private final Alignment myAlignment;
 	private final Indent myIndent;
 
-	public ReadonlyWhitespaceBlock(final TextRange range, final Wrap wrap, final Alignment alignment, final Indent indent)
+	public ReadonlyWhitespaceBlock(TextRange range, Wrap wrap, Alignment alignment, Indent indent)
 	{
 		myRange = range;
 		myWrap = wrap;
@@ -91,7 +91,7 @@ public class ReadonlyWhitespaceBlock implements Block
 
 	@Override
 	@Nonnull
-	public ChildAttributes getChildAttributes(final int newChildIndex)
+	public ChildAttributes getChildAttributes(int newChildIndex)
 	{
 		return ChildAttributes.DELEGATE_TO_NEXT_CHILD;
 	}

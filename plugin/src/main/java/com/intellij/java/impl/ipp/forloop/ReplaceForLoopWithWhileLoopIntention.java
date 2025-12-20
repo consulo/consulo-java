@@ -45,70 +45,70 @@ public class ReplaceForLoopWithWhileLoopIntention extends Intention {
     @Override
     protected void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiForStatement forStatement =
+        PsiForStatement forStatement =
             (PsiForStatement) element.getParent();
         if (forStatement == null) {
             return;
         }
-        final PsiStatement initialization = forStatement.getInitialization();
+        PsiStatement initialization = forStatement.getInitialization();
         if (initialization != null &&
             !(initialization instanceof PsiEmptyStatement)) {
-            final PsiElement parent = forStatement.getParent();
+            PsiElement parent = forStatement.getParent();
             parent.addBefore(initialization, forStatement);
         }
-        final JavaPsiFacade psiFacade =
+        JavaPsiFacade psiFacade =
             JavaPsiFacade.getInstance(element.getProject());
-        final PsiElementFactory factory = psiFacade.getElementFactory();
-        final PsiWhileStatement whileStatement =
+        PsiElementFactory factory = psiFacade.getElementFactory();
+        PsiWhileStatement whileStatement =
             (PsiWhileStatement) factory.createStatementFromText(
                 "while(true) {}", element);
-        final PsiExpression forCondition = forStatement.getCondition();
-        final PsiExpression whileCondition = whileStatement.getCondition();
-        final PsiStatement body = forStatement.getBody();
+        PsiExpression forCondition = forStatement.getCondition();
+        PsiExpression whileCondition = whileStatement.getCondition();
+        PsiStatement body = forStatement.getBody();
         if (forCondition != null) {
             assert whileCondition != null;
             whileCondition.replace(forCondition);
         }
-        final PsiBlockStatement blockStatement =
+        PsiBlockStatement blockStatement =
             (PsiBlockStatement) whileStatement.getBody();
         if (blockStatement == null) {
             return;
         }
-        final PsiElement newBody;
+        PsiElement newBody;
         if (body instanceof PsiBlockStatement) {
-            final PsiBlockStatement newWhileBody =
+            PsiBlockStatement newWhileBody =
                 (PsiBlockStatement) blockStatement.replace(body);
             newBody = newWhileBody.getCodeBlock();
         }
         else {
-            final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
+            PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
             if (body != null && !(body instanceof PsiEmptyStatement)) {
                 codeBlock.addAfter(body, codeBlock.getFirstChild());
             }
             newBody = codeBlock;
         }
-        final PsiStatement update = forStatement.getUpdate();
+        PsiStatement update = forStatement.getUpdate();
         if (update != null) {
-            final PsiStatement[] updateStatements;
+            PsiStatement[] updateStatements;
             if (update instanceof PsiExpressionListStatement) {
-                final PsiExpressionListStatement expressionListStatement =
+                PsiExpressionListStatement expressionListStatement =
                     (PsiExpressionListStatement) update;
-                final PsiExpressionList expressionList =
+                PsiExpressionList expressionList =
                     expressionListStatement.getExpressionList();
-                final PsiExpression[] expressions =
+                PsiExpression[] expressions =
                     expressionList.getExpressions();
                 updateStatements = new PsiStatement[expressions.length];
                 for (int i = 0, expressionsLength = expressions.length;
                      i < expressionsLength; i++) {
-                    final PsiExpression expression = expressions[i];
-                    final PsiStatement updateStatement =
+                    PsiExpression expression = expressions[i];
+                    PsiStatement updateStatement =
                         factory.createStatementFromText(
                             expression.getText() + ';', element);
                     updateStatements[i] = updateStatement;
                 }
             }
             else {
-                final PsiStatement updateStatement =
+                PsiStatement updateStatement =
                     factory.createStatementFromText(
                         update.getText() + ';', element);
                 updateStatements = new PsiStatement[]{updateStatement};
@@ -134,12 +134,12 @@ public class ReplaceForLoopWithWhileLoopIntention extends Intention {
 
         @Override
         public void visitContinueStatement(PsiContinueStatement statement) {
-            final PsiStatement continuedStatement =
+            PsiStatement continuedStatement =
                 statement.findContinuedStatement();
             if (!whileStatement.equals(continuedStatement)) {
                 return;
             }
-            final PsiElement parent = statement.getParent();
+            PsiElement parent = statement.getParent();
             if (parent == null) {
                 return;
             }

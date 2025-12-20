@@ -63,20 +63,20 @@ public class MultipleTypedDeclarationInspection extends BaseInspection {
     public void visitDeclarationStatement(
       PsiDeclarationStatement statement) {
       super.visitDeclarationStatement(statement);
-      final PsiElement[] elements = statement.getDeclaredElements();
+      PsiElement[] elements = statement.getDeclaredElements();
       if (elements.length > 1) {
-        final PsiType baseType = ((PsiVariable)elements[0]).getType();
+        PsiType baseType = ((PsiVariable)elements[0]).getType();
         boolean hasMultipleTypes = false;
         for (int i = 1; i < elements.length; i++) {
-          final PsiLocalVariable var = (PsiLocalVariable)elements[i];
-          final PsiType variableType = var.getType();
+          PsiLocalVariable var = (PsiLocalVariable)elements[i];
+          PsiType variableType = var.getType();
           if (!variableType.equals(baseType)) {
             hasMultipleTypes = true;
           }
         }
         if (hasMultipleTypes) {
           for (int i = 1; i < elements.length; i++) {
-            final PsiLocalVariable var =
+            PsiLocalVariable var =
               (PsiLocalVariable)elements[i];
             registerVariableError(var);
           }
@@ -90,21 +90,21 @@ public class MultipleTypedDeclarationInspection extends BaseInspection {
       if (!childrenContainTypeElement(field)) {
         return;
       }
-      final List<PsiField> fields = getSiblingFields(field);
+      List<PsiField> fields = getSiblingFields(field);
       if (fields.size() > 1) {
-        final PsiField firstField = fields.get(0);
-        final PsiType baseType = firstField.getType();
+        PsiField firstField = fields.get(0);
+        PsiType baseType = firstField.getType();
         boolean hasMultipleTypes = false;
         for (int i = 1; i < fields.size(); i++) {
-          final PsiField variable = fields.get(i);
-          final PsiType variableType = variable.getType();
+          PsiField variable = fields.get(i);
+          PsiType variableType = variable.getType();
           if (!variableType.equals(baseType)) {
             hasMultipleTypes = true;
           }
         }
         if (hasMultipleTypes) {
           for (int i = 1; i < fields.size(); i++) {
-            final PsiField var = fields.get(i);
+            PsiField var = fields.get(i);
             registerVariableError(var);
           }
         }
@@ -112,7 +112,7 @@ public class MultipleTypedDeclarationInspection extends BaseInspection {
     }
 
     public static List<PsiField> getSiblingFields(PsiField field) {
-      final List<PsiField> out = new ArrayList<PsiField>(5);
+      List<PsiField> out = new ArrayList<PsiField>(5);
       out.add(field);
       PsiField nextField =
         PsiTreeUtil.getNextSiblingOfType(field,
@@ -135,7 +135,7 @@ public class MultipleTypedDeclarationInspection extends BaseInspection {
     }
 
     public static boolean childrenContainTypeElement(PsiElement field) {
-      final PsiElement[] children = field.getChildren();
+      PsiElement[] children = field.getChildren();
       for (PsiElement aChildren : children) {
         if (aChildren instanceof PsiTypeElement) {
           return true;

@@ -57,9 +57,9 @@ public abstract class AbstractInplaceIntroduceFieldPopup extends AbstractJavaInp
                                             TypeSelectorManagerImpl typeSelectorManager,
                                             String title,
                                             PsiClass parentClass,
-                                            final PsiElement anchorElement,
-                                            final OccurrenceManager occurrenceManager,
-                                            final PsiElement anchorElementIfAll) {
+                                            PsiElement anchorElement,
+                                            OccurrenceManager occurrenceManager,
+                                            PsiElement anchorElementIfAll) {
     super(project, editor, expr, localVariable, occurrences, typeSelectorManager, title);
     myParentClass = parentClass;
     myOccurrenceManager = occurrenceManager;
@@ -115,7 +115,7 @@ public abstract class AbstractInplaceIntroduceFieldPopup extends AbstractJavaInp
       element = PsiTreeUtil.skipSiblingsForward(element, PsiWhiteSpace.class);
     }
     if (element instanceof PsiField) return (PsiVariable)element;
-    final PsiField field = PsiTreeUtil.getParentOfType(element, PsiField.class, false);
+    PsiField field = PsiTreeUtil.getParentOfType(element, PsiField.class, false);
     if (field != null) return field;
     element = PsiTreeUtil.skipSiblingsBackward(element, PsiWhiteSpace.class);
     return PsiTreeUtil.getParentOfType(element, PsiField.class, false);

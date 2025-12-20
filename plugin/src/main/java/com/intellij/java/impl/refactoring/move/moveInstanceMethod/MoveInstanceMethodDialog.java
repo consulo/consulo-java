@@ -48,8 +48,8 @@ public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
 
   private Map<PsiClass, EditorTextField> myOldClassParameterNameFields;
 
-  public MoveInstanceMethodDialog(final PsiMethod method,
-                                  final PsiVariable[] variables) {
+  public MoveInstanceMethodDialog(PsiMethod method,
+                                  PsiVariable[] variables) {
     super(method, variables, MoveInstanceMethodHandler.REFACTORING_NAME);
     init();
   }
@@ -62,7 +62,7 @@ public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
   @Override
   protected JComponent createCenterPanel() {
     JPanel mainPanel = new JPanel(new GridBagLayout());
-    final TitledSeparator separator = new TitledSeparator();
+    TitledSeparator separator = new TitledSeparator();
     mainPanel.add(separator, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 2, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0,0,0,0), 0,0));
 
     myList = createTargetVariableChooser();
@@ -75,13 +75,13 @@ public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
 
     separator.setText(RefactoringLocalize.moveinstancemethodSelectAnInstanceParameter().get());
 
-    final JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(myList);
+    JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(myList);
     mainPanel.add(scrollPane, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0,0,0,0), 0,0));
 
     myVisibilityPanel = createVisibilityPanel();
     mainPanel.add(TargetAWT.to(myVisibilityPanel.getComponent()), new GridBagConstraints(1, GridBagConstraints.RELATIVE, 1, 1, 0.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.VERTICAL, new Insets(0,0,0,0), 0,0));
 
-    final JPanel parametersPanel = createParametersPanel();
+    JPanel parametersPanel = createParametersPanel();
     if (parametersPanel != null) {
       mainPanel.add(parametersPanel, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0,0,0,0), 0,0));
     }
@@ -93,16 +93,16 @@ public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
     return mainPanel;
   }
 
-  private void validateTextFields(final int selectedIndex) {
+  private void validateTextFields(int selectedIndex) {
     for (EditorTextField textField : myOldClassParameterNameFields.values()) {
       textField.setEnabled(true);
     }
 
-    final PsiVariable variable = myVariables[selectedIndex];
+    PsiVariable variable = myVariables[selectedIndex];
     if (variable instanceof PsiField) {
-      final PsiField field = (PsiField)variable;
-      final PsiClass hisClass = field.getContainingClass();
-      final Set<PsiMember> members = myThisClassesMap.get(hisClass);
+      PsiField field = (PsiField)variable;
+      PsiClass hisClass = field.getContainingClass();
+      Set<PsiMember> members = myThisClassesMap.get(hisClass);
       if (members != null && members.size() == 1 && members.contains(field)) {  //Just the field is referenced
         myOldClassParameterNameFields.get(hisClass).setEnabled(false);
       }
@@ -116,11 +116,11 @@ public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
     if (myThisClassesMap.size() == 0) return null;
     JPanel panel = new JPanel(new VerticalFlowLayout(VerticalFlowLayout.TOP, 0, 0, true, true));
     for (PsiClass aClass : myThisClassesMap.keySet()) {
-      final LocalizeValue text = RefactoringLocalize.moveMethodThisParameterLabel(aClass.getName());
+      LocalizeValue text = RefactoringLocalize.moveMethodThisParameterLabel(aClass.getName());
       panel.add(new TitledSeparator(text.get(), null));
 
       String suggestedName = MoveInstanceMethodHandler.suggestParameterNameForThisClass(aClass);
-      final EditorTextField field = new EditorTextField(suggestedName, getProject(), JavaFileType.INSTANCE);
+      EditorTextField field = new EditorTextField(suggestedName, getProject(), JavaFileType.INSTANCE);
       field.setMinimumSize(new Dimension(field.getPreferredSize()));
       myOldClassParameterNameFields.put(aClass, field);
       panel.add(field);
@@ -133,7 +133,7 @@ public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
   @RequiredUIAccess
   protected void doAction() {
     Map<PsiClass, String> parameterNames = new LinkedHashMap<PsiClass, String>();
-    for (final PsiClass aClass : myThisClassesMap.keySet()) {
+    for (PsiClass aClass : myThisClassesMap.keySet()) {
       EditorTextField field = myOldClassParameterNameFields.get(aClass);
       if (field.isEnabled()) {
         String parameterName = field.getText().trim();
@@ -145,9 +145,9 @@ public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
       }
     }
 
-    final PsiVariable targetVariable = (PsiVariable)myList.getSelectedValue();
+    PsiVariable targetVariable = (PsiVariable)myList.getSelectedValue();
     if (targetVariable == null) return;
-    final MoveInstanceMethodProcessor processor = new MoveInstanceMethodProcessor(myMethod.getProject(),
+    MoveInstanceMethodProcessor processor = new MoveInstanceMethodProcessor(myMethod.getProject(),
                                                                                   myMethod, targetVariable,
                                                                                   myVisibilityPanel.getVisibility(),
                                                                                   parameterNames);
@@ -158,10 +158,10 @@ public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
   @Override
   protected void updateOnChanged(JList list) {
     super.updateOnChanged(list);
-    final PsiVariable selectedValue = (PsiVariable)list.getSelectedValue();
+    PsiVariable selectedValue = (PsiVariable)list.getSelectedValue();
     if (selectedValue != null) {
-      final PsiClassType psiType = (PsiClassType)selectedValue.getType();
-      final PsiClass targetClass = psiType.resolve();
+      PsiClassType psiType = (PsiClassType)selectedValue.getType();
+      PsiClass targetClass = psiType.resolve();
       UIUtil.setEnabled(TargetAWT.to(myVisibilityPanel.getComponent()), targetClass != null && !targetClass.isInterface(), true);
     }
   }

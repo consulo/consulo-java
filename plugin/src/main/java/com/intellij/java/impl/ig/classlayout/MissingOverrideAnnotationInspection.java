@@ -74,7 +74,7 @@ public class MissingOverrideAnnotationInspection extends BaseInspection implemen
 
     @Override
     public JComponent createOptionsPanel() {
-        final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+        MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
         panel.addCheckbox(InspectionGadgetsLocalize.ignoreEqualsHashcodeAndTostring().get(), "ignoreObjectMethods");
         panel.addCheckbox(InspectionGadgetsLocalize.ignoreMethodsInAnonymousClasses().get(), "ignoreAnonymousClassMethods");
         return panel;
@@ -95,21 +95,21 @@ public class MissingOverrideAnnotationInspection extends BaseInspection implemen
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
-            final PsiElement identifier = descriptor.getPsiElement();
-            final PsiElement parent = identifier.getParent();
+            PsiElement identifier = descriptor.getPsiElement();
+            PsiElement parent = identifier.getParent();
             if (!(parent instanceof PsiModifierListOwner)) {
                 return;
             }
-            final PsiModifierListOwner modifierListOwner =
+            PsiModifierListOwner modifierListOwner =
                 (PsiModifierListOwner) parent;
-            final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-            final PsiElementFactory factory = psiFacade.getElementFactory();
-            final PsiAnnotation annotation =
+            JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+            PsiElementFactory factory = psiFacade.getElementFactory();
+            PsiAnnotation annotation =
                 factory.createAnnotationFromText(
                     "@java.lang.Override",
                     modifierListOwner
                 );
-            final PsiModifierList modifierList =
+            PsiModifierList modifierList =
                 modifierListOwner.getModifierList();
             if (modifierList == null) {
                 return;
@@ -141,7 +141,7 @@ public class MissingOverrideAnnotationInspection extends BaseInspection implemen
                 method.hasModifierProperty(PsiModifier.STATIC)) {
                 return;
             }
-            final PsiClass methodClass = method.getContainingClass();
+            PsiClass methodClass = method.getContainingClass();
             if (methodClass == null) {
                 return;
             }
@@ -149,7 +149,7 @@ public class MissingOverrideAnnotationInspection extends BaseInspection implemen
                 methodClass instanceof PsiAnonymousClass) {
                 return;
             }
-            final boolean useJdk6Rules =
+            boolean useJdk6Rules =
                 PsiUtil.isLanguageLevel6OrHigher(method);
             if (useJdk6Rules) {
                 if (!isJdk6Override(method, methodClass)) {
@@ -173,16 +173,16 @@ public class MissingOverrideAnnotationInspection extends BaseInspection implemen
         private boolean hasOverrideAnnotation(
             PsiModifierListOwner element
         ) {
-            final PsiModifierList modifierList = element.getModifierList();
+            PsiModifierList modifierList = element.getModifierList();
             if (modifierList == null) {
                 return false;
             }
-            final PsiAnnotation annotation = modifierList.findAnnotation(CommonClassNames.JAVA_LANG_OVERRIDE);
+            PsiAnnotation annotation = modifierList.findAnnotation(CommonClassNames.JAVA_LANG_OVERRIDE);
             return annotation != null;
         }
 
         private boolean isJdk6Override(PsiMethod method, PsiClass methodClass) {
-            final PsiMethod[] superMethods =
+            PsiMethod[] superMethods =
                 getSuperMethodsInJavaSense(method, methodClass);
             if (superMethods.length <= 0) {
                 return false;
@@ -202,10 +202,10 @@ public class MissingOverrideAnnotationInspection extends BaseInspection implemen
         }
 
         private boolean isJdk5Override(PsiMethod method, PsiClass methodClass) {
-            final PsiMethod[] superMethods =
+            PsiMethod[] superMethods =
                 getSuperMethodsInJavaSense(method, methodClass);
             for (PsiMethod superMethod : superMethods) {
-                final PsiClass superClass = superMethod.getContainingClass();
+                PsiClass superClass = superMethod.getContainingClass();
                 if (superClass == null) {
                     continue;
                 }
@@ -226,10 +226,10 @@ public class MissingOverrideAnnotationInspection extends BaseInspection implemen
         private PsiMethod[] getSuperMethodsInJavaSense(
             @Nonnull PsiMethod method, @Nonnull PsiClass methodClass
         ) {
-            final PsiMethod[] superMethods = method.findSuperMethods();
-            final List<PsiMethod> toExclude = new SmartList<PsiMethod>();
+            PsiMethod[] superMethods = method.findSuperMethods();
+            List<PsiMethod> toExclude = new SmartList<PsiMethod>();
             for (PsiMethod superMethod : superMethods) {
-                final PsiClass superClass = superMethod.getContainingClass();
+                PsiClass superClass = superMethod.getContainingClass();
                 if (!InheritanceUtil.isInheritorOrSelf(methodClass, superClass,
                     true
                 )) {
@@ -237,7 +237,7 @@ public class MissingOverrideAnnotationInspection extends BaseInspection implemen
                 }
             }
             if (!toExclude.isEmpty()) {
-                final List<PsiMethod> result =
+                List<PsiMethod> result =
                     new ArrayList<PsiMethod>(Arrays.asList(superMethods));
                 result.removeAll(toExclude);
                 return result.toArray(new PsiMethod[result.size()]);

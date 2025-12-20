@@ -49,7 +49,7 @@ public class JavaAnonymousClassTreeElement extends JavaClassTreeElement
 		{
 			return myName;
 		}
-		final PsiClass element = getElement();
+		PsiClass element = getElement();
 
 		if(element != null)
 		{

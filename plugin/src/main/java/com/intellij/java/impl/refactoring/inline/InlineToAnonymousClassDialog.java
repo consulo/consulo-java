@@ -34,7 +34,7 @@ public class InlineToAnonymousClassDialog extends InlineOptionsWithSearchSetting
   private final PsiClass myClass;
   private final PsiCall myCallToInline;
 
-  protected InlineToAnonymousClassDialog(Project project, PsiClass psiClass, final PsiCall callToInline, boolean isInvokeOnReference) {
+  protected InlineToAnonymousClassDialog(Project project, PsiClass psiClass, PsiCall callToInline, boolean isInvokeOnReference) {
     super(project, true, psiClass);
     myClass = psiClass;
     myCallToInline = callToInline;

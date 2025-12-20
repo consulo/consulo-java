@@ -41,7 +41,7 @@ public class MissingCatchBodyFixer implements Fixer
 		}
 		PsiCatchSection catchSection = (PsiCatchSection) psiElement;
 
-		final Document doc = editor.getDocument();
+		Document doc = editor.getDocument();
 
 		PsiCodeBlock body = catchSection.getCatchBlock();
 		if(body != null && startLine(doc, body) == startLine(doc, catchSection))
@@ -49,7 +49,7 @@ public class MissingCatchBodyFixer implements Fixer
 			return;
 		}
 
-		final PsiJavaToken rParenth = catchSection.getRParenth();
+		PsiJavaToken rParenth = catchSection.getRParenth();
 		if(rParenth == null)
 		{
 			return;

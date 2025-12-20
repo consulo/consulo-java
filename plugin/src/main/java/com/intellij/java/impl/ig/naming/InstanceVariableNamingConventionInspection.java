@@ -47,7 +47,7 @@ public class InstanceVariableNamingConventionInspection
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final String fieldName = (String)infos[0];
+    String fieldName = (String)infos[0];
     if (fieldName.length() < getMinLength()) {
       return InspectionGadgetsLocalize.instanceVariableNameConventionProblemDescriptorShort().get();
     }
@@ -81,7 +81,7 @@ public class InstanceVariableNamingConventionInspection
       if (field.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }
-      final String name = field.getName();
+      String name = field.getName();
       if (name == null) {
         return;
       }

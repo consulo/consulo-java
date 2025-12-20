@@ -59,7 +59,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 			@Override
 			public ParameterInfoImpl[] genParams(PsiMethod method) throws IncorrectOperationException
 			{
-				final PsiElementFactory factory = JavaPsiFacade.getInstance(getProject()).getElementFactory();
+				PsiElementFactory factory = JavaPsiFacade.getInstance(getProject()).getElementFactory();
 				return new ParameterInfoImpl[]{
 						new ParameterInfoImpl(-1, "x", factory.createTypeFromText("T", method.getParameterList()), "null"),
 						new ParameterInfoImpl(-1, "y", factory.createTypeFromText("C<T>", method.getParameterList()), "null")
@@ -75,7 +75,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 			@Override
 			public ParameterInfoImpl[] genParams(PsiMethod method) throws IncorrectOperationException
 			{
-				final PsiElementFactory factory = JavaPsiFacade.getInstance(getProject()).getElementFactory();
+				PsiElementFactory factory = JavaPsiFacade.getInstance(getProject()).getElementFactory();
 				return new ParameterInfoImpl[]{
 						new ParameterInfoImpl(0, "t", factory.createTypeFromText("T", method), null)
 				};
@@ -90,7 +90,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 			@Override
 			public ParameterInfoImpl[] genParams(PsiMethod method) throws IncorrectOperationException
 			{
-				final PsiElementFactory factory = JavaPsiFacade.getInstance(getProject()).getElementFactory();
+				PsiElementFactory factory = JavaPsiFacade.getInstance(getProject()).getElementFactory();
 				return new ParameterInfoImpl[]{
 						new ParameterInfoImpl(-1, "t", factory.createTypeFromText("T", method.getParameterList()), "null"),
 						new ParameterInfoImpl(-1, "u", factory.createTypeFromText("U", method.getParameterList()), "null"),
@@ -209,7 +209,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 			@Override
 			public ParameterInfoImpl[] genParams(PsiMethod method) throws IncorrectOperationException
 			{
-				final PsiElementFactory factory = JavaPsiFacade.getInstance(method.getProject()).getElementFactory();
+				PsiElementFactory factory = JavaPsiFacade.getInstance(method.getProject()).getElementFactory();
 				return new ParameterInfoImpl[]{
 						new ParameterInfoImpl(-1, "l", factory.createTypeFromText("List", method), "null", true)
 				};
@@ -224,7 +224,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 			@Override
 			public ParameterInfoImpl[] genParams(PsiMethod method) throws IncorrectOperationException
 			{
-				final PsiElementFactory factory = JavaPsiFacade.getInstance(method.getProject()).getElementFactory();
+				PsiElementFactory factory = JavaPsiFacade.getInstance(method.getProject()).getElementFactory();
 				return new ParameterInfoImpl[]{
 						new ParameterInfoImpl(-1, "l", factory.createTypeFromText("List", method), "null", true)
 				};
@@ -239,7 +239,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 			@Override
 			public ParameterInfoImpl[] genParams(PsiMethod method) throws IncorrectOperationException
 			{
-				final PsiElementFactory factory = JavaPsiFacade.getInstance(method.getProject()).getElementFactory();
+				PsiElementFactory factory = JavaPsiFacade.getInstance(method.getProject()).getElementFactory();
 				return new ParameterInfoImpl[]{
 						new ParameterInfoImpl(-1, "c", factory.createTypeFromText("C", method), "null", true)
 				};
@@ -346,7 +346,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 
 	public void testReorderWithVarargs() throws Exception
 	{  // IDEADEV-26977
-		final PsiElementFactory factory = JavaPsiFacade.getInstance(getProject()).getElementFactory();
+		PsiElementFactory factory = JavaPsiFacade.getInstance(getProject()).getElementFactory();
 		doTest(null, new ParameterInfoImpl[]{
 				new ParameterInfoImpl(1),
 				new ParameterInfoImpl(0, "s", factory.createTypeFromText("java.lang.String...", getFile()))
@@ -379,7 +379,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 			@Override
 			public ParameterInfoImpl[] genParams(PsiMethod method) throws IncorrectOperationException
 			{
-				final PsiElementFactory factory = JavaPsiFacade.getInstance(method.getProject()).getElementFactory();
+				PsiElementFactory factory = JavaPsiFacade.getInstance(method.getProject()).getElementFactory();
 				return new ParameterInfoImpl[]{
 						new ParameterInfoImpl(1, "l", factory.createTypeFromText("List<T>[]", method.getParameterList()), "null", false),
 						new ParameterInfoImpl(0, "s", factory.createTypeFromText("String", method.getParameterList()))
@@ -414,7 +414,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 		doTest(null, null, "void", new SimpleParameterGen(), new SimpleExceptionsGen(), false);
 	}
 
-	private void doTest(@Nullable String newReturnType, ParameterInfoImpl[] parameterInfos, final boolean generateDelegate) throws Exception
+	private void doTest(@Nullable String newReturnType, ParameterInfoImpl[] parameterInfos, boolean generateDelegate) throws Exception
 	{
 		doTest(null, null, newReturnType, parameterInfos, new ThrownExceptionInfo[0], generateDelegate);
 	}
@@ -424,7 +424,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 			@Nullable String newReturnType,
 			ParameterInfoImpl[] parameterInfo,
 			ThrownExceptionInfo[] exceptionInfo,
-			final boolean generateDelegate) throws Exception
+			boolean generateDelegate) throws Exception
 	{
 		doTest(newVisibility, newName, newReturnType, new SimpleParameterGen(parameterInfo), new SimpleExceptionsGen(exceptionInfo), generateDelegate);
 	}
@@ -433,7 +433,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 			@Nullable String newName,
 			@Nullable @NonNls String newReturnType,
 			GenParams gen,
-			final boolean generateDelegate) throws Exception
+			boolean generateDelegate) throws Exception
 	{
 		doTest(newVisibility, newName, newReturnType, gen, new SimpleExceptionsGen(), generateDelegate);
 	}
@@ -443,15 +443,15 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 			@Nullable String newReturnType,
 			GenParams genParams,
 			GenExceptions genExceptions,
-			final boolean generateDelegate) throws Exception
+			boolean generateDelegate) throws Exception
 	{
 		String basePath = "/refactoring/changeSignature/" + getTestName(false);
-		@NonNls final String filePath = basePath + ".java";
+		@NonNls String filePath = basePath + ".java";
 		configureByFile(filePath);
-		final PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
+		PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
 		assertTrue("<caret> is not on method name", targetElement instanceof PsiMethod);
 		PsiMethod method = (PsiMethod) targetElement;
-		final PsiElementFactory factory = JavaPsiFacade.getInstance(getProject()).getElementFactory();
+		PsiElementFactory factory = JavaPsiFacade.getInstance(getProject()).getElementFactory();
 		PsiType newType = newReturnType != null ? factory.createTypeFromText(newReturnType, method) : method.getReturnType();
 		new ChangeSignatureProcessor(getProject(), method, generateDelegate, newVisibility, newName != null ? newName : method.getName(), newType, genParams.genParams(method), genExceptions
 				.genExceptions(method)).run();
@@ -462,19 +462,19 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 	public void testPropagateParameter() throws Exception
 	{
 		String basePath = "/refactoring/changeSignature/" + getTestName(false);
-		@NonNls final String filePath = basePath + ".java";
+		@NonNls String filePath = basePath + ".java";
 		configureByFile(filePath);
-		final PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
+		PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
 		assertTrue("<caret> is not on method name", targetElement instanceof PsiMethod);
 		PsiMethod method = (PsiMethod) targetElement;
-		final PsiClass containingClass = method.getContainingClass();
+		PsiClass containingClass = method.getContainingClass();
 		assertTrue(containingClass != null);
-		final PsiMethod[] callers = containingClass.findMethodsByName("caller", false);
+		PsiMethod[] callers = containingClass.findMethodsByName("caller", false);
 		assertTrue(callers.length > 0);
-		final PsiMethod caller = callers[0];
-		final HashSet<PsiMethod> propagateParametersMethods = new HashSet<PsiMethod>();
+		PsiMethod caller = callers[0];
+		HashSet<PsiMethod> propagateParametersMethods = new HashSet<PsiMethod>();
 		propagateParametersMethods.add(caller);
-		final PsiParameter[] parameters = method.getParameterList().getParameters();
+		PsiParameter[] parameters = method.getParameterList().getParameters();
 		new ChangeSignatureProcessor(getProject(), method, false, null, method.getName(), CanonicalTypes.createTypeWrapper(PsiType.VOID), new ParameterInfoImpl[]{
 				new ParameterInfoImpl(0, parameters[0].getName(), parameters[0].getType()),
 				new ParameterInfoImpl(-1, "b", PsiType.BOOLEAN, "true")

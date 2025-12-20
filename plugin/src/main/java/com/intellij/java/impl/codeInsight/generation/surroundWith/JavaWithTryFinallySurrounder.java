@@ -75,11 +75,11 @@ class JavaWithTryFinallySurrounder extends JavaStatementsSurrounder{
     }
     int offset = finallyBlock.getTextRange().getStartOffset() + 2;
     editor.getCaretModel().moveToOffset(offset);
-    final Document document = editor.getDocument();
+    Document document = editor.getDocument();
     PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(document);
     editor.getSelectionModel().removeSelection();
-    final PsiStatement firstTryStmt = tryBlock.getStatements()[0];
-    final int indent = firstTryStmt.getTextOffset() - document.getLineStartOffset(document.getLineNumber(firstTryStmt.getTextOffset()));
+    PsiStatement firstTryStmt = tryBlock.getStatements()[0];
+    int indent = firstTryStmt.getTextOffset() - document.getLineStartOffset(document.getLineNumber(firstTryStmt.getTextOffset()));
     EditorModificationUtil.insertStringAtCaret(editor, StringUtil.repeat(" ", indent), false, true);
     return new TextRange(editor.getCaretModel().getOffset(), editor.getCaretModel().getOffset());
   }

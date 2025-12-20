@@ -47,7 +47,7 @@ public class JavaQualifiedNameProvider implements QualifiedNameProvider {
   private static final Logger LOG = Logger.getInstance(JavaQualifiedNameProvider.class);
 
   @Nullable
-  public PsiElement adjustElementToCopy(final PsiElement element) {
+  public PsiElement adjustElementToCopy(PsiElement element) {
     if (element != null && !(element instanceof PsiMember) && element.getParent() instanceof PsiMember) {
       return element.getParent();
     }
@@ -60,7 +60,7 @@ public class JavaQualifiedNameProvider implements QualifiedNameProvider {
     if (element instanceof PsiClass) {
       return ((PsiClass) element).getQualifiedName();
     } else if (element instanceof PsiMember) {
-      final PsiMember member = (PsiMember) element;
+      PsiMember member = (PsiMember) element;
       PsiClass containingClass = member.getContainingClass();
       if (containingClass instanceof PsiAnonymousClass)
         containingClass = ((PsiAnonymousClass) containingClass).getBaseClassType().resolve();
@@ -72,12 +72,12 @@ public class JavaQualifiedNameProvider implements QualifiedNameProvider {
     return null;
   }
 
-  public PsiElement qualifiedNameToElement(final String fqn, final Project project) {
+  public PsiElement qualifiedNameToElement(String fqn, Project project) {
     PsiClass aClass = JavaPsiFacade.getInstance(project).findClass(fqn, GlobalSearchScope.allScope(project));
     if (aClass != null) {
       return aClass;
     }
-    final int endIndex = fqn.indexOf('#');
+    int endIndex = fqn.indexOf('#');
     if (endIndex != -1) {
       String className = fqn.substring(0, endIndex);
       if (className != null) {
@@ -126,13 +126,13 @@ public class JavaQualifiedNameProvider implements QualifiedNameProvider {
     return null;
   }
 
-  public void insertQualifiedName(String fqn, final PsiElement element, final Editor editor, final Project project) {
-    final PsiDocumentManager documentManager = PsiDocumentManager.getInstance(project);
+  public void insertQualifiedName(String fqn, PsiElement element, Editor editor, Project project) {
+    PsiDocumentManager documentManager = PsiDocumentManager.getInstance(project);
     Document document = editor.getDocument();
 
-    final PsiFile file = documentManager.getPsiFile(document);
+    PsiFile file = documentManager.getPsiFile(document);
 
-    final int offset = editor.getCaretModel().getOffset();
+    int offset = editor.getCaretModel().getOffset();
     PsiElement elementAtCaret = file.findElementAt(offset);
 
     fqn = fqn.replace('#', '.');
@@ -181,15 +181,15 @@ public class JavaQualifiedNameProvider implements QualifiedNameProvider {
           suffix = " ";
         }
       }
-      final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
-      final PsiExpression expression;
+      PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
+      PsiExpression expression;
       try {
         expression = factory.createExpressionFromText(toInsert + suffix, elementAtCaret);
       } catch (IncorrectOperationException e) {
         LOG.error(e);
         return;
       }
-      final PsiReferenceExpression referenceExpression = expression instanceof PsiMethodCallExpression
+      PsiReferenceExpression referenceExpression = expression instanceof PsiMethodCallExpression
           ? ((PsiMethodCallExpression) expression).getMethodExpression()
           : expression instanceof PsiReferenceExpression
           ? (PsiReferenceExpression) expression
@@ -245,14 +245,14 @@ public class JavaQualifiedNameProvider implements QualifiedNameProvider {
   }
 
   @Nullable
-  private static PsiElement getMember(final PsiElement element) {
+  private static PsiElement getMember(PsiElement element) {
     if (element instanceof PsiMember) return element;
     if (element instanceof PsiReference) {
       PsiElement resolved = ((PsiReference) element).resolve();
       if (resolved instanceof PsiMember) return resolved;
     }
     if (!(element instanceof PsiIdentifier)) return null;
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     PsiMember member = null;
     if (parent instanceof PsiJavaCodeReferenceElement) {
       PsiElement resolved = ((PsiJavaCodeReferenceElement) parent).resolve();
@@ -289,7 +289,7 @@ public class JavaQualifiedNameProvider implements QualifiedNameProvider {
     //    // failed to bind
     //  }
     //}
-    final JavaCodeStyleManager codeStyleManagerEx = JavaCodeStyleManager.getInstance(element.getProject());
+    JavaCodeStyleManager codeStyleManagerEx = JavaCodeStyleManager.getInstance(element.getProject());
     codeStyleManagerEx.shortenClassReferences(element, JavaCodeStyleManager.INCOMPLETE_CODE);
   }
 }

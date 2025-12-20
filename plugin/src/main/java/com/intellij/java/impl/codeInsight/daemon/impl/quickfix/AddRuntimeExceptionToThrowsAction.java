@@ -52,7 +52,7 @@ public class AddRuntimeExceptionToThrowsAction implements IntentionAction {
     }
 
     @Override
-    public void invoke(@Nonnull final Project project, Editor editor, PsiFile file) {
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
         if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
             return;
         }
@@ -117,7 +117,7 @@ public class AddRuntimeExceptionToThrowsAction implements IntentionAction {
         return (PsiClassType) type;
     }
 
-    private static PsiElement elementAtCaret(final Editor editor, final PsiFile file) {
+    private static PsiElement elementAtCaret(Editor editor, PsiFile file) {
         int offset = editor.getCaretModel().getOffset();
         return file.findElementAt(offset);
     }

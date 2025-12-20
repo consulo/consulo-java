@@ -31,7 +31,7 @@ public abstract class BasicSelectioner extends ExtendWordSelectionHandlerBase {
     return canSelectBasic(e);
   }
 
-  public static boolean canSelectBasic(final PsiElement e) {
+  public static boolean canSelectBasic(PsiElement e) {
     return
         !(e instanceof PsiWhiteSpace) &&
             !(e instanceof PsiComment) &&

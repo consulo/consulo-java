@@ -24,7 +24,7 @@ import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 
 public abstract class UnderscoresInLiteralsTest extends JavaCodeInsightFixtureTestCase {
   @Override
-  protected void tuneFixture(final JavaModuleFixtureBuilder moduleBuilder) throws Exception {
+  protected void tuneFixture(JavaModuleFixtureBuilder moduleBuilder) throws Exception {
     super.tuneFixture(moduleBuilder);
     moduleBuilder.setLanguageLevel(LanguageLevel.JDK_1_7);
   }
@@ -35,12 +35,12 @@ public abstract class UnderscoresInLiteralsTest extends JavaCodeInsightFixtureTe
   }
 
   public void testRemove() throws Exception {
-    final String removeIntention = CodeInsightBundle.message("intention.remove.literal.underscores");
+    String removeIntention = CodeInsightBundle.message("intention.remove.literal.underscores");
     CodeInsightTestUtil.doIntentionTest(myFixture, removeIntention, "WithUnderscores.java", "WithoutUnderscores.java");
   }
 
   public void testInsert() throws Exception {
-    final String insertIntention = CodeInsightBundle.message("intention.insert.literal.underscores");
+    String insertIntention = CodeInsightBundle.message("intention.insert.literal.underscores");
     CodeInsightTestUtil.doIntentionTest(myFixture, insertIntention, "WithoutUnderscores.java", "WithUnderscores.java");
   }
 }

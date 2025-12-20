@@ -39,30 +39,30 @@ public class EqualityToEqualsFix extends InspectionGadgetsFix {
 
   public void doFix(Project project, ProblemDescriptor descriptor)
     throws IncorrectOperationException {
-    final PsiElement comparisonToken = descriptor.getPsiElement();
-    final PsiBinaryExpression expression = (PsiBinaryExpression)
+    PsiElement comparisonToken = descriptor.getPsiElement();
+    PsiBinaryExpression expression = (PsiBinaryExpression)
       comparisonToken.getParent();
     if (expression == null) {
       return;
     }
     boolean negated = false;
-    final IElementType tokenType = expression.getOperationTokenType();
+    IElementType tokenType = expression.getOperationTokenType();
     if (JavaTokenType.NE.equals(tokenType)) {
       negated = true;
     }
-    final PsiExpression lhs = expression.getLOperand();
-    final PsiExpression strippedLhs =
+    PsiExpression lhs = expression.getLOperand();
+    PsiExpression strippedLhs =
       ParenthesesUtils.stripParentheses(lhs);
     if (strippedLhs == null) {
       return;
     }
-    final PsiExpression rhs = expression.getROperand();
-    final PsiExpression strippedRhs =
+    PsiExpression rhs = expression.getROperand();
+    PsiExpression strippedRhs =
       ParenthesesUtils.stripParentheses(rhs);
     if (strippedRhs == null) {
       return;
     }
-    @NonNls final String expString;
+    @NonNls String expString;
     if (ParenthesesUtils.getPrecedence(strippedLhs) >
         ParenthesesUtils.METHOD_CALL_PRECEDENCE) {
       expString = '(' + strippedLhs.getText() + ").equals(" +
@@ -72,7 +72,7 @@ public class EqualityToEqualsFix extends InspectionGadgetsFix {
       expString = strippedLhs.getText() + ".equals(" +
                   strippedRhs.getText() + ')';
     }
-    @NonNls final String newExpression;
+    @NonNls String newExpression;
     if (negated) {
       newExpression = '!' + expString;
     }

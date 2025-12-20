@@ -49,7 +49,7 @@ public class NestedTryStatementInspection extends BaseInspection {
         @Override
         public void visitTryStatement(@Nonnull PsiTryStatement statement) {
             super.visitTryStatement(statement);
-            final PsiTryStatement parentTry =
+            PsiTryStatement parentTry =
                 PsiTreeUtil.getParentOfType(
                     statement,
                     PsiTryStatement.class
@@ -57,16 +57,16 @@ public class NestedTryStatementInspection extends BaseInspection {
             if (parentTry == null) {
                 return;
             }
-            final PsiCodeBlock tryBlock = parentTry.getTryBlock();
+            PsiCodeBlock tryBlock = parentTry.getTryBlock();
             if (tryBlock == null) {
                 return;
             }
             if (!PsiTreeUtil.isAncestor(tryBlock, statement, true)) {
                 return;
             }
-            final PsiMethod containingMethod =
+            PsiMethod containingMethod =
                 PsiTreeUtil.getParentOfType(statement, PsiMethod.class);
-            final PsiMethod containingContainingMethod =
+            PsiMethod containingContainingMethod =
                 PsiTreeUtil.getParentOfType(parentTry, PsiMethod.class);
             if (containingMethod == null ||
                 containingContainingMethod == null ||

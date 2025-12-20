@@ -50,7 +50,7 @@ public class NoopMethodInAbstractClassInspection extends BaseInspection {
             if (method.isConstructor()) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return;
             }

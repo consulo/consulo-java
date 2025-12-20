@@ -82,7 +82,7 @@ public abstract class BaseOccurrenceManager implements OccurrenceManager {
   private static boolean needToDeclareFinal(PsiExpression[] occurrences) {
     PsiElement scopeToDeclare = null;
     for (PsiExpression occurrence : occurrences) {
-      final PsiElement data = occurrence.getUserData(ElementToWorkOn.PARENT);
+      PsiElement data = occurrence.getUserData(ElementToWorkOn.PARENT);
       if (scopeToDeclare == null) {
         scopeToDeclare = data != null ? data : occurrence;
       }

@@ -34,10 +34,10 @@ public class FieldSelectioner extends WordSelectioner {
     return e instanceof PsiField && e.getLanguage() == JavaLanguage.INSTANCE;
   }
 
-  private static void addRangeElem(final List<TextRange> result,
+  private static void addRangeElem(List<TextRange> result,
                                    CharSequence editorText,
-                                   final PsiElement first,
-                                   final int end) {
+                                   PsiElement first,
+                                   int end) {
     if (first != null) {
       result.addAll(expandToWholeLine(editorText,
                                       new TextRange(first.getTextRange().getStartOffset(), end)));
@@ -47,12 +47,12 @@ public class FieldSelectioner extends WordSelectioner {
   @Override
   public List<TextRange> select(PsiElement e, CharSequence editorText, int cursorOffset, Editor editor) {
     List<TextRange> result = super.select(e, editorText, cursorOffset, editor);
-    final PsiField field = (PsiField)e;
-    final TextRange range = field.getTextRange();
-    final PsiIdentifier first = field.getNameIdentifier();
-    final TextRange firstRange = first.getTextRange();
-    final PsiElement last = field.getInitializer();
-    final int end = last == null ? firstRange.getEndOffset() : last.getTextRange().getEndOffset();
+    PsiField field = (PsiField)e;
+    TextRange range = field.getTextRange();
+    PsiIdentifier first = field.getNameIdentifier();
+    TextRange firstRange = first.getTextRange();
+    PsiElement last = field.getInitializer();
+    int end = last == null ? firstRange.getEndOffset() : last.getTextRange().getEndOffset();
 
     PsiDocComment comment = field.getDocComment();
     if (comment != null) {

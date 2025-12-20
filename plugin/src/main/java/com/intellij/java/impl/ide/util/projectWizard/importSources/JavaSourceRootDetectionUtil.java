@@ -41,7 +41,7 @@ public class JavaSourceRootDetectionUtil
 		Lexer lexer = new JavaLexer(LanguageLevel.JDK_1_3);
 		lexer.start(text);
 		skipWhiteSpaceAndComments(lexer);
-		final IElementType firstToken = lexer.getTokenType();
+		IElementType firstToken = lexer.getTokenType();
 		if(firstToken != JavaTokenType.PACKAGE_KEYWORD)
 		{
 			if(JAVA_FILE_FIRST_TOKEN_SET.contains(firstToken))
@@ -53,7 +53,7 @@ public class JavaSourceRootDetectionUtil
 		lexer.advance();
 		skipWhiteSpaceAndComments(lexer);
 
-		final StringBuilder buffer = new StringBuilder();
+		StringBuilder buffer = new StringBuilder();
 		while(true)
 		{
 			if(lexer.getTokenType() != JavaTokenType.IDENTIFIER)

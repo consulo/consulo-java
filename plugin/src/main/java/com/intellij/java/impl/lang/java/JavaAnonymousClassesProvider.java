@@ -40,7 +40,7 @@ public class JavaAnonymousClassesProvider implements AnonymousElementProvider {
         element.accept(new JavaRecursiveElementWalkingVisitor() {
           @Override
           public void visitAnonymousClass(PsiAnonymousClass aClass) {
-            final PsiExpressionList arguments = aClass.getArgumentList();
+            PsiExpressionList arguments = aClass.getArgumentList();
             if (arguments != null) {
               for (PsiExpression expression : arguments.getExpressions()) {
                 visitExpression(expression);

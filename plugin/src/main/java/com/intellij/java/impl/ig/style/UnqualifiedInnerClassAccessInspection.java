@@ -74,44 +74,44 @@ public class UnqualifiedInnerClassAccessInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
+            PsiElement element = descriptor.getPsiElement();
             if (!(element instanceof PsiJavaCodeReferenceElement)) {
                 return;
             }
-            final PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement) element;
-            final PsiElement target = referenceElement.resolve();
+            PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement) element;
+            PsiElement target = referenceElement.resolve();
             if (!(target instanceof PsiClass)) {
                 return;
             }
-            final PsiClass aClass = (PsiClass) target;
-            final PsiClass containingClass = aClass.getContainingClass();
+            PsiClass aClass = (PsiClass) target;
+            PsiClass containingClass = aClass.getContainingClass();
             if (containingClass == null) {
                 return;
             }
-            final String qualifiedName = containingClass.getQualifiedName();
+            String qualifiedName = containingClass.getQualifiedName();
             if (qualifiedName == null) {
                 return;
             }
-            final PsiFile containingFile = referenceElement.getContainingFile();
+            PsiFile containingFile = referenceElement.getContainingFile();
             if (!(containingFile instanceof PsiJavaFile)) {
                 return;
             }
-            final PsiJavaFile javaFile = (PsiJavaFile) containingFile;
-            final String innerClassName = aClass.getQualifiedName();
+            PsiJavaFile javaFile = (PsiJavaFile) containingFile;
+            String innerClassName = aClass.getQualifiedName();
             if (innerClassName == null) {
                 return;
             }
-            final PsiImportList importList = javaFile.getImportList();
+            PsiImportList importList = javaFile.getImportList();
             if (importList == null) {
                 return;
             }
-            final PsiImportStatement[] importStatements = importList.getImportStatements();
-            final int importStatementsLength = importStatements.length;
+            PsiImportStatement[] importStatements = importList.getImportStatements();
+            int importStatementsLength = importStatements.length;
             boolean onDemand = false;
             PsiImportStatement referenceImportStatement = null;
             for (int i = importStatementsLength - 1; i >= 0; i--) {
-                final PsiImportStatement importStatement = importStatements[i];
-                final String importString = importStatement.getQualifiedName();
+                PsiImportStatement importStatement = importStatements[i];
+                String importString = importStatement.getQualifiedName();
                 if (importStatement.isOnDemand()) {
                     if (qualifiedName.equals(importString)) {
                         referenceImportStatement = importStatement;
@@ -126,39 +126,39 @@ public class UnqualifiedInnerClassAccessInspection extends BaseInspection {
                     }
                 }
             }
-            final ReferenceCollector referenceCollector;
+            ReferenceCollector referenceCollector;
             if (onDemand) {
                 referenceCollector = new ReferenceCollector(qualifiedName, onDemand);
             }
             else {
                 referenceCollector = new ReferenceCollector(innerClassName, onDemand);
             }
-            final PsiClass[] classes = javaFile.getClasses();
+            PsiClass[] classes = javaFile.getClasses();
             for (PsiClass psiClass : classes) {
                 psiClass.accept(referenceCollector);
             }
-            final Collection<PsiJavaCodeReferenceElement> references = referenceCollector.getReferences();
-            final SmartPointerManager pointerManager = SmartPointerManager.getInstance(project);
-            final List<SmartPsiElementPointer> pointers = new ArrayList();
+            Collection<PsiJavaCodeReferenceElement> references = referenceCollector.getReferences();
+            SmartPointerManager pointerManager = SmartPointerManager.getInstance(project);
+            List<SmartPsiElementPointer> pointers = new ArrayList();
             for (PsiJavaCodeReferenceElement reference : references) {
-                final SmartPsiElementPointer<PsiJavaCodeReferenceElement> pointer = pointerManager.createSmartPsiElementPointer(reference);
+                SmartPsiElementPointer<PsiJavaCodeReferenceElement> pointer = pointerManager.createSmartPsiElementPointer(reference);
                 pointers.add(pointer);
             }
             if (referenceImportStatement != null) {
                 referenceImportStatement.delete();
             }
             ImportUtils.addImportIfNeeded(containingClass, referenceElement);
-            final PsiDocumentManager documentManager = PsiDocumentManager.getInstance(project);
-            final Document document = documentManager.getDocument(containingFile);
+            PsiDocumentManager documentManager = PsiDocumentManager.getInstance(project);
+            Document document = documentManager.getDocument(containingFile);
             if (document == null) {
                 return;
             }
             documentManager.doPostponedOperationsAndUnblockDocument(document);
-            final String text = buildNewText(javaFile, references, containingClass, new StringBuilder()).toString();
+            String text = buildNewText(javaFile, references, containingClass, new StringBuilder()).toString();
             document.replaceString(0, document.getTextLength(), text);
             documentManager.commitDocument(document);
             if (pointers.size() > 1) {
-                final List<PsiElement> elements = new ArrayList();
+                List<PsiElement> elements = new ArrayList();
                 for (SmartPsiElementPointer pointer : pointers) {
                     elements.add(pointer.getElement());
                 }
@@ -177,7 +177,7 @@ public class UnqualifiedInnerClassAccessInspection extends BaseInspection {
             }
             //noinspection SuspiciousMethodCalls
             if (references.contains(element)) {
-                final String shortClassName = aClass.getName();
+                String shortClassName = aClass.getName();
                 if (isReferenceToTargetClass(shortClassName, aClass, element)) {
                     out.append(shortClassName);
                 }
@@ -187,7 +187,7 @@ public class UnqualifiedInnerClassAccessInspection extends BaseInspection {
                 out.append('.');
                 return out.append(element.getText());
             }
-            final PsiElement[] children = element.getChildren();
+            PsiElement[] children = element.getChildren();
             if (children.length == 0) {
                 return out.append(element.getText());
             }
@@ -198,10 +198,10 @@ public class UnqualifiedInnerClassAccessInspection extends BaseInspection {
         }
 
         private static boolean isReferenceToTargetClass(String referenceText, PsiClass targetClass, PsiElement context) {
-            final PsiManager manager = targetClass.getManager();
-            final JavaPsiFacade facade = JavaPsiFacade.getInstance(manager.getProject());
-            final PsiResolveHelper resolveHelper = facade.getResolveHelper();
-            final PsiClass referencedClass = resolveHelper.resolveReferencedClass(referenceText, context);
+            PsiManager manager = targetClass.getManager();
+            JavaPsiFacade facade = JavaPsiFacade.getInstance(manager.getProject());
+            PsiResolveHelper resolveHelper = facade.getResolveHelper();
+            PsiClass referencedClass = resolveHelper.resolveReferencedClass(referenceText, context);
             if (referencedClass == null) {
                 return true;
             }
@@ -225,23 +225,23 @@ public class UnqualifiedInnerClassAccessInspection extends BaseInspection {
             if (reference.isQualified()) {
                 return;
             }
-            final PsiElement target = reference.resolve();
+            PsiElement target = reference.resolve();
             if (!(target instanceof PsiClass)) {
                 return;
             }
-            final PsiClass aClass = (PsiClass) target;
+            PsiClass aClass = (PsiClass) target;
             if (!onDemand) {
-                final String qualifiedName = aClass.getQualifiedName();
+                String qualifiedName = aClass.getQualifiedName();
                 if (name.equals(qualifiedName)) {
                     references.add(reference);
                 }
                 return;
             }
-            final PsiClass containingClass = aClass.getContainingClass();
+            PsiClass containingClass = aClass.getContainingClass();
             if (containingClass == null) {
                 return;
             }
-            final String qualifiedName = containingClass.getQualifiedName();
+            String qualifiedName = containingClass.getQualifiedName();
             if (name.equals(qualifiedName)) {
                 references.add(reference);
             }
@@ -269,12 +269,12 @@ public class UnqualifiedInnerClassAccessInspection extends BaseInspection {
             if (reference.isQualified()) {
                 return;
             }
-            final PsiElement target = reference.resolve();
+            PsiElement target = reference.resolve();
             if (!(target instanceof PsiClass)) {
                 return;
             }
-            final PsiClass aClass = (PsiClass) target;
-            final PsiClass containingClass = aClass.getContainingClass();
+            PsiClass aClass = (PsiClass) target;
+            PsiClass containingClass = aClass.getContainingClass();
             if (containingClass == null) {
                 return;
             }
@@ -282,7 +282,7 @@ public class UnqualifiedInnerClassAccessInspection extends BaseInspection {
                 if (PsiTreeUtil.isAncestor(containingClass, reference, true)) {
                     return;
                 }
-                final PsiClass referenceClass = PsiTreeUtil.getParentOfType(reference, PsiClass.class);
+                PsiClass referenceClass = PsiTreeUtil.getParentOfType(reference, PsiClass.class);
                 if (referenceClass != null && referenceClass.isInheritor(containingClass, true)) {
                     return;
                 }

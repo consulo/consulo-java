@@ -51,13 +51,13 @@ public class ReplaceInaccessibleFieldWithGetterSetterFix extends LocalQuickFixAn
             return;
         }
         String qualifier = null;
-        final PsiExpression qualifierExpression = place.getQualifierExpression();
+        PsiExpression qualifierExpression = place.getQualifierExpression();
         if (qualifierExpression != null) {
             qualifier = qualifierExpression.getText();
         }
         PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
         PsiMethodCallExpression callExpression;
-        final String call = (qualifier != null ? qualifier + "." : "") + myMethodName;
+        String call = (qualifier != null ? qualifier + "." : "") + myMethodName;
         if (!myIsSetter) {
             callExpression = (PsiMethodCallExpression) elementFactory.createExpressionFromText(call + "()", null);
             callExpression = (PsiMethodCallExpression) CodeStyleManager.getInstance(project).reformat(callExpression);
@@ -66,8 +66,8 @@ public class ReplaceInaccessibleFieldWithGetterSetterFix extends LocalQuickFixAn
         else {
             PsiElement parent = PsiTreeUtil.skipParentsOfType(place, PsiParenthesizedExpression.class);
             if (parent instanceof PsiAssignmentExpression) {
-                final PsiExpression rExpression = ((PsiAssignmentExpression) parent).getRExpression();
-                final String argList = rExpression != null ? rExpression.getText() : "";
+                PsiExpression rExpression = ((PsiAssignmentExpression) parent).getRExpression();
+                String argList = rExpression != null ? rExpression.getText() : "";
                 callExpression = (PsiMethodCallExpression) elementFactory.createExpressionFromText(call + "(" + argList + ")", null);
                 callExpression = (PsiMethodCallExpression) CodeStyleManager.getInstance(project).reformat(callExpression);
                 parent.replace(callExpression);

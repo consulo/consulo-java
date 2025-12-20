@@ -42,7 +42,7 @@ public class MigrationConflictsPanel extends UsagesPanel
 	}
 
 	@Override
-	public void showUsages(@Nonnull final PsiElement[] primaryElements, @Nonnull final UsageInfo[] usageInfos)
+	public void showUsages(@Nonnull PsiElement[] primaryElements, @Nonnull UsageInfo[] usageInfos)
 	{
 		super.showUsages(primaryElements, usageInfos);
 	}

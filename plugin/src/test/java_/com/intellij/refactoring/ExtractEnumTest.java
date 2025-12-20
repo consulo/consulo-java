@@ -130,7 +130,7 @@ public abstract class ExtractEnumTest extends MultiFileTestCase {
            new RefactoringTestUtil.MemberDescriptor("BAR", PsiField.class, true));
   }
 
-  private void doTest(final RefactoringTestUtil.MemberDescriptor... memberDescriptors) throws Exception {
+  private void doTest(RefactoringTestUtil.MemberDescriptor... memberDescriptors) throws Exception {
     doTest(null, false, memberDescriptors);
   }
 
@@ -140,14 +140,14 @@ public abstract class ExtractEnumTest extends MultiFileTestCase {
     doTest(new PerformAction() {
       @Override
       public void performAction(VirtualFile rootDir, VirtualFile rootAfter) throws Exception {
-        final PsiClass aClass = myJavaFacade.findClass("Test", GlobalSearchScope.projectScope(myProject));
+        PsiClass aClass = myJavaFacade.findClass("Test", GlobalSearchScope.projectScope(myProject));
         assertNotNull("Class Test not found", aClass);
 
-        final ArrayList<PsiField> fields = new ArrayList<PsiField>();
-        final ArrayList<PsiMethod> methods = new ArrayList<PsiMethod>();
-        final List<MemberInfo> enumConstants = new ArrayList<MemberInfo>();
+        ArrayList<PsiField> fields = new ArrayList<PsiField>();
+        ArrayList<PsiMethod> methods = new ArrayList<PsiMethod>();
+        List<MemberInfo> enumConstants = new ArrayList<MemberInfo>();
         for (MemberInfo memberInfo : RefactoringTestUtil.findMembers(aClass, memberDescriptors)) {
-          final PsiMember member = memberInfo.getMember();
+          PsiMember member = memberInfo.getMember();
           if (member instanceof PsiField) {
             fields.add((PsiField)member);
             if (member.hasModifierProperty(PsiModifier.STATIC) && member.hasModifierProperty(PsiModifier.FINAL) && ((PsiField)member).hasInitializer()) {
@@ -162,7 +162,7 @@ public abstract class ExtractEnumTest extends MultiFileTestCase {
           }
         }
         try {
-          final ExtractClassProcessor processor =
+          ExtractClassProcessor processor =
             new ExtractClassProcessor(aClass, fields, methods, new ArrayList<PsiClass>(), "", null, "EEnum",
                                       null, generateAccessors, enumConstants);
 

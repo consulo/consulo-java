@@ -37,7 +37,7 @@ public abstract class AbstractJavaInplaceIntroduceTest extends AbstractInplaceIn
 
   @Nullable
   protected static PsiExpression getExpressionFromEditor() {
-    final PsiExpression expression = PsiTreeUtil.getParentOfType(getFile().findElementAt(getEditor().getCaretModel().getOffset()), PsiExpression.class);
+    PsiExpression expression = PsiTreeUtil.getParentOfType(getFile().findElementAt(getEditor().getCaretModel().getOffset()), PsiExpression.class);
     if (expression instanceof PsiReferenceExpression && expression.getParent() instanceof PsiMethodCallExpression) {
       return (PsiExpression)expression.getParent();
     }
@@ -45,7 +45,7 @@ public abstract class AbstractJavaInplaceIntroduceTest extends AbstractInplaceIn
   }
 
   protected static PsiLocalVariable getLocalVariableFromEditor() {
-    final PsiLocalVariable localVariable = PsiTreeUtil.getParentOfType(getFile().findElementAt(getEditor().getCaretModel().getOffset()),
+    PsiLocalVariable localVariable = PsiTreeUtil.getParentOfType(getFile().findElementAt(getEditor().getCaretModel().getOffset()),
                                                                        PsiLocalVariable.class);
     assertNotNull(localVariable);
     return localVariable;
@@ -64,12 +64,12 @@ public abstract class AbstractJavaInplaceIntroduceTest extends AbstractInplaceIn
 
   @Override
   protected AbstractInplaceIntroducer invokeRefactoring() {
-    final MyIntroduceHandler introduceHandler = createIntroduceHandler();
-    final PsiExpression expression = getExpressionFromEditor();
+    MyIntroduceHandler introduceHandler = createIntroduceHandler();
+    PsiExpression expression = getExpressionFromEditor();
     if (expression != null) {
       introduceHandler.invokeImpl(LightPlatformTestCase.getProject(), expression, getEditor());
     } else {
-      final PsiLocalVariable localVariable = getLocalVariableFromEditor();
+      PsiLocalVariable localVariable = getLocalVariableFromEditor();
       introduceHandler.invokeImpl(LightPlatformTestCase.getProject(), localVariable, getEditor());
     }
     return introduceHandler.getInplaceIntroducer();

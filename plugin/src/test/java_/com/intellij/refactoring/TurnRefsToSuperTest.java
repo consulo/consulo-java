@@ -78,8 +78,8 @@ public abstract class TurnRefsToSuperTest extends MultiFileTestCase {
     return "/refactoring/turnRefsToSuper/";
   }
 
-  private void performAction(final String className, final String superClassName, boolean replaceInstanceOf) {
-    final PsiClass aClass = myJavaFacade.findClass(className, GlobalSearchScope.allScope(myProject));
+  private void performAction(String className, String superClassName, boolean replaceInstanceOf) {
+    PsiClass aClass = myJavaFacade.findClass(className, GlobalSearchScope.allScope(myProject));
     assertNotNull("Class " + className + " not found", aClass);
     PsiClass superClass = myJavaFacade.findClass(superClassName, GlobalSearchScope.allScope(myProject));
     assertNotNull("Class " + superClassName + " not found", superClass);

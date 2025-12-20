@@ -67,7 +67,7 @@ public class EnumAsNameInspection extends BaseInspection {
         @Override
         public void visitVariable(@Nonnull PsiVariable variable) {
             super.visitVariable(variable);
-            final String variableName = variable.getName();
+            String variableName = variable.getName();
             if (!PsiKeyword.ENUM.equals(variableName)) {
                 return;
             }
@@ -77,7 +77,7 @@ public class EnumAsNameInspection extends BaseInspection {
         @Override
         public void visitMethod(@Nonnull PsiMethod method) {
             super.visitMethod(method);
-            final String name = method.getName();
+            String name = method.getName();
             if (!PsiKeyword.ENUM.equals(name)) {
                 return;
             }
@@ -87,11 +87,11 @@ public class EnumAsNameInspection extends BaseInspection {
         @Override
         public void visitClass(@Nonnull PsiClass aClass) {
             //note: no call to super, to avoid drill-down
-            final String name = aClass.getName();
+            String name = aClass.getName();
             if (!PsiKeyword.ENUM.equals(name)) {
                 return;
             }
-            final PsiTypeParameterList params = aClass.getTypeParameterList();
+            PsiTypeParameterList params = aClass.getTypeParameterList();
             if (params != null) {
                 params.accept(this);
             }
@@ -101,7 +101,7 @@ public class EnumAsNameInspection extends BaseInspection {
         @Override
         public void visitTypeParameter(PsiTypeParameter parameter) {
             super.visitTypeParameter(parameter);
-            final String name = parameter.getName();
+            String name = parameter.getName();
             if (!PsiKeyword.ENUM.equals(name)) {
                 return;
             }

@@ -39,7 +39,7 @@ import java.util.function.Consumer;
 public class HighlightExitPointsHandler extends HighlightUsagesHandlerBase<PsiElement> {
   private final PsiElement myTarget;
 
-  public HighlightExitPointsHandler(final Editor editor, final PsiFile file, final PsiElement target) {
+  public HighlightExitPointsHandler(Editor editor, PsiFile file, PsiElement target) {
     super(editor, file);
     myTarget = target;
   }
@@ -50,12 +50,12 @@ public class HighlightExitPointsHandler extends HighlightUsagesHandlerBase<PsiEl
   }
 
   @Override
-  protected void selectTargets(final List<PsiElement> targets, final Consumer<List<PsiElement>> selectionConsumer) {
+  protected void selectTargets(List<PsiElement> targets, Consumer<List<PsiElement>> selectionConsumer) {
     selectionConsumer.accept(targets);
   }
 
   @Override
-  public void computeUsages(final List<PsiElement> targets) {
+  public void computeUsages(List<PsiElement> targets) {
     FeatureUsageTracker.getInstance().triggerFeatureUsed(ProductivityFeatureNames.CODEASSISTS_HIGHLIGHT_RETURN);
 
     PsiElement parent = myTarget.getParent();
@@ -64,9 +64,9 @@ public class HighlightExitPointsHandler extends HighlightUsagesHandlerBase<PsiEl
     }
 
     PsiCodeBlock body = null;
-    final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(myTarget, PsiLambdaExpression.class);
+    PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(myTarget, PsiLambdaExpression.class);
     if (lambdaExpression != null) {
-      final PsiElement lambdaBody = lambdaExpression.getBody();
+      PsiElement lambdaBody = lambdaExpression.getBody();
       if (lambdaBody instanceof PsiCodeBlock codeBlock) {
         body = codeBlock;
       }
@@ -97,11 +97,11 @@ public class HighlightExitPointsHandler extends HighlightUsagesHandlerBase<PsiEl
     } else if (exitStatement instanceof PsiContinueStatement continueStatement) {
       return continueStatement.findContinuedStatement();
     } else if (exitStatement instanceof PsiThrowStatement throwStatement) {
-      final PsiExpression expr = throwStatement.getException();
+      PsiExpression expr = throwStatement.getException();
       if (expr == null) {
         return null;
       }
-      final PsiType exceptionType = expr.getType();
+      PsiType exceptionType = expr.getType();
       if (!(exceptionType instanceof PsiClassType)) {
         return null;
       }
@@ -109,7 +109,7 @@ public class HighlightExitPointsHandler extends HighlightUsagesHandlerBase<PsiEl
       PsiElement target = exitStatement;
       while (!(target instanceof PsiMethod || target == null || target instanceof PsiClass || target instanceof PsiFile)) {
         if (target instanceof PsiTryStatement tryStatement) {
-          final PsiParameter[] params = tryStatement.getCatchBlockParameters();
+          PsiParameter[] params = tryStatement.getCatchBlockParameters();
           for (PsiParameter param : params) {
             if (param.getType().isAssignableFrom(exceptionType)) {
               break;
@@ -127,8 +127,8 @@ public class HighlightExitPointsHandler extends HighlightUsagesHandlerBase<PsiEl
     return null;
   }
 
-  private void highlightExitPoints(final PsiStatement parent, final PsiCodeBlock body) throws AnalysisCanceledException {
-    final Project project = myTarget.getProject();
+  private void highlightExitPoints(PsiStatement parent, PsiCodeBlock body) throws AnalysisCanceledException {
+    Project project = myTarget.getProject();
     ControlFlow flow = ControlFlowFactory.getInstance(project).getControlFlow(
       body,
       LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance(),
@@ -151,7 +151,7 @@ public class HighlightExitPointsHandler extends HighlightUsagesHandlerBase<PsiEl
 
     PsiElement originalTarget = getExitTarget(parent);
 
-    final Iterator<PsiStatement> it = exitStatements.iterator();
+    Iterator<PsiStatement> it = exitStatements.iterator();
     while (it.hasNext()) {
       PsiStatement psiStatement = it.next();
       if (getExitTarget(psiStatement) != originalTarget) {

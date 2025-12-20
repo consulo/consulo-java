@@ -61,39 +61,39 @@ public class CreateClassUtil {
   private CreateClassUtil() {}
 
   @Nullable
-  private static PsiClass createClassFromTemplate(@Nonnull final Properties attributes, @Nullable final String templateName,
-                                                  @Nonnull final PsiDirectory directoryRoot,
-                                                  @Nonnull final String className) throws IncorrectOperationException {
+  private static PsiClass createClassFromTemplate(@Nonnull Properties attributes, @Nullable String templateName,
+                                                  @Nonnull PsiDirectory directoryRoot,
+                                                  @Nonnull String className) throws IncorrectOperationException {
     if (templateName == null) return null;
     if (templateName.equals(DO_NOT_CREATE_CLASS_TEMPLATE)) return null;
 
-    final Project project = directoryRoot.getProject();
+    Project project = directoryRoot.getProject();
     try {
-      final PsiDirectory directory = createParentDirectories(directoryRoot, className);
-      final PsiFile psiFile = directory.findFile(className + "." + JavaFileType.INSTANCE.getDefaultExtension());
+      PsiDirectory directory = createParentDirectories(directoryRoot, className);
+      PsiFile psiFile = directory.findFile(className + "." + JavaFileType.INSTANCE.getDefaultExtension());
       if (psiFile != null) {
         psiFile.delete();
       }
 
-      final String rawClassName = extractClassName(className);
-      final PsiFile existing = directory.findFile(rawClassName + ".java");
+      String rawClassName = extractClassName(className);
+      PsiFile existing = directory.findFile(rawClassName + ".java");
       if (existing instanceof PsiJavaFile) {
-        final PsiClass[] classes = ((PsiJavaFile)existing).getClasses();
+        PsiClass[] classes = ((PsiJavaFile)existing).getClasses();
         if (classes.length > 0) {
           return classes[0];
         }
         return null;
       }
 
-      final PsiClass aClass;
+      PsiClass aClass;
       if (templateName.equals(DEFAULT_CLASS_TEMPLATE)) {
         aClass = JavaDirectoryService.getInstance().createClass(directory, rawClassName);
       }
       else {
-        final FileTemplateManager fileTemplateManager = FileTemplateManager.getInstance(project);
+        FileTemplateManager fileTemplateManager = FileTemplateManager.getInstance(project);
         FileTemplate fileTemplate = fileTemplateManager.getJ2eeTemplate(templateName);
         LOG.assertTrue(fileTemplate != null, templateName + " not found");
-        final String text = fileTemplate.getText(attributes);
+        String text = fileTemplate.getText(attributes);
         aClass = JavaCreateFromTemplateHandler.createClassOrInterface(project, directory, text, true, fileTemplate.getExtension());
       }
       return (PsiClass)JavaCodeStyleManager.getInstance(project).shortenClassReferences(aClass);
@@ -105,11 +105,11 @@ public class CreateClassUtil {
 
   @Nonnull
   private static PsiDirectory createParentDirectories(@Nonnull PsiDirectory directoryRoot, @Nonnull String className) throws IncorrectOperationException {
-    final PsiJavaPackage currentPackage = JavaDirectoryService.getInstance().getPackage(directoryRoot);
-    final String packagePrefix = currentPackage == null? null : currentPackage.getQualifiedName() + ".";
-    final String packageName = extractPackage(packagePrefix != null && className.startsWith(packagePrefix)?
+    PsiJavaPackage currentPackage = JavaDirectoryService.getInstance().getPackage(directoryRoot);
+    String packagePrefix = currentPackage == null? null : currentPackage.getQualifiedName() + ".";
+    String packageName = extractPackage(packagePrefix != null && className.startsWith(packagePrefix)?
                                               className.substring(packagePrefix.length()) : className);
-    final StringTokenizer tokenizer = new StringTokenizer(packageName, ".");
+    StringTokenizer tokenizer = new StringTokenizer(packageName, ".");
     while (tokenizer.hasMoreTokens()) {
       String packagePart = tokenizer.nextToken();
       PsiDirectory subdirectory = directoryRoot.findSubdirectory(packagePart);
@@ -175,7 +175,7 @@ public class CreateClassUtil {
     if (newClassName == null) {
       return null;
     }
-    final String className = extractClassName(newClassName);
+    String className = extractClassName(newClassName);
     properties.setProperty(CLASS_NAME_PROPERTY, className);
     properties.setProperty(INTERFACE_NAME_PROPERTY, className);
 
@@ -184,9 +184,9 @@ public class CreateClassUtil {
 
   @Nullable
   public static PsiClass createClassFromCustomTemplate(@Nullable PsiDirectory classDirectory,
-                                                       @Nullable final Module module,
-                                                       final String className,
-                                                       final String templateName) {
+                                                       @Nullable Module module,
+                                                       String className,
+                                                       String templateName) {
     if (classDirectory == null && module != null) {
       try {
         classDirectory = PackageUtil.findOrCreateDirectoryForPackage(module, "", null, false);
@@ -199,7 +199,7 @@ public class CreateClassUtil {
       return null;
     }
     try {
-      final Properties properties = ApplicationManager.getApplication().isUnitTestMode() ?
+      Properties properties = ApplicationManager.getApplication().isUnitTestMode() ?
                                     new Properties() :
                                     FileTemplateManager.getInstance(classDirectory.getProject()).getDefaultProperties();
       return createClassNamed(className, new Properties(properties), templateName, classDirectory);

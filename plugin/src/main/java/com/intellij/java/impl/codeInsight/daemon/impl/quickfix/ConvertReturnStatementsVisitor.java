@@ -34,7 +34,7 @@ class ConvertReturnStatementsVisitor implements ReturnStatementsVisitor {
   private PsiReturnStatement myLatestReturn;
   private final String myDefaultValue;
 
-  public ConvertReturnStatementsVisitor(final PsiElementFactory factory, final PsiMethod method, final PsiType targetType) {
+  public ConvertReturnStatementsVisitor(PsiElementFactory factory, PsiMethod method, PsiType targetType) {
     myFactory = factory;
     myMethod = method;
     mySearcher = new DeclarationSearcher(myMethod, targetType);
@@ -43,7 +43,7 @@ class ConvertReturnStatementsVisitor implements ReturnStatementsVisitor {
 
   @Override
   public void visit(final List<PsiReturnStatement> returnStatements) throws IncorrectOperationException {
-    final PsiReturnStatement statement = ApplicationManager.getApplication().runWriteAction(new Computable<PsiReturnStatement>() {
+    PsiReturnStatement statement = ApplicationManager.getApplication().runWriteAction(new Computable<PsiReturnStatement>() {
       @Override
       public PsiReturnStatement compute() {
         return replaceReturnStatements(returnStatements);
@@ -59,7 +59,7 @@ class ConvertReturnStatementsVisitor implements ReturnStatementsVisitor {
   }
 
   private String generateValue(@Nonnull PsiElement stopElement) {
-    final PsiVariable variable = mySearcher.getDeclaration(stopElement);
+    PsiVariable variable = mySearcher.getDeclaration(stopElement);
     return variable != null ? variable.getName() : myDefaultValue;
   }
 
@@ -70,7 +70,7 @@ class ConvertReturnStatementsVisitor implements ReturnStatementsVisitor {
         PsiCodeBlock body = myMethod.getBody();
         PsiJavaToken rBrace = body.getRBrace();
         if (rBrace == null) return null;
-        final String value = generateValue(rBrace);
+        String value = generateValue(rBrace);
         PsiReturnStatement returnStatement = (PsiReturnStatement) myFactory.createStatementFromText("return " + value+";", myMethod);
         return (PsiReturnStatement) body.addBefore(returnStatement, rBrace);
       }
@@ -78,14 +78,14 @@ class ConvertReturnStatementsVisitor implements ReturnStatementsVisitor {
   }
 
   @Nullable
-  public PsiReturnStatement replaceReturnStatements(final List<PsiReturnStatement> currentStatements) throws IncorrectOperationException {
+  public PsiReturnStatement replaceReturnStatements(List<PsiReturnStatement> currentStatements) throws IncorrectOperationException {
     PsiReturnStatement latestReplaced = null;
 
     for (PsiReturnStatement returnStatement : currentStatements) {
       if (returnStatement.getReturnValue() != null) {
         continue;
       }
-      final String value = generateValue(returnStatement);
+      String value = generateValue(returnStatement);
 
       latestReplaced = (PsiReturnStatement) myFactory.createStatementFromText("return " + value+";", returnStatement.getParent());
       latestReplaced = (PsiReturnStatement)returnStatement.replace(latestReplaced);

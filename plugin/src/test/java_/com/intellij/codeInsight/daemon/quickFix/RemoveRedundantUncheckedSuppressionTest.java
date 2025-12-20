@@ -93,7 +93,7 @@ public abstract class RemoveRedundantUncheckedSuppressionTest extends LightQuick
         }
 
         private void checkMember(PsiMember member, RedundantSuppressInspection inspection, ProblemsHolder holder) {
-          final ProblemDescriptor[] problemDescriptors =
+          ProblemDescriptor[] problemDescriptors =
             (ProblemDescriptor[])inspection.checkElement(member, InspectionManager.getInstance(getProject()), getProject());
           if (problemDescriptors != null) {
             for (ProblemDescriptor problemDescriptor : problemDescriptors) {

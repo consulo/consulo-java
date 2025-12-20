@@ -92,17 +92,17 @@ public abstract class NullityInferrerTest extends CodeInsightTestCase {
 
 
   private void doTest(boolean annotateLocalVariables) throws Exception  {
-    final String nullityPath = "/codeInsight/nullityinferrer";
-    final VirtualFile aLib = LocalFileSystem.getInstance().findFileByPath(getTestDataPath() + nullityPath + "/lib/annotations.jar");
+    String nullityPath = "/codeInsight/nullityinferrer";
+    VirtualFile aLib = LocalFileSystem.getInstance().findFileByPath(getTestDataPath() + nullityPath + "/lib/annotations.jar");
     if (aLib != null) {
-      final VirtualFile file = ArchiveVfsUtil.getJarRootForLocalFile(aLib);
+      VirtualFile file = ArchiveVfsUtil.getJarRootForLocalFile(aLib);
       if (file != null) {
         ModuleRootModificationUtil.addModuleLibrary(myModule, file.getUrl());
       }
     }
 
     configureByFile(nullityPath + "/before" + getTestName(false) + ".java");
-    final NullityInferrer nullityInferrer = new NullityInferrer(annotateLocalVariables, getProject());
+    NullityInferrer nullityInferrer = new NullityInferrer(annotateLocalVariables, getProject());
     nullityInferrer.collect(getFile());
     nullityInferrer.apply(getProject());
     checkResultByFile(nullityPath + "/after" + getTestName(false)+ ".java");

@@ -34,17 +34,17 @@ public abstract class RemoveMiddleManTest extends MultiFileTestCase{
   private void doTest(final String conflict) throws Exception {
     doTest(new PerformAction() {
       @Override
-      public void performAction(final VirtualFile rootDir, final VirtualFile rootAfter) throws Exception {
+      public void performAction(VirtualFile rootDir, VirtualFile rootAfter) throws Exception {
         PsiClass aClass = myJavaFacade.findClass("Test", GlobalSearchScope.allScope(getProject()));
 
         if (aClass == null) aClass = myJavaFacade.findClass("p.Test", GlobalSearchScope.allScope(getProject()));
         assertNotNull("Class Test not found", aClass);
 
-        final PsiField field = aClass.findFieldByName("myField", false);
-        final Set<PsiMethod> methods = DelegationUtils.getDelegatingMethodsForField(field);
+        PsiField field = aClass.findFieldByName("myField", false);
+        Set<PsiMethod> methods = DelegationUtils.getDelegatingMethodsForField(field);
         List<MemberInfo> infos = new ArrayList<MemberInfo>();
         for (PsiMethod method : methods) {
-          final MemberInfo info = new MemberInfo(method);
+          MemberInfo info = new MemberInfo(method);
           info.setChecked(true);
           info.setToAbstract(true);
           infos.add(info);

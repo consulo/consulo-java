@@ -48,17 +48,17 @@ public class JavaLangReflectInspection extends BaseInspection {
         @Override
         public void visitVariable(@Nonnull PsiVariable variable) {
             super.visitVariable(variable);
-            final PsiType type = variable.getType();
-            final PsiType componentType = type.getDeepComponentType();
+            PsiType type = variable.getType();
+            PsiType componentType = type.getDeepComponentType();
             if (!(componentType instanceof PsiClassType)) {
                 return;
             }
-            final String className = ((PsiClassType) componentType).getClassName();
-            @NonNls final String javaLangReflect = "java.lang.reflect.";
+            String className = ((PsiClassType) componentType).getClassName();
+            @NonNls String javaLangReflect = "java.lang.reflect.";
             if (!className.startsWith(javaLangReflect)) {
                 return;
             }
-            final PsiTypeElement typeElement = variable.getTypeElement();
+            PsiTypeElement typeElement = variable.getTypeElement();
             if (typeElement == null) {
                 return;
             }

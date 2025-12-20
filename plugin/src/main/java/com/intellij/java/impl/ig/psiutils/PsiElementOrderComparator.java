@@ -25,8 +25,8 @@ public class PsiElementOrderComparator implements Comparator<PsiElement> {
     new PsiElementOrderComparator();
 
   public int compare(PsiElement element1, PsiElement element2) {
-    final int offset1 = element1.getTextOffset();
-    final int offset2 = element2.getTextOffset();
+    int offset1 = element1.getTextOffset();
+    int offset2 = element2.getTextOffset();
     return offset1 - offset2;
   }
 

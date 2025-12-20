@@ -42,7 +42,7 @@ public class ComparisonToNaNInspection extends BaseInspection {
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final PsiBinaryExpression comparison = (PsiBinaryExpression)infos[0];
+    PsiBinaryExpression comparison = (PsiBinaryExpression)infos[0];
     return JavaTokenType.EQEQ.equals(comparison.getOperationTokenType())
       ? InspectionGadgetsLocalize.comparisonToNanProblemDescriptor1().get()
       : InspectionGadgetsLocalize.comparisonToNanProblemDescriptor2().get();
@@ -64,21 +64,21 @@ public class ComparisonToNaNInspection extends BaseInspection {
     }
 
     public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiReferenceExpression nanExpression = (PsiReferenceExpression)descriptor.getPsiElement();
-      final PsiElement target = nanExpression.resolve();
+      PsiReferenceExpression nanExpression = (PsiReferenceExpression)descriptor.getPsiElement();
+      PsiElement target = nanExpression.resolve();
       if (!(target instanceof PsiField)) {
         return;
       }
-      final PsiField field = (PsiField)target;
-      final PsiClass containingClass = field.getContainingClass();
+      PsiField field = (PsiField)target;
+      PsiClass containingClass = field.getContainingClass();
       if (containingClass == null) {
         return;
       }
-      final String typeText = containingClass.getQualifiedName();
-      final PsiBinaryExpression comparison = (PsiBinaryExpression)nanExpression.getParent();
-      final PsiExpression lhs = comparison.getLOperand();
-      final PsiExpression rhs = comparison.getROperand();
-      final PsiExpression operand;
+      String typeText = containingClass.getQualifiedName();
+      PsiBinaryExpression comparison = (PsiBinaryExpression)nanExpression.getParent();
+      PsiExpression lhs = comparison.getLOperand();
+      PsiExpression rhs = comparison.getROperand();
+      PsiExpression operand;
       if (nanExpression.equals(lhs)) {
         operand = rhs;
       }
@@ -86,16 +86,16 @@ public class ComparisonToNaNInspection extends BaseInspection {
         operand = lhs;
       }
       assert operand != null;
-      final String operandText = operand.getText();
-      final IElementType tokenType = comparison.getOperationTokenType();
-      final String negationText;
+      String operandText = operand.getText();
+      IElementType tokenType = comparison.getOperationTokenType();
+      String negationText;
       if (tokenType.equals(JavaTokenType.EQEQ)) {
         negationText = "";
       }
       else {
         negationText = "!";
       }
-      @NonNls final String newExpressionText = negationText + typeText + ".isNaN(" + operandText + ')';
+      @NonNls String newExpressionText = negationText + typeText + ".isNaN(" + operandText + ')';
       replaceExpression(comparison, newExpressionText);
     }
   }
@@ -108,8 +108,8 @@ public class ComparisonToNaNInspection extends BaseInspection {
       if (!ComparisonUtils.isEqualityComparison(expression)) {
         return;
       }
-      final PsiExpression lhs = expression.getLOperand();
-      final PsiExpression rhs = expression.getROperand();
+      PsiExpression lhs = expression.getLOperand();
+      PsiExpression rhs = expression.getROperand();
       if (rhs == null || !TypeUtils.hasFloatingPointType(lhs) && !TypeUtils.hasFloatingPointType(rhs)) {
         return;
       }
@@ -125,21 +125,21 @@ public class ComparisonToNaNInspection extends BaseInspection {
       if (!(expression instanceof PsiReferenceExpression)) {
         return false;
       }
-      final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)expression;
-      @NonNls final String referenceName = referenceExpression.getReferenceName();
+      PsiReferenceExpression referenceExpression = (PsiReferenceExpression)expression;
+      @NonNls String referenceName = referenceExpression.getReferenceName();
       if (!"NaN".equals(referenceName)) {
         return false;
       }
-      final PsiElement target = referenceExpression.resolve();
+      PsiElement target = referenceExpression.resolve();
       if (!(target instanceof PsiField)) {
         return false;
       }
-      final PsiField field = (PsiField)target;
-      final PsiClass containingClass = field.getContainingClass();
+      PsiField field = (PsiField)target;
+      PsiClass containingClass = field.getContainingClass();
       if (containingClass == null) {
         return false;
       }
-      final String qualifiedName = containingClass.getQualifiedName();
+      String qualifiedName = containingClass.getQualifiedName();
       return CommonClassNames.JAVA_LANG_DOUBLE.equals(qualifiedName) || CommonClassNames.JAVA_LANG_FLOAT.equals(qualifiedName);
     }
   }

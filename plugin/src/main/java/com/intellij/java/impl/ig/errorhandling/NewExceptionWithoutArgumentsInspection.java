@@ -61,23 +61,23 @@ public class NewExceptionWithoutArgumentsInspection extends BaseInspection {
         @Override
         public void visitNewExpression(PsiNewExpression expression) {
             super.visitNewExpression(expression);
-            final PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpressionList argumentList = expression.getArgumentList();
             if (argumentList == null) {
                 return;
             }
-            final PsiExpression[] expressions = argumentList.getExpressions();
+            PsiExpression[] expressions = argumentList.getExpressions();
             if (expressions.length != 0) {
                 return;
             }
-            final PsiJavaCodeReferenceElement classReference = expression.getClassReference();
+            PsiJavaCodeReferenceElement classReference = expression.getClassReference();
             if (classReference == null) {
                 return;
             }
-            final PsiElement target = classReference.resolve();
+            PsiElement target = classReference.resolve();
             if (!(target instanceof PsiClass)) {
                 return;
             }
-            final PsiClass aClass = (PsiClass) target;
+            PsiClass aClass = (PsiClass) target;
             if (!InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_EXCEPTION)) {
                 return;
             }
@@ -90,14 +90,14 @@ public class NewExceptionWithoutArgumentsInspection extends BaseInspection {
         }
 
         private boolean hasAccessibleConstructorWithParameters(PsiClass aClass, PsiElement context) {
-            final PsiMethod[] constructors = aClass.getConstructors();
+            PsiMethod[] constructors = aClass.getConstructors();
             for (PsiMethod constructor : constructors) {
-                final PsiParameterList parameterList = constructor.getParameterList();
-                final int count = parameterList.getParametersCount();
+                PsiParameterList parameterList = constructor.getParameterList();
+                int count = parameterList.getParametersCount();
                 if (count <= 0) {
                     continue;
                 }
-                final PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(context.getProject()).getResolveHelper();
+                PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(context.getProject()).getResolveHelper();
                 if (resolveHelper.isAccessible(constructor, context, aClass)) {
                     return true;
                 }

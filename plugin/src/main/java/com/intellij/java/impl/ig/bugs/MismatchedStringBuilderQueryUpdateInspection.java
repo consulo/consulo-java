@@ -65,8 +65,8 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
     @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
-        final boolean updated = (Boolean) infos[0];
-        final PsiType type = (PsiType) infos[1]; //"StringBuilder";
+        boolean updated = (Boolean) infos[0];
+        PsiType type = (PsiType) infos[1]; //"StringBuilder";
         return updated
             ? InspectionGadgetsLocalize.mismatchedStringBuilderUpdatedProblemDescriptor(type.getPresentableText()).get()
             : InspectionGadgetsLocalize.mismatchedStringBuilderQueriedProblemDescriptor(type.getPresentableText()).get();
@@ -95,12 +95,12 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
             if (!field.hasModifierProperty(PsiModifier.PRIVATE)) {
                 return;
             }
-            final PsiClass containingClass = PsiUtil.getTopLevelClass(field);
+            PsiClass containingClass = PsiUtil.getTopLevelClass(field);
             if (!checkVariable(field, containingClass)) {
                 return;
             }
-            final boolean queried = stringBuilderContentsAreQueried(field, containingClass);
-            final boolean updated = stringBuilderContentsAreUpdated(field, containingClass);
+            boolean queried = stringBuilderContentsAreQueried(field, containingClass);
+            boolean updated = stringBuilderContentsAreUpdated(field, containingClass);
             if (queried == updated) {
                 return;
             }
@@ -110,12 +110,12 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
         @Override
         public void visitLocalVariable(PsiLocalVariable variable) {
             super.visitLocalVariable(variable);
-            final PsiCodeBlock codeBlock = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
+            PsiCodeBlock codeBlock = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
             if (!checkVariable(variable, codeBlock)) {
                 return;
             }
-            final boolean queried = stringBuilderContentsAreQueried(variable, codeBlock);
-            final boolean updated = stringBuilderContentsAreUpdated(variable, codeBlock);
+            boolean queried = stringBuilderContentsAreQueried(variable, codeBlock);
+            boolean updated = stringBuilderContentsAreUpdated(variable, codeBlock);
             if (queried == updated) {
                 return;
             }
@@ -147,7 +147,7 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
         private static boolean stringBuilderContentsAreUpdated(
             PsiVariable variable, PsiElement context
         ) {
-            final PsiExpression initializer = variable.getInitializer();
+            PsiExpression initializer = variable.getInitializer();
             if (initializer != null && !isDefaultConstructorCall(initializer)) {
                 return true;
             }
@@ -162,37 +162,37 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
             if (!(initializer instanceof PsiNewExpression)) {
                 return false;
             }
-            final PsiNewExpression newExpression = (PsiNewExpression) initializer;
-            final PsiJavaCodeReferenceElement classReference = newExpression.getClassReference();
+            PsiNewExpression newExpression = (PsiNewExpression) initializer;
+            PsiJavaCodeReferenceElement classReference = newExpression.getClassReference();
             if (classReference == null) {
                 return false;
             }
-            final PsiElement target = classReference.resolve();
+            PsiElement target = classReference.resolve();
             if (!(target instanceof PsiClass)) {
                 return false;
             }
-            final PsiClass aClass = (PsiClass) target;
-            final String qualifiedName = aClass.getQualifiedName();
+            PsiClass aClass = (PsiClass) target;
+            String qualifiedName = aClass.getQualifiedName();
             if (!CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(qualifiedName) &&
                 !CommonClassNames.JAVA_LANG_STRING_BUFFER.equals(qualifiedName)) {
                 return false;
             }
-            final PsiExpressionList argumentList = newExpression.getArgumentList();
+            PsiExpressionList argumentList = newExpression.getArgumentList();
             if (argumentList == null) {
                 return false;
             }
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length == 0) {
                 return true;
             }
-            final PsiExpression argument = arguments[0];
-            final PsiType argumentType = argument.getType();
+            PsiExpression argument = arguments[0];
+            PsiType argumentType = argument.getType();
             return PsiType.INT.equals(argumentType);
         }
     }
 
     public static boolean isStringBuilderUpdated(PsiVariable variable, PsiElement context) {
-        final StringBuilderUpdateCalledVisitor visitor = new StringBuilderUpdateCalledVisitor(variable);
+        StringBuilderUpdateCalledVisitor visitor = new StringBuilderUpdateCalledVisitor(variable);
         context.accept(visitor);
         return visitor.isUpdated();
     }
@@ -231,12 +231,12 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
                 return;
             }
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final String name = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            String name = methodExpression.getReferenceName();
             if (!updateNames.contains(name)) {
                 return;
             }
-            final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
+            PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
             if (hasReferenceToVariable(variable, qualifierExpression)) {
                 updated = true;
             }
@@ -244,7 +244,7 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
     }
 
     public static boolean isStringBuilderQueried(PsiVariable variable, PsiElement context) {
-        final StringBuilderQueryCalledVisitor visitor = new StringBuilderQueryCalledVisitor(variable);
+        StringBuilderQueryCalledVisitor visitor = new StringBuilderQueryCalledVisitor(variable);
         context.accept(visitor);
         return visitor.isQueried();
     }
@@ -297,20 +297,20 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
                 return;
             }
             super.visitReferenceExpression(expression);
-            final PsiElement parent = ParenthesesUtils.getParentSkipParentheses(expression);
+            PsiElement parent = ParenthesesUtils.getParentSkipParentheses(expression);
             if (!(parent instanceof PsiPolyadicExpression)) {
                 return;
             }
-            final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) parent;
-            final IElementType tokenType = polyadicExpression.getOperationTokenType();
+            PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) parent;
+            IElementType tokenType = polyadicExpression.getOperationTokenType();
             if (!JavaTokenType.PLUS.equals(tokenType)) {
                 return;
             }
-            final PsiElement target = expression.resolve();
+            PsiElement target = expression.resolve();
             if (!variable.equals(target)) {
                 return;
             }
-            final PsiType type = polyadicExpression.getType();
+            PsiType type = polyadicExpression.getType();
             if (type == null || !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
                 return;
             }
@@ -323,9 +323,9 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
                 return;
             }
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final String name = methodExpression.getReferenceName();
-            final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            String name = methodExpression.getReferenceName();
+            PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
             if (!queryNames.contains(name)) {
                 if (returnSelfNames.contains(name) && hasReferenceToVariable(variable, qualifierExpression) && isVariableValueUsed(
                     expression)) {
@@ -340,20 +340,20 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
     }
 
     private static boolean isVariableValueUsed(PsiExpression expression) {
-        final PsiElement parent = expression.getParent();
+        PsiElement parent = expression.getParent();
         if (parent instanceof PsiParenthesizedExpression) {
-            final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) parent;
+            PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) parent;
             return isVariableValueUsed(parenthesizedExpression);
         }
         else if (parent instanceof PsiTypeCastExpression) {
-            final PsiTypeCastExpression typeCastExpression = (PsiTypeCastExpression) parent;
+            PsiTypeCastExpression typeCastExpression = (PsiTypeCastExpression) parent;
             return isVariableValueUsed(typeCastExpression);
         }
         else if (parent instanceof PsiReturnStatement) {
             return true;
         }
         else if (parent instanceof PsiExpressionList) {
-            final PsiElement grandParent = parent.getParent();
+            PsiElement grandParent = parent.getParent();
             if (grandParent instanceof PsiMethodCallExpression) {
                 return true;
             }
@@ -362,13 +362,13 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
             return true;
         }
         else if (parent instanceof PsiAssignmentExpression) {
-            final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) parent;
-            final PsiExpression rhs = assignmentExpression.getRExpression();
+            PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) parent;
+            PsiExpression rhs = assignmentExpression.getRExpression();
             return expression.equals(rhs);
         }
         else if (parent instanceof PsiVariable) {
-            final PsiVariable variable = (PsiVariable) parent;
-            final PsiExpression initializer = variable.getInitializer();
+            PsiVariable variable = (PsiVariable) parent;
+            PsiExpression initializer = variable.getInitializer();
             return expression.equals(initializer);
         }
         return false;
@@ -376,32 +376,32 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
 
     private static boolean hasReferenceToVariable(PsiVariable variable, PsiElement element) {
         if (element instanceof PsiReferenceExpression) {
-            final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) element;
-            final PsiElement target = referenceExpression.resolve();
+            PsiReferenceExpression referenceExpression = (PsiReferenceExpression) element;
+            PsiElement target = referenceExpression.resolve();
             if (variable.equals(target)) {
                 return true;
             }
         }
         else if (element instanceof PsiParenthesizedExpression) {
-            final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) element;
-            final PsiExpression expression = parenthesizedExpression.getExpression();
+            PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) element;
+            PsiExpression expression = parenthesizedExpression.getExpression();
             return hasReferenceToVariable(variable, expression);
         }
         else if (element instanceof PsiMethodCallExpression) {
-            final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) element;
-            final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-            final String name = methodExpression.getReferenceName();
+            PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) element;
+            PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+            String name = methodExpression.getReferenceName();
             if (returnSelfNames.contains(name)) {
                 return hasReferenceToVariable(variable, methodExpression.getQualifierExpression());
             }
         }
         else if (element instanceof PsiConditionalExpression) {
-            final PsiConditionalExpression conditionalExpression = (PsiConditionalExpression) element;
-            final PsiExpression thenExpression = conditionalExpression.getThenExpression();
+            PsiConditionalExpression conditionalExpression = (PsiConditionalExpression) element;
+            PsiExpression thenExpression = conditionalExpression.getThenExpression();
             if (hasReferenceToVariable(variable, thenExpression)) {
                 return true;
             }
-            final PsiExpression elseExpression = conditionalExpression.getElseExpression();
+            PsiExpression elseExpression = conditionalExpression.getElseExpression();
             return hasReferenceToVariable(variable, elseExpression);
         }
         return false;

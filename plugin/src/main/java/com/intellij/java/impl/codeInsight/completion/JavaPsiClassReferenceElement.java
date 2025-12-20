@@ -110,7 +110,7 @@ public class JavaPsiClassReferenceElement extends LookupItem<Object> implements 
   }
 
   @Override
-  public boolean equals(final Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -118,7 +118,7 @@ public class JavaPsiClassReferenceElement extends LookupItem<Object> implements 
       return false;
     }
 
-    final JavaPsiClassReferenceElement that = (JavaPsiClassReferenceElement)o;
+    JavaPsiClassReferenceElement that = (JavaPsiClassReferenceElement)o;
 
     if (myQualifiedName != null) {
       return myQualifiedName.equals(that.myQualifiedName);
@@ -133,7 +133,7 @@ public class JavaPsiClassReferenceElement extends LookupItem<Object> implements 
 
   @Override
   public int hashCode() {
-    final String s = myQualifiedName;
+    String s = myQualifiedName;
     return s == null ? 239 : s.hashCode();
   }
 
@@ -175,7 +175,7 @@ public class JavaPsiClassReferenceElement extends LookupItem<Object> implements 
     return " (" + myPackageDisplayName + ")";
   }
 
-  private static String getName(final PsiClass psiClass, final LookupElement item, boolean diamond, @Nonnull PsiSubstitutor substitutor) {
+  private static String getName(PsiClass psiClass, LookupElement item, boolean diamond, @Nonnull PsiSubstitutor substitutor) {
     String forced =
       item instanceof JavaPsiClassReferenceElement ? ((JavaPsiClassReferenceElement)item).getForcedPresentableName() : item instanceof PsiTypeLookupItem ? ((PsiTypeLookupItem)
         item).getForcedPresentableName() : null;
@@ -189,7 +189,7 @@ public class JavaPsiClassReferenceElement extends LookupItem<Object> implements 
     }
 
     if (substitutor != PsiSubstitutor.EMPTY) {
-      final PsiTypeParameter[] params = psiClass.getTypeParameters();
+      PsiTypeParameter[] params = psiClass.getTypeParameters();
       if (params.length > 0) {
         return name + formatTypeParameters(substitutor, params);
       }
@@ -199,13 +199,13 @@ public class JavaPsiClassReferenceElement extends LookupItem<Object> implements 
   }
 
   @Nullable
-  private static String formatTypeParameters(@Nonnull final PsiSubstitutor substitutor, final PsiTypeParameter[] params) {
-    final boolean space = showSpaceAfterComma(params[0]);
+  private static String formatTypeParameters(@Nonnull PsiSubstitutor substitutor, PsiTypeParameter[] params) {
+    boolean space = showSpaceAfterComma(params[0]);
     StringBuilder buffer = new StringBuilder();
     buffer.append("<");
     for (int i = 0; i < params.length; i++) {
-      final PsiTypeParameter param = params[i];
-      final PsiType type = substitutor.substitute(param);
+      PsiTypeParameter param = params[i];
+      PsiType type = substitutor.substitute(param);
       if (type == null) {
         return "";
       }

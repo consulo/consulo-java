@@ -34,8 +34,8 @@ public class ForLoopThatDoesntUseLoopVariableInspection extends BaseInspection {
 
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final boolean condition = ((Boolean) infos[0]).booleanValue();
-        final boolean update = ((Boolean) infos[1]).booleanValue();
+        boolean condition = ((Boolean) infos[0]).booleanValue();
+        boolean update = ((Boolean) infos[1]).booleanValue();
         if (condition && update) {
             return InspectionGadgetsLocalize.forLoopNotUseLoopVariableProblemDescriptorBothConditionAndUpdate().get();
         }
@@ -79,8 +79,8 @@ public class ForLoopThatDoesntUseLoopVariableInspection extends BaseInspection {
         private static boolean conditionUsesInitializer(
             PsiForStatement statement
         ) {
-            final PsiStatement initialization = statement.getInitialization();
-            final PsiExpression condition = statement.getCondition();
+            PsiStatement initialization = statement.getInitialization();
+            PsiExpression condition = statement.getCondition();
 
             if (initialization == null) {
                 return true;
@@ -91,9 +91,9 @@ public class ForLoopThatDoesntUseLoopVariableInspection extends BaseInspection {
             if (!(initialization instanceof PsiDeclarationStatement)) {
                 return true;
             }
-            final PsiDeclarationStatement declaration =
+            PsiDeclarationStatement declaration =
                 (PsiDeclarationStatement) initialization;
-            final PsiElement[] declaredElements =
+            PsiElement[] declaredElements =
                 declaration.getDeclaredElements();
             if (declaredElements.length != 1) {
                 return true;
@@ -102,14 +102,14 @@ public class ForLoopThatDoesntUseLoopVariableInspection extends BaseInspection {
                 !(declaredElements[0] instanceof PsiLocalVariable)) {
                 return true;
             }
-            final PsiLocalVariable localVar =
+            PsiLocalVariable localVar =
                 (PsiLocalVariable) declaredElements[0];
             return expressionUsesVariable(condition, localVar);
         }
 
         private static boolean updateUsesInitializer(PsiForStatement statement) {
-            final PsiStatement initialization = statement.getInitialization();
-            final PsiStatement update = statement.getUpdate();
+            PsiStatement initialization = statement.getInitialization();
+            PsiStatement update = statement.getUpdate();
 
             if (initialization == null) {
                 return true;
@@ -120,9 +120,9 @@ public class ForLoopThatDoesntUseLoopVariableInspection extends BaseInspection {
             if (!(initialization instanceof PsiDeclarationStatement)) {
                 return true;
             }
-            final PsiDeclarationStatement declaration =
+            PsiDeclarationStatement declaration =
                 (PsiDeclarationStatement) initialization;
-            final PsiElement[] declaredElements =
+            PsiElement[] declaredElements =
                 declaration.getDeclaredElements();
             if (declaredElements.length != 1) {
                 return true;
@@ -131,7 +131,7 @@ public class ForLoopThatDoesntUseLoopVariableInspection extends BaseInspection {
                 !(declaredElements[0] instanceof PsiLocalVariable)) {
                 return true;
             }
-            final PsiLocalVariable localVar =
+            PsiLocalVariable localVar =
                 (PsiLocalVariable) declaredElements[0];
             return statementUsesVariable(update, localVar);
         }
@@ -140,7 +140,7 @@ public class ForLoopThatDoesntUseLoopVariableInspection extends BaseInspection {
             PsiStatement statement,
             PsiLocalVariable localVar
         ) {
-            final UseVisitor useVisitor = new UseVisitor(localVar);
+            UseVisitor useVisitor = new UseVisitor(localVar);
             statement.accept(useVisitor);
             return useVisitor.isUsed();
         }
@@ -149,7 +149,7 @@ public class ForLoopThatDoesntUseLoopVariableInspection extends BaseInspection {
             PsiExpression expression,
             PsiLocalVariable localVar
         ) {
-            final UseVisitor useVisitor = new UseVisitor(localVar);
+            UseVisitor useVisitor = new UseVisitor(localVar);
             expression.accept(useVisitor);
             return useVisitor.isUsed();
         }
@@ -180,7 +180,7 @@ public class ForLoopThatDoesntUseLoopVariableInspection extends BaseInspection {
                 return;
             }
             super.visitReferenceExpression(ref);
-            final PsiElement resolvedElement = ref.resolve();
+            PsiElement resolvedElement = ref.resolve();
             if (variable.equals(resolvedElement)) {
                 used = true;
             }

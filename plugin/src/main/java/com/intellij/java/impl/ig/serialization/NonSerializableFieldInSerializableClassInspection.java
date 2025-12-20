@@ -59,7 +59,7 @@ public class NonSerializableFieldInSerializableClassInspection extends Serializa
     @Nonnull
     @Override
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
-        final PsiField field = (PsiField) infos[0];
+        PsiField field = (PsiField) infos[0];
         return AddToIgnoreIfAnnotatedByListQuickFix.build(field, ignorableAnnotations);
     }
 
@@ -74,7 +74,7 @@ public class NonSerializableFieldInSerializableClassInspection extends Serializa
             if (field.hasModifierProperty(PsiModifier.TRANSIENT) || field.hasModifierProperty(PsiModifier.STATIC)) {
                 return;
             }
-            final PsiClass aClass = field.getContainingClass();
+            PsiClass aClass = field.getContainingClass();
             if (aClass == null) {
                 return;
             }
@@ -87,7 +87,7 @@ public class NonSerializableFieldInSerializableClassInspection extends Serializa
             if (SerializationUtils.isProbablySerializable(field.getType())) {
                 return;
             }
-            final boolean hasWriteObject = SerializationUtils.hasWriteObject(aClass);
+            boolean hasWriteObject = SerializationUtils.hasWriteObject(aClass);
             if (hasWriteObject) {
                 return;
             }

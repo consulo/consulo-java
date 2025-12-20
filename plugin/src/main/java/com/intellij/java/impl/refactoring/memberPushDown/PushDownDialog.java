@@ -94,7 +94,7 @@ public class PushDownDialog extends RefactoringDialog {
 
   protected JComponent createCenterPanel() {
     JPanel panel = new JPanel(new BorderLayout());
-    final MemberSelectionPanel memberSelectionPanel = new MemberSelectionPanel(
+    MemberSelectionPanel memberSelectionPanel = new MemberSelectionPanel(
       RefactoringLocalize.membersToBePushedDownPanelTitle().get(),
       myMemberInfos,
       RefactoringLocalize.keepAbstractColumnHeader().get()

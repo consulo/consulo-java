@@ -35,7 +35,7 @@ public class IntroduceParameterRefactoringImpl extends RefactoringImpl<Introduce
                                             PsiMethod methodToSearchFor,
                                             String parameterName, PsiExpression parameterInitializer,
                                             PsiExpression expressionToSearch, PsiLocalVariable localVariable,
-                                            boolean removeLocalVariable, boolean declareFinal, final boolean replaceAllOccurences) {
+                                            boolean removeLocalVariable, boolean declareFinal, boolean replaceAllOccurences) {
     super(
       new IntroduceParameterProcessor(project, methodToReplaceIn, methodToSearchFor,
                                       parameterInitializer, expressionToSearch, localVariable, removeLocalVariable, parameterName, replaceAllOccurences,
@@ -57,7 +57,7 @@ public class IntroduceParameterRefactoringImpl extends RefactoringImpl<Introduce
                                     PsiMethod methodToSearchFor,
                                     String parameterName, PsiExpression parameterInitializer,
                                     PsiExpression expressionToSearchFor,
-                                    boolean declareFinal, final boolean replaceAllOccurences) {
+                                    boolean declareFinal, boolean replaceAllOccurences) {
     this(project, methodToReplaceIn, methodToSearchFor, parameterName, parameterInitializer, expressionToSearchFor, null, false, declareFinal, replaceAllOccurences);
 
   }

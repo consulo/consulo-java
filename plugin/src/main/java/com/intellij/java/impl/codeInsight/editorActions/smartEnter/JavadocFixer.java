@@ -37,27 +37,27 @@ public class JavadocFixer
 	public boolean process(@Nonnull Editor editor, @Nonnull PsiFile psiFile)
 	{
 		// Check parameter description completion.
-		final CaretModel caretModel = editor.getCaretModel();
-		final Pair<JavadocHelper.JavadocParameterInfo, List<JavadocHelper.JavadocParameterInfo>> pair = myHelper.parse(psiFile, editor, caretModel.getOffset());
+		CaretModel caretModel = editor.getCaretModel();
+		Pair<JavadocHelper.JavadocParameterInfo, List<JavadocHelper.JavadocParameterInfo>> pair = myHelper.parse(psiFile, editor, caretModel.getOffset());
 
 		if(pair.first == null)
 		{
 			return false;
 		}
 
-		final JavadocHelper.JavadocParameterInfo next = findNext(pair.second, pair.first);
+		JavadocHelper.JavadocParameterInfo next = findNext(pair.second, pair.first);
 		if(next == null)
 		{
-			final int line = pair.first.lastLine + 1;
-			final Document document = editor.getDocument();
+			int line = pair.first.lastLine + 1;
+			Document document = editor.getDocument();
 			if(line < document.getLineCount())
 			{
 				StringBuilder indent = new StringBuilder();
 				boolean insertIndent = true;
-				final CharSequence text = document.getCharsSequence();
+				CharSequence text = document.getCharsSequence();
 				for(int i = document.getLineStartOffset(line), max = document.getLineEndOffset(line); i < max; i++)
 				{
-					final char c = text.charAt(i);
+					char c = text.charAt(i);
 					if(c == ' ' || c == '\t')
 					{
 						indent.append(c);
@@ -89,7 +89,7 @@ public class JavadocFixer
 		}
 		else
 		{
-			final LogicalPosition position = myHelper.calculateDescriptionStartPosition(psiFile, pair.second, next);
+			LogicalPosition position = myHelper.calculateDescriptionStartPosition(psiFile, pair.second, next);
 			myHelper.navigate(position, editor, psiFile.getProject());
 		}
 		return true;
@@ -97,8 +97,8 @@ public class JavadocFixer
 
 	private static void moveCaretToTheLineEndIfPossible(@Nonnull Editor editor, int line)
 	{
-		final Document document = editor.getDocument();
-		final CaretModel caretModel = editor.getCaretModel();
+		Document document = editor.getDocument();
+		CaretModel caretModel = editor.getCaretModel();
 		int offset;
 		if(line >= document.getLineCount())
 		{

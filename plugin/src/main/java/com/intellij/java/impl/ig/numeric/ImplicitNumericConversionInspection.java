@@ -75,7 +75,7 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
 
   @Override
   public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
+    MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
     optionsPanel.addCheckbox(
       InspectionGadgetsLocalize.implicitNumericConversionIgnoreWideningConversionOption().get(),
       "ignoreWideningConversions"
@@ -93,8 +93,8 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final PsiType type = (PsiType)infos[1];
-    final PsiType expectedType = (PsiType)infos[2];
+    PsiType type = (PsiType)infos[1];
+    PsiType expectedType = (PsiType)infos[2];
     return InspectionGadgetsLocalize.implicitNumericConversionProblemDescriptor(
         type.getPresentableText(),
         expectedType.getPresentableText()
@@ -128,20 +128,20 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
 
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor) {
-      final PsiExpression expression = (PsiExpression)descriptor.getPsiElement();
-      final PsiType expectedType = ExpectedTypeUtils.findExpectedType(expression, true);
+      PsiExpression expression = (PsiExpression)descriptor.getPsiElement();
+      PsiType expectedType = ExpectedTypeUtils.findExpectedType(expression, true);
       if (expectedType == null) {
         return;
       }
       if (isConvertible(expression, expectedType)) {
-        final String newExpression = convertExpression(expression, expectedType);
+        String newExpression = convertExpression(expression, expectedType);
         if (newExpression == null) {
           return;
         }
         replaceExpression(expression, newExpression);
       }
       else {
-        final String newExpression;
+        String newExpression;
         if (ParenthesesUtils.getPrecedence(expression) <= ParenthesesUtils.TYPE_CAST_PRECEDENCE) {
           newExpression = '(' + expectedType.getCanonicalText() + ')' + expression.getText();
         }
@@ -155,7 +155,7 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
     @Nullable
     @NonNls
     private static String convertExpression(PsiExpression expression, PsiType expectedType) {
-      final PsiType expressionType = expression.getType();
+      PsiType expressionType = expression.getType();
       if (expressionType == null) {
         return null;
       }
@@ -169,18 +169,18 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
         return expression.getText() + ".0";
       }
       if (expressionType.equals(PsiType.LONG) && expectedType.equals(PsiType.FLOAT)) {
-        final String text = expression.getText();
-        final int length = text.length();
+        String text = expression.getText();
+        int length = text.length();
         return text.substring(0, length - 1) + ".0F";
       }
       if (expressionType.equals(PsiType.LONG) && expectedType.equals(PsiType.DOUBLE)) {
-        final String text = expression.getText();
-        final int length = text.length();
+        String text = expression.getText();
+        int length = text.length();
         return text.substring(0, length - 1) + ".0";
       }
       if (expressionType.equals(PsiType.DOUBLE) && expectedType.equals(PsiType.FLOAT)) {
-        final String text = expression.getText();
-        final int length = text.length();
+        String text = expression.getText();
+        int length = text.length();
         if (text.charAt(length - 1) == 'd' || text.charAt(length - 1) == 'D') {
           return text.substring(0, length - 1) + 'F';
         }
@@ -189,8 +189,8 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
         }
       }
       if (expressionType.equals(PsiType.FLOAT) && expectedType.equals(PsiType.DOUBLE)) {
-        final String text = expression.getText();
-        final int length = text.length();
+        String text = expression.getText();
+        int length = text.length();
         return text.substring(0, length - 1);
       }
       return null;   //can't happen
@@ -200,7 +200,7 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
       if (!(expression instanceof PsiLiteralExpression) && !isNegatedLiteral(expression)) {
         return false;
       }
-      final PsiType expressionType = expression.getType();
+      PsiType expressionType = expression.getType();
       if (expressionType == null) {
         return false;
       }
@@ -220,12 +220,12 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
       if (!(expression instanceof PsiPrefixExpression)) {
         return false;
       }
-      final PsiPrefixExpression prefixExpression = (PsiPrefixExpression)expression;
-      final IElementType tokenType = prefixExpression.getOperationTokenType();
+      PsiPrefixExpression prefixExpression = (PsiPrefixExpression)expression;
+      IElementType tokenType = prefixExpression.getOperationTokenType();
       if (!JavaTokenType.MINUS.equals(tokenType)) {
         return false;
       }
-      final PsiExpression operand = prefixExpression.getOperand();
+      PsiExpression operand = prefixExpression.getOperand();
       return operand instanceof PsiLiteralExpression;
     }
 
@@ -301,28 +301,28 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
     }
 
     private void checkExpression(PsiExpression expression) {
-      final PsiElement parent = expression.getParent();
+      PsiElement parent = expression.getParent();
       if (parent instanceof PsiParenthesizedExpression) {
         return;
       }
       if (ignoreConstantConversions) {
         PsiExpression rootExpression = expression;
         while (rootExpression instanceof PsiParenthesizedExpression) {
-          final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression)rootExpression;
+          PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression)rootExpression;
           rootExpression = parenthesizedExpression.getExpression();
         }
         if (rootExpression instanceof PsiLiteralExpression || PsiUtil.isConstantExpression(rootExpression)) {
           return;
         }
       }
-      final PsiType expressionType = expression.getType();
+      PsiType expressionType = expression.getType();
       if (expressionType == null || !ClassUtils.isPrimitiveNumericType(expressionType)) {
         return;
       }
       if (PsiType.CHAR.equals(expressionType) && (ignoreCharConversions || isArgumentOfStringIndexOf(parent))) {
         return;
       }
-      final PsiType expectedType = ExpectedTypeUtils.findExpectedType(expression, true);
+      PsiType expectedType = ExpectedTypeUtils.findExpectedType(expression, true);
       if (!ClassUtils.isPrimitiveNumericType(expectedType)) {
         return;
       }
@@ -342,32 +342,32 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
       if (!(parent instanceof PsiExpressionList)) {
         return false;
       }
-      final PsiElement grandParent = parent.getParent();
+      PsiElement grandParent = parent.getParent();
       if (!(grandParent instanceof PsiMethodCallExpression)) {
         return false;
       }
-      final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)grandParent;
-      final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
+      PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)grandParent;
+      PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+      String methodName = methodExpression.getReferenceName();
       if (!HardcodedMethodConstants.INDEX_OF.equals(methodName) && !HardcodedMethodConstants.LAST_INDEX_OF.equals(methodName)) {
         return false;
       }
-      final PsiMethod method = methodCallExpression.resolveMethod();
+      PsiMethod method = methodCallExpression.resolveMethod();
       if (method == null) {
         return false;
       }
-      final PsiClass aClass = method.getContainingClass();
+      PsiClass aClass = method.getContainingClass();
       if (aClass == null) {
         return false;
       }
-      final String className = aClass.getQualifiedName();
+      String className = aClass.getQualifiedName();
       return CommonClassNames.JAVA_LANG_STRING.equals(className);
     }
   }
 
   static boolean hasLowerPrecision(PsiType expressionType, PsiType expectedType) {
-    final int operandPrecision = typePrecisions.getInt(expressionType);
-    final int castPrecision = typePrecisions.getInt(expectedType);
+    int operandPrecision = typePrecisions.getInt(expressionType);
+    int castPrecision = typePrecisions.getInt(expectedType);
     return operandPrecision <= castPrecision;
   }
 }

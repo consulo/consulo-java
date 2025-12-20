@@ -146,7 +146,7 @@ public abstract class UnusedDeclarationTest extends InspectionTestCase
 
 	public void testAdditionalAnnotations()
 	{
-		final String testAnnotation = "Annotated";
+		String testAnnotation = "Annotated";
 		EntryPointsManagerImpl.getInstance(getProject()).ADDITIONAL_ANNOTATIONS.add(testAnnotation);
 		try
 		{

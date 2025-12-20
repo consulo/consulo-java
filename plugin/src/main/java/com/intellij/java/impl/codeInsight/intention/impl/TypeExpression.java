@@ -36,10 +36,10 @@ import java.util.List;
 public class TypeExpression extends Expression {
   private final LinkedHashSet<SmartTypePointer> myItems;
 
-  public TypeExpression(final Project project, PsiType[] types) {
-    final SmartTypePointerManager manager = SmartTypePointerManager.getInstance(project);
+  public TypeExpression(Project project, PsiType[] types) {
+    SmartTypePointerManager manager = SmartTypePointerManager.getInstance(project);
     myItems = new LinkedHashSet<SmartTypePointer>();
-    for (final PsiType type : types) {
+    for (PsiType type : types) {
       myItems.add(manager.createSmartTypePointer(type));
     }
   }
@@ -79,8 +79,8 @@ public class TypeExpression extends Expression {
     PsiDocumentManager.getInstance(context.getProject()).commitAllDocuments();
     
     List<LookupElement> result = new ArrayList<LookupElement>(myItems.size());
-    for (final SmartTypePointer item : myItems) {
-      final PsiType type = item.getType();
+    for (SmartTypePointer item : myItems) {
+      PsiType type = item.getType();
       if (type != null) {
         result.add(PsiTypeLookupItem.createLookupItem(type, null));
       }

@@ -24,7 +24,7 @@ public class JavaExpressionContextType extends JavaCodeContextType implements Ja
   }
 
   static boolean isExpressionContext(PsiElement element) {
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!(parent instanceof PsiJavaCodeReferenceElement)) {
       return false;
     }

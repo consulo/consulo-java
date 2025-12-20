@@ -44,8 +44,8 @@ public class SynchronizedOnLiteralObjectInspection extends BaseInspection {
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    final String typeText = ((PsiType)infos[0]).getPresentableText();
-    final int message = (Integer)infos[1];
+    String typeText = ((PsiType)infos[0]).getPresentableText();
+    int message = (Integer)infos[1];
     switch (message) {
       case 1:
         return InspectionGadgetsLocalize.synchronizedOnLiteralObjectProblemDescriptor(typeText).get();
@@ -75,18 +75,18 @@ public class SynchronizedOnLiteralObjectInspection extends BaseInspection {
     @Override
     public void visitSynchronizedStatement(@Nonnull PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
-      final PsiExpression lockExpression = statement.getLockExpression();
+      PsiExpression lockExpression = statement.getLockExpression();
       if (lockExpression == null) {
         return;
       }
-      final PsiType type = lockExpression.getType();
+      PsiType type = lockExpression.getType();
       if (type == null) {
         return;
       }
       if (!type.equalsToText(CommonClassNames.JAVA_LANG_STRING) &&
           !type.equalsToText(CommonClassNames.JAVA_LANG_BOOLEAN) &&
           !type.equalsToText(CommonClassNames.JAVA_LANG_CHARACTER)) {
-        final PsiClassType javaLangNumberType = TypeUtils.getType(CommonClassNames.JAVA_LANG_NUMBER, statement);
+        PsiClassType javaLangNumberType = TypeUtils.getType(CommonClassNames.JAVA_LANG_NUMBER, statement);
         if (!javaLangNumberType.isAssignableFrom(type)) {
           return;
         }
@@ -100,16 +100,16 @@ public class SynchronizedOnLiteralObjectInspection extends BaseInspection {
         }
         return;
       }
-      final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)lockExpression;
-      final PsiElement target = referenceExpression.resolve();
+      PsiReferenceExpression referenceExpression = (PsiReferenceExpression)lockExpression;
+      PsiElement target = referenceExpression.resolve();
       if (!(target instanceof PsiVariable)) {
         if (warnOnAllPossiblyLiterals) {
           registerError(lockExpression, type, Integer.valueOf(3));
         }
         return;
       }
-      final PsiVariable variable = (PsiVariable)target;
-      final PsiExpression initializer = variable.getInitializer();
+      PsiVariable variable = (PsiVariable)target;
+      PsiExpression initializer = variable.getInitializer();
       if (!ExpressionUtils.isLiteral(initializer)) {
         if (warnOnAllPossiblyLiterals) {
           registerError(lockExpression, type, Integer.valueOf(3));

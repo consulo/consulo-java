@@ -61,7 +61,7 @@ public class PsiFieldNode extends BasePsiMemberNode<PsiField>{
 
   @Override
   public String getTitle() {
-    final PsiField field = getValue();
+    PsiField field = getValue();
     if (field != null) {
       PsiClass aClass = field.getContainingClass();
       if (aClass != null) {

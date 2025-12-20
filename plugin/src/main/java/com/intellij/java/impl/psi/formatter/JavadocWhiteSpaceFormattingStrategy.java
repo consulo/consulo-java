@@ -30,7 +30,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class JavadocWhiteSpaceFormattingStrategy extends WhiteSpaceFormattingStrategyAdapter {
   @Override
-  public boolean containsWhitespacesOnly(@Nonnull final ASTNode node) {
+  public boolean containsWhitespacesOnly(@Nonnull ASTNode node) {
     return node.getElementType() == JavaDocTokenType.DOC_COMMENT_DATA && node.textContains('\n') && node.getText().trim().length() == 0;
   }
 

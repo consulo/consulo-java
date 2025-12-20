@@ -27,8 +27,8 @@ class ReplacePostfixExpressionWithOperatorAssignmentPredicate implements PsiElem
     if (!(element instanceof PsiPostfixExpression)) {
       return false;
     }
-    final PsiPostfixExpression postfixExpression = (PsiPostfixExpression)element;
-    final IElementType tokenType = postfixExpression.getOperationTokenType();
+    PsiPostfixExpression postfixExpression = (PsiPostfixExpression)element;
+    IElementType tokenType = postfixExpression.getOperationTokenType();
     return !(!JavaTokenType.PLUSPLUS.equals(tokenType) && !JavaTokenType.MINUSMINUS.equals(tokenType));
   }
 }

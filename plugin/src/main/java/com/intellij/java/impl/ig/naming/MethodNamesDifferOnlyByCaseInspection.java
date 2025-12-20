@@ -83,21 +83,21 @@ public class MethodNamesDifferOnlyByCaseInspection extends BaseInspection {
             if (method.isConstructor()) {
                 return;
             }
-            final PsiIdentifier nameIdentifier = method.getNameIdentifier();
+            PsiIdentifier nameIdentifier = method.getNameIdentifier();
             if (nameIdentifier == null) {
                 return;
             }
-            final String methodName = method.getName();
+            String methodName = method.getName();
             if (ignoreIfMethodIsOverride && MethodUtils.hasSuper(method)) {
                 return;
             }
-            final PsiClass aClass = method.getContainingClass();
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null) {
                 return;
             }
-            final PsiMethod[] methods = aClass.getAllMethods();
+            PsiMethod[] methods = aClass.getAllMethods();
             for (PsiMethod testMethod : methods) {
-                final String testMethodName = testMethod.getName();
+                String testMethodName = testMethod.getName();
                 if (!methodName.equals(testMethodName) && methodName.equalsIgnoreCase(testMethodName)) {
                     registerError(nameIdentifier, testMethodName);
                 }

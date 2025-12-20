@@ -30,7 +30,7 @@ public abstract class RedundantThrowTest extends InspectionTestCase {
   }
 
   private void doTest(boolean checkRange) throws Exception {
-    final RedundantThrows tool = new RedundantThrows();
+    RedundantThrows tool = new RedundantThrows();
     doTest("redundantThrow/" + getTestName(false), tool, checkRange);
   }
 
@@ -45,7 +45,7 @@ public abstract class RedundantThrowTest extends InspectionTestCase {
   public void testRemote() throws Exception { doTest(); }
 
   public void testEntryPoint() throws Exception {
-    final RedundantThrows tool = new RedundantThrows();
+    RedundantThrows tool = new RedundantThrows();
     doTest("redundantThrow/" + getTestName(true), tool, false, true);
   }
 

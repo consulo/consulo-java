@@ -44,22 +44,22 @@ public class ReplaceInstanceVariableAssignment extends FixableUsageInfo {
   }
 
   public void fixUsage() throws IncorrectOperationException {
-    final PsiReferenceExpression lhs =
+    PsiReferenceExpression lhs =
       (PsiReferenceExpression)assignment.getLExpression();
-    final PsiExpression rhs = assignment.getRExpression();
+    PsiExpression rhs = assignment.getRExpression();
     assert rhs != null;
-    final PsiElement qualifier = lhs.getQualifier();
-    final PsiJavaToken sign = assignment.getOperationSign();
-    final String operator = sign.getText();
-    final String rhsText = rhs.getText();
-    final String newExpression;
+    PsiElement qualifier = lhs.getQualifier();
+    PsiJavaToken sign = assignment.getOperationSign();
+    String operator = sign.getText();
+    String rhsText = rhs.getText();
+    String newExpression;
     if (qualifier != null) {
-      final String qualifierText = qualifier.getText();
+      String qualifierText = qualifier.getText();
       if ("=".equals(operator)) {
         newExpression = qualifierText + '.' + delegateName + '.' + callSetter(rhsText);
       }
       else {
-        final String strippedOperator = getStrippedOperator(operator);
+        String strippedOperator = getStrippedOperator(operator);
         newExpression = qualifierText +
                         '.' +
                         delegateName +
@@ -77,7 +77,7 @@ public class ReplaceInstanceVariableAssignment extends FixableUsageInfo {
         newExpression = delegateName + '.' + callSetter(rhsText);
       }
       else {
-        final String strippedOperator = getStrippedOperator(operator);
+        String strippedOperator = getStrippedOperator(operator);
         newExpression = delegateName + '.' + callSetter(delegateName + '.' + callGetter() + strippedOperator + rhsText);
       }
     }

@@ -8,7 +8,7 @@ import consulo.language.editor.intention.IntentionAction;
  */
 public abstract class LightQuickFixAvailabilityTestCase extends LightQuickFixTestCase {
   @Override
-  protected void doAction(final String text, final boolean actionShouldBeAvailable, final String testFullPath, final String testName)
+  protected void doAction(String text, boolean actionShouldBeAvailable, String testFullPath, String testName)
     throws Exception {
     IntentionAction action = findActionWithText(text);
     assertTrue("Action with text '" + text + "' is " + (action == null ? "not " :"") +

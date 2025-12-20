@@ -35,10 +35,10 @@ public class RetargetStaticMethodCall extends FixableUsageInfo {
     }
 
     public void fixUsage() throws IncorrectOperationException {
-        final PsiReferenceExpression methodExpression = call.getMethodExpression();
-        final PsiExpression qualifier = (PsiExpression) methodExpression.getQualifier();
+        PsiReferenceExpression methodExpression = call.getMethodExpression();
+        PsiExpression qualifier = (PsiExpression) methodExpression.getQualifier();
         if (qualifier == null) {
-          final PsiElement resolveScope = call.resolveMethodGenerics().getCurrentFileResolveScope();
+          PsiElement resolveScope = call.resolveMethodGenerics().getCurrentFileResolveScope();
           if (!(resolveScope instanceof PsiImportStaticStatement)) {
             MutationUtils.replaceExpression(delegateClassName + '.' + call.getText(), call);
           }

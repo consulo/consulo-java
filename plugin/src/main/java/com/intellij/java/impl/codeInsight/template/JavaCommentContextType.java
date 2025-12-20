@@ -33,7 +33,7 @@ public class JavaCommentContextType extends BaseTemplateContextType {
   }
 
   @Override
-  public boolean isInContext(@Nonnull final PsiFile file, final int offset) {
+  public boolean isInContext(@Nonnull PsiFile file, int offset) {
     if (PsiUtilCore.getLanguageAtOffset(file, offset).isKindOf(JavaLanguage.INSTANCE)) {
       PsiElement element = file.findElementAt(offset);
       if (element instanceof PsiWhiteSpace && offset > 0) {

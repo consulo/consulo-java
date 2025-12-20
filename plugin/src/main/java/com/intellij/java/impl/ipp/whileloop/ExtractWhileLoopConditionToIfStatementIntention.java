@@ -44,38 +44,38 @@ public class ExtractWhileLoopConditionToIfStatementIntention extends Intention {
 
     protected void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiWhileStatement whileStatement =
+        PsiWhileStatement whileStatement =
             (PsiWhileStatement) element.getParent();
         if (whileStatement == null) {
             return;
         }
-        final PsiExpression condition = whileStatement.getCondition();
+        PsiExpression condition = whileStatement.getCondition();
         if (condition == null) {
             return;
         }
-        final String conditionText = condition.getText();
-        final PsiManager manager = whileStatement.getManager();
-        final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-        final PsiExpression newCondition =
+        String conditionText = condition.getText();
+        PsiManager manager = whileStatement.getManager();
+        PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
+        PsiExpression newCondition =
             factory.createExpressionFromText("true", whileStatement);
         condition.replace(newCondition);
-        final PsiStatement body = whileStatement.getBody();
-        final String ifStatementText = "if (!(" + conditionText + ")) break;";
-        final PsiStatement ifStatement =
+        PsiStatement body = whileStatement.getBody();
+        String ifStatementText = "if (!(" + conditionText + ")) break;";
+        PsiStatement ifStatement =
             factory.createStatementFromText(ifStatementText,
                 whileStatement);
-        final PsiElement newElement;
+        PsiElement newElement;
         if (body instanceof PsiBlockStatement) {
-            final PsiBlockStatement blockStatement = (PsiBlockStatement) body;
-            final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
-            final PsiElement bodyElement = codeBlock.getFirstBodyElement();
+            PsiBlockStatement blockStatement = (PsiBlockStatement) body;
+            PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
+            PsiElement bodyElement = codeBlock.getFirstBodyElement();
             newElement = codeBlock.addBefore(ifStatement, bodyElement);
         }
         else if (body != null) {
-            final PsiBlockStatement blockStatement =
+            PsiBlockStatement blockStatement =
                 (PsiBlockStatement) factory.createStatementFromText("{}",
                     whileStatement);
-            final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
+            PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
             codeBlock.add(ifStatement);
             if (!(body instanceof PsiEmptyStatement)) {
                 codeBlock.add(body);
@@ -85,7 +85,7 @@ public class ExtractWhileLoopConditionToIfStatementIntention extends Intention {
         else {
             return;
         }
-        final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(manager.getProject());
+        CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(manager.getProject());
         codeStyleManager.reformat(newElement);
     }
 }

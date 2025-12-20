@@ -348,8 +348,8 @@ public class JDParser {
   }
 
   @Nonnull
-  private static String removeWhiteSpacesFrom(@Nonnull final String token) {
-    final StringBuilder result = new StringBuilder();
+  private static String removeWhiteSpacesFrom(@Nonnull String token) {
+    StringBuilder result = new StringBuilder();
     for (char c : token.toCharArray()) {
       if (c != ' ') {
         result.append(c);
@@ -630,10 +630,10 @@ public class JDParser {
   protected StringBuilder formatJDTagDescription(@Nullable String str,
                                                  @Nonnull CharSequence firstLinePrefix,
                                                  @Nonnull CharSequence continuationPrefix) {
-    final int rightMargin = myCommonSettings.getRootSettings().getRightMargin(JavaLanguage.INSTANCE);
-    final int maxCommentLength = rightMargin - continuationPrefix.length();
-    final int firstLinePrefixLength = firstLinePrefix.length();
-    final boolean firstLineShorter = firstLinePrefixLength > continuationPrefix.length();
+    int rightMargin = myCommonSettings.getRootSettings().getRightMargin(JavaLanguage.INSTANCE);
+    int maxCommentLength = rightMargin - continuationPrefix.length();
+    int firstLinePrefixLength = firstLinePrefix.length();
+    boolean firstLineShorter = firstLinePrefixLength > continuationPrefix.length();
 
     StringBuilder sb = new StringBuilder(firstLinePrefix);
     List<String> list;

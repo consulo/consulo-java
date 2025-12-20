@@ -75,11 +75,11 @@ class AddModuleDependencyFix extends AddOrderEntryFix {
         myClasses = classes;
         myModules = new LinkedHashSet<>();
 
-        final PsiElement psiElement = reference.getElement();
-        final Project project = psiElement.getProject();
-        final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-        final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
-        final ModuleRootManager rootManager = ModuleRootManager.getInstance(currentModule);
+        PsiElement psiElement = reference.getElement();
+        Project project = psiElement.getProject();
+        JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
+        ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
+        ModuleRootManager rootManager = ModuleRootManager.getInstance(currentModule);
         for (PsiClass aClass : classes) {
             if (!facade.getResolveHelper().isAccessible(aClass, psiElement, aClass)) {
                 continue;
@@ -111,7 +111,7 @@ class AddModuleDependencyFix extends AddOrderEntryFix {
     @Override
     public LocalizeValue getText() {
         if (myModules.size() == 1) {
-            final Module module = ContainerUtil.getFirstItem(myModules);
+            Module module = ContainerUtil.getFirstItem(myModules);
             LOG.assertTrue(module != null);
             return JavaQuickFixLocalize.orderentryFixAddDependencyOnModule(module.getName());
         }

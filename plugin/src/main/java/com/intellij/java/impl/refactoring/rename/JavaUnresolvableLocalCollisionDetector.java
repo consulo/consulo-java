@@ -30,7 +30,7 @@ public class JavaUnresolvableLocalCollisionDetector {
   private JavaUnresolvableLocalCollisionDetector() {
   }
 
-  public static void findCollisions(final PsiElement element, final String newName, final List<UsageInfo> result) {
+  public static void findCollisions(final PsiElement element, String newName, final List<UsageInfo> result) {
     if (!(element instanceof PsiLocalVariable || element instanceof PsiParameter)) {
       return;
     }
@@ -50,7 +50,7 @@ public class JavaUnresolvableLocalCollisionDetector {
     }
     LOG.assertTrue(scope != null, element.getClass().getName());
 
-    final CollidingVariableVisitor collidingNameVisitor = new CollidingVariableVisitor() {
+    CollidingVariableVisitor collidingNameVisitor = new CollidingVariableVisitor() {
       public void visitCollidingElement(PsiVariable collidingVariable) {
         if (collidingVariable.equals(element)) return;
         LocalHidesRenamedLocalUsageInfo collision = new LocalHidesRenamedLocalUsageInfo(element, collidingVariable);
@@ -71,17 +71,17 @@ public class JavaUnresolvableLocalCollisionDetector {
     }*/
   }
 
-  public static void visitLocalsCollisions(PsiElement element, final String newName,
+  public static void visitLocalsCollisions(PsiElement element, String newName,
                                            PsiElement scope,
                                            PsiElement place,
-                                           final CollidingVariableVisitor collidingNameVisitor) {
+                                           CollidingVariableVisitor collidingNameVisitor) {
     if (scope == null) return;
     visitDownstreamCollisions(scope, place, newName, collidingNameVisitor);
     visitUpstreamLocalCollisions(element, scope, newName, collidingNameVisitor);
   }
 
-  private static void visitDownstreamCollisions(PsiElement scope, PsiElement place, final String newName,
-                                                final CollidingVariableVisitor collidingNameVisitor
+  private static void visitDownstreamCollisions(PsiElement scope, PsiElement place, String newName,
+                                                CollidingVariableVisitor collidingNameVisitor
                                                ) {
     ConflictingLocalVariablesVisitor collector =
       new ConflictingLocalVariablesVisitor(newName, collidingNameVisitor);
@@ -103,11 +103,11 @@ public class JavaUnresolvableLocalCollisionDetector {
 
   private static void visitUpstreamLocalCollisions(PsiElement element, PsiElement scope,
                                                   String newName,
-                                                  final CollidingVariableVisitor collidingNameVisitor) {
-    final PsiVariable collidingVariable =
+                                                  CollidingVariableVisitor collidingNameVisitor) {
+    PsiVariable collidingVariable =
       JavaPsiFacade.getInstance(scope.getProject()).getResolveHelper().resolveAccessibleReferencedVariable(newName, scope);
     if (collidingVariable instanceof PsiLocalVariable || collidingVariable instanceof PsiParameter) {
-      final PsiElement commonParent = PsiTreeUtil.findCommonParent(element, collidingVariable);
+      PsiElement commonParent = PsiTreeUtil.findCommonParent(element, collidingVariable);
       if (commonParent != null) {
         PsiElement current = element;
         while (current != null && current != commonParent) {

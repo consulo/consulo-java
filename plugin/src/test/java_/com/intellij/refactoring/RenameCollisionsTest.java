@@ -198,7 +198,7 @@ public abstract class RenameCollisionsTest extends LightRefactoringTestCase {
     doTest("gg");
   }
 
-  private void doTest(final String newName) throws Exception {
+  private void doTest(String newName) throws Exception {
     configureByFile(BASE_PATH + getTestName(false) + ".java");
     PsiElement element = TargetElementUtil
         .findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED, TargetElementUtilEx.REFERENCED_ELEMENT_ACCEPTED));
@@ -212,7 +212,7 @@ public abstract class RenameCollisionsTest extends LightRefactoringTestCase {
     PsiElement element = TargetElementUtil
         .findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED, TargetElementUtilEx.REFERENCED_ELEMENT_ACCEPTED));
     assertNotNull(element);
-    final UsageInfo[] usageInfos = RenameUtil.findUsages(element, "newName", true, true, new HashMap<PsiElement, String>());
+    UsageInfo[] usageInfos = RenameUtil.findUsages(element, "newName", true, true, new HashMap<PsiElement, String>());
     assertSize(1, usageInfos);
     for (UsageInfo usageInfo : usageInfos) {
       assertTrue(usageInfo instanceof MoveRenameUsageInfo);

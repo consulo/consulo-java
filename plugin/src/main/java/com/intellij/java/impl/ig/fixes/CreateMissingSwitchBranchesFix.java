@@ -39,15 +39,15 @@ public class CreateMissingSwitchBranchesFix extends BaseSwitchFix {
         if (switchBlock == null) {
             return;
         }
-        final PsiExpression switchExpression = switchBlock.getExpression();
+        PsiExpression switchExpression = switchBlock.getExpression();
         if (switchExpression == null) {
             return;
         }
-        final PsiClassType switchType = (PsiClassType) switchExpression.getType();
+        PsiClassType switchType = (PsiClassType) switchExpression.getType();
         if (switchType == null) {
             return;
         }
-        final PsiClass enumClass = switchType.resolve();
+        PsiClass enumClass = switchType.resolve();
         if (enumClass == null) {
             return;
         }

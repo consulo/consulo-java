@@ -148,7 +148,7 @@ class OverridingMethodsDialog extends DialogWrapper {
     // make SPACE check/uncheck selected rows
     @NonNls InputMap inputMap = myTable.getInputMap();
     inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "enable_disable");
-    @NonNls final ActionMap actionMap = myTable.getActionMap();
+    @NonNls ActionMap actionMap = myTable.getActionMap();
     actionMap.put("enable_disable", new AbstractAction() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -186,7 +186,7 @@ class OverridingMethodsDialog extends DialogWrapper {
     panel.add(scrollPane, BorderLayout.CENTER);
     ListSelectionListener selectionListener = new ListSelectionListener() {
       @Override
-      public void valueChanged(final ListSelectionEvent e) {
+      public void valueChanged(ListSelectionEvent e) {
         int index = myTable.getSelectionModel().getLeadSelectionIndex();
         if (index != -1) {
           UsageInfo usageInfo = myOverridingMethods.get(index);

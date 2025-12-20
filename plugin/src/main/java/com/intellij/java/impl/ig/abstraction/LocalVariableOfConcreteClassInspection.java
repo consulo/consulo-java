@@ -44,8 +44,8 @@ public class LocalVariableOfConcreteClassInspection extends BaseInspection {
     @Nonnull
     @RequiredReadAction
     public String buildErrorString(Object... arg) {
-        final PsiNamedElement variable = (PsiNamedElement) arg[0];
-        final String name = variable.getName();
+        PsiNamedElement variable = (PsiNamedElement) arg[0];
+        String name = variable.getName();
         return InspectionGadgetsLocalize.localVariableOfConcreteClassProblemDescriptor(name).get();
     }
 
@@ -68,7 +68,7 @@ public class LocalVariableOfConcreteClassInspection extends BaseInspection {
             @Nonnull PsiLocalVariable variable
         ) {
             super.visitLocalVariable(variable);
-            final PsiTypeElement typeElement = variable.getTypeElement();
+            PsiTypeElement typeElement = variable.getTypeElement();
             if (!ConcreteClassUtil.typeIsConcreteClass(typeElement, ignoreAbstractClasses)) {
                 return;
             }

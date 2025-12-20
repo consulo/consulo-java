@@ -77,7 +77,7 @@ public class StringConstructorInspection extends BaseInspection {
 
     @Override
     public InspectionGadgetsFix buildFix(Object... infos) {
-        final Boolean noArguments = (Boolean) infos[0];
+        Boolean noArguments = (Boolean) infos[0];
         return new StringConstructorFix(noArguments.booleanValue());
     }
 
@@ -98,11 +98,11 @@ public class StringConstructorInspection extends BaseInspection {
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiNewExpression expression = (PsiNewExpression) descriptor.getPsiElement();
-            final PsiExpressionList argList = expression.getArgumentList();
+            PsiNewExpression expression = (PsiNewExpression) descriptor.getPsiElement();
+            PsiExpressionList argList = expression.getArgumentList();
             assert argList != null;
-            final PsiExpression[] args = argList.getExpressions();
-            final String argText;
+            PsiExpression[] args = argList.getExpressions();
+            String argText;
             if (args.length == 1) {
                 argText = args[0].getText();
             }
@@ -117,21 +117,21 @@ public class StringConstructorInspection extends BaseInspection {
         @Override
         public void visitNewExpression(@Nonnull PsiNewExpression expression) {
             super.visitNewExpression(expression);
-            final PsiType type = expression.getType();
+            PsiType type = expression.getType();
             if (!TypeUtils.isJavaLangString(type)) {
                 return;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpressionList argumentList = expression.getArgumentList();
             if (argumentList == null) {
                 return;
             }
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length > 1) {
                 return;
             }
             if (arguments.length == 1) {
-                final PsiExpression argument = arguments[0];
-                final PsiType parameterType = argument.getType();
+                PsiExpression argument = arguments[0];
+                PsiType parameterType = argument.getType();
                 if (!TypeUtils.isJavaLangString(parameterType)) {
                     return;
                 }
@@ -147,19 +147,19 @@ public class StringConstructorInspection extends BaseInspection {
             if (!(argument instanceof PsiMethodCallExpression)) {
                 return false;
             }
-            final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) argument;
-            final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-            final PsiElement element = methodExpression.resolve();
+            PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) argument;
+            PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+            PsiElement element = methodExpression.resolve();
             if (!(element instanceof PsiMethod)) {
                 return false;
             }
-            final PsiMethod method = (PsiMethod) element;
-            final PsiClass aClass = method.getContainingClass();
+            PsiMethod method = (PsiMethod) element;
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null) {
                 return true;
             }
-            final String className = aClass.getQualifiedName();
-            final String methodName = method.getName();
+            String className = aClass.getQualifiedName();
+            String methodName = method.getName();
             return CommonClassNames.JAVA_LANG_STRING.equals(className) && methodName.equals("substring");
         }
     }

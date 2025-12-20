@@ -38,8 +38,8 @@ public abstract class LibraryOrderTest extends PsiTestCase {
     checkClassFromLib("test.A", "1");
 
     final ModifiableRootModel rootModel = ModuleRootManager.getInstance(myModule).getModifiableModel();
-    final OrderEntry[] order = rootModel.getOrderEntries();
-    final int length = order.length;
+    OrderEntry[] order = rootModel.getOrderEntries();
+    int length = order.length;
     OrderEntry lib2 = order[length - 1];
     OrderEntry lib1 = order[length - 2];
     assertTrue(lib1 instanceof LibraryOrderEntry);
@@ -64,28 +64,28 @@ public abstract class LibraryOrderTest extends PsiTestCase {
 
   public void testNavigation() throws Exception {
     setupPaths();
-    final PsiClass classA = getJavaFacade().findClass("test.A");
-    final PsiElement navigationElement = classA.getNavigationElement();
+    PsiClass classA = getJavaFacade().findClass("test.A");
+    PsiElement navigationElement = classA.getNavigationElement();
     assertNotNull(navigationElement);
     assertTrue(navigationElement != classA);
     assertEquals("A.java", navigationElement.getContainingFile().getVirtualFile().getName());
   }
 
   private void checkClassFromLib(String qualifiedName, String index) {
-    final PsiClass classA = (PsiClass)getJavaFacade().findClass(qualifiedName).getNavigationElement();
+    PsiClass classA = (PsiClass)getJavaFacade().findClass(qualifiedName).getNavigationElement();
     assertNotNull(classA);
-    final PsiMethod[] methodsA = classA.getMethods();
+    PsiMethod[] methodsA = classA.getMethods();
     assertEquals(1, methodsA.length);
     assertEquals("methodOfClassFromLib" + index, methodsA[0].getName());
   }
 
   public void setupPaths() {
-    final String basePath = JavaTestUtil.getJavaTestDataPath() + "/psi/libraryOrder/";
+    String basePath = JavaTestUtil.getJavaTestDataPath() + "/psi/libraryOrder/";
 
-    final VirtualFile lib1SrcFile = refreshAndFindFile(basePath + "lib1/src");
-    final VirtualFile lib1classes = refreshAndFindFile(basePath + "lib1/classes");
-    final VirtualFile lib2SrcFile = refreshAndFindFile(basePath + "lib2/src");
-    final VirtualFile lib2classes = refreshAndFindFile(basePath + "lib2/classes");
+    VirtualFile lib1SrcFile = refreshAndFindFile(basePath + "lib1/src");
+    VirtualFile lib1classes = refreshAndFindFile(basePath + "lib1/classes");
+    VirtualFile lib2SrcFile = refreshAndFindFile(basePath + "lib2/src");
+    VirtualFile lib2classes = refreshAndFindFile(basePath + "lib2/classes");
 
     assertTrue(lib1SrcFile != null);
     assertTrue(lib2SrcFile != null);
@@ -93,18 +93,18 @@ public abstract class LibraryOrderTest extends PsiTestCase {
     addLibraryWithSourcePath("lib1", lib1classes, lib1SrcFile);
     addLibraryWithSourcePath("lib2", lib2classes, lib2SrcFile);
 
-    final List<VirtualFile> list = Arrays.asList(OrderEnumerator.orderEntries(myModule).getClassesRoots());
+    List<VirtualFile> list = Arrays.asList(OrderEnumerator.orderEntries(myModule).getClassesRoots());
     assertTrue(list.contains(lib1classes));
     assertTrue(list.contains(lib2classes));
   }
 
   private VirtualFile refreshAndFindFile(String path) {
-    final File ioLib1Src = new File(path);
-    final VirtualFile lib1SrcFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(ioLib1Src);
+    File ioLib1Src = new File(path);
+    VirtualFile lib1SrcFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(ioLib1Src);
     return lib1SrcFile;
   }
 
-  private void addLibraryWithSourcePath(String name, VirtualFile libClasses, final VirtualFile libSource) {
+  private void addLibraryWithSourcePath(String name, VirtualFile libClasses, VirtualFile libSource) {
     ModuleRootModificationUtil.addModuleLibrary(myModule, name, Collections.singletonList(libClasses.getUrl()),
                                                 Collections.singletonList(libSource.getUrl()));
   }

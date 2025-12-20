@@ -32,7 +32,7 @@ import consulo.language.editor.TargetElementUtil;
 public class HighlightExitPointsHandlerFactory implements HighlightUsagesHandlerFactory {
   @Override
   @RequiredReadAction
-  public HighlightUsagesHandlerBase createHighlightUsagesHandler(final Editor editor, final PsiFile file) {
+  public HighlightUsagesHandlerBase createHighlightUsagesHandler(Editor editor, PsiFile file) {
     int offset = TargetElementUtil.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
     PsiElement target = file.findElementAt(offset);
     if (target instanceof PsiKeyword

@@ -63,12 +63,12 @@ public class ResultSetIndexZeroInspection extends BaseInspection {
         @Override
         public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            @NonNls final String methodName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            @NonNls String methodName = methodExpression.getReferenceName();
             if (methodName == null) {
                 return;
             }
-            final boolean resultSet;
+            boolean resultSet;
             if (methodName.startsWith("get") || methodName.startsWith("update")) {
                 resultSet = true;
             }
@@ -78,17 +78,17 @@ public class ResultSetIndexZeroInspection extends BaseInspection {
             else {
                 return;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length == 0) {
                 return;
             }
-            final PsiExpression argument = arguments[0];
-            final Object val = ExpressionUtils.computeConstantExpression(argument);
+            PsiExpression argument = arguments[0];
+            Object val = ExpressionUtils.computeConstantExpression(argument);
             if (!(val instanceof Integer) || ((Integer) val).intValue() != 0) {
                 return;
             }
-            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
             if (resultSet) {
                 if (TypeUtils.expressionHasTypeOrSubtype(qualifier, "java.sql.ResultSet")) {
                     registerError(argument, Boolean.valueOf(resultSet));

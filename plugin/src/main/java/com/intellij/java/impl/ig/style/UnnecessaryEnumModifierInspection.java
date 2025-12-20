@@ -43,7 +43,7 @@ public class UnnecessaryEnumModifierInspection extends BaseInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiElement parent = (PsiElement) infos[1];
+        PsiElement parent = (PsiElement) infos[1];
         return parent instanceof PsiMethod
             ? InspectionGadgetsLocalize.unnecessaryEnumModifierProblemDescriptor().get()
             : InspectionGadgetsLocalize.unnecessaryEnumModifierProblemDescriptor1().get();
@@ -74,8 +74,8 @@ public class UnnecessaryEnumModifierInspection extends BaseInspection {
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiModifierList modifierList;
+            PsiElement element = descriptor.getPsiElement();
+            PsiModifierList modifierList;
             if (element instanceof PsiModifierList) {
                 modifierList = (PsiModifierList) element;
             }
@@ -98,13 +98,13 @@ public class UnnecessaryEnumModifierInspection extends BaseInspection {
             if (!aClass.isEnum() || !ClassUtils.isInnerClass(aClass) || !aClass.hasModifierProperty(PsiModifier.STATIC)) {
                 return;
             }
-            final PsiModifierList modifiers = aClass.getModifierList();
+            PsiModifierList modifiers = aClass.getModifierList();
             if (modifiers == null) {
                 return;
             }
-            final PsiElement[] children = modifiers.getChildren();
-            for (final PsiElement child : children) {
-                final String text = child.getText();
+            PsiElement[] children = modifiers.getChildren();
+            for (PsiElement child : children) {
+                String text = child.getText();
                 if (PsiModifier.STATIC.equals(text)) {
                     registerError(child, child, aClass);
                 }
@@ -116,14 +116,14 @@ public class UnnecessaryEnumModifierInspection extends BaseInspection {
             if (!method.isConstructor() || !method.hasModifierProperty(PsiModifier.PRIVATE)) {
                 return;
             }
-            final PsiClass aClass = method.getContainingClass();
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null || !aClass.isEnum()) {
                 return;
             }
-            final PsiModifierList modifiers = method.getModifierList();
-            final PsiElement[] children = modifiers.getChildren();
-            for (final PsiElement child : children) {
-                final String text = child.getText();
+            PsiModifierList modifiers = method.getModifierList();
+            PsiElement[] children = modifiers.getChildren();
+            for (PsiElement child : children) {
+                String text = child.getText();
                 if (PsiModifier.PRIVATE.equals(text)) {
                     registerError(child, child, method);
                 }

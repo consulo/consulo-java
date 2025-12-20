@@ -45,7 +45,7 @@ public class ExtractSuperClassViewDescriptor extends UsageViewDescriptorAdapter 
     myElements[1] = targetDirectory;
     myMembersToMakeWritable.add(subclass);
     for (int i = 0; i < infos.length; i++) {
-      final MemberInfo info = infos[i];
+      MemberInfo info = infos[i];
       myElements[i + 2] = info.getMember();
       if (ClassMembersUtil.isProperMember(info)) {
         myMembersToMakeWritable.add(info.getMember());

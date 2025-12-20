@@ -58,12 +58,12 @@ public class JvmPsiTypeConverterImpl extends JvmPsiTypeConverter implements Cust
     ourPrimitiveTypes.put(PsiType.BOOLEAN, 'Z');
   }
 
-  public PsiType fromString(final String s, final ConvertContext context) {
+  public PsiType fromString(String s, ConvertContext context) {
     return convertFromString(s, context);
   }
 
   @Nullable
-  public static PsiType convertFromString(final String s, final ConvertContext context) {
+  public static PsiType convertFromString(String s, ConvertContext context) {
     if (s == null) return null;
 
     if (s.startsWith("[")) {
@@ -73,16 +73,16 @@ public class JvmPsiTypeConverterImpl extends JvmPsiTypeConverter implements Cust
         return null;
       }
 
-      final char c = s.charAt(arrayDimensions);
+      char c = s.charAt(arrayDimensions);
       if (c == 'L') {
         if (!s.endsWith(";")) return null;
-        final PsiClass aClass =
+        PsiClass aClass =
           DomJavaUtil.findClass(s.substring(arrayDimensions + 1, s.length() - 1), context.getFile(), context.getModule(), null);
         return aClass == null ? null : makeArray(arrayDimensions, createType(aClass));
       }
 
       if (s.length() == arrayDimensions + 1) {
-        final List<PsiType> list = ourPrimitiveTypes.getKeysByValue(c);
+        List<PsiType> list = ourPrimitiveTypes.getKeysByValue(c);
         return list == null || list.isEmpty() ? null : makeArray(arrayDimensions, list.get(0));
       }
 
@@ -91,11 +91,11 @@ public class JvmPsiTypeConverterImpl extends JvmPsiTypeConverter implements Cust
     if (Arrays.binarySearch(CanonicalPsiTypeConverterImpl.PRIMITIVES, s) >= 0) {
       return JavaPsiFacade.getInstance(context.getProject()).getElementFactory().createPrimitiveType(s);
     }
-    final PsiClass aClass1 = DomJavaUtil.findClass(s, context.getFile(), context.getModule(), context.getSearchScope());
+    PsiClass aClass1 = DomJavaUtil.findClass(s, context.getFile(), context.getModule(), context.getSearchScope());
     return aClass1 == null ? null : createType(aClass1);
   }
 
-  private static int getArrayDimensions(final String s) {
+  private static int getArrayDimensions(String s) {
     int arrayDimensions = 0;
 
     while (arrayDimensions < s.length() && s.charAt(arrayDimensions) == '[') {
@@ -104,20 +104,20 @@ public class JvmPsiTypeConverterImpl extends JvmPsiTypeConverter implements Cust
     return arrayDimensions;
   }
 
-  private static PsiClassType createType(final PsiClass aClass) {
+  private static PsiClassType createType(PsiClass aClass) {
     return JavaPsiFacade.getInstance(aClass.getProject()).getElementFactory().createType(aClass);
   }
 
-  private static PsiType makeArray(final int dimensions, final PsiType type) {
+  private static PsiType makeArray(int dimensions, PsiType type) {
     return dimensions == 0 ? type : makeArray(dimensions - 1, new PsiArrayType(type));
   }
 
-  public String toString(final PsiType psiType, final ConvertContext context) {
+  public String toString(PsiType psiType, ConvertContext context) {
     return convertToString(psiType);
   }
 
   @Nullable
-  public static String convertToString(final PsiType psiType) {
+  public static String convertToString(PsiType psiType) {
     if (psiType instanceof PsiArrayType) {
       return '[' + toStringArray(((PsiArrayType)psiType).getComponentType());
     }
@@ -128,7 +128,7 @@ public class JvmPsiTypeConverterImpl extends JvmPsiTypeConverter implements Cust
   }
 
   @NonNls @Nullable
-  private static String toStringArray(final PsiType psiType) {
+  private static String toStringArray(PsiType psiType) {
     if (psiType instanceof PsiArrayType) {
       return '[' + toStringArray(((PsiArrayType)psiType).getComponentType());
     }
@@ -143,10 +143,10 @@ public class JvmPsiTypeConverterImpl extends JvmPsiTypeConverter implements Cust
 
   @Nonnull
   public PsiReference[] createReferences(GenericDomValue<PsiType> value, PsiElement element, ConvertContext context) {
-    final PsiType psiType = value.getValue();
-    final String s = value.getStringValue();
+    PsiType psiType = value.getValue();
+    String s = value.getStringValue();
     assert s != null;
-    final int dimensions = getArrayDimensions(s);
+    int dimensions = getArrayDimensions(s);
     if (dimensions > 0) {
       if (s.charAt(dimensions) == 'L' && s.endsWith(";")) {
         return JVM_REFERENCE_PROVIDER.getReferencesByString(s.substring(dimensions + 1), element,

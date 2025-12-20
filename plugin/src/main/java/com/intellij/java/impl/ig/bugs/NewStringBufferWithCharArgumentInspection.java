@@ -52,7 +52,7 @@ public class NewStringBufferWithCharArgumentInspection extends BaseInspection {
     @Override
     @Nullable
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiExpression argument = (PsiExpression) infos[0];
+        PsiExpression argument = (PsiExpression) infos[0];
         if (!(argument instanceof PsiLiteralExpression)) {
             return null;
         }
@@ -67,19 +67,19 @@ public class NewStringBufferWithCharArgumentInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiNewExpression newExpression = (PsiNewExpression) element.getParent();
-            final PsiExpressionList argumentList = newExpression.getArgumentList();
+            PsiElement element = descriptor.getPsiElement();
+            PsiNewExpression newExpression = (PsiNewExpression) element.getParent();
+            PsiExpressionList argumentList = newExpression.getArgumentList();
             if (argumentList == null) {
                 return;
             }
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length != 1) {
                 return;
             }
-            final PsiExpression argument = arguments[0];
-            final String text = argument.getText();
-            final String newArgument = '"' + text.substring(1, text.length() - 1) + '"';
+            PsiExpression argument = arguments[0];
+            String text = argument.getText();
+            String newArgument = '"' + text.substring(1, text.length() - 1) + '"';
             replaceExpression(argument, newArgument);
         }
     }
@@ -95,24 +95,24 @@ public class NewStringBufferWithCharArgumentInspection extends BaseInspection {
         @Override
         public void visitNewExpression(PsiNewExpression expression) {
             super.visitNewExpression(expression);
-            final PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpressionList argumentList = expression.getArgumentList();
             if (argumentList == null) {
                 return;
             }
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length != 1) {
                 return;
             }
-            final PsiExpression argument = arguments[0];
-            final PsiType type = argument.getType();
+            PsiExpression argument = arguments[0];
+            PsiType type = argument.getType();
             if (!PsiType.CHAR.equals(type)) {
                 return;
             }
-            final PsiMethod constructor = expression.resolveConstructor();
+            PsiMethod constructor = expression.resolveConstructor();
             if (constructor == null) {
                 return;
             }
-            final PsiClass aClass = constructor.getContainingClass();
+            PsiClass aClass = constructor.getContainingClass();
             if (!InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER)) {
                 return;
             }

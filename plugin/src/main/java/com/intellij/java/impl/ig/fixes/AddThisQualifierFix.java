@@ -39,21 +39,21 @@ public class AddThisQualifierFix extends InspectionGadgetsFix {
 
   @Override
   public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-    final PsiReferenceExpression expression = (PsiReferenceExpression)descriptor.getPsiElement();
+    PsiReferenceExpression expression = (PsiReferenceExpression)descriptor.getPsiElement();
     if (expression.getQualifierExpression() != null) {
       return;
     }
-    final PsiElement target = expression.resolve();
+    PsiElement target = expression.resolve();
     if (!(target instanceof PsiMember)) {
       return;
     }
-    final PsiMember member = (PsiMember)target;
-    final PsiClass memberClass = member.getContainingClass();
+    PsiMember member = (PsiMember)target;
+    PsiClass memberClass = member.getContainingClass();
     if (memberClass == null) {
       return;
     }
     PsiClass containingClass = ClassUtils.getContainingClass(expression);
-    @NonNls final String newExpression;
+    @NonNls String newExpression;
     if (InheritanceUtil.isInheritorOrSelf(containingClass, memberClass, true)) {
       newExpression = "this." + expression.getText();
     }

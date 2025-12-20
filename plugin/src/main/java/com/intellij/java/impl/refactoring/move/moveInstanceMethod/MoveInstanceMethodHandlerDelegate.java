@@ -33,7 +33,7 @@ import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class MoveInstanceMethodHandlerDelegate extends MoveHandlerDelegate {
-  public boolean canMove(final PsiElement[] elements, @Nullable final PsiElement targetContainer) {
+  public boolean canMove(PsiElement[] elements, @Nullable PsiElement targetContainer) {
     if (elements.length != 1) return false;
     PsiElement element = elements [0];
     if (!(element instanceof PsiMethod)) return false;
@@ -42,7 +42,7 @@ public class MoveInstanceMethodHandlerDelegate extends MoveHandlerDelegate {
     return !method.hasModifierProperty(PsiModifier.STATIC) && super.canMove(elements, targetContainer);
   }
 
-  public boolean isValidTarget(final PsiElement psiElement, PsiElement[] sources) {
+  public boolean isValidTarget(PsiElement psiElement, PsiElement[] sources) {
     for (PsiElement source : sources) {
       if (JavaMoveClassesOrPackagesHandler.invalid4Move(source)) return false;
     }
@@ -51,11 +51,11 @@ public class MoveInstanceMethodHandlerDelegate extends MoveHandlerDelegate {
 
   @RequiredUIAccess
   public boolean tryToMove(
-    final PsiElement element,
-    final Project project,
-    final DataContext dataContext,
-    final PsiReference reference,
-    final Editor editor
+    PsiElement element,
+    Project project,
+    DataContext dataContext,
+    PsiReference reference,
+    Editor editor
   ) {
     if (element instanceof PsiMethod method) {
       if (!method.hasModifierProperty(PsiModifier.STATIC))  {
@@ -67,7 +67,7 @@ public class MoveInstanceMethodHandlerDelegate extends MoveHandlerDelegate {
   }
 
   @RequiredUIAccess
-  public void doMove(final Project project, final PsiElement[] elements, final PsiElement targetContainer, final MoveCallback callback) {
+  public void doMove(Project project, PsiElement[] elements, PsiElement targetContainer, MoveCallback callback) {
     new MoveInstanceMethodHandler().invoke(project, elements, null);
   }
 }

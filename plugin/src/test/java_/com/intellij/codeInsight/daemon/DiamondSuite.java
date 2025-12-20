@@ -30,7 +30,7 @@ public abstract class DiamondSuite {
   }
 
   public static Test suite() {
-    final TestSuite testSuite = new TestSuite("Diamond Suite");
+    TestSuite testSuite = new TestSuite("Diamond Suite");
     testSuite.addTestSuite(LightAdvHighlightingJdk7Test.class);
     testSuite.addTestSuite(Simplify2DiamondInspectionsTest.class);
     testSuite.addTestSuite(IntroduceParameterTest.class);

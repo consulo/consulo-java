@@ -27,16 +27,16 @@ import jakarta.annotation.Nullable;
 
 public abstract class ConvertNumberIntentionBase extends Intention {
     @Override
-    protected void processIntention(@Nonnull final PsiElement element) throws IncorrectOperationException {
-        final PsiExpression expression = (PsiExpression) element;
-        final Number value = (Number) ExpressionUtils.computeConstantExpression(expression);
+    protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+        PsiExpression expression = (PsiExpression) element;
+        Number value = (Number) ExpressionUtils.computeConstantExpression(expression);
         if (value == null) {
             return;
         }
-        final PsiType type = expression.getType();
-        final boolean negated = ExpressionUtils.isNegative(expression);
+        PsiType type = expression.getType();
+        boolean negated = ExpressionUtils.isNegative(expression);
 
-        final String resultString = convertValue(value, type, negated);
+        String resultString = convertValue(value, type, negated);
         if (resultString == null) {
             return;
         }
@@ -50,6 +50,6 @@ public abstract class ConvertNumberIntentionBase extends Intention {
     }
 
     @Nullable
-    protected abstract String convertValue(final Number value, final PsiType type, final boolean negated);
+    protected abstract String convertValue(Number value, PsiType type, boolean negated);
 }
 

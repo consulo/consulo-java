@@ -41,7 +41,7 @@ public class TextFilter extends PlainTextFilter {
   }
 
   @Override
-  protected String getTextByElement(final Object element) {
+  protected String getTextByElement(Object element) {
     if (element instanceof XmlTag) {
       return ((XmlTag) element).getLocalName();
     } else if (element instanceof PsiType) {

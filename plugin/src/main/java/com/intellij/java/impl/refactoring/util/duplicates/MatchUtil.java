@@ -31,8 +31,8 @@ import java.util.Map;
 
 public class MatchUtil {
   @Nullable
-  public static String getChangedSignature(Match match, final PsiMethod method, final boolean shouldBeStatic, String visibility) {
-    final PsiType returnType = match.getChangedReturnType(method);
+  public static String getChangedSignature(Match match, PsiMethod method, boolean shouldBeStatic, String visibility) {
+    PsiType returnType = match.getChangedReturnType(method);
     if (!match.myChangedParams.isEmpty() || returnType != null) {
       @NonNls StringBuilder buffer = new StringBuilder();
       buffer.append(visibility);
@@ -42,7 +42,7 @@ public class MatchUtil {
       if (shouldBeStatic) {
         buffer.append("static ");
       }
-      final PsiTypeParameterList typeParameterList = method.getTypeParameterList();
+      PsiTypeParameterList typeParameterList = method.getTypeParameterList();
       if (typeParameterList != null) {
         buffer.append(typeParameterList.getText());
         buffer.append(" ");
@@ -53,8 +53,8 @@ public class MatchUtil {
       buffer.append(method.getName());
       buffer.append("(");
       int count = 0;
-      final String INDENT = "    ";
-      final List<ParameterInfoImpl> params = patchParams(match.myChangedParams, method);
+      String INDENT = "    ";
+      List<ParameterInfoImpl> params = patchParams(match.myChangedParams, method);
       for (ParameterInfoImpl param : params) {
         String typeText = param.getTypeText();
         if (count > 0) {
@@ -72,7 +72,7 @@ public class MatchUtil {
         buffer.append("\n");
       }
       buffer.append(")");
-      final PsiClassType[] exceptions = method.getThrowsList().getReferencedTypes();
+      PsiClassType[] exceptions = method.getThrowsList().getReferencedTypes();
       if (exceptions.length > 0) {
         buffer.append("\n");
         buffer.append("throws\n");
@@ -88,21 +88,21 @@ public class MatchUtil {
   }
 
   public static void changeSignature(@Nonnull Match match, @Nonnull PsiMethod psiMethod) {
-    final PsiType expressionType = match.getChangedReturnType(psiMethod);
+    PsiType expressionType = match.getChangedReturnType(psiMethod);
     if (expressionType == null && match.myChangedParams.isEmpty()) return;
-    final List<ParameterInfoImpl> newParameters = patchParams(match.myChangedParams, psiMethod);
-    final ChangeSignatureProcessor csp = new ChangeSignatureProcessor(psiMethod.getProject(), psiMethod, false, null, psiMethod.getName(),
+    List<ParameterInfoImpl> newParameters = patchParams(match.myChangedParams, psiMethod);
+    ChangeSignatureProcessor csp = new ChangeSignatureProcessor(psiMethod.getProject(), psiMethod, false, null, psiMethod.getName(),
         expressionType != null ? expressionType : psiMethod.getReturnType(),
         newParameters.toArray(new ParameterInfoImpl[newParameters.size()]));
 
     csp.run();
   }
 
-  public static List<ParameterInfoImpl> patchParams(Map<PsiVariable, PsiType> changedParams, final PsiMethod psiMethod) {
-    final ArrayList<ParameterInfoImpl> newParameters = new ArrayList<ParameterInfoImpl>();
-    final PsiParameter[] oldParameters = psiMethod.getParameterList().getParameters();
+  public static List<ParameterInfoImpl> patchParams(Map<PsiVariable, PsiType> changedParams, PsiMethod psiMethod) {
+    ArrayList<ParameterInfoImpl> newParameters = new ArrayList<ParameterInfoImpl>();
+    PsiParameter[] oldParameters = psiMethod.getParameterList().getParameters();
     for (int i = 0; i < oldParameters.length; i++) {
-      final PsiParameter oldParameter = oldParameters[i];
+      PsiParameter oldParameter = oldParameters[i];
       PsiType type = oldParameter.getType();
       for (PsiVariable variable : changedParams.keySet()) {
         if (PsiEquivalenceUtil.areElementsEquivalent(variable, oldParameter)) {

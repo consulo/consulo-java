@@ -52,23 +52,23 @@ public class MapReplaceableByEnumMapInspection extends BaseInspection {
     @Override
     public void visitNewExpression(@Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
-      final PsiType type = expression.getType();
+      PsiType type = expression.getType();
       if (!(type instanceof PsiClassType)) {
         return;
       }
       PsiClassType classType = (PsiClassType)type;
       if (!classType.hasParameters()) {
-        final PsiType expectedType = ExpectedTypeUtils.findExpectedType(expression, false);
+        PsiType expectedType = ExpectedTypeUtils.findExpectedType(expression, false);
         if (!(expectedType instanceof PsiClassType)) {
           return;
         }
         classType = (PsiClassType)expectedType;
       }
-      final PsiType[] typeArguments = classType.getParameters();
+      PsiType[] typeArguments = classType.getParameters();
       if (typeArguments.length != 2) {
         return;
       }
-      final PsiType argumentType = typeArguments[0];
+      PsiType argumentType = typeArguments[0];
       if (!(argumentType instanceof PsiClassType)) {
         return;
       }
@@ -78,21 +78,21 @@ public class MapReplaceableByEnumMapInspection extends BaseInspection {
       if (null != TypeUtils.expressionHasTypeOrSubtype(expression, "java.util.EnumMap", "java.util.concurrent.ConcurrentMap")) {
         return;
       }
-      final PsiClassType argumentClassType = (PsiClassType)argumentType;
-      final PsiClass argumentClass = argumentClassType.resolve();
+      PsiClassType argumentClassType = (PsiClassType)argumentType;
+      PsiClass argumentClass = argumentClassType.resolve();
       if (argumentClass == null || !argumentClass.isEnum()) {
         return;
       }
-      final PsiClass aClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
+      PsiClass aClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
       if (argumentClass.equals(aClass)) {
-        final PsiMember member = PsiTreeUtil.getParentOfType(expression, PsiMember.class);
+        PsiMember member = PsiTreeUtil.getParentOfType(expression, PsiMember.class);
         if (member != null && !member.hasModifierProperty(PsiModifier.STATIC)) {
           return;
         }
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpressionList argumentList = expression.getArgumentList();
       if (argumentList != null) {
-        final PsiExpression[] arguments = argumentList.getExpressions();
+        PsiExpression[] arguments = argumentList.getExpressions();
         if (arguments.length > 0 && TypeUtils.expressionHasTypeOrSubtype(arguments[0], CommonClassNames.JAVA_UTIL_COMPARATOR)) {
           return;
         }

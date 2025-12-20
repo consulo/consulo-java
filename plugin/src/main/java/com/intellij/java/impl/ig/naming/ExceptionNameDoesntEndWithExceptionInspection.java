@@ -75,11 +75,11 @@ public class ExceptionNameDoesntEndWithExceptionInspection
       if (aClass instanceof PsiTypeParameter) {
         return;
       }
-      final String className = aClass.getName();
+      String className = aClass.getName();
       if (className == null) {
         return;
       }
-      @NonNls final String exception = "Exception";
+      @NonNls String exception = "Exception";
       if (className.endsWith(exception)) {
         return;
       }

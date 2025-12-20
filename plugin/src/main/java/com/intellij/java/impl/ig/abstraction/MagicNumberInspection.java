@@ -60,7 +60,7 @@ public class MagicNumberInspection extends BaseInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+        MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
         panel.addCheckbox(InspectionGadgetsLocalize.magicNumberIgnoreOption().get(), "ignoreInHashCode");
         panel.addCheckbox(InspectionGadgetsLocalize.ignoreInTestCode().get(), "ignoreInTestCode");
         panel.addCheckbox(InspectionGadgetsLocalize.ignoreInAnnotations().get(), "ignoreInAnnotations");
@@ -88,7 +88,7 @@ public class MagicNumberInspection extends BaseInspection {
         @Override
         public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression) {
             super.visitLiteralExpression(expression);
-            final PsiType type = expression.getType();
+            PsiType type = expression.getType();
             if (!ClassUtils.isPrimitiveNumericType(type) || PsiType.CHAR.equals(type)) {
                 return;
             }
@@ -96,7 +96,7 @@ public class MagicNumberInspection extends BaseInspection {
                 return;
             }
             if (ignoreInHashCode) {
-                final PsiMethod containingMethod = PsiTreeUtil.getParentOfType(expression, PsiMethod.class);
+                PsiMethod containingMethod = PsiTreeUtil.getParentOfType(expression, PsiMethod.class);
                 if (MethodUtils.isHashCode(containingMethod)) {
                     return;
                 }
@@ -105,18 +105,18 @@ public class MagicNumberInspection extends BaseInspection {
                 return;
             }
             if (ignoreInAnnotations) {
-                final boolean insideAnnotation = AnnotationUtil.isInsideAnnotation(expression);
+                boolean insideAnnotation = AnnotationUtil.isInsideAnnotation(expression);
                 if (insideAnnotation) {
                     return;
                 }
             }
             if (ignoreInitialCapacity) {
-                final PsiExpressionList expressionList =
+                PsiExpressionList expressionList =
                     PsiTreeUtil.getParentOfType(expression, PsiExpressionList.class, true, PsiMember.class);
                 if (expressionList != null) {
-                    final PsiElement parent = expressionList.getParent();
+                    PsiElement parent = expressionList.getParent();
                     if (parent instanceof PsiNewExpression) {
-                        final PsiNewExpression newExpression = (PsiNewExpression) parent;
+                        PsiNewExpression newExpression = (PsiNewExpression) parent;
                         if (TypeUtils.expressionHasTypeOrSubtype(
                             newExpression,
                             CommonClassNames.JAVA_LANG_ABSTRACT_STRING_BUILDER,
@@ -128,7 +128,7 @@ public class MagicNumberInspection extends BaseInspection {
                     }
                 }
             }
-            final PsiElement parent = expression.getParent();
+            PsiElement parent = expression.getParent();
             if (parent instanceof PsiPrefixExpression) {
                 registerError(parent);
             }
@@ -138,21 +138,21 @@ public class MagicNumberInspection extends BaseInspection {
         }
 
         private boolean isSpecialCaseLiteral(PsiLiteralExpression expression) {
-            final Object object = ExpressionUtils.computeConstantExpression(expression);
+            Object object = ExpressionUtils.computeConstantExpression(expression);
             if (object instanceof Integer) {
-                final int i = ((Integer) object).intValue();
+                int i = ((Integer) object).intValue();
                 return i >= 0 && i <= 10 || i == 100 || i == 1000;
             }
             else if (object instanceof Long) {
-                final long l = ((Long) object).longValue();
+                long l = ((Long) object).longValue();
                 return l >= 0L && l <= 2L;
             }
             else if (object instanceof Double) {
-                final double d = ((Double) object).doubleValue();
+                double d = ((Double) object).doubleValue();
                 return d == 1.0 || d == 0.0;
             }
             else if (object instanceof Float) {
-                final float f = ((Float) object).floatValue();
+                float f = ((Float) object).floatValue();
                 return f == 1.0f || f == 0.0f;
             }
             return false;

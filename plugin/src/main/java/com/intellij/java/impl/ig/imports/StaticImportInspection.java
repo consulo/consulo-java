@@ -39,13 +39,13 @@ public class StaticImportInspection extends StaticImportInspectionBase {
   @Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
-    final List<InspectionGadgetsFix> result = new SmartList<>();
-    final PsiImportStaticStatement importStaticStatement = (PsiImportStaticStatement) infos[0];
-    final SuppressForTestsScopeFix fix = SuppressForTestsScopeFix.build(this, importStaticStatement);
+    List<InspectionGadgetsFix> result = new SmartList<>();
+    PsiImportStaticStatement importStaticStatement = (PsiImportStaticStatement) infos[0];
+    SuppressForTestsScopeFix fix = SuppressForTestsScopeFix.build(this, importStaticStatement);
     ContainerUtil.addIfNotNull(result, fix);
-    final PsiClass aClass = importStaticStatement.resolveTargetClass();
+    PsiClass aClass = importStaticStatement.resolveTargetClass();
     if (aClass != null) {
-      final String name = aClass.getQualifiedName();
+      String name = aClass.getQualifiedName();
       result.add(new IgnoreClassFix(name, allowedClasses, LocalizeValue.localizeTODO("Allow static imports for class '" + name + "'")));
     }
     result.add(buildFix(infos));
@@ -54,24 +54,24 @@ public class StaticImportInspection extends StaticImportInspectionBase {
 
   @Override
   public JComponent createOptionsPanel() {
-    final JComponent panel = new JPanel(new GridBagLayout());
-    final GridBagConstraints constraints = new GridBagConstraints();
+    JComponent panel = new JPanel(new GridBagLayout());
+    GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 0;
     constraints.gridy = 0;
     constraints.weightx = 1.0;
     constraints.weighty = 1.0;
     constraints.fill = GridBagConstraints.BOTH;
-    final JPanel chooserList = UiUtils.createTreeClassChooserList(allowedClasses, "Statically importable Classes", "Choose statically importable class");
+    JPanel chooserList = UiUtils.createTreeClassChooserList(allowedClasses, "Statically importable Classes", "Choose statically importable class");
     panel.add(chooserList, constraints);
 
     constraints.gridy = 1;
     constraints.weighty = 0.0;
-    final CheckBox checkBox1 =
+    CheckBox checkBox1 =
       new CheckBox(InspectionGadgetsLocalize.ignoreSingleFieldStaticImportsOption().get(), this, "ignoreSingleFieldImports");
     panel.add(checkBox1, constraints);
 
     constraints.gridy = 2;
-    final CheckBox checkBox2 =
+    CheckBox checkBox2 =
       new CheckBox(InspectionGadgetsLocalize.ignoreSingleMethodStaticImportsOption().get(), this, "ignoreSingeMethodImports");
     panel.add(checkBox2, constraints);
 

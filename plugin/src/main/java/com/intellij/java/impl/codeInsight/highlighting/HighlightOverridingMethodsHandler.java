@@ -38,7 +38,7 @@ public class HighlightOverridingMethodsHandler extends HighlightUsagesHandlerBas
     private final PsiElement myTarget;
     private final PsiClass myClass;
 
-    public HighlightOverridingMethodsHandler(final Editor editor, final PsiFile file, final PsiElement target, final PsiClass psiClass) {
+    public HighlightOverridingMethodsHandler(Editor editor, PsiFile file, PsiElement target, PsiClass psiClass) {
         super(editor, file);
         myTarget = target;
         myClass = psiClass;
@@ -51,7 +51,7 @@ public class HighlightOverridingMethodsHandler extends HighlightUsagesHandlerBas
         if (list == null) {
             return Collections.emptyList();
         }
-        final PsiClassType[] classTypes = list.getReferencedTypes();
+        PsiClassType[] classTypes = list.getReferencedTypes();
         return ChooseClassAndDoHighlightRunnable.resolveClasses(classTypes);
     }
 
@@ -67,7 +67,7 @@ public class HighlightOverridingMethodsHandler extends HighlightUsagesHandlerBas
 
     @Override
     @RequiredReadAction
-    public void computeUsages(final List<PsiClass> classes) {
+    public void computeUsages(List<PsiClass> classes) {
         FeatureUsageTracker.getInstance().triggerFeatureUsed("codeassists.highlight.implements");
         for (PsiMethod method : myClass.getMethods()) {
             List<HierarchicalMethodSignature> superSignatures = method.getHierarchicalMethodSignature().getSuperSignatures();
@@ -93,7 +93,7 @@ public class HighlightOverridingMethodsHandler extends HighlightUsagesHandlerBas
             }
             String name;
             if (classes.size() == 1) {
-                final ItemPresentation presentation = classes.get(0).getPresentation();
+                ItemPresentation presentation = classes.get(0).getPresentation();
                 name = presentation != null ? presentation.getPresentableText() : "";
             }
             else {
@@ -103,7 +103,7 @@ public class HighlightOverridingMethodsHandler extends HighlightUsagesHandlerBas
         }
         else {
             addOccurrence(myTarget);
-            final int methodCount = myReadUsages.size() - 1;  // exclude 'target' keyword
+            int methodCount = myReadUsages.size() - 1;  // exclude 'target' keyword
             myStatusText = CodeInsightLocalize.statusBarOverriddenMethodsHighlightedMessage(
                 methodCount,
                 HighlightUsagesHandler.getShortcutText()

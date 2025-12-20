@@ -62,7 +62,7 @@ public class UnnecessaryJavaDocLinkInspection extends BaseInspection {
     @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
-        final int n = (Integer) infos[1];
+        int n = (Integer) infos[1];
         if (n == THIS_METHOD) {
             return InspectionGadgetsLocalize.unnecessaryJavadocLinkThisMethodProblemDescriptor().get();
         }
@@ -103,13 +103,13 @@ public class UnnecessaryJavaDocLinkInspection extends BaseInspection {
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = element.getParent();
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement parent = element.getParent();
             if (!(parent instanceof PsiDocTag)) {
                 return;
             }
-            final PsiDocTag docTag = (PsiDocTag) parent;
-            final PsiDocComment docComment = docTag.getContainingComment();
+            PsiDocTag docTag = (PsiDocTag) parent;
+            PsiDocComment docComment = docTag.getContainingComment();
             if (docComment != null) {
                 if (shouldDeleteEntireComment(docComment)) {
                     docComment.delete();
@@ -122,13 +122,13 @@ public class UnnecessaryJavaDocLinkInspection extends BaseInspection {
         private static boolean shouldDeleteEntireComment(
             PsiDocComment docComment
         ) {
-            final PsiDocToken[] docTokens = PsiTreeUtil.getChildrenOfType(
+            PsiDocToken[] docTokens = PsiTreeUtil.getChildrenOfType(
                 docComment, PsiDocToken.class);
             if (docTokens == null) {
                 return false;
             }
             for (PsiDocToken docToken : docTokens) {
-                final IElementType tokenType = docToken.getTokenType();
+                IElementType tokenType = docToken.getTokenType();
                 if (!JavaDocTokenType.DOC_COMMENT_DATA.equals(tokenType)) {
                     continue;
                 }
@@ -151,7 +151,7 @@ public class UnnecessaryJavaDocLinkInspection extends BaseInspection {
         @Override
         public void visitDocTag(PsiDocTag tag) {
             super.visitDocTag(tag);
-            @NonNls final String name = tag.getName();
+            @NonNls String name = tag.getName();
             if ("link".equals(name) || "linkplain".equals(name)) {
                 if (!(tag instanceof PsiInlineDocTag)) {
                     return;
@@ -162,15 +162,15 @@ public class UnnecessaryJavaDocLinkInspection extends BaseInspection {
                     return;
                 }
             }
-            final PsiReference reference = extractReference(tag);
+            PsiReference reference = extractReference(tag);
             if (reference == null) {
                 return;
             }
-            final PsiElement target = reference.resolve();
+            PsiElement target = reference.resolve();
             if (target == null) {
                 return;
             }
-            final PsiMethod containingMethod =
+            PsiMethod containingMethod =
                 PsiTreeUtil.getParentOfType(tag, PsiMethod.class);
             if (containingMethod == null) {
                 return;
@@ -181,7 +181,7 @@ public class UnnecessaryJavaDocLinkInspection extends BaseInspection {
                 );
                 return;
             }
-            final PsiClass containingClass =
+            PsiClass containingClass =
                 PsiTreeUtil.getParentOfType(tag, PsiClass.class);
             if (target.equals(containingClass)) {
                 registerError(tag.getNameElement(), '@' + name,
@@ -192,7 +192,7 @@ public class UnnecessaryJavaDocLinkInspection extends BaseInspection {
             if (!(target instanceof PsiMethod)) {
                 return;
             }
-            final PsiMethod method = (PsiMethod) target;
+            PsiMethod method = (PsiMethod) target;
             if (!isSuperMethod(method, containingMethod)) {
                 return;
             }
@@ -205,13 +205,13 @@ public class UnnecessaryJavaDocLinkInspection extends BaseInspection {
         }
 
         private PsiReference extractReference(PsiDocTag tag) {
-            final PsiDocTagValue valueElement = tag.getValueElement();
+            PsiDocTagValue valueElement = tag.getValueElement();
             if (valueElement != null) {
                 return valueElement.getReference();
             }
             // hack around the fact that a reference to a class is apparently
             // not a PsiDocTagValue
-            final PsiElement[] dataElements = tag.getDataElements();
+            PsiElement[] dataElements = tag.getDataElements();
             if (dataElements.length == 0) {
                 return null;
             }
@@ -225,7 +225,7 @@ public class UnnecessaryJavaDocLinkInspection extends BaseInspection {
             if (salientElement == null) {
                 return null;
             }
-            final PsiElement child = salientElement.getFirstChild();
+            PsiElement child = salientElement.getFirstChild();
             if (!(child instanceof PsiReference)) {
                 return null;
             }
@@ -236,23 +236,23 @@ public class UnnecessaryJavaDocLinkInspection extends BaseInspection {
             PsiMethod superMethodCandidate,
             PsiMethod derivedMethod
         ) {
-            final PsiClass superClassCandidate =
+            PsiClass superClassCandidate =
                 superMethodCandidate.getContainingClass();
-            final PsiClass derivedClass = derivedMethod.getContainingClass();
+            PsiClass derivedClass = derivedMethod.getContainingClass();
             if (derivedClass == null || superClassCandidate == null) {
                 return false;
             }
             if (!derivedClass.isInheritor(superClassCandidate, false)) {
                 return false;
             }
-            final PsiSubstitutor superSubstitutor =
+            PsiSubstitutor superSubstitutor =
                 TypeConversionUtil.getSuperClassSubstitutor(
                     superClassCandidate, derivedClass,
                     PsiSubstitutor.EMPTY
                 );
-            final MethodSignature superSignature =
+            MethodSignature superSignature =
                 superMethodCandidate.getSignature(superSubstitutor);
-            final MethodSignature derivedSignature =
+            MethodSignature derivedSignature =
                 derivedMethod.getSignature(PsiSubstitutor.EMPTY);
             return MethodSignatureUtil.isSubsignature(
                 superSignature,

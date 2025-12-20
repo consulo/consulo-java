@@ -53,13 +53,13 @@ public class SuppressionAnnotationInspection extends BaseInspection {
         @Override
         public void visitComment(PsiComment comment) {
             super.visitComment(comment);
-            final String commentText = comment.getText();
-            final IElementType tokenType = comment.getTokenType();
+            String commentText = comment.getText();
+            IElementType tokenType = comment.getTokenType();
             if (!tokenType.equals(JavaTokenType.END_OF_LINE_COMMENT)
                 && !tokenType.equals(JavaTokenType.C_STYLE_COMMENT)) {
                 return;
             }
-            @NonNls final String strippedComment = commentText.substring(2).trim();
+            @NonNls String strippedComment = commentText.substring(2).trim();
             if (strippedComment.startsWith(SuppressionUtil.SUPPRESS_INSPECTIONS_TAG_NAME)) {
                 registerError(comment);
             }
@@ -68,12 +68,12 @@ public class SuppressionAnnotationInspection extends BaseInspection {
         @Override
         public void visitAnnotation(PsiAnnotation annotation) {
             super.visitAnnotation(annotation);
-            final PsiJavaCodeReferenceElement reference =
+            PsiJavaCodeReferenceElement reference =
                 annotation.getNameReferenceElement();
             if (reference == null) {
                 return;
             }
-            @NonNls final String text = reference.getText();
+            @NonNls String text = reference.getText();
             if ("SuppressWarnings".equals(text) ||
                 BatchSuppressManager.SUPPRESS_INSPECTIONS_ANNOTATION_NAME.equals(text)) {
                 registerError(annotation);

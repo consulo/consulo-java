@@ -90,13 +90,13 @@ public class SliceUsage extends UsageInfo2UsageAdapter
 		final Processor<SliceUsage> uniqueProcessor = new CommonProcessors.UniqueProcessor<SliceUsage>(processor, new HashingStrategy<SliceUsage>()
 		{
 			@Override
-			public int hashCode(final SliceUsage object)
+			public int hashCode(SliceUsage object)
 			{
 				return object.getUsageInfo().hashCode();
 			}
 
 			@Override
-			public boolean equals(final SliceUsage o1, final SliceUsage o2)
+			public boolean equals(SliceUsage o1, SliceUsage o2)
 			{
 				return o1.getUsageInfo().equals(o2.getUsageInfo());
 			}

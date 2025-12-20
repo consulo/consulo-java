@@ -50,27 +50,27 @@ public class InferLambdaParameterTypeIntention extends Intention {
 
   @Override
   protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-    final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
+    PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
     LOG.assertTrue(lambdaExpression != null);
-    final PsiType functionalInterfaceType = lambdaExpression.getFunctionalInterfaceType();
-    final String buf = getInferredTypes(functionalInterfaceType, lambdaExpression);
+    PsiType functionalInterfaceType = lambdaExpression.getFunctionalInterfaceType();
+    String buf = getInferredTypes(functionalInterfaceType, lambdaExpression);
     lambdaExpression.getParameterList().replace(JavaPsiFacade.getElementFactory(element.getProject()).createMethodFromText("void foo" + buf,
                                                                                                                            element).getParameterList());
   }
 
   @Nullable
-  private static String getInferredTypes(PsiType functionalInterfaceType, final PsiLambdaExpression lambdaExpression) {
-    final PsiClassType.ClassResolveResult resolveResult = PsiUtil.resolveGenericsClassInType(functionalInterfaceType);
-    final StringBuilder buf = new StringBuilder();
+  private static String getInferredTypes(PsiType functionalInterfaceType, PsiLambdaExpression lambdaExpression) {
+    PsiClassType.ClassResolveResult resolveResult = PsiUtil.resolveGenericsClassInType(functionalInterfaceType);
+    StringBuilder buf = new StringBuilder();
     buf.append("(");
-    final PsiMethod interfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(functionalInterfaceType);
+    PsiMethod interfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(functionalInterfaceType);
     LOG.assertTrue(interfaceMethod != null);
-    final PsiParameter[] parameters = interfaceMethod.getParameterList().getParameters();
-    final PsiParameter[] lambdaParameters = lambdaExpression.getParameterList().getParameters();
+    PsiParameter[] parameters = interfaceMethod.getParameterList().getParameters();
+    PsiParameter[] lambdaParameters = lambdaExpression.getParameterList().getParameters();
     if (parameters.length != lambdaParameters.length) return null;
     for (int i = 0; i < parameters.length; i++) {
       PsiParameter parameter = parameters[i];
-      final PsiType psiType = GenericsUtil.eliminateWildcards(LambdaUtil.getSubstitutor(interfaceMethod, resolveResult).substitute(parameter.getType()));
+      PsiType psiType = GenericsUtil.eliminateWildcards(LambdaUtil.getSubstitutor(interfaceMethod, resolveResult).substitute(parameter.getType()));
       if (psiType != null) {
         buf.append(psiType.getPresentableText()).append(" ").append(lambdaParameters[i].getName());
       }
@@ -89,7 +89,7 @@ public class InferLambdaParameterTypeIntention extends Intention {
   private class LambdaParametersPredicate implements PsiElementPredicate {
     @Override
     public boolean satisfiedBy(PsiElement element) {
-      final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
+      PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
       if (lambdaExpression != null) {
         PsiParameter[] parameters = lambdaExpression.getParameterList().getParameters();
         if (parameters.length == 0) return false;
@@ -99,7 +99,7 @@ public class InferLambdaParameterTypeIntention extends Intention {
           }
         }
         if (PsiTreeUtil.isAncestor(lambdaExpression.getParameterList(), element, false)) {
-          final PsiType functionalInterfaceType = lambdaExpression.getFunctionalInterfaceType();
+          PsiType functionalInterfaceType = lambdaExpression.getFunctionalInterfaceType();
           if (functionalInterfaceType != null && LambdaUtil.getFunctionalInterfaceMethod(functionalInterfaceType) != null && LambdaUtil.isLambdaFullyInferred(lambdaExpression, functionalInterfaceType)) {
             myInferredTypesText = getInferredTypes(functionalInterfaceType, lambdaExpression);
             return myInferredTypesText != null;

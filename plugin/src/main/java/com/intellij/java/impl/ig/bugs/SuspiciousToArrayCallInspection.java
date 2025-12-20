@@ -37,7 +37,7 @@ public class SuspiciousToArrayCallInspection extends BaseInspection {
     @Override
     @Nonnull
     protected String buildErrorString(Object... infos) {
-        final PsiType type = (PsiType) infos[0];
+        PsiType type = (PsiType) infos[0];
         return InspectionGadgetsLocalize.suspiciousToArrayCallProblemDescriptor(type.getPresentableText()).get();
     }
 
@@ -57,34 +57,34 @@ public class SuspiciousToArrayCallInspection extends BaseInspection {
             @Nonnull PsiMethodCallExpression expression
         ) {
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression =
+            PsiReferenceExpression methodExpression =
                 expression.getMethodExpression();
-            @NonNls final String methodName =
+            @NonNls String methodName =
                 methodExpression.getReferenceName();
             if (!"toArray".equals(methodName)) {
                 return;
             }
-            final PsiExpression qualifierExpression =
+            PsiExpression qualifierExpression =
                 methodExpression.getQualifierExpression();
             if (qualifierExpression == null) {
                 return;
             }
-            final PsiType type = qualifierExpression.getType();
+            PsiType type = qualifierExpression.getType();
             if (!(type instanceof PsiClassType)) {
                 return;
             }
-            final PsiClassType classType = (PsiClassType) type;
-            final PsiClass aClass = classType.resolve();
+            PsiClassType classType = (PsiClassType) type;
+            PsiClass aClass = classType.resolve();
             if (aClass == null ||
                 !InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_UTIL_COLLECTION)) {
                 return;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length != 1) {
                 return;
             }
-            final PsiExpression argument = arguments[0];
+            PsiExpression argument = arguments[0];
             checkCollectionAndArrayTypes(classType, argument, expression);
         }
 
@@ -93,22 +93,22 @@ public class SuspiciousToArrayCallInspection extends BaseInspection {
             @Nonnull PsiExpression argument,
             @Nonnull PsiMethodCallExpression expression
         ) {
-            final PsiType argumentType = argument.getType();
+            PsiType argumentType = argument.getType();
             if (!(argumentType instanceof PsiArrayType)) {
                 return;
             }
-            final PsiArrayType arrayType = (PsiArrayType) argumentType;
-            final PsiType componentType = arrayType.getComponentType();
-            final PsiElement parent = expression.getParent();
+            PsiArrayType arrayType = (PsiArrayType) argumentType;
+            PsiType componentType = arrayType.getComponentType();
+            PsiElement parent = expression.getParent();
             if (parent instanceof PsiTypeCastExpression) {
-                final PsiTypeCastExpression castExpression =
+                PsiTypeCastExpression castExpression =
                     (PsiTypeCastExpression) parent;
-                final PsiTypeElement castTypeElement =
+                PsiTypeElement castTypeElement =
                     castExpression.getCastType();
                 if (castTypeElement == null) {
                     return;
                 }
-                final PsiType castType = castTypeElement.getType();
+                PsiType castType = castTypeElement.getType();
                 if (!castType.equals(arrayType)) {
                     registerError(argument, arrayType.getComponentType());
                 }
@@ -117,11 +117,11 @@ public class SuspiciousToArrayCallInspection extends BaseInspection {
                 if (!collectionType.hasParameters()) {
                     return;
                 }
-                final PsiType[] parameters = collectionType.getParameters();
+                PsiType[] parameters = collectionType.getParameters();
                 if (parameters.length != 1) {
                     return;
                 }
-                final PsiType parameter = parameters[0];
+                PsiType parameter = parameters[0];
                 if (!componentType.isAssignableFrom(parameter)) {
                     registerError(argument, parameter);
                 }

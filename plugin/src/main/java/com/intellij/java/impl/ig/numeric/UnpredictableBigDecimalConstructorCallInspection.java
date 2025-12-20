@@ -49,7 +49,7 @@ public abstract class UnpredictableBigDecimalConstructorCallInspection
 
   @Override
   public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel optionsPanel =
+    MultipleCheckboxOptionsPanel optionsPanel =
       new MultipleCheckboxOptionsPanel(this);
     optionsPanel.addCheckbox(
       InspectionGadgetsLocalize.unpredictableBigDecimalConstructorCallIgnoreReferencesOption().get(),
@@ -64,16 +64,16 @@ public abstract class UnpredictableBigDecimalConstructorCallInspection
 
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiNewExpression newExpression = (PsiNewExpression)infos[0];
-    final PsiExpressionList argumentList = newExpression.getArgumentList();
+    PsiNewExpression newExpression = (PsiNewExpression)infos[0];
+    PsiExpressionList argumentList = newExpression.getArgumentList();
     if (argumentList == null) {
       return null;
     }
-    final PsiExpression[] arguments = argumentList.getExpressions();
+    PsiExpression[] arguments = argumentList.getExpressions();
     if (arguments.length == 0) {
       return null;
     }
-    final PsiExpression firstArgument = arguments[0];
+    PsiExpression firstArgument = arguments[0];
     if (!(firstArgument instanceof PsiLiteralExpression)) {
       return null;
     }
@@ -97,19 +97,19 @@ public abstract class UnpredictableBigDecimalConstructorCallInspection
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiNewExpression newExpression =
+      PsiElement element = descriptor.getPsiElement();
+      PsiNewExpression newExpression =
         (PsiNewExpression)element.getParent();
-      final PsiExpressionList argumentList =
+      PsiExpressionList argumentList =
         newExpression.getArgumentList();
       if (argumentList == null) {
         return;
       }
-      final PsiExpression[] arguments = argumentList.getExpressions();
+      PsiExpression[] arguments = argumentList.getExpressions();
       if (arguments.length == 0) {
         return;
       }
-      final PsiExpression firstArgument = arguments[0];
+      PsiExpression firstArgument = arguments[0];
       replaceExpression(firstArgument,
                         '"' + firstArgument.getText() + '"');
     }
@@ -125,40 +125,40 @@ public abstract class UnpredictableBigDecimalConstructorCallInspection
     @Override
     public void visitNewExpression(PsiNewExpression expression) {
       super.visitNewExpression(expression);
-      final PsiJavaCodeReferenceElement classReference =
+      PsiJavaCodeReferenceElement classReference =
         expression.getClassReference();
       if (classReference == null) {
         return;
       }
-      final String name = classReference.getReferenceName();
+      String name = classReference.getReferenceName();
       if (!"BigDecimal".equals(name)) {
         return;
       }
-      final PsiMethod constructor = expression.resolveConstructor();
+      PsiMethod constructor = expression.resolveConstructor();
       if (constructor == null) {
         return;
       }
-      final PsiParameterList parameterList =
+      PsiParameterList parameterList =
         constructor.getParameterList();
-      final int length = parameterList.getParametersCount();
+      int length = parameterList.getParametersCount();
       if (length != 1 && length != 2) {
         return;
       }
-      final PsiParameter[] parameters = parameterList.getParameters();
-      final PsiParameter firstParameter = parameters[0];
-      final PsiType type = firstParameter.getType();
+      PsiParameter[] parameters = parameterList.getParameters();
+      PsiParameter firstParameter = parameters[0];
+      PsiType type = firstParameter.getType();
       if (!PsiType.DOUBLE.equals(type)) {
         return;
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpressionList argumentList = expression.getArgumentList();
       if (argumentList == null) {
         return;
       }
-      final PsiExpression[] arguments = argumentList.getExpressions();
+      PsiExpression[] arguments = argumentList.getExpressions();
       if (arguments.length == 0) {
         return;
       }
-      final PsiExpression firstArgument = arguments[0];
+      PsiExpression firstArgument = arguments[0];
       if (!checkArguments(firstArgument)) {
         return;
       }
@@ -178,13 +178,13 @@ public abstract class UnpredictableBigDecimalConstructorCallInspection
         if (ignoreComplexLiterals) {
           return false;
         }
-        final PsiBinaryExpression binaryExpression =
+        PsiBinaryExpression binaryExpression =
           (PsiBinaryExpression)firstArgument;
-        final PsiExpression lhs = binaryExpression.getLOperand();
+        PsiExpression lhs = binaryExpression.getLOperand();
         if (!checkArguments(lhs)) {
           return false;
         }
-        final PsiExpression rhs = binaryExpression.getROperand();
+        PsiExpression rhs = binaryExpression.getROperand();
         if (!checkArguments(rhs)) {
           return false;
         }

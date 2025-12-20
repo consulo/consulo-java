@@ -89,13 +89,13 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo {
     return defaultType;
   }
 
-  public boolean equals(final Object o) {
+  public boolean equals(Object o) {
     if (this == o)
       return true;
     if (!(o instanceof ExpectedTypeInfoImpl))
       return false;
 
-    final ExpectedTypeInfoImpl that = (ExpectedTypeInfoImpl) o;
+    ExpectedTypeInfoImpl that = (ExpectedTypeInfoImpl) o;
 
     if (kind != that.kind)
       return false;

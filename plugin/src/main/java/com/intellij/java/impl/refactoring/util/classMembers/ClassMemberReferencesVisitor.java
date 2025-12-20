@@ -74,7 +74,7 @@ public abstract class ClassMemberReferencesVisitor extends JavaRecursiveElementW
   @Override public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
     PsiElement referencedElement = reference.resolve();
     if (referencedElement instanceof PsiClass) {
-      final PsiClass referencedClass = (PsiClass) referencedElement;
+      PsiClass referencedClass = (PsiClass) referencedElement;
       if (PsiTreeUtil.isAncestor(myClass, referencedElement, true)) {
         visitClassMemberReferenceElement((PsiMember)referencedElement, reference);
       }

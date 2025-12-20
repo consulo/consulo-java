@@ -52,19 +52,19 @@ public class TypeOfVariableMacro extends Macro {
   public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
     if (params.length == 0) return null;
 
-    final Project project = context.getProject();
+    Project project = context.getProject();
     Result result = params[0].calculateQuickResult(context);
     if (result instanceof PsiElementResult) {
-      final PsiElement element = ((PsiElementResult)result).getElement();
+      PsiElement element = ((PsiElementResult)result).getElement();
       if (element instanceof PsiVariable) {
         return new PsiTypeResult(((PsiVariable)element).getType(), project);
       }
     } else if (result instanceof TextResult) {
       PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
       PsiElement place = file.findElementAt(context.getStartOffset());
-      final PsiVariable[] vars = MacroUtil.getVariablesVisibleAt(place, "");
-      final String name = result.toString();
-      for (final PsiVariable var : vars) {
+      PsiVariable[] vars = MacroUtil.getVariablesVisibleAt(place, "");
+      String name = result.toString();
+      for (PsiVariable var : vars) {
         if (name.equals(var.getName())) return new PsiTypeResult(var.getType(), project);
       }
     }

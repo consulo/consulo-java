@@ -32,35 +32,35 @@ public class MakeMethodDelegate extends FixableUsageInfo {
   }
 
   public void fixUsage() throws IncorrectOperationException {
-    final PsiCodeBlock body = method.getBody();
+    PsiCodeBlock body = method.getBody();
     assert body != null;
-    final PsiStatement[] statements = body.getStatements();
+    PsiStatement[] statements = body.getStatements();
     for (PsiStatement statement : statements) {
       statement.delete();
     }
-    @NonNls final StringBuffer delegation = new StringBuffer();
-    final PsiType returnType = method.getReturnType();
+    @NonNls StringBuffer delegation = new StringBuffer();
+    PsiType returnType = method.getReturnType();
     if (!PsiType.VOID.equals(returnType)) {
       delegation.append("return ");
     }
-    final String methodName = method.getName();
+    String methodName = method.getName();
     delegation.append(delegate + '.' + methodName + '(');
-    final PsiParameterList parameterList = method.getParameterList();
-    final PsiParameter[] parameters = parameterList.getParameters();
+    PsiParameterList parameterList = method.getParameterList();
+    PsiParameter[] parameters = parameterList.getParameters();
     boolean first = true;
     for (PsiParameter parameter : parameters) {
       if (!first) {
         delegation.append(',');
       }
       first = false;
-      final String parameterName = parameter.getName();
+      String parameterName = parameter.getName();
       delegation.append(parameterName);
     }
     delegation.append(");");
-    final PsiManager manager = method.getManager();
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-    final String delegationText = delegation.toString();
-    final PsiStatement delegationStatement =
+    PsiManager manager = method.getManager();
+    PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
+    String delegationText = delegation.toString();
+    PsiStatement delegationStatement =
         factory.createStatementFromText(delegationText, body);
     body.add(delegationStatement);
   }

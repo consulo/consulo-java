@@ -42,7 +42,7 @@ public class MethodCellRenderer extends PsiElementListCellRenderer<PsiMethod> {
   }
 
   public String getElementText(PsiMethod element) {
-    final PsiNamedElement container = fetchContainer(element);
+    PsiNamedElement container = fetchContainer(element);
     String text = container instanceof PsiClass ? myClassListCellRenderer.getElementText((PsiClass) container) : container.getName();
     if (myShowMethodNames) {
       text += "." + PsiFormatUtil.formatMethod(element, PsiSubstitutor.EMPTY, myOptions, PsiFormatUtilBase.SHOW_TYPE);
@@ -59,7 +59,7 @@ public class MethodCellRenderer extends PsiElementListCellRenderer<PsiMethod> {
     return aClass == null ? element.getContainingFile() : aClass;
   }
 
-  public String getContainerText(final PsiMethod element, final String name) {
+  public String getContainerText(PsiMethod element, String name) {
     return PsiClassListCellRenderer.getContainerTextStatic(element);
   }
 

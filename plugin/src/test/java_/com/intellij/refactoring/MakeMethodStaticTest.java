@@ -202,7 +202,7 @@ public abstract class MakeMethodStaticTest extends LightRefactoringTestCase {
     doTest(false);
   }
 
-  private void doTest(final boolean addClassParameter) throws Exception {
+  private void doTest(boolean addClassParameter) throws Exception {
     configureByFile("/refactoring/makeMethodStatic/before" + getTestName(false) + ".java");
     perform(addClassParameter);
     checkResultByFile("/refactoring/makeMethodStatic/after" + getTestName(false) + ".java");
@@ -223,8 +223,8 @@ public abstract class MakeMethodStaticTest extends LightRefactoringTestCase {
     PsiElement element = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue(element instanceof PsiMethod);
     PsiMethod method = (PsiMethod) element;
-    final ArrayList<VariableData> parametersForFields = new ArrayList<VariableData>();
-    final boolean addClassParameter = MakeStaticUtil.buildVariableData(method, parametersForFields);
+    ArrayList<VariableData> parametersForFields = new ArrayList<VariableData>();
+    boolean addClassParameter = MakeStaticUtil.buildVariableData(method, parametersForFields);
 
     new MakeMethodStaticProcessor(
             getProject(),

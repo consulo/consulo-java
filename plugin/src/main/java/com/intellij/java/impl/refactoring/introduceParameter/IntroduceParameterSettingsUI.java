@@ -64,7 +64,7 @@ public abstract class IntroduceParameterSettingsUI
 	{
 		myHasInitializer = onLocalVariable != null && onLocalVariable.getInitializer() != null;
 		myIsInvokedOnDeclaration = onExpression == null;
-		final PsiParameter[] parameters = methodToReplaceIn.getParameterList().getParameters();
+		PsiParameter[] parameters = methodToReplaceIn.getParameterList().getParameters();
 		myParametersToRemove = new PsiParameter[parameters.length];
 		myParametersToRemoveChecked = new boolean[parameters.length];
 		parametersToRemove.forEach(paramNum -> myParametersToRemove[paramNum] = parameters[paramNum]);
@@ -145,7 +145,7 @@ public abstract class IntroduceParameterSettingsUI
 		gbConstraints.gridy++;
 		radioButtonPanel.add(myReplaceFieldsWithGettersAllRadio, gbConstraints);
 
-		final int currentSetting = JavaRefactoringSettings.getInstance().INTRODUCE_PARAMETER_REPLACE_FIELDS_WITH_GETTERS;
+		int currentSetting = JavaRefactoringSettings.getInstance().INTRODUCE_PARAMETER_REPLACE_FIELDS_WITH_GETTERS;
 
 		myReplaceFieldsWithGettersButtonGroup.add(myReplaceFieldsWithGettersNoneRadio);
 		myReplaceFieldsWithGettersButtonGroup.add(myReplaceFieldsWithGettersInaccessibleRadio);
@@ -278,7 +278,7 @@ public abstract class IntroduceParameterSettingsUI
 		{
 			return myParametersToRemove[myParametersToRemove.length - 1] != null;
 		}
-		final int parameterIndex = ((PsiMethod) param.getDeclarationScope()).getParameterList().getParameterIndex(param);
+		int parameterIndex = ((PsiMethod) param.getDeclarationScope()).getParameterList().getParameterIndex(param);
 		return myParametersToRemove[parameterIndex] != null;
 	}
 
@@ -315,7 +315,7 @@ public abstract class IntroduceParameterSettingsUI
 		panel.add(myCbGenerateDelegate, gbConstraints);
 	}
 
-	protected void createOccurrencesCb(GridBagConstraints gbConstraints, JPanel panel, final int occurenceNumber)
+	protected void createOccurrencesCb(GridBagConstraints gbConstraints, JPanel panel, int occurenceNumber)
 	{
 		myCbReplaceAllOccurences = new NonFocusableCheckBox();
 		myCbReplaceAllOccurences.setText(RefactoringLocalize.replaceAllOccurences(occurenceNumber).get());

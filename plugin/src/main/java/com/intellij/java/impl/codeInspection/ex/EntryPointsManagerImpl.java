@@ -93,7 +93,7 @@ public class EntryPointsManagerImpl extends EntryPointsManagerBase implements Pe
 
   @Nonnull
   public static Button createConfigureAnnotationsButton() {
-    final Button configureAnnotations = Button.create(LocalizeValue.localizeTODO("Configure annotations..."));
+    Button configureAnnotations = Button.create(LocalizeValue.localizeTODO("Configure annotations..."));
     configureAnnotations.addClickListener(e -> getInstance(ProjectUtil.guessCurrentProject((JComponent)TargetAWT.to(configureAnnotations))).configureAnnotations());
     return configureAnnotations;
   }

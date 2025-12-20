@@ -56,29 +56,29 @@ public class FieldInColumnsPreFormatProcessor implements PreFormatProcessor {
   @Override
   public TextRange process(@Nonnull ASTNode element, @Nonnull TextRange range) {
     //region Checking that everything is ready to expand the range for the 'fields in columns'.
-    final PsiElement psi = element.getPsi();
+    PsiElement psi = element.getPsi();
     if (psi == null || !psi.isValid()) {
       return range;
     }
 
-    final PsiFile file = psi.getContainingFile();
+    PsiFile file = psi.getContainingFile();
     if (file == null) {
       return range;
     }
 
-    final Project project = psi.getProject();
-    final CommonCodeStyleSettings settings
+    Project project = psi.getProject();
+    CommonCodeStyleSettings settings
         = CodeStyleSettingsManager.getInstance(project).getCurrentSettings().getCommonSettings(JavaLanguage.INSTANCE);
     if (!settings.ALIGN_GROUP_FIELD_DECLARATIONS) {
       return range;
     }
 
-    final PsiElement startElement = file.findElementAt(range.getStartOffset());
+    PsiElement startElement = file.findElementAt(range.getStartOffset());
     if (startElement == null) {
       return range;
     }
 
-    final PsiField parent = PsiTreeUtil.getParentOfType(startElement, PsiField.class);
+    PsiField parent = PsiTreeUtil.getParentOfType(startElement, PsiField.class);
     if (parent == null) {
       return range;
     }
@@ -87,7 +87,7 @@ public class FieldInColumnsPreFormatProcessor implements PreFormatProcessor {
     //region Calculating start offset to use by the start offset of the first sibling white space or field to the left of the current field.
     int startToUse = range.getStartOffset();
     for (PsiElement f = parent; f != null; f = f.getPrevSibling()) {
-      final ASTNode node = f.getNode();
+      ASTNode node = f.getNode();
       if (node == null) {
         break;
       }
@@ -102,7 +102,7 @@ public class FieldInColumnsPreFormatProcessor implements PreFormatProcessor {
     //region Calculating end offset to use by the end offset of the last field in a group located to the right of the current field.
     int endToUse = range.getEndOffset();
     for (PsiElement f = parent; f != null; f = f.getNextSibling()) {
-      final ASTNode node = f.getNode();
+      ASTNode node = f.getNode();
       if (node == null) {
         break;
       }

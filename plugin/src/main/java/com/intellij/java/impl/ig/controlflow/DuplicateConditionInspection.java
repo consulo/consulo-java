@@ -69,34 +69,34 @@ public class DuplicateConditionInspection extends BaseInspection {
         @Override
         public void visitIfStatement(@Nonnull PsiIfStatement statement) {
             super.visitIfStatement(statement);
-            final PsiElement parent = statement.getParent();
+            PsiElement parent = statement.getParent();
             if (parent instanceof PsiIfStatement) {
-                final PsiIfStatement parentStatement = (PsiIfStatement) parent;
-                final PsiStatement elseBranch = parentStatement.getElseBranch();
+                PsiIfStatement parentStatement = (PsiIfStatement) parent;
+                PsiStatement elseBranch = parentStatement.getElseBranch();
                 if (statement.equals(elseBranch)) {
                     return;
                 }
             }
-            final Set<PsiExpression> conditions = new HashSet<PsiExpression>();
+            Set<PsiExpression> conditions = new HashSet<PsiExpression>();
             collectConditionsForIfStatement(statement, conditions, 0);
-            final int numConditions = conditions.size();
+            int numConditions = conditions.size();
             if (numConditions < 2) {
                 return;
             }
-            final PsiExpression[] conditionArray = conditions.toArray(new PsiExpression[numConditions]);
-            final boolean[] matched = new boolean[conditionArray.length];
+            PsiExpression[] conditionArray = conditions.toArray(new PsiExpression[numConditions]);
+            boolean[] matched = new boolean[conditionArray.length];
             Arrays.fill(matched, false);
             for (int i = 0; i < conditionArray.length; i++) {
                 if (matched[i]) {
                     continue;
                 }
-                final PsiExpression condition = conditionArray[i];
+                PsiExpression condition = conditionArray[i];
                 for (int j = i + 1; j < conditionArray.length; j++) {
                     if (matched[j]) {
                         continue;
                     }
-                    final PsiExpression testCondition = conditionArray[j];
-                    final boolean areEquivalent = EquivalenceChecker.getCanonicalPsiEquivalence()
+                    PsiExpression testCondition = conditionArray[j];
+                    boolean areEquivalent = EquivalenceChecker.getCanonicalPsiEquivalence()
                         .getCanonicalPsiEquivalence()
                         .expressionsAreEquivalent(condition, testCondition);
                     if (areEquivalent) {
@@ -117,9 +117,9 @@ public class DuplicateConditionInspection extends BaseInspection {
             if (depth > LIMIT_DEPTH) {
                 return;
             }
-            final PsiExpression condition = statement.getCondition();
+            PsiExpression condition = statement.getCondition();
             collectConditionsForExpression(condition, conditions);
-            final PsiStatement branch = statement.getElseBranch();
+            PsiStatement branch = statement.getElseBranch();
             if (branch instanceof PsiIfStatement) {
                 collectConditionsForIfStatement((PsiIfStatement) branch, conditions, depth + 1);
             }
@@ -130,16 +130,16 @@ public class DuplicateConditionInspection extends BaseInspection {
                 return;
             }
             if (condition instanceof PsiParenthesizedExpression) {
-                final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) condition;
-                final PsiExpression contents = parenthesizedExpression.getExpression();
+                PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) condition;
+                PsiExpression contents = parenthesizedExpression.getExpression();
                 collectConditionsForExpression(contents, conditions);
                 return;
             }
             if (condition instanceof PsiPolyadicExpression) {
-                final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) condition;
-                final IElementType tokenType = polyadicExpression.getOperationTokenType();
+                PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) condition;
+                IElementType tokenType = polyadicExpression.getOperationTokenType();
                 if (JavaTokenType.OROR.equals(tokenType)) {
-                    final PsiExpression[] operands = polyadicExpression.getOperands();
+                    PsiExpression[] operands = polyadicExpression.getOperands();
                     for (PsiExpression operand : operands) {
                         collectConditionsForExpression(operand, conditions);
                     }
@@ -153,7 +153,7 @@ public class DuplicateConditionInspection extends BaseInspection {
             if (element instanceof PsiMethodCallExpression) {
                 return true;
             }
-            final PsiElement[] children = element.getChildren();
+            PsiElement[] children = element.getChildren();
             for (PsiElement child : children) {
                 if (containsMethodCallExpression(child)) {
                     return true;

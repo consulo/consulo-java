@@ -54,11 +54,11 @@ public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiModifierList modifierList = (PsiModifierList) infos[1];
-        final PsiElement parent = modifierList.getParent();
+        PsiModifierList modifierList = (PsiModifierList) infos[1];
+        PsiElement parent = modifierList.getParent();
         if (parent instanceof PsiClass) {
-            final PsiClass aClass = (PsiClass) parent;
-            final PsiClass containingClass = aClass.getContainingClass();
+            PsiClass aClass = (PsiClass) parent;
+            PsiClass containingClass = aClass.getContainingClass();
             if (containingClass != null) {
                 return aClass.isInterface()
                     ? InspectionGadgetsLocalize.unnecessaryInterfaceModifierInnerInterfaceOfInterfaceProblemDescriptor().get()
@@ -100,27 +100,27 @@ public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiModifierList modifierList;
+            PsiElement element = descriptor.getPsiElement();
+            PsiModifierList modifierList;
             if (element instanceof PsiModifierList) {
                 modifierList = (PsiModifierList) element;
             }
             else {
-                final PsiElement parent = element.getParent();
+                PsiElement parent = element.getParent();
                 if (!(parent instanceof PsiModifierList)) {
                     return;
                 }
                 modifierList = (PsiModifierList) parent;
             }
             modifierList.setModifierProperty(PsiModifier.STATIC, false);
-            final PsiElement modifierOwner = modifierList.getParent();
+            PsiElement modifierOwner = modifierList.getParent();
             assert modifierOwner != null;
             if (modifierOwner instanceof PsiClass) {
-                final PsiClass aClass = (PsiClass) modifierOwner;
+                PsiClass aClass = (PsiClass) modifierOwner;
                 if (aClass.isInterface()) {
                     modifierList.setModifierProperty(PsiModifier.ABSTRACT, false);
                 }
-                final PsiClass containingClass = ClassUtils.getContainingClass(modifierOwner);
+                PsiClass containingClass = ClassUtils.getContainingClass(modifierOwner);
                 if (containingClass != null && containingClass.isInterface()) {
                     // do the inner classes
                     modifierList.setModifierProperty(PsiModifier.PUBLIC, false);
@@ -140,9 +140,9 @@ public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
     private static class UnnecessaryInterfaceModifierVisitor extends BaseInspectionVisitor {
         @Override
         public void visitClass(@Nonnull PsiClass aClass) {
-            final PsiClass parent = ClassUtils.getContainingClass(aClass);
+            PsiClass parent = ClassUtils.getContainingClass(aClass);
             if (parent != null && parent.isInterface()) {
-                final PsiModifierList modifiers = aClass.getModifierList();
+                PsiModifierList modifiers = aClass.getModifierList();
                 if (aClass.isInterface()) {
                     checkForRedundantModifiers(modifiers, INNER_INTERFACE_REDUNDANT_MODIFIERS);
                 }
@@ -151,7 +151,7 @@ public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
                 }
             }
             else if (aClass.isInterface()) {
-                final PsiModifierList modifiers = aClass.getModifierList();
+                PsiModifierList modifiers = aClass.getModifierList();
                 checkForRedundantModifiers(modifiers, INTERFACE_REDUNDANT_MODIFIERS);
             }
         }
@@ -159,28 +159,28 @@ public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
         @Override
         public void visitField(@Nonnull PsiField field) {
             // don't call super, to keep this from drilling in
-            final PsiClass containingClass = field.getContainingClass();
+            PsiClass containingClass = field.getContainingClass();
             if (containingClass == null) {
                 return;
             }
             if (!containingClass.isInterface()) {
                 return;
             }
-            final PsiModifierList modifiers = field.getModifierList();
+            PsiModifierList modifiers = field.getModifierList();
             checkForRedundantModifiers(modifiers, FIELD_REDUNDANT_MODIFIERS);
         }
 
         @Override
         public void visitMethod(@Nonnull PsiMethod method) {
             // don't call super, to keep this from drilling in
-            final PsiClass aClass = method.getContainingClass();
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null) {
                 return;
             }
             if (!aClass.isInterface()) {
                 return;
             }
-            final PsiModifierList modifiers = method.getModifierList();
+            PsiModifierList modifiers = method.getModifierList();
             checkForRedundantModifiers(modifiers, METHOD_REDUNDANT_MODIFIERS);
         }
 
@@ -188,10 +188,10 @@ public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
             if (list == null) {
                 return;
             }
-            final PsiElement[] children = list.getChildren();
-            final StringBuilder redundantModifiers = new StringBuilder();
+            PsiElement[] children = list.getChildren();
+            StringBuilder redundantModifiers = new StringBuilder();
             for (PsiElement child : children) {
-                final String modifierText = child.getText();
+                String modifierText = child.getText();
                 if (modifiers.contains(modifierText)) {
                     if (redundantModifiers.length() > 0) {
                         redundantModifiers.append(' ');

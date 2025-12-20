@@ -36,18 +36,18 @@ public class MakeInitializerExplicitFix extends InspectionGadgetsFix {
 
   public void doFix(Project project, ProblemDescriptor descriptor)
     throws IncorrectOperationException {
-    final PsiElement fieldName = descriptor.getPsiElement();
-    final PsiField field = (PsiField)fieldName.getParent();
+    PsiElement fieldName = descriptor.getPsiElement();
+    PsiField field = (PsiField)fieldName.getParent();
     if (field == null) {
       return;
     }
     if (field.getInitializer() != null) {
       return;
     }
-    final PsiType type = field.getType();
-    final PsiManager psiManager = PsiManager.getInstance(project);
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(psiManager.getProject()).getElementFactory();
-    final PsiExpression initializer =
+    PsiType type = field.getType();
+    PsiManager psiManager = PsiManager.getInstance(project);
+    PsiElementFactory factory = JavaPsiFacade.getInstance(psiManager.getProject()).getElementFactory();
+    PsiExpression initializer =
       factory.createExpressionFromText(getDefaultValue(type), field);
     field.setInitializer(initializer);
   }

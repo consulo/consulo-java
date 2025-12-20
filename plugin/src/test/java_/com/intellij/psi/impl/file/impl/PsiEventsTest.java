@@ -451,7 +451,7 @@ public abstract class PsiEventsTest extends PsiTestCase {
   }
 
   public void testAddExcludeRoot() throws IOException {
-    final VirtualFile dir = myPrjDir1.createChildDirectory(null, "aaa");
+    VirtualFile dir = myPrjDir1.createChildDirectory(null, "aaa");
 
     EventsTestListener listener = new EventsTestListener();
     myPsiManager.addPsiTreeChangeListener(listener,getTestRootDisposable());
@@ -467,7 +467,7 @@ public abstract class PsiEventsTest extends PsiTestCase {
   }
 
   public void testAddSourceRoot() throws IOException {
-    final VirtualFile dir = myPrjDir1.createChildDirectory(null, "aaa");
+    VirtualFile dir = myPrjDir1.createChildDirectory(null, "aaa");
 
     EventsTestListener listener = new EventsTestListener();
     myPsiManager.addPsiTreeChangeListener(listener,getTestRootDisposable());
@@ -503,8 +503,8 @@ public abstract class PsiEventsTest extends PsiTestCase {
   }
 
   public void testCyclicDispatching() throws Throwable {
-    final VirtualFile virtualFile = createFile("a.xml", "<tag/>").getVirtualFile();
-    final PsiTreeChangeAdapter listener = new PsiTreeChangeAdapter() {
+    VirtualFile virtualFile = createFile("a.xml", "<tag/>").getVirtualFile();
+    PsiTreeChangeAdapter listener = new PsiTreeChangeAdapter() {
       @Override
       public void propertyChanged(@Nonnull PsiTreeChangeEvent event) {
         getJavaFacade().findClass("XXX", GlobalSearchScope.allScope(myProject));

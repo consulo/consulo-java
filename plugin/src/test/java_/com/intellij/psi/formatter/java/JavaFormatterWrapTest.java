@@ -157,7 +157,7 @@ public abstract class JavaFormatterWrapTest extends AbstractJavaFormatterTest {
     getSettings().getRootSettings().RIGHT_MARGIN = 30;
     getSettings().getRootSettings().getCommonSettings(JavaLanguage.INSTANCE).WRAP_LONG_LINES = true;
 
-    final String text = "class Test {\n" +
+    String text = "class Test {\n" +
                         "    String s = \"first line \" +\n" +
                         "            +\"second line\";\n" +
                         "}";

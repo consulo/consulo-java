@@ -101,7 +101,7 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem {
   }
 
   @Override
-  public boolean equals(final Object o) {
+  public boolean equals(Object o) {
     return super.equals(o) && o instanceof PsiTypeLookupItem && getBracketsCount() == ((PsiTypeLookupItem) o).getBracketsCount() && myAddArrayInitializer == ((PsiTypeLookupItem) o)
         .myAddArrayInitializer;
   }
@@ -185,8 +185,8 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem {
 
   @Override
   public int hashCode() {
-    final int fromSuper = super.hashCode();
-    final int dim = getBracketsCount();
+    int fromSuper = super.hashCode();
+    int dim = getBracketsCount();
     return fromSuper + dim * 31;
   }
 
@@ -195,7 +195,7 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem {
   }
 
   public static PsiTypeLookupItem createLookupItem(@Nonnull PsiType type, @Nullable PsiElement context) {
-    final boolean diamond = isDiamond(type);
+    boolean diamond = isDiamond(type);
     return createLookupItem(type, context, diamond);
   }
 
@@ -214,10 +214,10 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem {
     return doCreateItem(type, context, dim, isDiamond, importFixer);
   }
 
-  private static PsiTypeLookupItem doCreateItem(final PsiType type, PsiElement context, int bracketsCount, boolean diamond, InsertHandler<PsiTypeLookupItem> importFixer) {
+  private static PsiTypeLookupItem doCreateItem(PsiType type, PsiElement context, int bracketsCount, boolean diamond, InsertHandler<PsiTypeLookupItem> importFixer) {
     if (type instanceof PsiClassType) {
       PsiClassType.ClassResolveResult classResolveResult = ((PsiClassType) type).resolveGenerics();
-      final PsiClass psiClass = classResolveResult.getElement();
+      PsiClass psiClass = classResolveResult.getElement();
 
       if (psiClass != null) {
         String name = psiClass.getName();
@@ -245,9 +245,9 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem {
   public static boolean isDiamond(PsiType type) {
     boolean diamond = false;
     if (type instanceof PsiClassReferenceType) {
-      final PsiReferenceParameterList parameterList = ((PsiClassReferenceType) type).getReference().getParameterList();
+      PsiReferenceParameterList parameterList = ((PsiClassReferenceType) type).getReference().getParameterList();
       if (parameterList != null) {
-        final PsiTypeElement[] typeParameterElements = parameterList.getTypeParameterElements();
+        PsiTypeElement[] typeParameterElements = parameterList.getTypeParameterElements();
         diamond = typeParameterElements.length == 1 && typeParameterElements[0].getType() instanceof PsiDiamondType;
       }
     }
@@ -261,7 +261,7 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem {
 
   @Override
   public void renderElement(LookupElementPresentation presentation) {
-    final Object object = getObject();
+    Object object = getObject();
     if (object instanceof PsiClass) {
       JavaPsiClassReferenceElement.renderClassItem(presentation, this, (PsiClass) object, myDiamond, myLocationString, mySubstitutor);
     } else {

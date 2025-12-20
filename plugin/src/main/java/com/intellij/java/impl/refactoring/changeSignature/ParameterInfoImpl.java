@@ -110,9 +110,9 @@ public class ParameterInfoImpl implements JavaParameterInfo
 		{
 			return;
 		}
-		final PsiParameter[] parameters = method.getParameterList().getParameters();
+		PsiParameter[] parameters = method.getParameterList().getParameters();
 		LOG.assertTrue(oldParameterIndex >= 0 && oldParameterIndex < parameters.length);
-		final PsiParameter parameter = parameters[oldParameterIndex];
+		PsiParameter parameter = parameters[oldParameterIndex];
 		setName(parameter.getName());
 		setType(parameter.getType());
 	}
@@ -147,7 +147,7 @@ public class ParameterInfoImpl implements JavaParameterInfo
 
 	public int hashCode()
 	{
-		final String name = getName();
+		String name = getName();
 		int result = name != null ? name.hashCode() : 0;
 		result = 29 * result + getTypeText().hashCode();
 		return result;
@@ -160,7 +160,7 @@ public class ParameterInfoImpl implements JavaParameterInfo
 	}
 
 	@Override
-	public PsiType createType(PsiElement context, final PsiManager manager) throws IncorrectOperationException
+	public PsiType createType(PsiElement context, PsiManager manager) throws IncorrectOperationException
 	{
 		return getTypeWrapper() == null ? null : getTypeWrapper().getType(context, manager);
 	}
@@ -197,13 +197,13 @@ public class ParameterInfoImpl implements JavaParameterInfo
 
 	@Override
 	@Nullable
-	public PsiExpression getValue(final PsiCallExpression expr) throws IncorrectOperationException
+	public PsiExpression getValue(PsiCallExpression expr) throws IncorrectOperationException
 	{
 		if(StringUtil.isEmpty(defaultValue))
 		{
 			return null;
 		}
-		final PsiExpression expression =
+		PsiExpression expression =
 				JavaPsiFacade.getElementFactory(expr.getProject()).createExpressionFromText(defaultValue, expr);
 		return (PsiExpression) JavaCodeStyleManager.getInstance(expr.getProject()).shortenClassReferences(expression);
 	}
@@ -220,7 +220,7 @@ public class ParameterInfoImpl implements JavaParameterInfo
 		return defaultValue;
 	}
 
-	public void setDefaultValue(final String defaultValue)
+	public void setDefaultValue(String defaultValue)
 	{
 		this.defaultValue = defaultValue;
 	}
@@ -235,7 +235,7 @@ public class ParameterInfoImpl implements JavaParameterInfo
 	public static ParameterInfoImpl[] fromMethod(@Nonnull PsiMethod method)
 	{
 		List<ParameterInfoImpl> result = new ArrayList<>();
-		final PsiParameter[] parameters = method.getParameterList().getParameters();
+		PsiParameter[] parameters = method.getParameterList().getParameters();
 		for(int i = 0; i < parameters.length; i++)
 		{
 			PsiParameter parameter = parameters[i];

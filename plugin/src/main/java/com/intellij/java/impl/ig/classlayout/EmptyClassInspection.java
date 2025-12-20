@@ -55,7 +55,7 @@ public class EmptyClassInspection extends BaseInspection {
     @Override
     @Nonnull
     protected String buildErrorString(Object... infos) {
-        final Object element = infos[0];
+        Object element = infos[0];
         if (element instanceof PsiAnonymousClass) {
             return InspectionGadgetsLocalize.emptyAnonymousClassProblemDescriptor().get();
         }
@@ -69,12 +69,12 @@ public class EmptyClassInspection extends BaseInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final JPanel panel = new JPanel(new GridBagLayout());
-        final JPanel annotationsListControl = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
+        JPanel panel = new JPanel(new GridBagLayout());
+        JPanel annotationsListControl = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
             ignorableAnnotations,
             InspectionGadgetsLocalize.ignoreIfAnnotatedBy().get()
         );
-        final GridBagConstraints constraints = new GridBagConstraints();
+        GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.weightx = 1.0;
@@ -85,14 +85,14 @@ public class EmptyClassInspection extends BaseInspection {
         constraints.gridy++;
         constraints.weighty = 0.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        final CheckBox checkBox1 = new CheckBox(
+        CheckBox checkBox1 = new CheckBox(
             InspectionGadgetsLocalize.emptyClassIgnoreParameterizationOption().get(),
             this,
             "ignoreClassWithParameterization"
         );
         panel.add(checkBox1, constraints);
         constraints.gridy++;
-        final CheckBox checkBox2 = new CheckBox("Ignore subclasses of java.lang.Throwable", this, "ignoreThrowables");
+        CheckBox checkBox2 = new CheckBox("Ignore subclasses of java.lang.Throwable", this, "ignoreThrowables");
         panel.add(checkBox2, constraints);
         return panel;
     }
@@ -100,7 +100,7 @@ public class EmptyClassInspection extends BaseInspection {
     @Nonnull
     @Override
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
-        final Object info = infos[0];
+        Object info = infos[0];
         if (!(info instanceof PsiModifierListOwner)) {
             return InspectionGadgetsFix.EMPTY_ARRAY;
         }
@@ -119,11 +119,11 @@ public class EmptyClassInspection extends BaseInspection {
             if (!(file instanceof PsiJavaFile)) {
                 return;
             }
-            final PsiJavaFile javaFile = (PsiJavaFile) file;
+            PsiJavaFile javaFile = (PsiJavaFile) file;
             if (javaFile.getClasses().length != 0) {
                 return;
             }
-            @NonNls final String fileName = javaFile.getName();
+            @NonNls String fileName = javaFile.getName();
             if ("package-info.java".equals(fileName)) {
                 return;
             }
@@ -142,19 +142,19 @@ public class EmptyClassInspection extends BaseInspection {
             if (aClass instanceof PsiTypeParameter) {
                 return;
             }
-            final PsiMethod[] constructors = aClass.getConstructors();
+            PsiMethod[] constructors = aClass.getConstructors();
             if (constructors.length > 0) {
                 return;
             }
-            final PsiMethod[] methods = aClass.getMethods();
+            PsiMethod[] methods = aClass.getMethods();
             if (methods.length > 0) {
                 return;
             }
-            final PsiField[] fields = aClass.getFields();
+            PsiField[] fields = aClass.getFields();
             if (fields.length > 0) {
                 return;
             }
-            final PsiClassInitializer[] initializers = aClass.getInitializers();
+            PsiClassInitializer[] initializers = aClass.getInitializers();
             if (initializers.length > 0) {
                 return;
             }
@@ -174,13 +174,13 @@ public class EmptyClassInspection extends BaseInspection {
             if (extendsList == null) {
                 return false;
             }
-            final PsiJavaCodeReferenceElement[] referenceElements = extendsList.getReferenceElements();
+            PsiJavaCodeReferenceElement[] referenceElements = extendsList.getReferenceElements();
             for (PsiJavaCodeReferenceElement referenceElement : referenceElements) {
-                final PsiReferenceParameterList parameterList = referenceElement.getParameterList();
+                PsiReferenceParameterList parameterList = referenceElement.getParameterList();
                 if (parameterList == null) {
                     continue;
                 }
-                final PsiType[] typeArguments = parameterList.getTypeArguments();
+                PsiType[] typeArguments = parameterList.getTypeArguments();
                 if (typeArguments.length != 0) {
                     return true;
                 }
@@ -190,17 +190,17 @@ public class EmptyClassInspection extends BaseInspection {
 
         private boolean isSuperParametrization(PsiClass aClass) {
             if (!(aClass instanceof PsiAnonymousClass)) {
-                final PsiReferenceList extendsList = aClass.getExtendsList();
-                final PsiReferenceList implementsList = aClass.getImplementsList();
+                PsiReferenceList extendsList = aClass.getExtendsList();
+                PsiReferenceList implementsList = aClass.getImplementsList();
                 return hasTypeArguments(extendsList) || hasTypeArguments(implementsList);
             }
-            final PsiAnonymousClass anonymousClass = (PsiAnonymousClass) aClass;
-            final PsiJavaCodeReferenceElement reference = anonymousClass.getBaseClassReference();
-            final PsiReferenceParameterList parameterList = reference.getParameterList();
+            PsiAnonymousClass anonymousClass = (PsiAnonymousClass) aClass;
+            PsiJavaCodeReferenceElement reference = anonymousClass.getBaseClassReference();
+            PsiReferenceParameterList parameterList = reference.getParameterList();
             if (parameterList == null) {
                 return false;
             }
-            final PsiTypeElement[] elements = parameterList.getTypeParameterElements();
+            PsiTypeElement[] elements = parameterList.getTypeParameterElements();
             for (PsiTypeElement element : elements) {
                 if (element != null) {
                     return true;

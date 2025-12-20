@@ -85,8 +85,8 @@ public class BoxingBoxedValueInspection extends BaseInspection {
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiCallExpression parent = PsiTreeUtil.getParentOfType(
+      PsiElement element = descriptor.getPsiElement();
+      PsiCallExpression parent = PsiTreeUtil.getParentOfType(
         element, PsiMethodCallExpression.class,
         PsiNewExpression.class);
       if (parent == null) {
@@ -109,47 +109,47 @@ public class BoxingBoxedValueInspection extends BaseInspection {
         return;
       }
       super.visitNewExpression(expression);
-      final PsiType constructorType = expression.getType();
+      PsiType constructorType = expression.getType();
       if (constructorType == null) {
         return;
       }
-      final String constructorTypeText =
+      String constructorTypeText =
         constructorType.getCanonicalText();
       if (!boxedPrimitiveMap.containsKey(constructorTypeText)) {
         return;
       }
-      final PsiMethod constructor = expression.resolveConstructor();
+      PsiMethod constructor = expression.resolveConstructor();
       if (constructor == null) {
         return;
       }
-      final PsiParameterList parameterList =
+      PsiParameterList parameterList =
         constructor.getParameterList();
       if (parameterList.getParametersCount() != 1) {
         return;
       }
-      final PsiParameter[] parameters = parameterList.getParameters();
-      final PsiParameter parameter = parameters[0];
-      final PsiType parameterType = parameter.getType();
-      final String parameterTypeText = parameterType.getCanonicalText();
-      final String boxableConstructorType =
+      PsiParameter[] parameters = parameterList.getParameters();
+      PsiParameter parameter = parameters[0];
+      PsiType parameterType = parameter.getType();
+      String parameterTypeText = parameterType.getCanonicalText();
+      String boxableConstructorType =
         boxedPrimitiveMap.get(constructorTypeText);
       if (!boxableConstructorType.equals(parameterTypeText)) {
         return;
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpressionList argumentList = expression.getArgumentList();
       if (argumentList == null) {
         return;
       }
-      final PsiExpression[] arguments = argumentList.getExpressions();
+      PsiExpression[] arguments = argumentList.getExpressions();
       if (arguments.length != 1) {
         return;
       }
-      final PsiExpression argument = arguments[0];
-      final PsiType argumentType = argument.getType();
+      PsiExpression argument = arguments[0];
+      PsiType argumentType = argument.getType();
       if (argumentType == null) {
         return;
       }
-      final String argumentTypeText = argumentType.getCanonicalText();
+      String argumentTypeText = argumentType.getCanonicalText();
       if (!constructorTypeText.equals(argumentTypeText)) {
         return;
       }
@@ -163,22 +163,21 @@ public class BoxingBoxedValueInspection extends BaseInspection {
         return;
       }
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      @NonNls
-      final String referenceName = methodExpression.getReferenceName();
+      @NonNls String referenceName = methodExpression.getReferenceName();
       if (!"valueOf".equals(referenceName)) {
         return;
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return;
       }
-      final PsiClass containingClass = method.getContainingClass();
+      PsiClass containingClass = method.getContainingClass();
       if (containingClass == null) {
         return;
       }
-      final String className = containingClass.getQualifiedName();
+      String className = containingClass.getQualifiedName();
       if (className == null) {
         return;
       }
@@ -188,17 +187,17 @@ public class BoxingBoxedValueInspection extends BaseInspection {
       if (method.getParameterList().getParametersCount() != 1) {
         return;
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
+      PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpression[] arguments = argumentList.getExpressions();
       if (arguments.length != 1) {
         return;
       }
-      final PsiExpression argument = arguments[0];
-      final PsiType argumentType = argument.getType();
+      PsiExpression argument = arguments[0];
+      PsiType argumentType = argument.getType();
       if (argumentType == null) {
         return;
       }
-      final String argumentTypeText = argumentType.getCanonicalText();
+      String argumentTypeText = argumentType.getCanonicalText();
       if (!className.equals(argumentTypeText)) {
         return;
       }

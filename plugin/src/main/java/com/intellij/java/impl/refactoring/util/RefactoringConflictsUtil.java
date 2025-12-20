@@ -90,7 +90,7 @@ public class RefactoringConflictsUtil {
         PsiModifierList modifierListCopy = member.getModifierList();
         if (modifierListCopy != null) {
             modifierListCopy = (PsiModifierList) modifierListCopy.copy();
-            final PsiClass containingClass = member.getContainingClass();
+            PsiClass containingClass = member.getContainingClass();
             if (containingClass != null && containingClass.isInterface()) {
                 VisibilityUtil.setVisibility(modifierListCopy, PsiModifier.PUBLIC);
             }
@@ -160,7 +160,7 @@ public class RefactoringConflictsUtil {
         @Nonnull PsiElement context,
         MultiMap<PsiElement, LocalizeValue> conflicts
     ) {
-        final Set<PsiMember> moving = new HashSet<PsiMember>(membersToMove);
+        Set<PsiMember> moving = new HashSet<PsiMember>(membersToMove);
         if (abstractMethods != null) {
             moving.addAll(abstractMethods);
         }
@@ -176,15 +176,15 @@ public class RefactoringConflictsUtil {
             }
         }
         else if (scope instanceof PsiNewExpression) {
-            final PsiNewExpression newExpression = (PsiNewExpression) scope;
-            final PsiAnonymousClass anonymousClass = newExpression.getAnonymousClass();
+            PsiNewExpression newExpression = (PsiNewExpression) scope;
+            PsiAnonymousClass anonymousClass = newExpression.getAnonymousClass();
             if (anonymousClass != null) {
                 if (!RefactoringHierarchyUtil.willBeInTargetClass(anonymousClass, moving, targetClass, false)) {
                     checkAccessibility(anonymousClass, context, anonymousClass, member, conflicts);
                 }
             }
             else {
-                final PsiMethod refElement = newExpression.resolveConstructor();
+                PsiMethod refElement = newExpression.resolveConstructor();
                 if (refElement != null) {
                     if (!RefactoringHierarchyUtil.willBeInTargetClass(refElement, moving, targetClass, false)) {
                         checkAccessibility(refElement, context, null, member, conflicts);
@@ -226,7 +226,7 @@ public class RefactoringConflictsUtil {
             conflicts.putValue(refMember, message.capitalize());
         }
         else if (newContext instanceof PsiClass && refMember instanceof PsiField && refMember.getContainingClass() == member.getContainingClass()) {
-            final PsiField fieldInSubClass = ((PsiClass) newContext).findFieldByName(refMember.getName(), false);
+            PsiField fieldInSubClass = ((PsiClass) newContext).findFieldByName(refMember.getName(), false);
             if (fieldInSubClass != null && fieldInSubClass != refMember) {
                 conflicts.putValue(
                     refMember,
@@ -241,16 +241,16 @@ public class RefactoringConflictsUtil {
     }
 
     public static void analyzeModuleConflicts(
-        final Project project,
-        final Collection<? extends PsiElement> scopes,
-        final UsageInfo[] usages,
-        final PsiElement target,
-        final MultiMap<PsiElement, LocalizeValue> conflicts
+        Project project,
+        Collection<? extends PsiElement> scopes,
+        UsageInfo[] usages,
+        PsiElement target,
+        MultiMap<PsiElement, LocalizeValue> conflicts
     ) {
         if (scopes == null) {
             return;
         }
-        final VirtualFile vFile = PsiUtilCore.getVirtualFile(target);
+        VirtualFile vFile = PsiUtilCore.getVirtualFile(target);
         if (vFile == null) {
             return;
         }
@@ -259,16 +259,16 @@ public class RefactoringConflictsUtil {
     }
 
     public static void analyzeModuleConflicts(
-        final Project project,
+        Project project,
         final Collection<? extends PsiElement> scopes,
-        final UsageInfo[] usages,
-        final VirtualFile vFile,
+        UsageInfo[] usages,
+        VirtualFile vFile,
         final MultiMap<PsiElement, LocalizeValue> conflicts
     ) {
         if (scopes == null) {
             return;
         }
-        for (final PsiElement scope : scopes) {
+        for (PsiElement scope : scopes) {
             if (scope instanceof PsiJavaPackage) {
                 return;
             }
@@ -280,19 +280,19 @@ public class RefactoringConflictsUtil {
         }
         final GlobalSearchScope resolveScope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(targetModule);
         final HashSet<PsiElement> reported = new HashSet<PsiElement>();
-        for (final PsiElement scope : scopes) {
+        for (PsiElement scope : scopes) {
             scope.accept(new JavaRecursiveElementVisitor() {
                 @Override
                 public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
                     super.visitReferenceElement(reference);
-                    final PsiElement resolved = reference.resolve();
+                    PsiElement resolved = reference.resolve();
                     if (resolved != null &&
                         !reported.contains(resolved) &&
                         !CommonRefactoringUtil.isAncestor(resolved, scopes) &&
                         !PsiSearchScopeUtil.isInScope(resolveScope, resolved) &&
                         !(resolved instanceof LightElement)) {
-                        final String scopeDescription = RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(reference), true);
-                        final LocalizeValue message = RefactoringLocalize.zeroReferencedIn1WillNotBeAccessibleInModule2(
+                        String scopeDescription = RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(reference), true);
+                        LocalizeValue message = RefactoringLocalize.zeroReferencedIn1WillNotBeAccessibleInModule2(
                             RefactoringUIUtil.getDescription(resolved, true),
                             scopeDescription,
                             CommonRefactoringUtil.htmlEmphasize(targetModule.getName())
@@ -307,7 +307,7 @@ public class RefactoringConflictsUtil {
         boolean isInTestSources = ModuleRootManager.getInstance(targetModule).getFileIndex().isInTestSourceContent(vFile);
         NextUsage:
         for (UsageInfo usage : usages) {
-            final PsiElement element = usage.getElement();
+            PsiElement element = usage.getElement();
             if (element != null && PsiTreeUtil.getParentOfType(element, PsiImportStatement.class, false) == null) {
 
                 for (PsiElement scope : scopes) {
@@ -316,9 +316,9 @@ public class RefactoringConflictsUtil {
                     }
                 }
 
-                final GlobalSearchScope resolveScope1 = element.getResolveScope();
+                GlobalSearchScope resolveScope1 = element.getResolveScope();
                 if (!resolveScope1.isSearchInModuleContent(targetModule, isInTestSources)) {
-                    final PsiFile usageFile = element.getContainingFile();
+                    PsiFile usageFile = element.getContainingFile();
                     PsiElement container;
                     if (usageFile instanceof PsiJavaFile) {
                         container = ConflictsUtil.getContainer(element);
@@ -326,13 +326,13 @@ public class RefactoringConflictsUtil {
                     else {
                         container = usageFile;
                     }
-                    final String scopeDescription = RefactoringUIUtil.getDescription(container, true);
-                    final VirtualFile usageVFile = usageFile.getVirtualFile();
+                    String scopeDescription = RefactoringUIUtil.getDescription(container, true);
+                    VirtualFile usageVFile = usageFile.getVirtualFile();
                     if (usageVFile != null) {
                         Module module = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(usageVFile);
                         if (module != null) {
                             LocalizeValue message;
-                            final PsiElement referencedElement;
+                            PsiElement referencedElement;
                             if (usage instanceof MoveRenameUsageInfo) {
                                 referencedElement = ((MoveRenameUsageInfo) usage).getReferencedElement();
                             }

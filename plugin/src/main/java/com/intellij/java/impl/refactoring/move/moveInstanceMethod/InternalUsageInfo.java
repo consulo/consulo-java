@@ -27,7 +27,7 @@ import consulo.logging.Logger;
  */
 public class InternalUsageInfo extends UsageInfo {
   private static final Logger LOG = Logger.getInstance(InternalUsageInfo.class);
-  public InternalUsageInfo(final PsiElement referenceElement) {
+  public InternalUsageInfo(PsiElement referenceElement) {
     super(referenceElement);
     LOG.assertTrue(referenceElement instanceof PsiReferenceExpression || referenceElement instanceof PsiNewExpression);
   }

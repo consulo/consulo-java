@@ -39,13 +39,13 @@ public class InvertBooleanDialog extends RefactoringDialog {
 
   private final PsiNamedElement myElement;
 
-  public InvertBooleanDialog(final PsiNamedElement element) {
+  public InvertBooleanDialog(PsiNamedElement element) {
     super(element.getProject(), false);
     myElement = element;
-    final String name = myElement.getName();
+    String name = myElement.getName();
     myNameField.setText(name);
     myLabel.setLabelFor(myNameField);
-    final String typeString = UsageViewUtil.getType(myElement);
+    String typeString = UsageViewUtil.getType(myElement);
     myLabel.setText(RefactoringLocalize.invertBooleanNameOfInvertedElement(typeString).get());
     myCaptionLabel.setText(RefactoringLocalize.invert01(typeString, DescriptiveNameUtil.getDescriptiveName(myElement)).get());
 
@@ -59,7 +59,7 @@ public class InvertBooleanDialog extends RefactoringDialog {
 
   protected void doAction() {
     Project project = myElement.getProject();
-    final String name = myNameField.getText().trim();
+    String name = myNameField.getText().trim();
     if (name.length() == 0) {
       CommonRefactoringUtil.showErrorMessage(
         InvertBooleanHandler.REFACTORING_NAME,

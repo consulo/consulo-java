@@ -56,7 +56,7 @@ public abstract class Constraint {
     if (this == o) return true;
     if (!(o instanceof Constraint)) return false;
 
-    final Constraint constraint = (Constraint)o;
+    Constraint constraint = (Constraint)o;
 
     if (myLeft != null ? !myLeft.equals(constraint.myLeft) : constraint.myLeft != null) return false;
     if (myRight != null ? !myRight.equals(constraint.myRight) : constraint.myRight != null) return false;
@@ -71,5 +71,5 @@ public abstract class Constraint {
     return result + relationType();
   }
 
-  public abstract Constraint apply(final Binding b);
+  public abstract Constraint apply(Binding b);
 }

@@ -27,23 +27,23 @@ import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class MoveMembersHandler extends MoveHandlerDelegate {
-  public boolean canMove(final PsiElement[] elements, @Nullable final PsiElement targetContainer) {
+  public boolean canMove(PsiElement[] elements, @Nullable PsiElement targetContainer) {
     for(PsiElement element: elements) {
       if (!isFieldOrStaticMethod(element)) return false;
     }
     return super.canMove(elements, targetContainer);
   }
 
-  public boolean isValidTarget(final PsiElement psiElement, PsiElement[] sources) {
+  public boolean isValidTarget(PsiElement psiElement, PsiElement[] sources) {
     return psiElement instanceof PsiClass && !(psiElement instanceof PsiAnonymousClass);
   }
 
-  public void doMove(final Project project, final PsiElement[] elements, final PsiElement targetContainer, final MoveCallback callback) {
+  public void doMove(Project project, PsiElement[] elements, PsiElement targetContainer, MoveCallback callback) {
     MoveMembersImpl.doMove(project, elements, targetContainer, callback);
   }
 
-  public boolean tryToMove(final PsiElement element, final Project project, final DataContext dataContext, final PsiReference reference,
-                           final Editor editor) {
+  public boolean tryToMove(PsiElement element, Project project, DataContext dataContext, PsiReference reference,
+                           Editor editor) {
     if (isFieldOrStaticMethod(element)) {
       MoveMembersImpl.doMove(project, new PsiElement[]{element}, null, null);
       return true;
@@ -51,7 +51,7 @@ public class MoveMembersHandler extends MoveHandlerDelegate {
     return false;
   }
 
-  private static boolean isFieldOrStaticMethod(final PsiElement element) {
+  private static boolean isFieldOrStaticMethod(PsiElement element) {
     if (element instanceof PsiField) return true;
     if (element instanceof PsiMethod) {
     //  if (element instanceof JspHolderMethod) return false;

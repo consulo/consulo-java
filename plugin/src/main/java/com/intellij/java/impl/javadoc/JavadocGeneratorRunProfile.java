@@ -88,7 +88,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
   }
 
   @Override
-  public RunProfileState getState(@Nonnull final Executor executor, @Nonnull final ExecutionEnvironment env) throws ExecutionException {
+  public RunProfileState getState(@Nonnull Executor executor, @Nonnull ExecutionEnvironment env) throws ExecutionException {
     return new MyJavaCommandLineState(myConfiguration, myProject, myGenerationScope, env);
   }
 
@@ -115,7 +115,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
     private static final String INDEX_HTML = "index.html";
     private JavadocConfiguration myConfiguration;
 
-    public MyJavaCommandLineState(final JavadocConfiguration configuration, Project project, AnalysisScope generationOptions, ExecutionEnvironment env) {
+    public MyJavaCommandLineState(JavadocConfiguration configuration, Project project, AnalysisScope generationOptions, ExecutionEnvironment env) {
       super(env);
       myGenerationOptions = generationOptions;
       myProject = project;
@@ -124,15 +124,15 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
     }
 
     protected GeneralCommandLine createCommandLine() throws ExecutionException {
-      final GeneralCommandLine cmdLine = new GeneralCommandLine();
-      final Sdk jdk = getSdk(myProject);
+      GeneralCommandLine cmdLine = new GeneralCommandLine();
+      Sdk jdk = getSdk(myProject);
       setupExeParams(jdk, cmdLine);
       setupProgramParameters(jdk, cmdLine);
       return cmdLine;
     }
 
-    private void setupExeParams(final Sdk jdk, GeneralCommandLine cmdLine) throws ExecutionException {
-      final String jdkPath = jdk != null && jdk.getSdkType() instanceof JavaSdkType javaSdkType ? javaSdkType.getBinPath(jdk) : null;
+    private void setupExeParams(Sdk jdk, GeneralCommandLine cmdLine) throws ExecutionException {
+      String jdkPath = jdk != null && jdk.getSdkType() instanceof JavaSdkType javaSdkType ? javaSdkType.getBinPath(jdk) : null;
       if (jdkPath == null) {
         throw new CantRunException(JavadocBundle.message("javadoc.generate.no.jdk.path"));
       }
@@ -145,14 +145,14 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
         }
       }
       cmdLine.setWorkDirectory((File) null);
-      @NonNls final String javadocExecutableName = File.separator + (Platform.current().os().isWindows() ? "javadoc.exe" : "javadoc");
+      @NonNls String javadocExecutableName = File.separator + (Platform.current().os().isWindows() ? "javadoc.exe" : "javadoc");
       @NonNls String exePath = jdkPath.replace('/', File.separatorChar) + javadocExecutableName;
       if (new File(exePath).exists()) {
         cmdLine.setExePath(exePath);
       } else { //try to use wrapper jdk
         exePath = new File(jdkPath).getParent().replace('/', File.separatorChar) + javadocExecutableName;
         if (!new File(exePath).exists()) {
-          final File parent = new File(Platform.current().jvm().getRuntimeProperty("java.home")).getParentFile(); //try system jre
+          File parent = new File(Platform.current().jvm().getRuntimeProperty("java.home")).getParentFile(); //try system jre
           exePath = parent.getPath() + File.separator + "bin" + javadocExecutableName;
           if (!new File(exePath).exists()) {
             throw new CantRunException(JavadocBundle.message("javadoc.generate.no.jdk.path"));
@@ -162,8 +162,8 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
       }
     }
 
-    private void setupProgramParameters(final Sdk jdk, final GeneralCommandLine cmdLine) throws CantRunException {
-      @NonNls final ParametersList parameters = cmdLine.getParametersList();
+    private void setupProgramParameters(Sdk jdk, GeneralCommandLine cmdLine) throws CantRunException {
+      @NonNls ParametersList parameters = cmdLine.getParametersList();
 
       if (myConfiguration.LOCALE != null && myConfiguration.LOCALE.length() > 0) {
         parameters.add("-locale");
@@ -208,17 +208,17 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
 
       parameters.addParametersString(myConfiguration.OTHER_OPTIONS);
 
-      final Set<Module> modules = new LinkedHashSet<>();
+      Set<Module> modules = new LinkedHashSet<>();
       try {
-        final File sourcePathTempFile = FileUtil.createTempFile("javadoc", "args.txt", true);
+        File sourcePathTempFile = FileUtil.createTempFile("javadoc", "args.txt", true);
         parameters.add("@" + sourcePathTempFile.getCanonicalPath());
         try (PrintWriter writer = new PrintWriter(new FileWriter(sourcePathTempFile))) {
-          final Collection<String> packages = new HashSet<>();
-          final Collection<String> sources = new HashSet<>();
-          final Runnable findRunnable = () ->
+          Collection<String> packages = new HashSet<>();
+          Collection<String> sources = new HashSet<>();
+          Runnable findRunnable = () ->
           {
-            final int scopeType = myGenerationOptions.getScopeType();
-            final boolean usePackageNotation = scopeType == AnalysisScope.MODULE || scopeType == AnalysisScope.MODULES
+            int scopeType = myGenerationOptions.getScopeType();
+            boolean usePackageNotation = scopeType == AnalysisScope.MODULE || scopeType == AnalysisScope.MODULES
               || scopeType == AnalysisScope.PROJECT || scopeType == AnalysisScope.DIRECTORY;
             myGenerationOptions.accept(new MyContentIterator(myProject, packages, sources, modules, usePackageNotation));
           };
@@ -241,10 +241,10 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
           if (!myConfiguration.OPTION_INCLUDE_LIBS) {
             enumerator = enumerator.withoutSdk().withoutLibraries();
           }
-          final PathsList pathsList = enumerator.getSourcePathsList();
-          final List<VirtualFile> files = pathsList.getRootDirs();
-          final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(myProject).getFileIndex();
-          final StringBuilder sourcePath = new StringBuilder();
+          PathsList pathsList = enumerator.getSourcePathsList();
+          List<VirtualFile> files = pathsList.getRootDirs();
+          ProjectFileIndex fileIndex = ProjectRootManager.getInstance(myProject).getFileIndex();
+          StringBuilder sourcePath = new StringBuilder();
           boolean start = true;
           for (VirtualFile file : files) {
             if (!myGenerationOptions.isIncludeTestSource() && fileIndex.isInTestSourceContent(file)) {
@@ -272,15 +272,15 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
         }
       }
 
-      final PathsList classPath;
-      final OrderEnumerator orderEnumerator = ProjectRootManager.getInstance(myProject).orderEntries(modules);
+      PathsList classPath;
+      OrderEnumerator orderEnumerator = ProjectRootManager.getInstance(myProject).orderEntries(modules);
       if (jdk.getSdkType() instanceof JavaSdkType) {
         classPath = orderEnumerator.withoutSdk().withoutModuleSourceEntries().getPathsList();
       } else {
         //libraries are included into jdk
         classPath = orderEnumerator.withoutModuleSourceEntries().getPathsList();
       }
-      final String classPathString = classPath.getPathsString();
+      String classPathString = classPath.getPathsString();
       if (classPathString.length() > 0) {
         parameters.add("-classpath");
         parameters.add(classPathString);
@@ -295,7 +295,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
     @Override
     @Nonnull
     protected ProcessHandler startProcess() throws ExecutionException {
-      final ProcessHandler handler = JavaCommandLineStateUtil.startProcess(createCommandLine());
+      ProcessHandler handler = JavaCommandLineStateUtil.startProcess(createCommandLine());
       ProcessTerminatedListener.attach(handler, myProject, JavadocBundle.message("javadoc.generate.exited"));
       handler.addProcessListener(new ProcessAdapter() {
         @Override
@@ -329,19 +329,19 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
 
     @Override
     public void visitFile(PsiFile file) {
-      final VirtualFile fileOrDir = file.getVirtualFile();
+      VirtualFile fileOrDir = file.getVirtualFile();
       if (fileOrDir == null) {
         return;
       }
       if (!fileOrDir.isInLocalFileSystem()) {
         return;
       }
-      final Module module = ModuleUtilCore.findModuleForFile(fileOrDir, myPsiManager.getProject());
+      Module module = ModuleUtilCore.findModuleForFile(fileOrDir, myPsiManager.getProject());
       if (module != null) {
         myModules.add(module);
       }
       if (file instanceof PsiJavaFile javaFile) {
-        final String packageName = javaFile.getPackageName();
+        String packageName = javaFile.getPackageName();
         if (containsPackagePrefix(module, packageName) || (packageName.length() == 0 && !(javaFile instanceof ServerPageFile))
           || !myUsePackageNotation) {
           mySourceFiles.add(FileUtil.toSystemIndependentName(fileOrDir.getPath()));

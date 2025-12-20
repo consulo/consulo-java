@@ -23,12 +23,12 @@ public abstract class JavaCallHierarchyTest extends HierarchyViewTestBase {
     return "ide/hierarchy/call/" + getTestName(false);
   }
 
-  private void doJavaCallTypeHierarchyTest(final String classFqn, final String methodName, final String... fileNames) throws Exception {
+  private void doJavaCallTypeHierarchyTest(final String classFqn, final String methodName, String... fileNames) throws Exception {
     doHierarchyTest(new Computable<HierarchyTreeStructure>() {
       @Override
       public HierarchyTreeStructure compute() {
-        final PsiClass psiClass = JavaPsiFacade.getInstance(getProject()).findClass(classFqn, ProjectScope.getProjectScope(getProject()));
-        final PsiMethod method = psiClass.findMethodsByName(methodName, false) [0];
+        PsiClass psiClass = JavaPsiFacade.getInstance(getProject()).findClass(classFqn, ProjectScope.getProjectScope(getProject()));
+        PsiMethod method = psiClass.findMethodsByName(methodName, false) [0];
         return new CallerMethodsTreeStructure(getProject(), method, HierarchyBrowserBaseEx.SCOPE_PROJECT);
       }
     }, fileNames);

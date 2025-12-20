@@ -104,7 +104,7 @@ public class LayeredLexerTest extends TestCase {
 
   private String nextToken(Lexer lexer) {
     assertTrue(lexer.getTokenType() != null);
-    final String s = lexer.getBufferSequence().subSequence(lexer.getTokenStart(), lexer.getTokenEnd()).toString();
+    String s = lexer.getBufferSequence().subSequence(lexer.getTokenStart(), lexer.getTokenEnd()).toString();
     lexer.advance();
     return s;
   }

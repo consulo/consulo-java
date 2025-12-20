@@ -30,13 +30,13 @@ public class ConditionalUtils {
     if (!(statement instanceof PsiReturnStatement)) {
       return false;
     }
-    final PsiReturnStatement returnStatement =
+    PsiReturnStatement returnStatement =
       (PsiReturnStatement)statement;
-    final PsiExpression returnValue = returnStatement.getReturnValue();
+    PsiExpression returnValue = returnStatement.getReturnValue();
     if (returnValue == null) {
       return false;
     }
-    final String returnValueText = returnValue.getText();
+    String returnValueText = returnValue.getText();
     return value.equals(returnValueText);
   }
 
@@ -47,19 +47,19 @@ public class ConditionalUtils {
     if (!(statement instanceof PsiExpressionStatement)) {
       return false;
     }
-    final PsiExpressionStatement expressionStatement =
+    PsiExpressionStatement expressionStatement =
       (PsiExpressionStatement)statement;
-    final PsiExpression expression = expressionStatement.getExpression();
+    PsiExpression expression = expressionStatement.getExpression();
     if (!(expression instanceof PsiAssignmentExpression)) {
       return false;
     }
-    final PsiAssignmentExpression assignment =
+    PsiAssignmentExpression assignment =
       (PsiAssignmentExpression)expression;
-    final PsiExpression rhs = assignment.getRExpression();
+    PsiExpression rhs = assignment.getRExpression();
     if (rhs == null) {
       return false;
     }
-    final String rhsText = rhs.getText();
+    String rhsText = rhs.getText();
     return value.equals(rhsText);
   }
 }

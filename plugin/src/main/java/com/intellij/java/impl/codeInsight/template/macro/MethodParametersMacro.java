@@ -49,7 +49,7 @@ public class MethodParametersMacro extends Macro {
   }
 
   @Override
-  public Result calculateResult(@Nonnull Expression[] params, final ExpressionContext context) {
+  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
     PsiElement place = context.getPsiElementAtStartOffset();
     while (place != null){
       if (place instanceof PsiMethod method) {

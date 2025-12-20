@@ -79,28 +79,28 @@ public class IfStatementWithIdenticalBranchesInspection extends BaseInspection {
         @Override
         public void doFix(@Nonnull Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
-            final PsiElement identifier = descriptor.getPsiElement();
-            final PsiIfStatement statement = (PsiIfStatement) identifier.getParent();
+            PsiElement identifier = descriptor.getPsiElement();
+            PsiIfStatement statement = (PsiIfStatement) identifier.getParent();
             assert statement != null;
-            final PsiStatement thenBranch = statement.getThenBranch();
+            PsiStatement thenBranch = statement.getThenBranch();
             if (thenBranch == null) {
                 return;
             }
-            final PsiStatement elseBranch = statement.getElseBranch();
+            PsiStatement elseBranch = statement.getElseBranch();
             if (elseBranch == null) {
                 // implicit else branch after the if
                 statement.delete();
                 return;
             }
             if (elseBranch instanceof PsiIfStatement) {
-                final PsiIfStatement elseIfStatement = (PsiIfStatement) elseBranch;
-                final PsiExpression condition1 = statement.getCondition();
-                final PsiExpression condition2 = elseIfStatement.getCondition();
+                PsiIfStatement elseIfStatement = (PsiIfStatement) elseBranch;
+                PsiExpression condition1 = statement.getCondition();
+                PsiExpression condition2 = elseIfStatement.getCondition();
                 if (condition1 == null) {
                     return;
                 }
                 replaceExpression(condition1, buildOrExpressionText(condition1, condition2));
-                final PsiStatement elseElseBranch = elseIfStatement.getElseBranch();
+                PsiStatement elseElseBranch = elseIfStatement.getElseBranch();
                 if (elseElseBranch == null) {
                     elseIfStatement.delete();
                 }
@@ -109,12 +109,12 @@ public class IfStatementWithIdenticalBranchesInspection extends BaseInspection {
                 }
             }
             else {
-                final PsiElement parent = statement.getParent();
+                PsiElement parent = statement.getParent();
                 if (thenBranch instanceof PsiBlockStatement) {
-                    final PsiBlockStatement blockStatement = (PsiBlockStatement) thenBranch;
+                    PsiBlockStatement blockStatement = (PsiBlockStatement) thenBranch;
                     if (parent instanceof PsiCodeBlock) {
-                        final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
-                        final PsiStatement[] statements =
+                        PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
+                        PsiStatement[] statements =
                             codeBlock.getStatements();
                         if (statements.length > 0) {
                             parent.addRangeBefore(statements[0], statements[statements.length - 1], statement);
@@ -135,7 +135,7 @@ public class IfStatementWithIdenticalBranchesInspection extends BaseInspection {
             PsiExpression expression1,
             PsiExpression expression2
         ) {
-            final StringBuilder result = new StringBuilder();
+            StringBuilder result = new StringBuilder();
             if (expression1 != null) {
                 result.append(expression1.getText());
             }
@@ -160,29 +160,29 @@ public class IfStatementWithIdenticalBranchesInspection extends BaseInspection {
             @Nonnull PsiIfStatement ifStatement
         ) {
             super.visitIfStatement(ifStatement);
-            final PsiStatement elseBranch = ifStatement.getElseBranch();
-            final PsiStatement thenBranch = ifStatement.getThenBranch();
+            PsiStatement elseBranch = ifStatement.getElseBranch();
+            PsiStatement thenBranch = ifStatement.getThenBranch();
             if (thenBranch == null) {
                 return;
             }
-            final Project project = ifStatement.getProject();
-            final InputVariables inputVariables =
+            Project project = ifStatement.getProject();
+            InputVariables inputVariables =
                 new InputVariables(Collections.<PsiVariable>emptyList(),
                     project, new LocalSearchScope(thenBranch), false
                 );
-            final DuplicatesFinder finder =
+            DuplicatesFinder finder =
                 new DuplicatesFinder(new PsiElement[]{thenBranch},
                     inputVariables, null,
                     Collections.<PsiVariable>emptyList()
                 );
             if (elseBranch instanceof PsiIfStatement) {
-                final PsiIfStatement statement =
+                PsiIfStatement statement =
                     (PsiIfStatement) elseBranch;
-                final PsiStatement branch = statement.getThenBranch();
+                PsiStatement branch = statement.getThenBranch();
                 if (branch == null) {
                     return;
                 }
-                final Match match = finder.isDuplicate(branch, true);
+                Match match = finder.isDuplicate(branch, true);
                 if (match != null && match.getReturnValue() == null) {
                     registerStatementError(ifStatement, statement);
                     return;
@@ -192,7 +192,7 @@ public class IfStatementWithIdenticalBranchesInspection extends BaseInspection {
                 checkIfStatementWithoutElseBranch(ifStatement);
             }
             else {
-                final Match match = finder.isDuplicate(elseBranch, true);
+                Match match = finder.isDuplicate(elseBranch, true);
                 if (match != null) {
                     registerStatementError(ifStatement);
                 }
@@ -202,23 +202,23 @@ public class IfStatementWithIdenticalBranchesInspection extends BaseInspection {
         private void checkIfStatementWithoutElseBranch(
             PsiIfStatement ifStatement
         ) {
-            final PsiStatement thenBranch = ifStatement.getThenBranch();
+            PsiStatement thenBranch = ifStatement.getThenBranch();
             if (ControlFlowUtils.statementMayCompleteNormally(thenBranch)) {
                 return;
             }
             PsiStatement nextStatement = getNextStatement(ifStatement);
             if (thenBranch instanceof PsiBlockStatement) {
-                final PsiBlockStatement blockStatement =
+                PsiBlockStatement blockStatement =
                     (PsiBlockStatement) thenBranch;
-                final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
-                final PsiStatement[] statements = codeBlock.getStatements();
-                final PsiStatement lastStatement =
+                PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
+                PsiStatement[] statements = codeBlock.getStatements();
+                PsiStatement lastStatement =
                     statements[statements.length - 1];
                 for (PsiStatement statement : statements) {
                     if (nextStatement == null) {
                         if (statement == lastStatement &&
                             statement instanceof PsiReturnStatement) {
-                            final PsiReturnStatement returnStatement =
+                            PsiReturnStatement returnStatement =
                                 (PsiReturnStatement) statement;
                             if (returnStatement.getReturnValue() == null) {
                                 registerStatementError(ifStatement);
@@ -268,12 +268,12 @@ public class IfStatementWithIdenticalBranchesInspection extends BaseInspection {
                 if (nextStatement == null) {
                     continue;
                 }
-                final PsiElement statementParent = statement.getParent();
+                PsiElement statementParent = statement.getParent();
                 if (!(statementParent instanceof PsiIfStatement)) {
                     continue;
                 }
                 // nextStatement should not be the else part of an if statement
-                final PsiElement nextStatementParent =
+                PsiElement nextStatementParent =
                     nextStatement.getParent();
                 if (statementParent.equals(nextStatementParent)) {
                     nextStatement = null;

@@ -148,12 +148,12 @@ public abstract class ExpressionParserTest extends JavaParsingTestCase {
   public void testLambdaExpression19() { doParserTest("(@A T t) -> (null)"); }
   public void testAmbiguousLambdaExpression() { doParserTest("f( (x) < y , z > (w) -> v )"); }
 
-  private void doParserTest(@NonNls final String text) {
+  private void doParserTest(@NonNls String text) {
     doParserTest(text, new MyTestParser());
   }
   private static class MyTestParser implements TestParser {
     @Override
-    public void parse(final PsiBuilder builder) {
+    public void parse(PsiBuilder builder) {
       JavaParser.INSTANCE.getExpressionParser().parse(builder);
     }
   }

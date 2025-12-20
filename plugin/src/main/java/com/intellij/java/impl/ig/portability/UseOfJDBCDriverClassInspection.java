@@ -50,16 +50,16 @@ public class UseOfJDBCDriverClassInspection extends BaseInspection {
     @Override
     public void visitVariable(@Nonnull PsiVariable variable) {
       super.visitVariable(variable);
-      final PsiType type = variable.getType();
+      PsiType type = variable.getType();
       if (!(type instanceof PsiClassType)) {
         return;
       }
-      final PsiType deepComponentType = type.getDeepComponentType();
+      PsiType deepComponentType = type.getDeepComponentType();
       if (!(deepComponentType instanceof PsiClassType)) {
         return;
       }
-      final PsiClassType classType = (PsiClassType)deepComponentType;
-      final PsiClass resolveClass = classType.resolve();
+      PsiClassType classType = (PsiClassType)deepComponentType;
+      PsiClass resolveClass = classType.resolve();
       if (resolveClass == null) {
         return;
       }
@@ -73,7 +73,7 @@ public class UseOfJDBCDriverClassInspection extends BaseInspection {
       if (!InheritanceUtil.isInheritor(resolveClass, "java.sql.Driver")) {
         return;
       }
-      final PsiTypeElement typeElement = variable.getTypeElement();
+      PsiTypeElement typeElement = variable.getTypeElement();
       if (typeElement == null) {
         return;
       }
@@ -84,14 +84,14 @@ public class UseOfJDBCDriverClassInspection extends BaseInspection {
     public void visitNewExpression(
       @Nonnull PsiNewExpression newExpression) {
       super.visitNewExpression(newExpression);
-      final PsiType type = newExpression.getType();
+      PsiType type = newExpression.getType();
       if (type == null) {
         return;
       }
       if (!(type instanceof PsiClassType)) {
         return;
       }
-      final PsiClass resolveClass = ((PsiClassType)type).resolve();
+      PsiClass resolveClass = ((PsiClassType)type).resolve();
       if (resolveClass == null) {
         return;
       }

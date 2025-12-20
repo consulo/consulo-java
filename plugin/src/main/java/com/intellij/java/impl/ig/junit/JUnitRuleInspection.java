@@ -58,7 +58,7 @@ public class JUnitRuleInspection extends BaseInspection {
   @Nullable
   @Override
   public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+    MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
     panel.addCheckbox("Report @Rule problems", "REPORT_RULE_PROBLEMS");
     panel.addCheckbox("Report @ClassRule problems", "REPORT_CLASS_RULE_PROBLEMS");
     return panel;
@@ -81,13 +81,13 @@ public class JUnitRuleInspection extends BaseInspection {
     return new BaseInspectionVisitor() {
       @Override
       public void visitField(PsiField field) {
-        final boolean ruleAnnotated = REPORT_RULE_PROBLEMS && AnnotationUtil.isAnnotated(field, RULE_FQN, false);
-        final boolean classRuleAnnotated = REPORT_CLASS_RULE_PROBLEMS && AnnotationUtil.isAnnotated(field, CLASS_RULE_FQN, false);
+        boolean ruleAnnotated = REPORT_RULE_PROBLEMS && AnnotationUtil.isAnnotated(field, RULE_FQN, false);
+        boolean classRuleAnnotated = REPORT_CLASS_RULE_PROBLEMS && AnnotationUtil.isAnnotated(field, CLASS_RULE_FQN, false);
         if (ruleAnnotated || classRuleAnnotated) {
           String annotation = ruleAnnotated ? RULE_FQN : CLASS_RULE_FQN;
           String errorMessage = null;
-          final boolean hasStatic = field.hasModifierProperty(PsiModifier.STATIC);
-          final boolean hasPublic = field.hasModifierProperty(PsiModifier.PUBLIC);
+          boolean hasStatic = field.hasModifierProperty(PsiModifier.STATIC);
+          boolean hasPublic = field.hasModifierProperty(PsiModifier.PUBLIC);
           if (!hasPublic) {
             if (classRuleAnnotated) {
               if (!hasStatic) {
@@ -141,9 +141,9 @@ public class JUnitRuleInspection extends BaseInspection {
 
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
+      PsiElement element = descriptor.getPsiElement();
       if (element != null) {
-        final PsiElement parent = element.getParent();
+        PsiElement parent = element.getParent();
         if (parent instanceof PsiField) {
           PsiUtil.setModifierProperty((PsiField)parent, PsiModifier.PUBLIC, true);
           PsiUtil.setModifierProperty((PsiField)parent, PsiModifier.STATIC, myMakeStatic);

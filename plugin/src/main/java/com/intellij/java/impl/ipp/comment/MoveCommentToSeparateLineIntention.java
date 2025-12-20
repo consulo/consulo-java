@@ -48,9 +48,9 @@ public class MoveCommentToSeparateLineIntention extends Intention {
 
     public void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiComment selectedComment = (PsiComment) element;
+        PsiComment selectedComment = (PsiComment) element;
         PsiElement elementToCheck = selectedComment;
-        final PsiWhiteSpace whiteSpace;
+        PsiWhiteSpace whiteSpace;
         while (true) {
             elementToCheck = PsiTreeUtil.prevLeaf(elementToCheck);
             if (elementToCheck == null) {
@@ -61,20 +61,20 @@ public class MoveCommentToSeparateLineIntention extends Intention {
                 break;
             }
         }
-        final PsiElement copyWhiteSpace = whiteSpace.copy();
-        final PsiElement parent = whiteSpace.getParent();
+        PsiElement copyWhiteSpace = whiteSpace.copy();
+        PsiElement parent = whiteSpace.getParent();
         assert parent != null;
-        final PsiManager manager = selectedComment.getManager();
-        final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-        final String commentText = selectedComment.getText();
-        final PsiComment newComment =
+        PsiManager manager = selectedComment.getManager();
+        PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
+        String commentText = selectedComment.getText();
+        PsiComment newComment =
             factory.createCommentFromText(commentText, parent);
-        final PsiElement insertedComment = parent
+        PsiElement insertedComment = parent
             .addBefore(newComment, whiteSpace);
         parent.addBefore(copyWhiteSpace, insertedComment);
 
         selectedComment.delete();
-        final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(manager.getProject());
+        CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(manager.getProject());
         codeStyleManager.reformat(insertedComment);
     }
 
@@ -82,7 +82,7 @@ public class MoveCommentToSeparateLineIntention extends Intention {
         if (!(element instanceof PsiWhiteSpace)) {
             return false;
         }
-        final String text = element.getText();
+        String text = element.getText();
         return containsLineBreak(text);
     }
 

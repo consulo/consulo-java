@@ -34,7 +34,7 @@ class RestoreReferencesDialog extends DialogWrapper {
   private Object[] mySelectedElements = PsiClass.EMPTY_ARRAY;
   private boolean myContainsClassesOnly = true;
 
-  public RestoreReferencesDialog(final Project project, final Object[] elements) {
+  public RestoreReferencesDialog(Project project, Object[] elements) {
     super(project, true);
     myNamedElements = elements;
     for (Object element : elements) {
@@ -64,7 +64,7 @@ class RestoreReferencesDialog extends DialogWrapper {
 
   @Override
   protected JComponent createCenterPanel() {
-    final JPanel panel = new JPanel(new BorderLayout(UIUtil.DEFAULT_HGAP, UIUtil.DEFAULT_VGAP));
+    JPanel panel = new JPanel(new BorderLayout(UIUtil.DEFAULT_HGAP, UIUtil.DEFAULT_VGAP));
     myList = new JBList<>(myNamedElements);
     myList.setCellRenderer(new FQNameCellRenderer());
     panel.add(ScrollPaneFactory.createScrollPane(myList), BorderLayout.CENTER);
@@ -80,11 +80,11 @@ class RestoreReferencesDialog extends DialogWrapper {
       BorderLayout.NORTH
     );
 
-    final JPanel buttonPanel = new JPanel(new VerticalFlowLayout());
-    final JButton okButton = new JButton(CommonLocalize.buttonOk().get());
+    JPanel buttonPanel = new JPanel(new VerticalFlowLayout());
+    JButton okButton = new JButton(CommonLocalize.buttonOk().get());
     getRootPane().setDefaultButton(okButton);
     buttonPanel.add(okButton);
-    final JButton cancelButton = new JButton(CommonLocalize.buttonCancel().get());
+    JButton cancelButton = new JButton(CommonLocalize.buttonCancel().get());
     buttonPanel.add(cancelButton);
 
     panel.setPreferredSize(new Dimension(500, 400));

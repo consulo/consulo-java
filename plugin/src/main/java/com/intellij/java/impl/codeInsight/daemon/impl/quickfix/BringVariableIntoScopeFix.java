@@ -151,7 +151,7 @@ public class BringVariableIntoScopeFix implements SyntheticIntentionAction {
     }
   }
 
-  private static void initialize(final PsiLocalVariable variable) throws IncorrectOperationException {
+  private static void initialize(PsiLocalVariable variable) throws IncorrectOperationException {
     PsiType type = variable.getType();
     String init = PsiTypesUtil.getDefaultValueOfType(type);
     PsiElementFactory factory = JavaPsiFacade.getInstance(variable.getProject()).getElementFactory();

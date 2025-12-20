@@ -59,7 +59,7 @@ public class UnusedSymbolLocalInspection extends UnusedSymbolLocalInspectionBase
       myAccessors.setSelected(!isIgnoreAccessors());
       updateEnableState();
 
-      final ActionListener listener = new ActionListener() {
+      ActionListener listener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
           LOCAL_VARIABLE = myCheckLocalVariablesCheckBox.isSelected();

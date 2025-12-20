@@ -85,7 +85,7 @@ public class NonProtectedConstructorInAbstractClassInspection extends BaseInspec
                 || method.hasModifierProperty(PsiModifier.PACKAGE_LOCAL)) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return;
             }

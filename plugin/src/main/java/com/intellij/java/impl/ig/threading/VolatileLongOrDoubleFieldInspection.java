@@ -35,8 +35,8 @@ public class VolatileLongOrDoubleFieldInspection extends BaseInspection {
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final PsiType type = (PsiType)infos[0];
-    final String typeString = type.getPresentableText();
+    PsiType type = (PsiType)infos[0];
+    String typeString = type.getPresentableText();
     return InspectionGadgetsLocalize.volatileFieldProblemDescriptor(typeString).get();
   }
 
@@ -53,7 +53,7 @@ public class VolatileLongOrDoubleFieldInspection extends BaseInspection {
       if (!field.hasModifierProperty(PsiModifier.VOLATILE)) {
         return;
       }
-      final PsiType type = field.getType();
+      PsiType type = field.getType();
       if (PsiType.LONG.equals(type) || PsiType.DOUBLE.equals(type)) {
         registerFieldError(field, type);
       }

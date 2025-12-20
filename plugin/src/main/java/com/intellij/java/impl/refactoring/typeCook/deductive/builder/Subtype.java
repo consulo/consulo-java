@@ -34,7 +34,7 @@ public class Subtype extends Constraint {
     return 1;
   }
 
-  public Constraint apply(final Binding b) {
+  public Constraint apply(Binding b) {
     return new Subtype(b.apply(myLeft), b.apply(myRight));
   }
 }

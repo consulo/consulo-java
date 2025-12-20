@@ -63,15 +63,15 @@ public class DateToStringInspection extends BaseInspection {
             @Nonnull PsiMethodCallExpression expression
         ) {
             super.visitMethodCallExpression(expression);
-            final String methodName = MethodCallUtils.getMethodName(expression);
+            String methodName = MethodCallUtils.getMethodName(expression);
             if (!HardcodedMethodConstants.TO_STRING.equals(methodName)) {
                 return;
             }
-            final PsiType targetType = MethodCallUtils.getTargetType(expression);
+            PsiType targetType = MethodCallUtils.getTargetType(expression);
             if (!TypeUtils.typeEquals(CommonClassNames.JAVA_UTIL_DATE, targetType)) {
                 return;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpressionList argumentList = expression.getArgumentList();
             if (argumentList.getExpressions().length != 0) {
                 return;
             }

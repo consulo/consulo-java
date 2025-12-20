@@ -60,13 +60,13 @@ public class AssertEqualsCalledOnArrayInspection extends BaseInspection {
 
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement methodNameIdentifier = descriptor.getPsiElement();
-      final PsiElement parent = methodNameIdentifier.getParent();
+      PsiElement methodNameIdentifier = descriptor.getPsiElement();
+      PsiElement parent = methodNameIdentifier.getParent();
       if (!(parent instanceof PsiReferenceExpression)) {
         return;
       }
-      final PsiReferenceExpression methodExpression = (PsiReferenceExpression)parent;
-      final PsiExpression qualifier = methodExpression.getQualifierExpression();
+      PsiReferenceExpression methodExpression = (PsiReferenceExpression)parent;
+      PsiExpression qualifier = methodExpression.getQualifierExpression();
       if (qualifier == null && ImportUtils.addStaticImport("org.junit.Assert", "assertArrayEquals", methodExpression)) {
         replaceExpression(methodExpression, "assertArrayEquals");
       }
@@ -86,25 +86,25 @@ public class AssertEqualsCalledOnArrayInspection extends BaseInspection {
     @Override
     public void visitMethodCallExpression(PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      @NonNls final String methodName = methodExpression.getReferenceName();
+      PsiReferenceExpression methodExpression = expression.getMethodExpression();
+      @NonNls String methodName = methodExpression.getReferenceName();
       if (!"assertEquals".equals(methodName)) {
         return;
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
-      final PsiType type1;
-      final PsiType type2;
+      PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpression[] arguments = argumentList.getExpressions();
+      PsiType type1;
+      PsiType type2;
       if (arguments.length == 2) {
-        final PsiExpression argument0 = arguments[0];
+        PsiExpression argument0 = arguments[0];
         type1 = argument0.getType();
-        final PsiExpression argument1 = arguments[1];
+        PsiExpression argument1 = arguments[1];
         type2 = argument1.getType();
       }
       else if (arguments.length == 3) {
-        final PsiExpression argument0 = arguments[1];
+        PsiExpression argument0 = arguments[1];
         type1 = argument0.getType();
-        final PsiExpression argument1 = arguments[2];
+        PsiExpression argument1 = arguments[2];
         type2 = argument1.getType();
       }
       else {
@@ -113,11 +113,11 @@ public class AssertEqualsCalledOnArrayInspection extends BaseInspection {
       if (!(type1 instanceof PsiArrayType) || !(type2 instanceof PsiArrayType)) {
         return;
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return;
       }
-      final PsiClass containingClass = method.getContainingClass();
+      PsiClass containingClass = method.getContainingClass();
       if (!InheritanceUtil.isInheritor(containingClass, "junit.framework.Assert") &&
           !InheritanceUtil.isInheritor(containingClass, "org.junit.Assert") &&
           !InheritanceUtil.isInheritor(containingClass, "org.testng.AssertJUnit")) {

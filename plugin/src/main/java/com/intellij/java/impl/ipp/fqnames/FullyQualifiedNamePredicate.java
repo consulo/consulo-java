@@ -30,39 +30,39 @@ class FullyQualifiedNamePredicate implements PsiElementPredicate {
     if (!(element instanceof PsiJavaCodeReferenceElement)) {
       return false;
     }
-    final PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement)element;
+    PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement)element;
     if (!referenceElement.isQualified()) {
       return false;
     }
-    final PsiElement parent = referenceElement.getParent();
+    PsiElement parent = referenceElement.getParent();
     if (parent instanceof PsiMethodCallExpression || parent instanceof PsiAssignmentExpression || parent instanceof PsiVariable) {
       return false;
     }
     if (PsiTreeUtil.getParentOfType(element, PsiImportStatementBase.class, PsiPackageStatement.class, JavaCodeFragment.class) != null) {
       return false;
     }
-    final PsiElement qualifier = referenceElement.getQualifier();
+    PsiElement qualifier = referenceElement.getQualifier();
     if (!(qualifier instanceof PsiJavaCodeReferenceElement)) {
       return false;
     }
-    final PsiJavaCodeReferenceElement qualifierReferenceElement = (PsiJavaCodeReferenceElement)qualifier;
-    final PsiElement resolved = qualifierReferenceElement.resolve();
+    PsiJavaCodeReferenceElement qualifierReferenceElement = (PsiJavaCodeReferenceElement)qualifier;
+    PsiElement resolved = qualifierReferenceElement.resolve();
     if (!(resolved instanceof PsiJavaPackage)) {
       if (!(resolved instanceof PsiClass)) {
         return false;
       }
-      final Project project = element.getProject();
-      final JavaCodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
+      Project project = element.getProject();
+      JavaCodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
       if (!codeStyleSettings.INSERT_INNER_CLASS_IMPORTS) {
         return false;
       }
     }
-    final PsiElement target = referenceElement.resolve();
+    PsiElement target = referenceElement.resolve();
     if (!(target instanceof PsiClass)) {
       return false;
     }
-    final PsiClass aClass = (PsiClass)target;
-    final String fqName = aClass.getQualifiedName();
+    PsiClass aClass = (PsiClass)target;
+    String fqName = aClass.getQualifiedName();
     if (fqName == null) {
       return false;
     }

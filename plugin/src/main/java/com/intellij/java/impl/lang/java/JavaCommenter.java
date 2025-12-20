@@ -96,14 +96,14 @@ public class JavaCommenter implements CodeDocumentationAwareCommenterEx {
   }
 
   @Override
-  public boolean isDocumentationComment(final PsiComment element) {
+  public boolean isDocumentationComment(PsiComment element) {
     return element instanceof PsiDocComment;
   }
 
   @Override
-  public boolean isDocumentationCommentText(final PsiElement element) {
+  public boolean isDocumentationCommentText(PsiElement element) {
     if (element == null) return false;
-    final ASTNode node = element.getNode();
+    ASTNode node = element.getNode();
     return node != null && (node.getElementType() == JavaDocTokenType.DOC_COMMENT_DATA || node.getElementType() == JavaDocTokenType.DOC_TAG_VALUE_TOKEN);
   }
 

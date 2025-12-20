@@ -48,7 +48,7 @@ public class UtilityClassWithPublicConstructorInspection extends BaseInspection 
 
     @Override
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiClass psiClass = (PsiClass) infos[0];
+        PsiClass psiClass = (PsiClass) infos[0];
         if (psiClass.getConstructors().length > 1) {
             return new UtilityClassWithPublicConstructorFix(true);
         }
@@ -76,14 +76,14 @@ public class UtilityClassWithPublicConstructorInspection extends BaseInspection 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
-            final PsiElement classNameIdentifier = descriptor.getPsiElement();
-            final PsiClass psiClass = (PsiClass) classNameIdentifier.getParent();
+            PsiElement classNameIdentifier = descriptor.getPsiElement();
+            PsiClass psiClass = (PsiClass) classNameIdentifier.getParent();
             if (psiClass == null) {
                 return;
             }
-            final PsiMethod[] constructors = psiClass.getConstructors();
+            PsiMethod[] constructors = psiClass.getConstructors();
             for (PsiMethod constructor : constructors) {
-                final PsiModifierList modifierList =
+                PsiModifierList modifierList =
                     constructor.getModifierList();
                 modifierList.setModifierProperty(PsiModifier.PRIVATE, true);
             }
@@ -111,8 +111,8 @@ public class UtilityClassWithPublicConstructorInspection extends BaseInspection 
         }
 
         private static boolean hasPublicConstructor(PsiClass aClass) {
-            final PsiMethod[] constructors = aClass.getConstructors();
-            for (final PsiMethod constructor : constructors) {
+            PsiMethod[] constructors = aClass.getConstructors();
+            for (PsiMethod constructor : constructors) {
                 if (constructor.hasModifierProperty(PsiModifier.PUBLIC)) {
                     return true;
                 }

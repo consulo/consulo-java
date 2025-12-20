@@ -28,7 +28,7 @@ public class PsiClassTableCellEditor extends AbstractTableCellEditor {
   private final GlobalSearchScope mySearchScope;
   private EditorTextField myEditor;
 
-  public PsiClassTableCellEditor(final Project project, final GlobalSearchScope searchScope) {
+  public PsiClassTableCellEditor(Project project, GlobalSearchScope searchScope) {
     myProject = project;
     mySearchScope = searchScope;
   }
@@ -38,7 +38,7 @@ public class PsiClassTableCellEditor extends AbstractTableCellEditor {
   }
 
   public final boolean stopCellEditing() {
-    final boolean b = super.stopCellEditing();
+    boolean b = super.stopCellEditing();
     myEditor = null;
     return b;
   }
@@ -57,7 +57,7 @@ public class PsiClassTableCellEditor extends AbstractTableCellEditor {
 
       public void addNotify() {
         super.addNotify();
-        final JComponent editorComponent = getEditor().getContentComponent();
+        JComponent editorComponent = getEditor().getContentComponent();
         editorComponent.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "ENTER");
         editorComponent.getActionMap().put("ENTER", new AbstractAction() {
           public void actionPerformed(ActionEvent e) {
@@ -66,10 +66,10 @@ public class PsiClassTableCellEditor extends AbstractTableCellEditor {
         });
       }
     };
-    final JPanel panel = new JPanel();
+    JPanel panel = new JPanel();
     panel.setLayout(new BorderLayout());
     panel.add(myEditor);
-    final FixedSizeButton button = new FixedSizeButton(myEditor);
+    FixedSizeButton button = new FixedSizeButton(myEditor);
     panel.add(button, BorderLayout.EAST);
     button.addActionListener(e -> {
       TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject).createInheritanceClassChooser(
@@ -81,7 +81,7 @@ public class PsiClassTableCellEditor extends AbstractTableCellEditor {
         Conditions.alwaysTrue()
       );
       chooser.showDialog();
-      final PsiClass psiClass = chooser.getSelected();
+      PsiClass psiClass = chooser.getSelected();
       if (psiClass != null) {
         myEditor.setText(psiClass.getQualifiedName());
       }

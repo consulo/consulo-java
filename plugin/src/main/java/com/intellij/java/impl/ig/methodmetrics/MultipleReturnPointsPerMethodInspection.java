@@ -66,21 +66,21 @@ public class MultipleReturnPointsPerMethodInspection
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final Integer returnPointCount = (Integer)infos[0];
+    Integer returnPointCount = (Integer)infos[0];
     return InspectionGadgetsLocalize.multipleReturnPointsPerMethodProblemDescriptor(returnPointCount).get();
   }
 
   @Override
   public JComponent createOptionsPanel() {
-    final JPanel panel = new JPanel(new GridBagLayout());
-    final JLabel label = new JLabel(InspectionGadgetsLocalize.returnPointLimitOption().get());
-    final JFormattedTextField termLimitTextField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
-    final CheckBox ignoreGuardClausesCheckBox =
+    JPanel panel = new JPanel(new GridBagLayout());
+    JLabel label = new JLabel(InspectionGadgetsLocalize.returnPointLimitOption().get());
+    JFormattedTextField termLimitTextField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
+    CheckBox ignoreGuardClausesCheckBox =
       new CheckBox(InspectionGadgetsLocalize.ignoreGuardClausesOption().get(), this, "ignoreGuardClauses");
-    final CheckBox ignoreEqualsMethodCheckBox =
+    CheckBox ignoreEqualsMethodCheckBox =
       new CheckBox(InspectionGadgetsLocalize.ignoreForEqualsMethodsOption().get(), this, "ignoreEqualsMethod");
 
-    final GridBagConstraints constraints = new GridBagConstraints();
+    GridBagConstraints constraints = new GridBagConstraints();
 
     constraints.anchor = GridBagConstraints.BASELINE_LEADING;
     constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -124,7 +124,7 @@ public class MultipleReturnPointsPerMethodInspection
           return;
         }
       }
-      final int returnPointCount = calculateReturnPointCount(method);
+      int returnPointCount = calculateReturnPointCount(method);
       if (returnPointCount <= getLimit()) {
         return;
       }
@@ -132,22 +132,22 @@ public class MultipleReturnPointsPerMethodInspection
     }
 
     private int calculateReturnPointCount(PsiMethod method) {
-      final ReturnPointCountVisitor visitor =
+      ReturnPointCountVisitor visitor =
         new ReturnPointCountVisitor(ignoreGuardClauses);
       method.accept(visitor);
-      final int count = visitor.getCount();
+      int count = visitor.getCount();
       if (!mayFallThroughBottom(method)) {
         return count;
       }
-      final PsiCodeBlock body = method.getBody();
+      PsiCodeBlock body = method.getBody();
       if (body == null) {
         return count;
       }
-      final PsiStatement[] statements = body.getStatements();
+      PsiStatement[] statements = body.getStatements();
       if (statements.length == 0) {
         return count + 1;
       }
-      final PsiStatement lastStatement =
+      PsiStatement lastStatement =
         statements[statements.length - 1];
       if (ControlFlowUtils.statementMayCompleteNormally(lastStatement)) {
         return count + 1;
@@ -159,7 +159,7 @@ public class MultipleReturnPointsPerMethodInspection
       if (method.isConstructor()) {
         return true;
       }
-      final PsiType returnType = method.getReturnType();
+      PsiType returnType = method.getReturnType();
       return PsiType.VOID.equals(returnType);
     }
   }

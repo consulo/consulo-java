@@ -19,7 +19,7 @@ public class IntroduceVariableUtil {
     if (parent instanceof PsiVariable) {
       PsiExpression copyVariableInitializer = ((PsiVariable)parent).getInitializer();
       if (copyVariableInitializer instanceof PsiNewExpression) {
-        final PsiDiamondType.DiamondInferenceResult diamondResolveResult =
+        PsiDiamondType.DiamondInferenceResult diamondResolveResult =
           PsiDiamondTypeImpl.resolveInferredTypesNoCheck((PsiNewExpression)copyVariableInitializer, copyVariableInitializer);
         if (!diamondResolveResult.getInferredTypes().isEmpty()) {
           PsiDiamondTypeUtil.expandTopLevelDiamondsInside(copyVariableInitializer);

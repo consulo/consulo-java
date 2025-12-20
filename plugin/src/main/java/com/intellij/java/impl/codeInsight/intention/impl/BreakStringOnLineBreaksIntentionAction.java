@@ -46,23 +46,23 @@ public class BreakStringOnLineBreaksIntentionAction extends PsiElementBaseIntent
       return false;
     }
 
-    final PsiJavaToken token = (PsiJavaToken)element;
+    PsiJavaToken token = (PsiJavaToken)element;
 
     if (token.getTokenType() != JavaTokenType.STRING_LITERAL) {
       return false;
     }
 
-    final String text = token.getText();
+    String text = token.getText();
     if (text == null) {
       return false;
     }
 
-    final int indexOfSlashN = text.indexOf("\\n");
+    int indexOfSlashN = text.indexOf("\\n");
     if (indexOfSlashN == -1 || Comparing.equal(text.substring(indexOfSlashN, text.length()), "\\n\"")){
       return false;
     }
 
-    final int indexOfSlashNSlashR = text.indexOf("\\n\\r");
+    int indexOfSlashNSlashR = text.indexOf("\\n\\r");
     return indexOfSlashNSlashR == -1 || !Comparing.equal(text.substring(indexOfSlashNSlashR, text.length()), "\\n\\r\"");
   }
 
@@ -72,32 +72,32 @@ public class BreakStringOnLineBreaksIntentionAction extends PsiElementBaseIntent
       return;
     }
 
-    final PsiJavaToken token = (PsiJavaToken)element;
+    PsiJavaToken token = (PsiJavaToken)element;
 
     if (token.getTokenType() != JavaTokenType.STRING_LITERAL) {
       return;
     }
 
 
-    final String text = token.getText();
+    String text = token.getText();
     if (text == null) {
       return;
     }
 
-    final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+    PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
     token.replace(factory.createExpressionFromText(breakOnLineBreaks(text), element));
   }
 
 
   @Nonnull
   private static String breakOnLineBreaks(@Nonnull String string) {
-    final String result = StringUtil.replace(
+    String result = StringUtil.replace(
       string,
       new String[]{"\\n\\r", "\\n"},
       new String[]{"\\n\\r\" + \n\"", "\\n\" + \n\""}
     );
 
-    final String redundantSuffix = " + \n\"\"";
+    String redundantSuffix = " + \n\"\"";
 
     return result.endsWith(redundantSuffix) ? result.substring(0, result.length() - redundantSuffix.length()) : result;
   }

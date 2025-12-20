@@ -52,26 +52,26 @@ public class ReplaceOnDemandImportIntention extends Intention {
     @Override
     protected void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiImportStatementBase importStatementBase =
+        PsiImportStatementBase importStatementBase =
             (PsiImportStatementBase) element;
         if (importStatementBase instanceof PsiImportStatement) {
-            final PsiImportStatement importStatement =
+            PsiImportStatement importStatement =
                 (PsiImportStatement) importStatementBase;
-            final PsiJavaFile javaFile =
+            PsiJavaFile javaFile =
                 (PsiJavaFile) importStatement.getContainingFile();
-            final PsiClass[] classes = javaFile.getClasses();
-            final String qualifiedName = importStatement.getQualifiedName();
-            final ClassCollector visitor = new ClassCollector(qualifiedName);
+            PsiClass[] classes = javaFile.getClasses();
+            String qualifiedName = importStatement.getQualifiedName();
+            ClassCollector visitor = new ClassCollector(qualifiedName);
             for (PsiClass aClass : classes) {
                 aClass.accept(visitor);
             }
-            final PsiClass[] importedClasses = visitor.getImportedClasses();
+            PsiClass[] importedClasses = visitor.getImportedClasses();
             Arrays.sort(importedClasses, new PsiClassComparator());
-            final PsiManager manager = importStatement.getManager();
-            final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-            final PsiElement importList = importStatement.getParent();
+            PsiManager manager = importStatement.getManager();
+            PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
+            PsiElement importList = importStatement.getParent();
             for (PsiClass importedClass : importedClasses) {
-                final PsiImportStatement newImportStatement =
+                PsiImportStatement newImportStatement =
                     factory.createImportStatement(importedClass);
                 importList.add(newImportStatement);
             }
@@ -98,13 +98,13 @@ public class ReplaceOnDemandImportIntention extends Intention {
             if (reference.isQualified()) {
                 return;
             }
-            final PsiElement element = reference.resolve();
+            PsiElement element = reference.resolve();
             if (!(element instanceof PsiClass)) {
                 return;
             }
-            final PsiClass aClass = (PsiClass) element;
-            final String qualifiedName = aClass.getQualifiedName();
-            final String packageName =
+            PsiClass aClass = (PsiClass) element;
+            String qualifiedName = aClass.getQualifiedName();
+            String packageName =
                 ClassUtil.extractPackageName(qualifiedName);
             if (!importedPackageName.equals(packageName)) {
                 return;
@@ -122,8 +122,8 @@ public class ReplaceOnDemandImportIntention extends Intention {
 
         @Override
         public int compare(PsiClass class1, PsiClass class2) {
-            final String qualifiedName1 = class1.getQualifiedName();
-            final String qualifiedName2 = class2.getQualifiedName();
+            String qualifiedName1 = class1.getQualifiedName();
+            String qualifiedName2 = class2.getQualifiedName();
             if (qualifiedName1 == null) {
                 return -1;
             }

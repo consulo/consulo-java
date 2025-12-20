@@ -39,7 +39,7 @@ class JavaResolveSnapshot extends ResolveSnapshotProvider.ResolveSnapshot {
   private final Project myProject;
   private final Document myDocument;
 
-  JavaResolveSnapshot(final PsiElement scope) {
+  JavaResolveSnapshot(PsiElement scope) {
     myProject = scope.getProject();
     myDocument = PsiDocumentManager.getInstance(myProject).getDocument(scope.getContainingFile());
     final SmartPointerManager pointerManager = SmartPointerManager.getInstance(myProject);
@@ -48,7 +48,7 @@ class JavaResolveSnapshot extends ResolveSnapshotProvider.ResolveSnapshot {
       @Override public void visitReferenceExpression(PsiReferenceExpression refExpr) {
         if (!refExpr.isQualified()) {
           JavaResolveResult resolveResult = refExpr.advancedResolve(false);
-          final PsiElement resolved = resolveResult.getElement();
+          PsiElement resolved = resolveResult.getElement();
           if (resolved instanceof PsiField && resolveResult.isStaticsScopeCorrect()) {
             SmartPsiElementPointer key = pointerManager.createSmartPsiElementPointer(refExpr);
             SmartPsiElementPointer value = pointers.get(resolved);
@@ -75,7 +75,7 @@ class JavaResolveSnapshot extends ResolveSnapshotProvider.ResolveSnapshot {
     if (referent instanceof PsiReferenceExpression && referee instanceof PsiField) {
       PsiReferenceExpression ref = ((PsiReferenceExpression) referent);
       if (!ref.isQualified() && hidingLocalName.equals(ref.getReferenceName())) {
-        final PsiElement newlyResolved = ref.resolve();
+        PsiElement newlyResolved = ref.resolve();
         if (referee.getManager().areElementsEquivalent(newlyResolved, referee)) return;
         RenameJavaMemberProcessor.qualifyMember((PsiField)referee, referent, hidingLocalName);
       }

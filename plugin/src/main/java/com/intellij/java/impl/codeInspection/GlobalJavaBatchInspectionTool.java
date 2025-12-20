@@ -37,9 +37,9 @@ import jakarta.annotation.Nullable;
 public abstract class GlobalJavaBatchInspectionTool extends GlobalInspectionTool implements BatchSuppressableTool
 {
 	@Override
-	public boolean queryExternalUsagesRequests(@Nonnull final InspectionManager manager,
-											   @Nonnull final GlobalInspectionContext globalContext,
-											   @Nonnull final ProblemDescriptionsProcessor problemDescriptionsProcessor,
+	public boolean queryExternalUsagesRequests(@Nonnull InspectionManager manager,
+											   @Nonnull GlobalInspectionContext globalContext,
+											   @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
 											   Object state)
 	{
 		return queryExternalUsagesRequests(globalContext.getRefManager(), globalContext.getExtension(GlobalJavaInspectionContext.CONTEXT), problemDescriptionsProcessor);
@@ -58,7 +58,7 @@ public abstract class GlobalJavaBatchInspectionTool extends GlobalInspectionTool
 	}
 
 	@Override
-	public boolean isSuppressedFor(@Nonnull final PsiElement element)
+	public boolean isSuppressedFor(@Nonnull PsiElement element)
 	{
 		return BatchSuppressManager.getInstance().isSuppressedFor(element, getShortName());
 	}

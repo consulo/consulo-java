@@ -43,21 +43,21 @@ public class VarargsSelectioner extends BasicSelectioner {
       return Collections.emptyList();
     }
 
-    final PsiExpressionList expressionList = (PsiExpressionList)e;
-    final PsiParameterList parameterList = getParameterList(expressionList);
+    PsiExpressionList expressionList = (PsiExpressionList)e;
+    PsiParameterList parameterList = getParameterList(expressionList);
 
     if (parameterList == null) {
       return Collections.emptyList();
     }
 
-    final PsiExpression[] varargArgs = getVarargArgs(parameterList, expressionList);
+    PsiExpression[] varargArgs = getVarargArgs(parameterList, expressionList);
 
     if (varargArgs.length == 0) {
       return Collections.emptyList();
     }
 
-    final TextRange firstExpressionRange = varargArgs[0].getTextRange();
-    final TextRange lastExpressionRange = varargArgs[varargArgs.length - 1].getTextRange();
+    TextRange firstExpressionRange = varargArgs[0].getTextRange();
+    TextRange lastExpressionRange = varargArgs[varargArgs.length - 1].getTextRange();
 
 
     return Collections.singletonList(new TextRange(firstExpressionRange.getStartOffset(), lastExpressionRange.getEndOffset()));
@@ -66,15 +66,15 @@ public class VarargsSelectioner extends BasicSelectioner {
   @Nonnull
   private static PsiExpression[] getVarargArgs(@Nonnull PsiParameterList parameterList,
                                                @Nonnull PsiExpressionList expressionList) {
-    final PsiParameter[] parameters = parameterList.getParameters();
-    final PsiExpression[] expressions = expressionList.getExpressions();
+    PsiParameter[] parameters = parameterList.getParameters();
+    PsiExpression[] expressions = expressionList.getExpressions();
 
     if (parameters.length == 0 || expressions.length == 0) {
       return PsiExpression.EMPTY_ARRAY;
     }
 
-    final int varargIndex = parameters.length - 1;
-    final PsiParameter varargParam = parameters[varargIndex];
+    int varargIndex = parameters.length - 1;
+    PsiParameter varargParam = parameters[varargIndex];
     if (!varargParam.isVarArgs() || parameters.length > expressions.length) {
       return PsiExpression.EMPTY_ARRAY;
     }
@@ -87,7 +87,7 @@ public class VarargsSelectioner extends BasicSelectioner {
     if (!(list.getParent() instanceof PsiMethodCallExpression)) {
       return null;
     }
-    final PsiMethod method = ((PsiMethodCallExpression)list.getParent()).resolveMethod();
+    PsiMethod method = ((PsiMethodCallExpression)list.getParent()).resolveMethod();
 
     return method != null ? method.getParameterList() : null;
   }

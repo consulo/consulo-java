@@ -59,20 +59,20 @@ public class SystemSetSecurityManagerInspection extends BaseInspection {
         }
 
         private static boolean isSetSecurityManager(PsiMethodCallExpression expression) {
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            String methodName = methodExpression.getReferenceName();
             if (!"setSecurityManager".equals(methodName)) {
                 return false;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return false;
             }
-            final PsiClass aClass = method.getContainingClass();
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null) {
                 return false;
             }
-            final String className = aClass.getQualifiedName();
+            String className = aClass.getQualifiedName();
             if (className == null) {
                 return false;
             }

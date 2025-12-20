@@ -44,12 +44,12 @@ public class ReplaceOperatorAssignmentWithPostfixExpressionIntention
     @Nonnull
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
-        final PsiAssignmentExpression assignment =
+        PsiAssignmentExpression assignment =
             (PsiAssignmentExpression) element;
-        final PsiExpression expression = assignment.getLExpression();
-        final PsiJavaToken sign = assignment.getOperationSign();
-        final IElementType tokenType = sign.getTokenType();
-        final String replacementText;
+        PsiExpression expression = assignment.getLExpression();
+        PsiJavaToken sign = assignment.getOperationSign();
+        IElementType tokenType = sign.getTokenType();
+        String replacementText;
         if (JavaTokenType.PLUSEQ.equals(tokenType)) {
             replacementText = expression.getText() + "++";
         }
@@ -68,12 +68,12 @@ public class ReplaceOperatorAssignmentWithPostfixExpressionIntention
     @Override
     protected void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiAssignmentExpression assignment =
+        PsiAssignmentExpression assignment =
             (PsiAssignmentExpression) element;
-        final PsiExpression expression = assignment.getLExpression();
-        final String expressionText = expression.getText();
-        final IElementType tokenType = assignment.getOperationTokenType();
-        final String newExpressionText;
+        PsiExpression expression = assignment.getLExpression();
+        String expressionText = expression.getText();
+        IElementType tokenType = assignment.getOperationTokenType();
+        String newExpressionText;
         if (JavaTokenType.PLUSEQ.equals(tokenType)) {
             newExpressionText = expressionText + "++";
         }

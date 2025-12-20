@@ -27,20 +27,20 @@ public class MethodInheritanceUtils {
   private MethodInheritanceUtils() {}
 
   public static Set<RefMethod> calculateSiblingMethods(RefMethod method) {
-    final Set<RefMethod> siblingMethods = new HashSet<RefMethod>();
-    final Stack<RefMethod> pendingMethods = new Stack<RefMethod>();
+    Set<RefMethod> siblingMethods = new HashSet<RefMethod>();
+    Stack<RefMethod> pendingMethods = new Stack<RefMethod>();
     pendingMethods.add(method);
     while (!pendingMethods.isEmpty()) {
-      final RefMethod methodToAnalyze = pendingMethods.pop();
+      RefMethod methodToAnalyze = pendingMethods.pop();
       siblingMethods.add(methodToAnalyze);
-      final Collection<RefMethod> overridingMethods = methodToAnalyze.getDerivedMethods();
+      Collection<RefMethod> overridingMethods = methodToAnalyze.getDerivedMethods();
       for (RefMethod overridingMethod : overridingMethods) {
         if (!siblingMethods.contains(overridingMethod) &&
             !pendingMethods.contains(overridingMethod)) {
           pendingMethods.add(overridingMethod);
         }
       }
-      final Collection<RefMethod> superMethods = methodToAnalyze.getSuperMethods();
+      Collection<RefMethod> superMethods = methodToAnalyze.getSuperMethods();
       for (RefMethod superMethod : superMethods) {
         if (!siblingMethods.contains(superMethod) &&
             !pendingMethods.contains(superMethod)) {

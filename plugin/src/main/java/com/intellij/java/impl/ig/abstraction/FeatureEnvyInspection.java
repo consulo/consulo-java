@@ -48,8 +48,8 @@ public class FeatureEnvyInspection extends BaseInspection {
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final PsiNamedElement element = (PsiNamedElement)infos[0];
-    final String className = element.getName();
+    PsiNamedElement element = (PsiNamedElement)infos[0];
+    String className = element.getName();
     return InspectionGadgetsLocalize.featureEnvyProblemDescriptor(className).get();
   }
 
@@ -71,7 +71,7 @@ public class FeatureEnvyInspection extends BaseInspection {
     @Override
     public void visitMethod(@Nonnull PsiMethod method) {
       if (ignoreTestCases) {
-        final PsiClass containingClass = method.getContainingClass();
+        PsiClass containingClass = method.getContainingClass();
         if (containingClass != null &&
             TestFrameworks.getInstance().isTestClass(containingClass)) {
           return;
@@ -80,15 +80,15 @@ public class FeatureEnvyInspection extends BaseInspection {
           return;
         }
       }
-      final PsiIdentifier nameIdentifier = method.getNameIdentifier();
+      PsiIdentifier nameIdentifier = method.getNameIdentifier();
       if (nameIdentifier == null) {
         return;
       }
-      final PsiClass containingClass = method.getContainingClass();
-      final ClassAccessVisitor visitor =
+      PsiClass containingClass = method.getContainingClass();
+      ClassAccessVisitor visitor =
         new ClassAccessVisitor(containingClass);
       method.accept(visitor);
-      final Set<PsiClass> overaccessedClasses =
+      Set<PsiClass> overaccessedClasses =
         visitor.getOveraccessedClasses();
       for (PsiClass aClass : overaccessedClasses) {
         registerError(nameIdentifier, aClass);

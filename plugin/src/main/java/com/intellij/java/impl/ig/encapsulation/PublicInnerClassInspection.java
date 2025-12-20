@@ -54,7 +54,7 @@ public class PublicInnerClassInspection extends BaseInspection {
     @Override
     @Nullable
     public JComponent createOptionsPanel() {
-        final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+        MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
         panel.addCheckbox(InspectionGadgetsLocalize.publicInnerClassIgnoreEnumOption().get(), "ignoreEnums");
         panel.addCheckbox(InspectionGadgetsLocalize.publicInnerClassIgnoreInterfaceOption().get(), "ignoreInterfaces");
         return panel;

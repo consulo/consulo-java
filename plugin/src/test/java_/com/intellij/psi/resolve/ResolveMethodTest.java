@@ -194,7 +194,7 @@ public abstract class ResolveMethodTest extends ResolveTestCase {
   public void testSuperOfObject() throws Exception {
     PsiElement target = resolve();
     assertTrue(target instanceof PsiMethod);
-    final PsiMethod method = (PsiMethod)target;
+    PsiMethod method = (PsiMethod)target;
     assertEquals("clone", method.getName());
     assertEquals(CommonClassNames.JAVA_LANG_OBJECT, method.getContainingClass().getQualifiedName());
   }
@@ -233,7 +233,7 @@ public abstract class ResolveMethodTest extends ResolveTestCase {
     assertTrue(result instanceof MethodCandidateInfo);
     assertTrue(!result.isValidResult());
     assertTrue(!((MethodCandidateInfo)result).isApplicable());
-    final PsiClass aClass = ((PsiMethod)result.getElement()).getContainingClass();
+    PsiClass aClass = ((PsiMethod)result.getElement()).getContainingClass();
     assertNotNull(aClass.getContainingClass());
   }
 

@@ -49,7 +49,7 @@ public abstract class MovePackageTest extends MultiFileTestCase {
   }
 
   private void performAction(String[] packageNames, String newPackageName) throws Exception {
-    final PsiJavaPackage[] packages = new PsiJavaPackage[packageNames.length];
+    PsiJavaPackage[] packages = new PsiJavaPackage[packageNames.length];
     for (int i = 0; i < packages.length; i++) {
       String packageName = packageNames[i];
       packages[i] = JavaPsiFacade.getInstance(myPsiManager.getProject()).findPackage(packageName);
@@ -58,7 +58,7 @@ public abstract class MovePackageTest extends MultiFileTestCase {
 
     PsiJavaPackage newParentPackage = JavaPsiFacade.getInstance(myPsiManager.getProject()).findPackage(newPackageName);
     assertNotNull(newParentPackage);
-    final PsiDirectory[] dirs = newParentPackage.getDirectories();
+    PsiDirectory[] dirs = newParentPackage.getDirectories();
     assertEquals(dirs.length, 1);
 
     new MoveClassesOrPackagesProcessor(myProject, packages,

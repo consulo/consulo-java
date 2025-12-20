@@ -34,10 +34,10 @@ public class PsiJavaCodeReferenceCodeFragmentImpl extends PsiCodeFragmentImpl im
   private static final Logger LOG = Logger.getInstance(PsiJavaCodeReferenceCodeFragmentImpl.class);
   private final boolean myIsClassesAccepted;
 
-  public PsiJavaCodeReferenceCodeFragmentImpl(final Project project,
-                                              final boolean isPhysical,
-                                              @NonNls final String name,
-                                              final CharSequence text,
+  public PsiJavaCodeReferenceCodeFragmentImpl(Project project,
+                                              boolean isPhysical,
+                                              @NonNls String name,
+                                              CharSequence text,
                                               boolean isClassesAccepted,
                                               @Nullable PsiElement context) {
     super(project, JavaElementType.REFERENCE_TEXT, isPhysical, name, text, context);
@@ -46,7 +46,7 @@ public class PsiJavaCodeReferenceCodeFragmentImpl extends PsiCodeFragmentImpl im
 
   @Override
   public PsiJavaCodeReferenceElement getReferenceElement() {
-    final CompositeElement treeElement = calcTreeElement();
+    CompositeElement treeElement = calcTreeElement();
     LOG.assertTrue(treeElement.getFirstChildNode().getElementType() == JavaElementType.JAVA_CODE_REFERENCE);
     return (PsiJavaCodeReferenceElement) SourceTreeToPsiMap.treeElementToPsi(treeElement.getFirstChildNode());
   }

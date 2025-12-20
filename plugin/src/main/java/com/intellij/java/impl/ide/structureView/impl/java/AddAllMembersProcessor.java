@@ -74,11 +74,11 @@ class AddAllMembersProcessor implements PsiScopeProcessor {
     if (!(element instanceof PsiMethod)) {
       return false;
     }
-    final PsiClass containingClass = ((PsiMethod) element).getContainingClass();
+    PsiClass containingClass = ((PsiMethod) element).getContainingClass();
     if (containingClass == null) {
       return false;
     } else {
-      final String qualifiedName = containingClass.getQualifiedName();
+      String qualifiedName = containingClass.getQualifiedName();
       return qualifiedName != null && qualifiedName.equals(Object.class.getName());
     }
   }

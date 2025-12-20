@@ -58,24 +58,24 @@ public class SingleCharacterStartsWithInspection extends BaseInspection {
         }
 
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiReferenceExpression methodExpression = (PsiReferenceExpression) element.getParent();
-            final PsiMethodCallExpression methodCall = (PsiMethodCallExpression) methodExpression.getParent();
-            final PsiElement qualifier = methodExpression.getQualifier();
+            PsiElement element = descriptor.getPsiElement();
+            PsiReferenceExpression methodExpression = (PsiReferenceExpression) element.getParent();
+            PsiMethodCallExpression methodCall = (PsiMethodCallExpression) methodExpression.getParent();
+            PsiElement qualifier = methodExpression.getQualifier();
             if (qualifier == null) {
                 return;
             }
-            final PsiExpressionList argumentList = methodCall.getArgumentList();
-            final PsiExpression[] expressions = argumentList.getExpressions();
-            final PsiExpression expression = expressions[0];
-            final String expressionText = expression.getText();
+            PsiExpressionList argumentList = methodCall.getArgumentList();
+            PsiExpression[] expressions = argumentList.getExpressions();
+            PsiExpression expression = expressions[0];
+            String expressionText = expression.getText();
             String character = expressionText.substring(1, expressionText.length() - 1);
             if (character.equals("'")) {
                 character = "\\'";
             }
-            final String qualifierText = qualifier.getText();
-            @NonNls final String newExpression;
-            final String referenceName = methodExpression.getReferenceName();
+            String qualifierText = qualifier.getText();
+            @NonNls String newExpression;
+            String referenceName = methodExpression.getReferenceName();
             if (HardcodedMethodConstants.STARTS_WITH.equals(referenceName)) {
                 newExpression = qualifierText + ".length() > 0 && " +
                     qualifierText + ".charAt(0) == '" + character + '\'';
@@ -97,26 +97,26 @@ public class SingleCharacterStartsWithInspection extends BaseInspection {
         @Override
         public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
             super.visitMethodCallExpression(call);
-            final PsiReferenceExpression methodExpression = call.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = call.getMethodExpression();
+            String methodName = methodExpression.getReferenceName();
             if (!HardcodedMethodConstants.STARTS_WITH.equals(methodName) &&
                 !HardcodedMethodConstants.ENDS_WITH.equals(methodName)) {
                 return;
             }
-            final PsiExpressionList argumentList = call.getArgumentList();
-            final PsiExpression[] args = argumentList.getExpressions();
+            PsiExpressionList argumentList = call.getArgumentList();
+            PsiExpression[] args = argumentList.getExpressions();
             if (args.length != 1 && args.length != 2) {
                 return;
             }
             if (!isSingleCharacterStringLiteral(args[0])) {
                 return;
             }
-            final PsiExpression qualifier =
+            PsiExpression qualifier =
                 methodExpression.getQualifierExpression();
             if (qualifier == null) {
                 return;
             }
-            final PsiType type = qualifier.getType();
+            PsiType type = qualifier.getType();
             if (!TypeUtils.isJavaLangString(type)) {
                 return;
             }
@@ -124,15 +124,15 @@ public class SingleCharacterStartsWithInspection extends BaseInspection {
         }
 
         private static boolean isSingleCharacterStringLiteral(PsiExpression arg) {
-            final PsiType type = arg.getType();
+            PsiType type = arg.getType();
             if (!TypeUtils.isJavaLangString(type)) {
                 return false;
             }
             if (!(arg instanceof PsiLiteralExpression)) {
                 return false;
             }
-            final PsiLiteralExpression literal = (PsiLiteralExpression) arg;
-            final String value = (String) literal.getValue();
+            PsiLiteralExpression literal = (PsiLiteralExpression) arg;
+            String value = (String) literal.getValue();
             if (value == null) {
                 return false;
             }

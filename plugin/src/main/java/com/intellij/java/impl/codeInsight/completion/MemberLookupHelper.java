@@ -45,7 +45,7 @@ public class MemberLookupHelper
 		this(overloads.get(0), containingClass, shouldImport, true);
 	}
 
-	public MemberLookupHelper(PsiMember member, @Nullable PsiClass containingClass, boolean shouldImport, final boolean mergedOverloads)
+	public MemberLookupHelper(PsiMember member, @Nullable PsiClass containingClass, boolean shouldImport, boolean mergedOverloads)
 	{
 		myMember = member;
 		myContainingClass = containingClass;
@@ -76,9 +76,9 @@ public class MemberLookupHelper
 
 	public void renderElement(LookupElementPresentation presentation, boolean showClass, boolean showPackage, PsiSubstitutor substitutor)
 	{
-		final String className = myContainingClass == null ? "???" : myContainingClass.getName();
+		String className = myContainingClass == null ? "???" : myContainingClass.getName();
 
-		final String memberName = myMember.getName();
+		String memberName = myMember.getName();
 		if(showClass && StringUtil.isNotEmpty(className))
 		{
 			presentation.setItemText(className + "." + memberName);
@@ -88,11 +88,11 @@ public class MemberLookupHelper
 			presentation.setItemText(memberName);
 		}
 
-		final String qname = myContainingClass == null ? "" : myContainingClass.getQualifiedName();
+		String qname = myContainingClass == null ? "" : myContainingClass.getQualifiedName();
 		String pkg = qname == null ? "" : StringUtil.getPackageName(qname);
 		String location = showPackage && StringUtil.isNotEmpty(pkg) ? " (" + pkg + ")" : "";
 
-		final String params = myMergedOverloads ? "(...)" : myMember instanceof PsiMethod ? getMethodParameterString((PsiMethod) myMember, substitutor) : "";
+		String params = myMergedOverloads ? "(...)" : myMember instanceof PsiMethod ? getMethodParameterString((PsiMethod) myMember, substitutor) : "";
 		presentation.clearTail();
 		presentation.appendTailText(params, false);
 		if(myShouldImport && StringUtil.isNotEmpty(className))

@@ -79,11 +79,11 @@ public abstract class LightAdvHighlightingPerformanceTest extends LightDaemonAna
     }
   }
 
-  private String getFilePath(final String suffix) {
+  private String getFilePath(String suffix) {
     return LightAdvHighlightingTest.BASE_PATH + "/" + getTestName(true) + suffix + ".java";
   }
 
-  private List<HighlightInfo> doTest(final int maxMillis) throws Exception {
+  private List<HighlightInfo> doTest(int maxMillis) throws Exception {
     configureByFile(getFilePath(""));
 
     PsiDocumentManager.getInstance(getProject()).commitAllDocuments();

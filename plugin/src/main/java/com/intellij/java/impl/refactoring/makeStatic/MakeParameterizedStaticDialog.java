@@ -225,7 +225,7 @@ public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
   protected boolean validateData() {
     int ret = 0;
     if (isMakeClassParameter()) {
-      final PsiMethod methodWithParameter = checkParameterDoesNotExist();
+      PsiMethod methodWithParameter = checkParameterDoesNotExist();
       if (methodWithParameter != null) {
         String who = methodWithParameter == myMember
           ? RefactoringLocalize.thisMethod().get()
@@ -278,7 +278,7 @@ public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
   }
 
   private JComboBox createComboBoxForName() {
-    final ComboBox<String> combobox = new ComboBox<>(myNameSuggestions,-1);
+    ComboBox<String> combobox = new ComboBox<>(myNameSuggestions,-1);
 
     combobox.setEditable(true);
     combobox.setSelectedIndex(0);

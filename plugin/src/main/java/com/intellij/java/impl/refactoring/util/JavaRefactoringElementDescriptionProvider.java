@@ -29,7 +29,7 @@ import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaRefactoringElementDescriptionProvider implements ElementDescriptionProvider {
-  public String getElementDescription(@Nonnull final PsiElement element, @Nonnull final ElementDescriptionLocation location) {
+  public String getElementDescription(@Nonnull PsiElement element, @Nonnull ElementDescriptionLocation location) {
     if (!(location instanceof RefactoringDescriptionLocation)) return null;
     RefactoringDescriptionLocation rdLocation = (RefactoringDescriptionLocation) location;
 

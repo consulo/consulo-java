@@ -34,7 +34,7 @@ public class InheritanceUtil {
 
   public static boolean existsMutualSubclass(PsiClass class1, final PsiClass class2) {
     if (class1 instanceof PsiTypeParameter) {
-      final PsiClass[] superClasses = class1.getSupers();
+      PsiClass[] superClasses = class1.getSupers();
       for (PsiClass superClass : superClasses) {
         if (!existsMutualSubclass(superClass, class2)) {
           return false;
@@ -46,11 +46,11 @@ public class InheritanceUtil {
       return existsMutualSubclass(class2, class1);
     }
 
-    final String className = class1.getQualifiedName();
+    String className = class1.getQualifiedName();
     if (CommonClassNames.JAVA_LANG_OBJECT.equals(className)) {
       return true;
     }
-    final String class2Name = class2.getQualifiedName();
+    String class2Name = class2.getQualifiedName();
     if (CommonClassNames.JAVA_LANG_OBJECT.equals(class2Name)) {
       return true;
     }
@@ -58,8 +58,8 @@ public class InheritanceUtil {
         class2.isInheritor(class1, true)) {
       return true;
     }
-    final SearchScope scope = GlobalSearchScope.allScope(class1.getProject());
-    final Query<PsiClass> search = ClassInheritorsSearch.search(class1, scope, true, true);
+    SearchScope scope = GlobalSearchScope.allScope(class1.getProject());
+    Query<PsiClass> search = ClassInheritorsSearch.search(class1, scope, true, true);
     return !search.forEach(new Processor<PsiClass>() {
       public boolean process(PsiClass inheritor) {
         return !inheritor.equals(class2) && !inheritor.isInheritor(class2, true);
@@ -68,8 +68,8 @@ public class InheritanceUtil {
   }
 
   public static boolean hasImplementation(PsiClass aClass) {
-    final SearchScope scope = GlobalSearchScope.projectScope(aClass.getProject());
-    final Query<PsiClass> search = ClassInheritorsSearch.search(aClass, scope, true, true);
+    SearchScope scope = GlobalSearchScope.projectScope(aClass.getProject());
+    Query<PsiClass> search = ClassInheritorsSearch.search(aClass, scope, true, true);
     return !search.forEach(new Processor<PsiClass>() {
       @Override
       public boolean process(PsiClass inheritor) {

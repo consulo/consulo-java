@@ -64,23 +64,23 @@ public class UnconstructableTestCaseInspection extends BaseInspection {
             if (!InheritanceUtil.isInheritor(aClass, "junit.framework.TestCase")) {
                 return;
             }
-            final PsiMethod[] constructors = aClass.getConstructors();
+            PsiMethod[] constructors = aClass.getConstructors();
             boolean hasStringConstructor = false;
             boolean hasNoArgConstructor = false;
             boolean hasConstructor = false;
-            for (final PsiMethod constructor : constructors) {
+            for (PsiMethod constructor : constructors) {
                 hasConstructor = true;
                 if (!constructor.hasModifierProperty(PsiModifier.PUBLIC)) {
                     continue;
                 }
-                final PsiParameterList parameterList = constructor.getParameterList();
-                final int parametersCount = parameterList.getParametersCount();
+                PsiParameterList parameterList = constructor.getParameterList();
+                int parametersCount = parameterList.getParametersCount();
                 if (parametersCount == 0) {
                     hasNoArgConstructor = true;
                 }
                 if (parametersCount == 1) {
-                    final PsiParameter[] parameters = parameterList.getParameters();
-                    final PsiType type = parameters[0].getType();
+                    PsiParameter[] parameters = parameterList.getParameters();
+                    PsiType type = parameters[0].getType();
                     if (TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING, type)) {
                         hasStringConstructor = true;
                     }

@@ -88,7 +88,7 @@ public class JDParamListOwnerComment extends JDComment
 	/**
 	 * Generates parameters or exceptions
 	 */
-	protected void generateList(@Nonnull final String prefix,
+	protected void generateList(@Nonnull String prefix,
 								@Nonnull StringBuilder sb,
 								@Nonnull List<TagDescription> tagBlocks,
 								@Nonnull String tag,

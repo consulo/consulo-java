@@ -53,13 +53,13 @@ public class MoveInitializerToSetUpMethodAction extends BaseMoveInitializerToMet
 
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
-    final boolean isAvailable = super.isAvailable(project, editor, element) && TestIntegrationUtils.isTest(element);
+    boolean isAvailable = super.isAvailable(project, editor, element) && TestIntegrationUtils.isTest(element);
     if (isAvailable) {
-      final PsiField field = PsiTreeUtil.getParentOfType(element, PsiField.class);
+      PsiField field = PsiTreeUtil.getParentOfType(element, PsiField.class);
       LOG.assertTrue(field != null);
-      final PsiClass aClass = field.getContainingClass();
+      PsiClass aClass = field.getContainingClass();
       LOG.assertTrue(aClass != null);
-      final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
+      PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
       for (TestFramework framework : TestFramework.EXTENSION_NAME.getExtensionList()) {
         if (framework instanceof JavaTestFramework testFramework && framework.isTestClass(aClass)) {
           try {
@@ -85,7 +85,7 @@ public class MoveInitializerToSetUpMethodAction extends BaseMoveInitializerToMet
   @Nonnull
   @Override
   protected Collection<PsiMethod> getOrCreateMethods(@Nonnull Project project, @Nonnull Editor editor, PsiFile file, @Nonnull PsiClass aClass) {
-    final PsiMethod setUpMethod = TestFrameworks.getInstance().findOrCreateSetUpMethod(aClass);
+    PsiMethod setUpMethod = TestFrameworks.getInstance().findOrCreateSetUpMethod(aClass);
     return setUpMethod == null ? Collections.<PsiMethod>emptyList() : Arrays.asList(setUpMethod);
   }
 }

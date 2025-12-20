@@ -54,7 +54,7 @@ public class MergeMethodArguments extends FixableUsageInfo {
                               String parameterName,
                               int[] paramsToMerge,
                               List<PsiTypeParameter> typeParams,
-                              final boolean keepMethodAsDelegate, final PsiClass containingClass, boolean changeSignature) {
+                              boolean keepMethodAsDelegate, PsiClass containingClass, boolean changeSignature) {
     super(method);
     this.paramsToMerge = paramsToMerge;
     this.packageName = packageName;
@@ -70,8 +70,8 @@ public class MergeMethodArguments extends FixableUsageInfo {
 
   public void fixUsage() throws IncorrectOperationException {
     final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(method.getProject());
-    final PsiMethod deepestSuperMethod = method.findDeepestSuperMethod();
-    final PsiClass psiClass;
+    PsiMethod deepestSuperMethod = method.findDeepestSuperMethod();
+    PsiClass psiClass;
     if (myContainingClass != null) {
       psiClass = myContainingClass.findInnerClassByName(className, false);
     } else {
@@ -80,11 +80,11 @@ public class MergeMethodArguments extends FixableUsageInfo {
     assert psiClass != null;
     PsiSubstitutor subst = PsiSubstitutor.EMPTY;
     if (deepestSuperMethod != null) {
-      final PsiClass parentClass = deepestSuperMethod.getContainingClass();
-      final PsiSubstitutor parentSubstitutor =
+      PsiClass parentClass = deepestSuperMethod.getContainingClass();
+      PsiSubstitutor parentSubstitutor =
           TypeConversionUtil.getSuperClassSubstitutor(parentClass, method.getContainingClass(), PsiSubstitutor.EMPTY);
       for (int i1 = 0; i1 < psiClass.getTypeParameters().length; i1++) {
-        final PsiTypeParameter typeParameter = psiClass.getTypeParameters()[i1];
+        PsiTypeParameter typeParameter = psiClass.getTypeParameters()[i1];
         for (PsiTypeParameter parameter : parentClass.getTypeParameters()) {
           if (Comparing.strEqual(typeParameter.getName(), parameter.getName())) {
             subst = subst.put(typeParameter, parentSubstitutor.substitute(
@@ -98,11 +98,11 @@ public class MergeMethodArguments extends FixableUsageInfo {
     final PsiClassType classType = JavaPsiFacade.getElementFactory(getProject()).createType(psiClass, subst);
     parametersInfo.add(new ParameterInfoImpl(-1, parameterName, classType, null) {
       @Override
-      public PsiExpression getValue(final PsiCallExpression expr) throws IncorrectOperationException {
+      public PsiExpression getValue(PsiCallExpression expr) throws IncorrectOperationException {
         return (PsiExpression) JavaCodeStyleManager.getInstance(getProject()).shortenClassReferences(psiFacade.getElementFactory().createExpressionFromText(getMergedParam(expr), expr));
       }
     });
-    final PsiParameter[] parameters = method.getParameterList().getParameters();
+    PsiParameter[] parameters = method.getParameterList().getParameters();
     for (int i = 0; i < parameters.length; i++) {
       if (!isParameterToMerge(i)) {
         parametersInfo.add(new ParameterInfoImpl(i, parameters[i].getName(), parameters[i].getType()));
@@ -113,10 +113,10 @@ public class MergeMethodArguments extends FixableUsageInfo {
     Runnable performChangeSignatureRunnable = new Runnable() {
       @Override
       public void run() {
-        final PsiMethod psiMethod = meth.getElement();
+        PsiMethod psiMethod = meth.getElement();
         if (psiMethod == null) return;
         if (myChangeSignature) {
-          final ChangeSignatureProcessor changeSignatureProcessor =
+          ChangeSignatureProcessor changeSignatureProcessor =
               new ChangeSignatureProcessor(psiMethod.getProject(), psiMethod,
                   myKeepMethodAsDelegate, null, psiMethod.getName(),
                   psiMethod.getReturnType(),
@@ -142,11 +142,11 @@ public class MergeMethodArguments extends FixableUsageInfo {
   }
 
   private String getMergedParam(PsiCallExpression call) {
-    final PsiExpression[] args = call.getArgumentList().getExpressions();
+    PsiExpression[] args = call.getArgumentList().getExpressions();
     StringBuffer newExpression = new StringBuffer();
-    final String qualifiedName;
+    String qualifiedName;
     if (myContainingClass != null) {
-      final String containingClassQName = myContainingClass.getQualifiedName();
+      String containingClassQName = myContainingClass.getQualifiedName();
       if (containingClassQName != null) {
         qualifiedName = containingClassQName + "." + className;
       } else {
@@ -157,12 +157,12 @@ public class MergeMethodArguments extends FixableUsageInfo {
     }
     newExpression.append("new ").append(qualifiedName);
     if (!typeParams.isEmpty()) {
-      final JavaResolveResult resolvant = call.resolveMethodGenerics();
-      final PsiSubstitutor substitutor = resolvant.getSubstitutor();
+      JavaResolveResult resolvant = call.resolveMethodGenerics();
+      PsiSubstitutor substitutor = resolvant.getSubstitutor();
       newExpression.append('<');
-      final Map<PsiTypeParameter, PsiType> substitutionMap = substitutor.getSubstitutionMap();
+      Map<PsiTypeParameter, PsiType> substitutionMap = substitutor.getSubstitutionMap();
       newExpression.append(StringUtil.join(typeParams, typeParameter -> {
-        final PsiType boundType = substitutionMap.get(typeParameter);
+        PsiType boundType = substitutionMap.get(typeParameter);
         if (boundType != null) {
           return boundType.getCanonicalText();
         } else {
@@ -181,7 +181,7 @@ public class MergeMethodArguments extends FixableUsageInfo {
       newExpression.append(getArgument(args, index));
     }
     if (lastParamIsVararg) {
-      final int lastArg = paramsToMerge[paramsToMerge.length - 1];
+      int lastArg = paramsToMerge[paramsToMerge.length - 1];
       for (int i = lastArg + 1; i < args.length; i++) {
         newExpression.append(',');
         newExpression.append(getArgument(args, i));
@@ -196,7 +196,7 @@ public class MergeMethodArguments extends FixableUsageInfo {
     if (i < args.length) {
       return args[i].getText();
     }
-    final PsiParameter[] parameters = method.getParameterList().getParameters();
+    PsiParameter[] parameters = method.getParameterList().getParameters();
     if (i < parameters.length) return parameters[i].getName();
     return null;
   }

@@ -71,25 +71,25 @@ public class StringConcatenationInFormatCallInspection extends BaseInspection {
 
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement().getParent().getParent();
+      PsiElement element = descriptor.getPsiElement().getParent().getParent();
       if (!(element instanceof PsiMethodCallExpression)) {
         return;
       }
-      final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)element;
-      final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-      final PsiExpression formatArgument = FormatUtils.getFormatArgument(argumentList);
+      PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)element;
+      PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+      PsiExpression formatArgument = FormatUtils.getFormatArgument(argumentList);
       if (!(formatArgument instanceof PsiPolyadicExpression)) {
         return;
       }
-      final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)formatArgument;
-      final StringBuilder newExpression = new StringBuilder();
-      final PsiExpression[] operands = polyadicExpression.getOperands();
+      PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)formatArgument;
+      StringBuilder newExpression = new StringBuilder();
+      PsiExpression[] operands = polyadicExpression.getOperands();
       for (PsiExpression operand : operands) {
         if (operand instanceof PsiReferenceExpression) {
           argumentList.add(operand);
           continue;
         }
-        final PsiJavaToken token = polyadicExpression.getTokenBeforeOperand(operand);
+        PsiJavaToken token = polyadicExpression.getTokenBeforeOperand(operand);
         if (token != null) {
           newExpression.append(token.getText());
         }
@@ -112,18 +112,18 @@ public class StringConcatenationInFormatCallInspection extends BaseInspection {
       if (!FormatUtils.isFormatCall(expression)) {
         return;
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      final PsiExpression formatArgument = FormatUtils.getFormatArgument(argumentList);
+      PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpression formatArgument = FormatUtils.getFormatArgument(argumentList);
       if (!ExpressionUtils.hasStringType(formatArgument)) {
         return;
       }
       if (!(formatArgument instanceof PsiPolyadicExpression)) {
         return;
       }
-      final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)formatArgument;
-      final PsiExpression[] operands = polyadicExpression.getOperands();
+      PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)formatArgument;
+      PsiExpression[] operands = polyadicExpression.getOperands();
       int count = 0;
-      for (final PsiExpression operand : operands) {
+      for (PsiExpression operand : operands) {
         if (!(operand instanceof PsiReferenceExpression)) {
           continue;
         }

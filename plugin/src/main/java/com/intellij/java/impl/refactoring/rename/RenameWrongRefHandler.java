@@ -37,10 +37,10 @@ import jakarta.annotation.Nonnull;
 public class RenameWrongRefHandler implements RenameHandler {
     @Override
     @RequiredReadAction
-    public final boolean isAvailableOnDataContext(final DataContext dataContext) {
-        final Editor editor = dataContext.getData(Editor.KEY);
-        final PsiFile file = dataContext.getData(PsiFile.KEY);
-        final Project project = dataContext.getData(Project.KEY);
+    public final boolean isAvailableOnDataContext(DataContext dataContext) {
+        Editor editor = dataContext.getData(Editor.KEY);
+        PsiFile file = dataContext.getData(PsiFile.KEY);
+        Project project = dataContext.getData(Project.KEY);
         return !(editor == null || file == null || project == null) && isAvailable(project, editor, file);
     }
 
@@ -52,20 +52,20 @@ public class RenameWrongRefHandler implements RenameHandler {
 
     @RequiredReadAction
     public static boolean isAvailable(Project project, Editor editor, PsiFile file) {
-        final PsiReference reference = file.findReferenceAt(editor.getCaretModel().getOffset());
+        PsiReference reference = file.findReferenceAt(editor.getCaretModel().getOffset());
         return reference instanceof PsiReferenceExpression referenceExpression
             && new RenameWrongRefFix(referenceExpression, true).isAvailable(project, editor, file);
     }
 
     @Override
     @RequiredReadAction
-    public final boolean isRenaming(final DataContext dataContext) {
+    public final boolean isRenaming(DataContext dataContext) {
         return isAvailableOnDataContext(dataContext);
     }
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file, final DataContext dataContext) {
+    public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file, DataContext dataContext) {
         final PsiReferenceExpression reference = (PsiReferenceExpression) file.findReferenceAt(editor.getCaretModel().getOffset());
         new WriteCommandAction(project) {
             @Override
@@ -76,6 +76,6 @@ public class RenameWrongRefHandler implements RenameHandler {
     }
 
     @Override
-    public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, final DataContext dataContext) {
+    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     }
 }

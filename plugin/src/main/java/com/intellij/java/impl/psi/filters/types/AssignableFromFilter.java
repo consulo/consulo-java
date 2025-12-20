@@ -39,7 +39,7 @@ public class AssignableFromFilter implements ElementFilter{
     myType = type;
   }
 
-  public AssignableFromFilter(final String className) {
+  public AssignableFromFilter(String className) {
     myClassName = className;
   }
 
@@ -55,7 +55,7 @@ public class AssignableFromFilter implements ElementFilter{
     PsiType type = myType;
     if(type == null) {
       JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(context.getProject());
-      final PsiClass aClass = psiFacade.findClass(myClassName, context.getResolveScope());
+      PsiClass aClass = psiFacade.findClass(myClassName, context.getResolveScope());
       if (aClass != null) {
         type = psiFacade.getElementFactory().createType(aClass, PsiSubstitutor.EMPTY);
       }
@@ -70,7 +70,7 @@ public class AssignableFromFilter implements ElementFilter{
     PsiSubstitutor substitutor = null;
     
     if(element instanceof CandidateInfo){
-      final CandidateInfo info = (CandidateInfo)element;
+      CandidateInfo info = (CandidateInfo)element;
       substitutor = info.getSubstitutor();
       element = info.getElement();
     }
@@ -100,9 +100,9 @@ public class AssignableFromFilter implements ElementFilter{
   }
 
   private static boolean allowBoxing(PsiElement place) {
-    final PsiElement parent = place.getParent();
+    PsiElement parent = place.getParent();
     if (parent.getParent() instanceof PsiSynchronizedStatement) {
-      final PsiSynchronizedStatement statement = (PsiSynchronizedStatement)parent.getParent();
+      PsiSynchronizedStatement statement = (PsiSynchronizedStatement)parent.getParent();
       if (parent.equals(statement.getLockExpression())) {
         return false;
       }
@@ -111,13 +111,13 @@ public class AssignableFromFilter implements ElementFilter{
   }
 
   private static boolean isReturnTypeInferrable(PsiMethod method, PsiElement place, PsiType expectedType, @Nullable PsiSubstitutor substitutor) {
-    final PsiResolveHelper helper = JavaPsiFacade.getInstance(method.getProject()).getResolveHelper();
-    for (final PsiTypeParameter parameter : method.getTypeParameters()) {
+    PsiResolveHelper helper = JavaPsiFacade.getInstance(method.getProject()).getResolveHelper();
+    for (PsiTypeParameter parameter : method.getTypeParameters()) {
       PsiType returnType = method.getReturnType();
       if (substitutor != null) {
         returnType = substitutor.substitute(returnType);
       }
-      final PsiType substitutionForParameter = helper.getSubstitutionForTypeParameter(parameter,
+      PsiType substitutionForParameter = helper.getSubstitutionForTypeParameter(parameter,
                                                                                       returnType,
                                                                                       expectedType,
                                                                                       false,

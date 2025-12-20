@@ -41,26 +41,26 @@ public class ExtractParameterAsLocalVariableFix extends InspectionGadgetsFix {
   @Override
   public void doFix(Project project, ProblemDescriptor descriptor)
     throws IncorrectOperationException {
-    final PsiReferenceExpression parameterReference = (PsiReferenceExpression)descriptor.getPsiElement();
-    final PsiElement target = parameterReference.resolve();
+    PsiReferenceExpression parameterReference = (PsiReferenceExpression)descriptor.getPsiElement();
+    PsiElement target = parameterReference.resolve();
     if (!(target instanceof PsiParameter)) {
       return;
     }
-    final PsiParameter parameter = (PsiParameter)target;
-    final PsiElement declarationScope = parameter.getDeclarationScope();
-    final PsiElement body;
+    PsiParameter parameter = (PsiParameter)target;
+    PsiElement declarationScope = parameter.getDeclarationScope();
+    PsiElement body;
     if (declarationScope instanceof PsiMethod method) {
       body = method.getBody();
     }
     else if (declarationScope instanceof PsiCatchSection) {
-      final PsiCatchSection catchSection = (PsiCatchSection)declarationScope;
+      PsiCatchSection catchSection = (PsiCatchSection)declarationScope;
       body = catchSection.getCatchBlock();
     }
     else if (declarationScope instanceof PsiLoopStatement) {
-      final PsiLoopStatement forStatement = (PsiLoopStatement)declarationScope;
-      final PsiStatement forBody = forStatement.getBody();
+      PsiLoopStatement forStatement = (PsiLoopStatement)declarationScope;
+      PsiStatement forBody = forStatement.getBody();
       if (forBody instanceof PsiBlockStatement) {
-        final PsiBlockStatement blockStatement = (PsiBlockStatement)forBody;
+        PsiBlockStatement blockStatement = (PsiBlockStatement)forBody;
         body = blockStatement.getCodeBlock();
       }
       else {
@@ -73,24 +73,24 @@ public class ExtractParameterAsLocalVariableFix extends InspectionGadgetsFix {
     if (body == null) {
       return;
     }
-    final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
-    final String parameterName = parameterReference.getText();
-    final JavaCodeStyleManager javaCodeStyleManager = JavaCodeStyleManager.getInstance(project);
-    final String variableName = javaCodeStyleManager.suggestUniqueVariableName(parameterName, parameterReference, true);
-    final SearchScope scope = parameter.getUseScope();
-    final Query<PsiReference> search = ReferencesSearch.search(parameter, scope);
-    final PsiReference reference = search.findFirst();
+    CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+    String parameterName = parameterReference.getText();
+    JavaCodeStyleManager javaCodeStyleManager = JavaCodeStyleManager.getInstance(project);
+    String variableName = javaCodeStyleManager.suggestUniqueVariableName(parameterName, parameterReference, true);
+    SearchScope scope = parameter.getUseScope();
+    Query<PsiReference> search = ReferencesSearch.search(parameter, scope);
+    PsiReference reference = search.findFirst();
     if (reference == null) {
       return;
     }
-    final PsiElement element = reference.getElement();
+    PsiElement element = reference.getElement();
     if (!(element instanceof PsiReferenceExpression)) {
       return;
     }
-    final PsiReferenceExpression firstReference = (PsiReferenceExpression)element;
-    final PsiElement[] children = body.getChildren();
-    final int startIndex;
-    final int endIndex;
+    PsiReferenceExpression firstReference = (PsiReferenceExpression)element;
+    PsiElement[] children = body.getChildren();
+    int startIndex;
+    int endIndex;
     if (body instanceof PsiCodeBlock) {
       startIndex = 1;
       endIndex = children.length - 1;
@@ -100,25 +100,25 @@ public class ExtractParameterAsLocalVariableFix extends InspectionGadgetsFix {
       endIndex = children.length;
     }
     boolean newDeclarationCreated = false;
-    final StringBuilder buffer = new StringBuilder();
+    StringBuilder buffer = new StringBuilder();
     for (int i = startIndex; i < endIndex; i++) {
-      final PsiElement child = children[i];
+      PsiElement child = children[i];
       newDeclarationCreated |= replaceVariableName(child, firstReference, variableName, parameterName, buffer);
     }
-    final String replacementText;
+    String replacementText;
     if (newDeclarationCreated) {
       replacementText = "{" + buffer + '}';
     }
     else {
-      final PsiType type = parameterReference.getType();
+      PsiType type = parameterReference.getType();
       if (type == null) {
         return;
       }
-      final String className = type.getCanonicalText();
+      String className = type.getCanonicalText();
       replacementText = '{' + className + ' ' + variableName + " = " + parameterName + ';' + buffer + '}';
     }
-    final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
-    final PsiCodeBlock block = elementFactory.createCodeBlockFromText(replacementText, null);
+    PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
+    PsiCodeBlock block = elementFactory.createCodeBlockFromText(replacementText, null);
     body.replace(block);
     codeStyleManager.reformat(declarationScope);
   }
@@ -130,9 +130,9 @@ public class ExtractParameterAsLocalVariableFix extends InspectionGadgetsFix {
     PsiElement element, PsiReferenceExpression firstReference,
     String newName, String originalName, StringBuilder out) {
     if (element instanceof PsiReferenceExpression) {
-      final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)element;
+      PsiReferenceExpression referenceExpression = (PsiReferenceExpression)element;
       if (element.equals(firstReference) && isLeftSideOfSimpleAssignment(referenceExpression)) {
-        final PsiType type = firstReference.getType();
+        PsiType type = firstReference.getType();
         if (type != null) {
           out.append(type.getCanonicalText());
           out.append(' ');
@@ -140,20 +140,20 @@ public class ExtractParameterAsLocalVariableFix extends InspectionGadgetsFix {
           return true;
         }
       }
-      final String text = element.getText();
+      String text = element.getText();
       if (text.equals(originalName)) {
         out.append(newName);
         return false;
       }
     }
-    final PsiElement[] children = element.getChildren();
+    PsiElement[] children = element.getChildren();
     if (children.length == 0) {
-      final String text = element.getText();
+      String text = element.getText();
       out.append(text);
     }
     else {
       boolean result = false;
-      for (final PsiElement child : children) {
+      for (PsiElement child : children) {
         if (result) {
           out.append(child.getText());
         }
@@ -170,24 +170,24 @@ public class ExtractParameterAsLocalVariableFix extends InspectionGadgetsFix {
     if (reference == null) {
       return false;
     }
-    final PsiElement parent = reference.getParent();
+    PsiElement parent = reference.getParent();
     if (!(parent instanceof PsiAssignmentExpression)) {
       return false;
     }
-    final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression)parent;
-    final IElementType tokenType = assignmentExpression.getOperationTokenType();
+    PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression)parent;
+    IElementType tokenType = assignmentExpression.getOperationTokenType();
     if (!JavaTokenType.EQ.equals(tokenType)) {
       return false;
     }
-    final PsiExpression lExpression = assignmentExpression.getLExpression();
+    PsiExpression lExpression = assignmentExpression.getLExpression();
     if (!reference.equals(lExpression)) {
       return false;
     }
-    final PsiExpression rExpression = assignmentExpression.getRExpression();
+    PsiExpression rExpression = assignmentExpression.getRExpression();
     if (rExpression instanceof PsiAssignmentExpression) {
       return false;
     }
-    final PsiElement grandParent = parent.getParent();
+    PsiElement grandParent = parent.getParent();
     return grandParent instanceof PsiExpressionStatement;
   }
 }

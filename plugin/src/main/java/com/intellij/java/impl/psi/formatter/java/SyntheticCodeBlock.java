@@ -109,7 +109,7 @@ public class SyntheticCodeBlock implements Block, JavaBlock {
         break;
       }
     }
-    final TextRange textRange = getTextRange();
+    TextRange textRange = getTextRange();
     if (treeNode != null) {
       PsiElement psi = treeNode.getPsi();
       if (psi != null) {
@@ -129,13 +129,13 @@ public class SyntheticCodeBlock implements Block, JavaBlock {
     return result;
   }
 
-  public void setChildAttributes(final ChildAttributes childAttributes) {
+  public void setChildAttributes(ChildAttributes childAttributes) {
     myChildAttributes = childAttributes;
   }
 
   @Override
   @Nonnull
-  public ChildAttributes getChildAttributes(final int newChildIndex) {
+  public ChildAttributes getChildAttributes(int newChildIndex) {
     if (myChildAttributes != null) {
       return myChildAttributes;
     }
@@ -174,7 +174,7 @@ public class SyntheticCodeBlock implements Block, JavaBlock {
     return null;
   }
 
-  private static boolean isDotFirst(final Block block) {
+  private static boolean isDotFirst(Block block) {
     Block current = block;
     while (!current.getSubBlocks().isEmpty()) {
       current = block.getSubBlocks().get(0);
@@ -208,7 +208,7 @@ public class SyntheticCodeBlock implements Block, JavaBlock {
     return false;
   }
 
-  public void setIsIncomplete(final boolean isIncomplete) {
+  public void setIsIncomplete(boolean isIncomplete) {
     myIsIncomplete = isIncomplete;
   }
 }

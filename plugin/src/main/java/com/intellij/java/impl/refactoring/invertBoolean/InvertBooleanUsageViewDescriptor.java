@@ -29,7 +29,7 @@ import jakarta.annotation.Nonnull;
 public class InvertBooleanUsageViewDescriptor implements UsageViewDescriptor {
   private final PsiNamedElement myElement;
 
-  public InvertBooleanUsageViewDescriptor(final PsiNamedElement element) {
+  public InvertBooleanUsageViewDescriptor(PsiNamedElement element) {
     myElement = element;
   }
 

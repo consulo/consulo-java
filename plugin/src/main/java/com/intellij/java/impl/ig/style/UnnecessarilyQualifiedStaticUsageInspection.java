@@ -59,8 +59,8 @@ public abstract class UnnecessarilyQualifiedStaticUsageInspection extends BaseIn
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiJavaCodeReferenceElement element = (PsiJavaCodeReferenceElement) infos[0];
-        final PsiElement parent = element.getParent();
+        PsiJavaCodeReferenceElement element = (PsiJavaCodeReferenceElement) infos[0];
+        PsiElement parent = element.getParent();
         return parent instanceof PsiMethodCallExpression
             ? InspectionGadgetsLocalize.unnecessarilyQualifiedStaticUsageProblemDescriptor(element.getText()).get()
             : InspectionGadgetsLocalize.unnecessarilyQualifiedStaticUsageProblemDescriptor1(element.getText()).get();
@@ -68,7 +68,7 @@ public abstract class UnnecessarilyQualifiedStaticUsageInspection extends BaseIn
 
     @Override
     public JComponent createOptionsPanel() {
-        final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
+        MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
         optionsPanel.addCheckbox(
             InspectionGadgetsLocalize.unnecessarilyQualifiedStaticUsageIgnoreFieldOption().get(),
             "m_ignoreStaticFieldAccesses"
@@ -98,7 +98,7 @@ public abstract class UnnecessarilyQualifiedStaticUsageInspection extends BaseIn
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) {
-            final PsiElement element = descriptor.getPsiElement();
+            PsiElement element = descriptor.getPsiElement();
             element.delete();
         }
     }
@@ -112,7 +112,7 @@ public abstract class UnnecessarilyQualifiedStaticUsageInspection extends BaseIn
         @Override
         public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
             super.visitReferenceElement(reference);
-            final PsiElement qualifier = reference.getQualifier();
+            PsiElement qualifier = reference.getQualifier();
             if (qualifier == null) {
                 return;
             }
@@ -142,56 +142,56 @@ public abstract class UnnecessarilyQualifiedStaticUsageInspection extends BaseIn
         if (referenceElement instanceof PsiMethodReferenceExpression) {
             return false;
         }
-        final PsiElement parent = referenceElement.getParent();
+        PsiElement parent = referenceElement.getParent();
         if (parent instanceof PsiImportStatementBase) {
             return false;
         }
-        final PsiElement qualifierElement = referenceElement.getQualifier();
+        PsiElement qualifierElement = referenceElement.getQualifier();
         if (!(qualifierElement instanceof PsiJavaCodeReferenceElement)) {
             return false;
         }
-        final PsiJavaCodeReferenceElement qualifier = (PsiJavaCodeReferenceElement) qualifierElement;
+        PsiJavaCodeReferenceElement qualifier = (PsiJavaCodeReferenceElement) qualifierElement;
         if (isGenericReference(referenceElement, qualifier)) {
             return false;
         }
-        final PsiElement target = referenceElement.resolve();
+        PsiElement target = referenceElement.resolve();
         if ((!(target instanceof PsiField) || ignoreStaticFieldAccesses) && (!(target instanceof PsiMethod) || ignoreStaticMethodCalls)) {
             return false;
         }
         if (ignoreStaticAccessFromStaticContext) {
-            final PsiMember containingMember = PsiTreeUtil.getParentOfType(referenceElement, PsiMember.class);
+            PsiMember containingMember = PsiTreeUtil.getParentOfType(referenceElement, PsiMember.class);
             if (containingMember != null && !containingMember.hasModifierProperty(PsiModifier.STATIC)) {
                 return false;
             }
         }
-        final String referenceName = referenceElement.getReferenceName();
+        String referenceName = referenceElement.getReferenceName();
         if (referenceName == null) {
             return false;
         }
-        final PsiElement resolvedQualifier = qualifier.resolve();
+        PsiElement resolvedQualifier = qualifier.resolve();
         if (!(resolvedQualifier instanceof PsiClass)) {
             return false;
         }
-        final PsiClass containingClass = PsiTreeUtil.getParentOfType(referenceElement, PsiClass.class);
-        final PsiClass qualifyingClass = (PsiClass) resolvedQualifier;
+        PsiClass containingClass = PsiTreeUtil.getParentOfType(referenceElement, PsiClass.class);
+        PsiClass qualifyingClass = (PsiClass) resolvedQualifier;
         if (containingClass == null || !PsiTreeUtil.isAncestor(qualifyingClass, containingClass, false)) {
             return false;
         }
-        final Project project = referenceElement.getProject();
-        final JavaPsiFacade manager = JavaPsiFacade.getInstance(project);
-        final PsiResolveHelper resolveHelper = manager.getResolveHelper();
-        final PsiMember member = (PsiMember) target;
-        final PsiClass memberClass;
+        Project project = referenceElement.getProject();
+        JavaPsiFacade manager = JavaPsiFacade.getInstance(project);
+        PsiResolveHelper resolveHelper = manager.getResolveHelper();
+        PsiMember member = (PsiMember) target;
+        PsiClass memberClass;
         if (target instanceof PsiField) {
-            final PsiVariable variable = resolveHelper.resolveReferencedVariable(referenceName, referenceElement);
+            PsiVariable variable = resolveHelper.resolveReferencedVariable(referenceName, referenceElement);
             if (variable == null || !variable.equals(member)) {
                 return false;
             }
-            final TextRange referenceElementTextRange = referenceElement.getTextRange();
+            TextRange referenceElementTextRange = referenceElement.getTextRange();
             if (referenceElementTextRange == null) {
                 return false;
             }
-            final TextRange variableTextRange = variable.getTextRange();
+            TextRange variableTextRange = variable.getTextRange();
             if (variableTextRange == null) {
                 return false;
             }
@@ -199,11 +199,11 @@ public abstract class UnnecessarilyQualifiedStaticUsageInspection extends BaseIn
             if (referenceElementTextRange.getStartOffset() < variableTextRange.getEndOffset()) {
                 return false;
             }
-            final PsiMember memberVariable = (PsiMember) variable;
+            PsiMember memberVariable = (PsiMember) variable;
             memberClass = memberVariable.getContainingClass();
         }
         else if (target instanceof PsiClass) {
-            final PsiClass aClass = resolveHelper.resolveReferencedClass(referenceName, referenceElement);
+            PsiClass aClass = resolveHelper.resolveReferencedClass(referenceName, referenceElement);
             if (aClass == null || !aClass.equals(member)) {
                 return false;
             }
@@ -216,15 +216,15 @@ public abstract class UnnecessarilyQualifiedStaticUsageInspection extends BaseIn
     }
 
     private static boolean isMethodAccessibleWithoutQualifier(PsiJavaCodeReferenceElement referenceElement, PsiClass qualifyingClass) {
-        final String referenceName = referenceElement.getReferenceName();
+        String referenceName = referenceElement.getReferenceName();
         if (referenceName == null) {
             return false;
         }
         PsiClass containingClass = ClassUtils.getContainingClass(referenceElement);
         while (containingClass != null) {
-            final PsiMethod[] methods = containingClass.findMethodsByName(referenceName, true);
-            for (final PsiMethod method : methods) {
-                final String name = method.getName();
+            PsiMethod[] methods = containingClass.findMethodsByName(referenceName, true);
+            for (PsiMethod method : methods) {
+                String name = method.getName();
                 if (referenceName.equals(name)) {
                     return containingClass.equals(qualifyingClass);
                 }
@@ -235,16 +235,16 @@ public abstract class UnnecessarilyQualifiedStaticUsageInspection extends BaseIn
     }
 
     static boolean isGenericReference(PsiJavaCodeReferenceElement referenceElement, PsiJavaCodeReferenceElement qualifierElement) {
-        final PsiReferenceParameterList qualifierParameterList = qualifierElement.getParameterList();
+        PsiReferenceParameterList qualifierParameterList = qualifierElement.getParameterList();
         if (qualifierParameterList != null) {
-            final PsiTypeElement[] typeParameterElements = qualifierParameterList.getTypeParameterElements();
+            PsiTypeElement[] typeParameterElements = qualifierParameterList.getTypeParameterElements();
             if (typeParameterElements.length > 0) {
                 return true;
             }
         }
-        final PsiReferenceParameterList parameterList = referenceElement.getParameterList();
+        PsiReferenceParameterList parameterList = referenceElement.getParameterList();
         if (parameterList != null) {
-            final PsiTypeElement[] typeParameterElements = parameterList.getTypeParameterElements();
+            PsiTypeElement[] typeParameterElements = parameterList.getTypeParameterElements();
             if (typeParameterElements.length > 0) {
                 return true;
             }

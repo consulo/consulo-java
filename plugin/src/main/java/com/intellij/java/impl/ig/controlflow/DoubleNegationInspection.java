@@ -65,19 +65,19 @@ public class DoubleNegationInspection extends BaseInspection {
         }
 
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement expression = descriptor.getPsiElement();
+            PsiElement expression = descriptor.getPsiElement();
             if (expression instanceof PsiPrefixExpression) {
-                final PsiPrefixExpression prefixExpression = (PsiPrefixExpression) expression;
-                final PsiExpression operand = ParenthesesUtils.stripParentheses(prefixExpression.getOperand());
+                PsiPrefixExpression prefixExpression = (PsiPrefixExpression) expression;
+                PsiExpression operand = ParenthesesUtils.stripParentheses(prefixExpression.getOperand());
                 replaceExpression(prefixExpression, BoolUtils.getNegatedExpressionText(operand));
             }
             else if (expression instanceof PsiPolyadicExpression) {
-                final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
-                final PsiExpression[] operands = polyadicExpression.getOperands();
-                final int length = operands.length;
+                PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
+                PsiExpression[] operands = polyadicExpression.getOperands();
+                int length = operands.length;
                 if (length == 2) {
-                    final PsiExpression firstOperand = operands[0];
-                    final PsiExpression secondOperand = operands[1];
+                    PsiExpression firstOperand = operands[0];
+                    PsiExpression secondOperand = operands[1];
                     if (isNegation(firstOperand)) {
                         replaceExpression(
                             polyadicExpression,
@@ -92,7 +92,7 @@ public class DoubleNegationInspection extends BaseInspection {
                     }
                 }
                 else {
-                    final StringBuilder newExpressionText = new StringBuilder();
+                    StringBuilder newExpressionText = new StringBuilder();
                     for (int i = 0; i < length; i++) {
                         if (i > 0) {
                             if (length % 2 != 1 && i == length - 1) {
@@ -122,7 +122,7 @@ public class DoubleNegationInspection extends BaseInspection {
             if (!isNegation(expression)) {
                 return;
             }
-            final PsiExpression operand = expression.getOperand();
+            PsiExpression operand = expression.getOperand();
             if (!isNegation(operand)) {
                 return;
             }
@@ -135,7 +135,7 @@ public class DoubleNegationInspection extends BaseInspection {
             if (!isNegation(expression)) {
                 return;
             }
-            final PsiExpression[] operands = expression.getOperands();
+            PsiExpression[] operands = expression.getOperands();
             if (operands.length == 2) {
                 int notNegatedCount = 0;
                 for (PsiExpression operand : operands) {

@@ -29,7 +29,7 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionImpl
 public class JavaDeleteTypeDescriptionProvider implements ElementDescriptionProvider {
-  public String getElementDescription(@Nonnull final PsiElement element, @Nonnull final ElementDescriptionLocation location) {
+  public String getElementDescription(@Nonnull PsiElement element, @Nonnull ElementDescriptionLocation location) {
     if (location instanceof DeleteTypeDescriptionLocation deleteTypeDescriptionLocation && deleteTypeDescriptionLocation.isPlural()) {
       if (element instanceof PsiMethod) {
         return IdeLocalize.promptDeleteMethod(2).get();

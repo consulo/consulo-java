@@ -63,11 +63,11 @@ public class RedundantImportInspection extends BaseInspection {
             if (!(file instanceof PsiJavaFile)) {
                 return;
             }
-            final PsiJavaFile javaFile = (PsiJavaFile) file;
+            PsiJavaFile javaFile = (PsiJavaFile) file;
      /* if (JspPsiUtil.isInJspFile(file)) {
         return;
       }*/
-            final PsiImportList importList = javaFile.getImportList();
+            PsiImportList importList = javaFile.getImportList();
             if (importList == null) {
                 return;
             }
@@ -76,16 +76,16 @@ public class RedundantImportInspection extends BaseInspection {
         }
 
         private void checkStaticImports(PsiImportList importList, PsiJavaFile javaFile) {
-            final PsiImportStaticStatement[] importStaticStatements = importList.getImportStaticStatements();
-            final Set<String> onDemandStaticImports = new HashSet();
-            final Set<String> singleMemberStaticImports = new HashSet();
+            PsiImportStaticStatement[] importStaticStatements = importList.getImportStaticStatements();
+            Set<String> onDemandStaticImports = new HashSet();
+            Set<String> singleMemberStaticImports = new HashSet();
             for (PsiImportStaticStatement importStaticStatement : importStaticStatements) {
-                final PsiClass targetClass = importStaticStatement.resolveTargetClass();
+                PsiClass targetClass = importStaticStatement.resolveTargetClass();
                 if (targetClass == null) {
                     continue;
                 }
-                final String qualifiedName = targetClass.getQualifiedName();
-                final String referenceName = importStaticStatement.getReferenceName();
+                String qualifiedName = targetClass.getQualifiedName();
+                String referenceName = importStaticStatement.getReferenceName();
                 if (referenceName == null) {
                     if (onDemandStaticImports.contains(qualifiedName)) {
                         registerError(importStaticStatement);
@@ -94,7 +94,7 @@ public class RedundantImportInspection extends BaseInspection {
                     onDemandStaticImports.add(qualifiedName);
                 }
                 else {
-                    final String qualifiedReferenceName = qualifiedName + '.' + referenceName;
+                    String qualifiedReferenceName = qualifiedName + '.' + referenceName;
                     if (singleMemberStaticImports.contains(qualifiedReferenceName)) {
                         registerError(importStaticStatement);
                         continue;
@@ -110,11 +110,11 @@ public class RedundantImportInspection extends BaseInspection {
         }
 
         private void checkNonStaticImports(PsiImportList importList, PsiJavaFile javaFile) {
-            final PsiImportStatement[] importStatements = importList.getImportStatements();
-            final Set<String> onDemandImports = new HashSet();
-            final Set<String> singleClassImports = new HashSet();
-            for (final PsiImportStatement importStatement : importStatements) {
-                final String qualifiedName = importStatement.getQualifiedName();
+            PsiImportStatement[] importStatements = importList.getImportStatements();
+            Set<String> onDemandImports = new HashSet();
+            Set<String> singleClassImports = new HashSet();
+            for (PsiImportStatement importStatement : importStatements) {
+                String qualifiedName = importStatement.getQualifiedName();
                 if (qualifiedName == null) {
                     continue;
                 }
@@ -129,21 +129,21 @@ public class RedundantImportInspection extends BaseInspection {
                         registerError(importStatement);
                         continue;
                     }
-                    final PsiElement element = importStatement.resolve();
+                    PsiElement element = importStatement.resolve();
                     if (!(element instanceof PsiClass)) {
                         continue;
                     }
-                    final PsiElement context = element.getContext();
+                    PsiElement context = element.getContext();
                     if (context == null) {
                         continue;
                     }
-                    final String contextName;
+                    String contextName;
                     if (context instanceof PsiJavaFile) {
-                        final PsiJavaFile file = (PsiJavaFile) context;
+                        PsiJavaFile file = (PsiJavaFile) context;
                         contextName = file.getPackageName();
                     }
                     else if (context instanceof PsiClass) {
-                        final PsiClass aClass = (PsiClass) context;
+                        PsiClass aClass = (PsiClass) context;
                         contextName = aClass.getQualifiedName();
                     }
                     else {

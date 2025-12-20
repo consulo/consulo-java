@@ -78,8 +78,8 @@ public class RemoveUnusedVariableFix implements SyntheticIntentionAction {
 
     private void removeVariableAndReferencingStatements(Editor editor) {
         final List<PsiElement> references = new ArrayList<PsiElement>();
-        final List<PsiElement> sideEffects = new ArrayList<PsiElement>();
-        final boolean[] canCopeWithSideEffects = {true};
+        List<PsiElement> sideEffects = new ArrayList<PsiElement>();
+        boolean[] canCopeWithSideEffects = {true};
         try {
             PsiElement context = myVariable instanceof PsiField ? ((PsiField) myVariable).getContainingClass() : PsiUtil.getVariableCodeBlock(myVariable, null);
             if (context != null) {
@@ -148,7 +148,7 @@ public class RemoveUnusedVariableFix implements SyntheticIntentionAction {
             text = "";
         }
         else {
-            final PsiElement sideEffect = sideEffects.get(0);
+            PsiElement sideEffect = sideEffects.get(0);
             if (sideEffect instanceof PsiExpression) {
                 text = PsiExpressionTrimRenderer.render((PsiExpression) sideEffect);
             }

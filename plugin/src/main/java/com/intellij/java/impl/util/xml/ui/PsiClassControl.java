@@ -46,19 +46,19 @@ import javax.swing.*;
  */
 public class PsiClassControl extends EditorTextFieldControl<PsiClassPanel> {
 
-  public PsiClassControl(final DomWrapper<String> domWrapper) {
+  public PsiClassControl(DomWrapper<String> domWrapper) {
     super(domWrapper);
   }
 
-  public PsiClassControl(final DomWrapper<String> domWrapper, final boolean commitOnEveryChange) {
+  public PsiClassControl(DomWrapper<String> domWrapper, boolean commitOnEveryChange) {
     super(domWrapper, commitOnEveryChange);
   }
 
-  protected EditorTextField getEditorTextField(@Nonnull final PsiClassPanel component) {
+  protected EditorTextField getEditorTextField(@Nonnull PsiClassPanel component) {
     return ((ReferenceEditorWithBrowseButton) component.getComponent(0)).getEditorTextField();
   }
 
-  protected PsiClassPanel createMainComponent(PsiClassPanel boundedComponent, final Project project) {
+  protected PsiClassPanel createMainComponent(PsiClassPanel boundedComponent, Project project) {
     if (boundedComponent == null) {
       boundedComponent = new PsiClassPanel();
     }
@@ -73,15 +73,15 @@ public class PsiClassControl extends EditorTextFieldControl<PsiClassPanel> {
   }
 
   protected static <T extends JPanel> T initReferenceEditorWithBrowseButton(
-    final T boundedComponent,
-    final ReferenceEditorWithBrowseButton editor,
-    final EditorTextFieldControl control
+    T boundedComponent,
+    ReferenceEditorWithBrowseButton editor,
+    EditorTextFieldControl control
   ) {
     boundedComponent.removeAll();
     boundedComponent.add(editor);
-    final GlobalSearchScope resolveScope = control.getDomWrapper().getResolveScope();
+    GlobalSearchScope resolveScope = control.getDomWrapper().getResolveScope();
     editor.addActionListener(e -> {
-      final DomElement domElement = control.getDomElement();
+      DomElement domElement = control.getDomElement();
       ExtendClass extend = domElement.getAnnotation(ExtendClass.class);
       PsiClass baseClass = null;
       ClassFilter filter = null;
@@ -94,7 +94,7 @@ public class PsiClassControl extends EditorTextFieldControl<PsiClassPanel> {
 
       PsiClass initialClass = null;
       if (domElement instanceof GenericDomValue) {
-        final Object value = ((GenericDomValue) domElement).getValue();
+        Object value = ((GenericDomValue) domElement).getValue();
         if (value instanceof PsiClass)
           initialClass = (PsiClass) value;
       }
@@ -102,7 +102,7 @@ public class PsiClassControl extends EditorTextFieldControl<PsiClassPanel> {
       TreeClassChooser chooser = TreeClassChooserFactory.getInstance(control.getProject())
           .createInheritanceClassChooser(UILocalize.chooseClass().get(), resolveScope, baseClass, initialClass, filter);
       chooser.showDialog();
-      final PsiClass psiClass = chooser.getSelected();
+      PsiClass psiClass = chooser.getSelected();
       if (psiClass != null) {
         control.setValue(psiClass.getQualifiedName());
       }

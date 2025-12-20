@@ -36,10 +36,10 @@ public class ReplaceInstanceVariableAccess extends FixableUsageInfo {
     }
 
     public void fixUsage() throws IncorrectOperationException {
-        final PsiElement qualifier = expression.getQualifier();
-        final String callString = delegateName + '.' + (getterName != null ? getterName + "()" : fieldName);
+        PsiElement qualifier = expression.getQualifier();
+        String callString = delegateName + '.' + (getterName != null ? getterName + "()" : fieldName);
         if (qualifier != null) {
-            final String qualifierText = qualifier.getText();
+            String qualifierText = qualifier.getText();
             MutationUtils.replaceExpression(qualifierText + '.' + callString, expression);
         } else {
             MutationUtils.replaceExpression(callString, expression);

@@ -46,7 +46,7 @@ public class ArraysAsListWithZeroOrOneArgumentInspection extends BaseInspection 
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    final Boolean isEmpty = (Boolean)infos[0];
+    Boolean isEmpty = (Boolean)infos[0];
     return isEmpty
       ? InspectionGadgetsLocalize.arraysAsListWithZeroArgumentsProblemDescriptor().get()
       : InspectionGadgetsLocalize.arraysAsListWithOneArgumentProblemDescriptor().get();
@@ -55,7 +55,7 @@ public class ArraysAsListWithZeroOrOneArgumentInspection extends BaseInspection 
   @Nullable
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    final Boolean isEmpty = (Boolean)infos[0];
+    Boolean isEmpty = (Boolean)infos[0];
     return new ArraysAsListWithOneArgumentFix(isEmpty);
   }
 
@@ -77,16 +77,16 @@ public class ArraysAsListWithZeroOrOneArgumentInspection extends BaseInspection 
 
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement().getParent().getParent();
+      PsiElement element = descriptor.getPsiElement().getParent().getParent();
       if (!(element instanceof PsiMethodCallExpression)) {
         return;
       }
-      final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)element;
+      PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)element;
       if (myEmpty) {
         replaceExpressionAndShorten(methodCallExpression, "java.util.Collections.emptyList()");
       }
       else {
-        final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+        PsiExpressionList argumentList = methodCallExpression.getArgumentList();
         replaceExpressionAndShorten(methodCallExpression, "java.util.Collections.singletonList" + argumentList.getText());
       }
     }
@@ -102,16 +102,16 @@ public class ArraysAsListWithZeroOrOneArgumentInspection extends BaseInspection 
     @Override
     public void visitMethodCallExpression(PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
+      PsiReferenceExpression methodExpression = expression.getMethodExpression();
+      String methodName = methodExpression.getReferenceName();
       if (!"asList".equals(methodName)) {
         return;
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
+      PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpression[] arguments = argumentList.getExpressions();
       if (arguments.length == 1) {
-        final PsiExpression argument = arguments[0];
-        final PsiType type = argument.getType();
+        PsiExpression argument = arguments[0];
+        PsiType type = argument.getType();
         if (type instanceof PsiArrayType) {
           return;
         }
@@ -119,15 +119,15 @@ public class ArraysAsListWithZeroOrOneArgumentInspection extends BaseInspection 
       else if (arguments.length != 0) {
         return;
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return;
       }
-      final PsiClass containingClass = method.getContainingClass();
+      PsiClass containingClass = method.getContainingClass();
       if (containingClass == null) {
         return;
       }
-      final String className = containingClass.getQualifiedName();
+      String className = containingClass.getQualifiedName();
       if (!CommonClassNames.JAVA_UTIL_ARRAYS.equals(className)) {
         return;
       }

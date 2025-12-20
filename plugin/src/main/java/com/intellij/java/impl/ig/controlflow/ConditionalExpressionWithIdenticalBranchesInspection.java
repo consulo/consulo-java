@@ -58,7 +58,7 @@ public class ConditionalExpressionWithIdenticalBranchesInspection extends BaseIn
     @Override
     @Nonnull
     protected String buildErrorString(Object... infos) {
-        final EquivalenceChecker.Decision decision = (EquivalenceChecker.Decision) infos[1];
+        EquivalenceChecker.Decision decision = (EquivalenceChecker.Decision) infos[1];
         return decision.isExact()
             ? InspectionGadgetsLocalize.conditionalExpressionWithIdenticalBranchesProblemDescriptor().get()
             : InspectionGadgetsLocalize.conditionalExpressionWithSimilarBranchesProblemDescriptor().get();
@@ -94,23 +94,23 @@ public class ConditionalExpressionWithIdenticalBranchesInspection extends BaseIn
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) {
-            final EquivalenceChecker.Decision decision = getEquivalenceDecision();
-            final PsiConditionalExpression conditionalExpression = getConditionalExpression();
-            final PsiExpression thenExpression = conditionalExpression.getThenExpression();
+            EquivalenceChecker.Decision decision = getEquivalenceDecision();
+            PsiConditionalExpression conditionalExpression = getConditionalExpression();
+            PsiExpression thenExpression = conditionalExpression.getThenExpression();
             assert thenExpression != null;
             if (decision.getExactlyMatches()) {
-                final PsiConditionalExpression expression = (PsiConditionalExpression) descriptor.getPsiElement();
-                final String bodyText = thenExpression.getText();
+                PsiConditionalExpression expression = (PsiConditionalExpression) descriptor.getPsiElement();
+                String bodyText = thenExpression.getText();
                 PsiReplacementUtil.replaceExpression(expression, bodyText);
             }
             else if (!decision.isExactUnMatches()) {
-                final PsiElement leftDiff = decision.getLeftDiff();
-                final PsiElement rightDiff = decision.getRightDiff();
+                PsiElement leftDiff = decision.getLeftDiff();
+                PsiElement rightDiff = decision.getRightDiff();
 
-                final String expression = "(" + conditionalExpression.getCondition().getText() + " ? " + leftDiff.getText() + " : " + rightDiff.getText() + ")";
-                final PsiExpression newConditionalExpression = JavaPsiFacade.getElementFactory(project).createExpressionFromText(expression, conditionalExpression);
+                String expression = "(" + conditionalExpression.getCondition().getText() + " ? " + leftDiff.getText() + " : " + rightDiff.getText() + ")";
+                PsiExpression newConditionalExpression = JavaPsiFacade.getElementFactory(project).createExpressionFromText(expression, conditionalExpression);
 
-                final PsiElement replacedConditionalExpression = leftDiff.replace(newConditionalExpression);
+                PsiElement replacedConditionalExpression = leftDiff.replace(newConditionalExpression);
                 ParenthesesUtils.removeParentheses((PsiExpression) replacedConditionalExpression, false);
                 conditionalExpression.replace(thenExpression);
             }
@@ -127,9 +127,9 @@ public class ConditionalExpressionWithIdenticalBranchesInspection extends BaseIn
         @Override
         public void visitConditionalExpression(PsiConditionalExpression expression) {
             super.visitConditionalExpression(expression);
-            final PsiExpression thenExpression = expression.getThenExpression();
-            final PsiExpression elseExpression = expression.getElseExpression();
-            final EquivalenceChecker.Decision decision = EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalentDecision(thenExpression, elseExpression);
+            PsiExpression thenExpression = expression.getThenExpression();
+            PsiExpression elseExpression = expression.getElseExpression();
+            EquivalenceChecker.Decision decision = EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalentDecision(thenExpression, elseExpression);
             if (thenExpression != null && (myReportOnlyExactlyIdentical ? decision.getExactlyMatches() : !decision.isExactUnMatches())) {
                 registerError(expression, expression, decision);
             }

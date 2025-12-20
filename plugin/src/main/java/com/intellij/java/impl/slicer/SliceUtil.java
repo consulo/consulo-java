@@ -132,7 +132,7 @@ public class SliceUtil
 			{
 				values = Collections.singletonList(initializer);
 			}
-			final Set<PsiExpression> expressions = new HashSet<PsiExpression>(values);
+			Set<PsiExpression> expressions = new HashSet<PsiExpression>(values);
 			if(initializer != null && expressions.isEmpty())
 			{
 				expressions.add(initializer);
@@ -290,7 +290,7 @@ public class SliceUtil
 			int indexNesting,
 			@Nonnull String syntheticField)
 	{
-		final PsiElement realExpression = expression.getParent() instanceof DummyHolder ? expression.getParent().getContext() : expression;
+		PsiElement realExpression = expression.getParent() instanceof DummyHolder ? expression.getParent().getContext() : expression;
 		assert realExpression != null;
 		if(!(realExpression instanceof PsiCompiledElement))
 		{
@@ -303,12 +303,12 @@ public class SliceUtil
 		return true;
 	}
 
-	private static boolean processMethodReturnValue(@Nonnull final PsiMethodCallExpression methodCallExpr,
+	private static boolean processMethodReturnValue(@Nonnull PsiMethodCallExpression methodCallExpr,
 			@Nonnull final Processor<SliceUsage> processor,
 			@Nonnull final SliceUsage parent,
-			@Nonnull final PsiSubstitutor parentSubstitutor)
+			@Nonnull PsiSubstitutor parentSubstitutor)
 	{
-		final JavaResolveResult resolved = methodCallExpr.resolveMethodGenerics();
+		JavaResolveResult resolved = methodCallExpr.resolveMethodGenerics();
 		PsiElement r = resolved.getElement();
 		if(r instanceof PsiCompiledElement)
 		{
@@ -348,13 +348,13 @@ public class SliceUtil
 				continue;
 			}
 
-			final PsiCodeBlock body = override.getBody();
+			PsiCodeBlock body = override.getBody();
 			if(body == null)
 			{
 				continue;
 			}
 
-			final PsiSubstitutor s = methodCalled == override ? substitutor : MethodSignatureUtil.getSuperMethodSignatureSubstitutor(methodCalled
+			PsiSubstitutor s = methodCalled == override ? substitutor : MethodSignatureUtil.getSuperMethodSignatureSubstitutor(methodCalled
 					.getSignature(substitutor), override.getSignature(substitutor));
 			final PsiSubstitutor superSubstitutor = s == null ? parentSubstitutor : s;
 
@@ -371,7 +371,7 @@ public class SliceUtil
 				}
 
 				@Override
-				public void visitReturnStatement(final PsiReturnStatement statement)
+				public void visitReturnStatement(PsiReturnStatement statement)
 				{
 					PsiExpression returnValue = statement.getReturnValue();
 					if(returnValue == null)
@@ -415,7 +415,7 @@ public class SliceUtil
 		return ReferencesSearch.search(field, searchScope).forEach(new Processor<PsiReference>()
 		{
 			@Override
-			public boolean process(final PsiReference reference)
+			public boolean process(PsiReference reference)
 			{
 				ProgressManager.checkCanceled();
 				PsiElement element = reference.getElement();
@@ -431,7 +431,7 @@ public class SliceUtil
 						return true;
 					}
 				}
-				final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) element;
+				PsiReferenceExpression referenceExpression = (PsiReferenceExpression) element;
 				PsiElement parentExpr = referenceExpression.getParent();
 				if(PsiUtil.isOnAssignmentLeftHand(referenceExpression))
 				{
@@ -478,7 +478,7 @@ public class SliceUtil
 		return new SliceTooComplexDFAUsage(simplify(element), parent, substitutor);
 	}
 
-	private static boolean processParameterUsages(@Nonnull final PsiParameter parameter,
+	private static boolean processParameterUsages(@Nonnull PsiParameter parameter,
 			@Nonnull final SliceUsage parent,
 			@Nonnull final PsiSubstitutor parentSubstitutor,
 			final int indexNesting,
@@ -504,7 +504,7 @@ public class SliceUtil
 			return true;
 		}
 
-		final PsiMethod method = (PsiMethod) declarationScope;
+		PsiMethod method = (PsiMethod) declarationScope;
 		final PsiType actualParameterType = parameter.getType();
 
 		final PsiParameter[] actualParameters = method.getParameterList().getParameters();
@@ -515,12 +515,12 @@ public class SliceUtil
 		superMethods.add(method);
 
 		final Set<PsiReference> processed = new HashSet<PsiReference>(); //usages of super method and overridden method can overlap
-		for(final PsiMethod superMethod : superMethods)
+		for(PsiMethod superMethod : superMethods)
 		{
 			if(!MethodReferencesSearch.search(superMethod, parent.getScope().toSearchScope(), true).forEach(new Processor<PsiReference>()
 			{
 				@Override
-				public boolean process(final PsiReference reference)
+				public boolean process(PsiReference reference)
 				{
 					ProgressManager.checkCanceled();
 					synchronized(processed)
@@ -618,7 +618,7 @@ public class SliceUtil
 					PsiType substituted = combined.substitute(actualExpressionType);
 					if(substituted instanceof PsiPrimitiveType)
 					{
-						final PsiClassType boxedType = ((PsiPrimitiveType) substituted).getBoxedType(argumentList);
+						PsiClassType boxedType = ((PsiPrimitiveType) substituted).getBoxedType(argumentList);
 						substituted = boxedType != null ? boxedType : substituted;
 					}
 					if(substituted == null)

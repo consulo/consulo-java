@@ -39,17 +39,17 @@ public abstract class ConvertParameterToLocalVariableTest extends LightQuickFixT
   }
 
   @Override
-  protected void doAction(final String text, final boolean actionShouldBeAvailable, final String testFullPath, final String testName)
+  protected void doAction(String text, boolean actionShouldBeAvailable, String testFullPath, String testName)
     throws Exception {
 
-    final LocalQuickFix fix = new ParameterCanBeLocalInspection.ConvertParameterToLocalQuickFix();
-    final int offset = getEditor().getCaretModel().getOffset();
-    final PsiElement psiElement = getFile().findElementAt(offset);
+    LocalQuickFix fix = new ParameterCanBeLocalInspection.ConvertParameterToLocalQuickFix();
+    int offset = getEditor().getCaretModel().getOffset();
+    PsiElement psiElement = getFile().findElementAt(offset);
     assert psiElement != null;
-    final InspectionManager manager = InspectionManager.getInstance(getProject());
-    final ProblemDescriptor descriptor = manager.createProblemDescriptor(psiElement, "", fix, ProblemHighlightType.LIKE_UNUSED_SYMBOL, true);
+    InspectionManager manager = InspectionManager.getInstance(getProject());
+    ProblemDescriptor descriptor = manager.createProblemDescriptor(psiElement, "", fix, ProblemHighlightType.LIKE_UNUSED_SYMBOL, true);
     fix.applyFix(getProject(), descriptor);
-    final String expectedFilePath = getBasePath() + "/after" + testName;
+    String expectedFilePath = getBasePath() + "/after" + testName;
     checkResultByFile("In file :" + expectedFilePath, expectedFilePath, false);
   }
 

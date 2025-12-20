@@ -45,7 +45,7 @@ public class NestingDepthInspection extends MethodMetricInspection {
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final Integer nestingDepth = (Integer)infos[0];
+    Integer nestingDepth = (Integer)infos[0];
     return InspectionGadgetsLocalize.nestingDepthProblemDescriptor(nestingDepth).get();
   }
 
@@ -61,9 +61,9 @@ public class NestingDepthInspection extends MethodMetricInspection {
       if (method.getNameIdentifier() == null) {
         return;
       }
-      final NestingDepthVisitor visitor = new NestingDepthVisitor();
+      NestingDepthVisitor visitor = new NestingDepthVisitor();
       method.accept(visitor);
-      final int count = visitor.getMaximumDepth();
+      int count = visitor.getMaximumDepth();
       if (count <= getLimit()) {
         return;
       }

@@ -33,25 +33,25 @@ class VariableAccessVisitor extends JavaRecursiveElementVisitor {
   public void visitReferenceExpression(
     @Nonnull PsiReferenceExpression referenceExpression) {
     super.visitReferenceExpression(referenceExpression);
-    final PsiExpression qualifier =
+    PsiExpression qualifier =
       referenceExpression.getQualifierExpression();
     if (qualifier != null && !(qualifier instanceof PsiThisExpression)) {
       return;
     }
-    final PsiElement element = referenceExpression.resolve();
+    PsiElement element = referenceExpression.resolve();
     if (!(element instanceof PsiField)) {
       return;
     }
-    final PsiField field = (PsiField)element;
-    final Set<PsiField> overAccessedFields = m_overAccessedFields;
+    PsiField field = (PsiField)element;
+    Set<PsiField> overAccessedFields = m_overAccessedFields;
     if (overAccessedFields.contains(field)) {
       return;
     }
     if (ControlFlowUtils.isInLoop(referenceExpression)) {
       overAccessedFields.add(field);
     }
-    final Map<PsiField, Integer> accessCounts = m_accessCounts;
-    final Integer count = accessCounts.get(field);
+    Map<PsiField, Integer> accessCounts = m_accessCounts;
+    Integer count = accessCounts.get(field);
     if (count == null) {
       accessCounts.put(field, Integer.valueOf(1));
     }

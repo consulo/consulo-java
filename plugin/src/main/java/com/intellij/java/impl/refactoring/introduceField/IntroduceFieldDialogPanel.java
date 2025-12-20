@@ -78,7 +78,7 @@ public class IntroduceFieldDialogPanel extends IntroduceFieldCentralPanel {
       if (myRbInSetUp != null) myRbInSetUp.setEnabled(false);
     }
 
-    final PsiMethod setUpMethod = TestFrameworks.getInstance().findSetUpMethod(myParentClass);
+    PsiMethod setUpMethod = TestFrameworks.getInstance().findSetUpMethod(myParentClass);
     if (myInitializerExpression != null && PsiTreeUtil.isAncestor(setUpMethod, myInitializerExpression, false) && myRbInSetUp.isEnabled() ||
         ourLastInitializerPlace == BaseExpressionToFieldHandler.InitializationPlace.IN_SETUP_METHOD && TestFrameworks.getInstance().isTestClass(myParentClass) && myRbInSetUp.isEnabled()) {
       myRbInSetUp.setSelected(true);
@@ -228,7 +228,7 @@ public class IntroduceFieldDialogPanel extends IntroduceFieldCentralPanel {
   protected boolean allowFinal() {
     boolean allowFinal = myRbInFieldDeclaration.isSelected() || (myRbInConstructor.isSelected() && !myWillBeDeclaredStatic);
     if (myRbInCurrentMethod.isSelected() && myIsCurrentMethodConstructor) {
-      final PsiMethod[] constructors = myParentClass.getConstructors();
+      PsiMethod[] constructors = myParentClass.getConstructors();
       allowFinal = constructors.length <= 1;
     }
     return super.allowFinal() && allowFinal;
@@ -245,7 +245,7 @@ public class IntroduceFieldDialogPanel extends IntroduceFieldCentralPanel {
 
   protected JPanel composeWholePanel(JComponent initializerPlacePanel, JPanel checkboxPanel) {
     JPanel panel = new JPanel(new GridBagLayout());
-    final GridBagConstraints constraints =
+    GridBagConstraints constraints =
       new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 0, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                              new Insets(0, 0, 0, 0), 0, 0);
     panel.add(initializerPlacePanel, constraints);

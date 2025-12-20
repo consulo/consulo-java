@@ -62,8 +62,8 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
         @Override
         @RequiredReadAction
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiIdentifier classNameIdentifier = (PsiIdentifier) descriptor.getPsiElement();
-            final PsiClass interfaceClass = (PsiClass) classNameIdentifier.getParent();
+            PsiIdentifier classNameIdentifier = (PsiIdentifier) descriptor.getPsiElement();
+            PsiClass interfaceClass = (PsiClass) classNameIdentifier.getParent();
             moveSubClassExtendsToImplements(interfaceClass);
             changeClassToInterface(interfaceClass);
             moveImplementsToExtends(interfaceClass);
@@ -72,18 +72,18 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
         @RequiredReadAction
         private static void changeClassToInterface(PsiClass aClass)
             throws IncorrectOperationException {
-            final PsiIdentifier nameIdentifier = aClass.getNameIdentifier();
+            PsiIdentifier nameIdentifier = aClass.getNameIdentifier();
             if (nameIdentifier == null) {
                 return;
             }
-            final PsiKeyword classKeyword = PsiTreeUtil.getPrevSiblingOfType(nameIdentifier, PsiKeyword.class);
-            final PsiManager manager = aClass.getManager();
-            final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-            final PsiKeyword interfaceKeyword = factory.createKeyword(PsiKeyword.INTERFACE);
+            PsiKeyword classKeyword = PsiTreeUtil.getPrevSiblingOfType(nameIdentifier, PsiKeyword.class);
+            PsiManager manager = aClass.getManager();
+            PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
+            PsiKeyword interfaceKeyword = factory.createKeyword(PsiKeyword.INTERFACE);
             if (classKeyword == null) {
                 return;
             }
-            final PsiModifierList modifierList = aClass.getModifierList();
+            PsiModifierList modifierList = aClass.getModifierList();
             if (modifierList != null) {
                 modifierList.setModifierProperty(PsiModifier.ABSTRACT, false);
                 modifierList.setModifierProperty(PsiModifier.FINAL, false);
@@ -93,16 +93,16 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
 
         private static void moveImplementsToExtends(PsiClass anInterface)
             throws IncorrectOperationException {
-            final PsiReferenceList extendsList = anInterface.getExtendsList();
+            PsiReferenceList extendsList = anInterface.getExtendsList();
             if (extendsList == null) {
                 return;
             }
-            final PsiReferenceList implementsList = anInterface.getImplementsList();
+            PsiReferenceList implementsList = anInterface.getImplementsList();
             if (implementsList == null) {
                 return;
             }
-            final PsiJavaCodeReferenceElement[] referenceElements = implementsList.getReferenceElements();
-            for (final PsiJavaCodeReferenceElement referenceElement : referenceElements) {
+            PsiJavaCodeReferenceElement[] referenceElements = implementsList.getReferenceElements();
+            for (PsiJavaCodeReferenceElement referenceElement : referenceElements) {
                 extendsList.add(referenceElement);
                 referenceElement.delete();
             }
@@ -110,15 +110,15 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
 
         private static void moveSubClassExtendsToImplements(PsiClass oldClass)
             throws IncorrectOperationException {
-            final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(oldClass.getProject()).getElementFactory();
-            final PsiJavaCodeReferenceElement classReference = elementFactory.createClassReferenceElement(oldClass);
-            final SearchScope searchScope = oldClass.getUseScope();
-            for (final PsiClass inheritor : ClassInheritorsSearch.search(oldClass, searchScope, false)) {
-                final PsiReferenceList extendsList = inheritor.getExtendsList();
+            PsiElementFactory elementFactory = JavaPsiFacade.getInstance(oldClass.getProject()).getElementFactory();
+            PsiJavaCodeReferenceElement classReference = elementFactory.createClassReferenceElement(oldClass);
+            SearchScope searchScope = oldClass.getUseScope();
+            for (PsiClass inheritor : ClassInheritorsSearch.search(oldClass, searchScope, false)) {
+                PsiReferenceList extendsList = inheritor.getExtendsList();
                 if (extendsList == null) {
                     continue;
                 }
-                final PsiReferenceList implementsList = inheritor.getImplementsList();
+                PsiReferenceList implementsList = inheritor.getImplementsList();
                 moveReference(extendsList, implementsList, classReference);
             }
         }
@@ -128,10 +128,10 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
             @Nullable PsiReferenceList target,
             @Nonnull PsiJavaCodeReferenceElement reference
         ) throws IncorrectOperationException {
-            final PsiJavaCodeReferenceElement[] sourceReferences = source.getReferenceElements();
-            final String fqName = reference.getQualifiedName();
-            for (final PsiJavaCodeReferenceElement sourceReference : sourceReferences) {
-                final String implementsReferenceFqName = sourceReference.getQualifiedName();
+            PsiJavaCodeReferenceElement[] sourceReferences = source.getReferenceElements();
+            String fqName = reference.getQualifiedName();
+            for (PsiJavaCodeReferenceElement sourceReference : sourceReferences) {
+                String implementsReferenceFqName = sourceReference.getQualifiedName();
                 if (fqName.equals(implementsReferenceFqName)) {
                     if (target != null) {
                         target.add(sourceReference);
@@ -160,14 +160,14 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
         }
 
         public static boolean mayBeInterface(PsiClass aClass) {
-            final PsiReferenceList extendsList = aClass.getExtendsList();
+            PsiReferenceList extendsList = aClass.getExtendsList();
             if (extendsList != null) {
-                final PsiJavaCodeReferenceElement[] extendsElements = extendsList.getReferenceElements();
+                PsiJavaCodeReferenceElement[] extendsElements = extendsList.getReferenceElements();
                 if (extendsElements.length > 0) {
                     return false;
                 }
             }
-            final PsiClassInitializer[] initializers = aClass.getInitializers();
+            PsiClassInitializer[] initializers = aClass.getInitializers();
             return initializers.length <= 0
                 && allMethodsPublicAbstract(aClass)
                 && allFieldsPublicStaticFinal(aClass)
@@ -176,8 +176,8 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
 
         private static boolean allFieldsPublicStaticFinal(PsiClass aClass) {
             boolean allFieldsStaticFinal = true;
-            final PsiField[] fields = aClass.getFields();
-            for (final PsiField field : fields) {
+            PsiField[] fields = aClass.getFields();
+            for (PsiField field : fields) {
                 if (!(field.isPublic() && field.isStatic() && field.isFinal())) {
                     allFieldsStaticFinal = false;
                 }
@@ -186,8 +186,8 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
         }
 
         private static boolean allMethodsPublicAbstract(PsiClass aClass) {
-            final PsiMethod[] methods = aClass.getMethods();
-            for (final PsiMethod method : methods) {
+            PsiMethod[] methods = aClass.getMethods();
+            for (PsiMethod method : methods) {
                 if (!(method.isPublic() && method.isAbstract())) {
                     return false;
                 }
@@ -196,7 +196,7 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
         }
 
         private static boolean allInnerClassesPublic(PsiClass aClass) {
-            final PsiClass[] innerClasses = aClass.getInnerClasses();
+            PsiClass[] innerClasses = aClass.getInnerClasses();
             for (PsiClass innerClass : innerClasses) {
                 if (!innerClass.isPublic()) {
                     return false;

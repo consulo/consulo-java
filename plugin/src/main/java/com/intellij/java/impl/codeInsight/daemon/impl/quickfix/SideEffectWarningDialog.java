@@ -110,9 +110,9 @@ public class SideEffectWarningDialog extends DialogWrapper {
   @Override
   @RequiredUIAccess
   protected JComponent createCenterPanel() {
-    final JPanel panel = new JPanel(new BorderLayout());
-    final String text = sideEffectsDescription();
-    final JLabel label = new JLabel(text);
+    JPanel panel = new JPanel(new BorderLayout());
+    String text = sideEffectsDescription();
+    JLabel label = new JLabel(text);
     label.setIcon(TargetAWT.to(UIUtil.getWarningIcon()));
     panel.add(label, BorderLayout.NORTH);
     return panel;

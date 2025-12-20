@@ -56,7 +56,7 @@ public class Util {
       classMemberRefs.add(new ClassMemberInExprUsageInfo(expr));
     }
     else if (expr instanceof PsiReferenceExpression) {
-      final PsiReferenceExpression refExpr = (PsiReferenceExpression)expr;
+      PsiReferenceExpression refExpr = (PsiReferenceExpression)expr;
 
       PsiElement subj = refExpr.resolve();
 
@@ -124,11 +124,11 @@ public class Util {
     if (parameters.length == 0) return IntLists.newArrayList();
 
     PsiMethod[] overridingMethods = OverridingMethodsSearch.search(method, true).toArray(PsiMethod.EMPTY_ARRAY);
-    final PsiMethod[] allMethods = ArrayUtil.append(overridingMethods, method);
+    PsiMethod[] allMethods = ArrayUtil.append(overridingMethods, method);
 
     final IntSet suspects = IntSets.newHashSet();
     expr.accept(new JavaRecursiveElementWalkingVisitor() {
-      @Override public void visitReferenceExpression(final PsiReferenceExpression expression) {
+      @Override public void visitReferenceExpression(PsiReferenceExpression expression) {
         super.visitReferenceExpression(expression);
         PsiElement resolved = expression.resolve();
         if (resolved instanceof PsiParameter) {
@@ -142,13 +142,13 @@ public class Util {
 
     final PrimitiveIterator.OfInt iterator = suspects.iterator();
     while(iterator.hasNext()) {
-      final int paramNum = iterator.nextInt();
+      int paramNum = iterator.nextInt();
       for (PsiMethod psiMethod : allMethods) {
         PsiParameter[] psiParameters = psiMethod.getParameterList().getParameters();
         if (paramNum >= psiParameters.length) continue;
         PsiParameter parameter = psiParameters[paramNum];
         if (!ReferencesSearch.search(parameter, parameter.getResolveScope(), false).forEach(new Processor<PsiReference>() {
-          public boolean process(final PsiReference reference) {
+          public boolean process(PsiReference reference) {
             PsiElement element = reference.getElement();
             boolean stillCanBeRemoved = false;
             if (element != null) {

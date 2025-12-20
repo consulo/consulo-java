@@ -52,8 +52,8 @@ public class SerialPersistentFieldsWithWrongSignatureInspection extends BaseInsp
                 return;
             }
             PsiField badSerialPersistentFields = null;
-            final PsiField[] fields = aClass.getFields();
-            for (final PsiField field : fields) {
+            PsiField[] fields = aClass.getFields();
+            for (PsiField field : fields) {
                 if (isSerialPersistentFields(field)) {
                     if (!field.hasModifierProperty(PsiModifier.PRIVATE) ||
                         !field.hasModifierProperty(PsiModifier.STATIC) ||
@@ -62,7 +62,7 @@ public class SerialPersistentFieldsWithWrongSignatureInspection extends BaseInsp
                         break;
                     }
                     else {
-                        final PsiType type = field.getType();
+                        PsiType type = field.getType();
                         if (!type.equalsToText("java.io.ObjectStreamField[]")) {
                             badSerialPersistentFields = field;
                             break;
@@ -80,7 +80,7 @@ public class SerialPersistentFieldsWithWrongSignatureInspection extends BaseInsp
         }
 
         private static boolean isSerialPersistentFields(PsiField field) {
-            final String fieldName = field.getName();
+            String fieldName = field.getName();
             return "serialPersistentFields".equals(fieldName);
         }
     }

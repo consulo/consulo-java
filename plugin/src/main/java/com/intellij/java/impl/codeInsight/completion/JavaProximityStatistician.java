@@ -29,7 +29,7 @@ import consulo.language.util.proximity.ProximityStatistician;
 @ExtensionImpl
 public class JavaProximityStatistician extends ProximityStatistician {
   @Override
-  public StatisticsInfo serialize(final PsiElement element, final ProximityLocation location) {
+  public StatisticsInfo serialize(PsiElement element, ProximityLocation location) {
     return element instanceof PsiMember ? JavaStatisticsManager.createInfo(null, (PsiMember)element) : null;
   }
 }

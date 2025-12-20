@@ -48,7 +48,7 @@ import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
 @ExtensionImpl(id = "javaBasic2ClassName", order = "before javaMemberName, before javaLegacy, after liveTemplates")
 public class JavaNoVariantsDelegator extends CompletionContributor implements DumbAware {
   @Override
-  public void fillCompletionVariants(@Nonnull final CompletionParameters parameters, @Nonnull final CompletionResultSet result) {
+  public void fillCompletionVariants(@Nonnull CompletionParameters parameters, @Nonnull final CompletionResultSet result) {
     if (JavaModuleCompletion.isModuleFile(parameters.getOriginalFile())) {
       return;
     }
@@ -70,7 +70,7 @@ public class JavaNoVariantsDelegator extends CompletionContributor implements Du
       }
     };
     result.runRemainingContributors(parameters, tracker);
-    final boolean empty = tracker.containsOnlyPackages || suggestAllAnnotations(parameters);
+    boolean empty = tracker.containsOnlyPackages || suggestAllAnnotations(parameters);
 
     if (JavaCompletionContributor.isClassNamePossible(parameters) && !JavaCompletionContributor.mayStartClassName(result)) {
       result.restartCompletionOnAnyPrefixChange();
@@ -113,7 +113,7 @@ public class JavaNoVariantsDelegator extends CompletionContributor implements Du
     }
   }
 
-  private static void suggestCollectionUtilities(CompletionParameters parameters, final CompletionResultSet result, PsiElement position) {
+  private static void suggestCollectionUtilities(CompletionParameters parameters, CompletionResultSet result, PsiElement position) {
     if (StringUtil.isNotEmpty(result.getPrefixMatcher().getPrefix())) {
       for (ExpectedTypeInfo info : JavaSmartCompletionContributor.getExpectedTypes(parameters)) {
         new CollectionsUtilityMethodsProvider(position, info.getType(), info.getDefaultType(), result).addCompletions(true);
@@ -148,7 +148,7 @@ public class JavaNoVariantsDelegator extends CompletionContributor implements Du
       if (type != null && !PsiType.VOID.equals(type)) {
         PsiReferenceExpression ref = ReferenceExpressionCompletionContributor.createMockReference(position, type, base);
         if (ref != null) {
-          for (final LookupElement item : JavaSmartCompletionContributor.completeReference(position, ref, filter, true, true, parameters, result.getPrefixMatcher())) {
+          for (LookupElement item : JavaSmartCompletionContributor.completeReference(position, ref, filter, true, true, parameters, result.getPrefixMatcher())) {
             qualifiedCollector.addElement(JavaCompletionUtil.highlightIfNeeded(null, new JavaChainLookupElement(base, item), item.getObject(), position));
           }
         }
@@ -173,7 +173,7 @@ public class JavaNoVariantsDelegator extends CompletionContributor implements Du
       return plainVariants;
     }
 
-    final Set<LookupElement> allClasses = new LinkedHashSet<>();
+    Set<LookupElement> allClasses = new LinkedHashSet<>();
     PsiElement qualifierName = qualifier.getReferenceNameElement();
     if (qualifierName != null) {
       JavaClassNameCompletionContributor.addAllClasses(parameters.withPosition(qualifierName, qualifierName.getTextRange().getEndOffset()), true, qMatcher, new CollectConsumer<>(allClasses));

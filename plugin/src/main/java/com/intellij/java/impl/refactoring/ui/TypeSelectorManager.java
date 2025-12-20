@@ -26,7 +26,7 @@ public interface TypeSelectorManager {
 
   void setAllOccurrences(boolean allOccurrences);
 
-  boolean isSuggestedType(final String fqName);
+  boolean isSuggestedType(String fqName);
 
   void typeSelected(@Nonnull PsiType type);
 }

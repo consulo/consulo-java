@@ -36,24 +36,24 @@ public class JavaMethodMergingContributor extends CompletionContributor {
 
   @Override
   public AutoCompletionDecision handleAutoCompletionPossibility(@Nonnull AutoCompletionContext context) {
-    final CompletionParameters parameters = context.getParameters();
+    CompletionParameters parameters = context.getParameters();
     if (parameters.getCompletionType() != CompletionType.SMART && parameters.getCompletionType() != CompletionType.BASIC) {
       return null;
     }
 
-    final LookupElement[] items = context.getItems();
+    LookupElement[] items = context.getItems();
     if (items.length > 1) {
       String commonName = null;
-      final ArrayList<PsiMethod> allMethods = new ArrayList<PsiMethod>();
+      ArrayList<PsiMethod> allMethods = new ArrayList<PsiMethod>();
       for (LookupElement item : items) {
         Object o = item.getPsiElement();
         if (item.getUserData(JavaCompletionUtil.FORCE_SHOW_SIGNATURE_ATTR) != null || !(o instanceof PsiMethod)) {
           return AutoCompletionDecision.SHOW_LOOKUP;
         }
 
-        final PsiMethod method = (PsiMethod) o;
-        final JavaChainLookupElement chain = item.as(JavaChainLookupElement.CLASS_CONDITION_KEY);
-        final String name = method.getName() + "#" + (chain == null ? "" : chain.getQualifier().getLookupString());
+        PsiMethod method = (PsiMethod) o;
+        JavaChainLookupElement chain = item.as(JavaChainLookupElement.CLASS_CONDITION_KEY);
+        String name = method.getName() + "#" + (chain == null ? "" : chain.getQualifier().getLookupString());
         if (commonName != null && !commonName.equals(name)) {
           return AutoCompletionDecision.SHOW_LOOKUP;
         }

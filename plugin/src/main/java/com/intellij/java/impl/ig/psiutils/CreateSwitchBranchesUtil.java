@@ -73,12 +73,12 @@ public class CreateSwitchBranchesUtil {
         @Nonnull Function<PsiSwitchLabelStatementBase, List<String>> caseExtractor
     ) {
         boolean isRuleBasedFormat = SwitchUtils.isRuleFormatSwitch(switchBlock);
-        final PsiCodeBlock body = switchBlock.getBody();
+        PsiCodeBlock body = switchBlock.getBody();
         if (body == null) {
             // replace entire switch statement if no code block is present
-            @NonNls final StringBuilder newStatementText = new StringBuilder();
+            @NonNls StringBuilder newStatementText = new StringBuilder();
             CommentTracker commentTracker = new CommentTracker();
-            final PsiExpression switchExpression = switchBlock.getExpression();
+            PsiExpression switchExpression = switchBlock.getExpression();
             newStatementText.append("switch(").append(switchExpression == null ? "" : commentTracker.text(switchExpression)).append("){");
             for (String missingName : missingNames) {
                 newStatementText.append(String.join("", generateStatements(missingName, switchBlock, isRuleBasedFormat)));
@@ -116,7 +116,7 @@ public class CreateSwitchBranchesUtil {
             bodyElement = bodyElement.getNextSibling();
         }
         if (!missingLabels.isEmpty()) {
-            final PsiElement lastChild = body.getLastChild();
+            PsiElement lastChild = body.getLastChild();
             for (String missingEnumElement : missingLabels) {
                 addedLabels.add(addSwitchLabelStatementBefore(missingEnumElement, lastChild, switchBlock, isRuleBasedFormat));
             }
@@ -196,8 +196,8 @@ public class CreateSwitchBranchesUtil {
             }
         }
         PsiElement correctedAnchor = anchor;
-        final PsiElement parent = anchor.getParent();
-        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(anchor.getProject());
+        PsiElement parent = anchor.getParent();
+        PsiElementFactory factory = JavaPsiFacade.getElementFactory(anchor.getProject());
         PsiSwitchLabelStatementBase result = null;
         for (String text : generateStatements(labelExpression, switchBlock, isRuleBasedFormat)) {
             PsiStatement statement = factory.createStatementFromText(text, parent);

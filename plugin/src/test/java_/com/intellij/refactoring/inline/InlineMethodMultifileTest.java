@@ -47,17 +47,17 @@ public abstract class InlineMethodMultifileTest extends RefactoringTestCase {
   private void doTest(String className, String methodName) throws Exception {
     String rootBefore = getRoot() + "/before";
     PsiTestUtil.removeAllRoots(myModule, IdeaTestUtil.getMockJdk17());
-    final VirtualFile rootDir = PsiTestUtil.createTestProjectStructure(myProject, myModule, rootBefore, myFilesToDelete);
+    VirtualFile rootDir = PsiTestUtil.createTestProjectStructure(myProject, myModule, rootBefore, myFilesToDelete);
     PsiClass aClass = myJavaFacade.findClass(className, ProjectScope.getAllScope(myProject));
     assertTrue(aClass != null);
     PsiElement element = aClass.findMethodsByName(methodName, false)[0];
     assertTrue(element instanceof PsiMethod);
     PsiMethod method = (PsiMethod)element;
-    final boolean condition = InlineMethodProcessor.checkBadReturns(method) && !InlineUtil.allUsagesAreTailCalls(method);
+    boolean condition = InlineMethodProcessor.checkBadReturns(method) && !InlineUtil.allUsagesAreTailCalls(method);
     assertFalse("Bad returns found", condition);
 
     InlineOptions options = new MockInlineMethodOptions();
-    final InlineMethodProcessor processor = new InlineMethodProcessor(getProject(), method, null, myEditor, options.isInlineThisOnly());
+    InlineMethodProcessor processor = new InlineMethodProcessor(getProject(), method, null, myEditor, options.isInlineThisOnly());
     processor.run();
 
     String rootAfter = getRoot() + "/after";

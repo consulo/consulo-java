@@ -51,7 +51,7 @@ public class BreakStatementInspection extends BaseInspection {
         @Override
         public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
             super.visitBreakStatement(statement);
-            final PsiSwitchStatement switchStatement =
+            PsiSwitchStatement switchStatement =
                 PsiTreeUtil.getParentOfType(
                     statement,
                     PsiSwitchStatement.class
@@ -65,22 +65,22 @@ public class BreakStatementInspection extends BaseInspection {
         private static boolean isTopLevelBreakInSwitch(
             PsiBreakStatement statement
         ) {
-            final PsiElement parent = statement.getParent();
+            PsiElement parent = statement.getParent();
             if (!(parent instanceof PsiCodeBlock)) {
                 return false;
             }
-            final PsiElement parentsParent = parent.getParent();
+            PsiElement parentsParent = parent.getParent();
             if (parentsParent instanceof PsiSwitchStatement) {
                 return true;
             }
             if (!(parentsParent instanceof PsiBlockStatement)) {
                 return false;
             }
-            final PsiElement blocksParent = parentsParent.getParent();
+            PsiElement blocksParent = parentsParent.getParent();
             if (!(blocksParent instanceof PsiCodeBlock)) {
                 return false;
             }
-            final PsiElement blocksParentsParent = blocksParent.getParent();
+            PsiElement blocksParentsParent = blocksParent.getParent();
             return blocksParentsParent instanceof PsiSwitchStatement;
         }
     }

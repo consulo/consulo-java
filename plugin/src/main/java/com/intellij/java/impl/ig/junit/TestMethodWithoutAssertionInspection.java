@@ -86,14 +86,14 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final JPanel panel = new JPanel(new BorderLayout());
-        final ListTable table = new ListTable(new ListWrappingTableModel(
+        JPanel panel = new JPanel(new BorderLayout());
+        ListTable table = new ListTable(new ListWrappingTableModel(
             Arrays.asList(classNames, methodNamePatterns),
             InspectionGadgetsLocalize.className().get(),
             InspectionGadgetsLocalize.methodNamePattern().get()
         ));
-        final JPanel tablePanel = UiUtils.createAddRemovePanel(table);
-        final CheckBox checkBox =
+        JPanel tablePanel = UiUtils.createAddRemovePanel(table);
+        CheckBox checkBox =
             new CheckBox(InspectionGadgetsLocalize.assertKeywordIsConsideredAnAssertion().get(), this, "assertKeywordIsAssertion");
         panel.add(tablePanel, BorderLayout.CENTER);
         panel.add(checkBox, BorderLayout.SOUTH);
@@ -139,30 +139,30 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
         }
 
         private boolean lastStatementIsCallToMethodWithAssertion(PsiMethod method) {
-            final PsiCodeBlock body = method.getBody();
+            PsiCodeBlock body = method.getBody();
             if (body == null) {
                 return false;
             }
-            final PsiStatement[] statements = body.getStatements();
+            PsiStatement[] statements = body.getStatements();
             if (statements.length <= 0) {
                 return false;
             }
-            final PsiStatement lastStatement = statements[0];
+            PsiStatement lastStatement = statements[0];
             if (!(lastStatement instanceof PsiExpressionStatement)) {
                 return false;
             }
-            final PsiExpressionStatement expressionStatement = (PsiExpressionStatement) lastStatement;
-            final PsiExpression expression = expressionStatement.getExpression();
+            PsiExpressionStatement expressionStatement = (PsiExpressionStatement) lastStatement;
+            PsiExpression expression = expressionStatement.getExpression();
             if (!(expression instanceof PsiMethodCallExpression)) {
                 return false;
             }
-            final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
-            final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-            final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
+            PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
+            PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+            PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
             if (qualifierExpression != null && !(qualifierExpression instanceof PsiThisExpression)) {
                 return false;
             }
-            final PsiMethod targetMethod = methodCallExpression.resolveMethod();
+            PsiMethod targetMethod = methodCallExpression.resolveMethod();
             return containsAssertion(targetMethod);
         }
 
@@ -170,21 +170,21 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
             if (element == null) {
                 return false;
             }
-            final ContainsAssertionVisitor visitor = new ContainsAssertionVisitor();
+            ContainsAssertionVisitor visitor = new ContainsAssertionVisitor();
             element.accept(visitor);
             return visitor.containsAssertion();
         }
 
         private boolean hasExpectedExceptionAnnotation(PsiMethod method) {
-            final PsiModifierList modifierList = method.getModifierList();
-            final PsiAnnotation testAnnotation = modifierList.findAnnotation("org.junit.Test");
+            PsiModifierList modifierList = method.getModifierList();
+            PsiAnnotation testAnnotation = modifierList.findAnnotation("org.junit.Test");
             if (testAnnotation == null) {
                 return false;
             }
-            final PsiAnnotationParameterList parameterList = testAnnotation.getParameterList();
-            final PsiNameValuePair[] nameValuePairs = parameterList.getAttributes();
+            PsiAnnotationParameterList parameterList = testAnnotation.getParameterList();
+            PsiNameValuePair[] nameValuePairs = parameterList.getAttributes();
             for (PsiNameValuePair nameValuePair : nameValuePairs) {
-                @NonNls final String parameterName = nameValuePair.getName();
+                @NonNls String parameterName = nameValuePair.getName();
                 if ("expected".equals(parameterName)) {
                     return true;
                 }
@@ -210,22 +210,22 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
                 return;
             }
             super.visitMethodCallExpression(call);
-            final PsiReferenceExpression methodExpression = call.getMethodExpression();
-            @NonNls final String methodName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = call.getMethodExpression();
+            @NonNls String methodName = methodExpression.getReferenceName();
             if (methodName == null) {
                 return;
             }
-            final int methodNamesSize = methodNamePatterns.size();
+            int methodNamesSize = methodNamePatterns.size();
             for (int i = 0; i < methodNamesSize; i++) {
-                final String pattern = methodNamePatterns.get(i);
+                String pattern = methodNamePatterns.get(i);
                 if (!methodNamesMatch(methodName, pattern)) {
                     continue;
                 }
-                final PsiMethod method = call.resolveMethod();
+                PsiMethod method = call.resolveMethod();
                 if (method == null || method.isConstructor()) {
                     continue;
                 }
-                final PsiClass aClass = method.getContainingClass();
+                PsiClass aClass = method.getContainingClass();
                 if (!InheritanceUtil.isInheritor(aClass, classNames.get(i))) {
                     continue;
                 }
@@ -275,7 +275,7 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
         if (pattern == null) {
             return false;
         }
-        final Matcher matcher = pattern.matcher(methodName);
+        Matcher matcher = pattern.matcher(methodName);
         return matcher.matches();
     }
 }

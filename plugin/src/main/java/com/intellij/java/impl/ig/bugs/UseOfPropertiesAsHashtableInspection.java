@@ -48,19 +48,19 @@ public class UseOfPropertiesAsHashtableInspection extends BaseInspection {
 
     @Override
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiMethodCallExpression methodCallExpression =
+        PsiMethodCallExpression methodCallExpression =
             (PsiMethodCallExpression) infos[0];
-        final String methodName =
+        String methodName =
             methodCallExpression.getMethodExpression().getReferenceName();
-        final boolean put = HardcodedMethodConstants.PUT.equals(methodName);
+        boolean put = HardcodedMethodConstants.PUT.equals(methodName);
         if (!(put || HardcodedMethodConstants.GET.equals(methodName))) {
             return null;
         }
-        final PsiExpressionList argumentList =
+        PsiExpressionList argumentList =
             methodCallExpression.getArgumentList();
-        final PsiExpression[] arguments = argumentList.getExpressions();
+        PsiExpression[] arguments = argumentList.getExpressions();
         for (PsiExpression argument : arguments) {
-            final PsiType type = argument.getType();
+            PsiType type = argument.getType();
             if (type == null || !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
                 return null;
             }
@@ -86,18 +86,18 @@ public class UseOfPropertiesAsHashtableInspection extends BaseInspection {
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = element.getParent();
-            final PsiElement grandParent = parent.getParent();
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement parent = element.getParent();
+            PsiElement grandParent = parent.getParent();
             if (!(grandParent instanceof PsiMethodCallExpression)) {
                 return;
             }
-            final PsiMethodCallExpression methodCallExpression =
+            PsiMethodCallExpression methodCallExpression =
                 (PsiMethodCallExpression) grandParent;
-            final PsiReferenceExpression methodExpression =
+            PsiReferenceExpression methodExpression =
                 methodCallExpression.getMethodExpression();
-            @NonNls final StringBuilder newExpression = new StringBuilder();
-            final PsiExpression qualifierExpression =
+            @NonNls StringBuilder newExpression = new StringBuilder();
+            PsiExpression qualifierExpression =
                 methodExpression.getQualifierExpression();
             if (qualifierExpression != null) {
                 newExpression.append(qualifierExpression.getText());
@@ -109,9 +109,9 @@ public class UseOfPropertiesAsHashtableInspection extends BaseInspection {
             else {
                 newExpression.append("getProperty(");
             }
-            final PsiExpressionList argumentList =
+            PsiExpressionList argumentList =
                 methodCallExpression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpression[] arguments = argumentList.getExpressions();
             boolean first = true;
             for (PsiExpression argument : arguments) {
                 if (!first) {
@@ -140,19 +140,19 @@ public class UseOfPropertiesAsHashtableInspection extends BaseInspection {
             @Nonnull PsiMethodCallExpression expression
         ) {
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression =
+            PsiReferenceExpression methodExpression =
                 expression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            String methodName = methodExpression.getReferenceName();
             if (!(HardcodedMethodConstants.PUT.equals(methodName) ||
                 HardcodedMethodConstants.PUTALL.equals(methodName) ||
                 HardcodedMethodConstants.GET.equals(methodName))) {
                 return;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return;
             }
@@ -162,7 +162,7 @@ public class UseOfPropertiesAsHashtableInspection extends BaseInspection {
             )) {
                 return;
             }
-            final PsiExpression qualifier =
+            PsiExpression qualifier =
                 methodExpression.getQualifierExpression();
             if (qualifier == null) {
                 return;

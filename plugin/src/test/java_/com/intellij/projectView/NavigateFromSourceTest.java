@@ -63,13 +63,13 @@ public abstract class NavigateFromSourceTest extends BaseProjectViewTestCase
 	public void testShowClassMembers() throws Exception
 	{
 		useStandardProviders();
-		final PsiClass[] classes = JavaDirectoryService.getInstance().getClasses(getPackageDirectory());
+		PsiClass[] classes = JavaDirectoryService.getInstance().getClasses(getPackageDirectory());
 		sortClassesByName(classes);
 		PsiClass psiClass = classes[0];
 
-		final AbstractProjectViewPSIPane pane = myStructure.createPane();
-		final PsiFile containingFile = psiClass.getContainingFile();
-		final VirtualFile virtualFile = containingFile.getVirtualFile();
+		AbstractProjectViewPSIPane pane = myStructure.createPane();
+		PsiFile containingFile = psiClass.getContainingFile();
+		VirtualFile virtualFile = containingFile.getVirtualFile();
 
 		myStructure.checkNavigateFromSourceBehaviour(psiClass, virtualFile, pane);
 
@@ -87,7 +87,7 @@ public abstract class NavigateFromSourceTest extends BaseProjectViewTestCase
 
 	public void testAutoscrollFromSourceOnOpening() throws Exception
 	{
-		final PsiClass[] classes = JavaDirectoryService.getInstance().getClasses(getPackageDirectory());
+		PsiClass[] classes = JavaDirectoryService.getInstance().getClasses(getPackageDirectory());
 		PsiClass psiClass = classes[0];
 
 		FileEditorManager.getInstance(getProject()).openFile(psiClass.getContainingFile().getVirtualFile(), true);
@@ -108,7 +108,7 @@ public abstract class NavigateFromSourceTest extends BaseProjectViewTestCase
 		assertEquals("Class1.java", ((PsiJavaFile) element).getName());
 	}
 
-	private static void doTestMultipleSelection(final AbstractProjectViewPSIPane pane, final PsiClass psiClass)
+	private static void doTestMultipleSelection(AbstractProjectViewPSIPane pane, PsiClass psiClass)
 	{
 		JTree tree = pane.getTree();
 		int rowCount = tree.getRowCount();
@@ -122,14 +122,14 @@ public abstract class NavigateFromSourceTest extends BaseProjectViewTestCase
 		assertEquals(10, tree.getSelectionCount());
 	}
 
-	private static void changeClassTextAndTryToNavigate(final String newClassString,
-			PsiJavaFile psiFile,
-			final AbstractProjectViewPSIPane pane,
-			final String expected) throws IOException, InterruptedException
+	private static void changeClassTextAndTryToNavigate(String newClassString,
+                                                        PsiJavaFile psiFile,
+                                                        AbstractProjectViewPSIPane pane,
+                                                        String expected) throws IOException, InterruptedException
 	{
 		PsiClass psiClass = psiFile.getClasses()[0];
-		final VirtualFile virtualFile = psiClass.getContainingFile().getVirtualFile();
-		final JTree tree = pane.getTree();
+		VirtualFile virtualFile = psiClass.getContainingFile().getVirtualFile();
+		JTree tree = pane.getTree();
 		writeToFile(virtualFile, newClassString.getBytes());
 
 		PlatformTestUtil.waitForAlarm(600);
@@ -139,7 +139,7 @@ public abstract class NavigateFromSourceTest extends BaseProjectViewTestCase
 		PlatformTestUtil.assertTreeEqual(tree, expected, true);
 	}
 
-	private static void writeToFile(final VirtualFile virtualFile, final byte[] b) throws IOException
+	private static void writeToFile(VirtualFile virtualFile, byte[] b) throws IOException
 	{
 		virtualFile.setBinaryContent(b);
 	}

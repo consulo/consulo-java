@@ -39,7 +39,7 @@ public class UnsecureRandomNumberGenerationInspection
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    @NonNls final String text = ((PsiElement)infos[0]).getText();
+    @NonNls String text = ((PsiElement)infos[0]).getText();
     if ("random".equals(text)) {
       return InspectionGadgetsLocalize.unsecureRandomNumberGenerationProblemDescriptor1().get();
     }
@@ -63,20 +63,20 @@ public class UnsecureRandomNumberGenerationInspection
     public void visitNewExpression(
       @Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
-      final PsiJavaCodeReferenceElement reference =
+      PsiJavaCodeReferenceElement reference =
         expression.getClassReference();
       if (reference == null) {
         return;
       }
-      final PsiElement element = reference.resolve();
+      PsiElement element = reference.resolve();
       if (!(element instanceof PsiClass)) {
         return;
       }
-      final PsiClass aClass = (PsiClass)element;
+      PsiClass aClass = (PsiClass)element;
       if (!InheritanceUtil.isInheritor(aClass, "java.util.Random")) {
         return;
       }
-      final String qualifiedName = aClass.getQualifiedName();
+      String qualifiedName = aClass.getQualifiedName();
       if ("java.security.SecureRandom".equals(qualifiedName)) {
         return;
       }
@@ -87,22 +87,22 @@ public class UnsecureRandomNumberGenerationInspection
     public void visitMethodCallExpression(
       @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      @NonNls final String methodName =
+      @NonNls String methodName =
         methodExpression.getReferenceName();
       if (!"random".equals(methodName)) {
         return;
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return;
       }
-      final PsiClass containingClass = method.getContainingClass();
+      PsiClass containingClass = method.getContainingClass();
       if (containingClass == null) {
         return;
       }
-      final String className = containingClass.getQualifiedName();
+      String className = containingClass.getQualifiedName();
       if (!CommonClassNames.JAVA_LANG_MATH.equals(className)) {
         return;
       }

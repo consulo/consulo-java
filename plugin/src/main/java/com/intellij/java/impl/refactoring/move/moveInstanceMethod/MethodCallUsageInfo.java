@@ -27,7 +27,7 @@ public class MethodCallUsageInfo extends UsageInfo {
   private final PsiElement myMethodCallExpression;
   private final boolean myIsInternal;
 
-  public MethodCallUsageInfo(final PsiReferenceExpression referenceExpression, final boolean internal) {
+  public MethodCallUsageInfo(PsiReferenceExpression referenceExpression, boolean internal) {
     super(referenceExpression);
     myIsInternal = internal;
     myMethodCallExpression = referenceExpression instanceof PsiMethodReferenceExpression ? referenceExpression : referenceExpression.getParent();

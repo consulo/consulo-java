@@ -60,13 +60,13 @@ class SameSignatureCallParametersProvider implements CompletionProvider {
   }
 
   void addSignatureItems(@Nonnull CompletionParameters parameters, @Nonnull Consumer<LookupElement> result) {
-    final PsiCall methodCall = PsiTreeUtil.getParentOfType(parameters.getPosition(), PsiCall.class);
+    PsiCall methodCall = PsiTreeUtil.getParentOfType(parameters.getPosition(), PsiCall.class);
     assert methodCall != null;
     Set<Pair<PsiMethod, PsiSubstitutor>> candidates = getCallCandidates(methodCall);
 
     PsiMethod container = PsiTreeUtil.getParentOfType(methodCall, PsiMethod.class);
     while (container != null) {
-      for (final Pair<PsiMethod, PsiSubstitutor> candidate : candidates) {
+      for (Pair<PsiMethod, PsiSubstitutor> candidate : candidates) {
         if (container.getParameterList().getParametersCount() > 1 && candidate.first.getParameterList().getParametersCount() > 1) {
           PsiMethod from = getMethodToTakeParametersFrom(container, candidate.first, candidate.second);
           if (from != null) {
@@ -81,8 +81,8 @@ class SameSignatureCallParametersProvider implements CompletionProvider {
   }
 
   private static LookupElement createParametersLookupElement(final PsiMethod takeParametersFrom, PsiElement call, PsiMethod invoked) {
-    final PsiParameter[] parameters = takeParametersFrom.getParameterList().getParameters();
-    final String lookupString = StringUtil.join(parameters, PsiNamedElement::getName, ", ");
+    PsiParameter[] parameters = takeParametersFrom.getParameterList().getParameters();
+    String lookupString = StringUtil.join(parameters, PsiNamedElement::getName, ", ");
 
     // TODO [VISTALL] new icon
     Image ppIcon = ImageEffects.transparent(AllIcons.Nodes.Parameter);
@@ -114,10 +114,10 @@ class SameSignatureCallParametersProvider implements CompletionProvider {
 
     PsiMethod toExclude = ExpressionUtils.isConstructorInvocation(expression) ? PsiTreeUtil.getParentOfType(expression, PsiMethod.class) : null;
 
-    for (final JavaResolveResult candidate : results) {
-      final PsiElement element = candidate.getElement();
+    for (JavaResolveResult candidate : results) {
+      PsiElement element = candidate.getElement();
       if (element instanceof PsiMethod) {
-        final PsiClass psiClass = ((PsiMethod) element).getContainingClass();
+        PsiClass psiClass = ((PsiMethod) element).getContainingClass();
         if (psiClass != null) {
           for (Pair<PsiMethod, PsiSubstitutor> overload : psiClass.findMethodsAndTheirSubstitutorsByName(((PsiMethod) element).getName(), true)) {
             if (overload.first != toExclude) {
@@ -139,13 +139,13 @@ class SameSignatureCallParametersProvider implements CompletionProvider {
     }
 
     Map<String, PsiType> requiredNames = new HashMap<>();
-    final PsiParameter[] parameters = place.getParameterList().getParameters();
-    final PsiParameter[] callParams = invoked.getParameterList().getParameters();
+    PsiParameter[] parameters = place.getParameterList().getParameters();
+    PsiParameter[] callParams = invoked.getParameterList().getParameters();
     if (callParams.length > parameters.length) {
       return null;
     }
 
-    final boolean checkNames = invoked.isConstructor();
+    boolean checkNames = invoked.isConstructor();
     boolean sameTypes = true;
     for (int i = 0; i < callParams.length; i++) {
       PsiParameter callParam = callParams[i];

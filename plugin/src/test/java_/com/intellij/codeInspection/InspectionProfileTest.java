@@ -59,12 +59,12 @@ public abstract class InspectionProfileTest extends LightIdeaTestCase {
   }
 
   public void testCopyProjectProfile() throws Exception {
-    final Element element = loadProfile();
-    final InspectionProfileImpl profile = createProfile();
+    Element element = loadProfile();
+    InspectionProfileImpl profile = createProfile();
     profile.readExternal(element);
-    final ModifiableModel model = profile.getModifiableModel();
+    ModifiableModel model = profile.getModifiableModel();
     model.commit();
-    final Element copy = new Element("inspections");
+    Element copy = new Element("inspections");
     profile.writeExternal(copy);
     assertElementsEqual(element, copy);
   }
@@ -76,18 +76,18 @@ public abstract class InspectionProfileTest extends LightIdeaTestCase {
   }
 
   public void testConvertOldProfile() throws Exception {
-    final Element element = loadOldStyleProfile();
-    final InspectionProfileImpl profile = createProfile();
+    Element element = loadOldStyleProfile();
+    InspectionProfileImpl profile = createProfile();
     profile.readExternal(element);
-    final ModifiableModel model = profile.getModifiableModel();
+    ModifiableModel model = profile.getModifiableModel();
     model.commit();
-    final Element copy = new Element("inspections");
+    Element copy = new Element("inspections");
     profile.writeExternal(copy);
     assertElementsEqual(loadProfile(), copy);
   }
 
   private static Element loadOldStyleProfile() throws IOException, JDOMException {
-    final Document document = JDOMUtil.loadDocument("<inspections version=\"1.0\" is_locked=\"false\">\n" +
+    Document document = JDOMUtil.loadDocument("<inspections version=\"1.0\" is_locked=\"false\">\n" +
                                                     "  <option name=\"myName\" value=\"ToConvert\" />\n" +
                                                     "  <option name=\"myLocal\" value=\"true\" />\n" +
                                                     "  <inspection_tool class=\"JavaDoc\" enabled=\"false\" level=\"WARNING\" enabled_by_default=\"false\">\n" +
@@ -125,7 +125,7 @@ public abstract class InspectionProfileTest extends LightIdeaTestCase {
   }
 
   private static Element loadProfile() throws IOException, JDOMException {
-    final Document document = JDOMUtil.loadDocument("<inspections version=\"1.0\" is_locked=\"false\">\n" +
+    Document document = JDOMUtil.loadDocument("<inspections version=\"1.0\" is_locked=\"false\">\n" +
                                                     "  <option name=\"myName\" value=\"ToConvert\" />\n" +
                                                     "  <option name=\"myLocal\" value=\"true\" />\n" +
                                                     "  <inspection_tool class=\"JavaDoc\" enabled=\"false\" level=\"WARNING\" enabled_by_default=\"false\">\n" +
@@ -163,7 +163,7 @@ public abstract class InspectionProfileTest extends LightIdeaTestCase {
   }
 
   public void testReloadProfileWithUnknownScopes() throws Exception {
-    final Element element = JDOMUtil.loadDocument("<inspections version=\"1.0\" is_locked=\"false\">\n" +
+    Element element = JDOMUtil.loadDocument("<inspections version=\"1.0\" is_locked=\"false\">\n" +
                                                   "  <option name=\"myName\" value=\"" + PROFILE + "\" />\n" +
                                                   "  <option name=\"myLocal\" value=\"true\" />\n" +
                                                   "  <inspection_tool class=\"ArgNamesErrorsInspection\" enabled=\"true\" level=\"ERROR\" enabled_by_default=\"false\" />\n" +
@@ -176,11 +176,11 @@ public abstract class InspectionProfileTest extends LightIdeaTestCase {
                                                   "    <scope name=\"Unknown scope name\" level=\"WARNING\" enabled=\"true\" />\n" +
                                                   "  </inspection_tool>\n" +
                                                   "</inspections>").getRootElement();
-    final InspectionProfileImpl profile = createProfile();
+    InspectionProfileImpl profile = createProfile();
     profile.readExternal(element);
-    final ModifiableModel model = profile.getModifiableModel();
+    ModifiableModel model = profile.getModifiableModel();
     model.commit();
-    final Element copy = new Element("inspections");
+    Element copy = new Element("inspections");
     profile.writeExternal(copy);
     assertElementsEqual(element, copy);
   }

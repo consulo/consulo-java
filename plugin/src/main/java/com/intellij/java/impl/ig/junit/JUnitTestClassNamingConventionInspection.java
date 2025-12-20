@@ -57,7 +57,7 @@ public class JUnitTestClassNamingConventionInspection
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final String className = (String)infos[0];
+    String className = (String)infos[0];
     if (className.length() < getMinLength()) {
       return InspectionGadgetsLocalize.junitTestClassNamingConventionProblemDescriptorShort().get();
     }
@@ -112,7 +112,7 @@ public class JUnitTestClassNamingConventionInspection
           return;
         }
       }
-      final String name = aClass.getName();
+      String name = aClass.getName();
       if (name == null) {
         return;
       }
@@ -127,7 +127,7 @@ public class JUnitTestClassNamingConventionInspection
       //if (!TestUtils.isTest(aClass)) {
       //    return false;
       //}
-      final PsiMethod[] methods = aClass.getMethods();
+      PsiMethod[] methods = aClass.getMethods();
       for (PsiMethod method : methods) {
         if (TestUtils.isJUnit4TestMethod(method)) {
           return true;

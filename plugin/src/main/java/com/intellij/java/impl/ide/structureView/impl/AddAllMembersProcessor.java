@@ -66,12 +66,12 @@ public class AddAllMembersProcessor extends BaseScopeProcessor {
 
   private static boolean isObjectMember(PsiElement element) {
     if (!(element instanceof PsiMethod)) return false;
-    final PsiClass containingClass = ((PsiMethod)element).getContainingClass();
+    PsiClass containingClass = ((PsiMethod)element).getContainingClass();
     if (containingClass == null) {
       return false;
     }
     else {
-      final String qualifiedName = containingClass.getQualifiedName();
+      String qualifiedName = containingClass.getQualifiedName();
       return qualifiedName != null && qualifiedName.equals(Object.class.getName());
     }
   }

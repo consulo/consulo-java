@@ -40,8 +40,8 @@ public class ExternalizableWithSerializationMethodsInspection
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final boolean hasReadObject = ((Boolean)infos[0]).booleanValue();
-    final boolean hasWriteObject = ((Boolean)infos[1]).booleanValue();
+    boolean hasReadObject = ((Boolean)infos[0]).booleanValue();
+    boolean hasWriteObject = ((Boolean)infos[1]).booleanValue();
     if (hasReadObject && hasWriteObject) {
       return InspectionGadgetsLocalize.externalizableWithSerializationMethodsProblemDescriptorBoth().get();
     }
@@ -69,9 +69,9 @@ public class ExternalizableWithSerializationMethodsInspection
       if (!SerializationUtils.isExternalizable(aClass)) {
         return;
       }
-      final boolean hasReadObject =
+      boolean hasReadObject =
         SerializationUtils.hasReadObject(aClass);
-      final boolean hasWriteObject =
+      boolean hasWriteObject =
         SerializationUtils.hasWriteObject(aClass);
       if (!hasWriteObject && !hasReadObject) {
         return;

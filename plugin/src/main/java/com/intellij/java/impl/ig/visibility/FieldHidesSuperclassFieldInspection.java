@@ -78,21 +78,21 @@ public class FieldHidesSuperclassFieldInspection extends BaseInspection {
 
     @Override
     public void visitField(@Nonnull PsiField field) {
-      final PsiClass aClass = field.getContainingClass();
+      PsiClass aClass = field.getContainingClass();
       if (aClass == null) {
         return;
       }
-      final String fieldName = field.getName();
+      String fieldName = field.getName();
       if (HardcodedMethodConstants.SERIAL_VERSION_UID.equals(fieldName)) {
         return;    //special case
       }
       PsiClass ancestorClass = aClass.getSuperClass();
-      final Set<PsiClass> visitedClasses = new HashSet<PsiClass>();
+      Set<PsiClass> visitedClasses = new HashSet<PsiClass>();
       while (ancestorClass != null) {
         if (!visitedClasses.add(ancestorClass)) {
           return;
         }
-        final PsiField ancestorField =
+        PsiField ancestorField =
           ancestorClass.findFieldByName(fieldName, false);
         if (ancestorField != null) {
           if (!m_ignoreInvisibleFields ||

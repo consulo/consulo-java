@@ -34,7 +34,7 @@ public class JavaCodeFoldingSettingsImpl extends JavaCodeFoldingSettingsBase imp
   }
 
   @Override
-  public void loadState(final JavaCodeFoldingSettingsImpl state) {
+  public void loadState(JavaCodeFoldingSettingsImpl state) {
     XmlSerializerUtil.copyBean(state, this);
   }
 }

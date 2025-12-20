@@ -30,12 +30,12 @@ public abstract class TemplateGenerationInfo extends GenerationInfoBase implemen
   private final Expression myExpression;
   private SmartPsiElementPointer<PsiMethod> myElement;
 
-  public TemplateGenerationInfo(final PsiMethod element, final Expression expression) {
+  public TemplateGenerationInfo(PsiMethod element, Expression expression) {
     setElement(element);
     myExpression = expression;
   }
 
-  private void setElement(final PsiMethod element) {
+  private void setElement(PsiMethod element) {
     myElement = SmartPointerManager.getInstance(element.getProject()).createSmartPsiElementPointer(element);
   }
 

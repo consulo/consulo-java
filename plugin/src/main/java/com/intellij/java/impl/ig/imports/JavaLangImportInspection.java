@@ -62,15 +62,15 @@ public class JavaLangImportInspection extends BaseInspection {
      /* if (JspPsiUtil.isInJspFile(aClass.getContainingFile())) {
         return;
       }   */
-            final PsiJavaFile file = (PsiJavaFile) aClass.getContainingFile();
+            PsiJavaFile file = (PsiJavaFile) aClass.getContainingFile();
             if (!file.getClasses()[0].equals(aClass)) {
                 return;
             }
-            final PsiImportList importList = file.getImportList();
+            PsiImportList importList = file.getImportList();
             if (importList == null) {
                 return;
             }
-            final PsiImportStatement[] importStatements =
+            PsiImportStatement[] importStatements =
                 importList.getImportStatements();
             for (PsiImportStatement importStatement : importStatements) {
                 checkImportStatement(importStatement, file);
@@ -81,12 +81,12 @@ public class JavaLangImportInspection extends BaseInspection {
             PsiImportStatement importStatement,
             PsiJavaFile file
         ) {
-            final PsiJavaCodeReferenceElement reference =
+            PsiJavaCodeReferenceElement reference =
                 importStatement.getImportReference();
             if (reference == null) {
                 return;
             }
-            final String text = importStatement.getQualifiedName();
+            String text = importStatement.getQualifiedName();
             if (text == null) {
                 return;
             }
@@ -96,11 +96,11 @@ public class JavaLangImportInspection extends BaseInspection {
                 }
             }
             else {
-                final int classNameIndex = text.lastIndexOf((int) '.');
+                int classNameIndex = text.lastIndexOf((int) '.');
                 if (classNameIndex < 0) {
                     return;
                 }
-                final String parentName =
+                String parentName =
                     text.substring(0, classNameIndex);
                 if (!HardcodedMethodConstants.JAVA_LANG.equals(parentName)) {
                     return;

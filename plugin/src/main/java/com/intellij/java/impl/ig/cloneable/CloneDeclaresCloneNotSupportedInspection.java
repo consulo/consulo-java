@@ -76,8 +76,8 @@ public class CloneDeclaresCloneNotSupportedInspection extends BaseInspection {
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement methodNameIdentifier = descriptor.getPsiElement();
-            final PsiMethod method = (PsiMethod) methodNameIdentifier.getParent();
+            PsiElement methodNameIdentifier = descriptor.getPsiElement();
+            PsiMethod method = (PsiMethod) methodNameIdentifier.getParent();
             PsiUtil.addException(method, "java.lang.CloneNotSupportedException");
         }
     }
@@ -97,7 +97,7 @@ public class CloneDeclaresCloneNotSupportedInspection extends BaseInspection {
             if (method.hasModifierProperty(PsiModifier.FINAL)) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return;
             }
@@ -107,11 +107,11 @@ public class CloneDeclaresCloneNotSupportedInspection extends BaseInspection {
             if (MethodUtils.hasInThrows(method, "java.lang.CloneNotSupportedException")) {
                 return;
             }
-            final MethodSignatureBackedByPsiMethod signature = SuperMethodsSearch.search(method, null, true, false).findFirst();
+            MethodSignatureBackedByPsiMethod signature = SuperMethodsSearch.search(method, null, true, false).findFirst();
             if (signature == null) {
                 return;
             }
-            final PsiMethod superMethod = signature.getMethod();
+            PsiMethod superMethod = signature.getMethod();
             if (!MethodUtils.hasInThrows(superMethod, "java.lang.CloneNotSupportedException")) {
                 return;
             }

@@ -78,7 +78,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testNullMethodParameter() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.CALL_PARAMETERS_WRAP = CommonCodeStyleSettings.WRAP_ALWAYS;
 		settings.ALIGN_MULTILINE_PARAMETERS_IN_CALLS = true;
 		doTest("NullMethodParameter.java", "NullMethodParameter_after.java");
@@ -86,14 +86,14 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testNew() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.getRootSettings().getIndentOptions(JavaFileType.INSTANCE).CONTINUATION_INDENT_SIZE = 8;
 		doTest("New.java", "New_after.java");
 	}
 
 	public void testJavaDoc() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.BLANK_LINES_AROUND_FIELD = 1;
 		doTest("JavaDoc.java", "JavaDoc_after.java");
 	}
@@ -111,8 +111,8 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testCastInsideElse() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
-		final CommonCodeStyleSettings.IndentOptions indentOptions = settings.getRootSettings().getIndentOptions(JavaFileType.INSTANCE);
+		CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings.IndentOptions indentOptions = settings.getRootSettings().getIndentOptions(JavaFileType.INSTANCE);
 		indentOptions.CONTINUATION_INDENT_SIZE = 2;
 		indentOptions.INDENT_SIZE = 2;
 		indentOptions.LABEL_INDENT_SIZE = 0;
@@ -125,7 +125,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testAlignMultiLine() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.ALIGN_MULTILINE_PARENTHESIZED_EXPRESSION = true;
 		settings.ALIGN_MULTILINE_BINARY_OPERATION = true;
 		doTest();
@@ -138,7 +138,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testSynchronizedBlock() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.SPACE_BEFORE_SYNCHRONIZED_PARENTHESES = false;
 		settings.SPACE_WITHIN_SYNCHRONIZED_PARENTHESES = false;
 		settings.SPACE_BEFORE_SYNCHRONIZED_LBRACE = false;
@@ -147,7 +147,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testMethodCallInAssignment() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.getRootSettings().getIndentOptions(JavaFileType.INSTANCE).CONTINUATION_INDENT_SIZE = 8;
 		doTest();
 	}
@@ -169,7 +169,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testIfElse() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.IF_BRACE_FORCE = CommonCodeStyleSettings.DO_NOT_FORCE;
 		settings.FOR_BRACE_FORCE = CommonCodeStyleSettings.FORCE_BRACES_IF_MULTILINE;
 		settings.WHILE_BRACE_FORCE = CommonCodeStyleSettings.FORCE_BRACES_IF_MULTILINE;
@@ -197,7 +197,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testIfBraces() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.IF_BRACE_FORCE = CommonCodeStyleSettings.FORCE_BRACES_ALWAYS;
 		settings.BRACE_STYLE = CommonCodeStyleSettings.END_OF_LINE;
 		settings.KEEP_LINE_BREAKS = false;
@@ -206,7 +206,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testTernaryExpression() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.ALIGN_MULTILINE_TERNARY_OPERATION = true;
 		doTest();
 
@@ -217,7 +217,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testAlignAssignment() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.ALIGN_MULTILINE_ASSIGNMENT = true;
 		settings.ALIGN_MULTILINE_BINARY_OPERATION = true;
 		doTest();
@@ -225,7 +225,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testAlignFor() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.ALIGN_MULTILINE_BINARY_OPERATION = true;
 		settings.ALIGN_MULTILINE_FOR = true;
 		doTest();
@@ -243,7 +243,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testIf() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.BRACE_STYLE = CommonCodeStyleSettings.NEXT_LINE;
 		doTest();
 		settings.BRACE_STYLE = CommonCodeStyleSettings.END_OF_LINE;
@@ -256,21 +256,21 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void test2() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.ALIGN_MULTILINE_PARAMETERS_IN_CALLS = true;
 		doTest();
 	}
 
 	public void testBlocks() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.KEEP_LINE_BREAKS = false;
 		doTest();
 	}
 
 	public void testBinaryOperation() throws IncorrectOperationException
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 
 		@NonNls String text = "class Foo {\n" + "    void foo () {\n" + "        xxx = aaa + bbb \n" + "        + ccc + eee + ddd;\n" + "    }\n" + "}";
 
@@ -328,7 +328,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testStringBinaryOperation() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 
 		settings.ALIGN_MULTILINE_ASSIGNMENT = false;
 		settings.ALIGN_MULTILINE_BINARY_OPERATION = false;
@@ -352,9 +352,9 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testBraces() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 
-		@NonNls final String text = "class Foo {\n" + "void foo () {\n" + "if (a) {\n" + "int i = 0;\n" + "}\n" + "}\n" + "}";
+		@NonNls String text = "class Foo {\n" + "void foo () {\n" + "if (a) {\n" + "int i = 0;\n" + "}\n" + "}\n" + "}";
 
 		settings.BRACE_STYLE = CommonCodeStyleSettings.END_OF_LINE;
 		settings.METHOD_BRACE_STYLE = CommonCodeStyleSettings.END_OF_LINE;
@@ -386,7 +386,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testExtendsList() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.ALIGN_MULTILINE_EXTENDS_LIST = true;
 		doTextTest("class A extends B, \n" + "C {}", "class A extends B,\n" + "                C {\n}");
 	}
@@ -423,7 +423,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testSpaceAroundField() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.BLANK_LINES_AROUND_FIELD = 1;
 
 		doTextTest("class Foo {\n" + "    boolean a;\n" + "    {\n" + "        if (a) {\n" + "        } else {\n" + "\n" + "        }\n" + "        a = 2;\n" + "    }\n" + "}", "class Foo {\n" + "  " +
@@ -432,7 +432,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testArray() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.SPACE_WITHIN_ARRAY_INITIALIZER_BRACES = true;
 		settings.SPACE_BEFORE_ARRAY_INITIALIZER_LBRACE = true;
 		doTextTest("class a {\n" + " void f() {\n" + "   final int[] i = new int[]{0};\n" + " }\n" + "}", "class a {\n" + "    void f() {\n" + "        final int[] i = new int[] { 0 };\n" + "    " +
@@ -492,7 +492,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testDoNotIndentCaseFromSwitch() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.INDENT_CASE_FROM_SWITCH = false;
 		doTextTest("class A {\n" + "void foo() {\n" + "switch(a){\n" + "case 1: \n" + "break;\n" + "}\n" + "}\n" + "}", "class A {\n" + "    void foo() {\n" + "        switch (a) {\n" + "        " +
 		 "case 1:\n" + "            break;\n" + "        }\n" + "    }\n" + "}");
@@ -500,7 +500,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testClass2() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.KEEP_FIRST_COLUMN_COMMENT = false;
 		doTextTest("class A {\n" + "// comment before\n" + "protected Object a;//  comment after\n" + "}", "class A {\n" + "    // comment before\n" + "    protected Object a;//  comment after\n" +
 		"}");
@@ -514,7 +514,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testParametersAlignment() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.ALIGN_MULTILINE_PARAMETERS_IN_CALLS = true;
 		settings.getRootSettings().RIGHT_MARGIN = 140;
 		doTest();
@@ -522,7 +522,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testConditionalExpression() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.SPACE_BEFORE_QUEST = true;
 		settings.SPACE_AFTER_QUEST = false;
 		settings.SPACE_BEFORE_COLON = true;
@@ -571,7 +571,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testLBraceAfterComment() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.KEEP_LINE_BREAKS = false;
 		doTextTest("public class Foo {\n" + "    public int foo() {\n" + "        if (a) \n" + "  //comment\n" + "{\n" + "            return;\n" + "        }\n" + "    }\n" + "}", "public class Foo " +
 		 "{\n" + "    public int foo() {\n" + "        if (a)\n" + "        //comment\n" + "        {\n" + "            return;\n" + "        }\n" + "    }\n" + "}");
@@ -579,7 +579,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testSpaces() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.SPACE_WITHIN_FOR_PARENTHESES = true;
 		settings.SPACE_WITHIN_IF_PARENTHESES = true;
 		settings.SPACE_WITHIN_METHOD_PARENTHESES = true;
@@ -591,7 +591,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testSpacesBeforeLBrace() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.SPACE_BEFORE_CLASS_LBRACE = true;
 		settings.SPACE_BEFORE_METHOD_LBRACE = true;
 		settings.SPACE_BEFORE_IF_LBRACE = true;
@@ -627,7 +627,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testCommentBeforeField() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.KEEP_LINE_BREAKS = false;
 		settings.KEEP_FIRST_COLUMN_COMMENT = false;
 		settings.KEEP_CONTROL_STATEMENT_IN_ONE_LINE = false;
@@ -638,7 +638,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testLabel() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.getRootSettings().getIndentOptions(JavaFileType.INSTANCE).LABEL_INDENT_ABSOLUTE = true;
 		settings.SPECIAL_ELSE_IF_TREATMENT = true;
 		settings.FOR_BRACE_FORCE = CommonCodeStyleSettings.FORCE_BRACES_ALWAYS;
@@ -698,8 +698,8 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 		getSettings().ASSERT_STATEMENT_WRAP = CommonCodeStyleSettings.WRAP_AS_NEEDED;
 		getSettings().BINARY_OPERATION_WRAP = CommonCodeStyleSettings.DO_NOT_WRAP;
 		getSettings().getRootSettings().RIGHT_MARGIN = 40;
-		final JavaPsiFacade facade = getJavaFacade();
-		final LanguageLevel effectiveLanguageLevel = LanguageLevel.HIGHEST;// LanguageLevelProjectExtension.getInstance(facade.getProject()).getLanguageLevel();
+		JavaPsiFacade facade = getJavaFacade();
+		LanguageLevel effectiveLanguageLevel = LanguageLevel.HIGHEST;// LanguageLevelProjectExtension.getInstance(facade.getProject()).getLanguageLevel();
 		try
 		{
 			// LanguageLevelProjectExtension.getInstance(facade.getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
@@ -727,14 +727,14 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 		getSettings().ASSERT_STATEMENT_WRAP = CommonCodeStyleSettings.WRAP_AS_NEEDED;
 		getSettings().getRootSettings().RIGHT_MARGIN = 37;
 
-		final CommonCodeStyleSettings.IndentOptions options = getSettings().getRootSettings().getIndentOptions(JavaFileType.INSTANCE);
+		CommonCodeStyleSettings.IndentOptions options = getSettings().getRootSettings().getIndentOptions(JavaFileType.INSTANCE);
 		options.INDENT_SIZE = 2;
 		options.CONTINUATION_INDENT_SIZE = 2;
 
 		getSettings().ASSERT_STATEMENT_COLON_ON_NEXT_LINE = true;
 
-		final JavaPsiFacade facade = getJavaFacade();
-		final LanguageLevel effectiveLanguageLevel = LanguageLevel.HIGHEST; //LanguageLevelProjectExtension.getInstance(facade.getProject()).getLanguageLevel();
+		JavaPsiFacade facade = getJavaFacade();
+		LanguageLevel effectiveLanguageLevel = LanguageLevel.HIGHEST; //LanguageLevelProjectExtension.getInstance(facade.getProject()).getLanguageLevel();
 		// LanguageLevelProjectExtension.getInstance(facade.getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
 
 		try
@@ -768,8 +768,8 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 		getSettings().ASSERT_STATEMENT_COLON_ON_NEXT_LINE = false;
 		getSettings().ALIGN_MULTILINE_BINARY_OPERATION = true;
 
-		final JavaPsiFacade facade = getJavaFacade();
-		final LanguageLevel effectiveLanguageLevel = LanguageLevel.HIGHEST;
+		JavaPsiFacade facade = getJavaFacade();
+		LanguageLevel effectiveLanguageLevel = LanguageLevel.HIGHEST;
 		//LanguageLevelProjectExtension.getInstance(facade.getProject()).getLanguageLevel();
 		//LanguageLevelProjectExtension.getInstance(facade.getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
 
@@ -815,7 +815,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testFormatCodeFragment() throws Exception
 	{
-		final JavaCodeFragmentFactory factory = JavaCodeFragmentFactory.getInstance(getProject());
+		JavaCodeFragmentFactory factory = JavaCodeFragmentFactory.getInstance(getProject());
 		final PsiCodeFragment fragment = factory.createCodeBlockCodeFragment("a=1;int b=2;", null, true);
 		final PsiElement[] result = new PsiElement[1];
 
@@ -1049,8 +1049,8 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 	public void testSpacesIncode() throws Exception
 	{
 
-		final JavaPsiFacade facade = getJavaFacade();
-		final LanguageLevel level = LanguageLevel.JDK_1_8;// LanguageLevelProjectExtension.getInstance(facade.getProject()).getLanguageLevel();
+		JavaPsiFacade facade = getJavaFacade();
+		LanguageLevel level = LanguageLevel.JDK_1_8;// LanguageLevelProjectExtension.getInstance(facade.getProject()).getLanguageLevel();
 
 		//LanguageLevelProjectExtension.getInstance(facade.getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
 
@@ -1149,8 +1149,8 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 	{
 		getSettings().SPACE_AFTER_COMMA = true;
 
-		final JavaPsiFacade facade = getJavaFacade();
-		final LanguageLevel effectiveLanguageLevel = LanguageLevel.HIGHEST; //LanguageLevelProjectExtension.getInstance(facade.getProject()).getLanguageLevel();
+		JavaPsiFacade facade = getJavaFacade();
+		LanguageLevel effectiveLanguageLevel = LanguageLevel.HIGHEST; //LanguageLevelProjectExtension.getInstance(facade.getProject()).getLanguageLevel();
 		try
 		{
 			//LanguageLevelProjectExtension.getInstance(facade.getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
@@ -1326,7 +1326,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testSCR429() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.KEEP_BLANK_LINES_IN_CODE = 2;
 		settings.KEEP_BLANK_LINES_BEFORE_RBRACE = 2;
 		settings.KEEP_BLANK_LINES_IN_DECLARATIONS = 2;
@@ -1335,7 +1335,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testSCR548() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.getRootSettings().getIndentOptions(JavaFileType.INSTANCE).INDENT_SIZE = 4;
 		settings.getRootSettings().getIndentOptions(JavaFileType.INSTANCE).CONTINUATION_INDENT_SIZE = 2;
 		doTest();
@@ -1366,7 +1366,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testSCR260() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.IF_BRACE_FORCE = CommonCodeStyleSettings.FORCE_BRACES_ALWAYS;
 		settings.BRACE_STYLE = CommonCodeStyleSettings.END_OF_LINE;
 		settings.KEEP_LINE_BREAKS = false;
@@ -1375,7 +1375,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testSCR114() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.BRACE_STYLE = CommonCodeStyleSettings.NEXT_LINE;
 		settings.CATCH_ON_NEW_LINE = true;
 		doTest();
@@ -1384,7 +1384,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 	public void testSCR259() throws Exception
 	{
 		myTextRange = new TextRange(36, 60);
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.IF_BRACE_FORCE = CommonCodeStyleSettings.FORCE_BRACES_ALWAYS;
 		settings.KEEP_LINE_BREAKS = false;
 		doTest();
@@ -1392,21 +1392,21 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testSCR279() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.ALIGN_MULTILINE_BINARY_OPERATION = true;
 		doTest();
 	}
 
 	public void testSCR395() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.METHOD_BRACE_STYLE = CommonCodeStyleSettings.END_OF_LINE;
 		doTest();
 	}
 
 	public void testSCR11799() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.getRootSettings().getIndentOptions(JavaFileType.INSTANCE).CONTINUATION_INDENT_SIZE = 4;
 		settings.CLASS_BRACE_STYLE = CommonCodeStyleSettings.NEXT_LINE;
 		settings.METHOD_BRACE_STYLE = CommonCodeStyleSettings.NEXT_LINE;
@@ -1415,14 +1415,14 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testSCR501() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.KEEP_FIRST_COLUMN_COMMENT = true;
 		doTest();
 	}
 
 	public void testSCR879() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.BRACE_STYLE = CommonCodeStyleSettings.NEXT_LINE;
 		doTest();
 	}
@@ -1437,7 +1437,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testSCR479() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.getRootSettings().RIGHT_MARGIN = 80;
 		settings.TERNARY_OPERATION_WRAP = CommonCodeStyleSettings.WRAP_AS_NEEDED;
 		doTextTest("public class Foo {\n" + "    public static void main(String[] args) {\n" + "        if (name != null ?                !name.equals(that.name) : that.name !=                null)" +
@@ -1447,7 +1447,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testSCR190() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.KEEP_LINE_BREAKS = false;
 		doTextTest("public class EntityObject \n" + "{ \n" + "    private Integer id; \n" + "\n" + "    public Integer getId() \n" + "    { \n" + "        return id; \n" + "    } \n" + "\n" + "    " +
 		 "public void setId(Integer id) \n" + "    { \n" + "        this.id = id; \n" + "    } \n" + "}", "public class EntityObject {\n" + "    private Integer id;\n" + "\n" + "    public Integer " +
@@ -1456,7 +1456,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testSCR1535() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.BRACE_STYLE = CommonCodeStyleSettings.NEXT_LINE;
 		settings.CLASS_BRACE_STYLE = CommonCodeStyleSettings.NEXT_LINE;
 		settings.METHOD_BRACE_STYLE = CommonCodeStyleSettings.NEXT_LINE;
@@ -1466,7 +1466,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testSCR970() throws Exception
 	{
-		final CommonCodeStyleSettings settings = getSettings();
+		CommonCodeStyleSettings settings = getSettings();
 		settings.THROWS_KEYWORD_WRAP = CommonCodeStyleSettings.WRAP_ALWAYS;
 		settings.THROWS_LIST_WRAP = CommonCodeStyleSettings.WRAP_AS_NEEDED;
 		settings.METHOD_PARAMETERS_WRAP = CommonCodeStyleSettings.WRAP_AS_NEEDED;
@@ -1703,8 +1703,8 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 		getSettings().KEEP_CONTROL_STATEMENT_IN_ONE_LINE = false;
 		getSettings().WHILE_ON_NEW_LINE = true;
 
-		final JavaPsiFacade facade = getJavaFacade();
-		final LanguageLevel stored = LanguageLevel.HIGHEST; //LanguageLevelProjectExtension.getInstance(facade.getProject()).getLanguageLevel();
+		JavaPsiFacade facade = getJavaFacade();
+		LanguageLevel stored = LanguageLevel.HIGHEST; //LanguageLevelProjectExtension.getInstance(facade.getProject()).getLanguageLevel();
 		//LanguageLevelProjectExtension.getInstance(facade.getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
 
 		try
@@ -1783,7 +1783,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 
 	public void testSCR3115() throws Exception
 	{
-		final CommonCodeStyleSettings.IndentOptions indentOptions = getSettings().getRootSettings().getIndentOptions(JavaFileType.INSTANCE);
+		CommonCodeStyleSettings.IndentOptions indentOptions = getSettings().getRootSettings().getIndentOptions(JavaFileType.INSTANCE);
 		indentOptions.USE_TAB_CHARACTER = true;
 		indentOptions.SMART_TABS = true;
 

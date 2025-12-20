@@ -49,18 +49,18 @@ import java.util.Collection;
 @ExtensionImpl
 public class PsiClassFavoriteNodeProvider implements BookmarkNodeProvider {
   @Override
-  public Collection<AbstractTreeNode> getFavoriteNodes(final DataContext context, final ViewSettings viewSettings) {
-    final Project project = context.getData(Project.KEY);
+  public Collection<AbstractTreeNode> getFavoriteNodes(DataContext context, ViewSettings viewSettings) {
+    Project project = context.getData(Project.KEY);
     if (project == null) return null;
     PsiElement[] elements = context.getData(PsiElement.KEY_OF_ARRAY);
     if (elements == null) {
-      final PsiElement element = context.getData(PsiElement.KEY);
+      PsiElement element = context.getData(PsiElement.KEY);
       if (element != null) {
         elements = new PsiElement[]{element};
       }
     }
     if (elements != null) {
-      final Collection<AbstractTreeNode> result = new ArrayList<>();
+      Collection<AbstractTreeNode> result = new ArrayList<>();
       for (PsiElement element : elements) {
         if (element instanceof PsiClass && checkClassUnderSources(element, project)) {
           result.add(new ClassSmartPointerNode(project, element, viewSettings));
@@ -71,18 +71,18 @@ public class PsiClassFavoriteNodeProvider implements BookmarkNodeProvider {
     return null;
   }
 
-  private boolean checkClassUnderSources(final PsiElement element, final Project project) {
-    final PsiFile file = element.getContainingFile();
+  private boolean checkClassUnderSources(PsiElement element, Project project) {
+    PsiFile file = element.getContainingFile();
     if (file != null && file.getVirtualFile() != null) {
-      final FileIndexFacade indexFacade = FileIndexFacade.getInstance(project);
-      final VirtualFile vf = file.getVirtualFile();
+      FileIndexFacade indexFacade = FileIndexFacade.getInstance(project);
+      VirtualFile vf = file.getVirtualFile();
       return indexFacade.isInSource(vf) || indexFacade.isInSourceContent(vf);
     }
     return false;
   }
 
   @Override
-  public AbstractTreeNode createNode(final Project project, final Object element, final ViewSettings viewSettings) {
+  public AbstractTreeNode createNode(Project project, Object element, ViewSettings viewSettings) {
     if (element instanceof PsiClass psiClass && checkClassUnderSources(psiClass, project)) {
       return new ClassSmartPointerNode(project, element, viewSettings);
     }
@@ -90,16 +90,16 @@ public class PsiClassFavoriteNodeProvider implements BookmarkNodeProvider {
   }
 
   @Override
-  public boolean elementContainsFile(final Object element, final VirtualFile vFile) {
+  public boolean elementContainsFile(Object element, VirtualFile vFile) {
     if (element instanceof PsiClass psiClass) {
-      final PsiFile file = psiClass.getContainingFile();
+      PsiFile file = psiClass.getContainingFile();
       if (file != null && Comparing.equal(file.getVirtualFile(), vFile)) return true;
     }
     return false;
   }
 
   @Override
-  public int getElementWeight(final Object value, final boolean isSortByType) {
+  public int getElementWeight(Object value, boolean isSortByType) {
     if (value instanceof PsiClass psiClass) {
       return isSortByType ? ClassTreeNode.getClassPosition(psiClass) : 3;
     }
@@ -108,12 +108,12 @@ public class PsiClassFavoriteNodeProvider implements BookmarkNodeProvider {
   }
 
   @Override
-  public String getElementLocation(final Object element) {
+  public String getElementLocation(Object element) {
     return element instanceof PsiClass psiClass ? ClassPresentationUtil.getNameForClass(psiClass, true) : null;
   }
 
   @Override
-  public boolean isInvalidElement(final Object element) {
+  public boolean isInvalidElement(Object element) {
     return element instanceof PsiClass psiClass && !psiClass.isValid();
   }
 
@@ -124,13 +124,13 @@ public class PsiClassFavoriteNodeProvider implements BookmarkNodeProvider {
   }
 
   @Override
-  public String getElementUrl(final Object element) {
+  public String getElementUrl(Object element) {
     return element instanceof PsiClass aClass ? aClass.getQualifiedName() : null;
   }
 
   @Override
   @RequiredReadAction
-  public String getElementModuleName(final Object element) {
+  public String getElementModuleName(Object element) {
     if (element instanceof PsiClass) {
       PsiClass aClass = (PsiClass) element;
       Module module = ModuleUtilCore.findModuleForPsiElement(aClass);
@@ -141,10 +141,10 @@ public class PsiClassFavoriteNodeProvider implements BookmarkNodeProvider {
 
   @Override
   @RequiredReadAction
-  public Object[] createPathFromUrl(final Project project, final String url, final String moduleName) {
+  public Object[] createPathFromUrl(Project project, String url, String moduleName) {
     GlobalSearchScope scope = null;
     if (moduleName != null) {
-      final Module module = ModuleManager.getInstance(project).findModuleByName(moduleName);
+      Module module = ModuleManager.getInstance(project).findModuleByName(moduleName);
       if (module != null) {
         scope = GlobalSearchScope.moduleScope(module);
       }
@@ -152,7 +152,7 @@ public class PsiClassFavoriteNodeProvider implements BookmarkNodeProvider {
     if (scope == null) {
       scope = GlobalSearchScope.allScope(project);
     }
-    final PsiClass aClass = JavaPsiFacade.getInstance(project).findClass(url, scope);
+    PsiClass aClass = JavaPsiFacade.getInstance(project).findClass(url, scope);
     if (aClass == null) return null;
     return new Object[]{aClass};
   }

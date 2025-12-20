@@ -91,8 +91,8 @@ public class StringUtils {
   @SuppressWarnings({"HardCodedStringLiteral"})
   @Nonnull
   public static String createSingularFromName(@Nonnull String name) {
-    final int nameLength = name.length();
-    final String singularName;
+    int nameLength = name.length();
+    String singularName;
     if (name.endsWith("ies")) {
       singularName = name.substring(0, nameLength - 3) + 'y';
     }
@@ -138,7 +138,7 @@ public class StringUtils {
   }
 
   public static String stripAngleBrackets(String string) {
-    final int index = string.indexOf('<');
+    int index = string.indexOf('<');
     if (index == -1) {
       return string;
     }

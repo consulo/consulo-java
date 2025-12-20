@@ -50,11 +50,11 @@ public class EmptySynchronizedStatementInspection extends BaseInspection {
      /* if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
         return;
       }*/
-      final PsiCodeBlock body = statement.getBody();
+      PsiCodeBlock body = statement.getBody();
       if (body == null) {
         return;
       }
-      final PsiStatement[] statements = body.getStatements();
+      PsiStatement[] statements = body.getStatements();
       if (statements.length > 0) {
         return;
       }

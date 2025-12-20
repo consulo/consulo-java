@@ -67,11 +67,11 @@ public class FinalizeInspection extends BaseInspection {
         @Override
         public void visitMethod(@Nonnull PsiMethod method) {
             //note: no call to super;
-            final String methodName = method.getName();
+            String methodName = method.getName();
             if (!HardcodedMethodConstants.FINALIZE.equals(methodName)) {
                 return;
             }
-            final PsiParameterList parameterList = method.getParameterList();
+            PsiParameterList parameterList = method.getParameterList();
             if (parameterList.getParametersCount() != 0) {
                 return;
             }
@@ -82,27 +82,27 @@ public class FinalizeInspection extends BaseInspection {
         }
 
         private boolean isTrivial(PsiMethod method) {
-            final PsiCodeBlock body = method.getBody();
+            PsiCodeBlock body = method.getBody();
             if (body == null) {
                 return true;
             }
-            final PsiStatement[] statements = body.getStatements();
+            PsiStatement[] statements = body.getStatements();
             if (statements.length == 0) {
                 return true;
             }
-            final Project project = method.getProject();
-            final JavaPsiFacade psiFacade =
+            Project project = method.getProject();
+            JavaPsiFacade psiFacade =
                 JavaPsiFacade.getInstance(project);
-            final PsiConstantEvaluationHelper evaluationHelper =
+            PsiConstantEvaluationHelper evaluationHelper =
                 psiFacade.getConstantEvaluationHelper();
             for (PsiStatement statement : statements) {
                 if (!(statement instanceof PsiIfStatement)) {
                     return false;
                 }
-                final PsiIfStatement ifStatement =
+                PsiIfStatement ifStatement =
                     (PsiIfStatement) statement;
-                final PsiExpression condition = ifStatement.getCondition();
-                final Object result =
+                PsiExpression condition = ifStatement.getCondition();
+                Object result =
                     evaluationHelper.computeConstantExpression(condition);
                 if (result == null || !result.equals(Boolean.FALSE)) {
                     return false;

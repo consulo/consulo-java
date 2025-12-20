@@ -48,17 +48,17 @@ public class SuperMethodWarningUtil {
 
   @Nonnull
   @RequiredReadAction
-  public static PsiMethod[] checkSuperMethods(final PsiMethod method, String actionString) {
+  public static PsiMethod[] checkSuperMethods(PsiMethod method, String actionString) {
     return checkSuperMethods(method, actionString, null);
   }
 
   @Nonnull
   @RequiredReadAction
-  public static PsiMethod[] checkSuperMethods(final PsiMethod method, String actionString, Collection<PsiElement> ignore) {
+  public static PsiMethod[] checkSuperMethods(PsiMethod method, String actionString, Collection<PsiElement> ignore) {
     PsiClass aClass = method.getContainingClass();
     if (aClass == null) return new PsiMethod[]{method};
 
-    final Collection<PsiMethod> superMethods = DeepestSuperMethodsSearch.search(method).findAll();
+    Collection<PsiMethod> superMethods = DeepestSuperMethodsSearch.search(method).findAll();
     if (ignore != null) {
       superMethods.removeAll(ignore);
     }
@@ -68,10 +68,10 @@ public class SuperMethodWarningUtil {
     Set<String> superClasses = new HashSet<>();
     boolean superAbstract = false;
     boolean parentInterface = false;
-    for (final PsiMethod superMethod : superMethods) {
-      final PsiClass containingClass = superMethod.getContainingClass();
+    for (PsiMethod superMethod : superMethods) {
+      PsiClass containingClass = superMethod.getContainingClass();
       superClasses.add(containingClass.getQualifiedName());
-      final boolean isInterface = containingClass.isInterface();
+      boolean isInterface = containingClass.isInterface();
       superAbstract |= isInterface || superMethod.hasModifierProperty(PsiModifier.ABSTRACT);
       parentInterface |= isInterface;
     }
@@ -99,7 +99,7 @@ public class SuperMethodWarningUtil {
 
 
   @RequiredReadAction
-  public static PsiMethod checkSuperMethod(final PsiMethod method, String actionString) {
+  public static PsiMethod checkSuperMethod(PsiMethod method, String actionString) {
     PsiClass aClass = method.getContainingClass();
     if (aClass == null) return method;
 
@@ -129,10 +129,10 @@ public class SuperMethodWarningUtil {
 
   @RequiredReadAction
   public static void checkSuperMethod(
-    final PsiMethod method,
-    final String actionString,
-    final PsiElementProcessor<PsiMethod> processor,
-    final Editor editor
+    PsiMethod method,
+    String actionString,
+    PsiElementProcessor<PsiMethod> processor,
+    Editor editor
   ) {
     PsiClass aClass = method.getContainingClass();
     if (aClass == null) {
@@ -146,7 +146,7 @@ public class SuperMethodWarningUtil {
       return;
     }
 
-    final PsiClass containingClass = superMethod.getContainingClass();
+    PsiClass containingClass = superMethod.getContainingClass();
     if (containingClass == null) {
       processor.execute(method);
       return;
@@ -157,13 +157,13 @@ public class SuperMethodWarningUtil {
       return;
     }
 
-    final PsiMethod[] methods = new PsiMethod[]{superMethod, method};
-    final String renameBase = actionString + " base method";
-    final String renameCurrent = actionString + " only current method";
-    final JBList<String> list = new JBList<>(renameBase, renameCurrent);
+    PsiMethod[] methods = new PsiMethod[]{superMethod, method};
+    String renameBase = actionString + " base method";
+    String renameCurrent = actionString + " only current method";
+    JBList<String> list = new JBList<>(renameBase, renameCurrent);
     JBPopup popup = ((AWTPopupFactory) JBPopupFactory.getInstance()).createListPopupBuilder(list)
         .setItemChoosenCallback(() -> {
-          final Object value = list.getSelectedValue();
+          Object value = list.getSelectedValue();
           if (value instanceof String) {
             processor.execute(methods[value.equals(renameBase) ? 0 : 1]);
           }

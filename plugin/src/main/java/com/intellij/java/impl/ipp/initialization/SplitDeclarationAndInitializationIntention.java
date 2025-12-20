@@ -50,15 +50,15 @@ public class SplitDeclarationAndInitializationIntention extends Intention {
     @Override
     public void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiField field = (PsiField) element.getParent();
+        PsiField field = (PsiField) element.getParent();
         field.normalizeDeclaration();
-        final PsiExpression initializer = field.getInitializer();
+        PsiExpression initializer = field.getInitializer();
         if (initializer == null) {
             return;
         }
-        final String initializerText;
+        String initializerText;
         if (initializer instanceof PsiArrayInitializerExpression) {
-            final PsiType type = initializer.getType();
+            PsiType type = initializer.getType();
             if (type == null) {
                 initializerText = initializer.getText();
             }
@@ -70,23 +70,23 @@ public class SplitDeclarationAndInitializationIntention extends Intention {
         else {
             initializerText = initializer.getText();
         }
-        final PsiClass containingClass = field.getContainingClass();
+        PsiClass containingClass = field.getContainingClass();
         if (containingClass == null) {
             return;
         }
-        final boolean fieldIsStatic =
+        boolean fieldIsStatic =
             field.hasModifierProperty(PsiModifier.STATIC);
-        final PsiClassInitializer[] classInitializers =
+        PsiClassInitializer[] classInitializers =
             containingClass.getInitializers();
         PsiClassInitializer classInitializer = null;
-        final int fieldOffset = field.getTextOffset();
+        int fieldOffset = field.getTextOffset();
         for (PsiClassInitializer existingClassInitializer : classInitializers) {
-            final int initializerOffset =
+            int initializerOffset =
                 existingClassInitializer.getTextOffset();
             if (initializerOffset <= fieldOffset) {
                 continue;
             }
-            final boolean initializerIsStatic =
+            boolean initializerIsStatic =
                 existingClassInitializer.hasModifierProperty(
                     PsiModifier.STATIC);
             if (initializerIsStatic == fieldIsStatic) {
@@ -94,9 +94,9 @@ public class SplitDeclarationAndInitializationIntention extends Intention {
                 break;
             }
         }
-        final PsiManager manager = field.getManager();
-        final Project project = manager.getProject();
-        final PsiElementFactory elementFactory =
+        PsiManager manager = field.getManager();
+        Project project = manager.getProject();
+        PsiElementFactory elementFactory =
             JavaPsiFacade.getInstance(project).getElementFactory();
         if (classInitializer == null) {
             classInitializer = elementFactory.createClassInitializer();
@@ -104,26 +104,26 @@ public class SplitDeclarationAndInitializationIntention extends Intention {
                 containingClass.addAfter(classInitializer, field);
 
             // add some whitespace between the field and the class initializer
-            final PsiElement whitespace =
+            PsiElement whitespace =
                 PsiParserFacade.SERVICE.getInstance(project).createWhiteSpaceFromText("\n");
             containingClass.addAfter(whitespace, field);
         }
-        final PsiCodeBlock body = classInitializer.getBody();
-        @NonNls final String initializationStatementText =
+        PsiCodeBlock body = classInitializer.getBody();
+        @NonNls String initializationStatementText =
             field.getName() + " = " + initializerText + ';';
-        final PsiExpressionStatement statement =
+        PsiExpressionStatement statement =
             (PsiExpressionStatement) elementFactory.createStatementFromText(
                 initializationStatementText, body);
-        final PsiElement addedElement = body.add(statement);
+        PsiElement addedElement = body.add(statement);
         if (fieldIsStatic) {
-            final PsiModifierList modifierList =
+            PsiModifierList modifierList =
                 classInitializer.getModifierList();
             if (modifierList != null) {
                 modifierList.setModifierProperty(PsiModifier.STATIC, true);
             }
         }
         initializer.delete();
-        final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(manager.getProject());
+        CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(manager.getProject());
         codeStyleManager.reformat(field);
         codeStyleManager.reformat(classInitializer);
         HighlightUtil.highlightElement(addedElement);

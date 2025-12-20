@@ -20,7 +20,7 @@ public abstract class JavadocInspectionQuickFixTest extends LightQuickFix15TestC
   @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
-    final JavaDocLocalInspection javaDocLocalInspection = new JavaDocLocalInspection();
+    JavaDocLocalInspection javaDocLocalInspection = new JavaDocLocalInspection();
     javaDocLocalInspection.TOP_LEVEL_CLASS_OPTIONS.REQUIRED_TAGS = "param";
     javaDocLocalInspection.TOP_LEVEL_CLASS_OPTIONS.ACCESS_JAVADOC_REQUIRED_FOR = "package";
     javaDocLocalInspection.METHOD_OPTIONS.ACCESS_JAVADOC_REQUIRED_FOR = "package";

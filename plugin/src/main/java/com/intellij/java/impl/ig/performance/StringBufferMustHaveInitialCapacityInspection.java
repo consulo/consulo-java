@@ -53,17 +53,17 @@ public class StringBufferMustHaveInitialCapacityInspection extends BaseInspectio
         @Override
         public void visitNewExpression(@Nonnull PsiNewExpression expression) {
             super.visitNewExpression(expression);
-            final PsiType type = expression.getType();
+            PsiType type = expression.getType();
 
             if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING_BUFFER, type)
                 && !TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING_BUILDER, type)) {
                 return;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpressionList argumentList = expression.getArgumentList();
             if (argumentList == null) {
                 return;
             }
-            final PsiExpression[] args = argumentList.getExpressions();
+            PsiExpression[] args = argumentList.getExpressions();
             if (args.length != 0) {
                 return;
             }

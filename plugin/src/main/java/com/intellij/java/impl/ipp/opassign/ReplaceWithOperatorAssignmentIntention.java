@@ -36,13 +36,13 @@ public class ReplaceWithOperatorAssignmentIntention extends MutablyNamedIntentio
     @Nonnull
     @Override
     public LocalizeValue getTextForElement(PsiElement element) {
-        final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) element;
-        final PsiExpression rhs = assignmentExpression.getRExpression();
-        final PsiPolyadicExpression expression = (PsiPolyadicExpression) PsiUtil.deparenthesizeExpression(rhs);
+        PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) element;
+        PsiExpression rhs = assignmentExpression.getRExpression();
+        PsiPolyadicExpression expression = (PsiPolyadicExpression) PsiUtil.deparenthesizeExpression(rhs);
         assert expression != null;
-        final PsiJavaToken sign = expression.getTokenBeforeOperand(expression.getOperands()[1]);
+        PsiJavaToken sign = expression.getTokenBeforeOperand(expression.getOperands()[1]);
         assert sign != null;
-        final String operator = sign.getText();
+        String operator = sign.getText();
         return IntentionPowerPackLocalize.replaceAssignmentWithOperatorAssignmentIntentionName(operator);
     }
 
@@ -60,21 +60,21 @@ public class ReplaceWithOperatorAssignmentIntention extends MutablyNamedIntentio
 
     @Override
     public void processIntention(@Nonnull PsiElement element) {
-        final PsiAssignmentExpression expression = (PsiAssignmentExpression) element;
-        final PsiExpression rhs = expression.getRExpression();
-        final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) PsiUtil.deparenthesizeExpression(rhs);
+        PsiAssignmentExpression expression = (PsiAssignmentExpression) element;
+        PsiExpression rhs = expression.getRExpression();
+        PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) PsiUtil.deparenthesizeExpression(rhs);
         assert polyadicExpression != null;
-        final PsiExpression lhs = expression.getLExpression();
+        PsiExpression lhs = expression.getLExpression();
         assert rhs != null;
-        final PsiExpression[] operands = polyadicExpression.getOperands();
-        final PsiJavaToken sign = polyadicExpression.getTokenBeforeOperand(operands[1]);
+        PsiExpression[] operands = polyadicExpression.getOperands();
+        PsiJavaToken sign = polyadicExpression.getTokenBeforeOperand(operands[1]);
         assert sign != null;
-        final String signText = sign.getText();
-        final StringBuilder newExpression = new StringBuilder();
+        String signText = sign.getText();
+        StringBuilder newExpression = new StringBuilder();
         newExpression.append(lhs.getText()).append(signText).append('=');
         boolean token = false;
         for (int i = 1; i < operands.length; i++) {
-            final PsiExpression operand = operands[i];
+            PsiExpression operand = operands[i];
             if (token) {
                 newExpression.append(signText);
             }

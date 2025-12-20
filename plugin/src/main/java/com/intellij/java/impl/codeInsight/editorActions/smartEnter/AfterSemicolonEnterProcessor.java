@@ -39,15 +39,15 @@ public class AfterSemicolonEnterProcessor implements EnterProcessor {
       int errorOffset = getErrorElementOffset(psiElement);
       int elementEndOffset = psiElement.getTextRange().getEndOffset();
       if (psiElement instanceof PsiEnumConstant) {
-        final CharSequence text = editor.getDocument().getCharsSequence();
-        final int commaOffset = CharArrayUtil.shiftForwardUntil(text, elementEndOffset, ",");
+        CharSequence text = editor.getDocument().getCharsSequence();
+        int commaOffset = CharArrayUtil.shiftForwardUntil(text, elementEndOffset, ",");
         if (commaOffset < text.length()) {
           elementEndOffset = commaOffset + 1;
         }
       }
 
       if (errorOffset >= 0 && errorOffset < elementEndOffset) {
-        final CharSequence text = editor.getDocument().getCharsSequence();
+        CharSequence text = editor.getDocument().getCharsSequence();
         if (text.charAt(errorOffset) == ' ' && text.charAt(errorOffset + 1) == ';') {
           errorOffset++;
         }

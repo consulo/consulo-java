@@ -44,7 +44,7 @@ class AnnotationInsertHandler implements InsertHandler<JavaPsiClassReferenceElem
     PsiFile file = context.getFile();
 
     PsiElement elementAt = file.findElementAt(context.getStartOffset());
-    final PsiElement parentElement = elementAt != null ? elementAt.getParent() : null;
+    PsiElement parentElement = elementAt != null ? elementAt.getParent() : null;
 
     if (elementAt instanceof PsiIdentifier &&
         (PsiTreeUtil.getParentOfType(elementAt, PsiAnnotationParameterList.class) != null ||

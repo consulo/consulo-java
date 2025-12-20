@@ -69,7 +69,7 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final boolean inSameFile = (Boolean)infos[0];
+    boolean inSameFile = (Boolean)infos[0];
     return inSameFile
       ? InspectionGadgetsLocalize.unnecessaryFullyQualifiedNameProblemDescriptor2().get()
       : InspectionGadgetsLocalize.unnecessaryFullyQualifiedNameProblemDescriptor1().get();
@@ -98,19 +98,19 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
 
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement)descriptor.getPsiElement();
-      final PsiFile file = referenceElement.getContainingFile();
-      final PsiElement target = referenceElement.resolve();
+      PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement)descriptor.getPsiElement();
+      PsiFile file = referenceElement.getContainingFile();
+      PsiElement target = referenceElement.resolve();
       if (!(target instanceof PsiClass)) {
         return;
       }
-      final PsiClass aClass = (PsiClass)target;
+      PsiClass aClass = (PsiClass)target;
       ImportUtils.addImportIfNeeded(aClass, referenceElement);
-      final String fullyQualifiedText = referenceElement.getText();
-      final QualificationRemover qualificationRemover = new QualificationRemover(fullyQualifiedText);
+      String fullyQualifiedText = referenceElement.getText();
+      QualificationRemover qualificationRemover = new QualificationRemover(fullyQualifiedText);
       file.accept(qualificationRemover);
       if (isOnTheFly()) {
-        final Collection<PsiElement> shortenedElements = qualificationRemover.getShortenedElements();
+        Collection<PsiElement> shortenedElements = qualificationRemover.getShortenedElements();
         HighlightUtils.highlightElements(shortenedElements);
       }
     }
@@ -131,15 +131,15 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
       @Override
       public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
         super.visitReferenceElement(reference);
-        final PsiElement parent = PsiTreeUtil.getParentOfType(reference, PsiImportStatementBase.class);
+        PsiElement parent = PsiTreeUtil.getParentOfType(reference, PsiImportStatementBase.class);
         if (parent != null) {
           return;
         }
-        final String text = reference.getText();
+        String text = reference.getText();
         if (!text.equals(fullyQualifiedText)) {
           return;
         }
-        final PsiElement qualifier = reference.getQualifier();
+        PsiElement qualifier = reference.getQualifier();
         if (qualifier == null) {
           return;
         }
@@ -147,9 +147,9 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
           qualifier.delete();
         }
         catch (IncorrectOperationException e) {
-          final Class<? extends QualificationRemover> aClass = getClass();
-          final String className = aClass.getName();
-          final Logger logger = Logger.getInstance(className);
+          Class<? extends QualificationRemover> aClass = getClass();
+          String className = aClass.getName();
+          Logger logger = Logger.getInstance(className);
           logger.error(e);
         }
         shortenedElements.add(reference);
@@ -177,60 +177,60 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
     }
 
     private void checkReference(PsiJavaCodeReferenceElement reference) {
-      final PsiElement qualifier = reference.getQualifier();
+      PsiElement qualifier = reference.getQualifier();
       if (!(qualifier instanceof PsiJavaCodeReferenceElement)) {
         return;
       }
-      final PsiElement parent = reference.getParent();
+      PsiElement parent = reference.getParent();
       if (parent instanceof PsiMethodCallExpression || parent instanceof PsiAssignmentExpression || parent instanceof PsiVariable) {
         return;
       }
-      final PsiElement element =
+      PsiElement element =
         PsiTreeUtil.getParentOfType(reference, PsiImportStatementBase.class, PsiPackageStatement.class, JavaCodeFragment.class);
       if (element != null) {
         return;
       }
       if (m_ignoreJavadoc) {
-        final PsiElement containingComment = PsiTreeUtil.getParentOfType(reference, PsiDocComment.class);
+        PsiElement containingComment = PsiTreeUtil.getParentOfType(reference, PsiDocComment.class);
         if (containingComment != null) {
           return;
         }
       }
-      final PsiFile containingFile = reference.getContainingFile();
+      PsiFile containingFile = reference.getContainingFile();
       if (!(containingFile instanceof PsiJavaFile)) {
         return;
       }
-      final PsiElement target = reference.resolve();
+      PsiElement target = reference.resolve();
       if (!(target instanceof PsiClass)) {
         return;
       }
-      final PsiJavaCodeReferenceElement qualifierReference = (PsiJavaCodeReferenceElement)qualifier;
-      final PsiElement qualifierTarget = qualifierReference.resolve();
+      PsiJavaCodeReferenceElement qualifierReference = (PsiJavaCodeReferenceElement)qualifier;
+      PsiElement qualifierTarget = qualifierReference.resolve();
       if (!(qualifierTarget instanceof PsiJavaPackage)) {
         return;
       }
-      final List<PsiJavaCodeReferenceElement> references = new ArrayList(2);
+      List<PsiJavaCodeReferenceElement> references = new ArrayList(2);
       references.add(reference);
-      final JavaCodeStyleSettings styleSettings = CodeStyleSettingsManager.getSettings(reference.getProject()).getCustomSettings(JavaCodeStyleSettings.class);
+      JavaCodeStyleSettings styleSettings = CodeStyleSettingsManager.getSettings(reference.getProject()).getCustomSettings(JavaCodeStyleSettings.class);
       if (styleSettings.INSERT_INNER_CLASS_IMPORTS) {
         collectInnerClassNames(reference, references);
       }
       Collections.reverse(references);
       for (int i = 0, size = references.size(); i < size; i++) {
-        final PsiJavaCodeReferenceElement aReference = references.get(i);
-        final PsiElement referenceTarget = aReference.resolve();
+        PsiJavaCodeReferenceElement aReference = references.get(i);
+        PsiElement referenceTarget = aReference.resolve();
         if (!(referenceTarget instanceof PsiClass)) {
           continue;
         }
-        final PsiClass aClass = (PsiClass)referenceTarget;
-        final String qualifiedName = aClass.getQualifiedName();
+        PsiClass aClass = (PsiClass)referenceTarget;
+        String qualifiedName = aClass.getQualifiedName();
         if (qualifiedName == null) {
           continue;
         }
         if (!ImportUtils.nameCanBeImported(qualifiedName, reference)) {
           continue;
         }
-        final boolean inSameFile = aClass.getContainingFile() == containingFile;
+        boolean inSameFile = aClass.getContainingFile() == containingFile;
         registerError(aReference, Boolean.valueOf(inSameFile));
         break;
       }
@@ -239,7 +239,7 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
     private void collectInnerClassNames(PsiJavaCodeReferenceElement reference, List<PsiJavaCodeReferenceElement> references) {
       PsiElement rParent = reference.getParent();
       while (rParent instanceof PsiJavaCodeReferenceElement) {
-        final PsiJavaCodeReferenceElement parentReference = (PsiJavaCodeReferenceElement)rParent;
+        PsiJavaCodeReferenceElement parentReference = (PsiJavaCodeReferenceElement)rParent;
         if (!reference.equals(parentReference.getQualifier())) {
           break;
         }

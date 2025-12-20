@@ -86,7 +86,7 @@ public class JavaParameterTableModel extends ParameterTableModelBase<ParameterIn
     JavaCodeFragmentFactory f = JavaCodeFragmentFactory.getInstance(myProject);
     final PsiTypeCodeFragment paramTypeCodeFragment =
         f.createTypeCodeFragment(parameterInfo.getTypeText(), myTypeContext, true, JavaCodeFragmentFactory.ALLOW_ELLIPSIS);
-    final CanonicalTypes.Type paramType = parameterInfo.getTypeWrapper();
+    CanonicalTypes.Type paramType = parameterInfo.getTypeWrapper();
     if (paramType != null) {
       paramType.addImportsTo(paramTypeCodeFragment);
     }
@@ -162,8 +162,8 @@ public class JavaParameterTableModel extends ParameterTableModelBase<ParameterIn
     }
 
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-      final Component editor = super.getTableCellEditorComponent(table, value, isSelected, row, column);
-      final PsiType type = getRowType(table, row);
+      Component editor = super.getTableCellEditorComponent(table, value, isSelected, row, column);
+      PsiType type = getRowType(table, row);
       if (type != null) {
         ((PsiExpressionCodeFragment) myCodeFragment).setExpectedType(type);
       }

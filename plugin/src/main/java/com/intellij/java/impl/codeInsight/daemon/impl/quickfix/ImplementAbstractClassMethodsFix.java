@@ -46,7 +46,7 @@ public class ImplementAbstractClassMethodsFix extends ImplementMethodsFix {
                              @Nonnull PsiElement startElement,
                              @Nonnull PsiElement endElement) {
     if (startElement instanceof PsiNewExpression) {
-      final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
+      PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
       String startElementText = startElement.getText();
       try {
         PsiNewExpression newExpression =
@@ -73,11 +73,11 @@ public class ImplementAbstractClassMethodsFix extends ImplementMethodsFix {
                      @Nullable final Editor editor,
                      @Nonnull final PsiElement startElement,
                      @Nonnull PsiElement endElement) {
-    final PsiFile containingFile = startElement.getContainingFile();
+    PsiFile containingFile = startElement.getContainingFile();
     if (editor == null || !FileModificationService.getInstance().prepareFileForWrite(containingFile)) return;
     PsiJavaCodeReferenceElement classReference = ((PsiNewExpression) startElement).getClassReference();
     if (classReference == null) return;
-    final PsiClass psiClass = (PsiClass) classReference.resolve();
+    PsiClass psiClass = (PsiClass) classReference.resolve();
     if (psiClass == null) return;
     final MemberChooser<PsiMethodMember> chooser = chooseMethodsToImplement(editor, startElement, psiClass, false);
     if (chooser == null) return;
@@ -87,15 +87,15 @@ public class ImplementAbstractClassMethodsFix extends ImplementMethodsFix {
 
     new WriteCommandAction(project, file) {
       @Override
-      protected void run(final Result result) throws Throwable {
+      protected void run(Result result) throws Throwable {
         PsiNewExpression newExpression =
             (PsiNewExpression) JavaPsiFacade.getElementFactory(project).createExpressionFromText(startElement.getText() + "{}", startElement);
         newExpression = (PsiNewExpression) startElement.replace(newExpression);
-        final PsiClass psiClass = newExpression.getAnonymousClass();
+        PsiClass psiClass = newExpression.getAnonymousClass();
         if (psiClass == null) return;
         Map<PsiClass, PsiSubstitutor> subst = new HashMap<PsiClass, PsiSubstitutor>();
         for (PsiMethodMember selectedElement : selectedElements) {
-          final PsiClass baseClass = selectedElement.getElement().getContainingClass();
+          PsiClass baseClass = selectedElement.getElement().getContainingClass();
           if (baseClass != null) {
             PsiSubstitutor substitutor = subst.get(baseClass);
             if (substitutor == null) {

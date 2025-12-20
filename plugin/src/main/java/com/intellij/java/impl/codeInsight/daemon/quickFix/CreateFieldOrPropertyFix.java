@@ -59,11 +59,11 @@ public class CreateFieldOrPropertyFix implements IntentionAction, LocalQuickFix 
     private final PsiAnnotation[] myAnnotations;
 
     public CreateFieldOrPropertyFix(
-        final PsiClass aClass,
-        final String name,
-        final PsiType type,
-        final PropertyMemberType memberType,
-        final PsiAnnotation[] annotations
+        PsiClass aClass,
+        String name,
+        PsiType type,
+        PropertyMemberType memberType,
+        PsiAnnotation[] annotations
     ) {
         myClass = aClass;
         myName = name;
@@ -87,7 +87,7 @@ public class CreateFieldOrPropertyFix implements IntentionAction, LocalQuickFix 
     }
 
     @Override
-    public void applyFix(@Nonnull final Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
         applyFixInner(project);
     }
 
@@ -119,7 +119,7 @@ public class CreateFieldOrPropertyFix implements IntentionAction, LocalQuickFix 
         }
     }
 
-    private void generateMembers(final Project project, final Editor editor, final PsiFile file) {
+    private void generateMembers(Project project, Editor editor, PsiFile file) {
         try {
             List<? extends GenerationInfo> prototypes = new GenerateFieldOrPropertyHandler(myName, myType, myMemberType, myAnnotations)
                 .generateMemberPrototypes(myClass, ClassMember.EMPTY_ARRAY);
@@ -128,19 +128,19 @@ public class CreateFieldOrPropertyFix implements IntentionAction, LocalQuickFix 
             if (prototypes.isEmpty()) {
                 return;
             }
-            final PsiElement scope = prototypes.get(0).getPsiMember().getContext();
+            PsiElement scope = prototypes.get(0).getPsiMember().getContext();
             assert scope != null;
-            final Expression expression = new EmptyExpression() {
+            Expression expression = new EmptyExpression() {
                 @Override
-                public consulo.language.editor.template.Result calculateResult(final ExpressionContext context) {
+                public consulo.language.editor.template.Result calculateResult(ExpressionContext context) {
                     return new TextResult(myType.getCanonicalText());
                 }
             };
-            final TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(scope);
+            TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(scope);
             boolean first = true;
-            @NonNls final String TYPE_NAME_VAR = "TYPE_NAME_VAR";
+            @NonNls String TYPE_NAME_VAR = "TYPE_NAME_VAR";
             for (GenerationInfo prototype : prototypes) {
-                final PsiTypeElement typeElement = PropertyUtil.getPropertyTypeElement(prototype.getPsiMember());
+                PsiTypeElement typeElement = PropertyUtil.getPropertyTypeElement(prototype.getPsiMember());
                 if (first) {
                     first = false;
                     builder.replaceElement(typeElement, TYPE_NAME_VAR, expression, true);

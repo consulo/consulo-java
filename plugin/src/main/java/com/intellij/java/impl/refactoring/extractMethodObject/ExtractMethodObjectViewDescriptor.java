@@ -28,7 +28,7 @@ import jakarta.annotation.Nonnull;
 public class ExtractMethodObjectViewDescriptor implements UsageViewDescriptor {
   private final PsiMethod myMethod;
 
-  public ExtractMethodObjectViewDescriptor(final PsiMethod method) {
+  public ExtractMethodObjectViewDescriptor(PsiMethod method) {
     myMethod = method;
   }
 
@@ -41,11 +41,11 @@ public class ExtractMethodObjectViewDescriptor implements UsageViewDescriptor {
     return "Method to be converted";
   }
 
-  public String getCodeReferencesText(final int usagesCount, final int filesCount) {
+  public String getCodeReferencesText(int usagesCount, int filesCount) {
     return "References to be changed";
   }
 
-  public String getCommentReferencesText(final int usagesCount, final int filesCount) {
+  public String getCommentReferencesText(int usagesCount, int filesCount) {
     return null;
   }
 }

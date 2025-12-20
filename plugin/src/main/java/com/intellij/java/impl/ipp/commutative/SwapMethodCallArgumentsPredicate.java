@@ -26,29 +26,29 @@ class SwapMethodCallArgumentsPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiExpressionList)) {
       return false;
     }
-    final PsiExpressionList argumentList = (PsiExpressionList)element;
-    final PsiExpression[] arguments = argumentList.getExpressions();
+    PsiExpressionList argumentList = (PsiExpressionList)element;
+    PsiExpression[] arguments = argumentList.getExpressions();
     if (arguments.length != 2) {
       return false;
     }
-    final PsiElement parent = argumentList.getParent();
+    PsiElement parent = argumentList.getParent();
     if (!(parent instanceof PsiCallExpression)) {
       return false;
     }
-    final PsiCallExpression methodCallExpression = (PsiCallExpression)parent;
-    final PsiMethod method = methodCallExpression.resolveMethod();
+    PsiCallExpression methodCallExpression = (PsiCallExpression)parent;
+    PsiMethod method = methodCallExpression.resolveMethod();
     if (method == null) {
       return false;
     }
-    final PsiParameterList parameterList = method.getParameterList();
-    final PsiParameter[] parameters = parameterList.getParameters();
+    PsiParameterList parameterList = method.getParameterList();
+    PsiParameter[] parameters = parameterList.getParameters();
     if (parameters.length != 2) {
       return false;
     }
-    final PsiParameter firstParameter = parameters[0];
-    final PsiParameter secondParameter = parameters[1];
-    final PsiType firstType = firstParameter.getType();
-    final PsiType secondType = secondParameter.getType();
+    PsiParameter firstParameter = parameters[0];
+    PsiParameter secondParameter = parameters[1];
+    PsiType firstType = firstParameter.getType();
+    PsiType secondType = secondParameter.getType();
     return firstType.equals(secondType);
   }
 }

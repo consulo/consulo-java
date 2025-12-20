@@ -22,7 +22,7 @@ public abstract class ProjectTreeBuilderTest extends BaseProjectViewTestCase {
   public void testStandardProviders() throws Exception {
     getProjectTreeStructure().setProviders();
 
-    final PsiClass aClass = JavaDirectoryService.getInstance().getClasses(getPackageDirectory())[0];
+    PsiClass aClass = JavaDirectoryService.getInstance().getClasses(getPackageDirectory())[0];
 
     PsiFile element = aClass.getContainingFile();
 
@@ -32,7 +32,7 @@ public abstract class ProjectTreeBuilderTest extends BaseProjectViewTestCase {
   public void testShowClassMembers() throws IncorrectOperationException, IOException {
     myStructure.setShowMembers(true);
     useStandardProviders();
-    final PsiClass[] classes = JavaDirectoryService.getInstance().getClasses(getPackageDirectory());
+    PsiClass[] classes = JavaDirectoryService.getInstance().getClasses(getPackageDirectory());
     sortClassesByName(classes);
     PsiClass aClass = classes[1];
     PsiClass innerClass1 = aClass.getInnerClasses()[0];
@@ -49,7 +49,7 @@ public abstract class ProjectTreeBuilderTest extends BaseProjectViewTestCase {
     PsiField innerClass1Field = innerClass14.getFields()[0];
     PsiField innerClass2Field = innerClass24.getFields()[0];
 
-    final AbstractProjectViewPSIPane pane = myStructure.createPane();
+    AbstractProjectViewPSIPane pane = myStructure.createPane();
 
     myStructure.checkNavigateFromSourceBehaviour(innerClass2Field, innerClass2Field.getContainingFile().getVirtualFile(), pane);
 
@@ -119,7 +119,7 @@ public abstract class ProjectTreeBuilderTest extends BaseProjectViewTestCase {
 
       Disposer.dispose(structureViewComponent);
 
-      final FileEditor fileEditor = fileEditors[0];
+      FileEditor fileEditor = fileEditors[0];
       structureViewComponent2 = (StructureViewComponent)fileEditor.getStructureViewBuilder().createStructureView(fileEditor, myProject);
       structureViewComponent2.setActionActive(JavaInheritedMembersNodeProvider.ID, false);
       IdeaTestUtil.assertTreeEqual(structureViewComponent2.getTree(), expected);

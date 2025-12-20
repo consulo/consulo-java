@@ -28,8 +28,8 @@ class ComparisonPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiBinaryExpression)) {
       return false;
     }
-    final PsiBinaryExpression expression = (PsiBinaryExpression)element;
-    final PsiExpression rhs = expression.getROperand();
+    PsiBinaryExpression expression = (PsiBinaryExpression)element;
+    PsiExpression rhs = expression.getROperand();
     if (rhs == null) {
       return false;
     }

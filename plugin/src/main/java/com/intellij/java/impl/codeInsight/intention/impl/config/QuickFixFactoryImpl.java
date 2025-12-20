@@ -239,7 +239,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
 
     @Nonnull
     @Override
-    public LocalQuickFixAndIntentionActionOnPsiElement createMakeClassInterfaceFix(@Nonnull PsiClass aClass, final boolean makeInterface) {
+    public LocalQuickFixAndIntentionActionOnPsiElement createMakeClassInterfaceFix(@Nonnull PsiClass aClass, boolean makeInterface) {
         return new MakeClassInterfaceFix(aClass, makeInterface);
     }
 
@@ -268,10 +268,10 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
     @Override
     @Nullable
     public IntentionAction createCreateClassOrPackageFix(
-        @Nonnull final PsiElement context,
-        @Nonnull final String qualifiedName,
-        final boolean createClass,
-        final String superClass
+        @Nonnull PsiElement context,
+        @Nonnull String qualifiedName,
+        boolean createClass,
+        String superClass
     ) {
         return CreateClassOrPackageFix.createFix(qualifiedName, context, createClass ? ClassKind.CLASS : null, superClass);
     }
@@ -279,10 +279,10 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
     @Override
     @Nullable
     public IntentionAction createCreateClassOrInterfaceFix(
-        @Nonnull final PsiElement context,
-        @Nonnull final String qualifiedName,
-        final boolean createClass,
-        final String superClass
+        @Nonnull PsiElement context,
+        @Nonnull String qualifiedName,
+        boolean createClass,
+        String superClass
     ) {
         return CreateClassOrPackageFix.createFix(qualifiedName, context, createClass ? ClassKind.CLASS : ClassKind.INTERFACE, superClass);
     }
@@ -290,11 +290,11 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
     @Nonnull
     @Override
     public IntentionAction createCreateFieldOrPropertyFix(
-        @Nonnull final PsiClass aClass,
-        @Nonnull final String name,
-        @Nonnull final PsiType type,
-        @Nonnull final PropertyMemberType targetMember,
-        @Nonnull final PsiAnnotation... annotations
+        @Nonnull PsiClass aClass,
+        @Nonnull String name,
+        @Nonnull PsiType type,
+        @Nonnull PropertyMemberType targetMember,
+        @Nonnull PsiAnnotation... annotations
     ) {
         return new CreateFieldOrPropertyFix(aClass, name, type, targetMember, annotations);
     }
@@ -772,7 +772,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
             }
 
             @Override
-            public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+            public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
                 invokeOnTheFlyImportOptimizer(() -> fix.invoke(project, editor, file), file);
             }
 
@@ -813,7 +813,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
         @Nonnull String qualifiedName,
         @Nonnull String element
     ) {
-        final EntryPointsManagerBase entryPointsManager = EntryPointsManagerBase.getInstance(project);
+        EntryPointsManagerBase entryPointsManager = EntryPointsManagerBase.getInstance(project);
         return SpecialAnnotationsUtil.createAddToSpecialAnnotationsListIntentionAction(
             JavaQuickFixLocalize.fixUnusedSymbolInjectionText(element, qualifiedName),
             JavaQuickFixLocalize.fixUnusedSymbolInjectionFamily(),
@@ -824,7 +824,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
 
     @Nonnull
     @Override
-    public IntentionAction createAddToImplicitlyWrittenFieldsFix(Project project, @Nonnull final String qualifiedName) {
+    public IntentionAction createAddToImplicitlyWrittenFieldsFix(Project project, @Nonnull String qualifiedName) {
         EntryPointsManagerBase entryPointsManagerBase = EntryPointsManagerBase.getInstance(project);
         return entryPointsManagerBase.new AddImplicitlyWriteAnnotation(qualifiedName);
     }
@@ -871,25 +871,25 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
         return OrderEntryFix.registerFixes(reference);
     }
 
-    private static void invokeOnTheFlyImportOptimizer(@Nonnull final Runnable runnable, @Nonnull final PsiFile file) {
-        final Project project = file.getProject();
-        final Document document = PsiDocumentManager.getInstance(project).getDocument(file);
+    private static void invokeOnTheFlyImportOptimizer(@Nonnull Runnable runnable, @Nonnull PsiFile file) {
+        Project project = file.getProject();
+        Document document = PsiDocumentManager.getInstance(project).getDocument(file);
         if (document == null) {
             return;
         }
-        final long stamp = document.getModificationStamp();
+        long stamp = document.getModificationStamp();
         DumbService.getInstance(file.getProject()).smartInvokeLater(() -> {
             if (project.isDisposed() || document.getModificationStamp() != stamp) {
                 return;
             }
             //no need to optimize imports on the fly during undo/redo
-            final UndoManager undoManager = ProjectUndoManager.getInstance(project);
+            UndoManager undoManager = ProjectUndoManager.getInstance(project);
             if (undoManager.isUndoInProgress() || undoManager.isRedoInProgress()) {
                 return;
             }
             PsiDocumentManager.getInstance(project).commitAllDocuments();
             String beforeText = file.getText();
-            final long oldStamp = document.getModificationStamp();
+            long oldStamp = document.getModificationStamp();
             UndoUtil.writeInRunUndoTransparentAction(runnable);
             if (oldStamp != document.getModificationStamp()) {
                 String afterText = file.getText();
@@ -907,9 +907,9 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
     @Nonnull
     @Override
     public IntentionAction createAddMissingRequiredAnnotationParametersFix(
-        @Nonnull final PsiAnnotation annotation,
-        @Nonnull final PsiMethod[] annotationMethods,
-        @Nonnull final Collection<String> missedElements
+        @Nonnull PsiAnnotation annotation,
+        @Nonnull PsiMethod[] annotationMethods,
+        @Nonnull Collection<String> missedElements
     ) {
         return new AddMissingRequiredAnnotationParametersFix(annotation, annotationMethods, missedElements);
     }
@@ -944,9 +944,9 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
     @Nullable
     @Override
     public IntentionAction createNotIterableForEachLoopFix(@Nonnull PsiExpression expression) {
-        final PsiElement parent = expression.getParent();
+        PsiElement parent = expression.getParent();
         if (parent instanceof PsiForeachStatement) {
-            final PsiType type = expression.getType();
+            PsiType type = expression.getType();
             if (InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_UTIL_ITERATOR)) {
                 return new ReplaceIteratorForEachLoopWithIteratorForLoopFix((PsiForeachStatement)parent);
             }
@@ -989,7 +989,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
         }
         // ignore unresolved imports errors
         PsiImportList importList = ((PsiJavaFile)file).getImportList();
-        final TextRange importsRange = importList == null ? TextRange.EMPTY_RANGE : importList.getTextRange();
+        TextRange importsRange = importList == null ? TextRange.EMPTY_RANGE : importList.getTextRange();
         boolean hasErrorsExceptUnresolvedImports = !DaemonCodeAnalyzer.processHighlights(
             document,
             file.getProject(),

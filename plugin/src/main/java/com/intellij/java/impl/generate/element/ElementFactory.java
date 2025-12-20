@@ -76,7 +76,7 @@ public class ElementFactory
 	{
 		FieldElement fe = new FieldElement();
 		fe.setName(field.getName());
-		final PsiMethod getterForField = useAccessor ? PropertyUtil.findGetterForField(field) : null;
+		PsiMethod getterForField = useAccessor ? PropertyUtil.findGetterForField(field) : null;
 		fe.setAccessor(getterForField != null ? getterForField.getName() + "()" : field.getName());
 
 		if(PsiAdapter.isConstantField(field))

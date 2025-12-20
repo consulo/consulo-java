@@ -53,7 +53,7 @@ public class TryWithIdenticalCatchesInspection extends BaseInspection {
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    final PsiType type = (PsiType)infos[1];
+    PsiType type = (PsiType)infos[1];
     return InspectionGadgetsLocalize.tryWithIdenticalCatchesProblemDescriptor(type.getPresentableText()).get();
   }
 
@@ -81,52 +81,52 @@ public class TryWithIdenticalCatchesInspection extends BaseInspection {
       if (!PsiUtil.isLanguageLevel7OrHigher(statement)) {
         return;
       }
-      final PsiCatchSection[] catchSections = statement.getCatchSections();
+      PsiCatchSection[] catchSections = statement.getCatchSections();
       if (catchSections.length < 2) {
         return;
       }
-      final PsiParameter[] parameters = statement.getCatchBlockParameters();
+      PsiParameter[] parameters = statement.getCatchBlockParameters();
       if (catchSections.length != parameters.length) {
         return;
       }
-      final boolean[] duplicates = new boolean[catchSections.length];
+      boolean[] duplicates = new boolean[catchSections.length];
       for (int i = 0; i < catchSections.length - 1; i++) {
-        final PsiCatchSection catchSection = catchSections[i];
-        final PsiCodeBlock catchBlock = catchSection.getCatchBlock();
+        PsiCatchSection catchSection = catchSections[i];
+        PsiCodeBlock catchBlock = catchSection.getCatchBlock();
         if (catchBlock == null) {
           continue;
         }
-        final PsiParameter parameter = catchSection.getParameter();
+        PsiParameter parameter = catchSection.getParameter();
         if (parameter == null) {
           continue;
         }
-        final InputVariables inputVariables = new InputVariables(Collections.singletonList(parameter),
+        InputVariables inputVariables = new InputVariables(Collections.singletonList(parameter),
                                                                  statement.getProject(),
                                                                  new LocalSearchScope(catchBlock),
                                                                  false);
-        final DuplicatesFinder finder = new DuplicatesFinder(new PsiElement[]{catchBlock},
+        DuplicatesFinder finder = new DuplicatesFinder(new PsiElement[]{catchBlock},
                                                              inputVariables, null, Collections.<PsiVariable>emptyList());
         for (int j = i + 1; j < catchSections.length; j++) {
           if (duplicates[j]) {
             continue;
           }
-          final PsiCatchSection otherSection = catchSections[j];
-          final PsiCodeBlock otherCatchBlock = otherSection.getCatchBlock();
+          PsiCatchSection otherSection = catchSections[j];
+          PsiCodeBlock otherCatchBlock = otherSection.getCatchBlock();
           if (otherCatchBlock == null) {
             continue;
           }
-          final Match match = finder.isDuplicate(otherCatchBlock, true);
+          Match match = finder.isDuplicate(otherCatchBlock, true);
           if (match == null || match.getReturnValue() != null) {
             continue;
           }
-          final List<PsiElement> parameterValues = match.getParameterValues(parameter);
+          List<PsiElement> parameterValues = match.getParameterValues(parameter);
           if (parameterValues != null && (parameterValues.size() != 1 || !(parameterValues.get(0) instanceof PsiReferenceExpression))) {
             continue;
           }
           if (!canCollapse(parameters, i, j)) {
             continue;
           }
-          final PsiJavaToken rParenth = otherSection.getRParenth();
+          PsiJavaToken rParenth = otherSection.getRParenth();
           if (rParenth != null) {
             registerErrorAtOffset(otherSection, 0, rParenth.getStartOffsetInParent() + 1, Integer.valueOf(i), parameter.getType());
           }
@@ -138,9 +138,9 @@ public class TryWithIdenticalCatchesInspection extends BaseInspection {
 
     private static boolean canCollapse(PsiParameter[] parameters, int index1, int index2) {
       if (index2 > index1) {
-        final PsiType type = parameters[index2].getType();
+        PsiType type = parameters[index2].getType();
         for (int i = index1 + 1; i < index2; i++) {
-          final PsiType otherType = parameters[i].getType();
+          PsiType otherType = parameters[i].getType();
           if (TypeConversionUtil.isAssignable(type, otherType)) {
             return false;
           }
@@ -148,9 +148,9 @@ public class TryWithIdenticalCatchesInspection extends BaseInspection {
         return true;
       }
       else {
-        final PsiType type = parameters[index1].getType();
+        PsiType type = parameters[index1].getType();
         for (int i = index2 + 1; i < index1; i++) {
-          final PsiType otherType = parameters[i].getType();
+          PsiType otherType = parameters[i].getType();
           if (TypeConversionUtil.isAssignable(otherType, type)) {
             return false;
           }
@@ -176,20 +176,20 @@ public class TryWithIdenticalCatchesInspection extends BaseInspection {
 
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiCatchSection section = (PsiCatchSection)descriptor.getPsiElement();
-      final PsiTryStatement tryStatement = (PsiTryStatement)section.getParent();
-      final PsiCatchSection[] catchSections = tryStatement.getCatchSections();
+      PsiCatchSection section = (PsiCatchSection)descriptor.getPsiElement();
+      PsiTryStatement tryStatement = (PsiTryStatement)section.getParent();
+      PsiCatchSection[] catchSections = tryStatement.getCatchSections();
       if (myCollapseIntoIndex >= catchSections.length) {
         return;   // something has gone stale
       }
-      final PsiCatchSection collapseInto = catchSections[myCollapseIntoIndex];
-      final PsiParameter parameter1 = collapseInto.getParameter();
-      final PsiParameter parameter2 = section.getParameter();
+      PsiCatchSection collapseInto = catchSections[myCollapseIntoIndex];
+      PsiParameter parameter1 = collapseInto.getParameter();
+      PsiParameter parameter2 = section.getParameter();
       if (parameter1 == null || parameter2 == null) {
         return;
       }
-      final PsiType type1 = parameter1.getType();
-      final PsiType type2 = parameter2.getType();
+      PsiType type1 = parameter1.getType();
+      PsiType type2 = parameter2.getType();
       if (TypeConversionUtil.isAssignable(type1, type2)) {
         section.delete();
         return;
@@ -198,19 +198,19 @@ public class TryWithIdenticalCatchesInspection extends BaseInspection {
         collapseInto.delete();
         return;
       }
-      final List<PsiType> types = new ArrayList();
+      List<PsiType> types = new ArrayList();
       collectDisjunctTypes(type1, types);
       collectDisjunctTypes(type2, types);
-      final StringBuilder typeText = new StringBuilder();
+      StringBuilder typeText = new StringBuilder();
       for (PsiType type : types) {
         if (typeText.length() > 0) {
           typeText.append(" | ");
         }
         typeText.append(type.getCanonicalText());
       }
-      final PsiTypeElement newTypeElement =
+      PsiTypeElement newTypeElement =
         JavaPsiFacade.getElementFactory(project).createTypeElementFromText(typeText.toString(), tryStatement);
-      final PsiTypeElement typeElement = parameter1.getTypeElement();
+      PsiTypeElement typeElement = parameter1.getTypeElement();
       if (typeElement == null) {
         return;
       }
@@ -220,16 +220,16 @@ public class TryWithIdenticalCatchesInspection extends BaseInspection {
 
     private static void collectDisjunctTypes(PsiType type, List<PsiType> out) {
       if (type instanceof PsiDisjunctionType) {
-        final PsiDisjunctionType disjunctionType = (PsiDisjunctionType)type;
-        final List<PsiType> disjunctions = disjunctionType.getDisjunctions();
+        PsiDisjunctionType disjunctionType = (PsiDisjunctionType)type;
+        List<PsiType> disjunctions = disjunctionType.getDisjunctions();
         for (PsiType disjunction : disjunctions) {
           collectDisjunctTypes(disjunction, out);
         }
         return;
       }
-      final int size = out.size();
+      int size = out.size();
       for (int i = 0; i < size; i++) {
-        final PsiType collectedType = out.get(i);
+        PsiType collectedType = out.get(i);
         if (TypeConversionUtil.isAssignable(type, collectedType)) {
           out.remove(i);
           out.add(type);

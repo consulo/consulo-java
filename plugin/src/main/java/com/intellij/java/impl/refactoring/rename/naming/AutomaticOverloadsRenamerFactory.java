@@ -38,7 +38,7 @@ public class AutomaticOverloadsRenamerFactory implements AutomaticRenamerFactory
   @Override
   public boolean isApplicable(PsiElement element) {
     if (element instanceof PsiMethod && !((PsiMethod) element).isConstructor()) {
-      final PsiClass containingClass = ((PsiMethod) element).getContainingClass();
+      PsiClass containingClass = ((PsiMethod) element).getContainingClass();
       return containingClass != null && containingClass.findMethodsByName(((PsiMethod) element).getName(),
           false).length > 1;
     }

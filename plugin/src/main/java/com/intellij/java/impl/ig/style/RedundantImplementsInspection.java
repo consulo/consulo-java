@@ -61,7 +61,7 @@ public class RedundantImplementsInspection extends BaseInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final MultipleCheckboxOptionsPanel checkboxOptionsPanel = new MultipleCheckboxOptionsPanel(this);
+        MultipleCheckboxOptionsPanel checkboxOptionsPanel = new MultipleCheckboxOptionsPanel(this);
         checkboxOptionsPanel.addCheckbox(InspectionGadgetsLocalize.ignoreSerializableOption().get(), "ignoreSerializable");
         checkboxOptionsPanel.addCheckbox(InspectionGadgetsLocalize.ignoreCloneableOption().get(), "ignoreCloneable");
         return checkboxOptionsPanel;
@@ -81,7 +81,7 @@ public class RedundantImplementsInspection extends BaseInspection {
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement implementReference = descriptor.getPsiElement();
+            PsiElement implementReference = descriptor.getPsiElement();
             deleteElement(implementReference);
         }
     }
@@ -106,35 +106,35 @@ public class RedundantImplementsInspection extends BaseInspection {
         }
 
         private void checkInterface(PsiClass aClass) {
-            final PsiReferenceList extendsList = aClass.getExtendsList();
+            PsiReferenceList extendsList = aClass.getExtendsList();
             if (extendsList == null) {
                 return;
             }
-            final PsiJavaCodeReferenceElement[] extendsElements = extendsList.getReferenceElements();
-            for (final PsiJavaCodeReferenceElement extendsElement : extendsElements) {
-                final PsiElement referent = extendsElement.resolve();
+            PsiJavaCodeReferenceElement[] extendsElements = extendsList.getReferenceElements();
+            for (PsiJavaCodeReferenceElement extendsElement : extendsElements) {
+                PsiElement referent = extendsElement.resolve();
                 if (!(referent instanceof PsiClass)) {
                     continue;
                 }
-                final PsiClass extendedInterface = (PsiClass) referent;
+                PsiClass extendedInterface = (PsiClass) referent;
                 checkExtendedInterface(extendedInterface, extendsElement, extendsElements);
             }
         }
 
         private void checkConcreteClass(PsiClass aClass) {
-            final PsiReferenceList extendsList = aClass.getExtendsList();
-            final PsiReferenceList implementsList = aClass.getImplementsList();
+            PsiReferenceList extendsList = aClass.getExtendsList();
+            PsiReferenceList implementsList = aClass.getImplementsList();
             if (extendsList == null || implementsList == null) {
                 return;
             }
-            final PsiJavaCodeReferenceElement[] extendsElements = extendsList.getReferenceElements();
-            final PsiJavaCodeReferenceElement[] implementsElements = implementsList.getReferenceElements();
-            for (final PsiJavaCodeReferenceElement implementsElement : implementsElements) {
-                final PsiElement referent = implementsElement.resolve();
+            PsiJavaCodeReferenceElement[] extendsElements = extendsList.getReferenceElements();
+            PsiJavaCodeReferenceElement[] implementsElements = implementsList.getReferenceElements();
+            for (PsiJavaCodeReferenceElement implementsElement : implementsElements) {
+                PsiElement referent = implementsElement.resolve();
                 if (!(referent instanceof PsiClass)) {
                     continue;
                 }
-                final PsiClass implementedClass = (PsiClass) referent;
+                PsiClass implementedClass = (PsiClass) referent;
                 checkImplementedClass(implementedClass, implementsElement, extendsElements, implementsElements);
             }
         }
@@ -145,33 +145,33 @@ public class RedundantImplementsInspection extends BaseInspection {
             PsiJavaCodeReferenceElement[] extendsElements,
             PsiJavaCodeReferenceElement[] implementsElements
         ) {
-            final String qualifiedName = implementedClass.getQualifiedName();
+            String qualifiedName = implementedClass.getQualifiedName();
             if (ignoreSerializable && CommonClassNames.JAVA_IO_SERIALIZABLE.equals(qualifiedName)) {
                 return;
             }
             else if (ignoreCloneable && CommonClassNames.JAVA_LANG_CLONEABLE.equals(qualifiedName)) {
                 return;
             }
-            for (final PsiJavaCodeReferenceElement extendsElement : extendsElements) {
-                final PsiElement extendsReferent = extendsElement.resolve();
+            for (PsiJavaCodeReferenceElement extendsElement : extendsElements) {
+                PsiElement extendsReferent = extendsElement.resolve();
                 if (!(extendsReferent instanceof PsiClass)) {
                     continue;
                 }
-                final PsiClass extendedClass = (PsiClass) extendsReferent;
+                PsiClass extendedClass = (PsiClass) extendsReferent;
                 if (extendedClass.isInheritor(implementedClass, true)) {
                     registerError(implementsElement);
                     return;
                 }
             }
-            for (final PsiJavaCodeReferenceElement testImplementElement : implementsElements) {
+            for (PsiJavaCodeReferenceElement testImplementElement : implementsElements) {
                 if (testImplementElement.equals(implementsElement)) {
                     continue;
                 }
-                final PsiElement implementsReferent = testImplementElement.resolve();
+                PsiElement implementsReferent = testImplementElement.resolve();
                 if (!(implementsReferent instanceof PsiClass)) {
                     continue;
                 }
-                final PsiClass testImplementedClass = (PsiClass) implementsReferent;
+                PsiClass testImplementedClass = (PsiClass) implementsReferent;
                 if (testImplementedClass.isInheritor(implementedClass, true)) {
                     registerError(implementsElement);
                     return;
@@ -184,15 +184,15 @@ public class RedundantImplementsInspection extends BaseInspection {
             PsiJavaCodeReferenceElement extendsElement,
             PsiJavaCodeReferenceElement[] extendsElements
         ) {
-            for (final PsiJavaCodeReferenceElement testExtendsElement : extendsElements) {
+            for (PsiJavaCodeReferenceElement testExtendsElement : extendsElements) {
                 if (testExtendsElement.equals(extendsElement)) {
                     continue;
                 }
-                final PsiElement implementsReferent = testExtendsElement.resolve();
+                PsiElement implementsReferent = testExtendsElement.resolve();
                 if (!(implementsReferent instanceof PsiClass)) {
                     continue;
                 }
-                final PsiClass testExtendedInterface = (PsiClass) implementsReferent;
+                PsiClass testExtendedInterface = (PsiClass) implementsReferent;
                 if (testExtendedInterface.isInheritor(extendedInterface, true)) {
                     registerError(extendsElement);
                     return;

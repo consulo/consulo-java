@@ -57,7 +57,7 @@ public abstract class LightCompletionTestCase extends LightCodeInsightTestCase {
     complete(1);
   }
 
-  protected void complete(final int time) {
+  protected void complete(int time) {
     new CodeCompletionHandlerBase(myType).invokeCompletion(getProject(), getEditor(), time);
 
     LookupImpl lookup = (LookupImpl)LookupManager.getActiveLookup(myEditor);
@@ -74,7 +74,7 @@ public abstract class LightCompletionTestCase extends LightCodeInsightTestCase {
   }
   
   protected void selectItem(LookupElement item, char completionChar) {
-    final LookupImpl lookup = (LookupImpl)LookupManager.getInstance(getProject()).getActiveLookup();
+    LookupImpl lookup = (LookupImpl)LookupManager.getInstance(getProject()).getActiveLookup();
     lookup.setCurrentItem(item);
     if (completionChar == 0 || completionChar == '\n' || completionChar == '\t') {
       lookup.finishLookup(completionChar);
@@ -89,7 +89,7 @@ public abstract class LightCompletionTestCase extends LightCodeInsightTestCase {
       return;
     }
     int index = 0;
-    for (final LookupElement myItem : myItems) {
+    for (LookupElement myItem : myItems) {
       for (String value : values) {
         if (value == null) {
           assertFalse("Unacceptable value reached: " + myItem.getLookupString(), true);
@@ -107,16 +107,16 @@ public abstract class LightCompletionTestCase extends LightCodeInsightTestCase {
     assertOrderedEquals(getLookupStrings(new ArrayList<String>()), items);
   }
 
-  protected void assertContainsItems(final String... expected) {
-    final Set<String> actual = getLookupStrings(new HashSet<String>());
+  protected void assertContainsItems(String... expected) {
+    Set<String> actual = getLookupStrings(new HashSet<String>());
     for (String s : expected) {
       assertTrue("Expected '" + s + "' not found in " + actual,
                  actual.contains(s));
     }
   }
 
-  protected void assertNotContainItems(final String... unexpected) {
-    final Set<String> actual = getLookupStrings(new HashSet<String>());
+  protected void assertNotContainItems(String... unexpected) {
+    Set<String> actual = getLookupStrings(new HashSet<String>());
     for (String s : unexpected) {
       assertFalse("Unexpected '" + s + "' presented in " + actual,
                   actual.contains(s));

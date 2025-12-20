@@ -64,28 +64,28 @@ public class RandomDoubleForRandomIntegerInspection extends BaseInspection {
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiIdentifier name = (PsiIdentifier) descriptor.getPsiElement();
-            final PsiReferenceExpression expression = (PsiReferenceExpression) name.getParent();
+            PsiIdentifier name = (PsiIdentifier) descriptor.getPsiElement();
+            PsiReferenceExpression expression = (PsiReferenceExpression) name.getParent();
             if (expression == null) {
                 return;
             }
-            final PsiExpression call = (PsiExpression) expression.getParent();
-            final PsiExpression qualifier = expression.getQualifierExpression();
+            PsiExpression call = (PsiExpression) expression.getParent();
+            PsiExpression qualifier = expression.getQualifierExpression();
             if (qualifier == null) {
                 return;
             }
-            final String qualifierText = qualifier.getText();
-            final PsiBinaryExpression multiplication = (PsiBinaryExpression) getContainingExpression(call);
+            String qualifierText = qualifier.getText();
+            PsiBinaryExpression multiplication = (PsiBinaryExpression) getContainingExpression(call);
             if (multiplication == null) {
                 return;
             }
-            final PsiExpression cast = getContainingExpression(multiplication);
+            PsiExpression cast = getContainingExpression(multiplication);
             if (cast == null) {
                 return;
             }
-            final PsiExpression multiplierExpression;
-            final PsiExpression lhs = multiplication.getLOperand();
-            final PsiExpression strippedLhs = ParenthesesUtils.stripParentheses(lhs);
+            PsiExpression multiplierExpression;
+            PsiExpression lhs = multiplication.getLOperand();
+            PsiExpression strippedLhs = ParenthesesUtils.stripParentheses(lhs);
             if (call.equals(strippedLhs)) {
                 multiplierExpression = multiplication.getROperand();
             }
@@ -93,8 +93,8 @@ public class RandomDoubleForRandomIntegerInspection extends BaseInspection {
                 multiplierExpression = lhs;
             }
             assert multiplierExpression != null;
-            final String multiplierText = multiplierExpression.getText();
-            final String nextInt = ".nextInt((int) ";
+            String multiplierText = multiplierExpression.getText();
+            String nextInt = ".nextInt((int) ";
             replaceExpression(cast, qualifierText + nextInt + multiplierText + ')');
         }
     }
@@ -108,29 +108,29 @@ public class RandomDoubleForRandomIntegerInspection extends BaseInspection {
         @Override
         public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
             super.visitMethodCallExpression(call);
-            final PsiReferenceExpression methodExpression = call.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
-            final String nextDouble = "nextDouble";
+            PsiReferenceExpression methodExpression = call.getMethodExpression();
+            String methodName = methodExpression.getReferenceName();
+            String nextDouble = "nextDouble";
             if (!nextDouble.equals(methodName)) {
                 return;
             }
-            final PsiMethod method = call.resolveMethod();
+            PsiMethod method = call.resolveMethod();
             if (method == null) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return;
             }
-            final String className = containingClass.getQualifiedName();
+            String className = containingClass.getQualifiedName();
             if (!"java.util.Random".equals(className)) {
                 return;
             }
-            final PsiExpression possibleMultiplierExpression = getContainingExpression(call);
+            PsiExpression possibleMultiplierExpression = getContainingExpression(call);
             if (!isMultiplier(possibleMultiplierExpression)) {
                 return;
             }
-            final PsiExpression possibleIntCastExpression = getContainingExpression(possibleMultiplierExpression);
+            PsiExpression possibleIntCastExpression = getContainingExpression(possibleMultiplierExpression);
             if (!isIntCast(possibleIntCastExpression)) {
                 return;
             }
@@ -144,8 +144,8 @@ public class RandomDoubleForRandomIntegerInspection extends BaseInspection {
             if (!(expression instanceof PsiBinaryExpression)) {
                 return false;
             }
-            final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) expression;
-            final IElementType tokenType = binaryExpression.getOperationTokenType();
+            PsiBinaryExpression binaryExpression = (PsiBinaryExpression) expression;
+            IElementType tokenType = binaryExpression.getOperationTokenType();
             return JavaTokenType.ASTERISK.equals(tokenType);
         }
 
@@ -156,8 +156,8 @@ public class RandomDoubleForRandomIntegerInspection extends BaseInspection {
             if (!(expression instanceof PsiTypeCastExpression)) {
                 return false;
             }
-            final PsiTypeCastExpression castExpression = (PsiTypeCastExpression) expression;
-            final PsiType type = castExpression.getType();
+            PsiTypeCastExpression castExpression = (PsiTypeCastExpression) expression;
+            PsiType type = castExpression.getType();
             return PsiType.INT.equals(type);
         }
     }

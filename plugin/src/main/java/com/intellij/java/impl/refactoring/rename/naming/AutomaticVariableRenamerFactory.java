@@ -34,7 +34,7 @@ import java.util.Collection;
  */
 @ExtensionImpl
 public class AutomaticVariableRenamerFactory implements AutomaticRenamerFactory {
-  public boolean isApplicable(final PsiElement element) {
+  public boolean isApplicable(PsiElement element) {
     return element instanceof PsiClass && !(element instanceof PsiAnonymousClass);
   }
 
@@ -47,11 +47,11 @@ public class AutomaticVariableRenamerFactory implements AutomaticRenamerFactory 
     return JavaRefactoringSettings.getInstance().isToRenameVariables();
   }
 
-  public void setEnabled(final boolean enabled) {
+  public void setEnabled(boolean enabled) {
     JavaRefactoringSettings.getInstance().setRenameVariables(enabled);
   }
 
-  public AutomaticRenamer createRenamer(final PsiElement element, final String newName, final Collection<UsageInfo> usages) {
+  public AutomaticRenamer createRenamer(PsiElement element, String newName, Collection<UsageInfo> usages) {
     return new AutomaticVariableRenamer((PsiClass) element, newName, usages);
   }
 }

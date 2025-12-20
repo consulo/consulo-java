@@ -54,7 +54,7 @@ public abstract class AutomaticUsageRenamer<T> {
   }
 
   public boolean hasAnythingToRename() {
-    for (final String s : myRenames.values()) {
+    for (String s : myRenames.values()) {
       if (s != null) return true;
     }
     return false;
@@ -118,11 +118,11 @@ public abstract class AutomaticUsageRenamer<T> {
   }
 
   public final void doRename() throws IncorrectOperationException {
-    for (final Map.Entry<T, List<RenameableUsage>> entry : myReferences.entrySet()) {
-      final T element = entry.getKey();
-      final String newName = getNewElementName(element);
+    for (Map.Entry<T, List<RenameableUsage>> entry : myReferences.entrySet()) {
+      T element = entry.getKey();
+      String newName = getNewElementName(element);
       doRenameElement(element);
-      for (final RenameableUsage usage : entry.getValue()) {
+      for (RenameableUsage usage : entry.getValue()) {
         usage.rename(newName);
       }
     }

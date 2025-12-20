@@ -38,7 +38,7 @@ public abstract class CollectionsListSettings {
     public static final SortedSet<String> DEFAULT_COLLECTION_LIST;
 
     static {
-        final SortedSet<String> set = new TreeSet<>();
+        SortedSet<String> set = new TreeSet<>();
         set.add(CommonClassNames.JAVA_UTIL_CONCURRENT_HASH_MAP);
         set.add("java.util.concurrent.PriorityBlockingQueue");
         set.add("java.util.ArrayDeque");
@@ -65,7 +65,7 @@ public abstract class CollectionsListSettings {
         myCollectionClassesRequiringCapacity.clear();
         myCollectionClassesRequiringCapacity.addAll(getDefaultSettings());
         for (Element classElement : node.getChildren("cls")) {
-            final String className = classElement.getText();
+            String className = classElement.getText();
             if (classElement.getAttributeValue("remove", Boolean.FALSE.toString()).equals(Boolean.TRUE.toString())) {
                 myCollectionClassesRequiringCapacity.remove(className);
             }
@@ -76,10 +76,10 @@ public abstract class CollectionsListSettings {
     }
 
     public void writeSettings(@Nonnull Element node) throws WriteExternalException {
-        final Collection<String> defaultToRemoveSettings = new HashSet<>(getDefaultSettings());
+        Collection<String> defaultToRemoveSettings = new HashSet<>(getDefaultSettings());
         defaultToRemoveSettings.removeAll(myCollectionClassesRequiringCapacity);
 
-        final Set<String> toAdd = new HashSet<>(myCollectionClassesRequiringCapacity);
+        Set<String> toAdd = new HashSet<>(myCollectionClassesRequiringCapacity);
         toAdd.removeAll(getDefaultSettings());
 
         for (String className : defaultToRemoveSettings) {
@@ -97,8 +97,8 @@ public abstract class CollectionsListSettings {
     }
 
     public JComponent createOptionsPanel() {
-        final String title = JavaQuickFixLocalize.collectionAddallCanBeReplacedWithConstructorFixOptionsTitle().get();
-        final ListTable table = new ListTable(new ListWrappingTableModel(myCollectionClassesRequiringCapacity, title));
+        String title = JavaQuickFixLocalize.collectionAddallCanBeReplacedWithConstructorFixOptionsTitle().get();
+        ListTable table = new ListTable(new ListWrappingTableModel(myCollectionClassesRequiringCapacity, title));
         return UiUtils.createAddRemoveTreeClassChooserPanel(table, title, CommonClassNames.JAVA_LANG_OBJECT);
     }
 }

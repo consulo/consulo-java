@@ -128,14 +128,14 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
   @Nullable
   protected abstract PsiElement getElement();
 
-  private void chooseTargetClass(List<PsiClass> classes, final Editor editor) {
+  private void chooseTargetClass(List<PsiClass> classes, Editor editor) {
     final Project project = classes.get(0).getProject();
 
     final JList list = new JBList(classes);
     PsiElementListCellRenderer renderer = new PsiClassListCellRenderer();
     list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     list.setCellRenderer(renderer);
-    final PopupChooserBuilder builder = new PopupChooserBuilder(list);
+    PopupChooserBuilder builder = new PopupChooserBuilder(list);
     renderer.installSpeedSearch(builder);
 
     Runnable runnable = new Runnable() {
@@ -294,14 +294,14 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
     PsiExpression qualifier = null;
 
     if (element instanceof PsiNameValuePair) {
-      final PsiAnnotation annotation = PsiTreeUtil.getParentOfType(element, PsiAnnotation.class);
+      PsiAnnotation annotation = PsiTreeUtil.getParentOfType(element, PsiAnnotation.class);
       if (annotation != null) {
         PsiJavaCodeReferenceElement nameRef = annotation.getNameReferenceElement();
         if (nameRef == null) {
           return Collections.emptyList();
         }
         else {
-          final PsiElement resolve = nameRef.resolve();
+          PsiElement resolve = nameRef.resolve();
           if (resolve instanceof PsiClass) {
             return Collections.singletonList((PsiClass)resolve);
           }
@@ -312,7 +312,7 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
       }
     }
     if (element instanceof PsiNewExpression) {
-      final PsiNewExpression newExpression = (PsiNewExpression)element;
+      PsiNewExpression newExpression = (PsiNewExpression)element;
       PsiJavaCodeReferenceElement ref = newExpression.getClassOrAnonymousClassReference();
       if (ref != null) {
         PsiElement refElement = ref.resolve();
@@ -324,11 +324,11 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
     else if (element instanceof PsiReferenceExpression) {
       qualifier = ((PsiReferenceExpression)element).getQualifierExpression();
       if (qualifier == null) {
-        final PsiElement parent = element.getParent();
+        PsiElement parent = element.getParent();
         if (parent instanceof PsiSwitchLabelStatement) {
-          final PsiSwitchStatement switchStatement = PsiTreeUtil.getParentOfType(parent, PsiSwitchStatement.class);
+          PsiSwitchStatement switchStatement = PsiTreeUtil.getParentOfType(parent, PsiSwitchStatement.class);
           if (switchStatement != null) {
-            final PsiExpression expression = switchStatement.getExpression();
+            PsiExpression expression = switchStatement.getExpression();
             if (expression != null) {
               psiClass = PsiUtil.resolveClassInClassTypeOnly(expression.getType());
             }
@@ -337,9 +337,9 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
       }
     }
     else if (element instanceof PsiMethodCallExpression) {
-      final PsiReferenceExpression methodExpression = ((PsiMethodCallExpression)element).getMethodExpression();
+      PsiReferenceExpression methodExpression = ((PsiMethodCallExpression)element).getMethodExpression();
       qualifier = methodExpression.getQualifierExpression();
-      @NonNls final String referenceName = methodExpression.getReferenceName();
+      @NonNls String referenceName = methodExpression.getReferenceName();
       if (referenceName == null) {
         return Collections.emptyList();
       }
@@ -352,7 +352,7 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
       }
 
       if (qualifier instanceof PsiJavaCodeReferenceElement) {
-        final PsiElement resolved = ((PsiJavaCodeReferenceElement)qualifier).resolve();
+        PsiElement resolved = ((PsiJavaCodeReferenceElement)qualifier).resolve();
         if (resolved instanceof PsiClass) {
           if (psiClass == null) {
             psiClass = (PsiClass)resolved;
@@ -388,7 +388,7 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
       }
 
       if (!allowOuterClasses || !isAllowOuterTargetClass()) {
-        final ArrayList<PsiClass> classes = new ArrayList<PsiClass>();
+        ArrayList<PsiClass> classes = new ArrayList<PsiClass>();
         collectSupers(psiClass, classes);
         return classes;
       }
@@ -409,7 +409,7 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
   private void collectSupers(PsiClass psiClass, ArrayList<PsiClass> classes) {
     classes.add(psiClass);
 
-    final PsiClass[] supers = psiClass.getSupers();
+    PsiClass[] supers = psiClass.getSupers();
     for (PsiClass aSuper : supers) {
       if (classes.contains(aSuper)) {
         continue;
@@ -424,14 +424,14 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
     return psiClass.getManager().isInProject(psiClass);
   }
 
-  protected static void startTemplate(@Nonnull Editor editor, final Template template, @Nonnull final Project project) {
+  protected static void startTemplate(@Nonnull Editor editor, Template template, @Nonnull Project project) {
     startTemplate(editor, template, project, null);
   }
 
-  protected static void startTemplate(@Nonnull final Editor editor,
-                                      final Template template,
-                                      @Nonnull final Project project,
-                                      final TemplateEditingListener listener) {
+  protected static void startTemplate(@Nonnull Editor editor,
+                                      Template template,
+                                      @Nonnull Project project,
+                                      TemplateEditingListener listener) {
     startTemplate(editor, template, project, listener, null);
   }
 
@@ -472,23 +472,23 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
     if (numParams == 0) {
       return;
     }
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(ref.getProject()).getElementFactory();
-    final Set<String> typeParamNames = new HashSet<String>();
+    PsiElementFactory factory = JavaPsiFacade.getInstance(ref.getProject()).getElementFactory();
+    Set<String> typeParamNames = new HashSet<String>();
     for (PsiType type : ref.getTypeParameters()) {
-      final PsiClass psiClass = PsiUtil.resolveClassInType(type);
+      PsiClass psiClass = PsiUtil.resolveClassInType(type);
       if (psiClass instanceof PsiTypeParameter) {
         typeParamNames.add(psiClass.getName());
       }
     }
     int idx = 0;
     for (PsiType type : ref.getTypeParameters()) {
-      final PsiClass psiClass = PsiUtil.resolveClassInType(type);
+      PsiClass psiClass = PsiUtil.resolveClassInType(type);
       if (psiClass instanceof PsiTypeParameter) {
         targetClass.getTypeParameterList().add(factory.createTypeParameterFromText(psiClass.getName(), null));
       }
       else {
         while (true) {
-          final String paramName = idx > 0 ? "T" + idx : "T";
+          String paramName = idx > 0 ? "T" + idx : "T";
           if (!typeParamNames.contains(paramName)) {
             targetClass.getTypeParameterList().add(factory.createTypeParameterFromText(paramName, null));
             break;

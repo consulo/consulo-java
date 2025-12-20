@@ -75,7 +75,7 @@ public class CreateFieldFromParameterDialog extends DialogWrapper {
       ApplicationPropertiesComponent.getInstance().setValue(PROPERTY_NAME, String.valueOf(myCbFinal.getValueOrError()));
     }
 
-    final PsiField[] fields = myTargetClass.getFields();
+    PsiField[] fields = myTargetClass.getFields();
     for (PsiField field : fields) {
       if (field.getName().equals(getEnteredName())) {
         int result = Messages.showOkCancelDialog(
@@ -112,7 +112,7 @@ public class CreateFieldFromParameterDialog extends DialogWrapper {
   @Override
   protected JComponent createNorthPanel() {
     if (myNames.length > 1) {
-      final ComboBox combobox = new ComboBox<>(myNames, 200);
+      ComboBox combobox = new ComboBox<>(myNames, 200);
       myNameField = combobox;
       combobox.setEditable(true);
       combobox.setSelectedIndex(0);
@@ -183,7 +183,7 @@ public class CreateFieldFromParameterDialog extends DialogWrapper {
     gbConstraints.weighty = 1;
     gbConstraints.gridx = 0;
     gbConstraints.gridy = 0;
-    final Label typeLabel = Label.create(CodeInsightLocalize.dialogCreateFieldFromParameterFieldTypeLabel());
+    Label typeLabel = Label.create(CodeInsightLocalize.dialogCreateFieldFromParameterFieldTypeLabel());
     panel.add(TargetAWT.to(typeLabel), gbConstraints);
     gbConstraints.gridx = 1;
     if (myTypes.length > 1) {

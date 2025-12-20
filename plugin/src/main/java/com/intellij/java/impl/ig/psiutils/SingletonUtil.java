@@ -36,11 +36,11 @@ public class SingletonUtil {
         aClass instanceof PsiAnonymousClass) {
       return false;
     }
-    final PsiMethod[] constructors = getIfOnlyInvisibleConstructors(aClass);
+    PsiMethod[] constructors = getIfOnlyInvisibleConstructors(aClass);
     if (constructors.length == 0) {
       return false;
     }
-    final PsiField selfInstance = getIfOneStaticSelfInstance(aClass);
+    PsiField selfInstance = getIfOneStaticSelfInstance(aClass);
     if (selfInstance == null) {
       return false;
     }
@@ -48,15 +48,15 @@ public class SingletonUtil {
   }
 
   private static PsiField getIfOneStaticSelfInstance(PsiClass aClass) {
-    final PsiField[] fields = aClass.getFields();
+    PsiField[] fields = aClass.getFields();
     PsiField result = null;
-    for (final PsiField field : fields) {
-      final String className = aClass.getQualifiedName();
+    for (PsiField field : fields) {
+      String className = aClass.getQualifiedName();
       if (!field.hasModifierProperty(PsiModifier.STATIC)) {
         continue;
       }
-      final PsiType type = field.getType();
-      final String fieldTypeName = type.getCanonicalText();
+      PsiType type = field.getType();
+      String fieldTypeName = type.getCanonicalText();
       if (!fieldTypeName.equals(className)) {
         continue;
       }
@@ -69,11 +69,11 @@ public class SingletonUtil {
   }
 
   private static PsiMethod[] getIfOnlyInvisibleConstructors(PsiClass aClass) {
-    final PsiMethod[] constructors = aClass.getConstructors();
+    PsiMethod[] constructors = aClass.getConstructors();
     if (constructors.length == 0) {
       return PsiMethod.EMPTY_ARRAY;
     }
-    for (final PsiMethod constructor : constructors) {
+    for (PsiMethod constructor : constructors) {
       if (constructor.hasModifierProperty(PsiModifier.PUBLIC)) {
         return PsiMethod.EMPTY_ARRAY;
       }
@@ -86,11 +86,11 @@ public class SingletonUtil {
   }
 
   private static boolean newOnlyAssignsToStaticSelfInstance(
-    PsiMethod method, final PsiField field) {
-    final Query<PsiReference> search =
+    PsiMethod method, PsiField field) {
+    Query<PsiReference> search =
       MethodReferencesSearch.search(method, field.getUseScope(),
                                     false);
-    final NewOnlyAssignedToFieldProcessor processor =
+    NewOnlyAssignedToFieldProcessor processor =
       new NewOnlyAssignedToFieldProcessor(field);
     search.forEach(processor);
     return processor.isNewOnlyAssignedToField();
@@ -107,13 +107,13 @@ public class SingletonUtil {
     }
 
     public boolean process(PsiReference reference) {
-      final PsiElement element = reference.getElement();
-      final PsiElement parent = element.getParent();
+      PsiElement element = reference.getElement();
+      PsiElement parent = element.getParent();
       if (!(parent instanceof PsiNewExpression)) {
         newOnlyAssignedToField = false;
         return false;
       }
-      final PsiElement grandParent = parent.getParent();
+      PsiElement grandParent = parent.getParent();
       if (field.equals(grandParent)) {
         return true;
       }
@@ -121,16 +121,16 @@ public class SingletonUtil {
         newOnlyAssignedToField = false;
         return false;
       }
-      final PsiAssignmentExpression assignmentExpression =
+      PsiAssignmentExpression assignmentExpression =
         (PsiAssignmentExpression)grandParent;
-      final PsiExpression lhs = assignmentExpression.getLExpression();
+      PsiExpression lhs = assignmentExpression.getLExpression();
       if (!(lhs instanceof PsiReferenceExpression)) {
         newOnlyAssignedToField = false;
         return false;
       }
-      final PsiReferenceExpression referenceExpression =
+      PsiReferenceExpression referenceExpression =
         (PsiReferenceExpression)lhs;
-      final PsiElement target = referenceExpression.resolve();
+      PsiElement target = referenceExpression.resolve();
       if (!field.equals(target)) {
         newOnlyAssignedToField = false;
         return false;

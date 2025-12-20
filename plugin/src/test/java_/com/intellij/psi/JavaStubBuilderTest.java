@@ -463,8 +463,8 @@ public abstract class JavaStubBuilderTest extends LightIdeaTestCase {
   }
 
   public void testSOEProof() {
-    final StringBuilder sb = new StringBuilder();
-    final SecureRandom random = new SecureRandom();
+    StringBuilder sb = new StringBuilder();
+    SecureRandom random = new SecureRandom();
     sb.append("class SOE_test {\n BigInteger BIG = new BigInteger(\n");
     int i;
     for (i = 0; i < 100000; i++) {
@@ -472,9 +472,9 @@ public abstract class JavaStubBuilderTest extends LightIdeaTestCase {
     }
     sb.append("  \"\");\n}");
 
-    final PsiJavaFile file = (PsiJavaFile)createLightFile("SOE_test.java", sb.toString());
+    PsiJavaFile file = (PsiJavaFile)createLightFile("SOE_test.java", sb.toString());
     long t = System.currentTimeMillis();
-    final StubElement tree = NEW_BUILDER.buildStubTree(file);
+    StubElement tree = NEW_BUILDER.buildStubTree(file);
     t = System.currentTimeMillis() - t;
     assertEquals("PsiJavaFileStub []\n" +
                  "  IMPORT_LIST:PsiImportListStub\n" +
@@ -490,7 +490,7 @@ public abstract class JavaStubBuilderTest extends LightIdeaTestCase {
   }
 
   public void testPerformance() throws Exception {
-    final String path = "/psi/stub/StubPerformanceTest.java";
+    String path = "/psi/stub/StubPerformanceTest.java";
     String text = FileUtil.loadFile(new File(path));
     final PsiJavaFile file = (PsiJavaFile)createLightFile("test.java", text);
 
@@ -502,21 +502,21 @@ public abstract class JavaStubBuilderTest extends LightIdeaTestCase {
     }).cpuBound().assertTiming();
   }
 
-  private static void doTest(@NonNls final String source, @NonNls @Nullable final String tree) {
-    final PsiJavaFile file = (PsiJavaFile)createLightFile("test.java", source);
-    final FileASTNode fileNode = file.getNode();
+  private static void doTest(@NonNls String source, @NonNls @Nullable String tree) {
+    PsiJavaFile file = (PsiJavaFile)createLightFile("test.java", source);
+    FileASTNode fileNode = file.getNode();
     assertNotNull(fileNode);
     assertFalse(fileNode.isParsed());
 
     long t1 = System.nanoTime();
-    final StubElement lighterTree = NEW_BUILDER.buildStubTree(file);
+    StubElement lighterTree = NEW_BUILDER.buildStubTree(file);
     t1 = Math.max((System.nanoTime() - t1)/1000, 1);
     assertFalse(fileNode.isParsed());
 
     file.getNode().getChildren(null); // force switch to AST
 
     long t2 = System.nanoTime();
-    final StubElement lighterTree2 = NEW_BUILDER.buildStubTree(file);  // build over AST
+    StubElement lighterTree2 = NEW_BUILDER.buildStubTree(file);  // build over AST
     t2 = Math.max((System.nanoTime() - t2)/1000, 1);
 
     file.accept(new PsiRecursiveElementWalkingVisitor() {
@@ -527,8 +527,8 @@ public abstract class JavaStubBuilderTest extends LightIdeaTestCase {
       }
     });
 
-    final String lightStr = DebugUtil.stubTreeToString(lighterTree);
-    final String lightStr2 = DebugUtil.stubTreeToString(lighterTree2);
+    String lightStr = DebugUtil.stubTreeToString(lighterTree);
+    String lightStr2 = DebugUtil.stubTreeToString(lighterTree2);
     if (tree != null) {
       System.out.println("light=" + t1 + "mks, heavy=" + t2 + "mks");
       if (!tree.isEmpty()) {

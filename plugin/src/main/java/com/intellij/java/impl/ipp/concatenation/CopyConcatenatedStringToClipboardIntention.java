@@ -53,23 +53,23 @@ public class CopyConcatenatedStringToClipboardIntention extends Intention {
             return;
         }
         PsiPolyadicExpression concatenationExpression = (PsiPolyadicExpression) element;
-        final IElementType tokenType = concatenationExpression.getOperationTokenType();
+        IElementType tokenType = concatenationExpression.getOperationTokenType();
         if (tokenType != JavaTokenType.PLUS) {
             return;
         }
-        final PsiType type = concatenationExpression.getType();
+        PsiType type = concatenationExpression.getType();
         if (type == null || !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
             return;
         }
-        final StringBuilder text = buildConcatenationText(concatenationExpression, new StringBuilder());
+        StringBuilder text = buildConcatenationText(concatenationExpression, new StringBuilder());
         CopyPasteManager.getInstance().setContents(new StringSelection(text.toString()));
     }
 
     private static StringBuilder buildConcatenationText(PsiPolyadicExpression polyadicExpression, StringBuilder out) {
         for (PsiElement element : polyadicExpression.getChildren()) {
             if (element instanceof PsiExpression) {
-                final PsiExpression expression = (PsiExpression) element;
-                final Object value = ExpressionUtils.computeConstantExpression(expression);
+                PsiExpression expression = (PsiExpression) element;
+                Object value = ExpressionUtils.computeConstantExpression(expression);
                 if (value == null) {
                     out.append('?');
                 }

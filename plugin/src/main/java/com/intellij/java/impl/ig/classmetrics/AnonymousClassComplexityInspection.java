@@ -65,7 +65,7 @@ public class AnonymousClassComplexityInspection extends ClassMetricInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final Integer totalComplexity = (Integer) infos[0];
+        Integer totalComplexity = (Integer) infos[0];
         return InspectionGadgetsLocalize.overlyComplexAnonymousInnerClassProblemDescriptor(totalComplexity).get();
     }
 
@@ -88,7 +88,7 @@ public class AnonymousClassComplexityInspection extends ClassMetricInspection {
             if (aClass instanceof PsiEnumConstantInitializer) {
                 return;
             }
-            final int totalComplexity = calculateTotalComplexity(aClass);
+            int totalComplexity = calculateTotalComplexity(aClass);
             if (totalComplexity <= getLimit()) {
                 return;
             }
@@ -99,17 +99,17 @@ public class AnonymousClassComplexityInspection extends ClassMetricInspection {
             if (aClass == null) {
                 return 0;
             }
-            final PsiMethod[] methods = aClass.getMethods();
+            PsiMethod[] methods = aClass.getMethods();
             int totalComplexity = calculateComplexityForMethods(methods);
             totalComplexity += calculateInitializerComplexity(aClass);
             return totalComplexity;
         }
 
         private int calculateInitializerComplexity(PsiClass aClass) {
-            final ComplexityVisitor visitor = new ComplexityVisitor();
+            ComplexityVisitor visitor = new ComplexityVisitor();
             int complexity = 0;
-            final PsiClassInitializer[] initializers = aClass.getInitializers();
-            for (final PsiClassInitializer initializer : initializers) {
+            PsiClassInitializer[] initializers = aClass.getInitializers();
+            for (PsiClassInitializer initializer : initializers) {
                 visitor.reset();
                 initializer.accept(visitor);
                 complexity += visitor.getComplexity();
@@ -118,9 +118,9 @@ public class AnonymousClassComplexityInspection extends ClassMetricInspection {
         }
 
         private int calculateComplexityForMethods(PsiMethod[] methods) {
-            final ComplexityVisitor visitor = new ComplexityVisitor();
+            ComplexityVisitor visitor = new ComplexityVisitor();
             int complexity = 0;
-            for (final PsiMethod method : methods) {
+            for (PsiMethod method : methods) {
                 visitor.reset();
                 method.accept(visitor);
                 complexity += visitor.getComplexity();

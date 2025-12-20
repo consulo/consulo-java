@@ -109,8 +109,8 @@ public abstract class OverrideImplementTest extends LightCodeInsightTestCase {
     PsiClass psiClass = PsiTreeUtil.getParentOfType(context, PsiClass.class);
     assert psiClass != null;
 
-    final Collection<MethodSignature> signatures = OverrideImplementUtil.getMethodSignaturesToOverride(psiClass);
-    final Collection<String> strings = ContainerUtil.map(signatures, FunctionUtil.string());
+    Collection<MethodSignature> signatures = OverrideImplementUtil.getMethodSignaturesToOverride(psiClass);
+    Collection<String> strings = ContainerUtil.map(signatures, FunctionUtil.string());
 
     assertTrue(strings.toString(), strings.contains("HierarchicalMethodSignatureImpl: A([PsiType:String])"));
     assertFalse(strings.toString(), strings.contains("HierarchicalMethodSignatureImpl: A([])"));
@@ -123,9 +123,9 @@ public abstract class OverrideImplementTest extends LightCodeInsightTestCase {
     PsiElement context = getFile().findElementAt(offset);
     PsiMethod psiMethod = PsiTreeUtil.getParentOfType(context, PsiMethod.class);
     assert psiMethod != null;
-    final PsiClass aClass = psiMethod.getContainingClass();
+    PsiClass aClass = psiMethod.getContainingClass();
     assert aClass != null && aClass.isEnum();
-    final PsiField[] fields = aClass.getFields();
+    PsiField[] fields = aClass.getFields();
     new ImplementAbstractMethodHandler(getProject(), getEditor(), psiMethod).implementInClass(fields);
     checkResultByFile(BASE_DIR + "after" + name + ".java");
   }
@@ -135,7 +135,7 @@ public abstract class OverrideImplementTest extends LightCodeInsightTestCase {
     configureByFile(BASE_DIR + "before" + name + ".java");
     int offset = getEditor().getCaretModel().getOffset();
     PsiElement context = getFile().findElementAt(offset);
-    final PsiClass aClass = PsiTreeUtil.getParentOfType(context, PsiClass.class);
+    PsiClass aClass = PsiTreeUtil.getParentOfType(context, PsiClass.class);
     assertTrue(aClass != null && aClass.isAnnotationType());
     assertFalse(new JavaOverrideMethodsHandler().isValidFor(getEditor(), getFile()));
   }
@@ -156,11 +156,11 @@ public abstract class OverrideImplementTest extends LightCodeInsightTestCase {
     assert psiClass != null;
     if (toImplement == null) {
       PsiClassType[] implement = psiClass.getImplementsListTypes();
-      final PsiClass superClass = implement.length == 0 ? psiClass.getSuperClass() : implement[0].resolve();
+      PsiClass superClass = implement.length == 0 ? psiClass.getSuperClass() : implement[0].resolve();
       assert superClass != null;
       PsiMethod method = superClass.getMethods()[0];
-      final PsiSubstitutor substitutor = TypeConversionUtil.getSuperClassSubstitutor(superClass, psiClass, PsiSubstitutor.EMPTY);
-      final List<PsiMethodMember> candidates = Collections.singletonList(new PsiMethodMember(method, substitutor));
+      PsiSubstitutor substitutor = TypeConversionUtil.getSuperClassSubstitutor(superClass, psiClass, PsiSubstitutor.EMPTY);
+      List<PsiMethodMember> candidates = Collections.singletonList(new PsiMethodMember(method, substitutor));
       OverrideImplementUtil.overrideOrImplementMethodsInRightPlace(getEditor(), psiClass, candidates, copyJavadoc, true);
     }
     else {

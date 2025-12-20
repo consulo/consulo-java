@@ -52,8 +52,8 @@ public abstract class ModuleWithTooFewClassesInspection extends BaseGlobalInspec
         if (!(refEntity instanceof RefModule)) {
             return null;
         }
-        final RefModule refModule = (RefModule) refEntity;
-        final List<RefEntity> children = refModule.getChildren();
+        RefModule refModule = (RefModule) refEntity;
+        List<RefEntity> children = refModule.getChildren();
         if (children == null) {
             return null;
         }
@@ -66,12 +66,12 @@ public abstract class ModuleWithTooFewClassesInspection extends BaseGlobalInspec
         if (numClasses >= limit || numClasses == 0) {
             return null;
         }
-        final Project project = globalInspectionContext.getProject();
-        final Module[] modules = ModuleManager.getInstance(project).getModules();
+        Project project = globalInspectionContext.getProject();
+        Module[] modules = ModuleManager.getInstance(project).getModules();
         if (modules.length == 1) {
             return null;
         }
-        final LocalizeValue errorString =
+        LocalizeValue errorString =
             InspectionGadgetsLocalize.moduleWithTooFewClassesProblemDescriptor(refModule.getName(), numClasses, limit);
         return new CommonProblemDescriptor[]{
             inspectionManager.createProblemDescriptor(errorString.get())

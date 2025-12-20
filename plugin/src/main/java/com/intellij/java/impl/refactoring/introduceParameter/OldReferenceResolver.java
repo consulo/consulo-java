@@ -69,11 +69,11 @@ public class OldReferenceResolver {
     PsiElementFactory factory = JavaPsiFacade.getInstance(myProject).getElementFactory();
     PsiExpression instanceRef;
     if (myContext instanceof PsiMethodCallExpression) {
-      final PsiMethodCallExpression methodCall = (PsiMethodCallExpression)myContext;
-      final PsiReferenceExpression methodExpression = methodCall.getMethodExpression();
+      PsiMethodCallExpression methodCall = (PsiMethodCallExpression)myContext;
+      PsiReferenceExpression methodExpression = methodCall.getMethodExpression();
       instanceRef = methodExpression.getQualifierExpression();
       if (instanceRef == null) {
-        final PsiClass thisResolveClass = RefactoringUtil.getThisResolveClass(methodExpression);
+        PsiClass thisResolveClass = RefactoringUtil.getThisResolveClass(methodExpression);
         if (thisResolveClass != null &&
             !(thisResolveClass instanceof PsiAnonymousClass) &&
             !thisResolveClass.equals(PsiTreeUtil.getParentOfType(methodExpression, PsiClass.class))) {
@@ -109,13 +109,13 @@ public class OldReferenceResolver {
     PsiElement newExpr = expr;  // references continue being resolved in the children of newExpr
 
     if (oldExpr instanceof PsiReferenceExpression) {
-      final PsiReferenceExpression oldRef = (PsiReferenceExpression)oldExpr;
-      final JavaResolveResult adv = oldRef.advancedResolve(false);
-      final PsiElement scope = getClassContainingResolve(adv);
-      final PsiClass clss = PsiTreeUtil.getParentOfType(oldExpr, PsiClass.class);
+      PsiReferenceExpression oldRef = (PsiReferenceExpression)oldExpr;
+      JavaResolveResult adv = oldRef.advancedResolve(false);
+      PsiElement scope = getClassContainingResolve(adv);
+      PsiClass clss = PsiTreeUtil.getParentOfType(oldExpr, PsiClass.class);
       if (clss != null && scope != null ) {
 
-        final PsiElement subj = adv.getElement();
+        PsiElement subj = adv.getElement();
 
 
         // Parameters
@@ -231,11 +231,11 @@ public class OldReferenceResolver {
         String id = getter.getName();
         String qualifier = null;
         if (newExpr instanceof PsiReferenceExpression) {
-          final PsiExpression instanceRef = getInstanceRef(factory);
+          PsiExpression instanceRef = getInstanceRef(factory);
           if (qualify && instanceRef != null) {
             qualifier = instanceRef.getText();
           } else {
-            final PsiExpression qualifierExpression = ((PsiReferenceExpression)newExpr).getQualifierExpression();
+            PsiExpression qualifierExpression = ((PsiReferenceExpression)newExpr).getQualifierExpression();
             if (qualifierExpression != null) {
               qualifier = qualifierExpression.getText();
             }
@@ -260,8 +260,8 @@ public class OldReferenceResolver {
   }
 
   @Nullable
-  private static PsiElement getClassContainingResolve(final JavaResolveResult result) {
-    final PsiElement elem = result.getElement();
+  private static PsiElement getClassContainingResolve(JavaResolveResult result) {
+    PsiElement elem = result.getElement();
     if (elem != null) {
       if (elem instanceof PsiLocalVariable || elem instanceof PsiParameter) {
         return PsiTreeUtil.getParentOfType(elem, PsiClass.class);

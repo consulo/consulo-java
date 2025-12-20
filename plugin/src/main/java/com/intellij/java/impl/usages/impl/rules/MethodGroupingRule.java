@@ -68,7 +68,7 @@ public class MethodGroupingRule implements UsageGroupingRule {
       do {
         containingMethod = PsiTreeUtil.getParentOfType(containingMethod, PsiMethod.class, true);
         if (containingMethod == null) break;
-        final PsiClass containingClass = ((PsiMethod)containingMethod).getContainingClass();
+        PsiClass containingClass = ((PsiMethod)containingMethod).getContainingClass();
         if (containingClass == null || containingClass.getQualifiedName() != null) break;
       }
       while (true);
@@ -147,7 +147,7 @@ public class MethodGroupingRule implements UsageGroupingRule {
     @Override
     @RequiredReadAction
     public boolean isValid() {
-      final PsiMethod method = getMethod();
+      PsiMethod method = getMethod();
       return method != null && method.isValid();
     }
 
@@ -193,7 +193,7 @@ public class MethodGroupingRule implements UsageGroupingRule {
 
     @Override
     @RequiredReadAction
-    public void calcData(final Key<?> key, final DataSink sink) {
+    public void calcData(Key<?> key, DataSink sink) {
       if (!isValid()) return;
       if (PsiElement.KEY == key) {
         sink.put(PsiElement.KEY, getMethod());

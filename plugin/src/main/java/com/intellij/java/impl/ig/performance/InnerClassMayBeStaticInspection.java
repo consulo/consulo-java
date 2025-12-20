@@ -69,26 +69,26 @@ public class InnerClassMayBeStaticInspection extends BaseInspection {
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiJavaToken classNameToken = (PsiJavaToken)descriptor.getPsiElement();
-      final PsiClass innerClass = (PsiClass)classNameToken.getParent();
+      PsiJavaToken classNameToken = (PsiJavaToken)descriptor.getPsiElement();
+      PsiClass innerClass = (PsiClass)classNameToken.getParent();
       assert innerClass != null;
-      final SearchScope useScope = innerClass.getUseScope();
-      final Query<PsiReference> query = ReferencesSearch.search(innerClass, useScope);
-      final Collection<PsiReference> references = query.findAll();
-      for (final PsiReference reference : references) {
-        final PsiElement element = reference.getElement();
-        final PsiElement parent = element.getParent();
+      SearchScope useScope = innerClass.getUseScope();
+      Query<PsiReference> query = ReferencesSearch.search(innerClass, useScope);
+      Collection<PsiReference> references = query.findAll();
+      for (PsiReference reference : references) {
+        PsiElement element = reference.getElement();
+        PsiElement parent = element.getParent();
         if (!(parent instanceof PsiNewExpression)) {
           continue;
         }
-        final PsiNewExpression newExpression = (PsiNewExpression)parent;
-        final PsiExpression qualifier = newExpression.getQualifier();
+        PsiNewExpression newExpression = (PsiNewExpression)parent;
+        PsiExpression qualifier = newExpression.getQualifier();
         if (qualifier == null) {
           continue;
         }
         qualifier.delete();
       }
-      final PsiModifierList modifiers = innerClass.getModifierList();
+      PsiModifierList modifiers = innerClass.getModifierList();
       if (modifiers == null) {
         return;
       }
@@ -115,12 +115,12 @@ public class InnerClassMayBeStaticInspection extends BaseInspection {
       if (aClass instanceof PsiAnonymousClass) {
         return;
       }
-      final PsiClass[] innerClasses = aClass.getInnerClasses();
-      for (final PsiClass innerClass : innerClasses) {
+      PsiClass[] innerClasses = aClass.getInnerClasses();
+      for (PsiClass innerClass : innerClasses) {
         if (innerClass.hasModifierProperty(PsiModifier.STATIC)) {
           continue;
         }
-        final InnerClassReferenceVisitor visitor =
+        InnerClassReferenceVisitor visitor =
           new InnerClassReferenceVisitor(innerClass);
         innerClass.accept(visitor);
         if (!visitor.canInnerClassBeStatic()) {

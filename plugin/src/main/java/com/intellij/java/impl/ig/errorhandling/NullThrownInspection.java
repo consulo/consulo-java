@@ -57,9 +57,9 @@ public class NullThrownInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-            final PsiExpression newExpression = factory.createExpressionFromText("new java.lang.NullPointerException()", element);
+            PsiElement element = descriptor.getPsiElement();
+            PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+            PsiExpression newExpression = factory.createExpressionFromText("new java.lang.NullPointerException()", element);
             element.replace(newExpression);
         }
     }
@@ -74,11 +74,11 @@ public class NullThrownInspection extends BaseInspection {
         @Override
         public void visitThrowStatement(PsiThrowStatement statement) {
             super.visitThrowStatement(statement);
-            final PsiExpression exception = ParenthesesUtils.stripParentheses(statement.getException());
+            PsiExpression exception = ParenthesesUtils.stripParentheses(statement.getException());
             if (!(exception instanceof PsiLiteralExpression)) {
                 return;
             }
-            final PsiType type = exception.getType();
+            PsiType type = exception.getType();
             if (!PsiType.NULL.equals(type)) {
                 return;
             }

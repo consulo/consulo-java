@@ -55,7 +55,7 @@ public class UnnecessaryConditionalExpressionInspection extends BaseInspection {
 
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiConditionalExpression expression = (PsiConditionalExpression) infos[0];
+        PsiConditionalExpression expression = (PsiConditionalExpression) infos[0];
         return InspectionGadgetsLocalize.simplifiableConditionalExpressionProblemDescriptor(calculateReplacementExpression(expression))
             .get();
     }
@@ -63,9 +63,9 @@ public class UnnecessaryConditionalExpressionInspection extends BaseInspection {
     static String calculateReplacementExpression(
         PsiConditionalExpression exp
     ) {
-        final PsiExpression thenExpression = exp.getThenExpression();
-        final PsiExpression elseExpression = exp.getElseExpression();
-        final PsiExpression condition = exp.getCondition();
+        PsiExpression thenExpression = exp.getThenExpression();
+        PsiExpression elseExpression = exp.getElseExpression();
+        PsiExpression condition = exp.getCondition();
 
         if (BoolUtils.isFalse(thenExpression) &&
             BoolUtils.isTrue(elseExpression)) {
@@ -89,8 +89,8 @@ public class UnnecessaryConditionalExpressionInspection extends BaseInspection {
         }
 
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiConditionalExpression expression = (PsiConditionalExpression) descriptor.getPsiElement();
-            final String newExpression = calculateReplacementExpression(expression);
+            PsiConditionalExpression expression = (PsiConditionalExpression) descriptor.getPsiElement();
+            String newExpression = calculateReplacementExpression(expression);
             replaceExpression(expression, newExpression);
         }
     }
@@ -103,11 +103,11 @@ public class UnnecessaryConditionalExpressionInspection extends BaseInspection {
             PsiConditionalExpression expression
         ) {
             super.visitConditionalExpression(expression);
-            final PsiExpression thenExpression = expression.getThenExpression();
+            PsiExpression thenExpression = expression.getThenExpression();
             if (thenExpression == null) {
                 return;
             }
-            final PsiExpression elseExpression = expression.getElseExpression();
+            PsiExpression elseExpression = expression.getElseExpression();
             if (elseExpression == null) {
                 return;
             }

@@ -68,9 +68,9 @@ public abstract class FindUsagesTest extends PsiTestCase{
     String[] fileNames = new String[]{"B.java", "A.java", "A.java", "B.java"};
     int[] starts = new int[]{};
     int[] ends = new int[]{};
-    final ArrayList<PsiFile> filesList = new ArrayList<PsiFile>();
-    final IntList startsList = IntLists.newArrayList();
-    final IntList endsList = IntLists.newArrayList();
+    ArrayList<PsiFile> filesList = new ArrayList<PsiFile>();
+    IntList startsList = IntLists.newArrayList();
+    IntList endsList = IntLists.newArrayList();
     PsiReference[] refs =
       MethodReferencesSearch.search((PsiMethod)superExpr.resolve(), GlobalSearchScope.projectScope(myProject), false).toArray(PsiReference.EMPTY_ARRAY);
     for (PsiReference ref : refs) {
@@ -82,7 +82,7 @@ public abstract class FindUsagesTest extends PsiTestCase{
   public void testSiblingImplement() throws Exception {
     PsiClass anInterface = myJavaFacade.findClass("A.I", GlobalSearchScope.allScope(myProject));
     PsiMethod method = anInterface.getMethods()[0];
-    final Collection<PsiMethod> overriders = OverridingMethodsSearch.search(method).findAll();
+    Collection<PsiMethod> overriders = OverridingMethodsSearch.search(method).findAll();
     assertEquals(1, overriders.size());
   }
 
@@ -128,7 +128,7 @@ public abstract class FindUsagesTest extends PsiTestCase{
     PsiClass aClass = myJavaFacade.findClass("com.Foo", GlobalSearchScope.allScope(myProject));
     doTest(aClass, new String[]{"Test.xml"}, new int[]{32}, new int[]{35});
 
-    final PsiFile nonCodeUsage = PsiFileFactory.getInstance(myProject).createFileFromText("a.xml", XmlFileType.INSTANCE, "<root action='com.Foo'/>", 0, true);
+    PsiFile nonCodeUsage = PsiFileFactory.getInstance(myProject).createFileFromText("a.xml", XmlFileType.INSTANCE, "<root action='com.Foo'/>", 0, true);
     assertTrue(new UsageInfo(nonCodeUsage, 14, 21, true).getNavigationOffset() > 0);
   }
 
@@ -140,7 +140,7 @@ public abstract class FindUsagesTest extends PsiTestCase{
       new WriteCommandAction(getProject()) {
         @Override
         protected void run(Result result) throws Throwable {
-          final ModifiableModuleModel moduleModel = ModuleManager.getInstance(getProject()).getModifiableModel();
+          ModifiableModuleModel moduleModel = ModuleManager.getInstance(getProject()).getModifiableModel();
           moduleModel.newModule("independent", "independent/");
           moduleModel.commit();
 
@@ -208,14 +208,14 @@ public abstract class FindUsagesTest extends PsiTestCase{
     int startOffset;
     int endOffset;
 
-    private SearchResult(final String fileName, final int startOffset, final int endOffset) {
+    private SearchResult(String fileName, int startOffset, int endOffset) {
       this.fileName = fileName;
       this.startOffset = startOffset;
       this.endOffset = endOffset;
     }
 
     @Override
-    public int compareTo(final SearchResult o) {
+    public int compareTo(SearchResult o) {
       int rc = fileName.compareTo(o.fileName);
       if (rc != 0) return rc;
 
@@ -229,11 +229,11 @@ public abstract class FindUsagesTest extends PsiTestCase{
       return fileName + "[" + startOffset + ":" + endOffset + "]";
     }
 
-    public boolean equals(final Object o) {
+    public boolean equals(Object o) {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
 
-      final SearchResult that = (SearchResult)o;
+      SearchResult that = (SearchResult)o;
 
       if (endOffset != that.endOffset) return false;
       if (startOffset != that.startOffset) return false;
@@ -243,7 +243,7 @@ public abstract class FindUsagesTest extends PsiTestCase{
     }
   }
 
-  private static void checkResult(String[] fileNames, final ArrayList<PsiFile> filesList, int[] starts, final IntList startsList, int[] ends, final IntList endsList) {
+  private static void checkResult(String[] fileNames, ArrayList<PsiFile> filesList, int[] starts, IntList startsList, int[] ends, IntList endsList) {
     List<SearchResult> expected = new ArrayList<SearchResult>();
     for (int i = 0; i < fileNames.length; i++) {
       String fileName = fileNames[i];

@@ -47,8 +47,8 @@ public class DependentMembersCollector extends DependentMembersCollectorBase<Psi
   private boolean existsInSuperClass(PsiMember classMember) {
     if (getSuperClass() == null) return false;
     if (!(classMember instanceof PsiMethod)) return false;
-    final PsiMethod method = ((PsiMethod)classMember);
-    final PsiMethod methodBySignature = (getSuperClass()).findMethodBySignature(method, true);
+    PsiMethod method = ((PsiMethod)classMember);
+    PsiMethod methodBySignature = (getSuperClass()).findMethodBySignature(method, true);
     return methodBySignature != null;
   }
 }

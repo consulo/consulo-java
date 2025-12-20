@@ -62,16 +62,16 @@ public class NonThreadSafeLazyInitializationInspection extends BaseInspection {
             @Nonnull PsiAssignmentExpression expression
         ) {
             super.visitAssignmentExpression(expression);
-            final PsiExpression lhs = expression.getLExpression();
+            PsiExpression lhs = expression.getLExpression();
             if (!(lhs instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiReference reference = (PsiReference) lhs;
-            final PsiElement referent = reference.resolve();
+            PsiReference reference = (PsiReference) lhs;
+            PsiElement referent = reference.resolve();
             if (!(referent instanceof PsiField)) {
                 return;
             }
-            final PsiField field = (PsiField) referent;
+            PsiField field = (PsiField) referent;
             if (!field.hasModifierProperty(PsiModifier.STATIC)) {
                 return;
             }
@@ -124,7 +124,7 @@ public class NonThreadSafeLazyInitializationInspection extends BaseInspection {
             PsiAssignmentExpression expression,
             PsiReferenceExpression lhs
         ) {
-            final PsiIfStatement ifStatement =
+            PsiIfStatement ifStatement =
                 PsiTreeUtil.getParentOfType(
                     expression,
                     PsiIfStatement.class
@@ -132,7 +132,7 @@ public class NonThreadSafeLazyInitializationInspection extends BaseInspection {
             if (ifStatement == null) {
                 return false;
             }
-            final PsiExpression condition = ifStatement.getCondition();
+            PsiExpression condition = ifStatement.getCondition();
             if (condition == null) {
                 return false;
             }
@@ -145,30 +145,30 @@ public class NonThreadSafeLazyInitializationInspection extends BaseInspection {
             if (!(condition instanceof PsiBinaryExpression)) {
                 return false;
             }
-            final PsiBinaryExpression comparison =
+            PsiBinaryExpression comparison =
                 (PsiBinaryExpression) condition;
-            final IElementType tokenType = comparison.getOperationTokenType();
+            IElementType tokenType = comparison.getOperationTokenType();
             if (!tokenType.equals(JavaTokenType.EQEQ)) {
                 return false;
             }
-            final PsiExpression lhs = comparison.getLOperand();
-            final PsiExpression rhs = comparison.getROperand();
+            PsiExpression lhs = comparison.getLOperand();
+            PsiExpression rhs = comparison.getROperand();
             if (rhs == null) {
                 return false;
             }
-            final String lhsText = lhs.getText();
-            final String rhsText = rhs.getText();
+            String lhsText = lhs.getText();
+            String rhsText = rhs.getText();
             if (!PsiKeyword.NULL.equals(lhsText) &&
                 !PsiKeyword.NULL.equals(rhsText)) {
                 return false;
             }
-            final String referenceText = reference.getText();
+            String referenceText = reference.getText();
             return referenceText.equals(lhsText) ||
                 referenceText.equals(rhsText);
         }
 
         private static boolean isInSynchronizedContext(PsiElement element) {
-            final PsiSynchronizedStatement syncBlock =
+            PsiSynchronizedStatement syncBlock =
                 PsiTreeUtil.getParentOfType(
                     element,
                     PsiSynchronizedStatement.class
@@ -176,7 +176,7 @@ public class NonThreadSafeLazyInitializationInspection extends BaseInspection {
             if (syncBlock != null) {
                 return true;
             }
-            final PsiMethod method =
+            PsiMethod method =
                 PsiTreeUtil.getParentOfType(
                     element,
                     PsiMethod.class
@@ -187,7 +187,7 @@ public class NonThreadSafeLazyInitializationInspection extends BaseInspection {
         }
 
         private static boolean isInStaticInitializer(PsiElement element) {
-            final PsiClassInitializer initializer =
+            PsiClassInitializer initializer =
                 PsiTreeUtil.getParentOfType(
                     element,
                     PsiClassInitializer.class
@@ -231,7 +231,7 @@ public class NonThreadSafeLazyInitializationInspection extends BaseInspection {
             PsiIfStatement ifStatement = PsiTreeUtil.getParentOfType(expression, PsiIfStatement.class);
             ifStatement.delete();
 
-            final PsiExpression holderReference = elementFactory.createExpressionFromText(holderName + "." + field.getName(), field);
+            PsiExpression holderReference = elementFactory.createExpressionFromText(holderName + "." + field.getName(), field);
             Collection<PsiReference> references = ReferencesSearch.search(field).findAll();
             for (PsiReference reference : references) {
                 PsiElement element = reference.getElement();
@@ -243,7 +243,7 @@ public class NonThreadSafeLazyInitializationInspection extends BaseInspection {
         @NonNls
         private static String suggestHolderName(PsiField field) {
             String string = field.getType().getDeepComponentType().getPresentableText();
-            final int index = string.indexOf('<');
+            int index = string.indexOf('<');
             if (index != -1) {
                 string = string.substring(0, index);
             }

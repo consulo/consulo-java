@@ -61,7 +61,7 @@ public class JavaStatementsSurroundDescriptor implements SurroundDescriptor {
   @Override
   @Nonnull
   public PsiElement[] getElementsToSurround(PsiFile file, int startOffset, int endOffset) {
-    final PsiElement[] statements = CodeInsightUtil.findStatementsInRange(file, startOffset, endOffset);
+    PsiElement[] statements = CodeInsightUtil.findStatementsInRange(file, startOffset, endOffset);
     if (statements.length == 0) return PsiElement.EMPTY_ARRAY;
     FeatureUsageTracker.getInstance().triggerFeatureUsed("codeassists.surroundwith.statement");
     return statements;

@@ -25,14 +25,14 @@ import jakarta.annotation.Nullable;
 class AddClarifyingParenthesesPredicate implements PsiElementPredicate {
 
   public boolean satisfiedBy(@Nonnull PsiElement element) {
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (mightBeConfusingExpression(parent)) {
       return false;
     }
     if (element instanceof PsiPolyadicExpression) {
-      final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)element;
-      final IElementType tokenType = polyadicExpression.getOperationTokenType();
-      final PsiExpression[] operands = polyadicExpression.getOperands();
+      PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)element;
+      IElementType tokenType = polyadicExpression.getOperationTokenType();
+      PsiExpression[] operands = polyadicExpression.getOperands();
       for (PsiExpression operand : operands) {
         if (operand instanceof PsiInstanceOfExpression) {
           return true;
@@ -40,45 +40,45 @@ class AddClarifyingParenthesesPredicate implements PsiElementPredicate {
         if (!(operand instanceof PsiPolyadicExpression)) {
           continue;
         }
-        final PsiPolyadicExpression expression = (PsiPolyadicExpression)operand;
-        final IElementType otherTokenType = expression.getOperationTokenType();
+        PsiPolyadicExpression expression = (PsiPolyadicExpression)operand;
+        IElementType otherTokenType = expression.getOperationTokenType();
         if (!tokenType.equals(otherTokenType)) {
           return true;
         }
       }
     }
     else if (element instanceof PsiConditionalExpression) {
-      final PsiConditionalExpression conditionalExpression = (PsiConditionalExpression)element;
-      final PsiExpression condition = conditionalExpression.getCondition();
+      PsiConditionalExpression conditionalExpression = (PsiConditionalExpression)element;
+      PsiExpression condition = conditionalExpression.getCondition();
       if (mightBeConfusingExpression(condition)) {
         return true;
       }
-      final PsiExpression thenExpression = conditionalExpression.getThenExpression();
+      PsiExpression thenExpression = conditionalExpression.getThenExpression();
       if (mightBeConfusingExpression(thenExpression)) {
         return true;
       }
-      final PsiExpression elseExpression = conditionalExpression.getElseExpression();
+      PsiExpression elseExpression = conditionalExpression.getElseExpression();
       if (mightBeConfusingExpression(elseExpression)) {
         return true;
       }
     }
     else if (element instanceof PsiInstanceOfExpression) {
-      final PsiInstanceOfExpression instanceOfExpression = (PsiInstanceOfExpression)element;
-      final PsiExpression operand = instanceOfExpression.getOperand();
+      PsiInstanceOfExpression instanceOfExpression = (PsiInstanceOfExpression)element;
+      PsiExpression operand = instanceOfExpression.getOperand();
       if (mightBeConfusingExpression(operand)) {
         return true;
       }
     }
     else if (element instanceof PsiAssignmentExpression) {
-      final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression)element;
-      final PsiExpression rhs = assignmentExpression.getRExpression();
+      PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression)element;
+      PsiExpression rhs = assignmentExpression.getRExpression();
       if (!(mightBeConfusingExpression(rhs))) {
         return false;
       }
       if (rhs instanceof PsiAssignmentExpression) {
-        final PsiAssignmentExpression nestedAssignment = (PsiAssignmentExpression)rhs;
-        final IElementType nestedTokenType = nestedAssignment.getOperationTokenType();
-        final IElementType tokenType = assignmentExpression.getOperationTokenType();
+        PsiAssignmentExpression nestedAssignment = (PsiAssignmentExpression)rhs;
+        IElementType nestedTokenType = nestedAssignment.getOperationTokenType();
+        IElementType tokenType = assignmentExpression.getOperationTokenType();
         if (nestedTokenType.equals(tokenType)) {
           return false;
         }

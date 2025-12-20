@@ -113,7 +113,7 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
         return getSubstitutor().substitute(getInferenceSubstitutor().substitute(getObject().getReturnType()));
     }
 
-    public void setInferenceSubstitutor(@Nonnull final PsiSubstitutor substitutor, PsiElement place) {
+    public void setInferenceSubstitutor(@Nonnull PsiSubstitutor substitutor, PsiElement place) {
         myInferenceSubstitutor = substitutor;
         myMayNeedExplicitTypeParameters = mayNeedTypeParameters(place);
     }
@@ -172,17 +172,17 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
 
     @Override
     public void handleInsert(InsertionContext context) {
-        final Document document = context.getDocument();
-        final PsiFile file = context.getFile();
-        final PsiMethod method = getObject();
+        Document document = context.getDocument();
+        PsiFile file = context.getFile();
+        PsiMethod method = getObject();
 
-        final LookupElement[] allItems = context.getElements();
-        final boolean overloadsMatter = allItems.length == 1 && getUserData(JavaCompletionUtil.FORCE_SHOW_SIGNATURE_ATTR) == null;
-        final boolean hasParams = MethodParenthesesHandler.hasParams(this, allItems, overloadsMatter, method);
+        LookupElement[] allItems = context.getElements();
+        boolean overloadsMatter = allItems.length == 1 && getUserData(JavaCompletionUtil.FORCE_SHOW_SIGNATURE_ATTR) == null;
+        boolean hasParams = MethodParenthesesHandler.hasParams(this, allItems, overloadsMatter, method);
         JavaCompletionUtil.insertParentheses(context, this, overloadsMatter, hasParams);
 
-        final int startOffset = context.getStartOffset();
-        final OffsetKey refStart = context.trackOffset(startOffset, true);
+        int startOffset = context.getStartOffset();
+        OffsetKey refStart = context.trackOffset(startOffset, true);
         if (shouldInsertTypeParameters() && mayNeedTypeParameters(context.getFile().findElementAt(context.getStartOffset()))) {
             qualifyMethodCall(file, startOffset, document);
             insertExplicitTypeParameters(context, refStart);
@@ -217,7 +217,7 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
 
     private void importOrQualify(Document document, PsiFile file, PsiMethod method, int startOffset) {
         if (willBeImported()) {
-            final PsiReferenceExpression ref = PsiTreeUtil.findElementOfClassAtOffset(file, startOffset, PsiReferenceExpression.class, false);
+            PsiReferenceExpression ref = PsiTreeUtil.findElementOfClassAtOffset(file, startOffset, PsiReferenceExpression.class, false);
             if (ref != null && myContainingClass != null && !ref.isReferenceTo(method)) {
                 ref.bindToElementViaStaticImport(myContainingClass);
             }
@@ -336,7 +336,7 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
         return myMayNeedExplicitTypeParameters && !getInferenceSubstitutor().equals(PsiSubstitutor.EMPTY) && myMethod.getParameterList().getParametersCount() == 0;
     }
 
-    public static boolean mayNeedTypeParameters(@Nullable final PsiElement leaf) {
+    public static boolean mayNeedTypeParameters(@Nullable PsiElement leaf) {
         if (PsiTreeUtil.getParentOfType(leaf, PsiExpressionList.class, true, PsiCodeBlock.class, PsiModifierListOwner.class) == null) {
             if (PsiTreeUtil.getParentOfType(leaf, PsiConditionalExpression.class, true, PsiCodeBlock.class, PsiModifierListOwner.class) == null) {
                 return false;
@@ -347,7 +347,7 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
             return false;
         }
 
-        final PsiElement parent = leaf.getParent();
+        PsiElement parent = leaf.getParent();
         if (parent instanceof PsiReferenceExpression && ((PsiReferenceExpression) parent).getTypeParameters().length > 0) {
             return false;
         }
@@ -357,20 +357,20 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
     private void insertExplicitTypeParameters(InsertionContext context, OffsetKey refStart) {
         context.commitDocument();
 
-        final String typeParams = getTypeParamsText(false);
+        String typeParams = getTypeParamsText(false);
         if (typeParams != null) {
             context.getDocument().insertString(context.getOffset(refStart), typeParams);
             JavaCompletionUtil.shortenReference(context.getFile(), context.getOffset(refStart));
         }
     }
 
-    private void qualifyMethodCall(PsiFile file, final int startOffset, final Document document) {
-        final PsiReference reference = file.findReferenceAt(startOffset);
+    private void qualifyMethodCall(PsiFile file, int startOffset, Document document) {
+        PsiReference reference = file.findReferenceAt(startOffset);
         if (reference instanceof PsiReferenceExpression && ((PsiReferenceExpression) reference).isQualified()) {
             return;
         }
 
-        final PsiMethod method = getObject();
+        PsiMethod method = getObject();
         if (!method.hasModifierProperty(PsiModifier.STATIC)) {
             document.insertString(startOffset, "this.");
             return;
@@ -386,13 +386,13 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
 
     @Nullable
     private String getTypeParamsText(boolean presentable) {
-        final PsiMethod method = getObject();
-        final PsiSubstitutor substitutor = getInferenceSubstitutor();
-        final PsiTypeParameter[] parameters = method.getTypeParameters();
+        PsiMethod method = getObject();
+        PsiSubstitutor substitutor = getInferenceSubstitutor();
+        PsiTypeParameter[] parameters = method.getTypeParameters();
         assert parameters.length > 0;
-        final StringBuilder builder = new StringBuilder("<");
+        StringBuilder builder = new StringBuilder("<");
         boolean first = true;
-        for (final PsiTypeParameter parameter : parameters) {
+        for (PsiTypeParameter parameter : parameters) {
             if (!first) {
                 builder.append(", ");
             }
@@ -409,7 +409,7 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
                 return null;
             }
 
-            final String text = presentable ? type.getPresentableText() : type.getCanonicalText();
+            String text = presentable ? type.getPresentableText() : type.getCanonicalText();
             if (text.indexOf('?') >= 0) {
                 return null;
             }

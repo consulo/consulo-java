@@ -228,7 +228,7 @@ public abstract class InlineMethodTest extends LightRefactoringTestCase {
     doTestConflict("Inline cannot be applied to multiline method in constructor call");
   }
 
-  private void doTestConflict(final String conflict) throws Exception {
+  private void doTestConflict(String conflict) throws Exception {
     try {
       doTest();
       fail("Conflict was not detected");
@@ -282,7 +282,7 @@ public abstract class InlineMethodTest extends LightRefactoringTestCase {
     doTest(false);
   }
 
-  private void doTest(final boolean nonCode) throws Exception {
+  private void doTest(boolean nonCode) throws Exception {
     String name = getTestName(false);
     @NonNls String fileName = "/refactoring/inlineMethod/" + name + ".java";
     configureByFile(fileName);
@@ -290,20 +290,20 @@ public abstract class InlineMethodTest extends LightRefactoringTestCase {
     checkResultByFile(fileName + ".after");
   }
 
-  private void performAction(final boolean nonCode) {
+  private void performAction(boolean nonCode) {
     performAction(new MockInlineMethodOptions(), nonCode);
   }
 
-  private void performAction(final InlineOptions options, final boolean nonCode) {
+  private void performAction(InlineOptions options, boolean nonCode) {
     PsiElement element = TargetElementUtil
       .findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED, TargetElementUtilEx.REFERENCED_ELEMENT_ACCEPTED));
-    final PsiReference ref = myFile.findReferenceAt(myEditor.getCaretModel().getOffset());
+    PsiReference ref = myFile.findReferenceAt(myEditor.getCaretModel().getOffset());
     PsiReferenceExpression refExpr = ref instanceof PsiReferenceExpression ? (PsiReferenceExpression)ref : null;
     assertTrue(element instanceof PsiMethod);
     PsiMethod method = (PsiMethod)element;
-    final boolean condition = InlineMethodProcessor.checkBadReturns(method) && !InlineUtil.allUsagesAreTailCalls(method);
+    boolean condition = InlineMethodProcessor.checkBadReturns(method) && !InlineUtil.allUsagesAreTailCalls(method);
     assertFalse("Bad returns found", condition);
-    final InlineMethodProcessor processor =
+    InlineMethodProcessor processor =
       new InlineMethodProcessor(getProject(), method, refExpr, myEditor, options.isInlineThisOnly(), nonCode, nonCode);
     processor.run();
   }

@@ -76,7 +76,7 @@ public abstract class TemplatesManager implements PersistentStateComponent<Templ
   }
 
   public void removeTemplate(TemplateResource template) {
-    final Iterator<TemplateResource> it = myState.templates.iterator();
+    Iterator<TemplateResource> it = myState.templates.iterator();
     while (it.hasNext()) {
       TemplateResource resource = it.next();
       if (Comparing.equal(resource.getFileName(), template.getFileName())) {
@@ -122,17 +122,17 @@ public abstract class TemplatesManager implements PersistentStateComponent<Templ
 
   @Nonnull
   public static PsiType createFieldListElementType(Project project) {
-    final PsiType classType = createElementType(project, FieldElement.class);
-    final PsiClass listClass = JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_UTIL_LIST, GlobalSearchScope.allScope(project));
+    PsiType classType = createElementType(project, FieldElement.class);
+    PsiClass listClass = JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_UTIL_LIST, GlobalSearchScope.allScope(project));
     return listClass != null ? JavaPsiFacade.getElementFactory(project).createType(listClass, classType) : PsiType.NULL;
   }
 
   @Nonnull
   public static PsiType createElementType(Project project, Class<?> elementClass) {
-    final List<String> methodNames = ContainerUtil.mapNotNull(elementClass.getMethods(), new Function<Method, String>() {
+    List<String> methodNames = ContainerUtil.mapNotNull(elementClass.getMethods(), new Function<Method, String>() {
       @Override
       public String apply(Method method) {
-        final String methodName = method.getName();
+        String methodName = method.getName();
         if (methodName.startsWith("set")) {
           //hide setters from completion list
           return null;
@@ -140,8 +140,8 @@ public abstract class TemplatesManager implements PersistentStateComponent<Templ
         return method.getGenericReturnType().toString() + " " + methodName + "();";
       }
     });
-    final String text = "interface " + elementClass.getSimpleName() + " {\n" + StringUtil.join(methodNames, "\n") + "}";
-    final PsiClass aClass = JavaPsiFacade.getElementFactory(project).createClassFromText(text, null).getInnerClasses()[0];
+    String text = "interface " + elementClass.getSimpleName() + " {\n" + StringUtil.join(methodNames, "\n") + "}";
+    PsiClass aClass = JavaPsiFacade.getElementFactory(project).createClassFromText(text, null).getInnerClasses()[0];
     return JavaPsiFacade.getElementFactory(project).createType(aClass);
   }
 }

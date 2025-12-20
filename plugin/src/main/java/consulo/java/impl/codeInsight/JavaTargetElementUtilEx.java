@@ -72,7 +72,7 @@ public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
     return !isEnumConstantReference(element, referenceOrReferencedElement);
   }
 
-  private static boolean isEnumConstantReference(final PsiElement element, final PsiElement referenceOrReferencedElement) {
+  private static boolean isEnumConstantReference(PsiElement element, PsiElement referenceOrReferencedElement) {
     return element != null &&
         element.getParent() instanceof PsiEnumConstant &&
         referenceOrReferencedElement instanceof PsiMethod &&
@@ -86,14 +86,14 @@ public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
         @Override
         public Boolean compute() {
           PsiClass containingClass = ((PsiMember) element).getContainingClass();
-          final PsiExpression expression = ((PsiReferenceExpression) reference).getQualifierExpression();
+          PsiExpression expression = ((PsiReferenceExpression) reference).getQualifierExpression();
           PsiClass psiClass;
           if (expression != null) {
             psiClass = PsiUtil.resolveClassInType(expression.getType());
           } else {
             if (element instanceof PsiClass) {
               psiClass = (PsiClass) element;
-              final PsiElement resolve = reference.resolve();
+              PsiElement resolve = reference.resolve();
               if (resolve instanceof PsiClass) {
                 containingClass = (PsiClass) resolve;
               }
@@ -167,7 +167,7 @@ public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
       }
       PsiResolveHelper helper = JavaPsiFacade.getInstance(parent.getProject()).getResolveHelper();
       PsiElement[] candidates = PsiUtil.mapElements(helper.getReferencedMethodCandidates(callExpr, false));
-      final Collection<PsiElement> methods = new LinkedHashSet<PsiElement>();
+      Collection<PsiElement> methods = new LinkedHashSet<PsiElement>();
       for (PsiElement candidate1 : candidates) {
         PsiMethod candidate = (PsiMethod) candidate1;
         if (candidate.hasModifierProperty(PsiModifier.STATIC) && !allowStatics) {
@@ -228,7 +228,7 @@ public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
       }
 
       if (refElement instanceof PsiClass) {
-        final PsiFile containingFile = refElement.getContainingFile();
+        PsiFile containingFile = refElement.getContainingFile();
         if (containingFile != null && containingFile.getVirtualFile() == null) { // in mirror file of compiled class
           String qualifiedName = ((PsiClass)refElement).getQualifiedName();
           if (qualifiedName == null) return null;
@@ -292,7 +292,7 @@ public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
     if (contextElement == null) {
       return null;
     }
-    final PsiElement parent = contextElement.getParent();
+    PsiElement parent = contextElement.getParent();
     if (parent instanceof XmlText || parent instanceof XmlAttributeValue) {
       return TargetElementUtil.findTargetElement(editor, flags, parent.getParent().getTextRange().getStartOffset() + 1);
     } else if (parent instanceof XmlTag || parent instanceof XmlAttribute) {
@@ -304,7 +304,7 @@ public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
   @Nullable
   @Override
   public PsiElement adjustReference(@Nonnull PsiReference ref) {
-    final PsiElement parent = ref.getElement().getParent();
+    PsiElement parent = ref.getElement().getParent();
     if (parent instanceof PsiMethodCallExpression) {
       return parent;
     }
@@ -337,7 +337,7 @@ public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
 
   @Nullable
   public static PsiReferenceExpression findReferenceExpression(Editor editor) {
-    final PsiReference ref = TargetElementUtil.findReference(editor);
+    PsiReference ref = TargetElementUtil.findReference(editor);
     return ref instanceof PsiReferenceExpression ? (PsiReferenceExpression) ref : null;
   }
 

@@ -43,15 +43,15 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   private final int myIndex;
   private final PsiJavaPackage[] myPackages;
 
-  public static PackagePrefixFileSystemItem create(final PsiDirectory directory) {
-    final ArrayList<PsiJavaPackage> packages = new ArrayList<PsiJavaPackage>();
+  public static PackagePrefixFileSystemItem create(PsiDirectory directory) {
+    ArrayList<PsiJavaPackage> packages = new ArrayList<PsiJavaPackage>();
     for (PsiJavaPackage cur = JavaDirectoryService.getInstance().getPackage(directory); cur != null; cur = cur.getParentPackage()) {
       packages.add(0, cur);
     }
     return new PackagePrefixFileSystemItem(directory, 0, packages.toArray(new PsiJavaPackage[packages.size()]));
   }
 
-  private PackagePrefixFileSystemItem(final PsiDirectory directory, int index, final PsiJavaPackage[] packages) {
+  private PackagePrefixFileSystemItem(PsiDirectory directory, int index, PsiJavaPackage[] packages) {
     myDirectory = directory;
     myIndex = index;
     myPackages = packages;
@@ -64,12 +64,12 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  public PsiElement setName(@NonNls @Nonnull final String name) throws IncorrectOperationException {
+  public PsiElement setName(@NonNls @Nonnull String name) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
   @Override
-  public void checkSetName(final String name) throws IncorrectOperationException {
+  public void checkSetName(String name) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
@@ -106,7 +106,7 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
 
   @Override
   @Nullable
-  public PsiElement findElementAt(final int offset) {
+  public PsiElement findElementAt(int offset) {
     return null;
   }
 
@@ -128,17 +128,17 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  public boolean textMatches(@Nonnull @NonNls final CharSequence text) {
+  public boolean textMatches(@Nonnull @NonNls CharSequence text) {
     return false;
   }
 
   @Override
-  public boolean textMatches(@Nonnull final PsiElement element) {
+  public boolean textMatches(@Nonnull PsiElement element) {
     return false;
   }
 
   @Override
-  public void accept(@Nonnull final PsiElementVisitor visitor) {
+  public void accept(@Nonnull PsiElementVisitor visitor) {
   }
 
   @Override
@@ -147,22 +147,22 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  public PsiElement add(@Nonnull final PsiElement element) throws IncorrectOperationException {
+  public PsiElement add(@Nonnull PsiElement element) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
   @Override
-  public PsiElement addBefore(@Nonnull final PsiElement element, final PsiElement anchor) throws IncorrectOperationException {
+  public PsiElement addBefore(@Nonnull PsiElement element, PsiElement anchor) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
   @Override
-  public PsiElement addAfter(@Nonnull final PsiElement element, final PsiElement anchor) throws IncorrectOperationException {
+  public PsiElement addAfter(@Nonnull PsiElement element, PsiElement anchor) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
   @Override
-  public void checkAdd(@Nonnull final PsiElement element) throws IncorrectOperationException {
+  public void checkAdd(@Nonnull PsiElement element) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
@@ -177,7 +177,7 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  public PsiElement replace(@Nonnull final PsiElement newElement) throws IncorrectOperationException {
+  public PsiElement replace(@Nonnull PsiElement newElement) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
@@ -188,13 +188,13 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
 
   @Override
   public boolean isWritable() {
-    final VirtualFile file = getVirtualFile();
+    VirtualFile file = getVirtualFile();
     return file != null && file.isWritable();
   }
 
   @Override
   public boolean isPhysical() {
-    final VirtualFile file = getVirtualFile();
+    VirtualFile file = getVirtualFile();
     return file != null && !(file.getFileSystem() instanceof DummyFileSystem);
   }
 
@@ -205,7 +205,7 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  public boolean processChildren(final PsiElementProcessor<PsiFileSystemItem> processor) {
+  public boolean processChildren(PsiElementProcessor<PsiFileSystemItem> processor) {
     if (myIndex == myPackages.length - 1) {
       return myDirectory.processChildren(processor);
     }

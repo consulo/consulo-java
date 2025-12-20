@@ -50,37 +50,37 @@ public class SuspiciousArrayCastInspection extends BaseInspection {
         @Override
         public void visitTypeCastExpression(PsiTypeCastExpression expression) {
             super.visitTypeCastExpression(expression);
-            final PsiTypeElement typeElement = expression.getCastType();
+            PsiTypeElement typeElement = expression.getCastType();
             if (typeElement == null) {
                 return;
             }
-            final PsiType castType = typeElement.getType();
+            PsiType castType = typeElement.getType();
             if (!(castType instanceof PsiArrayType)) {
                 return;
             }
-            final PsiExpression operand = expression.getOperand();
+            PsiExpression operand = expression.getOperand();
             if (operand == null) {
                 return;
             }
-            final PsiType type = operand.getType();
+            PsiType type = operand.getType();
             if (!(type instanceof PsiArrayType)) {
                 return;
             }
-            final PsiType castComponentType = castType.getDeepComponentType();
+            PsiType castComponentType = castType.getDeepComponentType();
             if (!(castComponentType instanceof PsiClassType)) {
                 return;
             }
-            final PsiClassType castClassType = (PsiClassType) castComponentType;
-            final PsiClass castClass = castClassType.resolve();
+            PsiClassType castClassType = (PsiClassType) castComponentType;
+            PsiClass castClass = castClassType.resolve();
             if (castClass == null) {
                 return;
             }
-            final PsiType componentType = type.getDeepComponentType();
+            PsiType componentType = type.getDeepComponentType();
             if (!(componentType instanceof PsiClassType)) {
                 return;
             }
-            final PsiClassType classType = (PsiClassType) componentType;
-            final PsiClass aClass = classType.resolve();
+            PsiClassType classType = (PsiClassType) componentType;
+            PsiClass aClass = classType.resolve();
             if (aClass == null) {
                 return;
             }

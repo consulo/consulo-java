@@ -55,26 +55,26 @@ public abstract class PullUpMultifileTest extends MultiFileTestCase
 		return JavaTestUtil.getJavaTestDataPath();
 	}
 
-	private void doTest(final String... conflicts) throws Exception
+	private void doTest(String... conflicts) throws Exception
 	{
-		final MultiMap<PsiElement, String> conflictsMap = new MultiMap<>();
+		MultiMap<PsiElement, String> conflictsMap = new MultiMap<>();
 		doTest((rootDir, rootAfter) ->
 		{
-			final PsiClass srcClass = myJavaFacade.findClass("a.A", GlobalSearchScope.allScope(myProject));
+			PsiClass srcClass = myJavaFacade.findClass("a.A", GlobalSearchScope.allScope(myProject));
 			assertTrue("Source class not found", srcClass != null);
 
-			final PsiClass targetClass = myJavaFacade.findClass("b.B", GlobalSearchScope.allScope(myProject));
+			PsiClass targetClass = myJavaFacade.findClass("b.B", GlobalSearchScope.allScope(myProject));
 			assertTrue("Target class not found", targetClass != null);
 
-			final PsiMethod[] methods = srcClass.getMethods();
+			PsiMethod[] methods = srcClass.getMethods();
 			assertTrue("No methods found", methods.length > 0);
-			final MemberInfo[] membersToMove = new MemberInfo[1];
-			final MemberInfo memberInfo = new MemberInfo(methods[0]);
+			MemberInfo[] membersToMove = new MemberInfo[1];
+			MemberInfo memberInfo = new MemberInfo(methods[0]);
 			memberInfo.setChecked(true);
 			membersToMove[0] = memberInfo;
 
-			final PsiDirectory targetDirectory = targetClass.getContainingFile().getContainingDirectory();
-			final PsiJavaPackage targetPackage = targetDirectory != null ? JavaDirectoryService.getInstance().getPackage(targetDirectory) : null;
+			PsiDirectory targetDirectory = targetClass.getContainingFile().getContainingDirectory();
+			PsiJavaPackage targetPackage = targetDirectory != null ? JavaDirectoryService.getInstance().getPackage(targetDirectory) : null;
 			conflictsMap.putAllValues(PullUpConflictsUtil.checkConflicts(membersToMove, srcClass, targetClass, targetPackage, targetDirectory, psiMethod -> PullUpProcessor.checkedInterfacesContain
 					(Arrays.asList(membersToMove), psiMethod)));
 
@@ -85,8 +85,8 @@ public abstract class PullUpMultifileTest extends MultiFileTestCase
 		{
 			fail("Conflict was not detected");
 		}
-		final HashSet<String> values = new HashSet<>(conflictsMap.values());
-		final HashSet<String> expected = new HashSet<>(Arrays.asList(conflicts));
+		HashSet<String> values = new HashSet<>(conflictsMap.values());
+		HashSet<String> expected = new HashSet<>(Arrays.asList(conflicts));
 
 		assertEquals(expected.size(), values.size());
 		for(String value : values)

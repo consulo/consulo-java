@@ -53,7 +53,7 @@ public class JUnitAbstractTestClassNamingConventionInspection extends Convention
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final String className = (String) infos[0];
+        String className = (String) infos[0];
         if (className.length() < getMinLength()) {
             return InspectionGadgetsLocalize.junitAbstractTestClassNamingConventionProblemDescriptorShort().get();
         }
@@ -109,7 +109,7 @@ public class JUnitAbstractTestClassNamingConventionInspection extends Convention
             )) {
                 return;
             }
-            final String name = aClass.getName();
+            String name = aClass.getName();
             if (name == null) {
                 return;
             }

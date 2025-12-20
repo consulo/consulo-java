@@ -51,12 +51,12 @@ public class ExcludeDeclaredFilter extends PositionElementFilter{
     }
 
     if (element instanceof PsiMethod && myCachedVar.get() instanceof PsiMethod)  {
-      final PsiMethod currentMethod = (PsiMethod) element;
-      final PsiMethod candidate = (PsiMethod) myCachedVar.get();
+      PsiMethod currentMethod = (PsiMethod) element;
+      PsiMethod candidate = (PsiMethod) myCachedVar.get();
       return !candidate.getManager().areElementsEquivalent(candidate, currentMethod) && !isOverridingMethod(currentMethod, candidate);
     }
     else if(element instanceof PsiClassType){
-      final PsiClass psiClass = ((PsiClassType)element).resolve();
+      PsiClass psiClass = ((PsiClassType)element).resolve();
       return isAcceptable(psiClass, context);
     }
     else if(context != null){
@@ -68,10 +68,10 @@ public class ExcludeDeclaredFilter extends PositionElementFilter{
   }
 
   //TODO check exotic conditions like overriding method in package local class from class in other package
-  private static boolean isOverridingMethod(final PsiMethod method, final PsiMethod candidate) {
+  private static boolean isOverridingMethod(PsiMethod method, PsiMethod candidate) {
     if (method.getManager().areElementsEquivalent(method, candidate)) return false;
     if (!MethodSignatureUtil.areSignaturesEqual(method,candidate)) return false;
-    final PsiClass candidateContainingClass = candidate.getContainingClass();
+    PsiClass candidateContainingClass = candidate.getContainingClass();
     return candidateContainingClass.isInheritor(method.getContainingClass(), true);
   }
 }

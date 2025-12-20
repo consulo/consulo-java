@@ -78,11 +78,11 @@ public class InnerClassVariableHidesOuterClassVariableInspection
 
     @Override
     public void visitField(@Nonnull PsiField field) {
-      final PsiClass aClass = field.getContainingClass();
+      PsiClass aClass = field.getContainingClass();
       if (aClass == null) {
         return;
       }
-      final String fieldName = field.getName();
+      String fieldName = field.getName();
       if (HardcodedMethodConstants.SERIAL_VERSION_UID.equals(fieldName)) {
         return;    //special case
       }
@@ -93,7 +93,7 @@ public class InnerClassVariableHidesOuterClassVariableInspection
       PsiClass ancestorClass =
         ClassUtils.getContainingClass(aClass);
       while (ancestorClass != null) {
-        final PsiField ancestorField =
+        PsiField ancestorField =
           ancestorClass.findFieldByName(fieldName, false);
         if (ancestorField != null) {
           if (!m_ignoreInvisibleFields ||

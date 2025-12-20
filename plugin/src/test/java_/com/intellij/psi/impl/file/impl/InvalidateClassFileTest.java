@@ -48,12 +48,12 @@ public abstract class InvalidateClassFileTest extends PsiTestCase {
 
   public void test1() throws Exception {
     String srcPath = JavaTestUtil.getJavaTestDataPath() + BASE_PATH + "Clazz.class";
-    final File srcFile = new File(srcPath);
-    final File dstFile = new File(myRoot, "Clazz.class");
+    File srcFile = new File(srcPath);
+    File dstFile = new File(myRoot, "Clazz.class");
     assertFalse(dstFile.exists());
     FileUtil.copy(srcFile, dstFile);
 
-    final VirtualFile rootVFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(myRoot);
+    VirtualFile rootVFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(myRoot);
 
     assertNotNull(rootVFile);
 
@@ -62,7 +62,7 @@ public abstract class InvalidateClassFileTest extends PsiTestCase {
     PsiClass clazz = getJavaFacade().findClass("Clazz", GlobalSearchScope.allScope(myProject));
     assertNotNull(clazz);
     final boolean[] notified = new boolean[] {false};
-    final PsiTreeChangeAdapter listener = new PsiTreeChangeAdapter() {
+    PsiTreeChangeAdapter listener = new PsiTreeChangeAdapter() {
       @Override
       public void childRemoved(@Nonnull PsiTreeChangeEvent event) {
         notified[0] = true;

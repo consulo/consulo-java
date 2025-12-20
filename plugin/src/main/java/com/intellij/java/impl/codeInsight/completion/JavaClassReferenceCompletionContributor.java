@@ -81,10 +81,10 @@ public class JavaClassReferenceCompletionContributor extends CompletionContribut
   }
 
   @Nullable
-  public static JavaClassReference findJavaClassReference(final PsiFile file, final int offset) {
+  public static JavaClassReference findJavaClassReference(PsiFile file, int offset) {
     PsiReference reference = file.findReferenceAt(offset);
     if (reference instanceof PsiMultiReference) {
-      for (final PsiReference psiReference : ((PsiMultiReference) reference).getReferences()) {
+      for (PsiReference psiReference : ((PsiMultiReference) reference).getReferences()) {
         if (psiReference instanceof JavaClassReference) {
           return (JavaClassReference) psiReference;
         }

@@ -210,7 +210,7 @@ public class JavaKeywordCompletion {
       }
 
       if (scope instanceof PsiMethod) {
-        final PsiMethod method = (PsiMethod)scope;
+        PsiMethod method = (PsiMethod)scope;
         if (method.isConstructor() || PsiType.VOID.equals(method.getReturnType())) {
           return TailType.SEMICOLON;
         }
@@ -218,7 +218,7 @@ public class JavaKeywordCompletion {
         return TailType.HUMBLE_SPACE_BEFORE_WORD;
       }
       if (scope instanceof PsiLambdaExpression) {
-        final PsiType returnType = LambdaUtil.getFunctionalInterfaceReturnType(((PsiLambdaExpression)scope));
+        PsiType returnType = LambdaUtil.getFunctionalInterfaceReturnType(((PsiLambdaExpression)scope));
         if (PsiType.VOID.equals(returnType)) {
           return TailType.SEMICOLON;
         }
@@ -445,17 +445,17 @@ public class JavaKeywordCompletion {
 
   private void addThisSuper() {
     if (SUPER_OR_THIS_PATTERN.accepts(myPosition)) {
-      final boolean afterDot = AFTER_DOT.accepts(myPosition);
-      final boolean insideQualifierClass = isInsideQualifierClass();
-      final boolean insideInheritorClass = PsiUtil.isLanguageLevel8OrHigher(myPosition) && isInsideInheritorClass();
+      boolean afterDot = AFTER_DOT.accepts(myPosition);
+      boolean insideQualifierClass = isInsideQualifierClass();
+      boolean insideInheritorClass = PsiUtil.isLanguageLevel8OrHigher(myPosition) && isInsideInheritorClass();
       if (!afterDot || insideQualifierClass || insideInheritorClass) {
         if (!afterDot || insideQualifierClass) {
           addKeyword(createKeyword(PsiKeyword.THIS));
         }
 
-        final LookupElement superItem = createKeyword(PsiKeyword.SUPER);
+        LookupElement superItem = createKeyword(PsiKeyword.SUPER);
         if (psiElement().afterLeaf(psiElement().withText("{").withSuperParent(2, psiMethod().constructor(true))).accepts(myPosition)) {
-          final PsiMethod method = PsiTreeUtil.getParentOfType(myPosition, PsiMethod.class, false, PsiClass.class);
+          PsiMethod method = PsiTreeUtil.getParentOfType(myPosition, PsiMethod.class, false, PsiClass.class);
           assert method != null;
           final boolean hasParams = superConstructorHasParameters(method);
           addKeyword(LookupElementDecorator.withInsertHandler(superItem, new ParenthesesInsertHandler<LookupElement>() {
@@ -816,13 +816,13 @@ public class JavaKeywordCompletion {
   }
 
   private void addUnfinishedMethodTypeParameters() {
-    final ProcessingContext context = new ProcessingContext();
+    ProcessingContext context = new ProcessingContext();
     if (psiElement().inside(psiElement(PsiTypeElement.class).afterLeaf(psiElement().withText(">")
                                                                                    .withParent(psiElement(PsiTypeParameterList.class).withParent(
                                                                                      PsiErrorElement.class).save
                                                                                                                                        ("typeParameterList"))))
                     .accepts(myPosition, context)) {
-      final PsiTypeParameterList list = (PsiTypeParameterList)context.get("typeParameterList");
+      PsiTypeParameterList list = (PsiTypeParameterList)context.get("typeParameterList");
       PsiElement current = list.getParent().getParent();
       if (current instanceof PsiField) {
         current = current.getParent();
@@ -1014,12 +1014,12 @@ public class JavaKeywordCompletion {
 
   private boolean isInsideQualifierClass() {
     if (myPosition.getParent() instanceof PsiJavaCodeReferenceElement) {
-      final PsiElement qualifier = ((PsiJavaCodeReferenceElement)myPosition.getParent()).getQualifier();
+      PsiElement qualifier = ((PsiJavaCodeReferenceElement)myPosition.getParent()).getQualifier();
       if (qualifier instanceof PsiJavaCodeReferenceElement) {
-        final PsiElement qualifierClass = ((PsiJavaCodeReferenceElement)qualifier).resolve();
+        PsiElement qualifierClass = ((PsiJavaCodeReferenceElement)qualifier).resolve();
         if (qualifierClass instanceof PsiClass) {
           PsiElement parent = myPosition;
-          final PsiManager psiManager = myPosition.getManager();
+          PsiManager psiManager = myPosition.getManager();
           while ((parent = PsiTreeUtil.getParentOfType(parent, PsiClass.class, true)) != null) {
             if (psiManager.areElementsEquivalent(parent, qualifierClass)) {
               return true;
@@ -1033,9 +1033,9 @@ public class JavaKeywordCompletion {
 
   private boolean isInsideInheritorClass() {
     if (myPosition.getParent() instanceof PsiJavaCodeReferenceElement) {
-      final PsiElement qualifier = ((PsiJavaCodeReferenceElement)myPosition.getParent()).getQualifier();
+      PsiElement qualifier = ((PsiJavaCodeReferenceElement)myPosition.getParent()).getQualifier();
       if (qualifier instanceof PsiJavaCodeReferenceElement) {
-        final PsiElement qualifierClass = ((PsiJavaCodeReferenceElement)qualifier).resolve();
+        PsiElement qualifierClass = ((PsiJavaCodeReferenceElement)qualifier).resolve();
         if (qualifierClass instanceof PsiClass && ((PsiClass)qualifierClass).isInterface()) {
           PsiElement parent = myPosition;
           while ((parent = PsiTreeUtil.getParentOfType(parent, PsiClass.class, true)) != null) {
@@ -1052,15 +1052,15 @@ public class JavaKeywordCompletion {
   }
 
   private static boolean superConstructorHasParameters(PsiMethod method) {
-    final PsiClass psiClass = method.getContainingClass();
+    PsiClass psiClass = method.getContainingClass();
     if (psiClass == null) {
       return false;
     }
 
-    final PsiClass superClass = psiClass.getSuperClass();
+    PsiClass superClass = psiClass.getSuperClass();
     if (superClass != null) {
-      for (final PsiMethod psiMethod : superClass.getConstructors()) {
-        final PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(method.getProject()).getResolveHelper();
+      for (PsiMethod psiMethod : superClass.getConstructors()) {
+        PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(method.getProject()).getResolveHelper();
         if (resolveHelper.isAccessible(psiMethod, method, null) && psiMethod.getParameterList().getParameters().length > 0) {
           return true;
         }

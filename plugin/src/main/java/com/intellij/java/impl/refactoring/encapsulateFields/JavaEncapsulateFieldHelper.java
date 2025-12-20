@@ -68,7 +68,7 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
       if (qualifier != null) {
         accessObjectClass = (PsiClass)PsiUtil.getAccessObjectClass(qualifier).getElement();
       }
-      final PsiResolveHelper helper = JavaPsiFacade.getInstance(((PsiReferenceExpression)reference).getProject()).getResolveHelper();
+      PsiResolveHelper helper = JavaPsiFacade.getInstance(((PsiReferenceExpression)reference).getProject()).getResolveHelper();
       if (helper.isAccessible(fieldDescriptor.getField(), newModifierList, ref, accessObjectClass, null)) {
         return null;
       }
@@ -106,10 +106,10 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
                               @Nonnull EncapsulateFieldsDescriptor descriptor,
                               PsiMethod setter,
                               PsiMethod getter) {
-    final PsiElement element = usage.getElement();
+    PsiElement element = usage.getElement();
     if (!(element instanceof PsiReferenceExpression)) return false;
 
-    final FieldDescriptor fieldDescriptor = usage.getFieldDescriptor();
+    FieldDescriptor fieldDescriptor = usage.getFieldDescriptor();
     PsiField field = fieldDescriptor.getField();
     boolean processGet = descriptor.isToEncapsulateGet();
     boolean processSet = descriptor.isToEncapsulateSet() && !field.hasModifierProperty(PsiModifier.FINAL);
@@ -117,8 +117,8 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
     PsiElementFactory factory = JavaPsiFacade.getInstance(descriptor.getTargetClass().getProject()).getElementFactory();
 
     try{
-      final PsiReferenceExpression expr = (PsiReferenceExpression)element;
-      final PsiElement parent = expr.getParent();
+      PsiReferenceExpression expr = (PsiReferenceExpression)element;
+      PsiElement parent = expr.getParent();
       if (parent instanceof PsiAssignmentExpression && expr.equals(((PsiAssignmentExpression)parent).getLExpression())){
         PsiAssignmentExpression assignment = (PsiAssignmentExpression)parent;
         if (assignment.getRExpression() == null) return true;
@@ -127,7 +127,7 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
         if (opType == JavaTokenType.EQ) {
           {
             if (!processSet) return true;
-            final PsiExpression setterArgument = assignment.getRExpression();
+            PsiExpression setterArgument = assignment.getRExpression();
 
             PsiMethodCallExpression methodCall = createSetterCall(fieldDescriptor, setterArgument, expr, descriptor.getTargetClass(), setter);
 
@@ -155,7 +155,7 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
 
             PsiExpression getExpr = expr;
             if (processGet) {
-              final PsiMethodCallExpression getterCall = createGetterCall(fieldDescriptor, expr, descriptor.getTargetClass(), getter);
+              PsiMethodCallExpression getterCall = createGetterCall(fieldDescriptor, expr, descriptor.getTargetClass(), getter);
               if (getterCall != null) {
                 getExpr = getterCall;
               }
@@ -194,7 +194,7 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
 
         PsiExpression getExpr = expr;
         if (processGet){
-          final PsiMethodCallExpression getterCall = createGetterCall(fieldDescriptor, expr, descriptor.getTargetClass(), getter);
+          PsiMethodCallExpression getterCall = createGetterCall(fieldDescriptor, expr, descriptor.getTargetClass(), getter);
           if (getterCall != null) {
             getExpr = getterCall;
           }
@@ -244,7 +244,7 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
                                                           PsiClass aClass,
                                                           PsiMethod setter) throws IncorrectOperationException {
     PsiElementFactory factory = JavaPsiFacade.getInstance(expr.getProject()).getElementFactory();
-    final String setterName = fieldDescriptor.getSetterName();
+    String setterName = fieldDescriptor.getSetterName();
     @NonNls String text = setterName + "(a)";
     PsiExpression qualifier = expr.getQualifierExpression();
     if (qualifier != null){
@@ -269,7 +269,7 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
                                                           PsiClass aClass,
                                                           PsiMethod getter) throws IncorrectOperationException {
     PsiElementFactory factory = JavaPsiFacade.getInstance(expr.getProject()).getElementFactory();
-    final String getterName = fieldDescriptor.getGetterName();
+    String getterName = fieldDescriptor.getGetterName();
     @NonNls String text = getterName + "()";
     PsiExpression qualifier = expr.getQualifierExpression();
     if (qualifier != null) {
@@ -294,7 +294,7 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
                                                                PsiReferenceExpression context,
                                                                PsiClass aClass) throws IncorrectOperationException {
     PsiElementFactory factory = JavaPsiFacade.getInstance(targetMethod.getProject()).getElementFactory();
-    final PsiElement resolved = methodCall.getMethodExpression().resolve();
+    PsiElement resolved = methodCall.getMethodExpression().resolve();
     if (resolved != targetMethod) {
       PsiClass containingClass;
       if (resolved instanceof PsiMethod) {
@@ -307,7 +307,7 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
         return null;
       }
       if (containingClass != null && containingClass.isInheritor(aClass, false)) {
-        final PsiExpression newMethodExpression =
+        PsiExpression newMethodExpression =
           factory.createExpressionFromText("super." + targetMethod.getName(), context);
         methodCall.getMethodExpression().replace(newMethodExpression);
       }

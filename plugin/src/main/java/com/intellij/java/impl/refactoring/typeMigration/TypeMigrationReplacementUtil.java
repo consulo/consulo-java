@@ -43,7 +43,7 @@ public class TypeMigrationReplacementUtil
 	{
 	}
 
-	public static PsiElement replaceExpression(PsiExpression expression, final Project project, Object conversion, TypeEvaluator typeEvaluator)
+	public static PsiElement replaceExpression(PsiExpression expression, Project project, Object conversion, TypeEvaluator typeEvaluator)
 	{
 		if(conversion instanceof TypeConversionDescriptorBase)
 		{
@@ -70,11 +70,11 @@ public class TypeMigrationReplacementUtil
 		}
 		else if(expression instanceof PsiReferenceExpression)
 		{
-			final PsiElement resolved = ((PsiReferenceExpression) expression).resolve();
-			final PsiMember replacer = ((PsiMember) conversion);
-			final String method = ((PsiMember) resolved).getName();
-			final String ref = expression.getText();
-			final String newref = ref.substring(0, ref.lastIndexOf(method)) + replacer.getName();
+			PsiElement resolved = ((PsiReferenceExpression) expression).resolve();
+			PsiMember replacer = ((PsiMember) conversion);
+			String method = ((PsiMember) resolved).getName();
+			String ref = expression.getText();
+			String newref = ref.substring(0, ref.lastIndexOf(method)) + replacer.getName();
 
 			if(conversion instanceof PsiMethod)
 			{
@@ -116,7 +116,7 @@ public class TypeMigrationReplacementUtil
 				}
 				else
 				{
-					final PsiElement parent = Util.getEssentialParent(expression);
+					PsiElement parent = Util.getEssentialParent(expression);
 
 					if(parent instanceof PsiMethodCallExpression)
 					{
@@ -144,27 +144,27 @@ public class TypeMigrationReplacementUtil
 		return migrationType;
 	}
 
-	static void migrateMemberOrVariableType(final PsiElement element, final Project project, PsiType migratedType)
+	static void migrateMemberOrVariableType(PsiElement element, Project project, PsiType migratedType)
 	{
 		try
 		{
 			migratedType = revalidateType(migratedType, project);
-			final PsiTypeElement typeElement = JavaPsiFacade.getInstance(project).getElementFactory().createTypeElement(migratedType);
+			PsiTypeElement typeElement = JavaPsiFacade.getInstance(project).getElementFactory().createTypeElement(migratedType);
 			if(element instanceof PsiMethod)
 			{
-				final PsiTypeElement returnTypeElement = ((PsiMethod) element).getReturnTypeElement();
+				PsiTypeElement returnTypeElement = ((PsiMethod) element).getReturnTypeElement();
 				if(returnTypeElement != null)
 				{
-					final PsiElement replaced = returnTypeElement.replace(typeElement);
+					PsiElement replaced = returnTypeElement.replace(typeElement);
 					JavaCodeStyleManager.getInstance(project).shortenClassReferences(replaced);
 				}
 			}
 			else if(element instanceof PsiVariable)
 			{
-				final PsiTypeElement varTypeElement = ((PsiVariable) element).getTypeElement();
+				PsiTypeElement varTypeElement = ((PsiVariable) element).getTypeElement();
 				if(varTypeElement != null)
 				{
-					final PsiElement replaced = varTypeElement.replace(typeElement);
+					PsiElement replaced = varTypeElement.replace(typeElement);
 					JavaCodeStyleManager.getInstance(project).shortenClassReferences(replaced);
 				}
 			}
@@ -179,20 +179,20 @@ public class TypeMigrationReplacementUtil
 		}
 	}
 
-	static PsiNewExpression replaceNewExpressionType(final Project project, final PsiNewExpression expression, final Map.Entry<TypeMigrationUsageInfo, PsiType> info)
+	static PsiNewExpression replaceNewExpressionType(Project project, PsiNewExpression expression, Map.Entry<TypeMigrationUsageInfo, PsiType> info)
 	{
-		final PsiType changeType = info.getValue();
+		PsiType changeType = info.getValue();
 		if(changeType != null)
 		{
 			try
 			{
-				final PsiJavaCodeReferenceElement classReference = expression.getClassOrAnonymousClassReference();
-				final PsiType componentType = changeType.getDeepComponentType();
+				PsiJavaCodeReferenceElement classReference = expression.getClassOrAnonymousClassReference();
+				PsiType componentType = changeType.getDeepComponentType();
 				if(classReference != null)
 				{
-					final PsiElement psiElement = changeType.equals(RefactoringChangeUtil.getTypeByExpression(expression)) ? classReference : replaceTypeWithClassReferenceOrKeyword(project,
+					PsiElement psiElement = changeType.equals(RefactoringChangeUtil.getTypeByExpression(expression)) ? classReference : replaceTypeWithClassReferenceOrKeyword(project,
 							componentType, classReference);
-					final PsiNewExpression newExpression = PsiTreeUtil.getParentOfType(psiElement, PsiNewExpression.class);
+					PsiNewExpression newExpression = PsiTreeUtil.getParentOfType(psiElement, PsiNewExpression.class);
 					if(!tryToReplaceWithDiamond(newExpression, changeType))
 					{
 						return newExpression;
@@ -200,7 +200,7 @@ public class TypeMigrationReplacementUtil
 				}
 				else
 				{
-					final PsiElement typeKeyword = getTypeKeyword(expression);
+					PsiElement typeKeyword = getTypeKeyword(expression);
 					if(typeKeyword != null)
 					{
 						replaceTypeWithClassReferenceOrKeyword(project, componentType, typeKeyword);
@@ -219,7 +219,7 @@ public class TypeMigrationReplacementUtil
 	{
 		if(newExpression != null && PsiDiamondTypeUtil.canCollapseToDiamond(newExpression, newExpression, changeType))
 		{
-			final PsiJavaCodeReferenceElement anonymousClassReference = newExpression.getClassOrAnonymousClassReference();
+			PsiJavaCodeReferenceElement anonymousClassReference = newExpression.getClassOrAnonymousClassReference();
 			if(anonymousClassReference != null)
 			{
 				PsiDiamondTypeUtil.replaceExplicitWithDiamond(anonymousClassReference.getParameterList());
@@ -231,7 +231,7 @@ public class TypeMigrationReplacementUtil
 
 	private static PsiElement replaceTypeWithClassReferenceOrKeyword(Project project, PsiType componentType, PsiElement typePlace)
 	{
-		final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
+		PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
 		if(componentType instanceof PsiClassType)
 		{
 			return typePlace.replace(factory.createReferenceElementByType((PsiClassType) componentType));

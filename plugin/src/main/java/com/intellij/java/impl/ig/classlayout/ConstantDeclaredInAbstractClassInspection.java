@@ -53,7 +53,7 @@ public class ConstantDeclaredInAbstractClassInspection extends BaseInspection {
                 !field.hasModifierProperty(PsiModifier.FINAL)) {
                 return;
             }
-            final PsiClass containingClass = field.getContainingClass();
+            PsiClass containingClass = field.getContainingClass();
             if (containingClass == null) {
                 return;
             }

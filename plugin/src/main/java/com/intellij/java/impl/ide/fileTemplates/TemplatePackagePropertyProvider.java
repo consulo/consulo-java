@@ -27,7 +27,7 @@ import java.util.Properties;
  */
 @ExtensionImpl
 public class TemplatePackagePropertyProvider implements DefaultTemplatePropertiesProvider {
-  public void fillProperties(final PsiDirectory directory, final Properties props) {
+  public void fillProperties(PsiDirectory directory, Properties props) {
     JavaTemplateUtil.setPackageNameAttribute(props, directory);
   }
 }

@@ -36,15 +36,15 @@ public abstract class PsiNamedElementAutomaticRenamer<T extends PsiNamedElement>
     return element.getName();
   }
 
-  protected void doRenameElement(final T t) throws IncorrectOperationException {
+  protected void doRenameElement(T t) throws IncorrectOperationException {
     t.setName(getNewElementName(t));
   }
 
   protected String suggestName(T element) {
     String elementName = getName(element);
-    final NameSuggester suggester = new NameSuggester(getOldName(), getNewName());
+    NameSuggester suggester = new NameSuggester(getOldName(), getNewName());
     String canonicalName = nameToCanonicalName(elementName, element);
-    final String newCanonicalName = suggester.suggestName(canonicalName);
+    String newCanonicalName = suggester.suggestName(canonicalName);
     if (newCanonicalName.length() == 0) {
       LOG.error("oldName = " + getOldName() + ", newName = " + getNewName() + ", name = " + elementName + ", canonicalName = " +
           canonicalName + ", newCanonicalName = " + newCanonicalName);

@@ -28,16 +28,16 @@ class CharToStringPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiLiteralExpression)) {
       return false;
     }
-    final PsiLiteralExpression expression =
+    PsiLiteralExpression expression =
       (PsiLiteralExpression)element;
-    final PsiType type = expression.getType();
+    PsiType type = expression.getType();
     if (!PsiType.CHAR.equals(type)) {
       return false;
     }
-    final String charLiteral = element.getText();
+    String charLiteral = element.getText();
     if (charLiteral.length() < 2) return false; // Incomplete char literal probably without closing amp
 
-    final String charText =
+    String charText =
       charLiteral.substring(1, charLiteral.length() - 1);
     if (StringUtil.unescapeStringCharacters(charText).length() != 1) {
       // not satisfied with character literals of more than one character
@@ -47,43 +47,43 @@ class CharToStringPredicate implements PsiElementPredicate {
   }
 
   private static boolean isInConcatenationContext(PsiElement element) {
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (parent instanceof PsiPolyadicExpression) {
-      final PsiPolyadicExpression parentExpression =
+      PsiPolyadicExpression parentExpression =
         (PsiPolyadicExpression)parent;
-      final PsiType parentType = parentExpression.getType();
+      PsiType parentType = parentExpression.getType();
       if (parentType == null) {
         return false;
       }
-      final String parentTypeText = parentType.getCanonicalText();
+      String parentTypeText = parentType.getCanonicalText();
       return CommonClassNames.JAVA_LANG_STRING.equals(parentTypeText);
     }
     else if (parent instanceof PsiAssignmentExpression) {
-      final PsiAssignmentExpression parentExpression =
+      PsiAssignmentExpression parentExpression =
         (PsiAssignmentExpression)parent;
-      final IElementType tokenType = parentExpression.getOperationTokenType();
+      IElementType tokenType = parentExpression.getOperationTokenType();
       if (!JavaTokenType.PLUSEQ.equals(tokenType)) {
         return false;
       }
-      final PsiType parentType = parentExpression.getType();
+      PsiType parentType = parentExpression.getType();
       if (parentType == null) {
         return false;
       }
-      final String parentTypeText = parentType.getCanonicalText();
+      String parentTypeText = parentType.getCanonicalText();
       return CommonClassNames.JAVA_LANG_STRING.equals(parentTypeText);
     }
     else if (parent instanceof PsiExpressionList) {
-      final PsiElement grandParent = parent.getParent();
+      PsiElement grandParent = parent.getParent();
       if (!(grandParent instanceof PsiMethodCallExpression)) {
         return false;
       }
-      final PsiMethodCallExpression methodCall =
+      PsiMethodCallExpression methodCall =
         (PsiMethodCallExpression)grandParent;
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         methodCall.getMethodExpression();
-      final PsiExpression qualifierExpression =
+      PsiExpression qualifierExpression =
         methodExpression.getQualifierExpression();
-      final PsiType type;
+      PsiType type;
       if (qualifierExpression == null) {
         // to use the intention inside the source of
         // String and StringBuffer
@@ -95,27 +95,27 @@ class CharToStringPredicate implements PsiElementPredicate {
       if (type == null) {
         return false;
       }
-      final String className = type.getCanonicalText();
+      String className = type.getCanonicalText();
       if (CommonClassNames.JAVA_LANG_STRING_BUFFER.equals(className) ||
           CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(className)) {
-        @NonNls final String methodName =
+        @NonNls String methodName =
           methodExpression.getReferenceName();
         if (!"append".equals(methodName) &&
             !"insert".equals(methodName)) {
           return false;
         }
-        final PsiElement method = methodExpression.resolve();
+        PsiElement method = methodExpression.resolve();
         return method != null;
       }
       else if (CommonClassNames.JAVA_LANG_STRING.equals(className)) {
-        @NonNls final String methodName =
+        @NonNls String methodName =
           methodExpression.getReferenceName();
         if (!"indexOf".equals(methodName) &&
             !"lastIndexOf".equals(methodName) &&
             !"replace".equals(methodName)) {
           return false;
         }
-        final PsiElement method = methodExpression.resolve();
+        PsiElement method = methodExpression.resolve();
         return method != null;
       }
     }

@@ -70,7 +70,7 @@ public class ObjectEqualityInspection extends BaseInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
+        MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
         optionsPanel.addCheckbox(InspectionGadgetsLocalize.objectComparisonEnumeratedIgnoreOption().get(), "m_ignoreEnums");
         optionsPanel.addCheckbox(InspectionGadgetsLocalize.objectComparisonKlassIgnoreOption().get(), "m_ignoreClassObjects");
         optionsPanel.addCheckbox(
@@ -98,11 +98,11 @@ public class ObjectEqualityInspection extends BaseInspection {
             if (!ComparisonUtils.isEqualityComparison(expression)) {
                 return;
             }
-            final PsiExpression rhs = expression.getROperand();
+            PsiExpression rhs = expression.getROperand();
             if (!isObjectType(rhs)) {
                 return;
             }
-            final PsiExpression lhs = expression.getLOperand();
+            PsiExpression lhs = expression.getLOperand();
             if (!isObjectType(lhs)) {
                 return;
             }
@@ -115,11 +115,11 @@ public class ObjectEqualityInspection extends BaseInspection {
             if (m_ignorePrivateConstructors && (typeHasPrivateConstructor(lhs) || typeHasPrivateConstructor(rhs))) {
                 return;
             }
-            final PsiMethod method = PsiTreeUtil.getParentOfType(expression, PsiMethod.class);
+            PsiMethod method = PsiTreeUtil.getParentOfType(expression, PsiMethod.class);
             if (method != null && MethodUtils.isEquals(method)) {
                 return;
             }
-            final PsiJavaToken sign = expression.getOperationSign();
+            PsiJavaToken sign = expression.getOperationSign();
             registerError(sign);
         }
 
@@ -127,12 +127,12 @@ public class ObjectEqualityInspection extends BaseInspection {
             if (expression == null) {
                 return false;
             }
-            final PsiType type = expression.getType();
+            PsiType type = expression.getType();
             if (!(type instanceof PsiClassType)) {
                 return false;
             }
-            final PsiClassType classType = (PsiClassType) type;
-            final PsiClass aClass = classType.resolve();
+            PsiClassType classType = (PsiClassType) type;
+            PsiClass aClass = classType.resolve();
             if (aClass != null && aClass.isInterface()) {
                 return implementersHaveOnlyPrivateConstructors(aClass);
             }
@@ -144,7 +144,7 @@ public class ObjectEqualityInspection extends BaseInspection {
         private boolean implementersHaveOnlyPrivateConstructors(final PsiClass aClass) {
             final GlobalSearchScope scope = GlobalSearchScope.allScope(aClass.getProject());
             final PsiElementProcessor.CollectElementsWithLimit<PsiClass> processor = new PsiElementProcessor.CollectElementsWithLimit(6);
-            final ProgressManager progressManager = ProgressManager.getInstance();
+            ProgressManager progressManager = ProgressManager.getInstance();
             progressManager.runProcess(new Runnable() {
                 public void run() {
                     ClassInheritorsSearch.search(aClass, scope, true, true).forEach(new PsiElementProcessorAdapter<PsiClass>(processor));
@@ -153,7 +153,7 @@ public class ObjectEqualityInspection extends BaseInspection {
             if (processor.isOverflow()) {
                 return false;
             }
-            final Collection<PsiClass> implementers = processor.getCollection();
+            Collection<PsiClass> implementers = processor.getCollection();
             for (PsiClass implementer : implementers) {
                 if (!implementer.isInterface() && !implementer.hasModifierProperty(PsiModifier.ABSTRACT)) {
                     if (!hasOnlyPrivateConstructors(implementer)) {
@@ -168,7 +168,7 @@ public class ObjectEqualityInspection extends BaseInspection {
             if (aClass == null) {
                 return false;
             }
-            final PsiMethod[] constructors = aClass.getConstructors();
+            PsiMethod[] constructors = aClass.getConstructors();
             if (constructors.length == 0) {
                 return false;
             }
@@ -187,12 +187,12 @@ public class ObjectEqualityInspection extends BaseInspection {
             if (expression instanceof PsiClassObjectAccessExpression) {
                 return true;
             }
-            final PsiType type = expression.getType();
+            PsiType type = expression.getType();
             if (!(type instanceof PsiClassType)) {
                 return false;
             }
-            final PsiClassType classType = (PsiClassType) type;
-            final PsiClassType rawType = classType.rawType();
+            PsiClassType classType = (PsiClassType) type;
+            PsiClassType rawType = classType.rawType();
             return rawType.equalsToText(CommonClassNames.JAVA_LANG_CLASS);
         }
 
@@ -204,7 +204,7 @@ public class ObjectEqualityInspection extends BaseInspection {
             if (expression == null) {
                 return false;
             }
-            final PsiType type = expression.getType();
+            PsiType type = expression.getType();
             return type != null &&
                 !(type instanceof PsiArrayType) &&
                 !(type instanceof PsiPrimitiveType) &&

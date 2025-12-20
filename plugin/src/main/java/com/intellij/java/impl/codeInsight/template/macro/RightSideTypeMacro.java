@@ -63,7 +63,7 @@ public class RightSideTypeMacro extends Macro {
     if (element instanceof PsiAssignmentExpression assignment) {
       PsiExpression rhs = assignment.getRExpression();
       if (rhs == null) return null;
-      final PsiType rhsType = rhs.getType();
+      PsiType rhsType = rhs.getType();
       if (rhsType == null) return null;
       return new PsiTypeResult(rhsType, project);
     } else if (element instanceof PsiVariable var) {

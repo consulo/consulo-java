@@ -27,29 +27,29 @@ class AssertTrueOrFalsePredicate implements PsiElementPredicate {
     if (!(element instanceof PsiMethodCallExpression)) {
       return false;
     }
-    final PsiMethodCallExpression expression =
+    PsiMethodCallExpression expression =
       (PsiMethodCallExpression)element;
-    final PsiExpressionList argumentList = expression.getArgumentList();
-    final int numExpressions = argumentList.getExpressions().length;
+    PsiExpressionList argumentList = expression.getArgumentList();
+    int numExpressions = argumentList.getExpressions().length;
     if (numExpressions < 1 || numExpressions > 2) {
       return false;
     }
-    final PsiReferenceExpression methodExpression =
+    PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
-    @NonNls final String methodName = methodExpression.getReferenceName();
+    @NonNls String methodName = methodExpression.getReferenceName();
     if (!"assertTrue".equals(methodName) &&
         !"assertFalse".equals(methodName)) {
       return false;
     }
-    final PsiMethod method = expression.resolveMethod();
+    PsiMethod method = expression.resolveMethod();
     if (method == null) {
       return false;
     }
-    final PsiClass targetClass = method.getContainingClass();
+    PsiClass targetClass = method.getContainingClass();
     if (targetClass == null) {
       return false;
     }
-    final String qualifiedName = targetClass.getQualifiedName();
+    String qualifiedName = targetClass.getQualifiedName();
     if (!"junit.framework.Assert".equals(qualifiedName) &&
         !"org.junit.Assert".equals(qualifiedName)) {
       return false;

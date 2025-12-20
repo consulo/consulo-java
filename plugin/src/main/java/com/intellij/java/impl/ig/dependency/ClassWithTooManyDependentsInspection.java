@@ -53,18 +53,18 @@ public abstract class ClassWithTooManyDependentsInspection extends BaseGlobalIns
     if (!(refEntity instanceof RefClass)) {
       return null;
     }
-    final RefClass refClass = (RefClass)refEntity;
-    final PsiClass aClass = refClass.getElement();
+    RefClass refClass = (RefClass)refEntity;
+    PsiClass aClass = refClass.getElement();
     if (ClassUtils.isInnerClass(aClass)) {
       return null;
     }
-    final Set<RefClass> dependents =
+    Set<RefClass> dependents =
       DependencyUtils.calculateDependentsForClass(refClass);
-    final int numDependents = dependents.size();
+    int numDependents = dependents.size();
     if (numDependents <= limit) {
       return null;
     }
-    final String errorString =
+    String errorString =
         InspectionGadgetsLocalize.classWithTooManyDependentsProblemDescriptor(refEntity.getName(), numDependents, limit).get();
 
     return new CommonProblemDescriptor[]{

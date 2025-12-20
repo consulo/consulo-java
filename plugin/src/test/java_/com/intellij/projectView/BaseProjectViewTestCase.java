@@ -80,7 +80,7 @@ public abstract class BaseProjectViewTestCase extends TestSourceBasedTestCase {
     assertEquals(expected, PlatformTestUtil.print(model));
   }
 
-  public static void checkContainsMethod(final Object rootElement, final AbstractTreeStructure structure) {
+  public static void checkContainsMethod(Object rootElement, AbstractTreeStructure structure) {
     ProjectViewTestUtil.checkContainsMethod(rootElement, structure, new Function<AbstractTreeNode, VirtualFile[]>() {
       @Override
       public VirtualFile[] fun(AbstractTreeNode kid) {

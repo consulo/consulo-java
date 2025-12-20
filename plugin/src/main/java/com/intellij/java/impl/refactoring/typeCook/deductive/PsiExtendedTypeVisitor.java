@@ -23,12 +23,12 @@ import com.intellij.java.language.psi.PsiTypeVisitorEx;
  * @author db
  */
 public abstract class PsiExtendedTypeVisitor<X> extends PsiTypeVisitorEx<X> {
-  public X visitClassType(final PsiClassType classType) {
+  public X visitClassType(PsiClassType classType) {
     super.visitClassType(classType);
-    final PsiClassType.ClassResolveResult result = classType.resolveGenerics();
+    PsiClassType.ClassResolveResult result = classType.resolveGenerics();
 
     if (result.getElement() != null) {
-      for (final PsiType type : result.getSubstitutor().getSubstitutionMap().values()) {
+      for (PsiType type : result.getSubstitutor().getSubstitutionMap().values()) {
         if (type != null) {
           type.accept(this);
         }

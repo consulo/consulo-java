@@ -55,7 +55,7 @@ public class LocalVariableNamingConventionInspection
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final String varName = (String)infos[0];
+    String varName = (String)infos[0];
     if (varName.length() < getMinLength()) {
       return InspectionGadgetsLocalize.localVariableNamingConventionProblemDescriptorShort().get();
     }
@@ -104,13 +104,13 @@ public class LocalVariableNamingConventionInspection
       @Nonnull PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       if (m_ignoreForLoopParameters) {
-        final PsiElement parent = variable.getParent();
+        PsiElement parent = variable.getParent();
         if (parent != null) {
-          final PsiElement grandparent = parent.getParent();
+          PsiElement grandparent = parent.getParent();
           if (grandparent instanceof PsiForStatement) {
-            final PsiForStatement forLoop =
+            PsiForStatement forLoop =
               (PsiForStatement)grandparent;
-            final PsiStatement initialization =
+            PsiStatement initialization =
               forLoop.getInitialization();
             if (parent.equals(initialization)) {
               return;
@@ -118,7 +118,7 @@ public class LocalVariableNamingConventionInspection
           }
         }
       }
-      final String name = variable.getName();
+      String name = variable.getName();
       if (name == null) {
         return;
       }
@@ -130,10 +130,10 @@ public class LocalVariableNamingConventionInspection
 
     @Override
     public void visitParameter(@Nonnull PsiParameter variable) {
-      final PsiElement scope = variable.getDeclarationScope();
-      final boolean isCatchParameter =
+      PsiElement scope = variable.getDeclarationScope();
+      boolean isCatchParameter =
         scope instanceof PsiCatchSection;
-      final boolean isForeachParameter =
+      boolean isForeachParameter =
         scope instanceof PsiForeachStatement;
       if (!isCatchParameter && !isForeachParameter) {
         return;
@@ -144,7 +144,7 @@ public class LocalVariableNamingConventionInspection
       if (m_ignoreForLoopParameters && isForeachParameter) {
         return;
       }
-      final String name = variable.getName();
+      String name = variable.getName();
       if (name == null) {
         return;
       }

@@ -27,32 +27,32 @@ class AssertEqualsWithLiteralPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiMethodCallExpression)) {
       return false;
     }
-    final PsiMethodCallExpression expression =
+    PsiMethodCallExpression expression =
       (PsiMethodCallExpression)element;
-    final PsiExpressionList argumentList = expression.getArgumentList();
-    final PsiExpression[] arguments = argumentList.getExpressions();
-    final int argumentCount = arguments.length;
+    PsiExpressionList argumentList = expression.getArgumentList();
+    PsiExpression[] arguments = argumentList.getExpressions();
+    int argumentCount = arguments.length;
     if (argumentCount < 2 || argumentCount > 3) {
       return false;
     }
-    final PsiReferenceExpression methodExpression =
+    PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
-    @NonNls final String methodName = methodExpression.getReferenceName();
+    @NonNls String methodName = methodExpression.getReferenceName();
     if (!"assertEquals".equals(methodName)) {
       return false;
     }
     if (ErrorUtil.containsError(element)) {
       return false;
     }
-    final PsiMethod method = expression.resolveMethod();
+    PsiMethod method = expression.resolveMethod();
     if (method == null) {
       return false;
     }
-    final PsiClass targetClass = method.getContainingClass();
+    PsiClass targetClass = method.getContainingClass();
     if (targetClass == null) {
       return false;
     }
-    final String qualifiedName = targetClass.getQualifiedName();
+    String qualifiedName = targetClass.getQualifiedName();
     if (!"junit.framework.Assert".equals(qualifiedName) &&
         !"org.junit.Assert".equals(qualifiedName)) {
       return false;
@@ -69,7 +69,7 @@ class AssertEqualsWithLiteralPredicate implements PsiElementPredicate {
     if (expression == null) {
       return false;
     }
-    @NonNls final String text = expression.getText();
+    @NonNls String text = expression.getText();
     return "true".equals(text) ||
            "false".equals(text) || "null".equals(text);
   }

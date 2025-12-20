@@ -25,18 +25,18 @@ import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import junit.framework.Assert;
 
 public class RefactoringTestUtil {
-  public static MemberInfo[] findMembers(final PsiClass sourceClass, final MemberDescriptor... membersToFind) {
+  public static MemberInfo[] findMembers(PsiClass sourceClass, MemberDescriptor... membersToFind) {
     MemberInfo[] infos = new MemberInfo[membersToFind.length];
     for (int i = 0; i < membersToFind.length; i++) {
-      final Class<? extends PsiMember> clazz = membersToFind[i].myClass;
-      final String name = membersToFind[i].myName;
+      Class<? extends PsiMember> clazz = membersToFind[i].myClass;
+      String name = membersToFind[i].myName;
       PsiMember member = null;
       boolean overrides = false;
       PsiReferenceList refList = null;
       if (PsiClass.class.isAssignableFrom(clazz)) {
         member = sourceClass.findInnerClassByName(name, false);
         if (member == null) {
-          final PsiClass[] supers = sourceClass.getSupers();
+          PsiClass[] supers = sourceClass.getSupers();
           for (PsiClass superTypeClass : supers) {
             if (superTypeClass.getName().equals(name)) {
               member = superTypeClass;
@@ -48,7 +48,7 @@ public class RefactoringTestUtil {
         }
 
       } else if (PsiMethod.class.isAssignableFrom(clazz)) {
-        final PsiMethod[] methods = sourceClass.findMethodsByName(name, false);
+        PsiMethod[] methods = sourceClass.findMethodsByName(name, false);
         Assert.assertEquals(1, methods.length);
         member = methods[0];
       } else if (PsiField.class.isAssignableFrom(clazz)) {

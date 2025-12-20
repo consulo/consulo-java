@@ -61,9 +61,9 @@ public abstract class MoveInstanceMethodDialogBase extends RefactoringDialog {
 
   protected JPanel createListAndVisibilityPanels() {
     myList = createTargetVariableChooser();
-    final JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(myList);
-    final JPanel hBox = new JPanel(new GridBagLayout());
-    final GridBagConstraints gbConstraints = new GridBagConstraints();
+    JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(myList);
+    JPanel hBox = new JPanel(new GridBagLayout());
+    GridBagConstraints gbConstraints = new GridBagConstraints();
 
     gbConstraints.fill = GridBagConstraints.BOTH;
     gbConstraints.weightx = 1;
@@ -84,7 +84,7 @@ public abstract class MoveInstanceMethodDialogBase extends RefactoringDialog {
   }
 
   protected JList createTargetVariableChooser() {
-    final JList list = new JBList(new MyListModel());
+    JList list = new JBList(new MyListModel());
     list.setCellRenderer(new MyListCellRenderer());
     list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     list.setSelectedIndex(0);
@@ -97,7 +97,7 @@ public abstract class MoveInstanceMethodDialogBase extends RefactoringDialog {
   }
 
   protected static JavaVisibilityPanel createVisibilityPanel() {
-    final JavaVisibilityPanel visibilityPanel = new JavaVisibilityPanel(false, true);
+    JavaVisibilityPanel visibilityPanel = new JavaVisibilityPanel(false, true);
     visibilityPanel.setVisibility(null);
     return visibilityPanel;
   }
@@ -105,20 +105,20 @@ public abstract class MoveInstanceMethodDialogBase extends RefactoringDialog {
   @RequiredUIAccess
   protected boolean verifyTargetClass(PsiClass targetClass) {
     if (targetClass.isInterface()) {
-      final Project project = getProject();
+      Project project = getProject();
       if (ClassInheritorsSearch.search(targetClass, false).findFirst() == null) {
-        final LocalizeValue message =
+        LocalizeValue message =
           RefactoringLocalize.zeroIsAnInterfaceThatHasNoImplementingClasses(DescriptiveNameUtil.getDescriptiveName(targetClass));
 
         Messages.showErrorDialog(project, message.get(), myRefactoringName);
         return false;
       }
 
-      final LocalizeValue message = RefactoringLocalize.zeroIsAnInterfaceMethodImplementationWillBeAddedToAllDirectlyImplementingClasses(
+      LocalizeValue message = RefactoringLocalize.zeroIsAnInterfaceMethodImplementationWillBeAddedToAllDirectlyImplementingClasses(
         DescriptiveNameUtil.getDescriptiveName(targetClass)
       );
 
-      final int result = Messages.showYesNoDialog(project, message.get(), myRefactoringName, UIUtil.getQuestionIcon());
+      int result = Messages.showYesNoDialog(project, message.get(), myRefactoringName, UIUtil.getQuestionIcon());
       if (result != 0) return false;
     }
 
@@ -139,8 +139,8 @@ public abstract class MoveInstanceMethodDialogBase extends RefactoringDialog {
     @RequiredUIAccess
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
       super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-      final PsiVariable psiVariable = (PsiVariable)value;
-      final String text = PsiFormatUtil.formatVariable(
+      PsiVariable psiVariable = (PsiVariable)value;
+      String text = PsiFormatUtil.formatVariable(
         psiVariable,
         PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_TYPE,
         PsiSubstitutor.EMPTY

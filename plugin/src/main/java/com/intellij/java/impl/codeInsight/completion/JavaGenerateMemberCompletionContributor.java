@@ -91,7 +91,7 @@ public class JavaGenerateMemberCompletionContributor {
       List<PsiMethod> prototypes = new ArrayList<>();
       Collections.addAll(prototypes, GetterSetterPrototypeProvider.generateGetterSetters(field, true));
       Collections.addAll(prototypes, GetterSetterPrototypeProvider.generateGetterSetters(field, false));
-      for (final PsiMethod prototype : prototypes) {
+      for (PsiMethod prototype : prototypes) {
         if (parent.findMethodBySignature(prototype, false) == null && addedSignatures.add(prototype.getSignature(PsiSubstitutor.EMPTY))) {
           Image icon = IconDescriptorUpdaters.getIcon(prototype, 0);
           result.addElement(createGenerateMethodElement(prototype, PsiSubstitutor.EMPTY, icon, "", (context, item) -> {
@@ -113,7 +113,7 @@ public class JavaGenerateMemberCompletionContributor {
     context.commitDocument();
   }
 
-  private static void addSuperSignatureElements(final PsiClass parent, boolean implemented, CompletionResultSet result, Set<MethodSignature> addedSignatures) {
+  private static void addSuperSignatureElements(PsiClass parent, boolean implemented, CompletionResultSet result, Set<MethodSignature> addedSignatures) {
     for (CandidateInfo candidate : OverrideImplementExploreUtil.getMethodsToOverrideImplement(parent, implemented)) {
       PsiMethod baseMethod = (PsiMethod) candidate.getElement();
       PsiClass baseClass = baseMethod.getContainingClass();
@@ -124,14 +124,14 @@ public class JavaGenerateMemberCompletionContributor {
     }
   }
 
-  private static LookupElementBuilder createOverridingLookupElement(final PsiMethod baseMethod,
+  private static LookupElementBuilder createOverridingLookupElement(PsiMethod baseMethod,
                                                                     PsiClass baseClass,
                                                                     PsiSubstitutor substitutor) {
     Image icon = IconDescriptorUpdaters.getIcon(baseMethod, 0);
     return createGenerateMethodElement(baseMethod, substitutor, icon, baseClass.getName(), (context, item) -> {
       removeLookupString(context);
 
-      final PsiClass parent = PsiTreeUtil.findElementOfClassAtOffset(context.getFile(), context.getStartOffset(), PsiClass.class, false);
+      PsiClass parent = PsiTreeUtil.findElementOfClassAtOffset(context.getFile(), context.getStartOffset(), PsiClass.class, false);
       if (parent == null) {
         return;
       }
@@ -144,10 +144,10 @@ public class JavaGenerateMemberCompletionContributor {
   private static void insertGenerationInfos(InsertionContext context, List<PsiGenerationInfo<PsiMethod>> infos) {
     List<PsiGenerationInfo<PsiMethod>> newInfos = GenerateMembersUtil.insertMembersAtOffset(context.getFile(), context.getStartOffset(), infos);
     if (!newInfos.isEmpty()) {
-      final List<PsiElement> elements = new ArrayList<>();
+      List<PsiElement> elements = new ArrayList<>();
       for (GenerationInfo member : newInfos) {
         if (!(member instanceof TemplateGenerationInfo)) {
-          final PsiMember psiMember = member.getPsiMember();
+          PsiMember psiMember = member.getPsiMember();
           if (psiMember != null) {
             elements.add(psiMember);
           }

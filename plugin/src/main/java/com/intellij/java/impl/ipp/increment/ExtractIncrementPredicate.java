@@ -28,20 +28,20 @@ class ExtractIncrementPredicate implements PsiElementPredicate {
         !(element instanceof PsiPostfixExpression)) {
       return false;
     }
-    final IElementType tokenType;
+    IElementType tokenType;
     if (element instanceof PsiPostfixExpression) {
-      final PsiPostfixExpression postfixExpression =
+      PsiPostfixExpression postfixExpression =
         (PsiPostfixExpression)element;
-      final PsiExpression operand = postfixExpression.getOperand();
+      PsiExpression operand = postfixExpression.getOperand();
       if (!(operand instanceof PsiReferenceExpression)) {
         return false;
       }
       tokenType = postfixExpression.getOperationTokenType();
     }
     else {
-      final PsiPrefixExpression prefixExpression =
+      PsiPrefixExpression prefixExpression =
         (PsiPrefixExpression)element;
-      final PsiExpression operand = prefixExpression.getOperand();
+      PsiExpression operand = prefixExpression.getOperand();
       if (!(operand instanceof PsiReferenceExpression)) {
         return false;
       }
@@ -51,11 +51,11 @@ class ExtractIncrementPredicate implements PsiElementPredicate {
         !JavaTokenType.MINUSMINUS.equals(tokenType)) {
       return false;
     }
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (parent instanceof PsiExpressionStatement) {
       return false;
     }
-    final PsiStatement containingStatement =
+    PsiStatement containingStatement =
       PsiTreeUtil.getParentOfType(element, PsiStatement.class);
     return containingStatement != null;
   }

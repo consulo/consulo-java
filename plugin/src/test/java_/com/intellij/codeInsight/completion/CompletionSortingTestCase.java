@@ -47,18 +47,18 @@ public abstract class CompletionSortingTestCase extends LightFixtureCompletionTe
 	@Override
 	protected abstract String getBasePath();
 
-	protected void checkPreferredItems(final int selected, @NonNls final String... expected)
+	protected void checkPreferredItems(int selected, @NonNls String... expected)
 	{
 		invokeCompletion(getTestName(false) + ".java");
 		assertPreferredItems(selected, expected);
 	}
 
-	protected void assertPreferredItems(final int selected, @NonNls final String... expected)
+	protected void assertPreferredItems(int selected, @NonNls String... expected)
 	{
 		myFixture.assertPreferredCompletionItems(selected, expected);
 	}
 
-	protected LookupImpl invokeCompletion(final String path)
+	protected LookupImpl invokeCompletion(String path)
 	{
 		configureNoCompletion(path);
 		myFixture.complete(myType);
@@ -70,21 +70,21 @@ public abstract class CompletionSortingTestCase extends LightFixtureCompletionTe
 		myFixture.configureFromExistingVirtualFile(myFixture.copyFileToProject(path, com.intellij.openapi.util.text.StringUtil.getShortName(path, '/')));
 	}
 
-	protected static void incUseCount(final LookupImpl lookup, final int index)
+	protected static void incUseCount(LookupImpl lookup, int index)
 	{
 		imitateItemSelection(lookup, index);
 		refreshSorting(lookup);
 	}
 
-	protected static void refreshSorting(final LookupImpl lookup)
+	protected static void refreshSorting(LookupImpl lookup)
 	{
 		lookup.setSelectionTouched(false);
 		lookup.resort(true);
 	}
 
-	protected static void imitateItemSelection(final LookupImpl lookup, final int index)
+	protected static void imitateItemSelection(LookupImpl lookup, int index)
 	{
-		final LookupElement item = lookup.getItems().get(index);
+		LookupElement item = lookup.getItems().get(index);
 		lookup.setCurrentItem(item);
 		StatisticsUpdate.collectStatisticChanges(item);
 		StatisticsUpdate.applyLastCompletionStatisticsUpdate();

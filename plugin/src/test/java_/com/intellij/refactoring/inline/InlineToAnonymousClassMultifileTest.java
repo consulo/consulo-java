@@ -57,7 +57,7 @@ public abstract class InlineToAnonymousClassMultifileTest extends RefactoringTes
   private void doTest(String className) throws Exception {
     String rootBefore = getRoot() + "/before";
     PsiTestUtil.removeAllRoots(myModule, IdeaTestUtil.getMockJdk17());
-    final VirtualFile rootDir = PsiTestUtil.createTestProjectStructure(myProject, myModule, rootBefore, myFilesToDelete);
+    VirtualFile rootDir = PsiTestUtil.createTestProjectStructure(myProject, myModule, rootBefore, myFilesToDelete);
     PsiClass classToInline = myJavaFacade.findClass(className, ProjectScope.getAllScope(myProject));
     assertEquals(LocalizeValue.empty(), InlineToAnonymousClassHandler.getCannotInlineMessage(classToInline));
     InlineToAnonymousClassProcessor processor = new InlineToAnonymousClassProcessor(myProject,

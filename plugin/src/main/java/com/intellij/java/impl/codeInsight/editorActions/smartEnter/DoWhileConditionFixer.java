@@ -38,11 +38,11 @@ public class DoWhileConditionFixer implements Fixer
 	{
 		if(psiElement instanceof PsiDoWhileStatement)
 		{
-			final Document doc = editor.getDocument();
-			final PsiDoWhileStatement stmt = (PsiDoWhileStatement) psiElement;
+			Document doc = editor.getDocument();
+			PsiDoWhileStatement stmt = (PsiDoWhileStatement) psiElement;
 			if(stmt.getBody() == null || !(stmt.getBody() instanceof PsiBlockStatement) && stmt.getWhileKeyword() == null)
 			{
-				final int startOffset = stmt.getTextRange().getStartOffset();
+				int startOffset = stmt.getTextRange().getStartOffset();
 				doc.replaceString(startOffset, startOffset + "do".length(), "do {} while()");
 				return;
 			}
@@ -51,12 +51,12 @@ public class DoWhileConditionFixer implements Fixer
 			{
 				if(stmt.getWhileKeyword() == null)
 				{
-					final int endOffset = stmt.getTextRange().getEndOffset();
+					int endOffset = stmt.getTextRange().getEndOffset();
 					doc.insertString(endOffset, "while()");
 				}
 				else if(stmt.getLParenth() == null || stmt.getRParenth() == null)
 				{
-					final TextRange whileRange = stmt.getWhileKeyword().getTextRange();
+					TextRange whileRange = stmt.getWhileKeyword().getTextRange();
 					doc.replaceString(whileRange.getStartOffset(), whileRange.getEndOffset(), "while()");
 				}
 				else

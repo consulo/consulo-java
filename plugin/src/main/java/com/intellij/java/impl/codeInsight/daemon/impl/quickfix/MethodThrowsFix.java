@@ -67,7 +67,7 @@ public class MethodThrowsFix extends LocalQuickFixAndIntentionActionOnPsiElement
                                @Nonnull PsiFile file,
                                @Nonnull PsiElement startElement,
                                @Nonnull PsiElement endElement) {
-        final PsiMethod myMethod = (PsiMethod) startElement;
+        PsiMethod myMethod = (PsiMethod) startElement;
         return myMethod.isValid()
             && myMethod.getManager().isInProject(myMethod);
     }
@@ -78,7 +78,7 @@ public class MethodThrowsFix extends LocalQuickFixAndIntentionActionOnPsiElement
                        @Nullable Editor editor,
                        @Nonnull PsiElement startElement,
                        @Nonnull PsiElement endElement) {
-        final PsiMethod myMethod = (PsiMethod) startElement;
+        PsiMethod myMethod = (PsiMethod) startElement;
         if (!FileModificationService.getInstance().prepareFileForWrite(myMethod.getContainingFile())) {
             return;
         }
@@ -95,8 +95,8 @@ public class MethodThrowsFix extends LocalQuickFixAndIntentionActionOnPsiElement
                 }
             }
             if (myShouldThrow && !alreadyThrows) {
-                final PsiElementFactory factory = JavaPsiFacade.getInstance(myMethod.getProject()).getElementFactory();
-                final PsiClassType type = (PsiClassType) factory.createTypeFromText(myThrowsCanonicalText, myMethod);
+                PsiElementFactory factory = JavaPsiFacade.getInstance(myMethod.getProject()).getElementFactory();
+                PsiClassType type = (PsiClassType) factory.createTypeFromText(myThrowsCanonicalText, myMethod);
                 PsiJavaCodeReferenceElement ref = factory.createReferenceElementByType(type);
                 ref = (PsiJavaCodeReferenceElement) JavaCodeStyleManager.getInstance(project).shortenClassReferences(ref);
                 myMethod.getThrowsList().add(ref);

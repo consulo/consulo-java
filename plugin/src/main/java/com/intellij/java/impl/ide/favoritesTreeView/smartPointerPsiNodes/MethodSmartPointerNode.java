@@ -35,7 +35,7 @@ public class MethodSmartPointerNode extends BaseSmartPointerPsiNode<SmartPsiElem
     super(project, SmartPointerManager.getInstance(project).createSmartPsiElementPointer(value), viewSettings);
   }
 
-  public MethodSmartPointerNode(final Project project, final Object value, final ViewSettings viewSettings) {
+  public MethodSmartPointerNode(Project project, Object value, ViewSettings viewSettings) {
     this(project, (PsiMethod)value, viewSettings);
   }
 
@@ -63,7 +63,7 @@ public class MethodSmartPointerNode extends BaseSmartPointerPsiNode<SmartPsiElem
   }
 
   public boolean isConstructor() {
-    final PsiMethod psiMethod = (PsiMethod)getPsiElement();
+    PsiMethod psiMethod = (PsiMethod)getPsiElement();
     return psiMethod != null && psiMethod.isConstructor();
   }
 

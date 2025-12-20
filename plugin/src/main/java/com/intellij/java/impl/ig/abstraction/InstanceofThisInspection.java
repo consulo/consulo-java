@@ -50,7 +50,7 @@ public class InstanceofThisInspection extends BaseInspection {
             if (thisValue.getQualifier() != null) {
                 return;
             }
-            final PsiElement parent =
+            PsiElement parent =
                 PsiTreeUtil.skipParentsOfType(thisValue, PsiParenthesizedExpression.class,
                     PsiConditionalExpression.class, PsiTypeCastExpression.class
                 );

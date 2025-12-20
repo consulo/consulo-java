@@ -69,33 +69,32 @@ public class CallToStringConcatCanBeReplacedByOperatorInspection
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiElement parent = element.getParent();
+      PsiElement element = descriptor.getPsiElement();
+      PsiElement parent = element.getParent();
       if (!(parent instanceof PsiReferenceExpression)) {
         return;
       }
-      final PsiReferenceExpression referenceExpression =
+      PsiReferenceExpression referenceExpression =
         (PsiReferenceExpression)parent;
-      final PsiExpression qualifier =
+      PsiExpression qualifier =
         referenceExpression.getQualifierExpression();
       if (qualifier == null) {
         return;
       }
-      final PsiElement grandParent = referenceExpression.getParent();
+      PsiElement grandParent = referenceExpression.getParent();
       if (!(grandParent instanceof PsiMethodCallExpression)) {
         return;
       }
-      final PsiMethodCallExpression methodCallExpression =
+      PsiMethodCallExpression methodCallExpression =
         (PsiMethodCallExpression)grandParent;
-      final PsiExpressionList argumentList =
+      PsiExpressionList argumentList =
         methodCallExpression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
+      PsiExpression[] arguments = argumentList.getExpressions();
       if (arguments.length != 1) {
         return;
       }
-      final PsiExpression argument = arguments[0];
-      @NonNls
-      final String newExpression =
+      PsiExpression argument = arguments[0];
+      @NonNls String newExpression =
         qualifier.getText() + '+' + argument.getText();
       replaceExpression(methodCallExpression, newExpression);
     }
@@ -108,23 +107,23 @@ public class CallToStringConcatCanBeReplacedByOperatorInspection
     public void visitMethodCallExpression(
       PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final Project project = expression.getProject();
-      final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-      final PsiClass stringClass = psiFacade.findClass(CommonClassNames.JAVA_LANG_STRING, expression.getResolveScope());
+      Project project = expression.getProject();
+      JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+      PsiClass stringClass = psiFacade.findClass(CommonClassNames.JAVA_LANG_STRING, expression.getResolveScope());
       if (stringClass == null) {
         return;
       }
-      final PsiClassType stringType =
+      PsiClassType stringType =
         psiFacade.getElementFactory().createType(stringClass);
       if (!MethodCallUtils.isCallToMethod(expression, CommonClassNames.JAVA_LANG_STRING, stringType, "concat", stringType)) {
         return;
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
+      PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpression[] arguments = argumentList.getExpressions();
       if (arguments.length != 1) {
         return;
       }
-      final PsiElement parent = expression.getParent();
+      PsiElement parent = expression.getParent();
       if (parent instanceof PsiExpressionStatement) {
         return;
       }

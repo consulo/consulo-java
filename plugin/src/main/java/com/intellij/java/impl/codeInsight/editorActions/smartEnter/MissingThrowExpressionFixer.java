@@ -34,7 +34,7 @@ public class MissingThrowExpressionFixer implements Fixer
 				return;
 			}
 
-			final int startOffset = throwStatement.getTextRange().getStartOffset();
+			int startOffset = throwStatement.getTextRange().getStartOffset();
 			if(throwStatement.getException() != null)
 			{
 				editor.getDocument().insertString(startOffset + "throw".length(), ";");

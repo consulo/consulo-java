@@ -33,19 +33,19 @@ public class BlockJoinLinesHandler implements JoinLinesHandlerDelegate {
   private static final Logger LOG = Logger.getInstance(BlockJoinLinesHandler.class);
 
   @Override
-  public int tryJoinLines(final Document document, final PsiFile psiFile, final int start, final int end) {
+  public int tryJoinLines(Document document, PsiFile psiFile, int start, int end) {
     PsiElement elementAtStartLineEnd = psiFile.findElementAt(start);
     PsiElement elementAtNextLineStart = psiFile.findElementAt(end);
     if (elementAtStartLineEnd == null || elementAtNextLineStart == null) return -1;
     if (!(elementAtStartLineEnd instanceof PsiJavaToken) || ((PsiJavaToken) elementAtStartLineEnd).getTokenType() != JavaTokenType.LBRACE) {
       return -1;
     }
-    final PsiElement codeBlock = elementAtStartLineEnd.getParent();
+    PsiElement codeBlock = elementAtStartLineEnd.getParent();
     if (!(codeBlock instanceof PsiCodeBlock)) return -1;
     if (!(codeBlock.getParent() instanceof PsiBlockStatement)) return -1;
-    final PsiElement parentStatement = codeBlock.getParent().getParent();
+    PsiElement parentStatement = codeBlock.getParent().getParent();
 
-    final CodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(elementAtStartLineEnd.getProject());
+    CodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(elementAtStartLineEnd.getProject());
     if (!(parentStatement instanceof PsiIfStatement && codeStyleSettings.IF_BRACE_FORCE != CommonCodeStyleSettings.FORCE_BRACES_ALWAYS ||
         parentStatement instanceof PsiWhileStatement && codeStyleSettings.WHILE_BRACE_FORCE !=
             CommonCodeStyleSettings.FORCE_BRACES_ALWAYS ||
@@ -70,7 +70,7 @@ public class BlockJoinLinesHandler implements JoinLinesHandlerDelegate {
       foundStatement = element;
     }
     try {
-      final PsiElement newStatement = codeBlock.getParent().replace(foundStatement);
+      PsiElement newStatement = codeBlock.getParent().replace(foundStatement);
 
       return newStatement.getTextRange().getStartOffset();
     } catch (IncorrectOperationException e) {

@@ -40,7 +40,7 @@ import java.util.Set;
  */
 @ExtensionImpl
 public class JavaUsageTypeProvider implements UsageTypeProviderEx {
-  public UsageType getUsageType(final PsiElement element) {
+  public UsageType getUsageType(PsiElement element) {
     return getUsageType(element, UsageTarget.EMPTY_ARRAY);
   }
 
@@ -62,14 +62,14 @@ public class JavaUsageTypeProvider implements UsageTypeProviderEx {
   @Nullable
   private static UsageType getMethodUsageType(PsiElement element) {
     if (element instanceof PsiReferenceExpression) {
-      final PsiMethod containerMethod = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
+      PsiMethod containerMethod = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
       if (containerMethod != null) {
-        final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) element;
-        final PsiExpression qualifier = referenceExpression.getQualifierExpression();
-        final PsiElement p = referenceExpression.getParent();
+        PsiReferenceExpression referenceExpression = (PsiReferenceExpression) element;
+        PsiExpression qualifier = referenceExpression.getQualifierExpression();
+        PsiElement p = referenceExpression.getParent();
         if (p instanceof PsiMethodCallExpression) {
-          final PsiMethodCallExpression callExpression = (PsiMethodCallExpression) p;
-          final PsiMethod calledMethod = callExpression.resolveMethod();
+          PsiMethodCallExpression callExpression = (PsiMethodCallExpression) p;
+          PsiMethod calledMethod = callExpression.resolveMethod();
           if (calledMethod == containerMethod) {
             return UsageType.RECURSION;
           }
@@ -91,9 +91,9 @@ public class JavaUsageTypeProvider implements UsageTypeProviderEx {
     return null;
   }
 
-  private static boolean parametersDelegated(final PsiMethod method, final PsiMethodCallExpression call) {
-    final PsiParameter[] parameters = method.getParameterList().getParameters();
-    final PsiExpression[] arguments = call.getArgumentList().getExpressions();
+  private static boolean parametersDelegated(PsiMethod method, PsiMethodCallExpression call) {
+    PsiParameter[] parameters = method.getParameterList().getParameters();
+    PsiExpression[] arguments = call.getArgumentList().getExpressions();
     if (parameters.length != arguments.length) return false;
 
     for (int i = 0; i < parameters.length; i++) {
@@ -161,7 +161,7 @@ public class JavaUsageTypeProvider implements UsageTypeProviderEx {
 
   @Nullable
   private static UsageType getClassUsageType(@Nonnull PsiElement element, @Nonnull UsageTarget[] targets) {
-    final PsiJavaCodeReferenceElement codeReference = PsiTreeUtil.getParentOfType(element, PsiJavaCodeReferenceElement.class);
+    PsiJavaCodeReferenceElement codeReference = PsiTreeUtil.getParentOfType(element, PsiJavaCodeReferenceElement.class);
     if (codeReference != null && isNestedClassOf(codeReference, targets)) {
       return UsageType.CLASS_NESTED_CLASS_ACCESS;
     }
@@ -203,9 +203,9 @@ public class JavaUsageTypeProvider implements UsageTypeProviderEx {
       }
     }
 
-    final PsiParameter psiParameter = PsiTreeUtil.getParentOfType(element, PsiParameter.class);
+    PsiParameter psiParameter = PsiTreeUtil.getParentOfType(element, PsiParameter.class);
     if (psiParameter != null) {
-      final PsiElement scope = psiParameter.getDeclarationScope();
+      PsiElement scope = psiParameter.getDeclarationScope();
       if (scope instanceof PsiMethod) return UsageType.CLASS_METHOD_PARAMETER_DECLARATION;
       if (scope instanceof PsiCatchSection) return UsageType.CLASS_CATCH_CLAUSE_PARAMETER_DECLARATION;
       if (scope instanceof PsiForeachStatement) return UsageType.CLASS_LOCAL_VAR_DECLARATION;
@@ -225,13 +225,13 @@ public class JavaUsageTypeProvider implements UsageTypeProviderEx {
 
     PsiMethod psiMethod = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
     if (psiMethod != null) {
-      final PsiTypeElement retType = psiMethod.getReturnTypeElement();
+      PsiTypeElement retType = psiMethod.getReturnTypeElement();
       if (retType != null && PsiTreeUtil.isAncestor(retType, element, true)) return UsageType.CLASS_METHOD_RETURN_TYPE;
     }
 
-    final PsiNewExpression psiNewExpression = PsiTreeUtil.getParentOfType(element, PsiNewExpression.class);
+    PsiNewExpression psiNewExpression = PsiTreeUtil.getParentOfType(element, PsiNewExpression.class);
     if (psiNewExpression != null) {
-      final PsiJavaCodeReferenceElement classReference = psiNewExpression.getClassOrAnonymousClassReference();
+      PsiJavaCodeReferenceElement classReference = psiNewExpression.getClassOrAnonymousClassReference();
       if (classReference != null && PsiTreeUtil.isAncestor(classReference, element, false)) {
         if (isAnonymousClassOf(psiNewExpression.getAnonymousClass(), targets)) {
           return UsageType.CLASS_ANONYMOUS_NEW_OPERATOR;
@@ -259,7 +259,7 @@ public class JavaUsageTypeProvider implements UsageTypeProviderEx {
   }
 
   private static boolean isNestedClassOf(PsiJavaCodeReferenceElement classReference, @Nonnull UsageTarget[] targets) {
-    final PsiElement qualifier = classReference.getQualifier();
+    PsiElement qualifier = classReference.getQualifier();
     if (qualifier instanceof PsiJavaCodeReferenceElement) {
       return qualifiesToTargetClasses((PsiJavaCodeReferenceElement) qualifier, targets);
     }

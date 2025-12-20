@@ -30,7 +30,7 @@ public class FileDocumentationProvider implements UnrestrictedDocumentationProvi
 
   @Override
   public String generateDoc(PsiElement element, @Nullable PsiElement originalElement) {
-    final JavaDocInfoGenerator javaDocInfoGenerator = new JavaDocInfoGenerator(element.getProject(), element);
+    JavaDocInfoGenerator javaDocInfoGenerator = new JavaDocInfoGenerator(element.getProject(), element);
     return JavaDocExternalFilter.filterInternalDocInfo(javaDocInfoGenerator.generateFileInfo());
   }
 }

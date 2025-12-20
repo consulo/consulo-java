@@ -42,7 +42,7 @@ class SerializableInnerClassWithNonSerializableOuterClassVisitor
         aClass instanceof PsiAnonymousClass) {
       return;
     }
-    final PsiClass containingClass = aClass.getContainingClass();
+    PsiClass containingClass = aClass.getContainingClass();
     if (containingClass == null) {
       return;
     }

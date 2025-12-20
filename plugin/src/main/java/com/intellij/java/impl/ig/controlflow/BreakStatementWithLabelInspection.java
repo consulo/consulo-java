@@ -47,13 +47,13 @@ public class BreakStatementWithLabelInspection extends BaseInspection {
         @Override
         public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
             super.visitBreakStatement(statement);
-            final PsiIdentifier labelIdentifier =
+            PsiIdentifier labelIdentifier =
                 statement.getLabelIdentifier();
             if (labelIdentifier == null) {
                 return;
             }
 
-            final String labelText = labelIdentifier.getText();
+            String labelText = labelIdentifier.getText();
             if (labelText == null) {
                 return;
             }

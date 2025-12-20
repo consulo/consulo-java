@@ -73,15 +73,15 @@ class ReplacePrimitiveWithBoxedTypeAction extends LocalQuickFixAndIntentionActio
         @Nonnull PsiElement startElement,
         @Nonnull PsiElement endElement
     ) {
-        final PsiType type = ((PsiTypeElement) startElement).getType();
+        PsiType type = ((PsiTypeElement) startElement).getType();
         PsiType boxedType;
         if (type instanceof PsiPrimitiveType) {
             boxedType = ((PsiPrimitiveType) type).getBoxedType(startElement);
         }
         else {
             LOG.assertTrue(type instanceof PsiWildcardType);
-            final PsiWildcardType wildcardType = (PsiWildcardType) type;
-            final PsiClassType boxedBound = ((PsiPrimitiveType) wildcardType.getBound()).getBoxedType(startElement);
+            PsiWildcardType wildcardType = (PsiWildcardType) type;
+            PsiClassType boxedBound = ((PsiPrimitiveType) wildcardType.getBound()).getBoxedType(startElement);
             LOG.assertTrue(boxedBound != null);
             boxedType = wildcardType.isExtends()
                 ? PsiWildcardType.createExtends(startElement.getManager(), boxedBound)

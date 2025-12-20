@@ -98,13 +98,13 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Synt
     protected abstract PsiElement resolveRef();
 
     @Override
-    public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file) {
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
         if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
             return;
         }
         ApplicationManager.getApplication().runWriteAction(() ->
         {
-            final List<T> methodsToImport = getMembersToImport(false);
+            List<T> methodsToImport = getMembersToImport(false);
             if (methodsToImport.isEmpty()) {
                 return;
             }
@@ -116,17 +116,17 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Synt
         if (!CodeInsightSettings.getInstance().ADD_MEMBER_IMPORTS_ON_THE_FLY) {
             return ImportClassFixBase.Result.POPUP_NOT_SHOWN;
         }
-        final List<T> candidates = getMembersToImport(true);
+        List<T> candidates = getMembersToImport(true);
         if (candidates.isEmpty()) {
             return ImportClassFixBase.Result.POPUP_NOT_SHOWN;
         }
 
-        final PsiElement element = getElement();
+        PsiElement element = getElement();
         if (element == null) {
             return ImportClassFixBase.Result.POPUP_NOT_SHOWN;
         }
 
-        final QuestionAction action = createQuestionAction(candidates, element.getProject(), editor);
+        QuestionAction action = createQuestionAction(candidates, element.getProject(), editor);
   /* PsiFile psiFile = element.getContainingFile();
    if (candidates.size() == 1 &&
         ImportClassFixBase.isAddUnambiguousImportsOnTheFlyEnabled(psiFile) &&
@@ -138,7 +138,7 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Synt
 */
         String hintText = AutoImportHelper.getInstance(element.getProject()).getImportMessage(candidates.size() > 1, getMemberPresentableText(candidates.get(0)));
         if (!ApplicationManager.getApplication().isUnitTestMode() && !HintManager.getInstance().hasShownHintsThatWillHideByOtherHint(true)) {
-            final TextRange textRange = element.getTextRange();
+            TextRange textRange = element.getTextRange();
             HintManager.getInstance().showQuestionHint(editor, hintText, textRange.getStartOffset(), textRange.getEndOffset(), action);
         }
         return ImportClassFixBase.Result.POPUP_SHOWN;
@@ -152,7 +152,7 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Synt
 
     @Override
     public boolean showHint(@Nonnull Editor editor) {
-        final PsiElement callExpression = getElement();
+        PsiElement callExpression = getElement();
         if (callExpression == null || getQualifierExpression() != null) {
             return false;
         }

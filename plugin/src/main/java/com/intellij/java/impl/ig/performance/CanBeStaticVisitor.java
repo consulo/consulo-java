@@ -36,9 +36,9 @@ class CanBeStaticVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     super.visitReferenceExpression(ref);
-    final PsiElement element = ref.resolve();
+    PsiElement element = ref.resolve();
     if (element instanceof PsiField) {
-      final PsiField field = (PsiField)element;
+      PsiField field = (PsiField)element;
       if (!field.hasModifierProperty(PsiModifier.STATIC)) {
         canBeStatic = false;
       }

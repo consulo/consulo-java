@@ -55,7 +55,7 @@ public class AwaitWithoutCorrespondingSignalInspection extends BaseInspection {
 
       if (expression.getMethodExpression().getQualifierExpression() instanceof PsiReferenceExpression referenceExpression
           && referenceExpression.resolve() instanceof PsiField field) {
-        final PsiClass fieldClass = field.getContainingClass();
+        PsiClass fieldClass = field.getContainingClass();
         if (fieldClass != null && PsiTreeUtil.isAncestor(fieldClass, expression, true) && !containsSignalCall(fieldClass, field)) {
           registerMethodCallError(expression);
         }
@@ -63,7 +63,7 @@ public class AwaitWithoutCorrespondingSignalInspection extends BaseInspection {
     }
 
     private static boolean containsSignalCall(PsiClass fieldClass, PsiField field) {
-      final ContainsSignalVisitor visitor = new ContainsSignalVisitor(field);
+      ContainsSignalVisitor visitor = new ContainsSignalVisitor(field);
       fieldClass.accept(visitor);
       return visitor.containsSignal();
     }
@@ -93,9 +93,9 @@ public class AwaitWithoutCorrespondingSignalInspection extends BaseInspection {
       if (!ThreadingUtils.isSignalOrSignalAllCall(expression)) {
         return;
       }
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      final PsiExpression qualifier =
+      PsiExpression qualifier =
         methodExpression.getQualifierExpression();
       if (qualifier == null) {
         return;
@@ -103,7 +103,7 @@ public class AwaitWithoutCorrespondingSignalInspection extends BaseInspection {
       if (!(qualifier instanceof PsiReferenceExpression)) {
         return;
       }
-      final PsiElement referent = ((PsiReference)qualifier).resolve();
+      PsiElement referent = ((PsiReference)qualifier).resolve();
       if (referent == null) {
         return;
       }

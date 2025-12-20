@@ -44,10 +44,10 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 	private static final ArrayList<Block> EMPTY_SUB_BLOCKS = new ArrayList<>();
 	private final Indent myIndent;
 
-	public LeafBlock(final ASTNode node,
-					 final Wrap wrap,
-					 final Alignment alignment,
-					 Indent indent)
+	public LeafBlock(ASTNode node,
+                     Wrap wrap,
+                     Alignment alignment,
+                     Indent indent)
 	{
 		myNode = node;
 		myWrap = wrap;
@@ -110,7 +110,7 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 
 	@Override
 	@Nonnull
-	public ChildAttributes getChildAttributes(final int newChildIndex)
+	public ChildAttributes getChildAttributes(int newChildIndex)
 	{
 		return new ChildAttributes(getIndent(), null);
 	}
@@ -127,7 +127,7 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 		return ShiftIndentInsideHelper.mayShiftIndentInside(myNode);
 	}
 
-	public void setStartOffset(final int startOffset)
+	public void setStartOffset(int startOffset)
 	{
 		myStartOffset = startOffset;
 		// if (startOffset != -1) assert startOffset == myNode.getTextRange().getStartOffset();

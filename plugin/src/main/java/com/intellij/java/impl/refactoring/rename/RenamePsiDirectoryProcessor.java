@@ -48,7 +48,7 @@ import java.util.Collections;
  */
 @ExtensionImpl
 public class RenamePsiDirectoryProcessor extends RenamePsiElementProcessor {
-  public boolean canProcessElement(@Nonnull final PsiElement element) {
+  public boolean canProcessElement(@Nonnull PsiElement element) {
     return element instanceof PsiDirectory;
   }
 
@@ -65,9 +65,9 @@ public class RenamePsiDirectoryProcessor extends RenamePsiElementProcessor {
     };
   }
 
-  public void renameElement(final PsiElement element,
-                            final String newName,
-                            final UsageInfo[] usages,
+  public void renameElement(PsiElement element,
+                            String newName,
+                            UsageInfo[] usages,
                             @Nullable RefactoringElementListener listener) throws IncorrectOperationException {
     PsiDirectory aDirectory = (PsiDirectory) element;
     // rename all non-package statement references
@@ -88,7 +88,7 @@ public class RenamePsiDirectoryProcessor extends RenamePsiElementProcessor {
     }
   }
 
-  public String getQualifiedNameAfterRename(final PsiElement element, final String newName, final boolean nonJava) {
+  public String getQualifiedNameAfterRename(PsiElement element, String newName, boolean nonJava) {
     PsiJavaPackage psiPackage = JavaDirectoryService.getInstance().getPackage(((PsiDirectory) element));
     if (psiPackage != null) {
       return RenamePsiPackageProcessor.getPackageQualifiedNameAfterRename(psiPackage, newName, nonJava);
@@ -108,14 +108,14 @@ public class RenamePsiDirectoryProcessor extends RenamePsiElementProcessor {
   @Nullable
   @Override
   public PsiElement getElementToSearchInStringsAndComments(PsiElement element) {
-    final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage((PsiDirectory) element);
+    PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage((PsiDirectory) element);
     if (aPackage != null) return aPackage;
     return null;
   }
 
   @Nullable
   @NonNls
-  public String getHelpID(final PsiElement element) {
+  public String getHelpID(PsiElement element) {
     return HelpID.RENAME_DIRECTORY;
   }
 
@@ -125,7 +125,7 @@ public class RenamePsiDirectoryProcessor extends RenamePsiElementProcessor {
     return JavaRefactoringSettings.getInstance().RENAME_SEARCH_IN_COMMENTS_FOR_PACKAGE;
   }
 
-  public void setToSearchInComments(PsiElement element, final boolean enabled) {
+  public void setToSearchInComments(PsiElement element, boolean enabled) {
     element = JavaDirectoryService.getInstance().getPackage(((PsiDirectory) element));
     if (element != null) {
       JavaRefactoringSettings.getInstance().RENAME_SEARCH_IN_COMMENTS_FOR_PACKAGE = enabled;
@@ -138,7 +138,7 @@ public class RenamePsiDirectoryProcessor extends RenamePsiElementProcessor {
     return JavaRefactoringSettings.getInstance().RENAME_SEARCH_FOR_TEXT_FOR_PACKAGE;
   }
 
-  public void setToSearchForTextOccurrences(PsiElement element, final boolean enabled) {
+  public void setToSearchForTextOccurrences(PsiElement element, boolean enabled) {
     element = JavaDirectoryService.getInstance().getPackage(((PsiDirectory) element));
     if (element != null) {
       JavaRefactoringSettings.getInstance().RENAME_SEARCH_FOR_TEXT_FOR_PACKAGE = enabled;

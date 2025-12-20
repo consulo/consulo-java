@@ -103,7 +103,7 @@ public class MemberSignature implements Comparable<MemberSignature> {
   }
 
   public int compareTo(MemberSignature other) {
-    final int result = name.compareTo(other.name);
+    int result = name.compareTo(other.name);
     if (result != 0) {
       return result;
     }
@@ -111,17 +111,17 @@ public class MemberSignature implements Comparable<MemberSignature> {
   }
 
   public static String createMethodSignature(PsiMethod method) {
-    final PsiParameterList parameterList = method.getParameterList();
-    final PsiParameter[] parameters = parameterList.getParameters();
-    final StringBuilder signatureBuffer = new StringBuilder();
+    PsiParameterList parameterList = method.getParameterList();
+    PsiParameter[] parameters = parameterList.getParameters();
+    StringBuilder signatureBuffer = new StringBuilder();
     signatureBuffer.append('(');
-    for (final PsiParameter parameter : parameters) {
-      final PsiType type = parameter.getType();
+    for (PsiParameter parameter : parameters) {
+      PsiType type = parameter.getType();
       signatureBuffer.append(createTypeSignature(type));
     }
     signatureBuffer.append(')');
-    final PsiType returnType = method.getReturnType();
-    final String returnTypeSignature;
+    PsiType returnType = method.getReturnType();
+    String returnTypeSignature;
     if (returnType == null) {
       // constructors have void return type.
       returnTypeSignature = createTypeSignature(PsiType.VOID);
@@ -134,7 +134,7 @@ public class MemberSignature implements Comparable<MemberSignature> {
   }
 
   public static String createPrimitiveType(PsiPrimitiveType primitiveType) {
-    @NonNls final String primitypeTypeSignature;
+    @NonNls String primitypeTypeSignature;
     if (primitiveType.equals(PsiType.INT)) {
       primitypeTypeSignature = "I";
     }
@@ -169,25 +169,25 @@ public class MemberSignature implements Comparable<MemberSignature> {
   }
 
   public static String createTypeSignature(PsiType type) {
-    final StringBuilder buffer = new StringBuilder();
+    StringBuilder buffer = new StringBuilder();
     PsiType internalType = type;
     while (internalType instanceof PsiArrayType) {
       buffer.append('[');
-      final PsiArrayType arrayType = (PsiArrayType)internalType;
+      PsiArrayType arrayType = (PsiArrayType)internalType;
       internalType = arrayType.getComponentType();
     }
     if (internalType instanceof PsiPrimitiveType) {
-      final PsiPrimitiveType primitiveType = (PsiPrimitiveType)internalType;
-      final String primitypeTypeSignature = createPrimitiveType(primitiveType);
+      PsiPrimitiveType primitiveType = (PsiPrimitiveType)internalType;
+      String primitypeTypeSignature = createPrimitiveType(primitiveType);
       buffer.append(primitypeTypeSignature);
     }
     else {
       buffer.append('L');
       if (internalType instanceof PsiClassType) {
-        final PsiClassType classType = (PsiClassType)internalType;
+        PsiClassType classType = (PsiClassType)internalType;
         PsiClass psiClass = classType.resolve();
         if (psiClass != null) {
-          final StringBuffer postFix = new StringBuffer("");
+          StringBuffer postFix = new StringBuffer("");
           PsiClass containingClass = psiClass.getContainingClass();
           while (containingClass != null) {
             // construct name for inner classes
@@ -195,7 +195,7 @@ public class MemberSignature implements Comparable<MemberSignature> {
             psiClass = containingClass;
             containingClass = psiClass.getContainingClass();
           }
-          final String qualifiedName = psiClass.getQualifiedName();
+          String qualifiedName = psiClass.getQualifiedName();
           if (qualifiedName == null) {
             // for type parameters
             buffer.append(CommonClassNames.JAVA_LANG_OBJECT);
@@ -217,7 +217,7 @@ public class MemberSignature implements Comparable<MemberSignature> {
 
   public boolean equals(Object object) {
     try {
-      final MemberSignature other = (MemberSignature)object;
+      MemberSignature other = (MemberSignature)object;
       return name.equals(other.name) &&
              signature.equals(other.signature) &&
              modifiers == other.modifiers;

@@ -61,14 +61,14 @@ public class MultipleFieldDeclarationHelper
 	 * @return last child field node at the field group identified by the given node if any; given child otherwise
 	 */
 	@Nonnull
-	public static ASTNode findLastFieldInGroup(@Nonnull final ASTNode child)
+	public static ASTNode findLastFieldInGroup(@Nonnull ASTNode child)
 	{
 		PsiElement psi = child.getPsi();
 		if(psi == null)
 		{
 			return child;
 		}
-		final PsiTypeElement typeElement = ((PsiVariable) psi).getTypeElement();
+		PsiTypeElement typeElement = ((PsiVariable) psi).getTypeElement();
 		if(typeElement == null)
 		{
 			return child;

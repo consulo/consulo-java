@@ -44,15 +44,15 @@ public class FlipConditionalIntention extends Intention {
 
     public void processIntention(PsiElement element)
         throws IncorrectOperationException {
-        final PsiConditionalExpression exp =
+        PsiConditionalExpression exp =
             (PsiConditionalExpression) element;
 
-        final PsiExpression condition = exp.getCondition();
-        final PsiExpression elseExpression = exp.getElseExpression();
-        final PsiExpression thenExpression = exp.getThenExpression();
+        PsiExpression condition = exp.getCondition();
+        PsiExpression elseExpression = exp.getElseExpression();
+        PsiExpression thenExpression = exp.getThenExpression();
         assert elseExpression != null;
         assert thenExpression != null;
-        final String newExpression =
+        String newExpression =
             BoolUtils.getNegatedExpressionText(condition) + '?' +
                 elseExpression.getText() +
                 ':' +

@@ -46,7 +46,7 @@ public class InterfaceMemberDependencyGraph<T extends PsiMember, M extends Membe
 	{
 		if(ClassMembersUtil.isImplementedInterface(memberInfo))
 		{
-			final PsiClass aClass = (PsiClass) memberInfo.getMember();
+			PsiClass aClass = (PsiClass) memberInfo.getMember();
 			myInterfaceDependencies = null;
 			myMembersToInterfacesMap = null;
 			if(memberInfo.isChecked())
@@ -67,7 +67,7 @@ public class InterfaceMemberDependencyGraph<T extends PsiMember, M extends Membe
 		{
 			myInterfaceDependencies = new HashSet<T>();
 			myMembersToInterfacesMap = new HashMap<T, HashSet<T>>();
-			for(final PsiClass implementedInterface : myImplementedInterfaces)
+			for(PsiClass implementedInterface : myImplementedInterfaces)
 			{
 				addInterfaceDeps(implementedInterface);
 			}
@@ -78,7 +78,7 @@ public class InterfaceMemberDependencyGraph<T extends PsiMember, M extends Membe
 	@Override
 	public Set<? extends T> getDependenciesOf(PsiMember member)
 	{
-		final Set dependent = getDependent();
+		Set dependent = getDependent();
 		if(dependent.contains(member))
 		{
 			return myMembersToInterfacesMap.get(member);
@@ -88,7 +88,7 @@ public class InterfaceMemberDependencyGraph<T extends PsiMember, M extends Membe
 
 	public String getElementTooltip(PsiMember member)
 	{
-		final Set<? extends PsiMember> dependencies = getDependenciesOf(member);
+		Set<? extends PsiMember> dependencies = getDependenciesOf(member);
 		if(dependencies == null || dependencies.size() == 0)
 		{
 			return null;

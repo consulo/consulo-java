@@ -34,9 +34,9 @@ public class NonJavaFileGroupingRule extends FileGroupingRule {
   @Nullable
   @Override
   public UsageGroup getParentGroupFor(@Nonnull Usage usage, @Nonnull UsageTarget[] targets) {
-    final FileUsageGroup usageGroup = (FileUsageGroup) super.getParentGroupFor(usage, targets);
+    FileUsageGroup usageGroup = (FileUsageGroup) super.getParentGroupFor(usage, targets);
     if (usageGroup != null) {
-      final PsiFile psiFile = usageGroup.getPsiFile();
+      PsiFile psiFile = usageGroup.getPsiFile();
       if (psiFile instanceof PsiJavaFile && !(psiFile instanceof ServerPageFile)) {
         return null;
       }

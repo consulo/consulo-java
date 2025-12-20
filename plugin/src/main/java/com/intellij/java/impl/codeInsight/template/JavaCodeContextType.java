@@ -60,7 +60,7 @@ public abstract class JavaCodeContextType extends BaseTemplateContextType {
     }
 
     @Override
-    public boolean isInContext(@Nonnull final PsiFile file, final int offset) {
+    public boolean isInContext(@Nonnull PsiFile file, int offset) {
         if (PsiUtilCore.getLanguageAtOffset(file, offset).isKindOf(JavaLanguage.INSTANCE)) {
             PsiElement element = file.findElementAt(offset);
             if (element instanceof PsiWhiteSpace) {
@@ -85,9 +85,9 @@ public abstract class JavaCodeContextType extends BaseTemplateContextType {
         if (project == null) {
             return super.createDocument(text, project);
         }
-        final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-        final JavaCodeFragmentFactory factory = JavaCodeFragmentFactory.getInstance(project);
-        final JavaCodeFragment fragment = factory.createCodeBlockCodeFragment((String) text, psiFacade.findPackage(""), true);
+        JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+        JavaCodeFragmentFactory factory = JavaCodeFragmentFactory.getInstance(project);
+        JavaCodeFragment fragment = factory.createCodeBlockCodeFragment((String) text, psiFacade.findPackage(""), true);
         DaemonCodeAnalyzer.getInstance(project).setHighlightingEnabled(fragment, false);
         return PsiDocumentManager.getInstance(project).getDocument(fragment);
     }

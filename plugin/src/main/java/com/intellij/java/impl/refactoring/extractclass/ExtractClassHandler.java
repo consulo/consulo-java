@@ -49,13 +49,13 @@ public class ExtractClassHandler implements ElementsHandler {
     @Override
     @RequiredUIAccess
     public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
-        final ScrollingModel scrollingModel = editor.getScrollingModel();
+        ScrollingModel scrollingModel = editor.getScrollingModel();
         scrollingModel.scrollToCaret(ScrollType.MAKE_VISIBLE);
-        final CaretModel caretModel = editor.getCaretModel();
-        final int position = caretModel.getOffset();
-        final PsiElement element = file.findElementAt(position);
+        CaretModel caretModel = editor.getCaretModel();
+        int position = caretModel.getOffset();
+        PsiElement element = file.findElementAt(position);
 
-        final PsiMember selectedMember = PsiTreeUtil.getParentOfType(element, PsiMember.class, true);
+        PsiMember selectedMember = PsiTreeUtil.getParentOfType(element, PsiMember.class, true);
         if (selectedMember == null) {
             //todo
             return;
@@ -146,9 +146,9 @@ public class ExtractClassHandler implements ElementsHandler {
         if (elements.length != 1) {
             return;
         }
-        final PsiClass containingClass = PsiTreeUtil.getParentOfType(elements[0], PsiClass.class, false);
+        PsiClass containingClass = PsiTreeUtil.getParentOfType(elements[0], PsiClass.class, false);
 
-        final PsiMember selectedMember = PsiTreeUtil.getParentOfType(elements[0], PsiMember.class, false);
+        PsiMember selectedMember = PsiTreeUtil.getParentOfType(elements[0], PsiMember.class, false);
         if (containingClass == null) {
             return;
         }
@@ -160,7 +160,7 @@ public class ExtractClassHandler implements ElementsHandler {
 
     private static boolean classIsTrivial(PsiClass containingClass) {
         if (containingClass.getFields().length == 0) {
-            final PsiMethod[] methods = containingClass.getMethods();
+            PsiMethod[] methods = containingClass.getMethods();
             if (methods.length == 0) {
                 return true;
             }

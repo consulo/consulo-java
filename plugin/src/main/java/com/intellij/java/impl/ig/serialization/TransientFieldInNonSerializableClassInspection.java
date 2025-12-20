@@ -40,7 +40,7 @@ public class TransientFieldInNonSerializableClassInspection extends BaseInspecti
 
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiField field = (PsiField) infos[0];
+        PsiField field = (PsiField) infos[0];
         return InspectionGadgetsLocalize.transientFieldInNonSerializableClassProblemDescriptor(field.getName()).get();
     }
 
@@ -56,7 +56,7 @@ public class TransientFieldInNonSerializableClassInspection extends BaseInspecti
         }
 
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement transientModifier = descriptor.getPsiElement();
+            PsiElement transientModifier = descriptor.getPsiElement();
             deleteElement(transientModifier);
         }
     }
@@ -71,7 +71,7 @@ public class TransientFieldInNonSerializableClassInspection extends BaseInspecti
             if (!field.hasModifierProperty(PsiModifier.TRANSIENT)) {
                 return;
             }
-            final PsiClass aClass = field.getContainingClass();
+            PsiClass aClass = field.getContainingClass();
             if (SerializationUtils.isSerializable(aClass)) {
                 return;
             }

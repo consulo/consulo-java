@@ -33,14 +33,14 @@ public class InstanceOfLeftPartTypeGetter {
     if(!PsiKeyword.INSTANCEOF.equals(context.getText())) return PsiType.EMPTY_ARRAY;
     if((context = FilterUtil.getPreviousElement(context, false)) == null) return PsiType.EMPTY_ARRAY;
 
-    final PsiExpression contextOfType = PsiTreeUtil.getContextOfType(context, PsiExpression.class, false);
+    PsiExpression contextOfType = PsiTreeUtil.getContextOfType(context, PsiExpression.class, false);
     if (contextOfType == null) return PsiType.EMPTY_ARRAY;
 
     PsiType type = contextOfType.getType();
     if (type == null) return PsiType.EMPTY_ARRAY;
 
     if (type instanceof PsiClassType) {
-      final PsiClass psiClass = ((PsiClassType)type).resolve();
+      PsiClass psiClass = ((PsiClassType)type).resolve();
       if (psiClass instanceof PsiTypeParameter) {
         return psiClass.getExtendsListTypes();
       }

@@ -39,11 +39,11 @@ public class CopyDefaultConstructorUsageInfo extends FixableUsageInfo{
   }
 
   public void fixUsage() throws IncorrectOperationException {
-    final PsiCodeBlock body = myConstructor.getBody();
+    PsiCodeBlock body = myConstructor.getBody();
     assert body != null;
     if (body.getFirstBodyElement() != null) { //do not copy empty constructor
-      final PsiElement constructorCopy = myConstructor.copy();
-      final PsiClass srcClass = myConstructor.getContainingClass();
+      PsiElement constructorCopy = myConstructor.copy();
+      PsiClass srcClass = myConstructor.getContainingClass();
       assert srcClass != null;
       InlineUtil.substituteTypeParams(constructorCopy, TypeConversionUtil.getSuperClassSubstitutor(srcClass, myTargetClass, PsiSubstitutor.EMPTY), JavaPsiFacade.getElementFactory(getProject()));
       myTargetClass.add(constructorCopy);

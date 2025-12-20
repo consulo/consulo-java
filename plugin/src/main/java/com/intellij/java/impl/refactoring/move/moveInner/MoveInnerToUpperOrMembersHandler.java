@@ -43,7 +43,7 @@ import javax.swing.*;
 @ExtensionImpl
 public class MoveInnerToUpperOrMembersHandler extends MoveHandlerDelegate {
     @Override
-    public boolean canMove(final PsiElement[] elements, @Nullable final PsiElement targetContainer) {
+    public boolean canMove(PsiElement[] elements, @Nullable PsiElement targetContainer) {
         if (elements.length != 1) {
             return false;
         }
@@ -52,13 +52,13 @@ public class MoveInnerToUpperOrMembersHandler extends MoveHandlerDelegate {
             (targetContainer == null || targetContainer.equals(MoveInnerImpl.getTargetContainer((PsiClass) elements[0], false)));
     }
 
-    private static boolean isStaticInnerClass(final PsiElement element) {
+    private static boolean isStaticInnerClass(PsiElement element) {
         return element instanceof PsiClass && element.getParent() instanceof PsiClass &&
             ((PsiClass) element).hasModifierProperty(PsiModifier.STATIC);
     }
 
     @Override
-    public void doMove(final Project project, final PsiElement[] elements, final PsiElement targetContainer, final MoveCallback callback) {
+    public void doMove(Project project, PsiElement[] elements, PsiElement targetContainer, MoveCallback callback) {
         SelectInnerOrMembersRefactoringDialog dialog = new SelectInnerOrMembersRefactoringDialog((PsiClass) elements[0], project);
         dialog.show();
         if (!dialog.isOK()) {
@@ -71,15 +71,15 @@ public class MoveInnerToUpperOrMembersHandler extends MoveHandlerDelegate {
     }
 
     @Override
-    public boolean tryToMove(final PsiElement element, final Project project, final DataContext dataContext, final PsiReference reference,
-                             final Editor editor) {
+    public boolean tryToMove(PsiElement element, Project project, DataContext dataContext, PsiReference reference,
+                             Editor editor) {
         if (isStaticInnerClass(element) && !JavaMoveClassesOrPackagesHandler.isReferenceInAnonymousClass(reference)) {
             FeatureUsageTracker.getInstance().triggerFeatureUsed("refactoring.move.moveInner");
             PsiClass aClass = (PsiClass) element;
             SelectInnerOrMembersRefactoringDialog dialog = new SelectInnerOrMembersRefactoringDialog(aClass, project);
             dialog.show();
             if (dialog.isOK()) {
-                final MoveHandlerDelegate moveHandlerDelegate = dialog.getRefactoringHandler();
+                MoveHandlerDelegate moveHandlerDelegate = dialog.getRefactoringHandler();
                 if (moveHandlerDelegate != null) {
                     moveHandlerDelegate.doMove(project, new PsiElement[]{aClass}, null, null);
                 }
@@ -94,7 +94,7 @@ public class MoveInnerToUpperOrMembersHandler extends MoveHandlerDelegate {
         private RadioButton myRbMoveMembers;
         private final String myClassName;
 
-        public SelectInnerOrMembersRefactoringDialog(final PsiClass innerClass, Project project) {
+        public SelectInnerOrMembersRefactoringDialog(PsiClass innerClass, Project project) {
             super(project, true);
             setTitle(RefactoringLocalize.selectRefactoringTitle());
             myClassName = innerClass.getName();

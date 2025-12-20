@@ -39,8 +39,8 @@ public class LibrariesAlphaComparator implements Comparator<Library> {
       name2 = null;
     }
     if (name1 == null && name2 == null) {
-      final VirtualFile[] files1 = library1.getFiles(BinariesOrderRootType.getInstance());
-      final VirtualFile[] files2 = library2.getFiles(BinariesOrderRootType.getInstance());
+      VirtualFile[] files1 = library1.getFiles(BinariesOrderRootType.getInstance());
+      VirtualFile[] files2 = library2.getFiles(BinariesOrderRootType.getInstance());
       name1 = files1.length > 0 ? files1[0].getName() : null;
       name2 = files2.length > 0 ? files2[0].getName() : null;
     }

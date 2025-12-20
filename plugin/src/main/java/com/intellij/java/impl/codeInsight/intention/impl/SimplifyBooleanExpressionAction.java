@@ -54,7 +54,7 @@ public class SimplifyBooleanExpressionAction implements IntentionAction{
     return expression != null && SimplifyBooleanExpressionFix.canBeSimplified(expression);
   }
 
-  private static PsiExpression getExpressionToSimplify(final Editor editor, final PsiFile file) {
+  private static PsiExpression getExpressionToSimplify(Editor editor, PsiFile file) {
     int offset = editor.getCaretModel().getOffset();
     PsiElement element = file.findElementAt(offset);
     if (element == null) return null;

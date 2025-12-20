@@ -67,26 +67,26 @@ public class ConvertToInstanceMethodHandler implements RefactoringActionHandler 
   @RequiredUIAccess
   public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length != 1 || !(elements[0] instanceof PsiMethod)) return;
-    final PsiMethod method = (PsiMethod)elements[0];
+    PsiMethod method = (PsiMethod)elements[0];
     if (!method.hasModifierProperty(PsiModifier.STATIC)) {
       LocalizeValue message = RefactoringLocalize.converttoinstancemethodMethodIsNotStatic(method.getName());
       Editor editor = dataContext.getData(Editor.KEY);
       CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME, HelpID.CONVERT_TO_INSTANCE_METHOD);
       return;
     }
-    final PsiParameter[] parameters = method.getParameterList().getParameters();
+    PsiParameter[] parameters = method.getParameterList().getParameters();
     List<PsiParameter> suitableParameters = new ArrayList<>();
     boolean classTypesFound = false;
     boolean resolvableClassesFound = false;
     boolean classesInProjectFound = false;
-    for (final PsiParameter parameter : parameters) {
-      final PsiType type = parameter.getType();
+    for (PsiParameter parameter : parameters) {
+      PsiType type = parameter.getType();
       if (type instanceof PsiClassType classType) {
         classTypesFound = true;
-        final PsiClass psiClass = classType.resolve();
+        PsiClass psiClass = classType.resolve();
         if (psiClass != null && !(psiClass instanceof PsiTypeParameter)) {
           resolvableClassesFound = true;
-          final boolean inProject = method.getManager().isInProject(psiClass);
+          boolean inProject = method.getManager().isInProject(psiClass);
           if (inProject) {
             classesInProjectFound = true;
             suitableParameters.add(parameter);

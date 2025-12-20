@@ -80,16 +80,16 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
     if (!JavaLanguage.INSTANCE.equals(element.getLanguage())) {
       return false;
     }
-    final PsiElement parent = PsiTreeUtil.getParentOfType(element, PsiMethod.class, PsiCodeBlock.class);
+    PsiElement parent = PsiTreeUtil.getParentOfType(element, PsiMethod.class, PsiCodeBlock.class);
     if (!(parent instanceof PsiMethod)) {
       return false;
     }
-    final PsiMethod method = (PsiMethod) parent;
-    final PsiParameterList parameterList = method.getParameterList();
+    PsiMethod method = (PsiMethod) parent;
+    PsiParameterList parameterList = method.getParameterList();
     if (parameterList.getParametersCount() == 0) {
       return false;
     }
-    final PsiClass containingClass = method.getContainingClass();
+    PsiClass containingClass = method.getContainingClass();
     if (containingClass == null || (containingClass.isInterface() && !PsiUtil.isLanguageLevel8OrHigher(method))) {
       return false;
     }
@@ -98,18 +98,18 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
-    final PsiParameter[] parameters = getParams(element);
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+    PsiParameter[] parameters = getParams(element);
     if (parameters == null || parameters.length == 0) {
       return;
     }
-    final PsiMethod method = (PsiMethod) parameters[0].getDeclarationScope();
-    final PsiMethod methodPrototype = generateMethodPrototype(method, parameters);
-    final PsiClass containingClass = method.getContainingClass();
+    PsiMethod method = (PsiMethod) parameters[0].getDeclarationScope();
+    PsiMethod methodPrototype = generateMethodPrototype(method, parameters);
+    PsiClass containingClass = method.getContainingClass();
     if (containingClass == null) {
       return;
     }
-    final PsiMethod existingMethod = containingClass.findMethodBySignature(methodPrototype, false);
+    PsiMethod existingMethod = containingClass.findMethodBySignature(methodPrototype, false);
     if (existingMethod != null) {
       editor.getCaretModel().moveToOffset(existingMethod.getTextOffset());
       HintManager.getInstance().showErrorHint(editor, (existingMethod.isConstructor() ? "Constructor" : "Method") + " with the chosen signature already exists");
@@ -122,19 +122,19 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
 
     Runnable runnable = () ->
     {
-      final PsiMethod prototype = (PsiMethod) containingClass.addBefore(methodPrototype, method);
+      PsiMethod prototype = (PsiMethod) containingClass.addBefore(methodPrototype, method);
       RefactoringUtil.fixJavadocsForParams(prototype, new HashSet<>(Arrays.asList(prototype.getParameterList().getParameters())));
 
 
       PsiCodeBlock body = prototype.getBody();
-      final String callArgs = "(" + StringUtil.join(method.getParameterList().getParameters(), psiParameter ->
+      String callArgs = "(" + StringUtil.join(method.getParameterList().getParameters(), psiParameter ->
       {
         if (ArrayUtil.find(parameters, psiParameter) > -1) {
           return "IntelliJIDEARulezzz";
         }
         return psiParameter.getName();
       }, ",") + ");";
-      final String methodCall;
+      String methodCall;
       if (method.getReturnType() == null) {
         methodCall = "this";
       } else if (!PsiType.VOID.equals(method.getReturnType())) {
@@ -145,8 +145,8 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
       LOG.assertTrue(body != null);
       body.add(JavaPsiFacade.getElementFactory(project).createStatementFromText(methodCall + callArgs, method));
       body = (PsiCodeBlock) CodeStyleManager.getInstance(project).reformat(body);
-      final PsiStatement stmt = body.getStatements()[0];
-      final PsiExpression expr;
+      PsiStatement stmt = body.getStatements()[0];
+      PsiExpression expr;
       if (stmt instanceof PsiReturnStatement) {
         expr = ((PsiReturnStatement) stmt).getReturnValue();
       } else if (stmt instanceof PsiExpressionStatement) {
@@ -170,7 +170,7 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
   public static void startTemplate(@Nonnull Project project, Editor editor, PsiExpression[] argsToBeDelegated, PsiMethod delegateMethod) {
     TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(delegateMethod);
     RangeMarker rangeMarker = editor.getDocument().createRangeMarker(delegateMethod.getTextRange());
-    for (final PsiExpression exprToBeDefault : argsToBeDelegated) {
+    for (PsiExpression exprToBeDefault : argsToBeDelegated) {
       builder.replaceElement(exprToBeDefault, new TextExpression(""));
     }
     Template template = builder.buildTemplate();
@@ -186,22 +186,22 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
 
   @Nullable
   protected PsiParameter[] getParams(PsiElement element) {
-    final PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
+    PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
     assert method != null;
-    final PsiParameter[] parameters = method.getParameterList().getParameters();
+    PsiParameter[] parameters = method.getParameterList().getParameters();
     if (parameters.length == 1) {
       return parameters;
     }
-    final ParameterClassMember[] members = new ParameterClassMember[parameters.length];
+    ParameterClassMember[] members = new ParameterClassMember[parameters.length];
     for (int i = 0; i < members.length; i++) {
       members[i] = new ParameterClassMember(parameters[i]);
     }
-    final PsiParameter selectedParam = PsiTreeUtil.getParentOfType(element, PsiParameter.class);
-    final int idx = selectedParam != null ? ArrayUtil.find(parameters, selectedParam) : -1;
+    PsiParameter selectedParam = PsiTreeUtil.getParentOfType(element, PsiParameter.class);
+    int idx = selectedParam != null ? ArrayUtil.find(parameters, selectedParam) : -1;
     if (ApplicationManager.getApplication().isUnitTestMode()) {
       return idx >= 0 ? new PsiParameter[]{selectedParam} : null;
     }
-    final MemberChooser<ParameterClassMember> chooser = new MemberChooser<>(members, false, true, element.getProject());
+    MemberChooser<ParameterClassMember> chooser = new MemberChooser<>(members, false, true, element.getProject());
     if (idx >= 0) {
       chooser.selectElements(new ClassMember[]{members[idx]});
     } else {
@@ -210,7 +210,7 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
     chooser.setTitle("Choose Default Value Parameters");
     chooser.setCopyJavadocVisible(false);
     if (chooser.showAndGet()) {
-      final List<ParameterClassMember> elements = chooser.getSelectedElements();
+      List<ParameterClassMember> elements = chooser.getSelectedElements();
       if (elements != null) {
         PsiParameter[] params = new PsiParameter[elements.size()];
         for (int i = 0; i < params.length; i++) {
@@ -223,9 +223,9 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
   }
 
   private static PsiMethod generateMethodPrototype(PsiMethod method, PsiParameter... params) {
-    final PsiMethod prototype = (PsiMethod) method.copy();
-    final PsiCodeBlock body = prototype.getBody();
-    final PsiCodeBlock emptyBody = JavaPsiFacade.getElementFactory(method.getProject()).createMethodFromText("void foo(){}", prototype).getBody();
+    PsiMethod prototype = (PsiMethod) method.copy();
+    PsiCodeBlock body = prototype.getBody();
+    PsiCodeBlock emptyBody = JavaPsiFacade.getElementFactory(method.getProject()).createMethodFromText("void foo(){}", prototype).getBody();
     assert emptyBody != null;
     if (body != null) {
       body.replace(emptyBody);
@@ -234,21 +234,21 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
       prototype.addBefore(emptyBody, null);
     }
 
-    final PsiClass aClass = method.getContainingClass();
+    PsiClass aClass = method.getContainingClass();
     if (aClass != null && aClass.isInterface() && !method.hasModifierProperty(PsiModifier.STATIC)) {
       prototype.getModifierList().setModifierProperty(PsiModifier.DEFAULT, true);
     }
 
-    final PsiParameterList parameterList = method.getParameterList();
+    PsiParameterList parameterList = method.getParameterList();
     Arrays.sort(params, (p1, p2) ->
     {
-      final int parameterIndex1 = parameterList.getParameterIndex(p1);
-      final int parameterIndex2 = parameterList.getParameterIndex(p2);
+      int parameterIndex1 = parameterList.getParameterIndex(p1);
+      int parameterIndex2 = parameterList.getParameterIndex(p2);
       return parameterIndex1 > parameterIndex2 ? -1 : 1;
     });
 
     for (PsiParameter param : params) {
-      final int parameterIndex = parameterList.getParameterIndex(param);
+      int parameterIndex = parameterList.getParameterIndex(param);
       prototype.getParameterList().getParameters()[parameterIndex].delete();
     }
     return prototype;

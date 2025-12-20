@@ -31,31 +31,31 @@ public class AnnotateOverriddenMethodsPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiAnnotation)) {
       return false;
     }
-    final PsiAnnotation annotation = (PsiAnnotation)element;
-    final String annotationName = annotation.getQualifiedName();
+    PsiAnnotation annotation = (PsiAnnotation)element;
+    String annotationName = annotation.getQualifiedName();
     if (annotationName == null) {
       return false;
     }
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!(parent instanceof PsiModifierList)) {
       return false;
     }
-    final PsiElement grandParent = parent.getParent();
-    final PsiMethod method;
-    final int parameterIndex;
+    PsiElement grandParent = parent.getParent();
+    PsiMethod method;
+    int parameterIndex;
     if (!(grandParent instanceof PsiMethod)) {
       if (!(grandParent instanceof PsiParameter)) {
         return false;
       }
-      final PsiParameter parameter = (PsiParameter)grandParent;
-      final PsiElement greatGrandParent = grandParent.getParent();
+      PsiParameter parameter = (PsiParameter)grandParent;
+      PsiElement greatGrandParent = grandParent.getParent();
       if (!(greatGrandParent instanceof PsiParameterList)) {
         return false;
       }
-      final PsiParameterList parameterList =
+      PsiParameterList parameterList =
         (PsiParameterList)greatGrandParent;
       parameterIndex = parameterList.getParameterIndex(parameter);
-      final PsiElement greatGreatGrandParent =
+      PsiElement greatGreatGrandParent =
         greatGrandParent.getParent();
       if (!(greatGreatGrandParent instanceof PsiMethod)) {
         return false;
@@ -66,8 +66,8 @@ public class AnnotateOverriddenMethodsPredicate implements PsiElementPredicate {
       parameterIndex = -1;
       method = (PsiMethod)grandParent;
     }
-    final Project project = element.getProject();
-    final Collection<PsiMethod> overridingMethods =
+    Project project = element.getProject();
+    Collection<PsiMethod> overridingMethods =
       OverridingMethodsSearch.search(method,
                                      GlobalSearchScope.allScope(project), true).findAll();
     if (overridingMethods.isEmpty()) {
@@ -75,7 +75,7 @@ public class AnnotateOverriddenMethodsPredicate implements PsiElementPredicate {
     }
     for (PsiMethod overridingMethod : overridingMethods) {
       if (parameterIndex == -1) {
-        final PsiAnnotation foundAnnotation =
+        PsiAnnotation foundAnnotation =
           AnnotationUtil.findAnnotation(overridingMethod,
                                         annotationName);
         if (foundAnnotation == null) {
@@ -83,11 +83,11 @@ public class AnnotateOverriddenMethodsPredicate implements PsiElementPredicate {
         }
       }
       else {
-        final PsiParameterList parameterList =
+        PsiParameterList parameterList =
           overridingMethod.getParameterList();
-        final PsiParameter[] parameters = parameterList.getParameters();
-        final PsiParameter parameter = parameters[parameterIndex];
-        final PsiAnnotation foundAnnotation =
+        PsiParameter[] parameters = parameterList.getParameters();
+        PsiParameter parameter = parameters[parameterIndex];
+        PsiAnnotation foundAnnotation =
           AnnotationUtil.findAnnotation(parameter,
                                         annotationName);
         if (foundAnnotation == null) {

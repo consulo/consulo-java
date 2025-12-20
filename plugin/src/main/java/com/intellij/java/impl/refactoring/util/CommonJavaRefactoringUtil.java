@@ -20,16 +20,16 @@ public class CommonJavaRefactoringUtil {
   @Contract(value = "null -> null", pure = true)
   public static PsiExpression unparenthesizeExpression(PsiExpression expression) {
     while (expression instanceof PsiParenthesizedExpression) {
-      final PsiExpression innerExpression = ((PsiParenthesizedExpression)expression).getExpression();
+      PsiExpression innerExpression = ((PsiParenthesizedExpression)expression).getExpression();
       if (innerExpression == null) return expression;
       expression = innerExpression;
     }
     return expression;
   }
 
-  public static List<PsiExpression> collectExpressions(final PsiFile file,
-                                                       final Document document,
-                                                       final int offset,
+  public static List<PsiExpression> collectExpressions(PsiFile file,
+                                                       Document document,
+                                                       int offset,
                                                        boolean acceptVoid) {
     CharSequence text = document.getCharsSequence();
     int correctedOffset = offset;
@@ -51,8 +51,8 @@ public class CommonJavaRefactoringUtil {
         correctedOffset = offset;
       }
     }
-    final PsiElement elementAtCaret = file.findElementAt(correctedOffset);
-    final List<PsiExpression> expressions = new ArrayList<>();
+    PsiElement elementAtCaret = file.findElementAt(correctedOffset);
+    List<PsiExpression> expressions = new ArrayList<>();
     PsiExpression expression = PsiTreeUtil.getParentOfType(elementAtCaret, PsiExpression.class);
     while (expression != null) {
       if (!expressions.contains(expression) && !(expression instanceof PsiParenthesizedExpression) && !(expression instanceof PsiSuperExpression) &&
@@ -77,7 +77,7 @@ public class CommonJavaRefactoringUtil {
       }
       else {
         if (!(expression.getParent() instanceof PsiMethodCallExpression)) {
-          final PsiElement resolve = ((PsiReferenceExpression)expression).resolve();
+          PsiElement resolve = ((PsiReferenceExpression)expression).resolve();
           if (!(resolve instanceof PsiClass) && !(resolve instanceof PsiPackage)) {
             return true;
           }

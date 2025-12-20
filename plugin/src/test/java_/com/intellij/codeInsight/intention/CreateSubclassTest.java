@@ -26,10 +26,10 @@ public abstract class CreateSubclassTest extends MultiFileTestCase {
   private void doTestInner() throws Exception {
     doTest(new PerformAction() {
       @Override
-      public void performAction(final VirtualFile rootDir, final VirtualFile rootAfter) throws Exception {
+      public void performAction(VirtualFile rootDir, VirtualFile rootAfter) throws Exception {
         PsiClass superClass = myJavaFacade.findClass("Test", ProjectScope.getAllScope(myProject));
         assertNotNull(superClass);
-        final PsiClass inner = superClass.findInnerClassByName("Inner", false);
+        PsiClass inner = superClass.findInnerClassByName("Inner", false);
         assertNotNull(inner);
         CreateSubclassAction.createInnerClass(inner);
       }
@@ -39,7 +39,7 @@ public abstract class CreateSubclassTest extends MultiFileTestCase {
   private void doTest() throws Exception {
     doTest(new PerformAction() {
       @Override
-      public void performAction(final VirtualFile rootDir, final VirtualFile rootAfter) throws Exception {
+      public void performAction(VirtualFile rootDir, VirtualFile rootAfter) throws Exception {
         PsiDirectory root = myPsiManager.findDirectory(rootDir);
         PsiClass superClass = myJavaFacade.findClass("Superclass", ProjectScope.getAllScope(myProject));
         CreateSubclassAction.createSubclass(superClass, root, "Subclass");

@@ -18,37 +18,37 @@ import java.util.Iterator;
 public abstract class PsiUtilTest extends LightCodeInsightTestCase {
   public void testTypeParameterIterator() throws Exception {
     PsiClass classA = createClass("class A<T> {}");
-    final Iterator<PsiTypeParameter> iterator = PsiUtil.typeParametersIterator(classA);
+    Iterator<PsiTypeParameter> iterator = PsiUtil.typeParametersIterator(classA);
     compareIterator(new String[]{"T"}, iterator);
   }
 
   private static PsiClass createClass(String text) throws IncorrectOperationException {
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(ourProject).getElementFactory();
-    final PsiClass classA = factory.createClassFromText(text, null).getInnerClasses()[0];
+    PsiElementFactory factory = JavaPsiFacade.getInstance(ourProject).getElementFactory();
+    PsiClass classA = factory.createClassFromText(text, null).getInnerClasses()[0];
     return classA;
   }
 
   public void testTypeParameterIterator1() throws Exception {
-    final PsiClass classA = createClass("class A<T> { class B<X> {}}");
-    final Iterator<PsiTypeParameter> iterator = PsiUtil.typeParametersIterator(classA.getInnerClasses()[0]);
+    PsiClass classA = createClass("class A<T> { class B<X> {}}");
+    Iterator<PsiTypeParameter> iterator = PsiUtil.typeParametersIterator(classA.getInnerClasses()[0]);
     compareIterator(new String[]{"X","T"}, iterator);
   }
 
   public void testTypeParameterIterator2() throws Exception {
-    final PsiClass classA = createClass("class A<T> { static class B<X> {}}");
-    final Iterator<PsiTypeParameter> iterator = PsiUtil.typeParametersIterator(classA.getInnerClasses()[0]);
+    PsiClass classA = createClass("class A<T> { static class B<X> {}}");
+    Iterator<PsiTypeParameter> iterator = PsiUtil.typeParametersIterator(classA.getInnerClasses()[0]);
     compareIterator(new String[]{"X"}, iterator);
   }
 
   public void testTypeParameterIterator3() throws Exception {
-    final PsiClass classA = createClass("class A<T> { class B<X, Y> {}}");
-    final Iterator<PsiTypeParameter> iterator = PsiUtil.typeParametersIterator(classA.getInnerClasses()[0]);
+    PsiClass classA = createClass("class A<T> { class B<X, Y> {}}");
+    Iterator<PsiTypeParameter> iterator = PsiUtil.typeParametersIterator(classA.getInnerClasses()[0]);
     compareIterator(new String[]{"Y", "X", "T"}, iterator);
   }
 
 
   private static void compareIterator(String[] expected, Iterator<PsiTypeParameter> it) {
-    final ArrayList<String> actual = new ArrayList<String>();
+    ArrayList<String> actual = new ArrayList<String>();
     while (it.hasNext()) {
       PsiTypeParameter typeParameter = it.next();
       actual.add(typeParameter.getName());

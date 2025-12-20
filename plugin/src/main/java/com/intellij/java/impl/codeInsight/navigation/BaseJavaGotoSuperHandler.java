@@ -46,7 +46,7 @@ import jakarta.annotation.Nullable;
 public abstract class BaseJavaGotoSuperHandler implements GotoSuperActionHander {
   @RequiredUIAccess
   @Override
-  public void invoke(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull final PsiFile file) {
+  public void invoke(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
     FeatureUsageTracker.getInstance().triggerFeatureUsed(GotoSuperAction.FEATURE_ID);
 
     int offset = editor.getCaretModel().getOffset();
@@ -54,9 +54,9 @@ public abstract class BaseJavaGotoSuperHandler implements GotoSuperActionHander 
     if (superElements == null || superElements.length == 0) return;
     if (superElements.length == 1) {
       PsiElement superElement = superElements[0].getNavigationElement();
-      final PsiFile containingFile = superElement.getContainingFile();
+      PsiFile containingFile = superElement.getContainingFile();
       if (containingFile == null) return;
-      final VirtualFile virtualFile = containingFile.getVirtualFile();
+      VirtualFile virtualFile = containingFile.getVirtualFile();
       if (virtualFile == null) return;
       OpenFileDescriptor descriptor =
         OpenFileDescriptorFactory.getInstance(project).builder(virtualFile).offset(superElement.getTextOffset()).build();

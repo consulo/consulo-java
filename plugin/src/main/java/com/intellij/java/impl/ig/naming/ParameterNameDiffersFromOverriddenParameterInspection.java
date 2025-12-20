@@ -60,7 +60,7 @@ public class ParameterNameDiffersFromOverriddenParameterInspection extends BaseI
     }
 
     public JComponent createOptionsPanel() {
-        final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
+        MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
         optionsPanel.addCheckbox(
             InspectionGadgetsLocalize.parameterNameDiffersFromOverriddenParameterIgnoreCharacterOption().get(),
             "m_ignoreSingleCharacterNames"
@@ -84,34 +84,34 @@ public class ParameterNameDiffersFromOverriddenParameterInspection extends BaseI
     private class ParameterNameDiffersFromOverriddenParameterVisitor extends BaseInspectionVisitor {
         @Override
         public void visitMethod(@Nonnull PsiMethod method) {
-            final PsiParameterList parameterList = method.getParameterList();
+            PsiParameterList parameterList = method.getParameterList();
             if (parameterList.getParametersCount() == 0) {
                 return;
             }
-            final Query<MethodSignatureBackedByPsiMethod> query =
+            Query<MethodSignatureBackedByPsiMethod> query =
                 SuperMethodsSearch.search(method, method.getContainingClass(), true, false);
-            final MethodSignatureBackedByPsiMethod methodSignature = query.findFirst();
+            MethodSignatureBackedByPsiMethod methodSignature = query.findFirst();
             if (methodSignature == null) {
                 return;
             }
-            final PsiMethod superMethod = methodSignature.getMethod();
-            final PsiParameter[] parameters = parameterList.getParameters();
+            PsiMethod superMethod = methodSignature.getMethod();
+            PsiParameter[] parameters = parameterList.getParameters();
             checkParameters(superMethod, parameters);
         }
 
         private void checkParameters(PsiMethod superMethod, PsiParameter[] parameters) {
             if (m_ignoreOverridesOfLibraryMethods) {
-                final PsiClass containingClass = superMethod.getContainingClass();
+                PsiClass containingClass = superMethod.getContainingClass();
                 if (containingClass != null && LibraryUtil.classIsInLibrary(containingClass)) {
                     return;
                 }
             }
-            final PsiParameterList superParameterList = superMethod.getParameterList();
-            final PsiParameter[] superParameters = superParameterList.getParameters();
+            PsiParameterList superParameterList = superMethod.getParameterList();
+            PsiParameter[] superParameters = superParameterList.getParameters();
             for (int i = 0; i < parameters.length; i++) {
-                final PsiParameter parameter = parameters[i];
-                final String parameterName = parameter.getName();
-                final String superParameterName = superParameters[i].getName();
+                PsiParameter parameter = parameters[i];
+                String parameterName = parameter.getName();
+                String superParameterName = superParameters[i].getName();
                 if (superParameterName == null) {
                     continue;
                 }

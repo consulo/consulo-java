@@ -61,7 +61,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
   private static void autoPopupMemberLookup(Project project, final Editor editor) {
     AutoPopupController.getInstance(project).autoPopupMemberLookup(editor, new Condition<PsiFile>() {
       @Override
-      public boolean value(final PsiFile file) {
+      public boolean value(PsiFile file) {
         int offset = editor.getCaretModel().getOffset();
 
         PsiElement lastElement = file.findElementAt(offset - 1);
@@ -70,7 +70,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
         }
 
         //do not show lookup when typing varargs ellipsis
-        final PsiElement prevSibling = PsiTreeUtil.prevVisibleLeaf(lastElement);
+        PsiElement prevSibling = PsiTreeUtil.prevVisibleLeaf(lastElement);
         if (prevSibling == null || ".".equals(prevSibling.getText())) {
           return false;
         }
@@ -86,7 +86,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
         if (!".".equals(lastElement.getText()) && !"#".equals(lastElement.getText())) {
           return JavaClassReferenceCompletionContributor.findJavaClassReference(file, offset - 1) != null;
         } else {
-          final PsiElement element = file.findElementAt(offset);
+          PsiElement element = file.findElementAt(offset);
           return element == null ||
               !"#".equals(lastElement.getText()) ||
               PsiTreeUtil.getParentOfType(element, PsiDocComment.class) != null;
@@ -96,11 +96,11 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
   }
 
   @Override
-  public Result beforeCharTyped(final char c,
+  public Result beforeCharTyped(char c,
                                 final Project project,
                                 final Editor editor,
                                 final PsiFile file,
-                                final FileType fileType) {
+                                FileType fileType) {
     if (c == '@' && file instanceof PsiJavaFile) {
       autoPopupJavadocLookup(project, editor);
     } else if (c == '#' || c == '.') {
@@ -108,7 +108,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
     }
 
 
-    final FileType originalFileType = getOriginalFileType(file);
+    FileType originalFileType = getOriginalFileType(file);
 
     int offsetBefore = editor.getCaretModel().getOffset();
 
@@ -151,7 +151,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
       }
       Document doc = editor.getDocument();
       PsiDocumentManager.getInstance(project).commitDocument(doc);
-      final PsiElement leaf = file.findElementAt(offset);
+      PsiElement leaf = file.findElementAt(offset);
       if (PsiTreeUtil.getParentOfType(leaf, PsiArrayInitializerExpression.class, false, PsiCodeBlock.class,
           PsiMember.class) != null) {
         return Result.CONTINUE;
@@ -212,10 +212,10 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
   }
 
   @Override
-  public Result charTyped(final char c,
-                          final Project project,
-                          @Nonnull final Editor editor,
-                          @Nonnull final PsiFile file) {
+  public Result charTyped(char c,
+                          Project project,
+                          @Nonnull Editor editor,
+                          @Nonnull PsiFile file) {
     if (myJavaLTTyped) {
       myJavaLTTyped = false;
       handleAfterJavaLT(editor, JavaTokenType.LT, JavaTokenType.GT, INVALID_INSIDE_REFERENCE);
@@ -229,8 +229,8 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
   }
 
   @Nullable
-  private static FileType getOriginalFileType(final PsiFile file) {
-    final VirtualFile virtualFile = file.getVirtualFile();
+  private static FileType getOriginalFileType(PsiFile file) {
+    VirtualFile virtualFile = file.getVirtualFile();
     return virtualFile != null ? virtualFile.getFileType() : null;
   }
 
@@ -253,10 +253,10 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
   }
 
   //need custom handler, since brace matcher cannot be used
-  public static boolean handleJavaGT(final Editor editor,
-                                     final IElementType lt,
-                                     final IElementType gt,
-                                     final TokenSet invalidInsideReference) {
+  public static boolean handleJavaGT(Editor editor,
+                                     IElementType lt,
+                                     IElementType gt,
+                                     TokenSet invalidInsideReference) {
     if (!CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET) {
       return false;
     }
@@ -281,7 +281,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
 
     int balance = 0;
     while (!iterator.atEnd() && balance >= 0) {
-      final IElementType tokenType = (IElementType) iterator.getTokenType();
+      IElementType tokenType = (IElementType) iterator.getTokenType();
       if (tokenType == lt) {
         balance--;
       } else if (tokenType == gt) {
@@ -302,10 +302,10 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
   }
 
   //need custom handler, since brace matcher cannot be used
-  public static void handleAfterJavaLT(final Editor editor,
-                                       final IElementType lt,
-                                       final IElementType gt,
-                                       final TokenSet invalidInsideReference) {
+  public static void handleAfterJavaLT(Editor editor,
+                                       IElementType lt,
+                                       IElementType gt,
+                                       TokenSet invalidInsideReference) {
     if (!CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET) {
       return;
     }
@@ -322,7 +322,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
 
     int balance = 0;
     while (!iterator.atEnd() && balance >= 0) {
-      final IElementType tokenType = (IElementType) iterator.getTokenType();
+      IElementType tokenType = (IElementType) iterator.getTokenType();
       if (tokenType == lt) {
         balance++;
       } else if (tokenType == gt) {
@@ -339,7 +339,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
     }
   }
 
-  private static void autoPopupJavadocLookup(final Project project, final Editor editor) {
+  private static void autoPopupJavadocLookup(Project project, final Editor editor) {
     AutoPopupController.getInstance(project).autoPopupMemberLookup(editor, new Condition<PsiFile>() {
       @Override
       public boolean value(PsiFile file) {
@@ -351,7 +351,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
     });
   }
 
-  public static boolean isAfterClassLikeIdentifierOrDot(final int offset, final Editor editor) {
+  public static boolean isAfterClassLikeIdentifierOrDot(int offset, Editor editor) {
     HighlighterIterator iterator = ((EditorEx) editor).getHighlighter().createIterator(offset);
     if (iterator.atEnd()) {
       return false;
@@ -359,7 +359,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
     if (iterator.getStart() > 0) {
       iterator.retreat();
     }
-    final IElementType tokenType = (IElementType) iterator.getTokenType();
+    IElementType tokenType = (IElementType) iterator.getTokenType();
     if (tokenType == JavaTokenType.DOT) {
       return true;
     }
@@ -369,14 +369,14 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
   public static boolean isClassLikeIdentifier(int offset,
                                               Editor editor,
                                               HighlighterIterator iterator,
-                                              final IElementType idType) {
+                                              IElementType idType) {
     if (iterator.getTokenType() == idType && iterator.getEnd() == offset) {
-      final CharSequence chars = editor.getDocument().getCharsSequence();
-      final char startChar = chars.charAt(iterator.getStart());
+      CharSequence chars = editor.getDocument().getCharsSequence();
+      char startChar = chars.charAt(iterator.getStart());
       if (!Character.isUpperCase(startChar)) {
         return false;
       }
-      final CharSequence word = chars.subSequence(iterator.getStart(), iterator.getEnd());
+      CharSequence word = chars.subSequence(iterator.getStart(), iterator.getEnd());
       if (word.length() == 1) {
         return true;
       }

@@ -41,8 +41,8 @@ public class ThisGetter
 	public static List<PsiExpression> getThisExpressionVariants(PsiElement context)
 	{
 		boolean first = true;
-		final List<PsiExpression> expressions = new ArrayList<>();
-		final PsiElementFactory factory = JavaPsiFacade.getInstance(context.getProject()).getElementFactory();
+		List<PsiExpression> expressions = new ArrayList<>();
+		PsiElementFactory factory = JavaPsiFacade.getInstance(context.getProject()).getElementFactory();
 
 		PsiElement prev = context;
 		context = context.getContext();
@@ -51,7 +51,7 @@ public class ThisGetter
 		{
 			if(context instanceof PsiClass && !(prev instanceof PsiExpressionList))
 			{
-				final String expressionText;
+				String expressionText;
 				if(first)
 				{
 					first = false;

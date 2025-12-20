@@ -78,8 +78,8 @@ public class TrivialIfInspection extends BaseInspection {
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
-            final PsiElement ifKeywordElement = descriptor.getPsiElement();
-            final PsiIfStatement statement = (PsiIfStatement) ifKeywordElement.getParent();
+            PsiElement ifKeywordElement = descriptor.getPsiElement();
+            PsiIfStatement statement = (PsiIfStatement) ifKeywordElement.getParent();
             if (isSimplifiableAssignment(statement)) {
                 replaceSimplifiableAssignment(statement);
             }
@@ -109,17 +109,17 @@ public class TrivialIfInspection extends BaseInspection {
         private static void replaceSimplifiableImplicitReturn(
             PsiIfStatement statement
         ) throws IncorrectOperationException {
-            final PsiExpression condition = statement.getCondition();
+            PsiExpression condition = statement.getCondition();
             if (condition == null) {
                 return;
             }
-            final String conditionText = condition.getText();
-            final PsiElement nextStatement =
+            String conditionText = condition.getText();
+            PsiElement nextStatement =
                 PsiTreeUtil.skipSiblingsForward(
                     statement,
                     PsiWhiteSpace.class
                 );
-            @NonNls final String newStatement = "return " + conditionText + ';';
+            @NonNls String newStatement = "return " + conditionText + ';';
             replaceStatement(statement, newStatement);
             assert nextStatement != null;
             deleteElement(nextStatement);
@@ -127,12 +127,12 @@ public class TrivialIfInspection extends BaseInspection {
 
         private static void repaceSimplifiableReturn(PsiIfStatement statement)
             throws IncorrectOperationException {
-            final PsiExpression condition = statement.getCondition();
+            PsiExpression condition = statement.getCondition();
             if (condition == null) {
                 return;
             }
-            final String conditionText = condition.getText();
-            @NonNls final String newStatement = "return " + conditionText + ';';
+            String conditionText = condition.getText();
+            @NonNls String newStatement = "return " + conditionText + ';';
             replaceStatement(statement, newStatement);
         }
 
@@ -140,22 +140,22 @@ public class TrivialIfInspection extends BaseInspection {
             PsiIfStatement statement
         )
             throws IncorrectOperationException {
-            final PsiExpression condition = statement.getCondition();
+            PsiExpression condition = statement.getCondition();
             if (condition == null) {
                 return;
             }
-            final String conditionText = condition.getText();
-            final PsiStatement thenBranch = statement.getThenBranch();
-            final PsiExpressionStatement assignmentStatement =
+            String conditionText = condition.getText();
+            PsiStatement thenBranch = statement.getThenBranch();
+            PsiExpressionStatement assignmentStatement =
                 (PsiExpressionStatement)
                     ControlFlowUtils.stripBraces(thenBranch);
-            final PsiAssignmentExpression assignmentExpression =
+            PsiAssignmentExpression assignmentExpression =
                 (PsiAssignmentExpression) assignmentStatement.getExpression();
-            final PsiJavaToken operator =
+            PsiJavaToken operator =
                 assignmentExpression.getOperationSign();
-            final String operand = operator.getText();
-            final PsiExpression lhs = assignmentExpression.getLExpression();
-            final String lhsText = lhs.getText();
+            String operand = operator.getText();
+            PsiExpression lhs = assignmentExpression.getLExpression();
+            String lhsText = lhs.getText();
             replaceStatement(
                 statement,
                 lhsText + operand + conditionText + ';'
@@ -165,7 +165,7 @@ public class TrivialIfInspection extends BaseInspection {
         private static void replaceSimplifiableImplicitAssignment(
             PsiIfStatement statement
         ) throws IncorrectOperationException {
-            final PsiElement prevStatement =
+            PsiElement prevStatement =
                 PsiTreeUtil.skipSiblingsBackward(
                     statement,
                     PsiWhiteSpace.class
@@ -173,22 +173,22 @@ public class TrivialIfInspection extends BaseInspection {
             if (prevStatement == null) {
                 return;
             }
-            final PsiExpression condition = statement.getCondition();
+            PsiExpression condition = statement.getCondition();
             if (condition == null) {
                 return;
             }
-            final String conditionText = condition.getText();
-            final PsiStatement thenBranch = statement.getThenBranch();
-            final PsiExpressionStatement assignmentStatement =
+            String conditionText = condition.getText();
+            PsiStatement thenBranch = statement.getThenBranch();
+            PsiExpressionStatement assignmentStatement =
                 (PsiExpressionStatement)
                     ControlFlowUtils.stripBraces(thenBranch);
-            final PsiAssignmentExpression assignmentExpression =
+            PsiAssignmentExpression assignmentExpression =
                 (PsiAssignmentExpression) assignmentStatement.getExpression();
-            final PsiJavaToken operator =
+            PsiJavaToken operator =
                 assignmentExpression.getOperationSign();
-            final String operand = operator.getText();
-            final PsiExpression lhs = assignmentExpression.getLExpression();
-            final String lhsText = lhs.getText();
+            String operand = operator.getText();
+            PsiExpression lhs = assignmentExpression.getLExpression();
+            String lhsText = lhs.getText();
             replaceStatement(
                 statement,
                 lhsText + operand + conditionText + ';'
@@ -200,29 +200,29 @@ public class TrivialIfInspection extends BaseInspection {
             PsiIfStatement statement
         )
             throws IncorrectOperationException {
-            final PsiElement prevStatement =
+            PsiElement prevStatement =
                 PsiTreeUtil.skipSiblingsBackward(
                     statement,
                     PsiWhiteSpace.class
                 );
-            final PsiExpression condition = statement.getCondition();
+            PsiExpression condition = statement.getCondition();
             if (condition == null) {
                 return;
             }
-            final String conditionText =
+            String conditionText =
                 BoolUtils.getNegatedExpressionText(condition);
-            final PsiStatement thenBranch = statement.getThenBranch();
-            final PsiExpressionStatement assignmentStatement =
+            PsiStatement thenBranch = statement.getThenBranch();
+            PsiExpressionStatement assignmentStatement =
                 (PsiExpressionStatement)
                     ControlFlowUtils.stripBraces(thenBranch);
-            final PsiAssignmentExpression assignmentExpression =
+            PsiAssignmentExpression assignmentExpression =
                 (PsiAssignmentExpression)
                     assignmentStatement.getExpression();
-            final PsiJavaToken operator =
+            PsiJavaToken operator =
                 assignmentExpression.getOperationSign();
-            final String operand = operator.getText();
-            final PsiExpression lhs = assignmentExpression.getLExpression();
-            final String lhsText = lhs.getText();
+            String operand = operator.getText();
+            PsiExpression lhs = assignmentExpression.getLExpression();
+            String lhsText = lhs.getText();
             replaceStatement(
                 statement,
                 lhsText + operand + conditionText + ';'
@@ -235,13 +235,13 @@ public class TrivialIfInspection extends BaseInspection {
             PsiIfStatement statement
         )
             throws IncorrectOperationException {
-            final PsiExpression condition = statement.getCondition();
+            PsiExpression condition = statement.getCondition();
             if (condition == null) {
                 return;
             }
-            final String conditionText =
+            String conditionText =
                 BoolUtils.getNegatedExpressionText(condition);
-            final PsiElement nextStatement =
+            PsiElement nextStatement =
                 PsiTreeUtil.skipSiblingsForward(
                     statement,
                     PsiWhiteSpace.class
@@ -249,7 +249,7 @@ public class TrivialIfInspection extends BaseInspection {
             if (nextStatement == null) {
                 return;
             }
-            @NonNls final String newStatement = "return " + conditionText + ';';
+            @NonNls String newStatement = "return " + conditionText + ';';
             replaceStatement(statement, newStatement);
             deleteElement(nextStatement);
         }
@@ -258,13 +258,13 @@ public class TrivialIfInspection extends BaseInspection {
             PsiIfStatement statement
         )
             throws IncorrectOperationException {
-            final PsiExpression condition = statement.getCondition();
+            PsiExpression condition = statement.getCondition();
             if (condition == null) {
                 return;
             }
-            final String conditionText =
+            String conditionText =
                 BoolUtils.getNegatedExpressionText(condition);
-            @NonNls final String newStatement = "return " + conditionText + ';';
+            @NonNls String newStatement = "return " + conditionText + ';';
             replaceStatement(statement, newStatement);
         }
 
@@ -272,24 +272,24 @@ public class TrivialIfInspection extends BaseInspection {
             PsiIfStatement statement
         )
             throws IncorrectOperationException {
-            final PsiExpression condition = statement.getCondition();
+            PsiExpression condition = statement.getCondition();
             if (condition == null) {
                 return;
             }
-            final String conditionText =
+            String conditionText =
                 BoolUtils.getNegatedExpressionText(condition);
-            final PsiStatement thenBranch = statement.getThenBranch();
-            final PsiExpressionStatement assignmentStatement =
+            PsiStatement thenBranch = statement.getThenBranch();
+            PsiExpressionStatement assignmentStatement =
                 (PsiExpressionStatement)
                     ControlFlowUtils.stripBraces(thenBranch);
-            final PsiAssignmentExpression assignmentExpression =
+            PsiAssignmentExpression assignmentExpression =
                 (PsiAssignmentExpression)
                     assignmentStatement.getExpression();
-            final PsiJavaToken operator =
+            PsiJavaToken operator =
                 assignmentExpression.getOperationSign();
-            final String operand = operator.getText();
-            final PsiExpression lhs = assignmentExpression.getLExpression();
-            final String lhsText = lhs.getText();
+            String operand = operator.getText();
+            PsiExpression lhs = assignmentExpression.getLExpression();
+            String lhsText = lhs.getText();
             replaceStatement(
                 statement,
                 lhsText + operand + conditionText + ';'
@@ -307,7 +307,7 @@ public class TrivialIfInspection extends BaseInspection {
         @Override
         public void visitIfStatement(@Nonnull PsiIfStatement ifStatement) {
             super.visitIfStatement(ifStatement);
-            final PsiExpression condition = ifStatement.getCondition();
+            PsiExpression condition = ifStatement.getCondition();
             if (condition == null) {
                 return;
             }
@@ -356,7 +356,7 @@ public class TrivialIfInspection extends BaseInspection {
         }
         PsiStatement thenBranch = ifStatement.getThenBranch();
         thenBranch = ControlFlowUtils.stripBraces(thenBranch);
-        final PsiElement nextStatement =
+        PsiElement nextStatement =
             PsiTreeUtil.skipSiblingsForward(
                 ifStatement,
                 PsiWhiteSpace.class
@@ -365,7 +365,7 @@ public class TrivialIfInspection extends BaseInspection {
             return false;
         }
 
-        final PsiStatement elseBranch = (PsiStatement) nextStatement;
+        PsiStatement elseBranch = (PsiStatement) nextStatement;
         return ConditionalUtils.isReturn(thenBranch, PsiKeyword.TRUE)
             && ConditionalUtils.isReturn(elseBranch, PsiKeyword.FALSE);
     }
@@ -379,7 +379,7 @@ public class TrivialIfInspection extends BaseInspection {
         PsiStatement thenBranch = ifStatement.getThenBranch();
         thenBranch = ControlFlowUtils.stripBraces(thenBranch);
 
-        final PsiElement nextStatement =
+        PsiElement nextStatement =
             PsiTreeUtil.skipSiblingsForward(
                 ifStatement,
                 PsiWhiteSpace.class
@@ -387,7 +387,7 @@ public class TrivialIfInspection extends BaseInspection {
         if (!(nextStatement instanceof PsiStatement)) {
             return false;
         }
-        final PsiStatement elseBranch = (PsiStatement) nextStatement;
+        PsiStatement elseBranch = (PsiStatement) nextStatement;
         return ConditionalUtils.isReturn(thenBranch, PsiKeyword.FALSE)
             && ConditionalUtils.isReturn(elseBranch, PsiKeyword.TRUE);
     }
@@ -419,22 +419,22 @@ public class TrivialIfInspection extends BaseInspection {
         elseBranch = ControlFlowUtils.stripBraces(elseBranch);
         if (ConditionalUtils.isAssignment(thenBranch, PsiKeyword.TRUE) &&
             ConditionalUtils.isAssignment(elseBranch, PsiKeyword.FALSE)) {
-            final PsiExpressionStatement thenExpressionStatement =
+            PsiExpressionStatement thenExpressionStatement =
                 (PsiExpressionStatement) thenBranch;
-            final PsiAssignmentExpression thenExpression =
+            PsiAssignmentExpression thenExpression =
                 (PsiAssignmentExpression)
                     thenExpressionStatement.getExpression();
-            final PsiExpressionStatement elseExpressionStatement =
+            PsiExpressionStatement elseExpressionStatement =
                 (PsiExpressionStatement) elseBranch;
-            final PsiAssignmentExpression elseExpression =
+            PsiAssignmentExpression elseExpression =
                 (PsiAssignmentExpression)
                     elseExpressionStatement.getExpression();
-            final IElementType thenTokenType = thenExpression.getOperationTokenType();
+            IElementType thenTokenType = thenExpression.getOperationTokenType();
             if (!thenTokenType.equals(elseExpression.getOperationTokenType())) {
                 return false;
             }
-            final PsiExpression thenLhs = thenExpression.getLExpression();
-            final PsiExpression elseLhs = elseExpression.getLExpression();
+            PsiExpression thenLhs = thenExpression.getLExpression();
+            PsiExpression elseLhs = elseExpression.getLExpression();
             return EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(
                 thenLhs,
                 elseLhs
@@ -454,22 +454,22 @@ public class TrivialIfInspection extends BaseInspection {
         elseBranch = ControlFlowUtils.stripBraces(elseBranch);
         if (ConditionalUtils.isAssignment(thenBranch, PsiKeyword.FALSE) &&
             ConditionalUtils.isAssignment(elseBranch, PsiKeyword.TRUE)) {
-            final PsiExpressionStatement thenExpressionStatement =
+            PsiExpressionStatement thenExpressionStatement =
                 (PsiExpressionStatement) thenBranch;
-            final PsiAssignmentExpression thenExpression =
+            PsiAssignmentExpression thenExpression =
                 (PsiAssignmentExpression)
                     thenExpressionStatement.getExpression();
-            final PsiExpressionStatement elseExpressionStatement =
+            PsiExpressionStatement elseExpressionStatement =
                 (PsiExpressionStatement) elseBranch;
-            final PsiAssignmentExpression elseExpression =
+            PsiAssignmentExpression elseExpression =
                 (PsiAssignmentExpression)
                     elseExpressionStatement.getExpression();
-            final IElementType thenTokenType = thenExpression.getOperationTokenType();
+            IElementType thenTokenType = thenExpression.getOperationTokenType();
             if (!thenTokenType.equals(elseExpression.getOperationTokenType())) {
                 return false;
             }
-            final PsiExpression thenLhs = thenExpression.getLExpression();
-            final PsiExpression elseLhs = elseExpression.getLExpression();
+            PsiExpression thenLhs = thenExpression.getLExpression();
+            PsiExpression elseLhs = elseExpression.getLExpression();
             return EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(
                 thenLhs,
                 elseLhs
@@ -488,7 +488,7 @@ public class TrivialIfInspection extends BaseInspection {
         }
         PsiStatement thenBranch = ifStatement.getThenBranch();
         thenBranch = ControlFlowUtils.stripBraces(thenBranch);
-        final PsiElement nextStatement =
+        PsiElement nextStatement =
             PsiTreeUtil.skipSiblingsBackward(
                 ifStatement,
                 PsiWhiteSpace.class
@@ -500,22 +500,22 @@ public class TrivialIfInspection extends BaseInspection {
         elseBranch = ControlFlowUtils.stripBraces(elseBranch);
         if (ConditionalUtils.isAssignment(thenBranch, PsiKeyword.TRUE) &&
             ConditionalUtils.isAssignment(elseBranch, PsiKeyword.FALSE)) {
-            final PsiExpressionStatement thenExpressionStatement =
+            PsiExpressionStatement thenExpressionStatement =
                 (PsiExpressionStatement) thenBranch;
-            final PsiAssignmentExpression thenExpression =
+            PsiAssignmentExpression thenExpression =
                 (PsiAssignmentExpression)
                     thenExpressionStatement.getExpression();
-            final PsiExpressionStatement elseExpressionStatement =
+            PsiExpressionStatement elseExpressionStatement =
                 (PsiExpressionStatement) elseBranch;
-            final PsiAssignmentExpression elseExpression =
+            PsiAssignmentExpression elseExpression =
                 (PsiAssignmentExpression)
                     elseExpressionStatement.getExpression();
-            final IElementType thenTokenType = thenExpression.getOperationTokenType();
+            IElementType thenTokenType = thenExpression.getOperationTokenType();
             if (!thenTokenType.equals(elseExpression.getOperationTokenType())) {
                 return false;
             }
-            final PsiExpression thenLhs = thenExpression.getLExpression();
-            final PsiExpression elseLhs = elseExpression.getLExpression();
+            PsiExpression thenLhs = thenExpression.getLExpression();
+            PsiExpression elseLhs = elseExpression.getLExpression();
             return EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(
                 thenLhs,
                 elseLhs
@@ -534,7 +534,7 @@ public class TrivialIfInspection extends BaseInspection {
         }
         PsiStatement thenBranch = ifStatement.getThenBranch();
         thenBranch = ControlFlowUtils.stripBraces(thenBranch);
-        final PsiElement nextStatement =
+        PsiElement nextStatement =
             PsiTreeUtil.skipSiblingsBackward(
                 ifStatement,
                 PsiWhiteSpace.class
@@ -546,22 +546,22 @@ public class TrivialIfInspection extends BaseInspection {
         elseBranch = ControlFlowUtils.stripBraces(elseBranch);
         if (ConditionalUtils.isAssignment(thenBranch, PsiKeyword.FALSE) &&
             ConditionalUtils.isAssignment(elseBranch, PsiKeyword.TRUE)) {
-            final PsiExpressionStatement thenExpressionStatement =
+            PsiExpressionStatement thenExpressionStatement =
                 (PsiExpressionStatement) thenBranch;
-            final PsiAssignmentExpression thenExpression =
+            PsiAssignmentExpression thenExpression =
                 (PsiAssignmentExpression)
                     thenExpressionStatement.getExpression();
-            final PsiExpressionStatement elseExpressionStatement =
+            PsiExpressionStatement elseExpressionStatement =
                 (PsiExpressionStatement) elseBranch;
-            final PsiAssignmentExpression elseExpression =
+            PsiAssignmentExpression elseExpression =
                 (PsiAssignmentExpression)
                     elseExpressionStatement.getExpression();
-            final IElementType thenTokenType = thenExpression.getOperationTokenType();
+            IElementType thenTokenType = thenExpression.getOperationTokenType();
             if (!thenTokenType.equals(elseExpression.getOperationTokenType())) {
                 return false;
             }
-            final PsiExpression thenLhs = thenExpression.getLExpression();
-            final PsiExpression elseLhs = elseExpression.getLExpression();
+            PsiExpression thenLhs = thenExpression.getLExpression();
+            PsiExpression elseLhs = elseExpression.getLExpression();
             return EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(
                 thenLhs,
                 elseLhs

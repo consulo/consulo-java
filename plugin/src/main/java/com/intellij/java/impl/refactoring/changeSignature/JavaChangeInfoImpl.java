@@ -112,7 +112,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
     this.propagateParametersMethods=propagateParametersMethods;
 
     this.oldName = oldName;
-    final PsiManager manager = method.getManager();
+    PsiManager manager = method.getManager();
     if (!method.isConstructor()){
       oldType = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory().createTypeElement(method.getReturnType()).getText();
     }
@@ -182,7 +182,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
       arrayToVarargs = false;
     }
     else {
-      final ParameterInfoImpl lastNewParam = this.newParams[this.newParams.length - 1];
+      ParameterInfoImpl lastNewParam = this.newParams[this.newParams.length - 1];
       obtainsVarargs = lastNewParam.isVarargType();
       retainsVarargs = lastNewParam.oldParameterIndex >= 0 && obtainsVarargs;
       if (retainsVarargs) {
@@ -233,7 +233,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
     return isParameterSetOrOrderChanged;
   }
 
-  private void setupExceptions(ThrownExceptionInfo[] newExceptions, final PsiMethod method) {
+  private void setupExceptions(ThrownExceptionInfo[] newExceptions, PsiMethod method) {
     if (newExceptions == null) newExceptions = JavaThrownExceptionInfo.extractExceptions(method);
 
     this.newExceptions = newExceptions;
@@ -258,13 +258,13 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
     isExceptionSetOrOrderChanged |= isExceptionSetChanged;
   }
 
-  protected void setupPropagationEnabled(final PsiParameter[] parameters, final ParameterInfoImpl[] newParams) {
+  protected void setupPropagationEnabled(PsiParameter[] parameters, ParameterInfoImpl[] newParams) {
     if (parameters.length != newParams.length) {
       isPropagationEnabled = false;
     }
     else {
       for (int i = 0; i < parameters.length; i++) {
-        final ParameterInfoImpl newParam = newParams[i];
+        ParameterInfoImpl newParam = newParams[i];
         if (newParam.oldParameterIndex != i) {
           isPropagationEnabled = false;
           break;

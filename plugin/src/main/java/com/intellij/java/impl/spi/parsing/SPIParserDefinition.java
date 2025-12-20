@@ -72,8 +72,8 @@ public class SPIParserDefinition implements ParserDefinition {
       @Nonnull
       @Override
       public ASTNode parse(IElementType root, PsiBuilder builder, LanguageVersion languageVersion) {
-        final PsiBuilder.Marker rootMarker = builder.mark();
-        final PsiBuilder.Marker propertiesList = builder.mark();
+        PsiBuilder.Marker rootMarker = builder.mark();
+        PsiBuilder.Marker propertiesList = builder.mark();
         while (!builder.eof()) {
           parseProvider(builder);
         }
@@ -110,7 +110,7 @@ public class SPIParserDefinition implements ParserDefinition {
   @Nonnull
   @Override
   public PsiElement createElement(ASTNode node) {
-    final IElementType elementType = node.getElementType();
+    IElementType elementType = node.getElementType();
     if (elementType == SPIElementTypes.PROVIDERS_LIST) {
       return new SPIClassProvidersElementList(node);
     }
@@ -135,7 +135,7 @@ public class SPIParserDefinition implements ParserDefinition {
 
   public static void parseProvider(PsiBuilder builder) {
     if (builder.getTokenType() == SPITokenType.IDENTIFIER) {
-      final PsiBuilder.Marker prop = builder.mark();
+      PsiBuilder.Marker prop = builder.mark();
 
       parseProviderChar(builder, builder.mark());
       prop.done(SPIElementTypes.PROVIDER);
@@ -146,13 +146,13 @@ public class SPIParserDefinition implements ParserDefinition {
     }
   }
 
-  private static void parseProviderChar(final PsiBuilder builder, PsiBuilder.Marker pack) {
+  private static void parseProviderChar(PsiBuilder builder, PsiBuilder.Marker pack) {
     builder.advanceLexer();
-    final IElementType tokenType = builder.getTokenType();
+    IElementType tokenType = builder.getTokenType();
     if (tokenType == JavaTokenType.DOT || tokenType == SPITokenType.DOLLAR) {
       pack.done(SPIElementTypes.PACK);
       builder.advanceLexer();
-      final IElementType initialTokenType = builder.getTokenType();
+      IElementType initialTokenType = builder.getTokenType();
       if (initialTokenType == null) return;
       parseProviderChar(builder, pack.precede());
     } else {

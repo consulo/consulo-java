@@ -38,7 +38,7 @@ public class SafeDeleteOverrideAnnotation extends SafeDeleteUsageInfo implements
   }
 
   public void performRefactoring() throws IncorrectOperationException {
-    final PsiAnnotation annotation = AnnotationUtil.findAnnotation(getMethod(), true, CommonClassNames.JAVA_LANG_OVERRIDE);
+    PsiAnnotation annotation = AnnotationUtil.findAnnotation(getMethod(), true, CommonClassNames.JAVA_LANG_OVERRIDE);
     if (annotation != null) {
       annotation.delete();
     }

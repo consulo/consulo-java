@@ -52,12 +52,12 @@ public class EqualsHashCodeCalledOnUrlInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(PsiMethodCallExpression expression) {
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      final PsiMethod method = expression.resolveMethod();
+      PsiReferenceExpression methodExpression = expression.getMethodExpression();
+      PsiMethod method = expression.resolveMethod();
       if (!MethodUtils.isEquals(method) && !MethodUtils.isHashCode(method)) {
         return;
       }
-      final PsiExpression qualifier = methodExpression.getQualifierExpression();
+      PsiExpression qualifier = methodExpression.getQualifierExpression();
       if (!ExpressionUtils.hasType(qualifier, "java.net.URL")) {
         return;
       }

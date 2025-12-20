@@ -45,7 +45,7 @@ public class InterfaceNamingConventionInspection extends ConventionInspection {
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final String interfaceName = (String)infos[0];
+    String interfaceName = (String)infos[0];
     if (interfaceName.length() < getMinLength()) {
       return InspectionGadgetsLocalize.interfaceNameConventionProblemDescriptorShort().get();
     }
@@ -78,7 +78,7 @@ public class InterfaceNamingConventionInspection extends ConventionInspection {
       if (!aClass.isInterface() || aClass.isAnnotationType()) {
         return;
       }
-      final String name = aClass.getName();
+      String name = aClass.getName();
       if (name == null) {
         return;
       }

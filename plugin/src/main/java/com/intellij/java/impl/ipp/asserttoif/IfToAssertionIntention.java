@@ -48,19 +48,19 @@ public class IfToAssertionIntention extends Intention {
     @Override
     protected void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiElement parent = element.getParent();
+        PsiElement parent = element.getParent();
         if (!(parent instanceof PsiIfStatement)) {
             return;
         }
-        final PsiIfStatement ifStatement = (PsiIfStatement) parent;
+        PsiIfStatement ifStatement = (PsiIfStatement) parent;
 
-        final PsiExpression condition = ifStatement.getCondition();
-        final String negatedExpressionText =
+        PsiExpression condition = ifStatement.getCondition();
+        String negatedExpressionText =
             BoolUtils.getNegatedExpressionText(condition);
-        final StringBuilder newStatementText = new StringBuilder("assert ");
+        StringBuilder newStatementText = new StringBuilder("assert ");
         newStatementText.append(negatedExpressionText);
-        final PsiStatement thenBranch = ifStatement.getThenBranch();
-        final String message = getMessage(thenBranch);
+        PsiStatement thenBranch = ifStatement.getThenBranch();
+        String message = getMessage(thenBranch);
         if (message != null) {
             newStatementText.append(':');
             newStatementText.append(message);
@@ -71,33 +71,33 @@ public class IfToAssertionIntention extends Intention {
 
     private static String getMessage(PsiElement element) {
         if (element instanceof PsiBlockStatement) {
-            final PsiBlockStatement blockStatement = (PsiBlockStatement) element;
-            final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
-            final PsiStatement[] statements = codeBlock.getStatements();
+            PsiBlockStatement blockStatement = (PsiBlockStatement) element;
+            PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
+            PsiStatement[] statements = codeBlock.getStatements();
             if (statements.length != 1) {
                 return null;
             }
-            final PsiStatement statement = statements[0];
+            PsiStatement statement = statements[0];
             return getMessage(statement);
         }
         else if (element instanceof PsiThrowStatement) {
-            final PsiThrowStatement throwStatement = (PsiThrowStatement) element;
+            PsiThrowStatement throwStatement = (PsiThrowStatement) element;
 
-            final PsiExpression exception = throwStatement.getException();
+            PsiExpression exception = throwStatement.getException();
             if (!(exception instanceof PsiNewExpression)) {
                 return null;
             }
-            final PsiNewExpression newExpression = (PsiNewExpression) exception;
-            final PsiExpressionList argumentList =
+            PsiNewExpression newExpression = (PsiNewExpression) exception;
+            PsiExpressionList argumentList =
                 newExpression.getArgumentList();
             if (argumentList == null) {
                 return null;
             }
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length != 1) {
                 return null;
             }
-            final PsiExpression argument = arguments[0];
+            PsiExpression argument = arguments[0];
             return argument.getText();
         }
         return null;

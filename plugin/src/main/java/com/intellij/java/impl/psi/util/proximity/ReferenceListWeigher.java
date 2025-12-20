@@ -49,7 +49,7 @@ public class ReferenceListWeigher extends ProximityWeigher {
   }
 
   @Nullable
-  protected Preference getPreferredCondition(@Nonnull final PsiElement position) {
+  protected Preference getPreferredCondition(@Nonnull PsiElement position) {
     if (INSIDE_REFERENCE_LIST.accepts(position)) {
       PsiReferenceList list = (PsiReferenceList) position.getParent().getParent();
       PsiReferenceList.Role role = list.getRole();

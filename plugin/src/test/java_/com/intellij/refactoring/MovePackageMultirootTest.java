@@ -49,7 +49,7 @@ public abstract class MovePackageMultirootTest extends MultiFileTestCase {
     return new PerformAction() {
       @Override
       public void performAction(VirtualFile rootDir, VirtualFile rootAfter) throws Exception {
-        final PsiManager manager = PsiManager.getInstance(myProject);
+        PsiManager manager = PsiManager.getInstance(myProject);
         PsiJavaPackage[] sourcePackages = new PsiJavaPackage[packageNames.length];
         for (int i = 0; i < packageNames.length; i++) {
           String packageName = packageNames[i];
@@ -69,7 +69,7 @@ public abstract class MovePackageMultirootTest extends MultiFileTestCase {
   @Override
   protected void prepareProject(VirtualFile rootDir) {
     PsiTestUtil.addContentRoot(myModule, rootDir);
-    final VirtualFile[] children = rootDir.getChildren();
+    VirtualFile[] children = rootDir.getChildren();
     for (VirtualFile child : children) {
       if (child.getName().startsWith("src")) {
         PsiTestUtil.addSourceRoot(myModule, child);

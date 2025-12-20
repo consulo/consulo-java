@@ -130,8 +130,8 @@ public class CreateTestDialog extends DialogWrapper {
     Map<String, JRadioButton> nameToButtonMap = new HashMap<>();
     List<Pair<String, JRadioButton>> attachedLibraries = new ArrayList<>();
 
-    for (final TestFramework descriptor : TestFramework.EXTENSION_NAME.getExtensionList()) {
-      final JRadioButton b = new JRadioButton(descriptor.getName());
+    for (TestFramework descriptor : TestFramework.EXTENSION_NAME.getExtensionList()) {
+      JRadioButton b = new JRadioButton(descriptor.getName());
       myLibraryButtons.add(b);
       group.add(b);
 
@@ -456,11 +456,11 @@ public class CreateTestDialog extends DialogWrapper {
 
   @Nullable
   private PsiDirectory selectTargetDirectory() throws IncorrectOperationException {
-    final String packageName = getPackageName();
+    String packageName = getPackageName();
     final PackageWrapper targetPackage = new PackageWrapper(PsiManager.getInstance(myProject), packageName);
 
     final VirtualFile selectedRoot = ReadAction.compute(() -> {
-      final HashSet<VirtualFile> testFolders = new HashSet<>();
+      HashSet<VirtualFile> testFolders = new HashSet<>();
       CreateTestAction.checkForTestRoots(myTargetModule, testFolders);
       VirtualFile[] roots;
       if (testFolders.isEmpty()) {
@@ -497,9 +497,9 @@ public class CreateTestDialog extends DialogWrapper {
     List<PsiDirectory> dirs = new ArrayList<>();
     for (ContentEntry e : ModuleRootManager.getInstance(myTargetModule).getContentEntries()) {
       for (ContentFolder f : e.getFolders(LanguageContentFolderScopes.of(TestContentFolderTypeProvider.getInstance()))) {
-        final VirtualFile file = f.getFile();
+        VirtualFile file = f.getFile();
         if (file != null) {
-          final PsiDirectory dir = PsiManager.getInstance(myProject).findDirectory(file);
+          PsiDirectory dir = PsiManager.getInstance(myProject).findDirectory(file);
           if (dir != null) {
             dirs.add(dir);
           }
@@ -508,7 +508,7 @@ public class CreateTestDialog extends DialogWrapper {
     }
     if (!dirs.isEmpty()) {
       for (PsiDirectory dir : dirs) {
-        final String dirName = dir.getVirtualFile().getPath();
+        String dirName = dir.getVirtualFile().getPath();
         if (dirName.contains("generated")) {
           continue;
         }

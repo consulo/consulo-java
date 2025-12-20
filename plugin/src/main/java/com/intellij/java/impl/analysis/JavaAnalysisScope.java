@@ -50,26 +50,26 @@ public class JavaAnalysisScope extends AnalysisScope {
         myType = PACKAGE;
     }
 
-    public JavaAnalysisScope(final PsiJavaFile psiFile) {
+    public JavaAnalysisScope(PsiJavaFile psiFile) {
         super(psiFile);
     }
 
     @Override
     @Nonnull
     public AnalysisScope getNarrowedComplementaryScope(@Nonnull Project defaultProject) {
-        final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(defaultProject).getFileIndex();
-        final HashSet<Module> modules = new HashSet<>();
+        ProjectFileIndex fileIndex = ProjectRootManager.getInstance(defaultProject).getFileIndex();
+        HashSet<Module> modules = new HashSet<>();
         if (myType == FILE) {
             if (myElement instanceof PsiJavaFile psiJavaFile/* && !FileTypeUtils.isInServerPageFile(myElement)*/) {
-                final PsiClass[] classes = psiJavaFile.getClasses();
+                PsiClass[] classes = psiJavaFile.getClasses();
                 boolean onlyPackLocalClasses = true;
-                for (final PsiClass aClass : classes) {
+                for (PsiClass aClass : classes) {
                     if (aClass.hasModifierProperty(PsiModifier.PUBLIC)) {
                         onlyPackLocalClasses = false;
                     }
                 }
                 if (onlyPackLocalClasses) {
-                    final PsiDirectory psiDirectory = psiJavaFile.getContainingDirectory();
+                    PsiDirectory psiDirectory = psiJavaFile.getContainingDirectory();
                     if (psiDirectory != null) {
                         return new JavaAnalysisScope(JavaDirectoryService.getInstance().getPackage(psiDirectory), null);
                     }
@@ -77,7 +77,7 @@ public class JavaAnalysisScope extends AnalysisScope {
             }
         }
         else if (myType == PACKAGE) {
-            final PsiDirectory[] directories = ((PsiPackage)myElement).getDirectories();
+            PsiDirectory[] directories = ((PsiPackage)myElement).getDirectories();
             for (PsiDirectory directory : directories) {
                 modules.addAll(getAllInterestingModules(fileIndex, directory.getVirtualFile()));
             }
@@ -116,7 +116,7 @@ public class JavaAnalysisScope extends AnalysisScope {
     @Override
     public boolean accept(@Nonnull Processor<VirtualFile> processor) {
         if (myElement instanceof PsiJavaPackage pack) {
-            final Set<PsiDirectory> dirs = new HashSet<>();
+            Set<PsiDirectory> dirs = new HashSet<>();
             pack.getApplication().runReadAction(() -> {
                 ContainerUtil.addAll(dirs, pack.getDirectories(GlobalSearchScope.projectScope(myElement.getProject())));
             });

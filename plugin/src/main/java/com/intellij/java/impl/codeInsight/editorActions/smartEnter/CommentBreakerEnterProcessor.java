@@ -37,8 +37,8 @@ public class CommentBreakerEnterProcessor implements EnterProcessor {
     if (isModified) {
       return false;
     }
-    final PsiElement atCaret = psiElement.getContainingFile().findElementAt(editor.getCaretModel().getOffset());
-    final PsiComment comment = PsiTreeUtil.getParentOfType(atCaret, PsiComment.class, false);
+    PsiElement atCaret = psiElement.getContainingFile().findElementAt(editor.getCaretModel().getOffset());
+    PsiComment comment = PsiTreeUtil.getParentOfType(atCaret, PsiComment.class, false);
     if (comment != null) {
       plainEnter(editor);
       if (comment.getTokenType() == JavaTokenType.END_OF_LINE_COMMENT) {

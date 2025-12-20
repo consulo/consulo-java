@@ -28,7 +28,7 @@ public class ConfigFileInfo {
   private final String myUrl;
 
 
-  public ConfigFileInfo(@Nonnull final ConfigFileMetaData metaData, @Nonnull final String url) {
+  public ConfigFileInfo(@Nonnull ConfigFileMetaData metaData, @Nonnull String url) {
     myMetaData = metaData;
     myUrl = url;
   }
@@ -44,11 +44,11 @@ public class ConfigFileInfo {
   }
 
 
-  public boolean equals(final Object o) {
+  public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    final ConfigFileInfo that = (ConfigFileInfo)o;
+    ConfigFileInfo that = (ConfigFileInfo)o;
 
     if (!myMetaData.equals(that.myMetaData)) return false;
     if (!myUrl.equals(that.myUrl)) return false;

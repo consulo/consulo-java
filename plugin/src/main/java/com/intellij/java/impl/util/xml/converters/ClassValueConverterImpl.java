@@ -40,7 +40,7 @@ public class ClassValueConverterImpl extends ClassValueConverter {
   }
 
   @Nonnull
-  public PsiReference[] createReferences(final GenericDomValue genericDomValue, final PsiElement element, final ConvertContext context) {
+  public PsiReference[] createReferences(GenericDomValue genericDomValue, PsiElement element, ConvertContext context) {
     return REFERENCE_PROVIDER.getReferencesByElement(element);
   }
 }

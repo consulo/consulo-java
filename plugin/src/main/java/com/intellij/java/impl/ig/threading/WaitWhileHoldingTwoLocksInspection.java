@@ -72,32 +72,32 @@ public class WaitWhileHoldingTwoLocksInspection extends BaseInspection {
           if (m_numLocksHeld < 2) {
             return;
           }
-          final PsiReferenceExpression methodExpression =
+          PsiReferenceExpression methodExpression =
             expression.getMethodExpression();
-          @NonNls final String methodName =
+          @NonNls String methodName =
             methodExpression.getReferenceName();
           if (!HardcodedMethodConstants.WAIT.equals(methodName)) {
             return;
           }
-          final PsiMethod method = expression.resolveMethod();
+          PsiMethod method = expression.resolveMethod();
           if (method == null) {
             return;
           }
-          final PsiParameterList parameterList =
+          PsiParameterList parameterList =
             method.getParameterList();
-          final int numParams = parameterList.getParametersCount();
+          int numParams = parameterList.getParametersCount();
           if (numParams > 2) {
             return;
           }
-          final PsiParameter[] parameters = parameterList.getParameters();
+          PsiParameter[] parameters = parameterList.getParameters();
           if (numParams > 0) {
-            final PsiType parameterType = parameters[0].getType();
+            PsiType parameterType = parameters[0].getType();
             if (!parameterType.equals(PsiType.LONG)) {
               return;
             }
           }
           if (numParams > 1) {
-            final PsiType parameterType = parameters[1].getType();
+            PsiType parameterType = parameters[1].getType();
             if (!parameterType.equals(PsiType.INT)) {
               return;
             }

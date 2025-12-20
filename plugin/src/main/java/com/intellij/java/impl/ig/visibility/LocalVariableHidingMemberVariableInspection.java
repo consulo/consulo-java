@@ -61,12 +61,12 @@ public class LocalVariableHidingMemberVariableInspection extends BaseInspection 
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final PsiClass aClass = (PsiClass)infos[0];
+    PsiClass aClass = (PsiClass)infos[0];
     return InspectionGadgetsLocalize.localVariableHidesMemberVariableProblemDescriptor(aClass.getName()).get();
   }
 
   public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
+    MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
     optionsPanel.addCheckbox(InspectionGadgetsLocalize.fieldNameHidesInSuperclassIgnoreOption().get(), "m_ignoreInvisibleFields");
     optionsPanel.addCheckbox(InspectionGadgetsLocalize.localVariableHidesMemberVariableIgnoreOption().get(), "m_ignoreStaticMethods");
     return optionsPanel;
@@ -82,12 +82,12 @@ public class LocalVariableHidingMemberVariableInspection extends BaseInspection 
     public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       if (m_ignoreStaticMethods) {
-        final PsiMember member = PsiTreeUtil.getParentOfType(variable, PsiMethod.class, PsiClassInitializer.class);
+        PsiMember member = PsiTreeUtil.getParentOfType(variable, PsiMethod.class, PsiClassInitializer.class);
         if (member != null && member.hasModifierProperty(PsiModifier.STATIC)) {
           return;
         }
       }
-      final PsiClass aClass = checkFieldNames(variable);
+      PsiClass aClass = checkFieldNames(variable);
       if (aClass == null) {
         return;
       }
@@ -97,17 +97,17 @@ public class LocalVariableHidingMemberVariableInspection extends BaseInspection 
     @Override
     public void visitParameter(@Nonnull PsiParameter variable) {
       super.visitParameter(variable);
-      final PsiElement declarationScope = variable.getDeclarationScope();
+      PsiElement declarationScope = variable.getDeclarationScope();
       if (!(declarationScope instanceof PsiCatchSection) && !(declarationScope instanceof PsiForeachStatement)) {
         return;
       }
       if (m_ignoreStaticMethods) {
-        final PsiMember member = PsiTreeUtil.getParentOfType(variable, PsiMethod.class, PsiClassInitializer.class);
+        PsiMember member = PsiTreeUtil.getParentOfType(variable, PsiMethod.class, PsiClassInitializer.class);
         if (member != null && member.hasModifierProperty(PsiModifier.STATIC)) {
           return;
         }
       }
-      final PsiClass aClass = checkFieldNames(variable);
+      PsiClass aClass = checkFieldNames(variable);
       if (aClass == null) {
         return;
       }
@@ -117,14 +117,14 @@ public class LocalVariableHidingMemberVariableInspection extends BaseInspection 
     @Nullable
     private PsiClass checkFieldNames(PsiVariable variable) {
       PsiClass aClass = ClassUtils.getContainingClass(variable);
-      final String variableName = variable.getName();
+      String variableName = variable.getName();
       if (variableName == null) {
         return null;
       }
       while (aClass != null) {
-        final PsiField[] fields = aClass.getAllFields();
+        PsiField[] fields = aClass.getAllFields();
         for (PsiField field : fields) {
-          final String fieldName = field.getName();
+          String fieldName = field.getName();
           if (!variableName.equals(fieldName)) {
             continue;
           }

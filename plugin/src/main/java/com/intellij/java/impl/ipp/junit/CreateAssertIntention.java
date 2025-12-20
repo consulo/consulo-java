@@ -47,13 +47,13 @@ public class CreateAssertIntention extends Intention {
 
     public void processIntention(PsiElement element)
         throws IncorrectOperationException {
-        final PsiExpressionStatement statement =
+        PsiExpressionStatement statement =
             (PsiExpressionStatement) element;
         assert statement != null;
-        final PsiExpression expression = statement.getExpression();
-        final PsiMethod containingMethod =
+        PsiExpression expression = statement.getExpression();
+        PsiMethod containingMethod =
             PsiTreeUtil.getParentOfType(statement, PsiMethod.class);
-        final String specifierString;
+        String specifierString;
         if (containingMethod != null &&
             AnnotationUtil.isAnnotated(containingMethod,
                 "org.junit.Test", true)) {
@@ -63,18 +63,18 @@ public class CreateAssertIntention extends Intention {
             specifierString = "";
         }
         if (BoolUtils.isNegation(expression)) {
-            @NonNls final String newExpression =
+            @NonNls String newExpression =
                 specifierString + "assertFalse(" +
                     BoolUtils.getNegatedExpressionText(expression) + ");";
             replaceStatementAndShorten(newExpression,
                 statement);
         }
         else if (isNullComparison(expression)) {
-            final PsiBinaryExpression binaryExpression =
+            PsiBinaryExpression binaryExpression =
                 (PsiBinaryExpression) expression;
-            final PsiExpression lhs = binaryExpression.getLOperand();
-            final PsiExpression rhs = binaryExpression.getROperand();
-            final PsiExpression comparedExpression;
+            PsiExpression lhs = binaryExpression.getLOperand();
+            PsiExpression rhs = binaryExpression.getROperand();
+            PsiExpression comparedExpression;
             if (isNull(lhs)) {
                 comparedExpression = rhs;
             }
@@ -82,18 +82,18 @@ public class CreateAssertIntention extends Intention {
                 comparedExpression = lhs;
             }
             assert comparedExpression != null;
-            @NonNls final String newExpression = specifierString +
+            @NonNls String newExpression = specifierString +
                 "assertNull(" + comparedExpression.getText() + ");";
             replaceStatementAndShorten(newExpression,
                 statement);
         }
         else if (isEqualityComparison(expression)) {
-            final PsiBinaryExpression binaryExpression =
+            PsiBinaryExpression binaryExpression =
                 (PsiBinaryExpression) expression;
-            final PsiExpression lhs = binaryExpression.getLOperand();
-            final PsiExpression rhs = binaryExpression.getROperand();
-            final PsiExpression comparedExpression;
-            final PsiExpression comparingExpression;
+            PsiExpression lhs = binaryExpression.getLOperand();
+            PsiExpression rhs = binaryExpression.getROperand();
+            PsiExpression comparedExpression;
+            PsiExpression comparingExpression;
             if (rhs instanceof PsiLiteralExpression) {
                 comparedExpression = rhs;
                 comparingExpression = lhs;
@@ -103,8 +103,8 @@ public class CreateAssertIntention extends Intention {
                 comparingExpression = rhs;
             }
             assert comparingExpression != null;
-            final PsiType type = lhs.getType();
-            @NonNls final String newExpression;
+            PsiType type = lhs.getType();
+            @NonNls String newExpression;
             if (PsiType.DOUBLE.equals(type) || PsiType.FLOAT.equals(type)) {
                 newExpression = specifierString + "assertEquals(" +
                     comparedExpression.getText() + ", " +
@@ -124,17 +124,17 @@ public class CreateAssertIntention extends Intention {
                 statement);
         }
         else if (isEqualsExpression(expression)) {
-            final PsiMethodCallExpression call =
+            PsiMethodCallExpression call =
                 (PsiMethodCallExpression) expression;
-            final PsiReferenceExpression methodExpression =
+            PsiReferenceExpression methodExpression =
                 call.getMethodExpression();
-            final PsiExpression comparedExpression =
+            PsiExpression comparedExpression =
                 methodExpression.getQualifierExpression();
             assert comparedExpression != null;
-            final PsiExpressionList argList = call.getArgumentList();
-            final PsiExpression comparingExpression =
+            PsiExpressionList argList = call.getArgumentList();
+            PsiExpression comparingExpression =
                 argList.getExpressions()[0];
-            @NonNls final String newExpression;
+            @NonNls String newExpression;
             if (comparingExpression instanceof PsiLiteralExpression) {
                 newExpression = specifierString + "assertEquals(" +
                     comparingExpression.getText() + ", " +
@@ -149,7 +149,7 @@ public class CreateAssertIntention extends Intention {
                 statement);
         }
         else {
-            @NonNls final String newExpression =
+            @NonNls String newExpression =
                 specifierString + "assertTrue(" + expression.getText() + ");";
             replaceStatementAndShorten(newExpression,
                 statement);
@@ -160,21 +160,21 @@ public class CreateAssertIntention extends Intention {
         if (!(expression instanceof PsiMethodCallExpression)) {
             return false;
         }
-        final PsiMethodCallExpression call =
+        PsiMethodCallExpression call =
             (PsiMethodCallExpression) expression;
-        final PsiReferenceExpression methodExpression =
+        PsiReferenceExpression methodExpression =
             call.getMethodExpression();
-        @NonNls final String methodName = methodExpression.getReferenceName();
+        @NonNls String methodName = methodExpression.getReferenceName();
         if (!"equals".equals(methodName)) {
             return false;
         }
-        final PsiExpression qualifier =
+        PsiExpression qualifier =
             methodExpression.getQualifierExpression();
         if (qualifier == null) {
             return false;
         }
-        final PsiExpressionList argList = call.getArgumentList();
-        final PsiExpression[] expressions = argList.getExpressions();
+        PsiExpressionList argList = call.getArgumentList();
+        PsiExpression[] expressions = argList.getExpressions();
         return expressions.length == 1 && expressions[0] != null;
     }
 
@@ -182,9 +182,9 @@ public class CreateAssertIntention extends Intention {
         if (!(expression instanceof PsiBinaryExpression)) {
             return false;
         }
-        final PsiBinaryExpression binaryExpression =
+        PsiBinaryExpression binaryExpression =
             (PsiBinaryExpression) expression;
-        final IElementType tokenType = binaryExpression.getOperationTokenType();
+        IElementType tokenType = binaryExpression.getOperationTokenType();
         return JavaTokenType.EQEQ.equals(tokenType);
     }
 
@@ -192,17 +192,17 @@ public class CreateAssertIntention extends Intention {
         if (!(expression instanceof PsiBinaryExpression)) {
             return false;
         }
-        final PsiBinaryExpression binaryExpression =
+        PsiBinaryExpression binaryExpression =
             (PsiBinaryExpression) expression;
-        final IElementType tokenType = binaryExpression.getOperationTokenType();
+        IElementType tokenType = binaryExpression.getOperationTokenType();
         if (!JavaTokenType.EQEQ.equals(tokenType)) {
             return false;
         }
-        final PsiExpression lhs = binaryExpression.getLOperand();
+        PsiExpression lhs = binaryExpression.getLOperand();
         if (isNull(lhs)) {
             return true;
         }
-        final PsiExpression Rhs = binaryExpression.getROperand();
+        PsiExpression Rhs = binaryExpression.getROperand();
         return isNull(Rhs);
     }
 
@@ -210,7 +210,7 @@ public class CreateAssertIntention extends Intention {
         if (!(expression instanceof PsiLiteralExpression)) {
             return false;
         }
-        @NonNls final String text = expression.getText();
+        @NonNls String text = expression.getText();
         return PsiKeyword.NULL.equals(text);
     }
 }

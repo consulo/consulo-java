@@ -58,8 +58,8 @@ public class UnnecessarySuperConstructorInspection extends BaseInspection {
         }
 
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement superCall = descriptor.getPsiElement();
-            final PsiElement callStatement = superCall.getParent();
+            PsiElement superCall = descriptor.getPsiElement();
+            PsiElement callStatement = superCall.getParent();
             assert callStatement != null;
             deleteElement(callStatement);
         }
@@ -73,13 +73,13 @@ public class UnnecessarySuperConstructorInspection extends BaseInspection {
         @Override
         public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
             super.visitMethodCallExpression(call);
-            final PsiReferenceExpression methodExpression = call.getMethodExpression();
-            final String methodText = methodExpression.getText();
+            PsiReferenceExpression methodExpression = call.getMethodExpression();
+            String methodText = methodExpression.getText();
             if (!PsiKeyword.SUPER.equals(methodText)) {
                 return;
             }
-            final PsiExpressionList argumentList = call.getArgumentList();
-            final PsiExpression[] args = argumentList.getExpressions();
+            PsiExpressionList argumentList = call.getArgumentList();
+            PsiExpression[] args = argumentList.getExpressions();
             if (args.length != 0) {
                 return;
             }

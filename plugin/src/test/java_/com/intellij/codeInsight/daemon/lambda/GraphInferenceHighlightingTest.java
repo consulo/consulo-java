@@ -87,7 +87,7 @@ public abstract class GraphInferenceHighlightingTest extends LightDaemonAnalyzer
     doTest(false);
   }
 
-  private void doTest(final boolean checkWarnings) throws Exception {
+  private void doTest(boolean checkWarnings) throws Exception {
     IdeaTestUtil.setTestVersion(JavaSdkVersion.JDK_1_8, getModule(), getTestRootDisposable());
     doTestNewInference(BASE_PATH + "/" + getTestName(false) + ".java", checkWarnings, false);
   }

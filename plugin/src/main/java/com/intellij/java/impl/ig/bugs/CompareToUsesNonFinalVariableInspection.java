@@ -43,7 +43,7 @@ public class CompareToUsesNonFinalVariableInspection extends BaseInspection {
 
     @Nullable
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiField field = (PsiField) infos[0];
+        PsiField field = (PsiField) infos[0];
         return MakeFieldFinalFix.buildFix(field);
     }
 
@@ -56,7 +56,7 @@ public class CompareToUsesNonFinalVariableInspection extends BaseInspection {
 
         @Override
         public void visitMethod(@Nonnull PsiMethod method) {
-            final boolean isCompareTo = MethodUtils.isCompareTo(method);
+            boolean isCompareTo = MethodUtils.isCompareTo(method);
             if (isCompareTo) {
                 method.accept(new JavaRecursiveElementVisitor() {
 
@@ -70,11 +70,11 @@ public class CompareToUsesNonFinalVariableInspection extends BaseInspection {
                         @Nonnull PsiReferenceExpression expression
                     ) {
                         super.visitReferenceExpression(expression);
-                        final PsiElement element = expression.resolve();
+                        PsiElement element = expression.resolve();
                         if (!(element instanceof PsiField)) {
                             return;
                         }
-                        final PsiField field = (PsiField) element;
+                        PsiField field = (PsiField) element;
                         if (field.hasModifierProperty(PsiModifier.FINAL)) {
                             return;
                         }

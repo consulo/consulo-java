@@ -38,7 +38,7 @@ public class PsiExpressionCodeFragmentImpl extends PsiCodeFragmentImpl implement
                                        boolean isPhysical,
                                        @NonNls String name,
                                        CharSequence text,
-                                       @Nullable final PsiType expectedType,
+                                       @Nullable PsiType expectedType,
                                        @Nullable PsiElement context) {
     super(project, JavaElementType.EXPRESSION_TEXT, isPhysical, name, text, context);
     setExpectedType(expectedType);

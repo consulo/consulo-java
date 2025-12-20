@@ -1082,8 +1082,8 @@ public abstract class TreeIsCorrectAfterDiffReparseTest extends LightCodeInsight
                    "}";
     configureFromFileText("Foo.java", part1 + part2);
 
-    final PsiDocumentManager docManager = PsiDocumentManager.getInstance(ourProject);
-    final Document doc = docManager.getDocument(myFile);
+    PsiDocumentManager docManager = PsiDocumentManager.getInstance(ourProject);
+    Document doc = docManager.getDocument(myFile);
     doc.insertString(part1.length(), "/**");
 
     boolean old = DebugUtil.CHECK;

@@ -22,7 +22,7 @@ public abstract class AbstractReparseTestCase extends PsiTestCase
 	protected PsiFile myDummyFile;
 	private int myInsertOffset;
 
-	protected void setFileType(final FileType fileType)
+	protected void setFileType(FileType fileType)
 	{
 		myFileType = fileType;
 	}
@@ -81,11 +81,11 @@ public abstract class AbstractReparseTestCase extends PsiTestCase
 		myInsertOffset -= count;
 	}
 
-	private void doReparseAndCheck(final String s, final String expectedNewText, final int length) throws IncorrectOperationException
+	private void doReparseAndCheck(String s, String expectedNewText, int length) throws IncorrectOperationException
 	{
 		doReparse(s, length);
 		String foundStructure = DebugUtil.treeToString(SourceTreeToPsiMap.psiElementToTree(myDummyFile), false);
-		final PsiFile psiFile = createDummyFile(getTestName(false) + "." + myFileType.getDefaultExtension(), expectedNewText);
+		PsiFile psiFile = createDummyFile(getTestName(false) + "." + myFileType.getDefaultExtension(), expectedNewText);
 		String expectedStructure = DebugUtil.treeToString(SourceTreeToPsiMap.psiElementToTree(psiFile), false);
 		if(!expectedStructure.equals(foundStructure))
 		{

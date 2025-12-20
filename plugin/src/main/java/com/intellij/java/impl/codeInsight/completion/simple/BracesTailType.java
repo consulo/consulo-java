@@ -35,7 +35,7 @@ import consulo.util.lang.CharArrayUtil;
 public class BracesTailType extends TailType {
 
   @Override
-  public int processTail(final Editor editor, int tailOffset) {
+  public int processTail(Editor editor, int tailOffset) {
     int startOffset = tailOffset;
 
     CharSequence seq = editor.getDocument().getCharsSequence();

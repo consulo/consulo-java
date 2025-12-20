@@ -57,7 +57,7 @@ public class JavaReflectionReferenceContributor extends PsiReferenceContributor 
       @Override
       protected PsiReference[] getReferencesByMethod(@Nonnull PsiLiteralExpression literalArgument, @Nonnull PsiReferenceExpression methodReference, @Nonnull ProcessingContext context) {
 
-        final PsiExpression qualifier = methodReference.getQualifierExpression();
+        PsiExpression qualifier = methodReference.getQualifierExpression();
         return qualifier != null ? new PsiReference[]{new JavaLangClassMemberReference(literalArgument, qualifier)} : null;
       }
     });
@@ -67,7 +67,7 @@ public class JavaReflectionReferenceContributor extends PsiReferenceContributor 
       @Override
       protected PsiReference[] getReferencesByMethod(@Nonnull PsiLiteralExpression literalArgument, @Nonnull PsiReferenceExpression methodReference, @Nonnull ProcessingContext context) {
 
-        final String referenceName = methodReference.getReferenceName();
+        String referenceName = methodReference.getReferenceName();
         if (FOR_NAME.equals(referenceName) || LOAD_CLASS.equals(referenceName)) {
           return new JavaClassReferenceProvider().getReferencesByElement(literalArgument, context);
         }

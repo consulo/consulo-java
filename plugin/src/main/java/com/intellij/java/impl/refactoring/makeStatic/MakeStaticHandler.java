@@ -87,14 +87,14 @@ public class MakeStaticHandler implements RefactoringActionHandler
 
 	@Override
 	@RequiredUIAccess
-	public void invoke(@Nonnull final Project project, @Nonnull PsiElement[] elements, DataContext dataContext)
+	public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext)
 	{
 		if (elements.length != 1 || !(elements[0] instanceof PsiTypeParameterListOwner))
 		{
 			return;
 		}
 
-		final PsiTypeParameterListOwner member = (PsiTypeParameterListOwner) elements[0];
+		PsiTypeParameterListOwner member = (PsiTypeParameterListOwner) elements[0];
 		if (!CommonRefactoringUtil.checkReadOnlyStatus(project, member))
 		{
 			return;
@@ -112,10 +112,10 @@ public class MakeStaticHandler implements RefactoringActionHandler
 	}
 
 	@RequiredUIAccess
-	public static void invoke(final PsiTypeParameterListOwner member)
+	public static void invoke(PsiTypeParameterListOwner member)
 	{
-		final Project project = member.getProject();
-		final InternalUsageInfo[] classRefsInMember = MakeStaticUtil.findClassRefsInMember(member, false);
+		Project project = member.getProject();
+		InternalUsageInfo[] classRefsInMember = MakeStaticUtil.findClassRefsInMember(member, false);
 
     /*
 	String classParameterName = "anObject";
@@ -125,7 +125,7 @@ public class MakeStaticHandler implements RefactoringActionHandler
 		AbstractMakeStaticDialog dialog;
 		if (project.getApplication().isUnitTestMode())
 		{
-			final boolean[] hasMethodReferenceOnInstance = new boolean[]{false};
+			boolean[] hasMethodReferenceOnInstance = new boolean[]{false};
 			if (member instanceof PsiMethod method)
 			{
 				if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(
@@ -143,7 +143,7 @@ public class MakeStaticHandler implements RefactoringActionHandler
 
 			if (classRefsInMember.length > 0 || hasMethodReferenceOnInstance[0])
 			{
-				final PsiType type = JavaPsiFacade.getInstance(project).getElementFactory().createType(member.getContainingClass());
+				PsiType type = JavaPsiFacade.getInstance(project).getElementFactory().createType(member.getContainingClass());
 				//TODO: callback
 				String[] nameSuggestions = JavaCodeStyleManager.getInstance(project)
 					.suggestVariableName(VariableKind.PARAMETER, null, null, type).names;

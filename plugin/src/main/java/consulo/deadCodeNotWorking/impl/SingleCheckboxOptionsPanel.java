@@ -31,13 +31,13 @@ public class SingleCheckboxOptionsPanel extends JPanel
 	public SingleCheckboxOptionsPanel(@Nonnull String label, @Nonnull InspectionTool owner, @NonNls String property)
 	{
 		super(new GridBagLayout());
-		final boolean selected = getPropertyValue(owner, property);
-		final JCheckBox checkBox = new JCheckBox(label, selected);
-		final ButtonModel model = checkBox.getModel();
-		final SingleCheckboxChangeListener listener = new SingleCheckboxChangeListener(owner, property, model);
+		boolean selected = getPropertyValue(owner, property);
+		JCheckBox checkBox = new JCheckBox(label, selected);
+		ButtonModel model = checkBox.getModel();
+		SingleCheckboxChangeListener listener = new SingleCheckboxChangeListener(owner, property, model);
 		model.addChangeListener(listener);
 
-		final GridBagConstraints constraints = new GridBagConstraints();
+		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.weightx = 1.0;
@@ -51,8 +51,8 @@ public class SingleCheckboxOptionsPanel extends JPanel
 	{
 		try
 		{
-			final Class<? extends InspectionTool> aClass = owner.getClass();
-			final Field field = aClass.getField(property);
+			Class<? extends InspectionTool> aClass = owner.getClass();
+			Field field = aClass.getField(property);
 			return field.getBoolean(owner);
 		}
 		catch(IllegalAccessException ignore)
@@ -89,8 +89,8 @@ public class SingleCheckboxOptionsPanel extends JPanel
 		{
 			try
 			{
-				final Class<? extends InspectionTool> aClass = owner.getClass();
-				final Field field = aClass.getField(property);
+				Class<? extends InspectionTool> aClass = owner.getClass();
+				Field field = aClass.getField(property);
 				field.setBoolean(owner, selected);
 			}
 			catch(IllegalAccessException | NoSuchFieldException ignore)

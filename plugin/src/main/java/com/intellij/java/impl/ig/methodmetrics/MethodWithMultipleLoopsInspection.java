@@ -33,7 +33,7 @@ public class MethodWithMultipleLoopsInspection extends BaseInspection {
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final Integer negationCount = (Integer)infos[0];
+    Integer negationCount = (Integer)infos[0];
     return InspectionGadgetsLocalize.methodWithMultipleLoopsProblemDescriptor(negationCount).get();
   }
 
@@ -50,9 +50,9 @@ public class MethodWithMultipleLoopsInspection extends BaseInspection {
       if (method.getNameIdentifier() == null) {
         return;
       }
-      final LoopCountVisitor visitor = new LoopCountVisitor();
+      LoopCountVisitor visitor = new LoopCountVisitor();
       method.accept(visitor);
-      final int negationCount = visitor.getCount();
+      int negationCount = visitor.getCount();
       if (negationCount <= 1) {
         return;
       }

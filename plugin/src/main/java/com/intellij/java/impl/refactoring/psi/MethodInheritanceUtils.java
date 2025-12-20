@@ -32,20 +32,20 @@ public class MethodInheritanceUtils {
   }
 
   public static Set<PsiMethod> calculateSiblingMethods(PsiMethod method) {
-    final Set<PsiMethod> siblingMethods = new HashSet<PsiMethod>();
-    final Stack<PsiMethod> pendingMethods = new Stack<PsiMethod>();
+    Set<PsiMethod> siblingMethods = new HashSet<PsiMethod>();
+    Stack<PsiMethod> pendingMethods = new Stack<PsiMethod>();
     pendingMethods.add(method);
     while (!pendingMethods.isEmpty()) {
-      final PsiMethod methodToAnalyze = pendingMethods.pop();
+      PsiMethod methodToAnalyze = pendingMethods.pop();
       siblingMethods.add(methodToAnalyze);
-      final Iterable<PsiMethod> overridingMethods = OverridingMethodsSearch.search(methodToAnalyze, false);
+      Iterable<PsiMethod> overridingMethods = OverridingMethodsSearch.search(methodToAnalyze, false);
       for (PsiMethod overridingMethod : overridingMethods) {
         if (!siblingMethods.contains(overridingMethod) &&
             !pendingMethods.contains(overridingMethod)) {
           pendingMethods.add(overridingMethod);
         }
       }
-      final PsiMethod[] superMethods = methodToAnalyze.findSuperMethods();
+      PsiMethod[] superMethods = methodToAnalyze.findSuperMethods();
       for (PsiMethod superMethod : superMethods) {
         if (!siblingMethods.contains(superMethod) &&
             !pendingMethods.contains(superMethod)) {
@@ -59,26 +59,26 @@ public class MethodInheritanceUtils {
   public static boolean hasSiblingMethods(PsiMethod method) {
 
 
-    final Iterable<PsiMethod> overridingMethods =
+    Iterable<PsiMethod> overridingMethods =
         SearchUtils.findOverridingMethods(method);
     if (overridingMethods.iterator().hasNext()) {
       return true;
     }
-    final PsiMethod[] superMethods = method.findSuperMethods();
+    PsiMethod[] superMethods = method.findSuperMethods();
     return superMethods.length != 0;
 
   }
 
   public static PsiClass[] findAvailableSuperClassesForMethod(PsiMethod method) {
-    final List<PsiClass> sourceClasses = new ArrayList<PsiClass>();
+    List<PsiClass> sourceClasses = new ArrayList<PsiClass>();
     findAvailableSuperClasses(method, sourceClasses);
     return sourceClasses.toArray(new PsiClass[sourceClasses.size()]);
   }
 
   private static void findAvailableSuperClasses(PsiMethod method, List<PsiClass> sourceClasses) {
-    final PsiMethod[] superMethods = method.findSuperMethods(true);
+    PsiMethod[] superMethods = method.findSuperMethods(true);
     for (PsiMethod superMethod : superMethods) {
-      final PsiClass containingClass = superMethod.getContainingClass();
+      PsiClass containingClass = superMethod.getContainingClass();
       if (!(containingClass instanceof PsiCompiledElement)) {
         sourceClasses.add(containingClass);
         findAvailableSuperClasses(superMethod, sourceClasses);
@@ -87,10 +87,10 @@ public class MethodInheritanceUtils {
   }
 
   public static PsiClass[] findAvailableSubClassesForMethod(PsiMethod method) {
-    final Iterable<PsiMethod> query = SearchUtils.findOverridingMethods(method);
-    final List<PsiClass> sourceClasses = new ArrayList<PsiClass>();
+    Iterable<PsiMethod> query = SearchUtils.findOverridingMethods(method);
+    List<PsiClass> sourceClasses = new ArrayList<PsiClass>();
     for (PsiMethod superMethod : query) {
-      final PsiClass containingClass = superMethod.getContainingClass();
+      PsiClass containingClass = superMethod.getContainingClass();
       if (!(containingClass instanceof PsiCompiledElement)) {
         sourceClasses.add(containingClass);
       }
@@ -100,13 +100,13 @@ public class MethodInheritanceUtils {
 
   public static PsiClass[] getNonLibrarySuperClasses(PsiClass sourceClass) {
 
-    final List<PsiClass> out = new ArrayList<PsiClass>();
+    List<PsiClass> out = new ArrayList<PsiClass>();
     findNonLibrarySupers(sourceClass, out);
     return out.toArray(new PsiClass[out.size()]);
   }
 
   private static void findNonLibrarySupers(PsiClass sourceClass, List<PsiClass> out) {
-    final PsiClass[] supers = sourceClass.getSupers();
+    PsiClass[] supers = sourceClass.getSupers();
     for (PsiClass psiClass : supers) {
       if (!(psiClass instanceof PsiCompiledElement) && !out.contains(psiClass)) {
         out.add(psiClass);
@@ -116,8 +116,8 @@ public class MethodInheritanceUtils {
   }
 
   public static PsiClass[] getNonLibrarySubClasses(PsiClass sourceClass) {
-    final List<PsiClass> out = new ArrayList<PsiClass>();
-    final Iterable<PsiClass> query = SearchUtils.findClassInheritors(sourceClass, true);
+    List<PsiClass> out = new ArrayList<PsiClass>();
+    Iterable<PsiClass> query = SearchUtils.findClassInheritors(sourceClass, true);
     for (PsiClass psiClass : query) {
       if (!(psiClass instanceof PsiCompiledElement)) {
         out.add(psiClass);

@@ -37,7 +37,7 @@ public class IteratorUtils {
   public static boolean containsCallToIteratorNext(PsiElement context,
                                                    PsiVariable target,
                                                    boolean checkTarget) {
-    final CallsIteratorNextVisitor visitor =
+    CallsIteratorNextVisitor visitor =
         new CallsIteratorNextVisitor(target, checkTarget, false);
     context.accept(visitor);
     return visitor.callsIteratorNext();
@@ -46,7 +46,7 @@ public class IteratorUtils {
   public static boolean containsCallToScannerNext(PsiElement context,
                                                   PsiVariable target,
                                                   boolean checkTarget) {
-    final CallsIteratorNextVisitor visitor =
+    CallsIteratorNextVisitor visitor =
         new CallsIteratorNextVisitor(target, checkTarget, true);
     context.accept(visitor);
     return visitor.callsIteratorNext();
@@ -97,9 +97,9 @@ public class IteratorUtils {
         return;
       }
       if (checkTarget) {
-        final PsiReferenceExpression methodExpression =
+        PsiReferenceExpression methodExpression =
             expression.getMethodExpression();
-        final PsiExpression qualifier =
+        PsiExpression qualifier =
             methodExpression.getQualifierExpression();
         if (!(qualifier instanceof PsiReferenceExpression)) {
           if (target != null) {
@@ -111,9 +111,9 @@ public class IteratorUtils {
             return;
           }
         } else {
-          final PsiReferenceExpression referenceExpression =
+          PsiReferenceExpression referenceExpression =
               (PsiReferenceExpression) qualifier;
-          final PsiElement element = referenceExpression.resolve();
+          PsiElement element = referenceExpression.resolve();
           if (target == null || !target.equals(element)) {
             return;
           }

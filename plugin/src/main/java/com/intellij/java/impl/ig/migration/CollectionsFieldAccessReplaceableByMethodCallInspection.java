@@ -51,7 +51,7 @@ public abstract class CollectionsFieldAccessReplaceableByMethodCallInspection ex
   @Override
   @Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiReferenceExpression expression = (PsiReferenceExpression) infos[0];
+    PsiReferenceExpression expression = (PsiReferenceExpression) infos[0];
     return new CollectionsFieldAccessReplaceableByMethodCallFix(expression.getReferenceName());
   }
 
@@ -73,27 +73,27 @@ public abstract class CollectionsFieldAccessReplaceableByMethodCallInspection ex
     @NonNls
     private static String getCollectionsMethodCallText(
         PsiReferenceExpression referenceExpression) {
-      final String referenceName = referenceExpression.getReferenceName();
-      final PsiElement parent = referenceExpression.getParent();
+      String referenceName = referenceExpression.getReferenceName();
+      PsiElement parent = referenceExpression.getParent();
       if (!(parent instanceof PsiExpressionList)) {
         return getUntypedCollectionsMethodCallText(referenceName);
       }
-      final PsiType type = ExpectedTypeUtils.findExpectedType(
+      PsiType type = ExpectedTypeUtils.findExpectedType(
           referenceExpression, false);
       if (!(type instanceof PsiClassType)) {
         return getUntypedCollectionsMethodCallText(referenceName);
       }
-      final PsiClassType classType = (PsiClassType) type;
-      final PsiType[] parameterTypes = classType.getParameters();
+      PsiClassType classType = (PsiClassType) type;
+      PsiType[] parameterTypes = classType.getParameters();
       boolean useTypeParameter = false;
-      final String[] canonicalTexts = new String[parameterTypes.length];
+      String[] canonicalTexts = new String[parameterTypes.length];
       for (int i = 0, parameterTypesLength = parameterTypes.length;
            i < parameterTypesLength; i++) {
-        final PsiType parameterType = parameterTypes[i];
+        PsiType parameterType = parameterTypes[i];
         if (parameterType instanceof PsiWildcardType) {
-          final PsiWildcardType wildcardType =
+          PsiWildcardType wildcardType =
               (PsiWildcardType) parameterType;
-          final PsiType bound = wildcardType.getBound();
+          PsiType bound = wildcardType.getBound();
           if (bound != null) {
             if (!bound.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
               useTypeParameter = true;
@@ -141,13 +141,13 @@ public abstract class CollectionsFieldAccessReplaceableByMethodCallInspection ex
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor)
         throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
+      PsiElement element = descriptor.getPsiElement();
       if (!(element instanceof PsiReferenceExpression)) {
         return;
       }
-      final PsiReferenceExpression referenceExpression =
+      PsiReferenceExpression referenceExpression =
           (PsiReferenceExpression) element;
-      final String newMethodCallText =
+      String newMethodCallText =
           getCollectionsMethodCallText(referenceExpression);
       replaceExpression(referenceExpression,
           "java.util." + newMethodCallText);
@@ -169,8 +169,8 @@ public abstract class CollectionsFieldAccessReplaceableByMethodCallInspection ex
         return;
       }
       super.visitReferenceExpression(expression);
-      @NonNls final String name = expression.getReferenceName();
-      @NonNls final String replacement;
+      @NonNls String name = expression.getReferenceName();
+      @NonNls String replacement;
       if ("EMPTY_LIST".equals(name)) {
         replacement = "emptyList()";
       } else if ("EMPTY_MAP".equals(name)) {
@@ -180,16 +180,16 @@ public abstract class CollectionsFieldAccessReplaceableByMethodCallInspection ex
       } else {
         return;
       }
-      final PsiElement target = expression.resolve();
+      PsiElement target = expression.resolve();
       if (!(target instanceof PsiField)) {
         return;
       }
-      final PsiField field = (PsiField) target;
-      final PsiClass containingClass = field.getContainingClass();
+      PsiField field = (PsiField) target;
+      PsiClass containingClass = field.getContainingClass();
       if (containingClass == null) {
         return;
       }
-      final String qualifiedName = containingClass.getQualifiedName();
+      String qualifiedName = containingClass.getQualifiedName();
       if (!CommonClassNames.JAVA_UTIL_COLLECTIONS.equals(qualifiedName)) {
         return;
       }

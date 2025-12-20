@@ -45,9 +45,9 @@ public class IntroduceParameterObjectHandler implements RefactoringActionHandler
     @Override
     @RequiredUIAccess
     public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
-        final ScrollingModel scrollingModel = editor.getScrollingModel();
+        ScrollingModel scrollingModel = editor.getScrollingModel();
         scrollingModel.scrollToCaret(ScrollType.MAKE_VISIBLE);
-        final PsiElement element = dataContext.getData(PsiElement.KEY);
+        PsiElement element = dataContext.getData(PsiElement.KEY);
         PsiMethod selectedMethod = null;
         if (element instanceof PsiMethod) {
             selectedMethod = (PsiMethod)element;
@@ -56,16 +56,16 @@ public class IntroduceParameterObjectHandler implements RefactoringActionHandler
             selectedMethod = methodScope;
         }
         else {
-            final CaretModel caretModel = editor.getCaretModel();
-            final int position = caretModel.getOffset();
-            final PsiElement elementAt = file.findElementAt(position);
-            final PsiMethodCallExpression methodCallExpression =
+            CaretModel caretModel = editor.getCaretModel();
+            int position = caretModel.getOffset();
+            PsiElement elementAt = file.findElementAt(position);
+            PsiMethodCallExpression methodCallExpression =
                 PsiTreeUtil.getParentOfType(elementAt, PsiMethodCallExpression.class);
             if (methodCallExpression != null) {
                 selectedMethod = methodCallExpression.resolveMethod();
             }
             else {
-                final PsiParameterList parameterList = PsiTreeUtil.getParentOfType(elementAt, PsiParameterList.class);
+                PsiParameterList parameterList = PsiTreeUtil.getParentOfType(elementAt, PsiParameterList.class);
                 if (parameterList != null && parameterList.getParent() instanceof PsiMethod) {
                     selectedMethod = (PsiMethod)parameterList.getParent();
                 }
@@ -87,7 +87,7 @@ public class IntroduceParameterObjectHandler implements RefactoringActionHandler
         if (elements.length != 1) {
             return;
         }
-        final PsiMethod method = PsiTreeUtil.getParentOfType(elements[0], PsiMethod.class, false);
+        PsiMethod method = PsiTreeUtil.getParentOfType(elements[0], PsiMethod.class, false);
         if (method == null) {
             return;
         }
@@ -96,7 +96,7 @@ public class IntroduceParameterObjectHandler implements RefactoringActionHandler
     }
 
     @RequiredUIAccess
-    private static void invoke(final Project project, final PsiMethod selectedMethod, Editor editor) {
+    private static void invoke(Project project, PsiMethod selectedMethod, Editor editor) {
         PsiMethod newMethod = SuperMethodWarningUtil.checkSuperMethod(selectedMethod, RefactoringLocalize.toRefactor().get());
         if (newMethod == null) {
             return;
@@ -105,7 +105,7 @@ public class IntroduceParameterObjectHandler implements RefactoringActionHandler
             return;
         }
 
-        final PsiParameter[] parameters = newMethod.getParameterList().getParameters();
+        PsiParameter[] parameters = newMethod.getParameterList().getParameters();
         if (parameters.length == 0) {
             LocalizeValue message =
                 RefactoringLocalize.cannotPerformRefactoringWithReason(JavaRefactoringLocalize.methodSelectedHasNoParameters());

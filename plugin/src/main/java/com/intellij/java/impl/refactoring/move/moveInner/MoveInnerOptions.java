@@ -24,10 +24,10 @@ public class MoveInnerOptions {
   private final PsiElement myTargetContainer;
   private final String myNewClassName;
 
-  public MoveInnerOptions(final PsiClass innerClass,
-                          final PsiClass outerClass,
-                          final PsiElement targetContainer,
-                          final String newClassName) {
+  public MoveInnerOptions(PsiClass innerClass,
+                          PsiClass outerClass,
+                          PsiElement targetContainer,
+                          String newClassName) {
     myInnerClass = innerClass;
     myOuterClass = outerClass;
     myTargetContainer = targetContainer;

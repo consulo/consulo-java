@@ -30,17 +30,17 @@ public class ConfigFileImpl implements ConfigFile {
   private final Project myProject;
   private long myModificationCount;
 
-  public ConfigFileImpl(@Nonnull final ConfigFileContainerImpl container, @Nonnull final ConfigFileInfo configuration) {
+  public ConfigFileImpl(@Nonnull ConfigFileContainerImpl container, @Nonnull ConfigFileInfo configuration) {
     myContainer = container;
     myInfo = configuration;
-    final VirtualFilePointerManager pointerManager = VirtualFilePointerManager.getInstance();
+    VirtualFilePointerManager pointerManager = VirtualFilePointerManager.getInstance();
     myFilePointer = pointerManager.create(configuration.getUrl(), this, new VirtualFilePointerListener() {
       @Override
-      public void beforeValidityChanged(@Nonnull final VirtualFilePointer[] pointers) {
+      public void beforeValidityChanged(@Nonnull VirtualFilePointer[] pointers) {
       }
 
       @Override
-      public void validityChanged(@Nonnull final VirtualFilePointer[] pointers) {
+      public void validityChanged(@Nonnull VirtualFilePointer[] pointers) {
         myPsiFile = null;
         onChange();
       }
@@ -59,7 +59,7 @@ public class ConfigFileImpl implements ConfigFile {
     return myFilePointer.getUrl();
   }
 
-  public void setInfo(@Nonnull final ConfigFileInfo info) {
+  public void setInfo(@Nonnull ConfigFileInfo info) {
     myInfo = info;
   }
 
@@ -92,7 +92,7 @@ public class ConfigFileImpl implements ConfigFile {
   @Override
   @Nullable
   public XmlFile getXmlFile() {
-    final PsiFile file = getPsiFile();
+    PsiFile file = getPsiFile();
     return file instanceof XmlFile ? (XmlFile) file : null;
   }
 
@@ -108,12 +108,12 @@ public class ConfigFileImpl implements ConfigFile {
 
   @Override
   public boolean isValid() {
-    final PsiFile psiFile = getPsiFile();
+    PsiFile psiFile = getPsiFile();
     if (psiFile == null || !psiFile.isValid()) {
       return false;
     }
     if (psiFile instanceof XmlFile) {
-      final XmlDocument document = ((XmlFile) psiFile).getDocument();
+      XmlDocument document = ((XmlFile) psiFile).getDocument();
       return document != null && document.getRootTag() != null;
     }
     return true;

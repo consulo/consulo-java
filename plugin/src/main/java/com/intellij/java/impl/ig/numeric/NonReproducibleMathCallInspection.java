@@ -80,10 +80,10 @@ public class NonReproducibleMathCallInspection extends BaseInspection {
         }
 
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiIdentifier nameIdentifier = (PsiIdentifier) descriptor.getPsiElement();
-            final PsiReferenceExpression reference = (PsiReferenceExpression) nameIdentifier.getParent();
+            PsiIdentifier nameIdentifier = (PsiIdentifier) descriptor.getPsiElement();
+            PsiReferenceExpression reference = (PsiReferenceExpression) nameIdentifier.getParent();
             assert reference != null;
-            final String name = reference.getReferenceName();
+            String name = reference.getReferenceName();
             replaceExpression(reference, "StrictMath." + name);
         }
     }
@@ -96,20 +96,20 @@ public class NonReproducibleMathCallInspection extends BaseInspection {
         @Override
         public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            String methodName = methodExpression.getReferenceName();
             if (!nonReproducibleMethods.contains(methodName)) {
                 return;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return;
             }
-            final PsiClass referencedClass = method.getContainingClass();
+            PsiClass referencedClass = method.getContainingClass();
             if (referencedClass == null) {
                 return;
             }
-            final String className = referencedClass.getQualifiedName();
+            String className = referencedClass.getQualifiedName();
             if (!CommonClassNames.JAVA_LANG_MATH.equals(className)) {
                 return;
             }

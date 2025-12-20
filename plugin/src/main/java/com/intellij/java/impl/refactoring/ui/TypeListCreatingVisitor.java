@@ -42,7 +42,7 @@ class TypeListCreatingVisitor implements RefactoringHierarchyUtil.SuperTypeVisit
   }
 
   public void visitClass(PsiClass aClass) {
-    final PsiType type = myFactory.createType(aClass);
+    PsiType type = myFactory.createType(aClass);
     if (!mySet.contains(type)) {
       myList.add(type);
       mySet.add(type);

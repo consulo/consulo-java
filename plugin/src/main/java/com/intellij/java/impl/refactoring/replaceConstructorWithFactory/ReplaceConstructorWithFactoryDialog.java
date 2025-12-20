@@ -119,7 +119,7 @@ public class ReplaceConstructorWithFactoryDialog extends RefactoringDialog {
 
     gbc.gridx++;
     gbc.weightx = 1.0;
-    @NonNls final String[] nameSuggestions = new String[]{
+    @NonNls String[] nameSuggestions = new String[]{
       "create" + myContainingClass.getName(),
       "new" + myContainingClass.getName(),
       "getInstance",
@@ -195,10 +195,10 @@ public class ReplaceConstructorWithFactoryDialog extends RefactoringDialog {
   }
 
   protected void doAction() {
-    final Project project = getProject();
-    final PsiManager manager = PsiManager.getInstance(project);
-    final String targetClassName = getTargetClassName();
-    final PsiClass targetClass =
+    Project project = getProject();
+    PsiManager manager = PsiManager.getInstance(project);
+    String targetClassName = getTargetClassName();
+    PsiClass targetClass =
       JavaPsiFacade.getInstance(manager.getProject()).findClass(targetClassName, GlobalSearchScope.allScope(project));
     if (targetClass == null) {
       LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.class0NotFound(targetClassName));
@@ -216,8 +216,8 @@ public class ReplaceConstructorWithFactoryDialog extends RefactoringDialog {
 
   @Override
   protected void canRun() throws ConfigurationException {
-    final String name = myNameField.getEnteredName();
-    final PsiNameHelper nameHelper = PsiNameHelper.getInstance(myContainingClass.getProject());
+    String name = myNameField.getEnteredName();
+    PsiNameHelper nameHelper = PsiNameHelper.getInstance(myContainingClass.getProject());
     if (!nameHelper.isIdentifier(name)) {
       throw new ConfigurationException("\'" + name + "\' is invalid factory method name");
     }

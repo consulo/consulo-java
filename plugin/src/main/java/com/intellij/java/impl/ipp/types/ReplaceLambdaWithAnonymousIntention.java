@@ -64,16 +64,16 @@ public class ReplaceLambdaWithAnonymousIntention extends Intention {
 
     @Override
     protected void processIntention(Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
-        final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
+        PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
         LOG.assertTrue(lambdaExpression != null);
-        final PsiParameter[] paramListCopy = ((PsiParameterList) lambdaExpression.getParameterList().copy())
+        PsiParameter[] paramListCopy = ((PsiParameterList) lambdaExpression.getParameterList().copy())
             .getParameters();
-        final PsiType functionalInterfaceType = lambdaExpression.getFunctionalInterfaceType();
+        PsiType functionalInterfaceType = lambdaExpression.getFunctionalInterfaceType();
         LOG.assertTrue(functionalInterfaceType != null);
-        final PsiMethod method = LambdaUtil.getFunctionalInterfaceMethod(functionalInterfaceType);
+        PsiMethod method = LambdaUtil.getFunctionalInterfaceMethod(functionalInterfaceType);
         LOG.assertTrue(method != null);
 
-        final String blockText = getBodyText(lambdaExpression);
+        String blockText = getBodyText(lambdaExpression);
         if (blockText == null) {
             return;
         }
@@ -83,7 +83,7 @@ public class ReplaceLambdaWithAnonymousIntention extends Intention {
         ChangeContextUtil.encodeContextInfo(blockFromText, true);
         PsiNewExpression newExpression = (PsiNewExpression) psiElementFactory.createExpressionFromText("new " +
             functionalInterfaceType.getCanonicalText() + "(){}", lambdaExpression);
-        final PsiClass thisClass = RefactoringChangeUtil.getThisClass(lambdaExpression);
+        PsiClass thisClass = RefactoringChangeUtil.getThisClass(lambdaExpression);
         final String thisClassName = thisClass != null ? thisClass.getName() : null;
         if (thisClassName != null) {
             final PsiThisExpression thisAccessExpr = thisClass instanceof PsiAnonymousClass ? null :
@@ -108,7 +108,7 @@ public class ReplaceLambdaWithAnonymousIntention extends Intention {
                 public void visitMethodCallExpression(PsiMethodCallExpression expression) {
                     super.visitMethodCallExpression(expression);
                     if (thisAccessExpr != null) {
-                        final PsiMethod psiMethod = expression.resolveMethod();
+                        PsiMethod psiMethod = expression.resolveMethod();
                         if (psiMethod != null && !psiMethod.hasModifierProperty(PsiModifier.STATIC) && expression
                             .getMethodExpression().getQualifierExpression() == null) {
                             replacements.put(expression, psiElementFactory.createExpressionFromText(thisAccessExpr
@@ -125,16 +125,16 @@ public class ReplaceLambdaWithAnonymousIntention extends Intention {
         newExpression = (PsiNewExpression) JavaCodeStyleManager.getInstance(lambdaExpression.getProject())
             .shortenClassReferences(lambdaExpression.replace(newExpression));
 
-        final PsiAnonymousClass anonymousClass = newExpression.getAnonymousClass();
+        PsiAnonymousClass anonymousClass = newExpression.getAnonymousClass();
         LOG.assertTrue(anonymousClass != null);
-        final List<PsiGenerationInfo<PsiMethod>> infos = OverrideImplementUtil.overrideOrImplement(anonymousClass,
+        List<PsiGenerationInfo<PsiMethod>> infos = OverrideImplementUtil.overrideOrImplement(anonymousClass,
             method);
         if (infos != null && infos.size() == 1) {
-            final PsiMethod member = infos.get(0).getPsiMember();
-            final PsiParameter[] parameters = member.getParameterList().getParameters();
+            PsiMethod member = infos.get(0).getPsiMember();
+            PsiParameter[] parameters = member.getParameterList().getParameters();
             for (int i = 0; i < parameters.length; i++) {
-                final PsiParameter parameter = parameters[i];
-                final String lambdaParamName = paramListCopy[i].getName();
+                PsiParameter parameter = parameters[i];
+                String lambdaParamName = paramListCopy[i].getName();
                 if (lambdaParamName != null) {
                     parameter.setName(lambdaParamName);
                 }
@@ -149,9 +149,9 @@ public class ReplaceLambdaWithAnonymousIntention extends Intention {
 
     private static String getBodyText(PsiLambdaExpression lambdaExpression) {
         String blockText;
-        final PsiElement body = lambdaExpression.getBody();
+        PsiElement body = lambdaExpression.getBody();
         if (body instanceof PsiExpression) {
-            final PsiType returnType = LambdaUtil.getFunctionalInterfaceReturnType(lambdaExpression);
+            PsiType returnType = LambdaUtil.getFunctionalInterfaceReturnType(lambdaExpression);
             blockText = "{";
             blockText += PsiType.VOID.equals(returnType) ? "" : "return ";
             blockText += body.getText() + ";}";
@@ -168,14 +168,14 @@ public class ReplaceLambdaWithAnonymousIntention extends Intention {
     private static class LambdaPredicate implements PsiElementPredicate {
         @Override
         public boolean satisfiedBy(PsiElement element) {
-            final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element,
+            PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element,
                 PsiLambdaExpression.class);
             if (lambdaExpression != null && (element.getParent() == lambdaExpression && element instanceof PsiJavaToken
                 && ((PsiJavaToken) element).getTokenType() == JavaTokenType.ARROW || PsiTreeUtil.isAncestor
                 (lambdaExpression.getParameterList(), element, false))) {
-                final PsiClass thisClass = PsiTreeUtil.getParentOfType(lambdaExpression, PsiClass.class, true);
+                PsiClass thisClass = PsiTreeUtil.getParentOfType(lambdaExpression, PsiClass.class, true);
                 if (thisClass == null || thisClass instanceof PsiAnonymousClass) {
-                    final PsiElement body = lambdaExpression.getBody();
+                    PsiElement body = lambdaExpression.getBody();
                     if (body == null) {
                         return false;
                     }
@@ -195,20 +195,20 @@ public class ReplaceLambdaWithAnonymousIntention extends Intention {
                         return false;
                     }
                 }
-                final PsiType functionalInterfaceType = lambdaExpression.getFunctionalInterfaceType();
+                PsiType functionalInterfaceType = lambdaExpression.getFunctionalInterfaceType();
                 if (functionalInterfaceType != null &&
                     LambdaUtil.isLambdaFullyInferred(lambdaExpression, functionalInterfaceType) &&
                     LambdaUtil.isFunctionalType(functionalInterfaceType)) {
-                    final PsiMethod interfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(functionalInterfaceType);
+                    PsiMethod interfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(functionalInterfaceType);
                     if (interfaceMethod != null) {
-                        final PsiSubstitutor substitutor = LambdaUtil.getSubstitutor(interfaceMethod,
+                        PsiSubstitutor substitutor = LambdaUtil.getSubstitutor(interfaceMethod,
                             PsiUtil.resolveGenericsClassInType(functionalInterfaceType));
                         for (PsiType type : interfaceMethod.getSignature(substitutor).getParameterTypes()) {
                             if (!PsiTypesUtil.isDenotableType(type)) {
                                 return false;
                             }
                         }
-                        final PsiType returnType = LambdaUtil.getFunctionalInterfaceReturnType
+                        PsiType returnType = LambdaUtil.getFunctionalInterfaceReturnType
                             (functionalInterfaceType);
                         return PsiTypesUtil.isDenotableType(returnType);
                     }

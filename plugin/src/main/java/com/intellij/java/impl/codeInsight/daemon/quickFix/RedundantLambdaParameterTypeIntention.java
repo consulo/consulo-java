@@ -49,16 +49,16 @@ public class RedundantLambdaParameterTypeIntention extends PsiElementBaseIntenti
 
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
-    final PsiParameterList parameterList = PsiTreeUtil.getParentOfType(element, PsiParameterList.class);
+    PsiParameterList parameterList = PsiTreeUtil.getParentOfType(element, PsiParameterList.class);
     if (parameterList == null) {
       return false;
     }
-    final PsiElement parent = parameterList.getParent();
+    PsiElement parent = parameterList.getParent();
     if (!(parent instanceof PsiLambdaExpression)) {
       return false;
     }
-    final PsiLambdaExpression expression = (PsiLambdaExpression) parent;
-    final PsiParameter[] parameters = parameterList.getParameters();
+    PsiLambdaExpression expression = (PsiLambdaExpression) parent;
+    PsiParameter[] parameters = parameterList.getParameters();
     for (PsiParameter parameter : parameters) {
       if (parameter.getTypeElement() == null) {
         return false;
@@ -67,46 +67,46 @@ public class RedundantLambdaParameterTypeIntention extends PsiElementBaseIntenti
     if (parameters.length == 0) {
       return false;
     }
-    final PsiType functionalInterfaceType = LambdaUtil.getFunctionalInterfaceType(expression, true);
+    PsiType functionalInterfaceType = LambdaUtil.getFunctionalInterfaceType(expression, true);
     if (functionalInterfaceType != null) {
-      final PsiElement lambdaParent = expression.getParent();
+      PsiElement lambdaParent = expression.getParent();
       if (lambdaParent instanceof PsiExpressionList) {
-        final PsiElement gParent = lambdaParent.getParent();
+        PsiElement gParent = lambdaParent.getParent();
         if (gParent instanceof PsiCallExpression && ((PsiCallExpression) gParent).getTypeArguments().length
             == 0) {
-          final JavaResolveResult resolveResult = ((PsiCallExpression) gParent).resolveMethodGenerics();
-          final PsiMethod method = (PsiMethod) resolveResult.getElement();
+          JavaResolveResult resolveResult = ((PsiCallExpression) gParent).resolveMethodGenerics();
+          PsiMethod method = (PsiMethod) resolveResult.getElement();
           if (method == null) {
             return false;
           }
-          final int idx = LambdaUtil.getLambdaIdx((PsiExpressionList) lambdaParent, expression);
+          int idx = LambdaUtil.getLambdaIdx((PsiExpressionList) lambdaParent, expression);
           if (idx < 0) {
             return false;
           }
 
-          final PsiTypeParameter[] typeParameters = method.getTypeParameters();
-          final PsiExpression[] arguments = ((PsiExpressionList) lambdaParent).getExpressions();
-          final JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(project);
+          PsiTypeParameter[] typeParameters = method.getTypeParameters();
+          PsiExpression[] arguments = ((PsiExpressionList) lambdaParent).getExpressions();
+          JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(project);
           arguments[idx] = javaPsiFacade.getElementFactory().createExpressionFromText("(" + StringUtil.join
               (expression.getParameterList().getParameters(), parameter -> parameter.getName(), ", ") + ") -> {}", expression);
-          final PsiParameter[] methodParams = method.getParameterList().getParameters();
-          final PsiSubstitutor substitutor = javaPsiFacade.getResolveHelper().inferTypeArguments
+          PsiParameter[] methodParams = method.getParameterList().getParameters();
+          PsiSubstitutor substitutor = javaPsiFacade.getResolveHelper().inferTypeArguments
               (typeParameters, methodParams, arguments, ((MethodCandidateInfo) resolveResult)
                   .getSiteSubstitutor(), gParent, DefaultParameterTypeInferencePolicy.INSTANCE);
 
           for (PsiTypeParameter parameter : typeParameters) {
-            final PsiType psiType = substitutor.substitute(parameter);
+            PsiType psiType = substitutor.substitute(parameter);
             if (psiType == null || dependsOnTypeParams(psiType, expression, parameter)) {
               return false;
             }
           }
 
 
-          final PsiType paramType;
+          PsiType paramType;
           if (idx < methodParams.length) {
             paramType = methodParams[idx].getType();
           } else {
-            final PsiParameter lastParam = methodParams[methodParams.length - 1];
+            PsiParameter lastParam = methodParams[methodParams.length - 1];
             if (!lastParam.isVarArgs()) {
               return false;
             }
@@ -127,20 +127,20 @@ public class RedundantLambdaParameterTypeIntention extends PsiElementBaseIntenti
   public void invoke(@Nonnull Project project,
                      Editor editor,
                      @Nonnull PsiElement element) throws IncorrectOperationException {
-    final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
+    PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
     removeTypes(lambdaExpression);
   }
 
   private static void removeTypes(PsiLambdaExpression lambdaExpression) {
     if (lambdaExpression != null) {
-      final PsiParameter[] parameters = lambdaExpression.getParameterList().getParameters();
-      final String text;
+      PsiParameter[] parameters = lambdaExpression.getParameterList().getParameters();
+      String text;
       if (parameters.length == 1) {
         text = parameters[0].getName();
       } else {
         text = "(" + StringUtil.join(parameters, parameter -> parameter.getName(), ", ") + ")";
       }
-      final PsiLambdaExpression expression = (PsiLambdaExpression) JavaPsiFacade.getElementFactory
+      PsiLambdaExpression expression = (PsiLambdaExpression) JavaPsiFacade.getElementFactory
           (lambdaExpression.getProject()).createExpressionFromText(text + "->{}", lambdaExpression);
       lambdaExpression.getParameterList().replace(expression.getParameterList());
     }

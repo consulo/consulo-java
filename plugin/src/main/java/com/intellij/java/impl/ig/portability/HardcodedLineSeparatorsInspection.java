@@ -57,15 +57,15 @@ public class HardcodedLineSeparatorsInspection extends BaseInspection {
     @Override
     public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
-      final PsiType type = expression.getType();
+      PsiType type = expression.getType();
       if (type == null || !TypeUtils.isJavaLangString(type) && !type.equals(PsiType.CHAR)) {
         return;
       }
-      final String text = expression.getText();
-      final Matcher matcher = newlines.matcher(text);
+      String text = expression.getText();
+      Matcher matcher = newlines.matcher(text);
       int end = 0;
       while (matcher.find(end)) {
-        final int start = matcher.start();
+        int start = matcher.start();
         end = matcher.end();
         registerErrorAtOffset(expression, start, end - start);
       }

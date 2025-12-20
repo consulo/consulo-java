@@ -34,7 +34,7 @@ public class AnnotatedPackagesSearch extends ExtensibleQueryFactory<PsiJavaPacka
     private final PsiClass myAnnotationClass;
     private final SearchScope myScope;
 
-    public Parameters(final PsiClass annotationClass, final SearchScope scope) {
+    public Parameters(PsiClass annotationClass, SearchScope scope) {
       myAnnotationClass = annotationClass;
       myScope = scope;
     }

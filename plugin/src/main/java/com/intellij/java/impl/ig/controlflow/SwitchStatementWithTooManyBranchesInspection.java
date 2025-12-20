@@ -49,7 +49,7 @@ public abstract class SwitchStatementWithTooManyBranchesInspection extends BaseI
 
     @Nonnull
     protected String buildErrorString(Object... infos) {
-        final Integer branchCount = (Integer) infos[0];
+        Integer branchCount = (Integer) infos[0];
         return InspectionGadgetsLocalize.ifStatementWithTooManyBranchesProblemDescriptor(branchCount).get();
     }
 
@@ -60,11 +60,11 @@ public abstract class SwitchStatementWithTooManyBranchesInspection extends BaseI
     private class SwitchStatementWithTooManyBranchesVisitor extends BaseInspectionVisitor {
         @Override
         public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
-            final PsiCodeBlock body = statement.getBody();
+            PsiCodeBlock body = statement.getBody();
             if (body == null) {
                 return;
             }
-            final int branchCount = SwitchUtils.calculateBranchCount(statement);
+            int branchCount = SwitchUtils.calculateBranchCount(statement);
             if (branchCount <= m_limit) {
                 return;
             }

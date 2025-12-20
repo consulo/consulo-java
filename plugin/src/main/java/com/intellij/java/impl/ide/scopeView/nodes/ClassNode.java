@@ -25,23 +25,23 @@ import com.intellij.java.language.psi.PsiClass;
  * Date: 30-Jan-2006
  */
 public class ClassNode extends BasePsiNode<PsiClass> implements Comparable<ClassNode>{
-  public ClassNode(final PsiClass aClass) {
+  public ClassNode(PsiClass aClass) {
     super(aClass);
   }
 
   public String toString() {
-    final PsiClass aClass = (PsiClass)getPsiElement();
+    PsiClass aClass = (PsiClass)getPsiElement();
     return aClass != null && aClass.isValid() ? ClassPresentationUtil.getNameForClass(aClass, false) : "";
   }
 
   @Override
   public boolean isDeprecated() {
-    final PsiClass psiClass = (PsiClass)getPsiElement();
+    PsiClass psiClass = (PsiClass)getPsiElement();
     return psiClass != null && psiClass.isDeprecated();
   }
 
-  public int compareTo(final ClassNode o) {
-    final int comparision = ClassTreeNode.getClassPosition((PsiClass)getPsiElement()) - ClassTreeNode.getClassPosition((PsiClass)o.getPsiElement());
+  public int compareTo(ClassNode o) {
+    int comparision = ClassTreeNode.getClassPosition((PsiClass)getPsiElement()) - ClassTreeNode.getClassPosition((PsiClass)o.getPsiElement());
     if (comparision == 0) {
       return toString().compareToIgnoreCase(o.toString());
     }

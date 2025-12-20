@@ -68,7 +68,7 @@ public class MethodOverridesPackageLocalMethodInspection
 
     @Override
     public void visitMethod(@Nonnull PsiMethod method) {
-      final PsiClass aClass = method.getContainingClass();
+      PsiClass aClass = method.getContainingClass();
       if (aClass == null) {
         return;
       }
@@ -76,30 +76,30 @@ public class MethodOverridesPackageLocalMethodInspection
         return;
       }
       PsiClass ancestorClass = aClass.getSuperClass();
-      final Set<PsiClass> visitedClasses = new HashSet<PsiClass>();
+      Set<PsiClass> visitedClasses = new HashSet<PsiClass>();
       while (ancestorClass != null) {
         if (!visitedClasses.add(ancestorClass)) {
           return;
         }
-        final PsiMethod overridingMethod =
+        PsiMethod overridingMethod =
           ancestorClass.findMethodBySignature(method, true);
         if (overridingMethod != null) {
           if (overridingMethod.hasModifierProperty(
             PsiModifier.PACKAGE_LOCAL)) {
-            final PsiJavaFile file =
+            PsiJavaFile file =
               PsiTreeUtil.getParentOfType(aClass,
                                           PsiJavaFile.class);
             if (file == null) {
               return;
             }
-            final PsiJavaFile ancestorFile =
+            PsiJavaFile ancestorFile =
               PsiTreeUtil.getParentOfType(ancestorClass,
                                           PsiJavaFile.class);
             if (ancestorFile == null) {
               return;
             }
-            final String packageName = file.getPackageName();
-            final String ancestorPackageName =
+            String packageName = file.getPackageName();
+            String ancestorPackageName =
               ancestorFile.getPackageName();
             if (!packageName.equals(ancestorPackageName)) {
               registerMethodError(method);

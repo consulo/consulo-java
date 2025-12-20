@@ -61,7 +61,7 @@ public class DirectoryAsPackageRenameHandler extends DirectoryAsPackageRenameHan
                                                      boolean searchInComments, boolean searchInNonJavaFiles) {
     return new MoveDirectoryWithClassesProcessor(project, dirsToRename, null, searchInComments, searchInNonJavaFiles, false, null) {
       @Override
-      public TargetDirectoryWrapper getTargetDirectory(final PsiDirectory dir) {
+      public TargetDirectoryWrapper getTargetDirectory(PsiDirectory dir) {
         return new TargetDirectoryWrapper(dir.getParentDirectory(), StringUtil.getShortName(newQName));
       }
 

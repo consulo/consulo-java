@@ -69,8 +69,8 @@ public class JavaChainLookupElement extends LookupElementDecorator<LookupElement
 
   @Override
   public Set<String> getAllLookupStrings() {
-    final Set<String> strings = getDelegate().getAllLookupStrings();
-    final Set<String> result = new HashSet<String>();
+    Set<String> strings = getDelegate().getAllLookupStrings();
+    Set<String> result = new HashSet<String>();
     result.addAll(strings);
     result.add(getLookupString());
     return result;
@@ -103,10 +103,10 @@ public class JavaChainLookupElement extends LookupElementDecorator<LookupElement
   @Override
   public void renderElement(LookupElementPresentation presentation) {
     super.renderElement(presentation);
-    final LookupElementPresentation qualifierPresentation = new LookupElementPresentation();
+    LookupElementPresentation qualifierPresentation = new LookupElementPresentation();
     myQualifier.renderElement(qualifierPresentation);
     String name = maybeAddParentheses(qualifierPresentation.getItemText());
-    final String qualifierText = myQualifier.as(CastingLookupElementDecorator.CLASS_CONDITION_KEY) != null ? "(" + name + ")" : name;
+    String qualifierText = myQualifier.as(CastingLookupElementDecorator.CLASS_CONDITION_KEY) != null ? "(" + name + ")" : name;
     presentation.setItemText(qualifierText + "." + presentation.getItemText());
 
     if (myQualifier instanceof JavaPsiClassReferenceElement) {
@@ -117,22 +117,22 @@ public class JavaChainLookupElement extends LookupElementDecorator<LookupElement
 
   @Override
   public void handleInsert(InsertionContext context) {
-    final Document document = context.getEditor().getDocument();
+    Document document = context.getEditor().getDocument();
     document.replaceString(context.getStartOffset(), context.getTailOffset(), ";");
     myQualifier.putUserData(CHAIN_QUALIFIER, true);
-    final InsertionContext qualifierContext = CompletionUtilCore.emulateInsertion(context, context.getStartOffset(), myQualifier);
+    InsertionContext qualifierContext = CompletionUtilCore.emulateInsertion(context, context.getStartOffset(), myQualifier);
     OffsetKey oldStart = context.trackOffset(context.getStartOffset(), false);
 
     PsiDocumentManager.getInstance(context.getProject()).doPostponedOperationsAndUnblockDocument(document);
 
     int start = CharArrayUtil.shiftForward(context.getDocument().getCharsSequence(), context.getStartOffset(), " \t\n");
     if (shouldParenthesizeQualifier(context.getFile(), start, qualifierContext.getTailOffset())) {
-      final String space = CodeStyleSettingsManager.getSettings(qualifierContext.getProject()).SPACE_WITHIN_PARENTHESES ? " " : "";
+      String space = CodeStyleSettingsManager.getSettings(qualifierContext.getProject()).SPACE_WITHIN_PARENTHESES ? " " : "";
       document.insertString(start, "(" + space);
       document.insertString(qualifierContext.getTailOffset(), space + ")");
     }
 
-    final char atTail = document.getCharsSequence().charAt(context.getTailOffset() - 1);
+    char atTail = document.getCharsSequence().charAt(context.getTailOffset() - 1);
     if (atTail != ';') {
       return;
     }
@@ -148,7 +148,7 @@ public class JavaChainLookupElement extends LookupElementDecorator<LookupElement
     }
   }
 
-  protected boolean shouldParenthesizeQualifier(final PsiFile file, final int startOffset, final int endOffset) {
+  protected boolean shouldParenthesizeQualifier(PsiFile file, int startOffset, int endOffset) {
     PsiElement element = file.findElementAt(startOffset);
     if (element == null) {
       return false;
@@ -181,7 +181,7 @@ public class JavaChainLookupElement extends LookupElementDecorator<LookupElement
 
   @Nonnull
   private LookupElement getComparableQualifier() {
-    final CastingLookupElementDecorator casting = myQualifier.as(CastingLookupElementDecorator.CLASS_CONDITION_KEY);
+    CastingLookupElementDecorator casting = myQualifier.as(CastingLookupElementDecorator.CLASS_CONDITION_KEY);
     return casting == null ? myQualifier : casting.getDelegate();
   }
 
@@ -207,7 +207,7 @@ public class JavaChainLookupElement extends LookupElementDecorator<LookupElement
 
   @Override
   public PsiType getType() {
-    final Object object = getObject();
+    Object object = getObject();
     if (object instanceof PsiMember) {
       return JavaCompletionUtil.getQualifiedMemberReferenceType(JavaCompletionUtil.getLookupElementType(myQualifier), (PsiMember) object);
     }

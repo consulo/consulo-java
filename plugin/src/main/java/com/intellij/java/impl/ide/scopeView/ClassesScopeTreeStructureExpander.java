@@ -57,39 +57,39 @@ public class ClassesScopeTreeStructureExpander implements ScopeTreeStructureExpa
   private final Project myProject;
 
   @Inject
-  public ClassesScopeTreeStructureExpander(final Project project) {
+  public ClassesScopeTreeStructureExpander(Project project) {
     myProject = project;
   }
 
   public void treeWillExpand(TreeExpansionEvent event) throws ExpandVetoException {
     if (myProject.isDisposed()) return;
     ProjectView projectView = ProjectView.getInstance(myProject);
-    final TreePath path = event.getPath();
+    TreePath path = event.getPath();
     if (path == null) return;
-    final DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+    DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
     if (node instanceof DirectoryNode) {
       Set<ClassNode> classNodes = null;
       for (int i = node.getChildCount() - 1; i >= 0; i--) {
-        final TreeNode childNode = node.getChildAt(i);
+        TreeNode childNode = node.getChildAt(i);
         if (childNode instanceof FileNode) {
-          final FileNode fileNode = (FileNode) childNode;
-          final PsiElement file = fileNode.getPsiElement();
+          FileNode fileNode = (FileNode) childNode;
+          PsiElement file = fileNode.getPsiElement();
           if (file instanceof PsiJavaFile) {
-            final VirtualFile virtualFile = ((PsiJavaFile) file).getVirtualFile();
+            VirtualFile virtualFile = ((PsiJavaFile) file).getVirtualFile();
             if (virtualFile == null || (virtualFile.getFileType() != JavaFileType.INSTANCE && virtualFile.getFileType() != JavaClassFileType.INSTANCE)) {
               return;
             }
-            final PsiClass[] psiClasses = ((PsiJavaFile) file).getClasses();
+            PsiClass[] psiClasses = ((PsiJavaFile) file).getClasses();
             if (classNodes == null) {
               classNodes = new HashSet<ClassNode>();
             }
             commitDocument((PsiFile) file);
-            for (final PsiClass psiClass : psiClasses) {
+            for (PsiClass psiClass : psiClasses) {
               if (psiClass != null && psiClass.isValid()) {
                 final ClassNode classNode = new ClassNode(psiClass);
                 classNodes.add(classNode);
                 if (projectView.isShowMembers(ScopeViewPane.ID)) {
-                  final List<PsiElement> result = new ArrayList<PsiElement>();
+                  List<PsiElement> result = new ArrayList<PsiElement>();
                   PsiClassChildrenSource.DEFAULT_CHILDREN.addChildren(psiClass, result);
                   for (PsiElement psiElement : result) {
                     psiElement.accept(new JavaElementVisitor() {
@@ -122,7 +122,7 @@ public class ClassesScopeTreeStructureExpander implements ScopeTreeStructureExpa
         }
       }
       TreeUtil.sort(node, getNodeComparator());
-      final Object source = event.getSource();
+      Object source = event.getSource();
       if (source instanceof JTree) {
         ((DefaultTreeModel) ((JTree) source).getModel()).reload(node);
       }
@@ -130,16 +130,16 @@ public class ClassesScopeTreeStructureExpander implements ScopeTreeStructureExpa
   }
 
   public void treeWillCollapse(TreeExpansionEvent event) throws ExpandVetoException {
-    final TreePath path = event.getPath();
+    TreePath path = event.getPath();
     if (path == null) return;
-    final DefaultMutableTreeNode node = (PackageDependenciesNode) path.getLastPathComponent();
+    DefaultMutableTreeNode node = (PackageDependenciesNode) path.getLastPathComponent();
     if (node instanceof DirectoryNode) {
       Set<FileNode> fileNodes = null;
       for (int i = node.getChildCount() - 1; i >= 0; i--) {
-        final TreeNode childNode = node.getChildAt(i);
+        TreeNode childNode = node.getChildAt(i);
         if (childNode instanceof ClassNode) {
-          final ClassNode classNode = (ClassNode) childNode;
-          final PsiFile containingFile = classNode.getContainingFile();
+          ClassNode classNode = (ClassNode) childNode;
+          PsiFile containingFile = classNode.getContainingFile();
           if (containingFile != null && containingFile.isValid()) {
             if (fileNodes == null) {
               fileNodes = new HashSet<FileNode>();
@@ -155,7 +155,7 @@ public class ClassesScopeTreeStructureExpander implements ScopeTreeStructureExpa
         }
       }
       TreeUtil.sort(node, getNodeComparator());
-      final Object source = event.getSource();
+      Object source = event.getSource();
       if (source instanceof JTree) {
         ((DefaultTreeModel) ((JTree) source).getModel()).reload(node);
       }
@@ -166,9 +166,9 @@ public class ClassesScopeTreeStructureExpander implements ScopeTreeStructureExpa
     return new DependencyNodeComparator(ProjectView.getInstance(myProject).isSortByType(ScopeViewPane.ID));
   }
 
-  private void commitDocument(final PsiFile file) {
-    final PsiDocumentManager documentManager = PsiDocumentManager.getInstance(myProject);
-    final Document document = documentManager.getDocument(file);
+  private void commitDocument(PsiFile file) {
+    PsiDocumentManager documentManager = PsiDocumentManager.getInstance(myProject);
+    Document document = documentManager.getDocument(file);
     documentManager.commitDocument(document);
   }
 }

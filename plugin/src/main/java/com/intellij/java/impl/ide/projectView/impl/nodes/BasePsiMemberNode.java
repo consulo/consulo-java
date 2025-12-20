@@ -42,7 +42,7 @@ public abstract class BasePsiMemberNode<T extends PsiModifierListOwner> extends 
 
   @Override
   protected boolean isDeprecated() {
-    final PsiModifierListOwner element = getValue();
+    PsiModifierListOwner element = getValue();
     return element != null && element.isValid() &&
         element instanceof PsiDocCommentOwner &&
         ((PsiDocCommentOwner) element).isDeprecated();

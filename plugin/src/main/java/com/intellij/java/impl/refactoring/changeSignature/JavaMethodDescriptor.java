@@ -41,8 +41,8 @@ public class JavaMethodDescriptor implements MethodDescriptor<ParameterInfoImpl,
 
   @Override
   public List<ParameterInfoImpl> getParameters() {
-    final ArrayList<ParameterInfoImpl> result = new ArrayList<ParameterInfoImpl>();
-    final PsiParameter[] parameters = myMethod.getParameterList().getParameters();
+    ArrayList<ParameterInfoImpl> result = new ArrayList<ParameterInfoImpl>();
+    PsiParameter[] parameters = myMethod.getParameterList().getParameters();
     for (int i = 0; i < parameters.length; i++) {
       PsiParameter parameter = parameters[i];
       ParameterInfoImpl info = new ParameterInfoImpl(i, parameter.getName(), parameter.getType());
@@ -69,7 +69,7 @@ public class JavaMethodDescriptor implements MethodDescriptor<ParameterInfoImpl,
 
   @Nullable
   public String getReturnTypeText() {
-    final PsiTypeElement typeElement = myMethod.getReturnTypeElement();
+    PsiTypeElement typeElement = myMethod.getReturnTypeElement();
     return typeElement != null ? typeElement.getText() : null;
   }
 

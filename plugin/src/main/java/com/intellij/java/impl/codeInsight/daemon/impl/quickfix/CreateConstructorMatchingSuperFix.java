@@ -65,7 +65,7 @@ public class CreateConstructorMatchingSuperFix extends BaseIntentionAction imple
     }
 
     @Override
-    public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file) {
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
         if (!FileModificationService.getInstance().prepareFileForWrite(myClass.getContainingFile())) {
             return;
         }
@@ -129,13 +129,13 @@ public class CreateConstructorMatchingSuperFix extends BaseIntentionAction imple
                             derived = GenerateMembersUtil.substituteGenericMethod(base, candidate.getSubstitutor(), targetClass);
 
                             if (!isCopyJavadoc1) {
-                                final PsiDocComment docComment = derived.getDocComment();
+                                PsiDocComment docComment = derived.getDocComment();
                                 if (docComment != null) {
                                     docComment.delete();
                                 }
                             }
 
-                            final String targetClassName = targetClass.getName();
+                            String targetClassName = targetClass.getName();
                             LOG.assertTrue(targetClassName != null, targetClass);
                             derived.setName(targetClassName);
 

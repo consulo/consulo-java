@@ -54,8 +54,8 @@ public class StringToUpperWithoutLocaleInspection extends BaseInspection {
     @Override
     @Nullable
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiReferenceExpression methodExpression = (PsiReferenceExpression) infos[0];
-        final PsiModifierListOwner annotatableQualifier = NonNlsUtils.getAnnotatableQualifier(methodExpression);
+        PsiReferenceExpression methodExpression = (PsiReferenceExpression) infos[0];
+        PsiModifierListOwner annotatableQualifier = NonNlsUtils.getAnnotatableQualifier(methodExpression);
         if (annotatableQualifier == null) {
             return null;
         }
@@ -71,8 +71,8 @@ public class StringToUpperWithoutLocaleInspection extends BaseInspection {
         @Override
         public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            String methodName = methodExpression.getReferenceName();
             if (!HardcodedMethodConstants.TO_UPPER_CASE.equals(methodName) &&
                 !HardcodedMethodConstants.TO_LOWER_CASE.equals(methodName)) {
                 return;
@@ -80,23 +80,23 @@ public class StringToUpperWithoutLocaleInspection extends BaseInspection {
             if (NonNlsUtils.isNonNlsAnnotatedUse(expression)) {
                 return;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return;
             }
-            final PsiParameterList parameterList = method.getParameterList();
+            PsiParameterList parameterList = method.getParameterList();
             if (parameterList.getParametersCount() == 1) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return;
             }
-            final String className = containingClass.getQualifiedName();
+            String className = containingClass.getQualifiedName();
             if (!CommonClassNames.JAVA_LANG_STRING.equals(className)) {
                 return;
             }
-            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
             if (NonNlsUtils.isNonNlsAnnotated(qualifier)) {
                 return;
             }

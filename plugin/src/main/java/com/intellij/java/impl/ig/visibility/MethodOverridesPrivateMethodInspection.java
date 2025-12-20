@@ -65,7 +65,7 @@ public class MethodOverridesPrivateMethodInspection extends BaseInspection {
 
     @Override
     public void visitMethod(@Nonnull PsiMethod method) {
-      final PsiClass aClass = method.getContainingClass();
+      PsiClass aClass = method.getContainingClass();
       if (aClass == null) {
         return;
       }
@@ -73,12 +73,12 @@ public class MethodOverridesPrivateMethodInspection extends BaseInspection {
         return;
       }
       PsiClass ancestorClass = aClass.getSuperClass();
-      final Set<PsiClass> visitedClasses = new HashSet<PsiClass>();
+      Set<PsiClass> visitedClasses = new HashSet<PsiClass>();
       while (ancestorClass != null) {
         if (!visitedClasses.add(ancestorClass)) {
           return;
         }
-        final PsiMethod overridingMethod =
+        PsiMethod overridingMethod =
           ancestorClass.findMethodBySignature(method, false);
         if (overridingMethod != null) {
           if (overridingMethod.hasModifierProperty(

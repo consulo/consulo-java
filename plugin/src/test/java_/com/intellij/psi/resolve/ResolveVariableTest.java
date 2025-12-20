@@ -165,7 +165,7 @@ public abstract class ResolveVariableTest extends ResolveTestCase {
 
   public void testPrivateOverloading() throws Exception {
     PsiReference ref = configureByFile("var/PrivateOverloading.java");
-    final JavaResolveResult result = ((PsiJavaReference)ref).advancedResolve(true);
+    JavaResolveResult result = ((PsiJavaReference)ref).advancedResolve(true);
     PsiElement target = result.getElement();
     assertNotNull(target);
     assertFalse(result.isValidResult());
@@ -173,7 +173,7 @@ public abstract class ResolveVariableTest extends ResolveTestCase {
 
   public void testVisibility6() throws Exception {
     PsiReference ref = configureByFile("var/Visibility6.java");
-    final JavaResolveResult result = ((PsiJavaReference)ref).advancedResolve(true);
+    JavaResolveResult result = ((PsiJavaReference)ref).advancedResolve(true);
     PsiElement target = result.getElement();
     assertNotNull(target);
     assertFalse(result.isValidResult());
@@ -181,23 +181,23 @@ public abstract class ResolveVariableTest extends ResolveTestCase {
 
   public void testVisibility7() throws Exception {
     PsiReference ref = configureByFile("var/InnerPrivates1.java");
-    final JavaResolveResult result = ((PsiJavaReference)ref).advancedResolve(true);
+    JavaResolveResult result = ((PsiJavaReference)ref).advancedResolve(true);
     PsiElement target = result.getElement();
     assertNotNull(target);
     assertTrue(result.isValidResult());
   }
 
   public void testForeachParameter() throws Exception {
-    final PsiReference ref = configureByFile("var/ForeachParameter.java");
-    final PsiElement element = ref.resolve();
+    PsiReference ref = configureByFile("var/ForeachParameter.java");
+    PsiElement element = ref.resolve();
     assertTrue(element instanceof PsiParameter);
     assertEquals("o", ((PsiParameter)element).getName());
     assertTrue(element.getParent() instanceof PsiForeachStatement);
   }
 
   public void testRefInSuper() throws Exception {
-    final PsiJavaReference ref = (PsiJavaReference)configureByFile("var/RefInSuper.java");
-    final JavaResolveResult resolveResult = ref.advancedResolve(false);
+    PsiJavaReference ref = (PsiJavaReference)configureByFile("var/RefInSuper.java");
+    JavaResolveResult resolveResult = ref.advancedResolve(false);
     assertTrue(resolveResult.isValidResult());
     PsiElement currentFileResolveScope = resolveResult.getCurrentFileResolveScope();
     assertTrue(currentFileResolveScope instanceof PsiClass);
@@ -208,8 +208,8 @@ public abstract class ResolveVariableTest extends ResolveTestCase {
   }
 
   public void testRefInOuter() throws Exception {
-    final PsiJavaReference ref = (PsiJavaReference)configureByFile("var/RefInOuter.java");
-    final JavaResolveResult resolveResult = ref.advancedResolve(false);
+    PsiJavaReference ref = (PsiJavaReference)configureByFile("var/RefInOuter.java");
+    JavaResolveResult resolveResult = ref.advancedResolve(false);
     assertTrue(resolveResult.isValidResult());
     PsiElement currentFileResolveScope = resolveResult.getCurrentFileResolveScope();
     assertTrue(currentFileResolveScope instanceof PsiClass);
@@ -220,22 +220,22 @@ public abstract class ResolveVariableTest extends ResolveTestCase {
   }
 
   public void testInheritedOuter() throws Exception {
-    final PsiJavaReference ref = (PsiJavaReference)configureByFile("var/InheritedOuter.java");
-    final JavaResolveResult resolveResult = ref.advancedResolve(false);
+    PsiJavaReference ref = (PsiJavaReference)configureByFile("var/InheritedOuter.java");
+    JavaResolveResult resolveResult = ref.advancedResolve(false);
     assertTrue(resolveResult.isValidResult());
   }
 
   public void testStaticFieldsInInterfacesConflict() throws Exception {
-    final PsiJavaReference ref = (PsiJavaReference)configureByFile("var/FieldConflict.java");
-    final JavaResolveResult resolveResult = ref.advancedResolve(false);
+    PsiJavaReference ref = (PsiJavaReference)configureByFile("var/FieldConflict.java");
+    JavaResolveResult resolveResult = ref.advancedResolve(false);
     assertTrue(!resolveResult.isValidResult());
-    final JavaResolveResult[] results = ref.multiResolve(false);
+    JavaResolveResult[] results = ref.multiResolve(false);
     assertEquals(2, results.length);
   }
 
   public void testShadowFieldsInHierarchy() throws Exception {
-    final PsiJavaReference ref = (PsiJavaReference)configure();
-    final JavaResolveResult resolveResult = ref.advancedResolve(false);
+    PsiJavaReference ref = (PsiJavaReference)configure();
+    JavaResolveResult resolveResult = ref.advancedResolve(false);
     assertTrue(resolveResult.isValidResult());
     PsiField field = myJavaFacade.findClass("TestPage", GlobalSearchScope.allScope(getProject())).getFields()[0];
     assertEquals(field, resolveResult.getElement());

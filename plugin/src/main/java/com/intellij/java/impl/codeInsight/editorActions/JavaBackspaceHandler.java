@@ -41,9 +41,9 @@ public class JavaBackspaceHandler extends BackspaceHandlerDelegate {
   }
 
   @Override
-  public boolean charDeleted(final char c, final PsiFile file, final Editor editor) {
+  public boolean charDeleted(char c, PsiFile file, Editor editor) {
     int offset = editor.getCaretModel().getOffset();
-    final CharSequence chars = editor.getDocument().getCharsSequence();
+    CharSequence chars = editor.getDocument().getCharsSequence();
     if (editor.getDocument().getTextLength() <= offset) return false; //virtual space after end of file
 
     char c1 = chars.charAt(offset);
@@ -55,10 +55,10 @@ public class JavaBackspaceHandler extends BackspaceHandlerDelegate {
     return false;
   }
 
-  public static void handleLTDeletion(final Editor editor,
-                                      final int offset,
-                                      final IElementType lt,
-                                      final IElementType gt, final TokenSet invalidInsideReference) {
+  public static void handleLTDeletion(Editor editor,
+                                      int offset,
+                                      IElementType lt,
+                                      IElementType gt, TokenSet invalidInsideReference) {
     HighlighterIterator iterator = ((EditorEx) editor).getHighlighter().createIterator(offset);
     while (iterator.getStart() > 0 && !invalidInsideReference.contains((IElementType) iterator.getTokenType())) {
       iterator.retreat();
@@ -68,7 +68,7 @@ public class JavaBackspaceHandler extends BackspaceHandlerDelegate {
 
     int balance = 0;
     while (!iterator.atEnd() && balance >= 0) {
-      final IElementType tokenType = (IElementType) iterator.getTokenType();
+      IElementType tokenType = (IElementType) iterator.getTokenType();
       if (tokenType == lt) {
         balance++;
       } else if (tokenType == gt) {

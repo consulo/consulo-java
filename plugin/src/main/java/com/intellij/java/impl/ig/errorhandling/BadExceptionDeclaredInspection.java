@@ -68,7 +68,7 @@ public class BadExceptionDeclaredInspection extends BaseInspection {
     public BadExceptionDeclaredInspection() {
         if (exceptionsString.length() != 0) {
             exceptions.clear();
-            final List<String> strings = StringUtil.split(exceptionsString, ",");
+            List<String> strings = StringUtil.split(exceptionsString, ",");
             for (String string : strings) {
                 exceptions.add(string);
             }
@@ -97,15 +97,15 @@ public class BadExceptionDeclaredInspection extends BaseInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final JComponent panel = new JPanel(new GridBagLayout());
-        final ListTable table =
+        JComponent panel = new JPanel(new GridBagLayout());
+        ListTable table =
             new ListTable(new ListWrappingTableModel(exceptions, InspectionGadgetsLocalize.exceptionClassColumnName().get()));
         JPanel tablePanel = UiUtils.createAddRemoveTreeClassChooserPanel(
             table,
             InspectionGadgetsLocalize.chooseExceptionClass().get(),
             CommonClassNames.JAVA_LANG_THROWABLE
         );
-        final GridBagConstraints constraints = new GridBagConstraints();
+        GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.weightx = 1.0;
@@ -113,7 +113,7 @@ public class BadExceptionDeclaredInspection extends BaseInspection {
         constraints.fill = GridBagConstraints.BOTH;
         panel.add(tablePanel, constraints);
 
-        final CheckBox checkBox1 =
+        CheckBox checkBox1 =
             new CheckBox(InspectionGadgetsLocalize.ignoreExceptionsDeclaredInTestsOption().get(), this,
                 "ignoreTestCases"
             );
@@ -121,7 +121,7 @@ public class BadExceptionDeclaredInspection extends BaseInspection {
         constraints.weighty = 0.0;
         panel.add(checkBox1, constraints);
 
-        final CheckBox checkBox2 = new CheckBox(
+        CheckBox checkBox2 = new CheckBox(
             InspectionGadgetsLocalize.ignoreExceptionsDeclaredOnLibraryOverrideOption().get(),
             this,
             "ignoreLibraryOverrides"
@@ -142,7 +142,7 @@ public class BadExceptionDeclaredInspection extends BaseInspection {
         public void visitMethod(@Nonnull PsiMethod method) {
             super.visitMethod(method);
             if (ignoreTestCases) {
-                final PsiClass containingClass = method.getContainingClass();
+                PsiClass containingClass = method.getContainingClass();
                 if (containingClass != null && TestFrameworks.getInstance().isTestClass(containingClass)) {
                     return;
                 }
@@ -153,15 +153,15 @@ public class BadExceptionDeclaredInspection extends BaseInspection {
             if (ignoreLibraryOverrides && LibraryUtil.isOverrideOfLibraryMethod(method)) {
                 return;
             }
-            final PsiReferenceList throwsList = method.getThrowsList();
-            final PsiJavaCodeReferenceElement[] references = throwsList.getReferenceElements();
+            PsiReferenceList throwsList = method.getThrowsList();
+            PsiJavaCodeReferenceElement[] references = throwsList.getReferenceElements();
             for (PsiJavaCodeReferenceElement reference : references) {
-                final PsiElement element = reference.resolve();
+                PsiElement element = reference.resolve();
                 if (!(element instanceof PsiClass)) {
                     continue;
                 }
-                final PsiClass thrownClass = (PsiClass) element;
-                final String qualifiedName = thrownClass.getQualifiedName();
+                PsiClass thrownClass = (PsiClass) element;
+                String qualifiedName = thrownClass.getQualifiedName();
                 if (qualifiedName != null && exceptions.contains(qualifiedName)) {
                     registerError(reference);
                 }

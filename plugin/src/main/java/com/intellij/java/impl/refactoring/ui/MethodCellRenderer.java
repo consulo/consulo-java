@@ -41,7 +41,7 @@ public class MethodCellRenderer extends DefaultListCellRenderer {
 
     PsiMethod method = (PsiMethod) value;
 
-    final String text = PsiFormatUtil.formatMethod(method, PsiSubstitutor.EMPTY,
+    String text = PsiFormatUtil.formatMethod(method, PsiSubstitutor.EMPTY,
               PsiFormatUtil.SHOW_CONTAINING_CLASS | PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_PARAMETERS,
               PsiFormatUtil.SHOW_TYPE);
     setText(text);

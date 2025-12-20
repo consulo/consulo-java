@@ -47,7 +47,7 @@ public class TypeParameterExtendsObjectInspection extends BaseInspection {
     @Override
     @Nonnull
     protected String buildErrorString(Object... infos) {
-        final Integer type = (Integer) infos[0];
+        Integer type = (Integer) infos[0];
         return type == 1
             ? InspectionGadgetsLocalize.typeParameterExtendsObjectProblemDescriptor1().get()
             : InspectionGadgetsLocalize.typeParameterExtendsObjectProblemDescriptor2().get();
@@ -72,23 +72,23 @@ public class TypeParameterExtendsObjectInspection extends BaseInspection {
 
         @Override
         public void doFix(@Nonnull Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement identifier = descriptor.getPsiElement();
-            final PsiElement parent = identifier.getParent();
+            PsiElement identifier = descriptor.getPsiElement();
+            PsiElement parent = identifier.getParent();
             if (parent instanceof PsiTypeParameter) {
-                final PsiTypeParameter typeParameter = (PsiTypeParameter) parent;
-                final PsiReferenceList extendsList = typeParameter.getExtendsList();
-                final PsiJavaCodeReferenceElement[] referenceElements = extendsList.getReferenceElements();
+                PsiTypeParameter typeParameter = (PsiTypeParameter) parent;
+                PsiReferenceList extendsList = typeParameter.getExtendsList();
+                PsiJavaCodeReferenceElement[] referenceElements = extendsList.getReferenceElements();
                 for (PsiJavaCodeReferenceElement referenceElement : referenceElements) {
                     deleteElement(referenceElement);
                 }
             }
             else {
-                final PsiTypeElement typeElement = (PsiTypeElement) parent;
+                PsiTypeElement typeElement = (PsiTypeElement) parent;
                 PsiElement child = typeElement.getLastChild();
                 while (child != null) {
                     if (child instanceof PsiJavaToken) {
-                        final PsiJavaToken javaToken = (PsiJavaToken) child;
-                        final IElementType tokenType = javaToken.getTokenType();
+                        PsiJavaToken javaToken = (PsiJavaToken) child;
+                        IElementType tokenType = javaToken.getTokenType();
                         if (tokenType == JavaTokenType.QUEST) {
                             return;
                         }
@@ -108,15 +108,15 @@ public class TypeParameterExtendsObjectInspection extends BaseInspection {
         @Override
         public void visitTypeParameter(PsiTypeParameter parameter) {
             super.visitTypeParameter(parameter);
-            final PsiClassType[] extendsListTypes = parameter.getExtendsListTypes();
+            PsiClassType[] extendsListTypes = parameter.getExtendsListTypes();
             if (extendsListTypes.length != 1) {
                 return;
             }
-            final PsiClassType extendsType = extendsListTypes[0];
+            PsiClassType extendsType = extendsListTypes[0];
             if (!extendsType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
                 return;
             }
-            final PsiIdentifier nameIdentifier = parameter.getNameIdentifier();
+            PsiIdentifier nameIdentifier = parameter.getNameIdentifier();
             if (nameIdentifier == null) {
                 return;
             }
@@ -126,23 +126,23 @@ public class TypeParameterExtendsObjectInspection extends BaseInspection {
         @Override
         public void visitTypeElement(PsiTypeElement typeElement) {
             super.visitTypeElement(typeElement);
-            final PsiElement lastChild = typeElement.getLastChild();
+            PsiElement lastChild = typeElement.getLastChild();
             if (!(lastChild instanceof PsiTypeElement)) {
                 return;
             }
-            final PsiType type = typeElement.getType();
+            PsiType type = typeElement.getType();
             if (!(type instanceof PsiWildcardType)) {
                 return;
             }
-            final PsiWildcardType wildcardType = (PsiWildcardType) type;
+            PsiWildcardType wildcardType = (PsiWildcardType) type;
             if (!wildcardType.isExtends()) {
                 return;
             }
-            final PsiType extendsBound = wildcardType.getBound();
+            PsiType extendsBound = wildcardType.getBound();
             if (!TypeUtils.isJavaLangObject(extendsBound)) {
                 return;
             }
-            final PsiElement firstChild = typeElement.getFirstChild();
+            PsiElement firstChild = typeElement.getFirstChild();
             if (firstChild == null) {
                 return;
             }

@@ -27,15 +27,15 @@ class ObscureThrownExceptionsPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiReferenceList)) {
       return false;
     }
-    final PsiReferenceList throwsList = (PsiReferenceList)element;
+    PsiReferenceList throwsList = (PsiReferenceList)element;
     if (throwsList.getReferenceElements().length < 2) {
       return false;
     }
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!(parent instanceof PsiMethod)) {
       return false;
     }
-    final PsiMethod method = (PsiMethod)parent;
+    PsiMethod method = (PsiMethod)parent;
     return method.getThrowsList().equals(element);
   }
 }

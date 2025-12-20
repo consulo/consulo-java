@@ -34,7 +34,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class JavaOverrideMethodsHandler implements OverrideMethodHandler {
   @Override
-  public boolean isValidFor(final Editor editor, final PsiFile file) {
+  public boolean isValidFor(Editor editor, PsiFile file) {
     if (!(file instanceof PsiJavaFile)) {
       return false;
     }
@@ -44,7 +44,7 @@ public class JavaOverrideMethodsHandler implements OverrideMethodHandler {
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull final PsiFile file) {
+  public void invoke(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
     PsiClass aClass = OverrideImplementUtil.getContextClass(project, editor, file, true);
     if (aClass == null) return;
 

@@ -61,15 +61,15 @@ public class AnonymousInnerClassMayBeStaticInspection extends BaseInspection {
             if (aClass instanceof PsiEnumConstantInitializer) {
                 return;
             }
-            final PsiMember containingMember =
+            PsiMember containingMember =
                 PsiTreeUtil.getParentOfType(aClass, PsiMember.class);
             if (containingMember == null ||
                 containingMember.hasModifierProperty(PsiModifier.STATIC)) {
                 return;
             }
-            final PsiAnonymousClass anAnonymousClass =
+            PsiAnonymousClass anAnonymousClass =
                 (PsiAnonymousClass) aClass;
-            final InnerClassReferenceVisitor visitor =
+            InnerClassReferenceVisitor visitor =
                 new InnerClassReferenceVisitor(anAnonymousClass);
             anAnonymousClass.accept(visitor);
             if (!visitor.canInnerClassBeStatic()) {

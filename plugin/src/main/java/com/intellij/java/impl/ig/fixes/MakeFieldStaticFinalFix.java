@@ -47,7 +47,7 @@ public class MakeFieldStaticFinalFix extends InspectionGadgetsFix {
 
   @Nullable
   public static InspectionGadgetsFix buildFix(PsiField field) {
-    final PsiExpression initializer = field.getInitializer();
+    PsiExpression initializer = field.getInitializer();
     if (initializer == null) {
       return null;
     }
@@ -65,13 +65,13 @@ public class MakeFieldStaticFinalFix extends InspectionGadgetsFix {
   @Override
   protected void doFix(Project project, ProblemDescriptor descriptor)
     throws IncorrectOperationException {
-    final PsiElement element = descriptor.getPsiElement();
-    final PsiElement parent = element.getParent();
+    PsiElement element = descriptor.getPsiElement();
+    PsiElement parent = element.getParent();
     if (!(parent instanceof PsiField)) {
       return;
     }
-    final PsiField field = (PsiField)parent;
-    final PsiModifierList modifierList = field.getModifierList();
+    PsiField field = (PsiField)parent;
+    PsiModifierList modifierList = field.getModifierList();
     if (modifierList == null) {
       return;
     }

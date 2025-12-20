@@ -42,13 +42,13 @@ public class OptimizeImportsRefactoringHelper implements RefactoringHelper<Set<P
   private static final Logger LOG = Logger.getInstance(OptimizeImportsRefactoringHelper.class);
 
   @Override
-  public Set<PsiJavaFile> prepareOperation(final UsageInfo[] usages) {
+  public Set<PsiJavaFile> prepareOperation(UsageInfo[] usages) {
     Set<PsiJavaFile> javaFiles = new HashSet<PsiJavaFile>();
     for (UsageInfo usage : usages) {
       if (usage.isNonCodeUsage) continue;
-      final PsiElement element = usage.getElement();
+      PsiElement element = usage.getElement();
       if (element != null) {
-        final PsiFile file = element.getContainingFile();
+        PsiFile file = element.getContainingFile();
         if (file instanceof PsiJavaFile) {
           javaFiles.add((PsiJavaFile) file);
         }
@@ -67,26 +67,26 @@ public class OptimizeImportsRefactoringHelper implements RefactoringHelper<Set<P
     });
 
     final Set<SmartPsiElementPointer<PsiImportStatementBase>> redundants = new HashSet<SmartPsiElementPointer<PsiImportStatementBase>>();
-    final Runnable findRedundantImports = new Runnable() {
+    Runnable findRedundantImports = new Runnable() {
       @Override
       public void run() {
         ApplicationManager.getApplication().runReadAction(new Runnable() {
           @Override
           public void run() {
-            final JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(project);
-            final ProgressIndicator progressIndicator = ProgressManager.getInstance().getProgressIndicator();
-            final SmartPointerManager pointerManager = SmartPointerManager.getInstance(project);
+            JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(project);
+            ProgressIndicator progressIndicator = ProgressManager.getInstance().getProgressIndicator();
+            SmartPointerManager pointerManager = SmartPointerManager.getInstance(project);
             int i = 0;
-            final int fileCount = javaFiles.size();
+            int fileCount = javaFiles.size();
             for (PsiJavaFile file : javaFiles) {
               if (file.isValid()) {
-                final VirtualFile virtualFile = file.getVirtualFile();
+                VirtualFile virtualFile = file.getVirtualFile();
                 if (virtualFile != null) {
                   if (progressIndicator != null) {
                     progressIndicator.setText2(virtualFile.getPresentableUrl());
                     progressIndicator.setFraction((double) i++ / fileCount);
                   }
-                  final Collection<PsiImportStatementBase> perFile = styleManager.findRedundantImports(file);
+                  Collection<PsiImportStatementBase> perFile = styleManager.findRedundantImports(file);
                   if (perFile != null) {
                     for (PsiImportStatementBase redundant : perFile) {
                       redundants.add(pointerManager.createSmartPsiElementPointer(redundant));
@@ -107,15 +107,15 @@ public class OptimizeImportsRefactoringHelper implements RefactoringHelper<Set<P
       @Override
       public void run() {
         try {
-          for (final SmartPsiElementPointer<PsiImportStatementBase> pointer : redundants) {
-            final PsiImportStatementBase importStatement = pointer.getElement();
+          for (SmartPsiElementPointer<PsiImportStatementBase> pointer : redundants) {
+            PsiImportStatementBase importStatement = pointer.getElement();
             if (importStatement != null && importStatement.isValid()) {
-              final PsiJavaCodeReferenceElement ref = importStatement.getImportReference();
+              PsiJavaCodeReferenceElement ref = importStatement.getImportReference();
               //Do not remove non-resolving refs
               if (ref == null) {
                 continue;
               }
-              final PsiElement resolve = ref.resolve();
+              PsiElement resolve = ref.resolve();
               if (resolve == null) {
                 continue;
               }

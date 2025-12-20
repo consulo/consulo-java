@@ -57,16 +57,16 @@ public class RedundantStringFormatCallInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = element.getParent();
-            final PsiElement grandParent = parent.getParent();
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement parent = element.getParent();
+            PsiElement grandParent = parent.getParent();
             if (!(grandParent instanceof PsiMethodCallExpression)) {
                 return;
             }
-            final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) grandParent;
-            final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
-            final PsiExpression lastArgument = arguments[arguments.length - 1];
+            PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) grandParent;
+            PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpression lastArgument = arguments[arguments.length - 1];
             methodCallExpression.replace(lastArgument);
         }
     }
@@ -80,30 +80,30 @@ public class RedundantStringFormatCallInspection extends BaseInspection {
         @Override
         public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            String methodName = methodExpression.getReferenceName();
             if (!"format".equals(methodName)) {
                 return;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length > 2 || arguments.length == 0) {
                 return;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return;
             }
-            final PsiClass aClass = method.getContainingClass();
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null) {
                 return;
             }
-            final String className = aClass.getQualifiedName();
+            String className = aClass.getQualifiedName();
             if (!CommonClassNames.JAVA_LANG_STRING.equals(className)) {
                 return;
             }
-            final PsiExpression firstArgument = arguments[0];
-            final PsiType firstType = firstArgument.getType();
+            PsiExpression firstArgument = arguments[0];
+            PsiType firstType = firstArgument.getType();
             if (firstType == null || containsPercentN(firstArgument)) {
                 return;
             }
@@ -114,8 +114,8 @@ public class RedundantStringFormatCallInspection extends BaseInspection {
                 if (arguments.length != 2) {
                     return;
                 }
-                final PsiExpression secondArgument = arguments[1];
-                final PsiType secondType = secondArgument.getType();
+                PsiExpression secondArgument = arguments[1];
+                PsiType secondType = secondArgument.getType();
                 if (secondType == null) {
                     return;
                 }
@@ -130,17 +130,17 @@ public class RedundantStringFormatCallInspection extends BaseInspection {
                 return false;
             }
             if (expression instanceof PsiLiteralExpression) {
-                final PsiLiteralExpression literalExpression = (PsiLiteralExpression) expression;
-                final String expressionText = literalExpression.getText();
+                PsiLiteralExpression literalExpression = (PsiLiteralExpression) expression;
+                String expressionText = literalExpression.getText();
                 return expressionText.contains("%n");
             }
             if (expression instanceof PsiPolyadicExpression) {
-                final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
-                final IElementType tokenType = polyadicExpression.getOperationTokenType();
+                PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
+                IElementType tokenType = polyadicExpression.getOperationTokenType();
                 if (!tokenType.equals(JavaTokenType.PLUS)) {
                     return false;
                 }
-                final PsiExpression[] operands = polyadicExpression.getOperands();
+                PsiExpression[] operands = polyadicExpression.getOperands();
                 for (PsiExpression operand : operands) {
                     if (containsPercentN(operand)) {
                         return true;

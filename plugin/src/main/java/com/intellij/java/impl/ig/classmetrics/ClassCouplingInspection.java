@@ -56,7 +56,7 @@ public class ClassCouplingInspection extends ClassMetricInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final Integer totalDependencies = (Integer) infos[0];
+        Integer totalDependencies = (Integer) infos[0];
         return InspectionGadgetsLocalize.overlyCoupledClassProblemDescriptor(totalDependencies).get();
     }
 
@@ -72,18 +72,18 @@ public class ClassCouplingInspection extends ClassMetricInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final String configurationLabel = getConfigurationLabel();
-        final JLabel label = new JLabel(configurationLabel);
-        final JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
+        String configurationLabel = getConfigurationLabel();
+        JLabel label = new JLabel(configurationLabel);
+        JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
 
-        final GridBagConstraints constraints = new GridBagConstraints();
+        GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.weightx = 0.0;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.fill = GridBagConstraints.NONE;
         constraints.insets.right = UIUtil.DEFAULT_HGAP;
-        final JPanel panel = new JPanel(new GridBagLayout());
+        JPanel panel = new JPanel(new GridBagLayout());
         panel.add(label, constraints);
         constraints.gridx = 1;
         constraints.gridy = 0;
@@ -93,12 +93,12 @@ public class ClassCouplingInspection extends ClassMetricInspection {
         constraints.fill = GridBagConstraints.NONE;
         panel.add(valueField, constraints);
 
-        final CheckBox arrayCheckBox = new CheckBox(
+        CheckBox arrayCheckBox = new CheckBox(
             InspectionGadgetsLocalize.includeJavaSystemClassesOption().get(),
             this,
             "m_includeJavaClasses"
         );
-        final CheckBox objectCheckBox = new CheckBox(
+        CheckBox objectCheckBox = new CheckBox(
             InspectionGadgetsLocalize.includeLibraryClassesOption().get(),
             this,
             "m_includeLibraryClasses"
@@ -127,7 +127,7 @@ public class ClassCouplingInspection extends ClassMetricInspection {
         @Override
         public void visitClass(@Nonnull PsiClass aClass) {
             // note: no call to super
-            final int totalDependencies = calculateTotalDependencies(aClass);
+            int totalDependencies = calculateTotalDependencies(aClass);
             if (totalDependencies <= getLimit()) {
                 return;
             }
@@ -135,7 +135,7 @@ public class ClassCouplingInspection extends ClassMetricInspection {
         }
 
         private int calculateTotalDependencies(PsiClass aClass) {
-            final CouplingVisitor visitor = new CouplingVisitor(aClass,
+            CouplingVisitor visitor = new CouplingVisitor(aClass,
                 m_includeJavaClasses, m_includeLibraryClasses
             );
             aClass.accept(visitor);

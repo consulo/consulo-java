@@ -100,8 +100,8 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
 
     @Override
     @Nullable
-    public String getDefaultDocumentationUrl(@Nonnull final Sdk sdk) {
-        final JavaSdkVersion version = JavaSdkTypeUtil.getVersion(sdk);
+    public String getDefaultDocumentationUrl(@Nonnull Sdk sdk) {
+        JavaSdkVersion version = JavaSdkTypeUtil.getVersion(sdk);
         if (version == JavaSdkVersion.JDK_1_5) {
             return "http://docs.oracle.com/javase/1.5.0/docs/api/";
         }
@@ -137,8 +137,8 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
 
     @Override
     public String getToolsPath(Sdk sdk) {
-        final String versionString = sdk.getVersionString();
-        final boolean isJdk1_x = versionString != null && (versionString.contains("1.0") || versionString.contains("1.1"));
+        String versionString = sdk.getVersionString();
+        boolean isJdk1_x = versionString != null && (versionString.contains("1.0") || versionString.contains("1.1"));
         return getConvertedHomePath(sdk) + "lib" + File.separator + (isJdk1_x ? "classes.zip" : "tools.jar");
     }
 
@@ -287,13 +287,13 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
 
     @Override
     public String suggestSdkName(String currentSdkName, String sdkHome) {
-        final String suggestedName;
+        String suggestedName;
         if (currentSdkName != null && !currentSdkName.isEmpty()) {
-            final Matcher matcher = myVersionStringPattern.matcher(currentSdkName);
-            final boolean replaceNameWithVersion = matcher.matches();
+            Matcher matcher = myVersionStringPattern.matcher(currentSdkName);
+            boolean replaceNameWithVersion = matcher.matches();
             if (replaceNameWithVersion) {
                 // user did not change name -> set it automatically
-                final String versionString = getVersionString(sdkHome);
+                String versionString = getVersionString(sdkHome);
                 suggestedName = versionString == null ? currentSdkName : matcher.replaceFirst("$1" + versionString + "$3");
             }
             else {
@@ -335,9 +335,9 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
 
     @Override
     public void setupSdkPaths(Sdk sdk) {
-        final File jdkHome = new File(sdk.getHomePath());
+        File jdkHome = new File(sdk.getHomePath());
 
-        final SdkModificator sdkModificator = sdk.getSdkModificator();
+        SdkModificator sdkModificator = sdk.getSdkModificator();
 
         boolean isModuleJdk = false;
         File jmodsDirectory = new File(jdkHome, "jmods");
@@ -489,7 +489,7 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
     }
 
     @Override
-    public final String getVersionString(final String sdkHome) {
+    public final String getVersionString(String sdkHome) {
         OwnJdkVersionDetector.JdkVersionInfo jdkInfo = OwnJdkVersionDetector.getInstance().detectJdkVersionInfo(sdkHome);
         return jdkInfo != null ? OwnJdkVersionDetector.formatVersionString(jdkInfo.version) : null;
     }
@@ -617,7 +617,7 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
     }
 
     @Nullable
-    public static VirtualFile findDocs(File file, final String relativePath) {
+    public static VirtualFile findDocs(File file, String relativePath) {
         file = new File(file.getAbsolutePath() + File.separator + relativePath.replace('/', File.separatorChar));
         if (!file.exists() || !file.isDirectory()) {
             return null;

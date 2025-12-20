@@ -28,7 +28,7 @@ import jakarta.annotation.Nonnull;
 public class MoveJavaInnerHandler implements MoveInnerHandler {
   @Nonnull
   @Override
-  public PsiClass copyClass(@Nonnull final MoveInnerOptions options) {
+  public PsiClass copyClass(@Nonnull MoveInnerOptions options) {
     PsiClass innerClass = options.getInnerClass();
 
     PsiClass newClass;
@@ -43,14 +43,14 @@ public class MoveJavaInnerHandler implements MoveInnerHandler {
       PsiUtil.setModifierProperty(newClass, PsiModifier.STATIC, false);
       PsiUtil.setModifierProperty(newClass, PsiModifier.PRIVATE, false);
       PsiUtil.setModifierProperty(newClass, PsiModifier.PROTECTED, false);
-      final boolean makePublic = needPublicAccess(options.getOuterClass(), options.getTargetContainer());
+      boolean makePublic = needPublicAccess(options.getOuterClass(), options.getTargetContainer());
       if (makePublic) {
         PsiUtil.setModifierProperty(newClass, PsiModifier.PUBLIC, true);
       }
 
-      final PsiMethod[] constructors = newClass.getConstructors();
+      PsiMethod[] constructors = newClass.getConstructors();
       for (PsiMethod constructor : constructors) {
-        final PsiModifierList modifierList = constructor.getModifierList();
+        PsiModifierList modifierList = constructor.getModifierList();
         modifierList.setModifierProperty(PsiModifier.PRIVATE, false);
         modifierList.setModifierProperty(PsiModifier.PROTECTED, false);
         if (makePublic && !newClass.isEnum()) {
@@ -67,13 +67,13 @@ public class MoveJavaInnerHandler implements MoveInnerHandler {
     return newClass;
   }
 
-  protected static boolean needPublicAccess(final PsiClass outerClass, final PsiElement targetContainer) {
+  protected static boolean needPublicAccess(PsiClass outerClass, PsiElement targetContainer) {
     if (outerClass.isInterface()) {
       return true;
     }
     if (targetContainer instanceof PsiDirectory) {
-      final PsiJavaPackage targetPackage = JavaDirectoryService.getInstance().getPackage((PsiDirectory)targetContainer);
-      final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(outerClass.getProject());
+      PsiJavaPackage targetPackage = JavaDirectoryService.getInstance().getPackage((PsiDirectory)targetContainer);
+      JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(outerClass.getProject());
       if (targetPackage != null && !psiFacade.isInPackage(outerClass, targetPackage)) {
         return true;
       }

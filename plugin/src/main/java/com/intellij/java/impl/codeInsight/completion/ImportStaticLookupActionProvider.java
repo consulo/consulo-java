@@ -22,7 +22,7 @@ public class ImportStaticLookupActionProvider implements LookupActionProvider {
       return;
     }
 
-    final Image checkIcon = AllIcons.Actions.Checked;
+    Image checkIcon = AllIcons.Actions.Checked;
     final Image icon = item.willBeImported() ? checkIcon : Image.empty(checkIcon.getWidth(), checkIcon.getHeight());
     consumer.accept(new LookupElementAction(icon, "Import statically") {
       @Override

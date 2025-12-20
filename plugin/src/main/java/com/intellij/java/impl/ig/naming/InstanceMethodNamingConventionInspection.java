@@ -53,7 +53,7 @@ public class InstanceMethodNamingConventionInspection extends ConventionInspecti
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final String methodName = (String)infos[0];
+    String methodName = (String)infos[0];
     if (methodName.length() < getMinLength()) {
       return InspectionGadgetsLocalize.instanceMethodNameConventionProblemDescriptorShort().get();
     }
@@ -91,11 +91,11 @@ public class InstanceMethodNamingConventionInspection extends ConventionInspecti
       if (method.isConstructor() || method.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }
-      final PsiIdentifier nameIdentifier = method.getNameIdentifier();
+      PsiIdentifier nameIdentifier = method.getNameIdentifier();
       if (nameIdentifier == null) {
         return;
       }
-      final String name = method.getName();
+      String name = method.getName();
       if (isValid(name)) {
         return;
       }

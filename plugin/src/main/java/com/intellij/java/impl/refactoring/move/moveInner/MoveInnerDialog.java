@@ -80,7 +80,7 @@ public class MoveInnerDialog extends RefactoringDialog {
 
   @NonNls private static final String RECENTS_KEY = "MoveInnerDialog.RECENTS_KEY";
 
-  public MoveInnerDialog(Project project, PsiClass innerClass, MoveInnerProcessor processor, final PsiElement targetContainer) {
+  public MoveInnerDialog(Project project, PsiClass innerClass, MoveInnerProcessor processor, PsiElement targetContainer) {
     super(project, true);
     myProject = project;
     myInnerClass = innerClass;
@@ -164,8 +164,8 @@ public class MoveInnerDialog extends RefactoringDialog {
     super.init();
   }
 
-  public static boolean isThisNeeded(final PsiClass innerClass, final PsiClass outerClass) {
-    final Map<PsiClass, Set<PsiMember>> classesToMembers = MoveInstanceMembersUtil.getThisClassesToMembers(innerClass);
+  public static boolean isThisNeeded(PsiClass innerClass, PsiClass outerClass) {
+    Map<PsiClass, Set<PsiMember>> classesToMembers = MoveInstanceMembersUtil.getThisClassesToMembers(innerClass);
     for (PsiClass psiClass : classesToMembers.keySet()) {
       if (InheritanceUtil.isInheritorOrSelf(outerClass, psiClass, true)) {
         return true;
@@ -193,27 +193,27 @@ public class MoveInnerDialog extends RefactoringDialog {
   @Nullable
   private PsiElement getTargetContainer() {
     if (myTargetContainer instanceof PsiDirectory) {
-      final PsiDirectory psiDirectory = (PsiDirectory)myTargetContainer;
+      PsiDirectory psiDirectory = (PsiDirectory)myTargetContainer;
       PsiJavaPackage oldPackage = getTargetPackage();
       String name = oldPackage == null ? "" : oldPackage.getQualifiedName();
-      final String targetName = myPackageNameField.getText();
+      String targetName = myPackageNameField.getText();
       if (!Comparing.equal(name, targetName)) {
-        final ProjectRootManager projectRootManager = ProjectRootManager.getInstance(myProject);
-        final VirtualFile[] contentSourceRoots = projectRootManager.getContentSourceRoots();
-        final PackageWrapper newPackage = new PackageWrapper(PsiManager.getInstance(myProject), targetName);
-        final VirtualFile targetSourceRoot;
+        ProjectRootManager projectRootManager = ProjectRootManager.getInstance(myProject);
+        VirtualFile[] contentSourceRoots = projectRootManager.getContentSourceRoots();
+        PackageWrapper newPackage = new PackageWrapper(PsiManager.getInstance(myProject), targetName);
+        VirtualFile targetSourceRoot;
         if (contentSourceRoots.length > 1) {
           PsiDirectory initialDir = null;
           if (oldPackage != null) {
-            final PsiDirectory[] directories = oldPackage.getDirectories();
-            final VirtualFile root = projectRootManager.getFileIndex().getContentRootForFile(psiDirectory.getVirtualFile());
+            PsiDirectory[] directories = oldPackage.getDirectories();
+            VirtualFile root = projectRootManager.getFileIndex().getContentRootForFile(psiDirectory.getVirtualFile());
             for(PsiDirectory dir: directories) {
               if (Comparing.equal(projectRootManager.getFileIndex().getContentRootForFile(dir.getVirtualFile()), root)) {
                 initialDir = dir;
               }
             }
           }
-          final VirtualFile sourceRoot = MoveClassesOrPackagesUtil.chooseSourceRoot(newPackage, contentSourceRoots, initialDir);
+          VirtualFile sourceRoot = MoveClassesOrPackagesUtil.chooseSourceRoot(newPackage, contentSourceRoots, initialDir);
           if (sourceRoot == null) return null;
           targetSourceRoot = sourceRoot;
         }
@@ -239,8 +239,8 @@ public class MoveInnerDialog extends RefactoringDialog {
 
   protected void doAction() {
     String message = null;
-    final String className = getClassName();
-    final String parameterName = getParameterName();
+    String className = getClassName();
+    String parameterName = getParameterName();
     PsiManager manager = PsiManager.getInstance(myProject);
     if ("".equals(className)) {
       message = RefactoringLocalize.noClassNameSpecified().get();
@@ -292,7 +292,7 @@ public class MoveInnerDialog extends RefactoringDialog {
       mySuggestedNameInfo.nameChosen(getParameterName());
     }
 
-    final PsiElement target = getTargetContainer();
+    PsiElement target = getTargetContainer();
     if (target == null) return;
     myProcessor.setup(getInnerClass(), className, isPassOuterClass(), parameterName,
                       isSearchInComments(), isSearchInNonJavaFiles(), target);
@@ -305,7 +305,7 @@ public class MoveInnerDialog extends RefactoringDialog {
 
   private void createUIComponents() {
     if (!myInnerClass.hasModifierProperty(PsiModifier.STATIC)) {
-      final PsiManager manager = myInnerClass.getManager();
+      PsiManager manager = myInnerClass.getManager();
       PsiType outerType = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory().createType(myInnerClass.getContainingClass());
       mySuggestedNameInfo =  JavaCodeStyleManager.getInstance(myProject).suggestVariableName(VariableKind.PARAMETER, null, null, outerType);
       String[] variants = mySuggestedNameInfo.names;
@@ -331,7 +331,7 @@ public class MoveInnerDialog extends RefactoringDialog {
   @Nullable
   private PsiJavaPackage getTargetPackage() {
     if (myTargetContainer instanceof PsiDirectory) {
-      final PsiDirectory directory = (PsiDirectory)myTargetContainer;
+      PsiDirectory directory = (PsiDirectory)myTargetContainer;
       return JavaDirectoryService.getInstance().getPackage(directory);
     }
     return null;

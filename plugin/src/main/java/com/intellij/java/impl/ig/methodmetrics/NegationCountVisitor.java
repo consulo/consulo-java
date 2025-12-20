@@ -32,7 +32,7 @@ class NegationCountVisitor extends JavaRecursiveElementVisitor {
   @Override
   public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
     super.visitBinaryExpression(expression);
-    final IElementType tokenType = expression.getOperationTokenType();
+    IElementType tokenType = expression.getOperationTokenType();
     if (tokenType.equals(JavaTokenType.NE)) {
       m_count++;
     }
@@ -53,7 +53,7 @@ class NegationCountVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitAssertStatement(PsiAssertStatement statement) {
-    final int count = m_count;
+    int count = m_count;
     super.visitAssertStatement(statement);
     if (myIgnoreInAssertStatements) {
       m_count = count;

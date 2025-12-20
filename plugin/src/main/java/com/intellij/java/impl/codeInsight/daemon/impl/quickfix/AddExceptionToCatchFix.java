@@ -167,24 +167,23 @@ public class AddExceptionToCatchFix extends BaseIntentionAction implements Synth
   }
 
   @Nullable
-  private static PsiElement findElement(final PsiFile file, final int offset) {
+  private static PsiElement findElement(PsiFile file, int offset) {
     PsiElement element = file.findElementAt(offset);
     if (element instanceof PsiWhiteSpace) element = file.findElementAt(offset - 1);
     if (element == null) return null;
 
-    @SuppressWarnings({"unchecked"})
-    final PsiElement parent = PsiTreeUtil.getParentOfType(element, PsiTryStatement.class, PsiMethod.class);
+    @SuppressWarnings({"unchecked"}) PsiElement parent = PsiTreeUtil.getParentOfType(element, PsiTryStatement.class, PsiMethod.class);
     if (parent == null || parent instanceof PsiMethod) return null;
-    final PsiTryStatement statement = (PsiTryStatement) parent;
+    PsiTryStatement statement = (PsiTryStatement) parent;
 
-    final PsiCodeBlock tryBlock = statement.getTryBlock();
+    PsiCodeBlock tryBlock = statement.getTryBlock();
     if (tryBlock != null && tryBlock.getTextRange().contains(offset)) {
       if (!ExceptionUtil.collectUnhandledExceptions(tryBlock, statement.getParent()).isEmpty()) {
         return tryBlock;
       }
     }
 
-    final PsiResourceList resourceList = statement.getResourceList();
+    PsiResourceList resourceList = statement.getResourceList();
     if (resourceList != null && resourceList.getTextRange().contains(offset)) {
       if (!ExceptionUtil.collectUnhandledExceptions(resourceList, statement.getParent()).isEmpty()) {
         return resourceList;

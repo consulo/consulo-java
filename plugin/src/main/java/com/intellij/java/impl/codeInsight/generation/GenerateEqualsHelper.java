@@ -87,7 +87,7 @@ public class GenerateEqualsHelper implements Runnable {
 
     myNonNullSet = new HashSet<PsiField>();
     ContainerUtil.addAll(myNonNullSet, nonNullFields);
-    final PsiManager manager = PsiManager.getInstance(project);
+    PsiManager manager = PsiManager.getInstance(project);
 
     myFactory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
 
@@ -105,7 +105,7 @@ public class GenerateEqualsHelper implements Runnable {
   @Override
   public void run() {
     try {
-      final Collection<PsiMethod> members = generateMembers();
+      Collection<PsiMethod> members = generateMembers();
       for (PsiElement member : members) {
         myClass.add(member);
       }
@@ -132,7 +132,7 @@ public class GenerateEqualsHelper implements Runnable {
           }
 
           text += "public int hashCode() {\nreturn 0;\n}";
-          final PsiMethod trivialHashCode = myFactory.createMethodFromText(text, null);
+          PsiMethod trivialHashCode = myFactory.createMethodFromText(text, null);
           hashCode = (PsiMethod) myCodeStyleManager.reformat(trivialHashCode);
         }
       }
@@ -149,8 +149,8 @@ public class GenerateEqualsHelper implements Runnable {
   }
 
   public static Map<String, PsiType> getEqualsImplicitVars(Project project) {
-    final Map<String, PsiType> map = new LinkedHashMap<String, PsiType>();
-    final PsiType stringType = project != null ? PsiType.getJavaLangString(PsiManager.getInstance(project), GlobalSearchScope.allScope(project)) : PsiType.NULL;
+    Map<String, PsiType> map = new LinkedHashMap<String, PsiType>();
+    PsiType stringType = project != null ? PsiType.getJavaLangString(PsiManager.getInstance(project), GlobalSearchScope.allScope(project)) : PsiType.NULL;
     map.put(INSTANCE_NAME, stringType);
     map.put(BASE_PARAM_NAME, stringType);
     map.put(CHECK_PARAMETER_WITH_INSTANCEOF, PsiType.BOOLEAN);
@@ -159,7 +159,7 @@ public class GenerateEqualsHelper implements Runnable {
   }
 
   public static Map<String, PsiType> getHashCodeImplicitVars() {
-    final Map<String, PsiType> map = new LinkedHashMap<String, PsiType>();
+    Map<String, PsiType> map = new LinkedHashMap<String, PsiType>();
     map.put(SUPER_HAS_HASH_CODE, PsiType.BOOLEAN);
     return map;
   }
@@ -171,23 +171,23 @@ public class GenerateEqualsHelper implements Runnable {
     ContainerUtil.addAll(equalsFields, myEqualsFields);
     Collections.sort(equalsFields, EqualsFieldsComparator.INSTANCE);
 
-    final HashMap<String, Object> contextMap = new HashMap<String, Object>();
+    HashMap<String, Object> contextMap = new HashMap<String, Object>();
 
-    final PsiType classType = JavaPsiFacade.getElementFactory(myClass.getProject()).createType(myClass);
-    final JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(myClass.getProject());
+    PsiType classType = JavaPsiFacade.getElementFactory(myClass.getProject()).createType(myClass);
+    JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(myClass.getProject());
     String[] nameSuggestions = codeStyleManager.suggestVariableName(VariableKind.LOCAL_VARIABLE, null, null, classType).names;
     String instanceBaseName = nameSuggestions.length > 0 && nameSuggestions[0].length() < 10 ? nameSuggestions[0] : "that";
     contextMap.put(INSTANCE_NAME, instanceBaseName);
 
-    final PsiType objectType = PsiType.getJavaLangObject(myClass.getManager(), myClass.getResolveScope());
+    PsiType objectType = PsiType.getJavaLangObject(myClass.getManager(), myClass.getResolveScope());
     nameSuggestions = codeStyleManager.suggestVariableName(VariableKind.PARAMETER, null, null, objectType).names;
-    final String objectBaseName = nameSuggestions.length > 0 ? nameSuggestions[0] : "object";
+    String objectBaseName = nameSuggestions.length > 0 ? nameSuggestions[0] : "object";
     contextMap.put(BASE_PARAM_NAME, objectBaseName);
-    final MethodSignature equalsSignature = getEqualsSignature(myProject, myClass.getResolveScope());
+    MethodSignature equalsSignature = getEqualsSignature(myProject, myClass.getResolveScope());
     contextMap.put(SUPER_HAS_EQUALS, superMethodExists(equalsSignature));
     contextMap.put(CHECK_PARAMETER_WITH_INSTANCEOF, myCheckParameterWithInstanceof);
 
-    final String methodText = GenerationUtil.velocityGenerateCode(myClass, equalsFields, myNonNullSet, new HashMap<String, String>(), contextMap,
+    String methodText = GenerationUtil.velocityGenerateCode(myClass, equalsFields, myNonNullSet, new HashMap<String, String>(), contextMap,
         EqualsHashCodeTemplatesManager.getInstance().getDefaultEqualsTemplate().getTemplate(), 0, false, myUseAccessors);
     buffer.append(methodText);
     PsiMethod result;
@@ -196,15 +196,15 @@ public class GenerateEqualsHelper implements Runnable {
     } catch (IncorrectOperationException e) {
       return null;
     }
-    final PsiParameter[] parameters = result.getParameterList().getParameters();
+    PsiParameter[] parameters = result.getParameterList().getParameters();
     if (parameters.length != 1) {
       return null;
     }
-    final PsiParameter parameter = parameters[0];
+    PsiParameter parameter = parameters[0];
     PsiUtil.setModifierProperty(parameter, PsiModifier.FINAL, styleSettings.GENERATE_FINAL_PARAMETERS);
 
     PsiMethod method = (PsiMethod) myCodeStyleManager.reformat(result);
-    final PsiMethod superEquals = MethodSignatureUtil.findMethodBySignature(myClass, equalsSignature, true);
+    PsiMethod superEquals = MethodSignatureUtil.findMethodBySignature(myClass, equalsSignature, true);
     if (superEquals != null) {
       OverrideImplementUtil.annotateOnOverrideImplement(method, myClass, superEquals);
     }
@@ -227,10 +227,10 @@ public class GenerateEqualsHelper implements Runnable {
   private PsiMethod createHashCode() throws IncorrectOperationException {
     @NonNls StringBuilder buffer = new StringBuilder();
 
-    final HashMap<String, Object> contextMap = new HashMap<String, Object>();
+    HashMap<String, Object> contextMap = new HashMap<String, Object>();
     contextMap.put(SUPER_HAS_HASH_CODE, mySuperHasHashCode);
 
-    final String methodText = GenerationUtil.velocityGenerateCode(myClass, Arrays.asList(myHashCodeFields), myNonNullSet, new HashMap<String, String>(), contextMap,
+    String methodText = GenerationUtil.velocityGenerateCode(myClass, Arrays.asList(myHashCodeFields), myNonNullSet, new HashMap<String, String>(), contextMap,
         EqualsHashCodeTemplatesManager.getInstance().getDefaultHashcodeTemplate().getTemplate(), 0, false, myUseAccessors);
     buffer.append(methodText);
     PsiMethod hashCode;
@@ -239,7 +239,7 @@ public class GenerateEqualsHelper implements Runnable {
     } catch (IncorrectOperationException e) {
       return null;
     }
-    final PsiMethod superHashCode = MethodSignatureUtil.findMethodBySignature(myClass, getHashCodeSignature(), true);
+    PsiMethod superHashCode = MethodSignatureUtil.findMethodBySignature(myClass, getHashCodeSignature(), true);
     if (superHashCode != null) {
       OverrideImplementUtil.annotateOnOverrideImplement(hashCode, myClass, superHashCode);
     }
@@ -275,12 +275,12 @@ public class GenerateEqualsHelper implements Runnable {
     if (!(aType instanceof PsiArrayType)) {
       return false;
     }
-    final PsiType componentType = ((PsiArrayType) aType).getComponentType();
-    final PsiClass psiClass = PsiUtil.resolveClassInType(componentType);
+    PsiType componentType = ((PsiArrayType) aType).getComponentType();
+    PsiClass psiClass = PsiUtil.resolveClassInType(componentType);
     if (psiClass == null) {
       return false;
     }
-    final String qName = psiClass.getQualifiedName();
+    String qName = psiClass.getQualifiedName();
     return CommonClassNames.JAVA_LANG_OBJECT.equals(qName);
   }
 
@@ -289,7 +289,7 @@ public class GenerateEqualsHelper implements Runnable {
   }
 
   public static MethodSignature getEqualsSignature(Project project, GlobalSearchScope scope) {
-    final PsiClassType javaLangObject = PsiType.getJavaLangObject(PsiManager.getInstance(project), scope);
+    PsiClassType javaLangObject = PsiType.getJavaLangObject(PsiManager.getInstance(project), scope);
     return MethodSignatureUtil.createMethodSignature("equals", new PsiType[]{javaLangObject}, PsiTypeParameter.EMPTY_ARRAY, PsiSubstitutor.EMPTY);
   }
 }

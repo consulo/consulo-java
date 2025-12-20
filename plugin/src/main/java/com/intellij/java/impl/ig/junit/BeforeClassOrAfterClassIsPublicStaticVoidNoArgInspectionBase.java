@@ -64,16 +64,16 @@ public class BeforeClassOrAfterClassIsPublicStaticVoidNoArgInspectionBase extend
             if (annotation == null) {
                 return;
             }
-            final PsiType returnType = method.getReturnType();
+            PsiType returnType = method.getReturnType();
             if (returnType == null) {
                 return;
             }
-            final PsiClass targetClass = method.getContainingClass();
+            PsiClass targetClass = method.getContainingClass();
             if (targetClass == null) {
                 return;
             }
 
-            final PsiParameterList parameterList = method.getParameterList();
+            PsiParameterList parameterList = method.getParameterList();
             boolean junit4Annotation = isJunit4Annotation(annotation);
             if (junit4Annotation && (parameterList.getParametersCount() != 0 || !method.isPublic())
                 || !PsiType.VOID.equals(returnType)

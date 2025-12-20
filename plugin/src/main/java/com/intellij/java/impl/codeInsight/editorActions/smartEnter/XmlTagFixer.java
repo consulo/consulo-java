@@ -31,17 +31,17 @@ public class XmlTagFixer implements Fixer {
   @Override
   public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException {
     if (psiElement instanceof XmlTag) {
-      final ASTNode emptyTagEnd = XmlChildRole.EMPTY_TAG_END_FINDER.findChild(psiElement.getNode());
-      final ASTNode endTagEnd = XmlChildRole.START_TAG_END_FINDER.findChild(psiElement.getNode());
+      ASTNode emptyTagEnd = XmlChildRole.EMPTY_TAG_END_FINDER.findChild(psiElement.getNode());
+      ASTNode endTagEnd = XmlChildRole.START_TAG_END_FINDER.findChild(psiElement.getNode());
       if (emptyTagEnd != null || endTagEnd != null) {
         return;
       }
 
       int insertionOffset = psiElement.getTextRange().getEndOffset();
       Document doc = editor.getDocument();
-      final int caretAt = editor.getCaretModel().getOffset();
-      final CharSequence text = doc.getCharsSequence();
-      final int probableCommaOffset = CharArrayUtil.shiftForward(text, insertionOffset, " \t");
+      int caretAt = editor.getCaretModel().getOffset();
+      CharSequence text = doc.getCharsSequence();
+      int probableCommaOffset = CharArrayUtil.shiftForward(text, insertionOffset, " \t");
 
       //if (caretAt < probableCommaOffset) {
       //  final CharSequence tagName = text.subSequence(psiElement.getTextRange().getStartOffset() + 1, caretAt);

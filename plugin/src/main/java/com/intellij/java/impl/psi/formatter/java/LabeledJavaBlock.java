@@ -50,7 +50,7 @@ public class LabeledJavaBlock extends AbstractJavaBlock
 	@Override
 	protected List<Block> buildChildren()
 	{
-		final ArrayList<Block> result = new ArrayList<>();
+		ArrayList<Block> result = new ArrayList<>();
 		ASTNode child = myNode.getFirstChildNode();
 		Indent currentIndent = getLabelIndent();
 		Wrap currentWrap = null;
@@ -84,7 +84,7 @@ public class LabeledJavaBlock extends AbstractJavaBlock
 
 	@Override
 	@Nonnull
-	public ChildAttributes getChildAttributes(final int newChildIndex)
+	public ChildAttributes getChildAttributes(int newChildIndex)
 	{
 		return new ChildAttributes(Indent.getNoneIndent(), null);
 	}

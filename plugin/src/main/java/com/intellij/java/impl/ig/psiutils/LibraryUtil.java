@@ -32,14 +32,14 @@ public class LibraryUtil {
 
   public static boolean callOnLibraryMethod(
     @Nonnull PsiMethodCallExpression expression) {
-    final PsiMethod method = expression.resolveMethod();
+    PsiMethod method = expression.resolveMethod();
     return method instanceof PsiCompiledElement;
   }
 
   public static boolean isOverrideOfLibraryMethod(@Nonnull PsiMethod method) {
-    final PsiMethod[] superMethods = method.findSuperMethods();
+    PsiMethod[] superMethods = method.findSuperMethods();
     for (PsiMethod superMethod : superMethods) {
-      final PsiClass containingClass = superMethod.getContainingClass();
+      PsiClass containingClass = superMethod.getContainingClass();
       if (classIsInLibrary(containingClass)) {
         return true;
       }
@@ -55,12 +55,12 @@ public class LibraryUtil {
     if (!(variable instanceof PsiParameter)) {
       return false;
     }
-    final PsiParameter parameter = (PsiParameter)variable;
-    final PsiElement scope = parameter.getDeclarationScope();
+    PsiParameter parameter = (PsiParameter)variable;
+    PsiElement scope = parameter.getDeclarationScope();
     if (!(scope instanceof PsiMethod)) {
       return false;
     }
-    final PsiMethod method = (PsiMethod)scope;
+    PsiMethod method = (PsiMethod)scope;
     return isOverrideOfLibraryMethod(method);
   }
 }

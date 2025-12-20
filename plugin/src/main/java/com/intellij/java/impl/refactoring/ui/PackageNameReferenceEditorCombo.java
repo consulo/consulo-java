@@ -29,17 +29,17 @@ import java.awt.event.ActionListener;
  * @author yole
  */
 public class PackageNameReferenceEditorCombo extends ReferenceEditorComboWithBrowseButton {
-  public PackageNameReferenceEditorCombo(final String text, @Nonnull final Project project,
-                                         final String recentsKey, final String chooserTitle) {
+  public PackageNameReferenceEditorCombo(String text, @Nonnull final Project project,
+                                         String recentsKey, final String chooserTitle) {
     super(null, text, project, false, recentsKey);
     setButtonIcon(PlatformIconGroup.nodesPackage());
     addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        final PackageChooserDialog chooser = new PackageChooserDialog(chooserTitle, project);
+        PackageChooserDialog chooser = new PackageChooserDialog(chooserTitle, project);
         chooser.selectPackage(getText());
         chooser.show();
         if (chooser.isOK()) {
-          final PsiJavaPackage aPackage = chooser.getSelectedPackage();
+          PsiJavaPackage aPackage = chooser.getSelectedPackage();
           if (aPackage != null) {
             setText(aPackage.getQualifiedName());
           }

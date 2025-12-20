@@ -45,14 +45,14 @@ class InstanceofTypeProvider implements CompletionProvider {
 
   @RequiredReadAction
   @Override
-  public void addCompletions(@Nonnull final CompletionParameters parameters, final ProcessingContext context, @Nonnull final CompletionResultSet result) {
-    final PsiElement position = parameters.getPosition();
-    final PsiType[] leftTypes = InstanceOfLeftPartTypeGetter.getLeftTypes(position);
+  public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull final CompletionResultSet result) {
+    PsiElement position = parameters.getPosition();
+    PsiType[] leftTypes = InstanceOfLeftPartTypeGetter.getLeftTypes(position);
     final Set<PsiClassType> expectedClassTypes = new LinkedHashSet<PsiClassType>();
     final Set<PsiClass> parameterizedTypes = new HashSet<PsiClass>();
-    for (final PsiType type : leftTypes) {
+    for (PsiType type : leftTypes) {
       if (type instanceof PsiClassType) {
-        final PsiClassType classType = (PsiClassType) type;
+        PsiClassType classType = (PsiClassType) type;
         if (!classType.isRaw()) {
           ContainerUtil.addIfNotNull(parameterizedTypes, classType.resolve());
         }
@@ -64,7 +64,7 @@ class InstanceofTypeProvider implements CompletionProvider {
     JavaInheritorsGetter.processInheritors(parameters, expectedClassTypes, result.getPrefixMatcher(), new Consumer<PsiType>() {
       @Override
       public void accept(PsiType type) {
-        final PsiClass psiClass = PsiUtil.resolveClassInType(type);
+        PsiClass psiClass = PsiUtil.resolveClassInType(type);
         if (psiClass == null || psiClass instanceof PsiTypeParameter) {
           return;
         }
@@ -80,16 +80,16 @@ class InstanceofTypeProvider implements CompletionProvider {
   }
 
   private static LookupElement createInstanceofLookupElement(PsiClass psiClass, Set<PsiClass> toWildcardInheritors) {
-    final PsiTypeParameter[] typeParameters = psiClass.getTypeParameters();
+    PsiTypeParameter[] typeParameters = psiClass.getTypeParameters();
     if (typeParameters.length > 0) {
-      for (final PsiClass parameterizedType : toWildcardInheritors) {
+      for (PsiClass parameterizedType : toWildcardInheritors) {
         if (psiClass.isInheritor(parameterizedType, true)) {
           PsiSubstitutor substitutor = PsiSubstitutor.EMPTY;
-          final PsiWildcardType wildcard = PsiWildcardType.createUnbounded(psiClass.getManager());
-          for (final PsiTypeParameter typeParameter : typeParameters) {
+          PsiWildcardType wildcard = PsiWildcardType.createUnbounded(psiClass.getManager());
+          for (PsiTypeParameter typeParameter : typeParameters) {
             substitutor = substitutor.put(typeParameter, wildcard);
           }
-          final PsiElementFactory factory = JavaPsiFacade.getElementFactory(psiClass.getProject());
+          PsiElementFactory factory = JavaPsiFacade.getElementFactory(psiClass.getProject());
           return PsiTypeLookupItem.createLookupItem(factory.createType(psiClass, substitutor), psiClass);
         }
       }

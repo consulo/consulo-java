@@ -60,18 +60,18 @@ public class MakeInferredAnnotationExplicit extends BaseIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull final Project project, Editor editor, PsiFile file) {
-    final PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
-    final PsiModifierListOwner owner = ExternalAnnotationsLineMarkerProvider.getAnnotationOwner(leaf);
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
+    PsiModifierListOwner owner = ExternalAnnotationsLineMarkerProvider.getAnnotationOwner(leaf);
     if (owner != null && owner.getLanguage().isKindOf(JavaLanguage.INSTANCE) && isWritable(owner) && ModuleUtilCore.findModuleForPsiElement(
       file) != null && PsiUtil.getLanguageLevel(file)
                               .isAtLeast(LanguageLevel.JDK_1_5)) {
-      final PsiAnnotation[] annotations = InferredAnnotationsManager.getInstance(project).findInferredAnnotations(owner);
+      PsiAnnotation[] annotations = InferredAnnotationsManager.getInstance(project).findInferredAnnotations(owner);
       if (annotations.length > 0) {
-        final String annos = StringUtil.join(annotations, annotation ->
+        String annos = StringUtil.join(annotations, annotation ->
         {
-          final PsiJavaCodeReferenceElement nameRef = correctAnnotation(annotation).getNameReferenceElement();
-          final String name = nameRef != null ? nameRef.getReferenceName() : annotation.getQualifiedName();
+          PsiJavaCodeReferenceElement nameRef = correctAnnotation(annotation).getNameReferenceElement();
+          String name = nameRef != null ? nameRef.getReferenceName() : annotation.getQualifiedName();
           return "@" + name + annotation.getParameterList().getText();
         }, " ");
         setText(LocalizeValue.localizeTODO("Insert '" + annos + "'"));
@@ -92,24 +92,24 @@ public class MakeInferredAnnotationExplicit extends BaseIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
-    final PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
-    final PsiModifierListOwner owner = ExternalAnnotationsLineMarkerProvider.getAnnotationOwner(leaf);
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
+    PsiModifierListOwner owner = ExternalAnnotationsLineMarkerProvider.getAnnotationOwner(leaf);
     assert owner != null;
-    final PsiModifierList modifierList = owner.getModifierList();
+    PsiModifierList modifierList = owner.getModifierList();
     assert modifierList != null;
-    final Module module = ModuleUtilCore.findModuleForPsiElement(file);
+    Module module = ModuleUtilCore.findModuleForPsiElement(file);
     assert module != null;
 
     if (!FileModificationService.getInstance().preparePsiElementForWrite(owner)) {
       return;
     }
 
-    final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
+    JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
 
     for (PsiAnnotation inferred : InferredAnnotationsManager.getInstance(project).findInferredAnnotations(owner)) {
-      final PsiAnnotation toInsert = correctAnnotation(inferred);
-      final String qname = toInsert.getQualifiedName();
+      PsiAnnotation toInsert = correctAnnotation(inferred);
+      String qname = toInsert.getQualifiedName();
       assert qname != null;
       if (facade.findClass(qname, file.getResolveScope()) == null && !InferNullityAnnotationsAction.addAnnotationsDependency(project,
                                                                                                                              Collections.singleton(

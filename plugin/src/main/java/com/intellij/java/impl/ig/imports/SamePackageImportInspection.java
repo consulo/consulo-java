@@ -58,24 +58,24 @@ public class SamePackageImportInspection extends BaseInspection {
 
         @Override
         public void visitImportList(PsiImportList importList) {
-            final PsiElement parent = importList.getParent();
+            PsiElement parent = importList.getParent();
             if (!(parent instanceof PsiJavaFile)) {
                 return;
             }
      /* if (JspPsiUtil.isInJspFile(importList)) {
         return;
       } */
-            final PsiJavaFile javaFile = (PsiJavaFile) parent;
-            final String packageName = javaFile.getPackageName();
-            final PsiImportStatement[] importStatements =
+            PsiJavaFile javaFile = (PsiJavaFile) parent;
+            String packageName = javaFile.getPackageName();
+            PsiImportStatement[] importStatements =
                 importList.getImportStatements();
-            for (final PsiImportStatement importStatement : importStatements) {
-                final PsiJavaCodeReferenceElement reference =
+            for (PsiImportStatement importStatement : importStatements) {
+                PsiJavaCodeReferenceElement reference =
                     importStatement.getImportReference();
                 if (reference == null) {
                     continue;
                 }
-                final String text = importStatement.getQualifiedName();
+                String text = importStatement.getQualifiedName();
                 if (importStatement.isOnDemand()) {
                     if (packageName.equals(text)) {
                         registerError(importStatement);
@@ -85,8 +85,8 @@ public class SamePackageImportInspection extends BaseInspection {
                     if (text == null) {
                         return;
                     }
-                    final int classNameIndex = text.lastIndexOf((int) '.');
-                    final String parentName;
+                    int classNameIndex = text.lastIndexOf((int) '.');
+                    String parentName;
                     if (classNameIndex < 0) {
                         parentName = "";
                     }

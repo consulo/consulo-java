@@ -50,16 +50,16 @@ public class CreateMethodFromMethodReferenceFix extends CreateFromUsageBaseFix {
 
   @Override
   protected boolean isAvailableImpl(int offset) {
-    final PsiMethodReferenceExpression call = getMethodReference();
+    PsiMethodReferenceExpression call = getMethodReference();
     if (call == null || !call.isValid()) {
       return false;
     }
-    final PsiType functionalInterfaceType = call.getFunctionalInterfaceType();
+    PsiType functionalInterfaceType = call.getFunctionalInterfaceType();
     if (functionalInterfaceType == null || LambdaUtil.getFunctionalInterfaceMethod(functionalInterfaceType) == null) {
       return false;
     }
 
-    final String name = call.getReferenceName();
+    String name = call.getReferenceName();
 
     if (name == null) {
       return false;
@@ -74,7 +74,7 @@ public class CreateMethodFromMethodReferenceFix extends CreateFromUsageBaseFix {
 
   @Override
   protected PsiElement getElement() {
-    final PsiMethodReferenceExpression call = getMethodReference();
+    PsiMethodReferenceExpression call = getMethodReference();
     if (call == null || !call.getManager().isInProject(call)) {
       return null;
     }
@@ -93,7 +93,7 @@ public class CreateMethodFromMethodReferenceFix extends CreateFromUsageBaseFix {
   }
 
   @Override
-  protected void invokeImpl(final PsiClass targetClass) {
+  protected void invokeImpl(PsiClass targetClass) {
     if (targetClass == null) {
       return;
     }
@@ -114,7 +114,7 @@ public class CreateMethodFromMethodReferenceFix extends CreateFromUsageBaseFix {
     LOG.assertTrue(methodName != null);
 
 
-    final Project project = targetClass.getProject();
+    Project project = targetClass.getProject();
     JVMElementFactory elementFactory = JVMElementFactories.getFactory(targetClass.getLanguage(), project);
     if (elementFactory == null) {
       elementFactory = JavaPsiFacade.getElementFactory(project);
@@ -137,19 +137,19 @@ public class CreateMethodFromMethodReferenceFix extends CreateFromUsageBaseFix {
       PsiUtil.setModifierProperty(method, PsiModifier.STATIC, true);
     }
 
-    final PsiElement context = PsiTreeUtil.getParentOfType(expression, PsiClass.class, PsiMethod.class);
+    PsiElement context = PsiTreeUtil.getParentOfType(expression, PsiClass.class, PsiMethod.class);
 
-    final PsiType functionalInterfaceType = expression.getFunctionalInterfaceType();
-    final PsiClassType.ClassResolveResult classResolveResult = PsiUtil.resolveGenericsClassInType
+    PsiType functionalInterfaceType = expression.getFunctionalInterfaceType();
+    PsiClassType.ClassResolveResult classResolveResult = PsiUtil.resolveGenericsClassInType
         (functionalInterfaceType);
-    final PsiMethod interfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(classResolveResult);
+    PsiMethod interfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(classResolveResult);
     LOG.assertTrue(interfaceMethod != null);
 
-    final PsiType interfaceReturnType = LambdaUtil.getFunctionalInterfaceReturnType(functionalInterfaceType);
+    PsiType interfaceReturnType = LambdaUtil.getFunctionalInterfaceReturnType(functionalInterfaceType);
     LOG.assertTrue(interfaceReturnType != null);
 
     final PsiSubstitutor substitutor = LambdaUtil.getSubstitutor(interfaceMethod, classResolveResult);
-    final ExpectedTypeInfo[] expectedTypes = {new ExpectedTypeInfoImpl(interfaceReturnType,
+    ExpectedTypeInfo[] expectedTypes = {new ExpectedTypeInfoImpl(interfaceReturnType,
         ExpectedTypeInfo.TYPE_OR_SUBTYPE, interfaceReturnType, TailType.NONE, null,
         ExpectedTypeInfoImpl.NULL)};
     CreateMethodFromUsageFix.doCreate(targetClass, method, false, ContainerUtil.map2List(interfaceMethod

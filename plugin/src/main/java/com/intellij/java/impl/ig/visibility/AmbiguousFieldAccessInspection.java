@@ -46,8 +46,8 @@ public class AmbiguousFieldAccessInspection extends BaseInspection {
   @Override
   @RequiredReadAction
   protected String buildErrorString(Object... infos) {
-    final PsiClass fieldClass = (PsiClass)infos[0];
-    final PsiVariable variable = (PsiVariable)infos[1];
+    PsiClass fieldClass = (PsiClass)infos[0];
+    PsiVariable variable = (PsiVariable)infos[1];
     if (variable instanceof PsiLocalVariable) {
       return InspectionGadgetsLocalize.ambiguousFieldAccessHidesLocalVariableProblemDescriptor(fieldClass.getName()).get();
     }
@@ -71,12 +71,12 @@ public class AmbiguousFieldAccessInspection extends BaseInspection {
     }
 
     protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
+      PsiElement element = descriptor.getPsiElement();
       if (!(element instanceof PsiReferenceExpression)) {
         return;
       }
-      final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)element;
-      final String newExpressionText = "super." + referenceExpression.getText();
+      PsiReferenceExpression referenceExpression = (PsiReferenceExpression)element;
+      String newExpressionText = "super." + referenceExpression.getText();
       replaceExpression(referenceExpression, newExpressionText);
     }
   }
@@ -98,26 +98,26 @@ public class AmbiguousFieldAccessInspection extends BaseInspection {
       if (containingClass == null) {
         return;
       }
-      final PsiElement target = expression.resolve();
+      PsiElement target = expression.resolve();
       if (target == null) {
         return;
       }
       if (!(target instanceof PsiField)) {
         return;
       }
-      final PsiField field = (PsiField)target;
-      final PsiClass fieldClass = field.getContainingClass();
+      PsiField field = (PsiField)target;
+      PsiClass fieldClass = field.getContainingClass();
       if (fieldClass == null || !containingClass.isInheritor(fieldClass, true)) {
         return;
       }
-      final PsiElement parent = containingClass.getParent();
-      final PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(expression.getProject()).getResolveHelper();
-      final String referenceText = expression.getText();
-      final PsiVariable variable = resolveHelper.resolveAccessibleReferencedVariable(referenceText, parent);
+      PsiElement parent = containingClass.getParent();
+      PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(expression.getProject()).getResolveHelper();
+      String referenceText = expression.getText();
+      PsiVariable variable = resolveHelper.resolveAccessibleReferencedVariable(referenceText, parent);
       if (variable == null || field == variable) {
         return;
       }
-      final PsiElement commonParent = PsiTreeUtil.findCommonParent(variable, containingClass);
+      PsiElement commonParent = PsiTreeUtil.findCommonParent(variable, containingClass);
       if (commonParent == null) {
         return;
       }

@@ -41,7 +41,7 @@ public class NullSmartCompletionContributor extends CompletionContributor {
   public NullSmartCompletionContributor() {
     extend(CompletionType.SMART, and(JavaSmartCompletionContributor.INSIDE_EXPRESSION, not(psiElement().afterLeaf("."))), new ExpectedTypeBasedCompletionProvider() {
       @Override
-      protected void addCompletions(final CompletionParameters parameters, final CompletionResultSet result, final Collection<ExpectedTypeInfo> infos) {
+      protected void addCompletions(CompletionParameters parameters, CompletionResultSet result, Collection<ExpectedTypeInfo> infos) {
         if (!StringUtil.startsWithChar(result.getPrefixMatcher().getPrefix(), 'n')) {
           return;
         }
@@ -53,9 +53,9 @@ public class NullSmartCompletionContributor extends CompletionContributor {
           }
         }
 
-        for (final ExpectedTypeInfo info : infos) {
+        for (ExpectedTypeInfo info : infos) {
           if (!(info.getType() instanceof PsiPrimitiveType)) {
-            final LookupElement item = BasicExpressionCompletionContributor.createKeywordLookupItem(parameters.getPosition(), PsiKeyword.NULL);
+            LookupElement item = BasicExpressionCompletionContributor.createKeywordLookupItem(parameters.getPosition(), PsiKeyword.NULL);
             result.addElement(JavaSmartCompletionContributor.decorate(item, infos));
             return;
           }

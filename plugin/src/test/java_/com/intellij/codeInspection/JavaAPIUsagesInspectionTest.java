@@ -43,7 +43,7 @@ public abstract class JavaAPIUsagesInspectionTest extends InspectionTestCase {
   }
 
   private void doTest() {
-    final Java15APIUsageInspection usageInspection = new Java15APIUsageInspection();
+    Java15APIUsageInspection usageInspection = new Java15APIUsageInspection();
     doTest("usage1.5/" + getTestName(true), new LocalInspectionToolWrapper(usageInspection), "java 1.5");
   }
 
@@ -63,21 +63,21 @@ public abstract class JavaAPIUsagesInspectionTest extends InspectionTestCase {
   @SuppressWarnings("UnusedDeclaration")
   public void _testCollectSinceApiUsages() {
     final String version = "1.7";
-    final ContentIterator contentIterator = new ContentIterator() {
+    ContentIterator contentIterator = new ContentIterator() {
       @Override
       public boolean processFile(VirtualFile fileOrDir) {
-        final PsiFile file = PsiManager.getInstance(getProject()).findFile(fileOrDir);
+        PsiFile file = PsiManager.getInstance(getProject()).findFile(fileOrDir);
         if (file instanceof PsiJavaFile) {
           file.accept(new JavaRecursiveElementVisitor() {
             @Override
             public void visitElement(PsiElement element) {
               super.visitElement(element);
               if (element instanceof PsiDocCommentOwner) {
-                final PsiDocComment comment = ((PsiDocCommentOwner)element).getDocComment();
+                PsiDocComment comment = ((PsiDocCommentOwner)element).getDocComment();
                 if (comment != null) {
                   for (PsiDocTag tag : comment.getTags()) {
                     if (Comparing.strEqual(tag.getName(), "since")) {
-                      final PsiDocTagValue value = tag.getValueElement();
+                      PsiDocTagValue value = tag.getValueElement();
                       if (value != null && value.getText().equals(version)) {
                         System.out.println(Java15APIUsageInspection.getSignature((PsiMember)element));
                       }
@@ -92,7 +92,7 @@ public abstract class JavaAPIUsagesInspectionTest extends InspectionTestCase {
         return true;
       }
     };
-    final VirtualFile srcFile = StandardFileSystems.jar().findFileByPath("c:/program files/java/jdk1.6.0_12/src.zip!/");
+    VirtualFile srcFile = StandardFileSystems.jar().findFileByPath("c:/program files/java/jdk1.6.0_12/src.zip!/");
     assert srcFile != null;
     VfsUtilCore.iterateChildrenRecursively(srcFile, VirtualFileFilter.ALL, contentIterator);
   }

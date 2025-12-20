@@ -35,8 +35,8 @@ public class JavaPsiDirectoryMethodProxy implements PsiDirectoryMethodProxy {
 
 
   @Override
-  public boolean checkCreateFile(@Nonnull PsiDirectory psiDirectory, @Nonnull final String name) throws IncorrectOperationException {
-    final FileType type = FileTypeManager.getInstance().getFileTypeByFileName(name);
+  public boolean checkCreateFile(@Nonnull PsiDirectory psiDirectory, @Nonnull String name) throws IncorrectOperationException {
+    FileType type = FileTypeManager.getInstance().getFileTypeByFileName(name);
     if (type == JavaClassFileType.INSTANCE) {
       throw new IncorrectOperationException("Cannot create class-file");
     }
@@ -45,11 +45,11 @@ public class JavaPsiDirectoryMethodProxy implements PsiDirectoryMethodProxy {
   }
 
   @Override
-  public PsiElement add(@Nonnull PsiDirectory psiDirectory, @Nonnull final PsiElement element) throws IncorrectOperationException {
+  public PsiElement add(@Nonnull PsiDirectory psiDirectory, @Nonnull PsiElement element) throws IncorrectOperationException {
     if (element instanceof PsiClass) {
-      final String name = ((PsiClass) element).getName();
+      String name = ((PsiClass) element).getName();
       if (name != null) {
-        final PsiClass newClass = JavaDirectoryService.getInstance().createClass(psiDirectory, name);
+        PsiClass newClass = JavaDirectoryService.getInstance().createClass(psiDirectory, name);
         return newClass.replace(element);
       } else {
         LOG.error("not implemented");
@@ -61,7 +61,7 @@ public class JavaPsiDirectoryMethodProxy implements PsiDirectoryMethodProxy {
   }
 
   @Override
-  public boolean checkAdd(@Nonnull PsiDirectory psiDirectory, @Nonnull final PsiElement element) throws IncorrectOperationException {
+  public boolean checkAdd(@Nonnull PsiDirectory psiDirectory, @Nonnull PsiElement element) throws IncorrectOperationException {
     if (element instanceof PsiClass) {
       if (((PsiClass) element).getContainingClass() == null) {
         JavaDirectoryServiceImpl.checkCreateClassOrInterface(psiDirectory, ((PsiClass) element).getName());

@@ -56,28 +56,28 @@ public class IterableVariableMacro extends VariableTypeMacroBase {
   @Override
   @Nullable
   @RequiredReadAction
-  protected PsiElement[] getVariables(Expression[] params, final ExpressionContext context) {
+  protected PsiElement[] getVariables(Expression[] params, ExpressionContext context) {
     if (params.length != 0) {
       return null;
     }
 
-    final List<PsiElement> result = new ArrayList<>();
+    List<PsiElement> result = new ArrayList<>();
 
 
     Project project = context.getProject();
-    final int offset = context.getStartOffset();
+    int offset = context.getStartOffset();
     PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
     assert file != null;
     PsiElement place = file.findElementAt(offset);
-    final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
-    final GlobalSearchScope scope = file.getResolveScope();
+    PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
+    GlobalSearchScope scope = file.getResolveScope();
 
     PsiType iterableType = elementFactory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_ITERABLE, scope);
     PsiType mapType = elementFactory.createTypeByFQClassName(CommonClassNames.JAVA_UTIL_MAP, scope);
 
     PsiVariable[] variables = MacroUtil.getVariablesVisibleAt(place, "");
     for (PsiVariable var : variables) {
-      final PsiElement parent = var.getParent();
+      PsiElement parent = var.getParent();
       if (parent instanceof PsiForeachStatement && parent == PsiTreeUtil.getParentOfType(place, PsiForeachStatement.class)) {
         continue;
       }

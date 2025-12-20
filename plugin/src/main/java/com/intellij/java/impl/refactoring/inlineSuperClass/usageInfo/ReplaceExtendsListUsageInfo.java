@@ -29,7 +29,7 @@ import consulo.language.util.IncorrectOperationException;
 public class ReplaceExtendsListUsageInfo extends FixableUsageInfo {
   private final SafeDeleteExtendsClassUsageInfo mySafeDeleteUsageInfo;
 
-  public ReplaceExtendsListUsageInfo(PsiJavaCodeReferenceElement element, final PsiClass superClass, final PsiClass targetClass) {
+  public ReplaceExtendsListUsageInfo(PsiJavaCodeReferenceElement element, PsiClass superClass, PsiClass targetClass) {
     super(element);
     mySafeDeleteUsageInfo = new SafeDeleteExtendsClassUsageInfo(element, superClass, targetClass);
   }

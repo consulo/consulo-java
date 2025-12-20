@@ -47,8 +47,8 @@ public class JavacQuirksInspection extends BaseLocalInspectionTool {
   @Nonnull
   @Override
   public PsiElementVisitor buildVisitorImpl(
-    @Nonnull final ProblemsHolder holder,
-    final boolean isOnTheFly,
+    @Nonnull ProblemsHolder holder,
+    boolean isOnTheFly,
     LocalInspectionToolSession session,
     Object state
   ) {

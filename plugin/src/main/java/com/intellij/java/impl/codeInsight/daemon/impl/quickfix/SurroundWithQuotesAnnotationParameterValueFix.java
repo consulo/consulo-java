@@ -33,8 +33,8 @@ public class SurroundWithQuotesAnnotationParameterValueFix implements SyntheticI
   private final PsiAnnotationMemberValue myValue;
   private final PsiType myExpectedType;
 
-  public SurroundWithQuotesAnnotationParameterValueFix(final PsiAnnotationMemberValue value,
-                                                       final PsiType expectedType) {
+  public SurroundWithQuotesAnnotationParameterValueFix(PsiAnnotationMemberValue value,
+                                                       PsiType expectedType) {
     myValue = value;
     myExpectedType = expectedType;
   }
@@ -44,7 +44,7 @@ public class SurroundWithQuotesAnnotationParameterValueFix implements SyntheticI
     if (!myValue.isValid() || !myExpectedType.isValid() || !(myExpectedType instanceof PsiClassType)) {
       return false;
     }
-    final PsiClass resolvedType = ((PsiClassType)myExpectedType).resolve();
+    PsiClass resolvedType = ((PsiClassType)myExpectedType).resolve();
     return resolvedType != null && CommonClassNames.JAVA_LANG_STRING.equals(resolvedType.getQualifiedName()) &&
       myValue instanceof PsiLiteralExpression;
   }
@@ -56,7 +56,7 @@ public class SurroundWithQuotesAnnotationParameterValueFix implements SyntheticI
     newText = "\"" + newText + "\"";
     PsiElement newToken = JavaPsiFacade.getInstance(project).getElementFactory().createExpressionFromText(newText,
                                                                                                           null);
-    final PsiElement newElement = myValue.replace(newToken);
+    PsiElement newElement = myValue.replace(newToken);
     editor.getCaretModel().moveToOffset(newElement.getTextOffset() + newElement.getTextLength());
   }
 

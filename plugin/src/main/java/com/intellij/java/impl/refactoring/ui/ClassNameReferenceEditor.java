@@ -41,16 +41,16 @@ public class ClassNameReferenceEditor extends ReferenceEditorWithBrowseButton {
   private PsiClass mySelectedClass;
   private String myChooserTitle;
 
-  public ClassNameReferenceEditor(@Nonnull final Project project, @Nullable final PsiClass selectedClass) {
+  public ClassNameReferenceEditor(@Nonnull Project project, @Nullable PsiClass selectedClass) {
     this(project, selectedClass, null);
   }
 
-  public ClassNameReferenceEditor(@Nonnull final Project project, @Nullable final PsiClass selectedClass,
+  public ClassNameReferenceEditor(@Nonnull final Project project, @Nullable PsiClass selectedClass,
                                   @Nullable final GlobalSearchScope resolveScope) {
     super(null, project, new Function<String,Document>() {
-      public Document apply(final String s) {
+      public Document apply(String s) {
         PsiJavaPackage defaultPackage = JavaPsiFacade.getInstance(project).findPackage("");
-        final JavaCodeFragment fragment = JavaCodeFragmentFactory.getInstance(project).createReferenceCodeFragment(s, defaultPackage, true, true);
+        JavaCodeFragment fragment = JavaCodeFragmentFactory.getInstance(project).createReferenceCodeFragment(s, defaultPackage, true, true);
         fragment.setVisibilityChecker(JavaCodeFragment.VisibilityChecker.EVERYTHING_VISIBLE);
         if (resolveScope != null) {
           fragment.forceResolveScope(resolveScope);
@@ -69,7 +69,7 @@ public class ClassNameReferenceEditor extends ReferenceEditorWithBrowseButton {
     return myChooserTitle;
   }
 
-  public void setChooserTitle(final String chooserTitle) {
+  public void setChooserTitle(String chooserTitle) {
     myChooserTitle = chooserTitle;
   }
 

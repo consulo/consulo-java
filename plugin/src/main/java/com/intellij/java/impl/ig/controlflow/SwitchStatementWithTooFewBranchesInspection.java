@@ -55,8 +55,8 @@ public abstract class SwitchStatementWithTooFewBranchesInspection extends BaseIn
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    final Integer branchCount = (Integer) infos[0];
-    final PsiSwitchBlock block = (PsiSwitchBlock) infos[1];
+    Integer branchCount = (Integer) infos[0];
+    PsiSwitchBlock block = (PsiSwitchBlock) infos[1];
     if (block instanceof PsiSwitchExpression) {
       return branchCount == 0
         ? InspectionGadgetsLocalize.switchExpressionWithSingleDefaultMessage().get()
@@ -70,7 +70,7 @@ public abstract class SwitchStatementWithTooFewBranchesInspection extends BaseIn
   @Nullable
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    final Integer branchCount = (Integer) infos[0];
+    Integer branchCount = (Integer) infos[0];
     return (Boolean) infos[2] ? new UnwrapSwitchStatementFix(branchCount) : null;
   }
 
@@ -100,13 +100,13 @@ public abstract class SwitchStatementWithTooFewBranchesInspection extends BaseIn
 
     @Nullable
     public Object[] processSwitch(@Nonnull PsiSwitchBlock block) {
-      final PsiCodeBlock body = block.getBody();
+      PsiCodeBlock body = block.getBody();
       if (body == null) {
         return null;
       }
       int branches = 0;
       boolean defaultFound = false;
-      for (final PsiSwitchLabelStatementBase child : PsiTreeUtil.getChildrenOfTypeAsList(body, PsiSwitchLabelStatementBase.class)) {
+      for (PsiSwitchLabelStatementBase child : PsiTreeUtil.getChildrenOfTypeAsList(body, PsiSwitchLabelStatementBase.class)) {
         if (child.isDefaultCase()) {
           defaultFound = true;
         } else {

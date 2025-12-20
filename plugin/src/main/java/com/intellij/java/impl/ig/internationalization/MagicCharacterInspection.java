@@ -60,14 +60,14 @@ public class MagicCharacterInspection extends BaseInspection {
         @Override
         public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression) {
             super.visitLiteralExpression(expression);
-            final PsiType type = expression.getType();
+            PsiType type = expression.getType();
             if (type == null) {
                 return;
             }
             if (!type.equals(PsiType.CHAR)) {
                 return;
             }
-            final String text = expression.getText();
+            String text = expression.getText();
             if (text == null) {
                 return;
             }

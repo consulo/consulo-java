@@ -36,7 +36,7 @@ public class JavaWordCompletionFilter implements WordCompletionElementFilter {
       JavaDocTokenType.DOC_COMMENT_DATA, JavaTokenType.STRING_LITERAL);
 
   @Override
-  public boolean isWordCompletionEnabledIn(final IElementType element, LanguageVersion languageVersion) {
+  public boolean isWordCompletionEnabledIn(IElementType element, LanguageVersion languageVersion) {
     return ENABLED_TOKENS.contains(element);
   }
 

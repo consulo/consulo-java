@@ -68,7 +68,7 @@ public class CastThatLosesPrecisionInspection extends BaseInspection {
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final PsiType operandType = (PsiType)infos[0];
+    PsiType operandType = (PsiType)infos[0];
     return InspectionGadgetsLocalize.castThatLosesPrecisionProblemDescriptor(operandType.getPresentableText()).get();
   }
 
@@ -88,15 +88,15 @@ public class CastThatLosesPrecisionInspection extends BaseInspection {
 
     @Override
     public void visitTypeCastExpression(@Nonnull PsiTypeCastExpression expression) {
-      final PsiType castType = expression.getType();
+      PsiType castType = expression.getType();
       if (!ClassUtils.isPrimitiveNumericType(castType)) {
         return;
       }
-      final PsiExpression operand = expression.getOperand();
+      PsiExpression operand = expression.getOperand();
       if (operand == null) {
         return;
       }
-      final PsiType operandType = operand.getType();
+      PsiType operandType = operand.getType();
       if (!ClassUtils.isPrimitiveNumericType(operandType)) {
         return;
       }
@@ -109,7 +109,7 @@ public class CastThatLosesPrecisionInspection extends BaseInspection {
         }
       }
       if (PsiType.LONG.equals(operandType) && PsiType.INT.equals(castType)) {
-        final PsiMethod method = PsiTreeUtil.getParentOfType(expression, PsiMethod.class, true, PsiClass.class);
+        PsiMethod method = PsiTreeUtil.getParentOfType(expression, PsiMethod.class, true, PsiClass.class);
         if (MethodUtils.isHashCode(method)) {
           return;
         }
@@ -119,12 +119,12 @@ public class CastThatLosesPrecisionInspection extends BaseInspection {
         result = Integer.valueOf(((Character)result).charValue());
       }
       if (result instanceof Number) {
-        final Number number = (Number)result;
+        Number number = (Number)result;
         if (valueIsContainableInType(number, castType)) {
           return;
         }
       }
-      final PsiTypeElement castTypeElement = expression.getCastType();
+      PsiTypeElement castTypeElement = expression.getCastType();
       if (castTypeElement == null) {
         return;
       }
@@ -132,14 +132,14 @@ public class CastThatLosesPrecisionInspection extends BaseInspection {
     }
 
     private boolean hasLowerPrecision(PsiType operandType, PsiType castType) {
-      final Integer operandPrecision = typePrecisions.get(operandType);
-      final Integer castPrecision = typePrecisions.get(castType);
+      Integer operandPrecision = typePrecisions.get(operandType);
+      Integer castPrecision = typePrecisions.get(castType);
       return operandPrecision.intValue() <= castPrecision.intValue();
     }
 
     private boolean valueIsContainableInType(Number value, PsiType type) {
-      final long longValue = value.longValue();
-      final double doubleValue = value.doubleValue();
+      long longValue = value.longValue();
+      double doubleValue = value.doubleValue();
       if (PsiType.BYTE.equals(type)) {
         return longValue >= (long)Byte.MIN_VALUE &&
                longValue <= (long)Byte.MAX_VALUE &&

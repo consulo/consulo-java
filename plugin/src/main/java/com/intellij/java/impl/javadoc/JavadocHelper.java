@@ -78,9 +78,9 @@ public class JavadocHelper
 	public void navigate(@Nonnull LogicalPosition position, @Nonnull Editor editor, @Nonnull final Project project)
 	{
 		final Document document = editor.getDocument();
-		final CaretModel caretModel = editor.getCaretModel();
+		CaretModel caretModel = editor.getCaretModel();
 		final int endLineOffset = document.getLineEndOffset(position.line);
-		final LogicalPosition endLinePosition = editor.offsetToLogicalPosition(endLineOffset);
+		LogicalPosition endLinePosition = editor.offsetToLogicalPosition(endLineOffset);
 		if(endLinePosition.column < position.column && !editor.getSettings().isVirtualSpace() && !editor.isViewer())
 		{
 			final String toInsert = StringUtil.repeat(" ", position.column - endLinePosition.column);
@@ -123,8 +123,8 @@ public class JavadocHelper
 			}
 		}
 
-		final CodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getInstance(psiFile.getProject()).getCurrentSettings();
-		final int indentSize = codeStyleSettings.getIndentSize(psiFile.getFileType());
+		CodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getInstance(psiFile.getProject()).getCurrentSettings();
+		int indentSize = codeStyleSettings.getIndentSize(psiFile.getFileType());
 		int column;
 		if(codeStyleSettings.getCustomSettings(JavaCodeStyleSettings.class).JD_ALIGN_PARAM_COMMENTS)
 		{
@@ -155,7 +155,7 @@ public class JavadocHelper
 	public Pair<JavadocParameterInfo, List<JavadocParameterInfo>> parse(@Nonnull PsiFile psiFile, @Nonnull Editor editor, int offset)
 	{
 		List<JavadocParameterInfo> result = new ArrayList<JavadocParameterInfo>();
-		final PsiElement elementAtCaret = psiFile.findElementAt(offset);
+		PsiElement elementAtCaret = psiFile.findElementAt(offset);
 		if(elementAtCaret == null)
 		{
 			return EMPTY;
@@ -220,13 +220,13 @@ public class JavadocHelper
 	@Nullable
 	private static JavadocParameterInfo parse(@Nonnull PsiElement element, @Nonnull Editor editor)
 	{
-		final PsiDocTag tag = PsiTreeUtil.getParentOfType(element, PsiDocTag.class, false);
+		PsiDocTag tag = PsiTreeUtil.getParentOfType(element, PsiDocTag.class, false);
 		if(tag == null || !PARAM_TEXT.equals(tag.getName()))
 		{
 			return null;
 		}
 
-		final PsiDocTagValue paramRef = PsiTreeUtil.getChildOfType(tag, PsiDocTagValue.class);
+		PsiDocTagValue paramRef = PsiTreeUtil.getChildOfType(tag, PsiDocTagValue.class);
 		if(paramRef == null)
 		{
 			return null;
@@ -234,12 +234,12 @@ public class JavadocHelper
 
 		for(PsiElement e = paramRef.getNextSibling(); e != null; e = e.getNextSibling())
 		{
-			final ASTNode node = e.getNode();
+			ASTNode node = e.getNode();
 			if(node == null)
 			{
 				break;
 			}
-			final IElementType elementType = node.getElementType();
+			IElementType elementType = node.getElementType();
 			if(elementType == JavaDocTokenType.DOC_COMMENT_DATA)
 			{
 				return new JavadocParameterInfo(

@@ -52,7 +52,7 @@ public class EmptyFinallyBlockInspection extends BaseInspection {
 
     @Override
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final Integer count = (Integer) infos[0];
+        Integer count = (Integer) infos[0];
         if (count == 0) {
             return new RemoveTryFinallyBlockFix();
         }
@@ -70,31 +70,31 @@ public class EmptyFinallyBlockInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiTryStatement tryStatement = PsiTreeUtil.getParentOfType(element, PsiTryStatement.class);
+            PsiElement element = descriptor.getPsiElement();
+            PsiTryStatement tryStatement = PsiTreeUtil.getParentOfType(element, PsiTryStatement.class);
             if (tryStatement == null) {
                 return;
             }
-            final PsiCodeBlock tryBlock = tryStatement.getTryBlock();
+            PsiCodeBlock tryBlock = tryStatement.getTryBlock();
             if (tryBlock == null) {
                 return;
             }
-            final PsiElement parent = tryStatement.getParent();
+            PsiElement parent = tryStatement.getParent();
             if (parent == null) {
                 return;
             }
 
-            final PsiResourceList resources = tryStatement.getResourceList();
+            PsiResourceList resources = tryStatement.getResourceList();
             if (resources != null) {
-                final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+                PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
                 for (PsiResourceVariable resource : resources.getResourceVariables()) {
-                    final PsiStatement statement = factory.createStatementFromText(resource.getText() + ";", parent);
+                    PsiStatement statement = factory.createStatementFromText(resource.getText() + ";", parent);
                     parent.addBefore(statement, tryStatement);
                 }
             }
 
-            final PsiElement first = tryBlock.getFirstBodyElement();
-            final PsiElement last = tryBlock.getLastBodyElement();
+            PsiElement first = tryBlock.getFirstBodyElement();
+            PsiElement last = tryBlock.getLastBodyElement();
             if (first != null && last != null) {
                 parent.addRangeAfter(first, last, tryStatement);
             }
@@ -113,12 +113,12 @@ public class EmptyFinallyBlockInspection extends BaseInspection {
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiTryStatement tryStatement = PsiTreeUtil.getParentOfType(element, PsiTryStatement.class);
+            PsiElement element = descriptor.getPsiElement();
+            PsiTryStatement tryStatement = PsiTreeUtil.getParentOfType(element, PsiTryStatement.class);
             if (tryStatement == null) {
                 return;
             }
-            final PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
+            PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
             if (finallyBlock == null) {
                 return;
             }
@@ -127,8 +127,8 @@ public class EmptyFinallyBlockInspection extends BaseInspection {
 
         private static void deleteUntilFinally(PsiElement element) {
             if (element instanceof PsiJavaToken) {
-                final PsiJavaToken keyword = (PsiJavaToken) element;
-                final IElementType tokenType = keyword.getTokenType();
+                PsiJavaToken keyword = (PsiJavaToken) element;
+                IElementType tokenType = keyword.getTokenType();
                 if (tokenType.equals(JavaTokenType.FINALLY_KEYWORD)) {
                     keyword.delete();
                     return;
@@ -157,17 +157,17 @@ public class EmptyFinallyBlockInspection extends BaseInspection {
             /*if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
                 return;
             }*/
-            final PsiCodeBlock finallyBlock = statement.getFinallyBlock();
+            PsiCodeBlock finallyBlock = statement.getFinallyBlock();
             if (finallyBlock == null) {
                 return;
             }
             if (finallyBlock.getStatements().length != 0) {
                 return;
             }
-            final PsiCodeBlock[] catchBlocks = statement.getCatchBlocks();
-            final PsiElement[] children = statement.getChildren();
-            for (final PsiElement child : children) {
-                final String childText = child.getText();
+            PsiCodeBlock[] catchBlocks = statement.getCatchBlocks();
+            PsiElement[] children = statement.getChildren();
+            for (PsiElement child : children) {
+                String childText = child.getText();
                 if (PsiKeyword.FINALLY.equals(childText)) {
                     registerError(child, Integer.valueOf(catchBlocks.length));
                     return;

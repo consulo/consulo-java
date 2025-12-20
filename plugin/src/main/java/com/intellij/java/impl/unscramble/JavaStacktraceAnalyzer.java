@@ -92,7 +92,7 @@ public class JavaStacktraceAnalyzer implements StacktraceAnalyzer {
     return builder.toString();
   }
 
-  private static String trimSuffix(final String line) {
+  private static String trimSuffix(String line) {
     int len = line.length();
 
     while ((0 < len) && (line.charAt(len - 1) <= ' ')) {
@@ -102,7 +102,7 @@ public class JavaStacktraceAnalyzer implements StacktraceAnalyzer {
   }
 
   private static boolean mustHaveNewLineBefore(String line) {
-    final int nonWs = CharArrayUtil.shiftForward(line, 0, " \t");
+    int nonWs = CharArrayUtil.shiftForward(line, 0, " \t");
     if (nonWs < line.length()) {
       line = line.substring(nonWs);
     }

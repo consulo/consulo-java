@@ -30,13 +30,13 @@ import jakarta.annotation.Nonnull;
 public class KeywordLookupItem extends LookupItem<PsiKeyword> implements TypedLookupItem {
   private final PsiElement myPosition;
 
-  public KeywordLookupItem(final PsiKeyword keyword, @Nonnull PsiElement position) {
+  public KeywordLookupItem(PsiKeyword keyword, @Nonnull PsiElement position) {
     super(keyword, keyword.getText());
     myPosition = position;
   }
 
   @Override
-  public boolean equals(final Object o) {
+  public boolean equals(Object o) {
     return o instanceof KeywordLookupItem && getLookupString().equals(((KeywordLookupItem) o).getLookupString());
   }
 

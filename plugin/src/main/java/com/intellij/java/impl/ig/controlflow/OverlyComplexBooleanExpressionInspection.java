@@ -65,24 +65,24 @@ public class OverlyComplexBooleanExpressionInspection extends BaseInspection {
     @Override
     @Nonnull
     protected String buildErrorString(Object... infos) {
-        final Integer termCount = (Integer) infos[0];
+        Integer termCount = (Integer) infos[0];
         return InspectionGadgetsLocalize.overlyComplexBooleanExpressionProblemDescriptor(termCount).get();
     }
 
     @Override
     public JComponent createOptionsPanel() {
-        final JPanel panel = new JPanel(new GridBagLayout());
-        final CheckBox ignoreConjunctionsDisjunctionsCheckBox = new CheckBox(
+        JPanel panel = new JPanel(new GridBagLayout());
+        CheckBox ignoreConjunctionsDisjunctionsCheckBox = new CheckBox(
             InspectionGadgetsLocalize.overlyComplexBooleanExpressionIgnoreOption().get(),
             this,
             "m_ignorePureConjunctionsDisjunctions"
         );
-        final NumberFormat formatter = NumberFormat.getIntegerInstance();
+        NumberFormat formatter = NumberFormat.getIntegerInstance();
         formatter.setParseIntegerOnly(true);
-        final JFormattedTextField termLimitTextField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
+        JFormattedTextField termLimitTextField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
 
-        final GridBagConstraints constraints = new GridBagConstraints();
-        final JLabel label = new JLabel(InspectionGadgetsLocalize.overlyComplexBooleanExpressionMaxTermsOption().get());
+        GridBagConstraints constraints = new GridBagConstraints();
+        JLabel label = new JLabel(InspectionGadgetsLocalize.overlyComplexBooleanExpressionMaxTermsOption().get());
 
         constraints.anchor = GridBagConstraints.BASELINE_LEADING;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -140,11 +140,11 @@ public class OverlyComplexBooleanExpressionInspection extends BaseInspection {
             if (!isBoolean(expression)) {
                 return;
             }
-            final PsiElement parent = expression.getParent();
+            PsiElement parent = expression.getParent();
             if (parent instanceof PsiExpression && isBoolean((PsiExpression) parent)) {
                 return;
             }
-            final int numTerms = countTerms(expression);
+            int numTerms = countTerms(expression);
             if (numTerms <= m_limit) {
                 return;
             }
@@ -159,8 +159,8 @@ public class OverlyComplexBooleanExpressionInspection extends BaseInspection {
                 return 1;
             }
             if (expression instanceof PsiPolyadicExpression) {
-                final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
-                final PsiExpression[] operands = polyadicExpression.getOperands();
+                PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
+                PsiExpression[] operands = polyadicExpression.getOperands();
                 int count = 0;
                 for (PsiExpression operand : operands) {
                     count += countTerms(operand);
@@ -168,11 +168,11 @@ public class OverlyComplexBooleanExpressionInspection extends BaseInspection {
                 return count;
             }
             else if (expression instanceof PsiPrefixExpression) {
-                final PsiPrefixExpression prefixExpression = (PsiPrefixExpression) expression;
+                PsiPrefixExpression prefixExpression = (PsiPrefixExpression) expression;
                 return countTerms(prefixExpression.getOperand());
             }
             else if (expression instanceof PsiParenthesizedExpression) {
-                final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) expression;
+                PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) expression;
                 return countTerms(parenthesizedExpression.getExpression());
             }
             return 1;
@@ -180,15 +180,15 @@ public class OverlyComplexBooleanExpressionInspection extends BaseInspection {
 
         private boolean isBoolean(PsiExpression expression) {
             if (expression instanceof PsiPolyadicExpression) {
-                final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
+                PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
                 return s_booleanOperators.contains(polyadicExpression.getOperationTokenType());
             }
             else if (expression instanceof PsiPrefixExpression) {
-                final PsiPrefixExpression prefixExpression = (PsiPrefixExpression) expression;
+                PsiPrefixExpression prefixExpression = (PsiPrefixExpression) expression;
                 return JavaTokenType.EXCL.equals(prefixExpression.getOperationTokenType());
             }
             else if (expression instanceof PsiParenthesizedExpression) {
-                final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) expression;
+                PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) expression;
                 return isBoolean(parenthesizedExpression.getExpression());
             }
             return false;
@@ -198,12 +198,12 @@ public class OverlyComplexBooleanExpressionInspection extends BaseInspection {
             if (!(expression instanceof PsiPolyadicExpression)) {
                 return false;
             }
-            final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
-            final IElementType sign = polyadicExpression.getOperationTokenType();
+            PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
+            IElementType sign = polyadicExpression.getOperationTokenType();
             if (!s_booleanOperators.contains(sign)) {
                 return false;
             }
-            final PsiExpression[] operands = polyadicExpression.getOperands();
+            PsiExpression[] operands = polyadicExpression.getOperands();
             for (PsiExpression operand : operands) {
                 if (!(operand instanceof PsiReferenceExpression) &&
                     !(operand instanceof PsiMethodCallExpression) &&

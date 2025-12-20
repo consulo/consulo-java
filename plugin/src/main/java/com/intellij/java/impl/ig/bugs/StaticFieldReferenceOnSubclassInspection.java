@@ -48,8 +48,8 @@ public class StaticFieldReferenceOnSubclassInspection extends BaseInspection {
 
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiClass declaringClass = (PsiClass) infos[0];
-        final PsiClass referencedClass = (PsiClass) infos[1];
+        PsiClass declaringClass = (PsiClass) infos[0];
+        PsiClass referencedClass = (PsiClass) infos[1];
         return InspectionGadgetsLocalize.staticFieldViaSubclassProblemDescriptor(
             declaringClass.getQualifiedName(),
             referencedClass.getQualifiedName()
@@ -68,10 +68,10 @@ public class StaticFieldReferenceOnSubclassInspection extends BaseInspection {
         }
 
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiIdentifier name = (PsiIdentifier) descriptor.getPsiElement();
-            final PsiReferenceExpression expression = (PsiReferenceExpression) name.getParent();
+            PsiIdentifier name = (PsiIdentifier) descriptor.getPsiElement();
+            PsiReferenceExpression expression = (PsiReferenceExpression) name.getParent();
             assert expression != null;
-            final PsiField field = (PsiField) expression.resolve();
+            PsiField field = (PsiField) expression.resolve();
             assert field != null;
             replaceExpressionWithReferenceTo(expression, field);
         }
@@ -89,32 +89,32 @@ public class StaticFieldReferenceOnSubclassInspection extends BaseInspection {
             PsiReferenceExpression expression
         ) {
             super.visitReferenceExpression(expression);
-            final PsiElement qualifier = expression.getQualifier();
+            PsiElement qualifier = expression.getQualifier();
             if (!(qualifier instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiElement referent = expression.resolve();
+            PsiElement referent = expression.resolve();
             if (!(referent instanceof PsiField)) {
                 return;
             }
-            final PsiField field = (PsiField) referent;
+            PsiField field = (PsiField) referent;
             if (!field.hasModifierProperty(PsiModifier.STATIC)) {
                 return;
             }
-            final PsiElement qualifierReferent =
+            PsiElement qualifierReferent =
                 ((PsiReference) qualifier).resolve();
             if (!(qualifierReferent instanceof PsiClass)) {
                 return;
             }
-            final PsiClass referencedClass = (PsiClass) qualifierReferent;
-            final PsiClass declaringClass = field.getContainingClass();
+            PsiClass referencedClass = (PsiClass) qualifierReferent;
+            PsiClass declaringClass = field.getContainingClass();
             if (declaringClass == null) {
                 return;
             }
             if (declaringClass.equals(referencedClass)) {
                 return;
             }
-            final PsiClass containingClass =
+            PsiClass containingClass =
                 ClassUtils.getContainingClass(expression);
             if (!ClassUtils.isClassVisibleFromClass(
                 containingClass,
@@ -122,7 +122,7 @@ public class StaticFieldReferenceOnSubclassInspection extends BaseInspection {
             )) {
                 return;
             }
-            final PsiElement identifier = expression.getReferenceNameElement();
+            PsiElement identifier = expression.getReferenceNameElement();
             registerError(identifier, declaringClass, referencedClass);
         }
     }

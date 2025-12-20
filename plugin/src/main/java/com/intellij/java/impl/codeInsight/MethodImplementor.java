@@ -35,7 +35,7 @@ public interface MethodImplementor {
   PsiMethod[] getMethodsToImplement(PsiClass aClass);
 
   @Nonnull
-  PsiMethod[] createImplementationPrototypes(final PsiClass inClass, PsiMethod method) throws IncorrectOperationException;
+  PsiMethod[] createImplementationPrototypes(PsiClass inClass, PsiMethod method) throws IncorrectOperationException;
 
   @Nullable
   GenerationInfo createGenerationInfo(PsiMethod method, boolean mergeIfExists);

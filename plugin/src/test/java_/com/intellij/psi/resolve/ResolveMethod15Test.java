@@ -14,139 +14,139 @@ import static org.junit.Assert.assertThat;
  */
 public abstract class ResolveMethod15Test extends Resolve15TestCase {
   public void testStaticImportOnDemand() throws Exception {
-    final PsiReference ref = configureByFile();
-    final PsiElement element = ref.resolve();
+    PsiReference ref = configureByFile();
+    PsiElement element = ref.resolve();
     assertNotNull(element);
     assertThat(element, instanceOf(PsiMethod.class));
-    final PsiMethod method = (PsiMethod)element;
+    PsiMethod method = (PsiMethod)element;
     assertEquals("asList", method.getName());
     assertEquals(CommonClassNames.JAVA_UTIL_ARRAYS, method.getContainingClass().getQualifiedName());
   }
 
   public void testStaticImportHidden() throws Exception {
-    final PsiJavaReference ref = (PsiJavaReference)configureByFile();
-    final JavaResolveResult result = ref.advancedResolve(false);
+    PsiJavaReference ref = (PsiJavaReference)configureByFile();
+    JavaResolveResult result = ref.advancedResolve(false);
     assertFalse(result.isValidResult());
-    final PsiElement element = result.getElement();
+    PsiElement element = result.getElement();
     assertNotNull(element);
     assertThat(element, instanceOf(PsiMethod.class));
-    final PsiMethod method = (PsiMethod)element;
+    PsiMethod method = (PsiMethod)element;
     assertEquals(CommonClassNames.JAVA_LANG_OBJECT, method.getContainingClass().getQualifiedName());
   }
 
   public void testStaticImportDirect() throws Exception {
-    final PsiReference ref = configureByFile();
-    final PsiElement element = ref.resolve();
+    PsiReference ref = configureByFile();
+    PsiElement element = ref.resolve();
     assertNotNull(element);
     assertThat(element, instanceOf(PsiMethod.class));
-    final PsiMethod method = (PsiMethod)element;
+    PsiMethod method = (PsiMethod)element;
     assertEquals("asList", method.getName());
     assertEquals(CommonClassNames.JAVA_UTIL_ARRAYS, method.getContainingClass().getQualifiedName());
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
-    final JavaResolveResult[] resolveResults = refExpr.multiResolve(false);
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    JavaResolveResult[] resolveResults = refExpr.multiResolve(false);
     assertEquals(1, resolveResults.length);
-    final JavaResolveResult resolveResult = resolveResults[0];
+    JavaResolveResult resolveResult = resolveResults[0];
     assertTrue(resolveResult.isValidResult());
     assertThat(resolveResult.getCurrentFileResolveScope(), instanceOf(PsiImportStaticStatement.class));
     assertThat(resolveResult, instanceOf(MethodCandidateInfo.class));
-    final MethodCandidateInfo methodCandidateInfo = (MethodCandidateInfo)resolveResult;
+    MethodCandidateInfo methodCandidateInfo = (MethodCandidateInfo)resolveResult;
     assertTrue(methodCandidateInfo.isApplicable());
   }
 
 
   public void testStaticImportConflict() throws Exception {
-    final PsiReference ref = configureByFile();
-    final PsiElement element = ref.resolve();
+    PsiReference ref = configureByFile();
+    PsiElement element = ref.resolve();
     assertNotNull(element);
     assertThat(element, instanceOf(PsiMethod.class));
-    final PsiMethod method = (PsiMethod)element;
+    PsiMethod method = (PsiMethod)element;
     assertEquals("sort", method.getName());
     assertEquals(CommonClassNames.JAVA_UTIL_COLLECTIONS, method.getContainingClass().getQualifiedName());
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
-    final JavaResolveResult[] resolveResults = refExpr.multiResolve(false);
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    JavaResolveResult[] resolveResults = refExpr.multiResolve(false);
     assertEquals(1, resolveResults.length);
-    final JavaResolveResult resolveResult = resolveResults[0];
+    JavaResolveResult resolveResult = resolveResults[0];
     assertFalse(resolveResult.isValidResult());
     assertThat(resolveResult.getCurrentFileResolveScope(), instanceOf(PsiImportStaticStatement.class));
     assertThat(resolveResult, instanceOf(MethodCandidateInfo.class));
-    final MethodCandidateInfo methodCandidateInfo = (MethodCandidateInfo)resolveResult;
+    MethodCandidateInfo methodCandidateInfo = (MethodCandidateInfo)resolveResult;
     assertFalse(methodCandidateInfo.isApplicable());
   }
 
   public void testStaticImportConflict1() throws Exception {
-    final PsiJavaCodeReferenceElement ref = (PsiJavaCodeReferenceElement)configureByFile();
-    final JavaResolveResult result = ref.advancedResolve(false);
+    PsiJavaCodeReferenceElement ref = (PsiJavaCodeReferenceElement)configureByFile();
+    JavaResolveResult result = ref.advancedResolve(false);
     PsiElement element = result.getElement();
     assertTrue(!result.isValidResult());
     assertThat(element, instanceOf(PsiMethod.class));
-    final PsiMethod method = (PsiMethod)element;
+    PsiMethod method = (PsiMethod)element;
     PsiMethod parentMethod = PsiTreeUtil.getParentOfType(ref.getElement(), PsiMethod.class);
     assertEquals(method, parentMethod);
   }
   public void testStaticImportConflict3() throws Exception {
-    final PsiJavaCodeReferenceElement ref = (PsiJavaCodeReferenceElement)configureByFile();
-    final JavaResolveResult result = ref.advancedResolve(false);
+    PsiJavaCodeReferenceElement ref = (PsiJavaCodeReferenceElement)configureByFile();
+    JavaResolveResult result = ref.advancedResolve(false);
     assertResolvesToMethodInClass(result, "ToImportX2");
   }
 
   public void testGenericsAndVarargsNoConflict() throws Exception {
-    final PsiReference ref = configureByFile();
-    final PsiElement element = ref.resolve();
+    PsiReference ref = configureByFile();
+    PsiElement element = ref.resolve();
     assertNotNull(element);
     assertThat(element, instanceOf(PsiMethod.class));
-    final PsiMethod method = (PsiMethod)element;
+    PsiMethod method = (PsiMethod)element;
     assertEquals("method", method.getName());
     assertEquals(method.getTypeParameters().length, 0);
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
-    final JavaResolveResult[] resolveResults = refExpr.multiResolve(false);
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    JavaResolveResult[] resolveResults = refExpr.multiResolve(false);
     assertEquals(1, resolveResults.length);
-    final JavaResolveResult resolveResult = resolveResults[0];
+    JavaResolveResult resolveResult = resolveResults[0];
     assertTrue(resolveResult.isValidResult());
     assertThat(resolveResult, instanceOf(MethodCandidateInfo.class));
-    final MethodCandidateInfo methodCandidateInfo = (MethodCandidateInfo)resolveResult;
+    MethodCandidateInfo methodCandidateInfo = (MethodCandidateInfo)resolveResult;
     assertTrue(methodCandidateInfo.isApplicable());
   }
 
   //JLS3 15.2.8 hack
   public void testGetClass() throws Exception {
-    final PsiReference ref = configureByFile();
+    PsiReference ref = configureByFile();
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
     PsiType type = ((PsiExpression)refExpr.getParent()).getType();
     assertEquals("java.lang.Class<? extends java.lang.String>", type.getCanonicalText());
   }
 
   public void testFilterFixedVsVarargs1() throws Exception {
-    final PsiReference ref = configureByFile();
+    PsiReference ref = configureByFile();
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
     PsiMethodCallExpression call = (PsiMethodCallExpression) refExpr.getParent();
     assertNull(call.resolveMethod());
   }
 
   public void testFilterFixedVsVarargs2() throws Exception {
-    final PsiReference ref = configureByFile();
+    PsiReference ref = configureByFile();
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
     PsiMethodCallExpression call = (PsiMethodCallExpression) refExpr.getParent();
     assertNull(call.resolveMethod());
   }
 
   public void testFilterFixedVsVarargs3() throws Exception {
-    final PsiReference ref = configureByFile();
+    PsiReference ref = configureByFile();
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
     PsiMethodCallExpression call = (PsiMethodCallExpression) refExpr.getParent();
     assertNull(call.resolveMethod());
   }
 
   public void testFilterFixedVsVarargs4() throws Exception {
-    final PsiReference ref = configureByFile();
+    PsiReference ref = configureByFile();
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
     PsiMethodCallExpression call = (PsiMethodCallExpression) refExpr.getParent();
     JavaResolveResult resolveResult = call.resolveMethodGenerics();
     assertNotNull(resolveResult.getElement());
@@ -154,9 +154,9 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
   }
 
   public void testFilterFixedVsVarargs5() throws Exception {
-    final PsiReference ref = configureByFile();
+    PsiReference ref = configureByFile();
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
     PsiMethodCallExpression call = (PsiMethodCallExpression) refExpr.getParent();
     JavaResolveResult resolveResult = call.resolveMethodGenerics();
     PsiElement element = resolveResult.getElement();
@@ -166,9 +166,9 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
   }
 
   public void testFilterFixedVsVarargs6() throws Exception {
-    final PsiReference ref = configureByFile();
+    PsiReference ref = configureByFile();
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
     PsiMethodCallExpression call = (PsiMethodCallExpression) refExpr.getParent();
     JavaResolveResult resolveResult = call.resolveMethodGenerics();
     PsiElement element = resolveResult.getElement();
@@ -178,9 +178,9 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
   }
 
   public void testFilterFixedVsVarargs7() throws Exception {
-    final PsiReference ref = configureByFile();
+    PsiReference ref = configureByFile();
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
     PsiMethodCallExpression call = (PsiMethodCallExpression) refExpr.getParent();
     JavaResolveResult resolveResult = call.resolveMethodGenerics();
     PsiElement element = resolveResult.getElement();
@@ -190,9 +190,9 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
   }
 
   public void testFilterFixedVsVarargs8() throws Exception {
-    final PsiReference ref = configureByFile();
+    PsiReference ref = configureByFile();
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
     PsiCallExpression call = (PsiCallExpression) refExpr.getParent();
     JavaResolveResult resolveResult = call.resolveMethodGenerics();
     PsiElement element = resolveResult.getElement();
@@ -201,9 +201,9 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
     assertTrue(!((PsiMethod) element).isVarArgs());
   }
   public void testFilterFixedVsVarargs9() throws Exception {
-    final PsiReference ref = configureByFile();
+    PsiReference ref = configureByFile();
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
     PsiCallExpression call = (PsiCallExpression) refExpr.getParent();
     JavaResolveResult resolveResult = call.resolveMethodGenerics();
     PsiElement element = resolveResult.getElement();
@@ -213,22 +213,22 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
   }
 
   public void testFilterBoxing1() throws Exception {
-    final PsiReference ref = configureByFile();
+    PsiReference ref = configureByFile();
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
     PsiCallExpression call = (PsiCallExpression) refExpr.getParent();
     JavaResolveResult resolveResult = call.resolveMethodGenerics();
     PsiElement element = resolveResult.getElement();
     assertNotNull(element);
     assertTrue(resolveResult.isValidResult());
-    final PsiMethod method = (PsiMethod)element;
+    PsiMethod method = (PsiMethod)element;
     assertEquals(PsiType.BOOLEAN, method.getParameterList().getParameters()[1].getType());
   }
 
   public void testFilterVarargsVsVarargs1() throws Exception {
-    final PsiReference ref = configureByFile();
+    PsiReference ref = configureByFile();
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
     PsiCallExpression call = (PsiCallExpression) refExpr.getParent();
     JavaResolveResult resolveResult = call.resolveMethodGenerics();
     PsiElement element = resolveResult.getElement();
@@ -238,125 +238,125 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
   }
 
   public void testFilterVarargsVsVarargs2() throws Exception {
-    final PsiReference ref = configureByFile();
+    PsiReference ref = configureByFile();
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
     PsiCallExpression call = (PsiCallExpression) refExpr.getParent();
     JavaResolveResult resolveResult = call.resolveMethodGenerics();
     assertNull(resolveResult.getElement());
     assertFalse(resolveResult.isValidResult());
 
-    final JavaResolveResult[] candidates = refExpr.multiResolve(false);
+    JavaResolveResult[] candidates = refExpr.multiResolve(false);
     assertEquals(2, candidates.length);
   }
 
   public void testFilterVarargsVsVarargs3() throws Exception {
-    final PsiReference ref = configureByFile();
+    PsiReference ref = configureByFile();
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
     PsiCallExpression call = (PsiCallExpression) refExpr.getParent();
     JavaResolveResult resolveResult = call.resolveMethodGenerics();
     assertNotNull(resolveResult.getElement());
     assertFalse(resolveResult.isValidResult());
 
-    final JavaResolveResult[] candidates = refExpr.multiResolve(false);
+    JavaResolveResult[] candidates = refExpr.multiResolve(false);
     assertEquals(1, candidates.length);
   }
 
   public void testFilterVarargsVsVarargs4() throws Exception {
-    final PsiReference ref = configureByFile();
+    PsiReference ref = configureByFile();
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
     PsiCallExpression call = (PsiCallExpression) refExpr.getParent();
     JavaResolveResult resolveResult = call.resolveMethodGenerics();
     assertNull(resolveResult.getElement());
     assertFalse(resolveResult.isValidResult());
 
-    final JavaResolveResult[] candidates = refExpr.multiResolve(false);
+    JavaResolveResult[] candidates = refExpr.multiResolve(false);
     assertEquals(2, candidates.length);
   }
 
   //IDEADEV-3313
   public void testCovariantReturnTypes() throws Exception {
-    final PsiReference ref = configureByFile();
+    PsiReference ref = configureByFile();
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
-    final PsiElement parent = refExpr.getParent();
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    PsiElement parent = refExpr.getParent();
     assertThat(parent, instanceOf(PsiMethodCallExpression.class));
-    final PsiMethod method = ((PsiCall)parent).resolveMethod();
+    PsiMethod method = ((PsiCall)parent).resolveMethod();
     assertNotNull(method);
     assertEquals("E", method.getContainingClass().getName());
   }
 
   public void testGenericMethods1() throws Exception {
-    final PsiReference ref = configureByFile();
+    PsiReference ref = configureByFile();
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
-    final PsiElement parent = refExpr.getParent();
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    PsiElement parent = refExpr.getParent();
     assertThat(parent, instanceOf(PsiMethodCallExpression.class));
-    final PsiMethodCallExpression expression = (PsiMethodCallExpression)parent;
+    PsiMethodCallExpression expression = (PsiMethodCallExpression)parent;
     assertNull(expression.resolveMethod());
-    final JavaResolveResult[] results = expression.getMethodExpression().multiResolve(false);
+    JavaResolveResult[] results = expression.getMethodExpression().multiResolve(false);
     assertEquals(2, results.length);
   }
 
   public void testGenericMethods2() throws Exception {
-    final PsiReference ref = configureByFile();
-    final PsiMethod method = checkResolvesUnique(ref);
+    PsiReference ref = configureByFile();
+    PsiMethod method = checkResolvesUnique(ref);
     assertEquals(0, method.getTypeParameters().length);
   }
 
   public void testGenericMethods3() throws Exception {
-    final PsiReference ref = configureByFile();
-    final PsiMethod method = checkResolvesUnique(ref);
+    PsiReference ref = configureByFile();
+    PsiMethod method = checkResolvesUnique(ref);
     assertEquals(0, method.getTypeParameters().length);
   }
 
   public void testGenericMethods4() throws Exception {
-    final PsiReference ref = configureByFile();
-    final PsiMethod method = checkResolvesUnique(ref);
+    PsiReference ref = configureByFile();
+    PsiMethod method = checkResolvesUnique(ref);
     assertEquals(0, method.getTypeParameters().length);
   }
 
   public void testGenericMethods5() throws Exception {
-    final PsiReference ref = configureByFile();
-    final PsiMethod method = checkResolvesUnique(ref);
+    PsiReference ref = configureByFile();
+    PsiMethod method = checkResolvesUnique(ref);
     assertEquals(2, method.getTypeParameters().length);
   }
 
   public void testGenericMethods6() throws Exception {
-    final PsiReference ref = configureByFile();
+    PsiReference ref = configureByFile();
     checkResolvesUnique(ref);
   }
 
   public void testGenericClass1() throws Exception {
-    final PsiReference ref = configureByFile();
-    final PsiMethod method = checkResolvesUnique(ref);
+    PsiReference ref = configureByFile();
+    PsiMethod method = checkResolvesUnique(ref);
     assertEquals("Foo", method.getContainingClass().getName());
   }
 
   public void testGenericClass2() throws Exception {
-    final PsiReference ref = configureByFile();
-    final PsiMethod method = checkResolvesUnique(ref);
+    PsiReference ref = configureByFile();
+    PsiMethod method = checkResolvesUnique(ref);
     assertEquals(0, method.getTypeParameters().length);
   }
 
   public void testMoreSpecificSameErasure() throws Exception {
-    final PsiReference ref = configureByFile();
-    final PsiMethod method = checkResolvesUnique(ref);
+    PsiReference ref = configureByFile();
+    PsiMethod method = checkResolvesUnique(ref);
     assertEquals(0, method.getTypeParameters().length);
   }
 
   private PsiReference configureByFile() throws Exception {
     return configureByFile("method/generics/" + getTestName(false) + ".java");
   }
-  private static PsiMethod checkResolvesUnique(final PsiReference ref) {
+  private static PsiMethod checkResolvesUnique(PsiReference ref) {
     assertThat(ref, instanceOf(PsiReferenceExpression.class));
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
-    final PsiElement parent = refExpr.getParent();
+    PsiReferenceExpression refExpr = (PsiReferenceExpression)ref;
+    PsiElement parent = refExpr.getParent();
     assertThat(parent, instanceOf(PsiMethodCallExpression.class));
-    final PsiMethodCallExpression expression = (PsiMethodCallExpression)parent;
-    final PsiMethod method = expression.resolveMethod();
+    PsiMethodCallExpression expression = (PsiMethodCallExpression)parent;
+    PsiMethod method = expression.resolveMethod();
     assertNotNull(method);
     return method;
   }
@@ -374,7 +374,7 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
     PsiElement target = ref.resolve();
     assertThat(target, instanceOf(PsiMethod.class));
     assertThat(target.getParent(), instanceOf(PsiClass.class));
-    final PsiParameter[] parameters = ((PsiMethod)target).getParameterList().getParameters();
+    PsiParameter[] parameters = ((PsiMethod)target).getParameterList().getParameters();
     assertEquals(1, parameters.length);
     assertTrue(parameters[0].getType() instanceof PsiArrayType);
   }
@@ -466,7 +466,7 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
   }
 
 
-  private static void assertGenericResolve(PsiReference ref, final String methodName, final String[] expectedTypeParameterValues, @NonNls final String expectedCallType) {
+  private static void assertGenericResolve(PsiReference ref, String methodName, String[] expectedTypeParameterValues, @NonNls String expectedCallType) {
     PsiElement target = ref.resolve();
     assertThat(target, instanceOf(PsiMethod.class));
 
@@ -493,44 +493,44 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
   }
   public void testDependingParams2() throws Exception{
     PsiJavaReference ref = (PsiJavaReference) configureByFile();
-    final JavaResolveResult result = ref.advancedResolve(true);
+    JavaResolveResult result = ref.advancedResolve(true);
     assertTrue(result.isValidResult());
   }
 
   public void testTypeInference1() throws Exception{
     PsiJavaReference ref = (PsiJavaReference) configureByFile();
-    final JavaResolveResult result = ref.advancedResolve(true);
+    JavaResolveResult result = ref.advancedResolve(true);
     assertNotNull(result.getElement());
   }
 
 
   public void testRawVsGenericConflict() throws Exception{
     PsiJavaReference ref = (PsiJavaReference) configureByFile();
-    final JavaResolveResult result = ref.advancedResolve(true);
+    JavaResolveResult result = ref.advancedResolve(true);
     assertResolvesToMethodInClass(result, "A");
   }
 
   public void testRawInheritanceConflict() throws Exception {
     PsiJavaReference ref = (PsiJavaReference)configureByFile();
-    final JavaResolveResult[] result = ref.multiResolve(false);
+    JavaResolveResult[] result = ref.multiResolve(false);
     assertEquals("False ambiguity", 1, result.length);
   }
 
   public void testRawVsGenericConflictInCaseOfOverride() throws Exception{
     PsiJavaReference ref = (PsiJavaReference) configureByFile();
-    final JavaResolveResult result = ref.advancedResolve(true);
+    JavaResolveResult result = ref.advancedResolve(true);
     assertResolvesToMethodInClass(result, "B");
   }
 
   public void testRawVsGenericConflictInCaseOfOverride2() throws Exception{
     PsiJavaReference ref = (PsiJavaReference) configureByFile();
-    final JavaResolveResult result = ref.advancedResolve(true);
+    JavaResolveResult result = ref.advancedResolve(true);
     assertResolvesToMethodInClass(result, "TestProcessor");
   }
 
   public void testAutoboxingAndWidening() throws Exception{
     PsiJavaReference ref = (PsiJavaReference) configureByFile();
-    final JavaResolveResult result = ref.advancedResolve(true);
+    JavaResolveResult result = ref.advancedResolve(true);
     assertNotNull(result.getElement());
     assertTrue(result.isValidResult());
   }
@@ -541,22 +541,22 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
   }
   public void testHidingSuperPrivate() throws Exception {
     PsiJavaReference ref = (PsiJavaReference)configureByFile();
-    final JavaResolveResult result = ref.advancedResolve(true);
+    JavaResolveResult result = ref.advancedResolve(true);
     assertResolvesToMethodInClass(result, "S");
   }
   public void testNestedTypeParams() throws Exception {
     PsiJavaReference ref = (PsiJavaReference)configureByFile();
-    final JavaResolveResult result = ref.advancedResolve(true);
+    JavaResolveResult result = ref.advancedResolve(true);
     assertResolvesToMethodInClass(result, "TestImpl");
   }
   public void testTypeParamBoundConflict() throws Exception {
     PsiJavaReference ref = (PsiJavaReference)configureByFile();
-    final JavaResolveResult result = ref.advancedResolve(true);
+    JavaResolveResult result = ref.advancedResolve(true);
     assertResolvesToMethodInClass(result, "Testergen");
   }
   public void testAmbiguousBoxing() throws Exception {
     PsiJavaReference ref = (PsiJavaReference)configureByFile();
-    final JavaResolveResult result = ref.advancedResolve(true);
+    JavaResolveResult result = ref.advancedResolve(true);
     assertFalse(result.isValidResult());
 
     JavaResolveResult[] results = ref.multiResolve(false);
@@ -567,7 +567,7 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
   
   public void testStaticMethodInSubclass() throws Exception {
     PsiJavaReference ref = (PsiJavaReference)configureByFile();
-    final JavaResolveResult result = ref.advancedResolve(true);
+    JavaResolveResult result = ref.advancedResolve(true);
     assertTrue(result.isValidResult());
 
     assertResolvesToMethodInClass(result, "SomeSubClass");

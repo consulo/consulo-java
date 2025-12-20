@@ -110,7 +110,7 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
 
     PsiExpression expression = getInitializer(var);
     if (expression instanceof PsiReferenceExpression) {
-      final PsiElement target = ((PsiReferenceExpression) expression).resolve();
+      PsiElement target = ((PsiReferenceExpression) expression).resolve();
       if (target instanceof PsiVariable) {
         return RecursionManager.doPreventingRecursion(expression, true, () -> getInitializerColor((PsiVariable) target));
       }
@@ -193,7 +193,7 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
       if (willBeImported()) {
         RangeMarker toDelete = JavaCompletionUtil.insertTemporary(context.getTailOffset(), document, " ");
         context.commitDocument();
-        final PsiReferenceExpression ref = PsiTreeUtil.findElementOfClassAtOffset(context.getFile(), context.getStartOffset(), PsiReferenceExpression.class, false);
+        PsiReferenceExpression ref = PsiTreeUtil.findElementOfClassAtOffset(context.getFile(), context.getStartOffset(), PsiReferenceExpression.class, false);
         if (ref != null) {
           if (ref.isQualified()) {
             return; // shouldn't happen, but sometimes we see exceptions because of this
@@ -221,7 +221,7 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
       makeFinalIfNeeded(context, (PsiVariable) target);
     }
 
-    final char completionChar = context.getCompletionChar();
+    char completionChar = context.getCompletionChar();
     if (completionChar == '=') {
       context.setAddCompletionChar(false);
       EqTailType.INSTANCE.processTail(context.getEditor(), context.getTailOffset());
@@ -266,7 +266,7 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
 
     PsiReference reference = context.getFile().findReferenceAt(context.getStartOffset());
     if (reference instanceof PsiReferenceExpression && !((PsiReferenceExpression) reference).isQualified()) {
-      final PsiVariable target = JavaPsiFacade.getInstance(context.getProject()).getResolveHelper().resolveReferencedVariable(field.getName(), (PsiElement) reference);
+      PsiVariable target = JavaPsiFacade.getInstance(context.getProject()).getResolveHelper().resolveReferencedVariable(field.getName(), (PsiElement) reference);
       return !field.getManager().areElementsEquivalent(target, CompletionUtilCore.getOriginalOrSelf(field));
     }
     return false;
@@ -275,7 +275,7 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
   private static void qualifyFieldReference(InsertionContext context, PsiField field) {
     context.commitDocument();
     PsiFile file = context.getFile();
-    final PsiReference reference = file.findReferenceAt(context.getStartOffset());
+    PsiReference reference = file.findReferenceAt(context.getStartOffset());
     if (reference instanceof PsiJavaCodeReferenceElement && ((PsiJavaCodeReferenceElement) reference).isQualified()) {
       return;
     }

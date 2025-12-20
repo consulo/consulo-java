@@ -45,7 +45,7 @@ class ParamDocTagInfo implements JavadocTagInfo {
   @Override
   public String checkTagValue(PsiDocTagValue value) {
     if (value == null) return JavaErrorBundle.message("javadoc.param.tag.parameter.name.expected");
-    final ASTNode firstChildNode = value.getNode().getFirstChildNode();
+    ASTNode firstChildNode = value.getNode().getFirstChildNode();
     if (firstChildNode != null &&
         firstChildNode.getElementType().equals(JavaDocTokenType.DOC_TAG_VALUE_LT)) {
       if (value.getNode().findChildByType(JavaDocTokenType.DOC_TAG_VALUE_TOKEN) == null) {

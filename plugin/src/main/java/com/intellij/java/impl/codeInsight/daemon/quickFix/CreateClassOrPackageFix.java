@@ -64,21 +64,21 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
     private final String myTemplateName;
 
     @Nullable
-    public static CreateClassOrPackageFix createFix(@Nonnull final String qualifiedName,
-                                                    @Nonnull final GlobalSearchScope scope,
-                                                    @Nonnull final PsiElement context,
-                                                    @Nullable final PsiJavaPackage basePackage,
+    public static CreateClassOrPackageFix createFix(@Nonnull String qualifiedName,
+                                                    @Nonnull GlobalSearchScope scope,
+                                                    @Nonnull PsiElement context,
+                                                    @Nullable PsiJavaPackage basePackage,
                                                     @Nullable ClassKind kind,
                                                     @Nullable String superClass,
                                                     @Nullable String templateName) {
-        final List<PsiDirectory> directories = getWritableDirectoryListDefault(basePackage, scope, context.getManager());
+        List<PsiDirectory> directories = getWritableDirectoryListDefault(basePackage, scope, context.getManager());
         if (directories.isEmpty()) {
             return null;
         }
-        final String redPart = basePackage == null ? qualifiedName : qualifiedName.substring(basePackage.getQualifiedName().length() + 1);
-        final int dot = redPart.indexOf('.');
-        final boolean fixPath = dot >= 0;
-        final String firstRedName = fixPath ? redPart.substring(0, dot) : redPart;
+        String redPart = basePackage == null ? qualifiedName : qualifiedName.substring(basePackage.getQualifiedName().length() + 1);
+        int dot = redPart.indexOf('.');
+        boolean fixPath = dot >= 0;
+        String firstRedName = fixPath ? redPart.substring(0, dot) : redPart;
         for (Iterator<PsiDirectory> i = directories.iterator(); i.hasNext(); ) {
             if (!checkCreateClassOrPackage(kind != null && !fixPath, i.next(), firstRedName)) {
                 i.remove();
@@ -94,9 +94,9 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
     }
 
     @Nullable
-    public static CreateClassOrPackageFix createFix(@Nonnull final String qualifiedName,
-                                                    @Nonnull final PsiElement context,
-                                                    @Nullable ClassKind kind, final String superClass) {
+    public static CreateClassOrPackageFix createFix(@Nonnull String qualifiedName,
+                                                    @Nonnull PsiElement context,
+                                                    @Nullable ClassKind kind, String superClass) {
         return createFix(qualifiedName, context.getResolveScope(), context, null, kind, superClass, null);
     }
 
@@ -106,7 +106,7 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
                                     @Nonnull String redPart,
                                     @Nullable ClassKind kind,
                                     @Nullable String superClass,
-                                    @Nullable final String templateName) {
+                                    @Nullable String templateName) {
         super(context);
         myRedPart = redPart;
         myTemplateName = templateName;
@@ -157,7 +157,7 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
         }
     }
 
-    private static boolean checkCreateClassOrPackage(final boolean createJavaClass, final PsiDirectory directory, final String name) {
+    private static boolean checkCreateClassOrPackage(boolean createJavaClass, PsiDirectory directory, String name) {
         try {
             if (createJavaClass) {
                 JavaDirectoryService.getInstance().checkCreateClass(directory, name);
@@ -173,12 +173,12 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
     }
 
     @Nullable
-    private PsiDirectory chooseDirectory(final Project project, final PsiFile file) {
+    private PsiDirectory chooseDirectory(Project project, PsiFile file) {
         PsiDirectory preferredDirectory = myWritableDirectoryList.isEmpty() ? null : myWritableDirectoryList.get(0);
-        final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
-        final VirtualFile virtualFile = file.getVirtualFile();
+        ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
+        VirtualFile virtualFile = file.getVirtualFile();
         assert virtualFile != null;
-        final Module moduleForFile = fileIndex.getModuleForFile(virtualFile);
+        Module moduleForFile = fileIndex.getModuleForFile(virtualFile);
         if (myWritableDirectoryList.size() > 1 && !ApplicationManager.getApplication().isUnitTestMode()) {
             if (moduleForFile != null) {
                 for (PsiDirectory directory : myWritableDirectoryList) {
@@ -197,15 +197,15 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
         return preferredDirectory;
     }
 
-    private void doCreate(final PsiDirectory baseDirectory, PsiElement myContext) {
-        final PsiManager manager = baseDirectory.getManager();
+    private void doCreate(PsiDirectory baseDirectory, PsiElement myContext) {
+        PsiManager manager = baseDirectory.getManager();
         PsiDirectory directory = baseDirectory;
         String lastName;
         for (StringTokenizer st = new StringTokenizer(myRedPart, "."); ; ) {
             lastName = st.nextToken();
             if (st.hasMoreTokens()) {
                 try {
-                    final PsiDirectory subdirectory = directory.findSubdirectory(lastName);
+                    PsiDirectory subdirectory = directory.findSubdirectory(lastName);
                     directory = subdirectory != null ? subdirectory : directory.createSubdirectory(lastName);
                 }
                 catch (IncorrectOperationException e) {
@@ -246,13 +246,13 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
         return false;
     }
 
-    public static List<PsiDirectory> getWritableDirectoryListDefault(@Nullable final PsiJavaPackage context,
-                                                                     final GlobalSearchScope scope,
-                                                                     final PsiManager psiManager) {
+    public static List<PsiDirectory> getWritableDirectoryListDefault(@Nullable PsiJavaPackage context,
+                                                                     GlobalSearchScope scope,
+                                                                     PsiManager psiManager) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Getting writable directory list for package '" + (context == null ? null : context.getQualifiedName()) + "', scope=" + scope);
         }
-        final List<PsiDirectory> writableDirectoryList = new ArrayList<PsiDirectory>();
+        List<PsiDirectory> writableDirectoryList = new ArrayList<PsiDirectory>();
         if (context != null) {
             for (PsiDirectory directory : context.getDirectories()) {
                 if (LOG.isDebugEnabled()) {

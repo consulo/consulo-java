@@ -37,15 +37,15 @@ public class ConfigFileMetaData {
   private final boolean myFileNameFixed;
   private final boolean myUnique;
 
-  public ConfigFileMetaData(final String title,
-                            final @NonNls String id,
-                            final @NonNls String fileName,
-                            final @NonNls String directoryPath,
-                            final ConfigFileVersion[] versions,
-                            final @Nullable ConfigFileVersion defaultVersion,
-                            final boolean optional,
-                            final boolean fileNameFixed,
-                            final boolean unique) {
+  public ConfigFileMetaData(String title,
+                            @NonNls String id,
+                            @NonNls String fileName,
+                            @NonNls String directoryPath,
+                            ConfigFileVersion[] versions,
+                            @Nullable ConfigFileVersion defaultVersion,
+                            boolean optional,
+                            boolean fileNameFixed,
+                            boolean unique) {
     myTitle = title;
     myId = id;
     myFileName = fileName;
@@ -59,14 +59,14 @@ public class ConfigFileMetaData {
     LOG.assertTrue(Arrays.asList(myVersions).contains(myDefaultVersion));
   }
 
-  public ConfigFileMetaData(final String title,
-                            final @NonNls String fileName,
-                            final @NonNls String directoryPath,
-                            final ConfigFileVersion[] versions,
+  public ConfigFileMetaData(String title,
+                            @NonNls String fileName,
+                            @NonNls String directoryPath,
+                            ConfigFileVersion[] versions,
                             ConfigFileVersion defaultVersion,
                             boolean optional,
-                            final boolean fileNameFixed,
-                            final boolean unique) {
+                            boolean fileNameFixed,
+                            boolean unique) {
     this(title, fileName, fileName, directoryPath, versions, defaultVersion, optional, fileNameFixed, unique);
   }
 

@@ -55,7 +55,7 @@ public class MakeTypeGenericAction extends PsiElementBaseIntentionAction {
   }
 
   @RequiredReadAction
-  private Pair<PsiVariable,PsiType> findVariable(final PsiElement element) {
+  private Pair<PsiVariable,PsiType> findVariable(PsiElement element) {
     PsiVariable variable = null;
     PsiElement elementParent = element.getParent();
     if (element instanceof PsiIdentifier) {
@@ -71,18 +71,18 @@ public class MakeTypeGenericAction extends PsiElementBaseIntentionAction {
     }
     if (variable == null) return null;
     variableName = variable.getName();
-    final PsiExpression initializer = variable.getInitializer();
+    PsiExpression initializer = variable.getInitializer();
     if (initializer == null) return null;
-    final PsiType variableType = variable.getType();
-    final PsiType initializerType = initializer.getType();
+    PsiType variableType = variable.getType();
+    PsiType initializerType = initializer.getType();
     if (!(variableType instanceof PsiClassType)) return null;
-    final PsiClassType variableClassType = (PsiClassType) variableType;
+    PsiClassType variableClassType = (PsiClassType) variableType;
     if (!variableClassType.isRaw()) return null;
     if (!(initializerType instanceof PsiClassType)) return null;
-    final PsiClassType initializerClassType = (PsiClassType) initializerType;
+    PsiClassType initializerClassType = (PsiClassType) initializerType;
     if (initializerClassType.isRaw()) return null;
-    final PsiClassType.ClassResolveResult variableResolveResult = variableClassType.resolveGenerics();
-    final PsiClassType.ClassResolveResult initializerResolveResult = initializerClassType.resolveGenerics();
+    PsiClassType.ClassResolveResult variableResolveResult = variableClassType.resolveGenerics();
+    PsiClassType.ClassResolveResult initializerResolveResult = initializerClassType.resolveGenerics();
     if (initializerResolveResult.getElement() == null) return null;
     PsiClass variableResolved = variableResolveResult.getElement();
     PsiSubstitutor targetSubstitutor = TypeConversionUtil.getClassSubstitutor(variableResolved, initializerResolveResult.getElement(), initializerResolveResult.getSubstitutor());

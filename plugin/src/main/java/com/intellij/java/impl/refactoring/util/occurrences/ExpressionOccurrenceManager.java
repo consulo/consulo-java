@@ -63,12 +63,12 @@ public class ExpressionOccurrenceManager extends BaseOccurrenceManager {
     if(myFilter != null && !myFilter.isOK(myMainOccurence)) {
       return defaultOccurrences();
     }
-    final PsiExpression[] expressionOccurrences = findExpressionOccurrences();
-    final PsiClass scopeClass = PsiTreeUtil.getNonStrictParentOfType(myScope, PsiClass.class);
+    PsiExpression[] expressionOccurrences = findExpressionOccurrences();
+    PsiClass scopeClass = PsiTreeUtil.getNonStrictParentOfType(myScope, PsiClass.class);
     if (myMaintainStaticContext && expressionOccurrences.length > 1 && !RefactoringUtil.isInStaticContext(myMainOccurence, scopeClass)) {
-      final ArrayList<PsiExpression> expressions = new ArrayList<PsiExpression>(Arrays.asList(expressionOccurrences));
+      ArrayList<PsiExpression> expressions = new ArrayList<PsiExpression>(Arrays.asList(expressionOccurrences));
       for (Iterator<PsiExpression> iterator = expressions.iterator(); iterator.hasNext();) {
-        final PsiExpression expression = iterator.next();
+        PsiExpression expression = iterator.next();
         if(RefactoringUtil.isInStaticContext(expression, scopeClass)) {
           iterator.remove();
         }
@@ -86,26 +86,26 @@ public class ExpressionOccurrenceManager extends BaseOccurrenceManager {
 
   public PsiExpression[] findExpressionOccurrences() {
     if (myMainOccurence instanceof PsiLiteralExpression && !myMainOccurence.isPhysical()) {
-      final FindManager findManager = FindManager.getInstance(getScope().getProject());
-      final FindModel findModel = (FindModel)findManager.getFindInFileModel().clone();
+      FindManager findManager = FindManager.getInstance(getScope().getProject());
+      FindModel findModel = (FindModel)findManager.getFindInFileModel().clone();
       findModel.setCaseSensitive(true);
       findModel.setRegularExpressions(false);
       String value = StringUtil.stripQuotesAroundValue(myMainOccurence.getText());
       if (value.length() > 0) {
         findModel.setStringToFind(value);
-        final List<PsiExpression> results = new ArrayList<PsiExpression>();
-        final PsiFile file = getScope().getContainingFile();
-        final String text = getScope().getText();
-        final int offset = getScope().getTextRange().getStartOffset();
+        List<PsiExpression> results = new ArrayList<PsiExpression>();
+        PsiFile file = getScope().getContainingFile();
+        String text = getScope().getText();
+        int offset = getScope().getTextRange().getStartOffset();
         FindResult result = findManager.findString(text, 0, findModel);
-        final Set<PsiLiteralExpression> literals = new HashSet<PsiLiteralExpression>();
+        Set<PsiLiteralExpression> literals = new HashSet<PsiLiteralExpression>();
         while (result.isStringFound()) {
-          final int startOffset = offset + result.getStartOffset();
-          final int endOffset = result.getEndOffset();
-          final PsiLiteralExpression literalExpression =
+          int startOffset = offset + result.getStartOffset();
+          int endOffset = result.getEndOffset();
+          PsiLiteralExpression literalExpression =
             PsiTreeUtil.getParentOfType(file.findElementAt(startOffset), PsiLiteralExpression.class);
           if (literalExpression != null && !literals.contains(literalExpression)) { //enum. occurrences inside string literals
-            final PsiExpression expression =
+            PsiExpression expression =
               IntroduceVariableBase.getSelectedExpression(file.getProject(), file, startOffset, offset + endOffset);
             if (expression != null && IntroduceVariableBase.getErrorMessage(expression) == null) {
               results.add(expression);

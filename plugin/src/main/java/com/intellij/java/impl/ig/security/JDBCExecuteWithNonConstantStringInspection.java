@@ -70,38 +70,38 @@ public class JDBCExecuteWithNonConstantStringInspection
     public void visitMethodCallExpression(
       @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression = expression
+      PsiReferenceExpression methodExpression = expression
         .getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
+      String methodName = methodExpression.getReferenceName();
       if (!s_execMethodNames.contains(methodName)) {
         return;
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return;
       }
-      final PsiClass aClass = method.getContainingClass();
+      PsiClass aClass = method.getContainingClass();
       if (aClass == null) {
         return;
       }
       if (!InheritanceUtil.isInheritor(aClass, "java.sql.Statement")) {
         return;
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      final PsiExpression[] args = argumentList.getExpressions();
+      PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpression[] args = argumentList.getExpressions();
       if (args.length == 0) {
         return;
       }
-      final PsiExpression arg = args[0];
-      final PsiType type = arg.getType();
+      PsiExpression arg = args[0];
+      PsiType type = arg.getType();
       if (type == null) {
         return;
       }
-      final String typeText = type.getCanonicalText();
+      String typeText = type.getCanonicalText();
       if (!CommonClassNames.JAVA_LANG_STRING.equals(typeText)) {
         return;
       }
-      final String stringValue =
+      String stringValue =
         (String)ConstantExpressionUtil.computeCastTo(arg, type);
       if (stringValue != null) {
         return;

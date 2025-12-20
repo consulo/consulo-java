@@ -63,17 +63,17 @@ public class HighlightSuppressedWarningsHandler extends HighlightUsagesHandlerBa
 
   @Override
   public List<PsiLiteralExpression> getTargets() {
-    final List<PsiLiteralExpression> result = new ArrayList<PsiLiteralExpression>();
+    List<PsiLiteralExpression> result = new ArrayList<PsiLiteralExpression>();
     if (mySuppressedExpression != null) {
       result.add(mySuppressedExpression);
       return result;
     }
-    final PsiAnnotationParameterList list = myTarget.getParameterList();
-    final PsiNameValuePair[] attributes = list.getAttributes();
+    PsiAnnotationParameterList list = myTarget.getParameterList();
+    PsiNameValuePair[] attributes = list.getAttributes();
     for (PsiNameValuePair attribute : attributes) {
-      final PsiAnnotationMemberValue value = attribute.getValue();
+      PsiAnnotationMemberValue value = attribute.getValue();
       if (value instanceof PsiArrayInitializerMemberValue) {
-        final PsiAnnotationMemberValue[] initializers = ((PsiArrayInitializerMemberValue) value).getInitializers();
+        PsiAnnotationMemberValue[] initializers = ((PsiArrayInitializerMemberValue) value).getInitializers();
         for (PsiAnnotationMemberValue initializer : initializers) {
           if (initializer instanceof PsiLiteralExpression) {
             result.add((PsiLiteralExpression) initializer);
@@ -99,7 +99,7 @@ public class HighlightSuppressedWarningsHandler extends HighlightUsagesHandlerBa
         @Nonnull
         @Override
         public String getTextFor(PsiLiteralExpression value) {
-          final Object o = value.getValue();
+          Object o = value.getValue();
           LOG.assertTrue(o instanceof String);
           return (String) o;
         }
@@ -111,15 +111,15 @@ public class HighlightSuppressedWarningsHandler extends HighlightUsagesHandlerBa
 
   @Override
   public void computeUsages(List<PsiLiteralExpression> targets) {
-    final Project project = myTarget.getProject();
-    final PsiElement parent = myTarget.getParent().getParent();
+    Project project = myTarget.getProject();
+    PsiElement parent = myTarget.getParent().getParent();
     final LocalInspectionsPass pass = new LocalInspectionsPass(myFile, myFile.getViewProvider().getDocument(),
         parent.getTextRange().getStartOffset(), parent.getTextRange().getEndOffset(), LocalInspectionsPass.EMPTY_PRIORITY_RANGE,
         false, HighlightInfoProcessor.getEmpty());
-    final InspectionProfile inspectionProfile =
+    InspectionProfile inspectionProfile =
         InspectionProjectProfileManager.getInstance(project).getInspectionProfile();
     for (PsiLiteralExpression target : targets) {
-      final Object value = target.getValue();
+      Object value = target.getValue();
       if (!(value instanceof String)) {
         continue;
       }
@@ -146,7 +146,7 @@ public class HighlightSuppressedWarningsHandler extends HighlightUsagesHandlerBa
       }
 
       for (HighlightInfo info : pass.getInfos()) {
-        final PsiElement element = CollectHighlightsUtil.findCommonParent(myFile, info.getStartOffset(), info.getEndOffset());
+        PsiElement element = CollectHighlightsUtil.findCommonParent(myFile, info.getStartOffset(), info.getEndOffset());
         if (element != null) {
           addOccurrence(element);
         }

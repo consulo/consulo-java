@@ -129,11 +129,11 @@ public class JavaRefactoringSettings implements PersistentStateComponent<JavaRef
     return RENAME_VARIABLES;
   }
 
-  public void setRenameInheritors(final boolean RENAME_INHERITORS) {
+  public void setRenameInheritors(boolean RENAME_INHERITORS) {
     this.RENAME_INHERITORS = RENAME_INHERITORS;
   }
 
-  public void setRenameVariables(final boolean RENAME_VARIABLES) {
+  public void setRenameVariables(boolean RENAME_VARIABLES) {
     this.RENAME_VARIABLES = RENAME_VARIABLES;
   }
 

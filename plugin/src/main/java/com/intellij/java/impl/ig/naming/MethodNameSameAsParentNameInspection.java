@@ -63,19 +63,19 @@ public class MethodNameSameAsParentNameInspection extends BaseInspection {
       if (method.getNameIdentifier() == null) {
         return;
       }
-      final PsiClass containingClass = method.getContainingClass();
+      PsiClass containingClass = method.getContainingClass();
       if (containingClass == null) {
         return;
       }
-      final PsiClass parent = containingClass.getSuperClass();
+      PsiClass parent = containingClass.getSuperClass();
       if (parent == null) {
         return;
       }
-      final String parentName = parent.getName();
+      String parentName = parent.getName();
       if (parentName == null) {
         return;
       }
-      final String methodName = method.getName();
+      String methodName = method.getName();
       if (!methodName.equals(parentName)) {
         return;
       }

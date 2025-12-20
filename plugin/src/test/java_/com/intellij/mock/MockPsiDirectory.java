@@ -22,7 +22,7 @@ import jakarta.annotation.Nullable;
 public class MockPsiDirectory extends MockPsiElement implements PsiDirectory {
   private final PsiJavaPackage myPackage;
 
-  public MockPsiDirectory(final PsiJavaPackage aPackage, @Nonnull Disposable parentDisposable) {
+  public MockPsiDirectory(PsiJavaPackage aPackage, @Nonnull Disposable parentDisposable) {
     super(parentDisposable);
     myPackage = aPackage;
   }
@@ -39,12 +39,12 @@ public class MockPsiDirectory extends MockPsiElement implements PsiDirectory {
   }
 
   @Override
-  public void checkCreateFile(@Nonnull final String name) throws IncorrectOperationException {
+  public void checkCreateFile(@Nonnull String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Method checkCreateFile is not yet implemented in " + getClass().getName());
   }
 
   @Override
-  public void checkCreateSubdirectory(@Nonnull final String name) throws IncorrectOperationException {
+  public void checkCreateSubdirectory(@Nonnull String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Method checkCreateSubdirectory is not yet implemented in " + getClass().getName());
   }
 
@@ -56,31 +56,31 @@ public class MockPsiDirectory extends MockPsiElement implements PsiDirectory {
 
   @Override
   @Nonnull
-  public PsiFile createFile(@Nonnull final String name) throws IncorrectOperationException {
+  public PsiFile createFile(@Nonnull String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Method createFile is not yet implemented in " + getClass().getName());
   }
 
   @Override
   @Nonnull
-  public PsiFile copyFileFrom(@Nonnull final String newName, @Nonnull final PsiFile originalFile) throws IncorrectOperationException {
+  public PsiFile copyFileFrom(@Nonnull String newName, @Nonnull PsiFile originalFile) throws IncorrectOperationException {
     throw new IncorrectOperationException("Method copyFileFrom is not yet implemented in " + getClass().getName());
   }
 
   @Override
   @Nonnull
-  public PsiDirectory createSubdirectory(@Nonnull final String name) throws IncorrectOperationException {
+  public PsiDirectory createSubdirectory(@Nonnull String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Method createSubdirectory is not yet implemented in " + getClass().getName());
   }
 
   @Override
   @Nullable
-  public PsiFile findFile(@Nonnull @NonNls final String name) {
+  public PsiFile findFile(@Nonnull @NonNls String name) {
     throw new UnsupportedOperationException("Method findFile is not yet implemented in " + getClass().getName());
   }
 
   @Override
   @Nullable
-  public PsiDirectory findSubdirectory(@Nonnull final String name) {
+  public PsiDirectory findSubdirectory(@Nonnull String name) {
     throw new UnsupportedOperationException("Method findSubdirectory is not yet implemented in " + getClass().getName());
   }
 
@@ -99,7 +99,7 @@ public class MockPsiDirectory extends MockPsiElement implements PsiDirectory {
   @Override
   @Nullable
   public PsiDirectory getParentDirectory() {
-    final PsiJavaPackage psiPackage = myPackage.getParentPackage();
+    PsiJavaPackage psiPackage = myPackage.getParentPackage();
     return psiPackage == null ? null : new MockPsiDirectory(psiPackage, getProject());
   }
 
@@ -116,18 +116,18 @@ public class MockPsiDirectory extends MockPsiElement implements PsiDirectory {
   }
 
   @Override
-  public boolean processChildren(final PsiElementProcessor<PsiFileSystemItem> processor) {
+  public boolean processChildren(PsiElementProcessor<PsiFileSystemItem> processor) {
     throw new UnsupportedOperationException("Method processChildren is not yet implemented in " + getClass().getName());
   }
 
   @Override
   @Nonnull
-  public PsiElement setName(@Nonnull final String name) throws IncorrectOperationException {
+  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Method setName is not yet implemented in " + getClass().getName());
   }
 
   @Override
-  public void checkSetName(final String name) throws IncorrectOperationException {
+  public void checkSetName(String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Method checkSetName is not yet implemented in " + getClass().getName());
   }
 

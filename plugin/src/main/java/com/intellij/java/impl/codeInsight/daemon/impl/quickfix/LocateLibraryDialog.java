@@ -52,7 +52,7 @@ public class LocateLibraryDialog extends DialogWrapper {
   private final Project myProject;
   private List<String> myResultingLibraryPaths;
 
-  public LocateLibraryDialog(@Nonnull Module module, @Nonnull List<String> defaultLibraryPaths, @Nonnull @NonNls final String presentableName) {
+  public LocateLibraryDialog(@Nonnull Module module, @Nonnull List<String> defaultLibraryPaths, @Nonnull @NonNls String presentableName) {
     super(module.getProject(), true);
     myDefaultLibraryPaths = defaultLibraryPaths;
     setTitle(JavaQuickFixBundle.message("add.library.title.dialog", presentableName));
@@ -64,7 +64,7 @@ public class LocateLibraryDialog extends DialogWrapper {
     myCopyToDir.addBrowseFolderListener(JavaQuickFixBundle.message("add.library.title.choose.folder"), JavaQuickFixBundle.message("add.library.description.choose.folder"), myProject,
         FileChooserDescriptorFactory.createSingleFolderDescriptor());
 
-    final ItemListener listener = e -> updateButtons();
+    ItemListener listener = e -> updateButtons();
 
     myUseBundledRadioButton.addItemListener(listener);
     myCopyLibraryFilesRadioButton.addItemListener(listener);
@@ -94,7 +94,7 @@ public class LocateLibraryDialog extends DialogWrapper {
   }
 
   private void updateButtons() {
-    final boolean copyFiles = myCopyLibraryFilesRadioButton.isSelected();
+    boolean copyFiles = myCopyLibraryFilesRadioButton.isSelected();
     myCopyToDir.setEnabled(copyFiles);
     setOKActionEnabled(!copyFiles || !myCopyToDir.getText().isEmpty());
   }
@@ -132,14 +132,14 @@ public class LocateLibraryDialog extends DialogWrapper {
       return myDefaultLibraryPaths;
     }
 
-    final String dstDir = myCopyToDir.getText();
+    String dstDir = myCopyToDir.getText();
     if (dstDir.isEmpty()) {
       return Collections.emptyList();
     }
 
     List<String> result = new ArrayList<>();
     for (String path : myDefaultLibraryPaths) {
-      final File srcFile = new File(path);
+      File srcFile = new File(path);
       if (!srcFile.exists()) {
         Messages.showErrorDialog(
           myProject,

@@ -48,7 +48,7 @@ public final class FileClassMacro extends Macro {
     //if (!(psiFile instanceof PsiJavaFile)) {
     //  return null;
     //}
-    final PsiFile javaFile = dataContext.getData(PsiFile.KEY);
+    PsiFile javaFile = dataContext.getData(PsiFile.KEY);
     if (!(javaFile instanceof PsiJavaFile)) return null;
     PsiClass[] classes = ((PsiJavaFile) javaFile).getClasses();
     if (classes.length == 1) {

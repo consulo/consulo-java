@@ -48,12 +48,12 @@ class CollectionQueryCalledVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     super.visitForeachStatement(statement);
-    final PsiExpression qualifier = statement.getIteratedValue();
+    PsiExpression qualifier = statement.getIteratedValue();
     if (!(qualifier instanceof PsiReferenceExpression)) {
       return;
     }
-    final PsiReference referenceExpression = (PsiReference)qualifier;
-    final PsiElement referent = referenceExpression.resolve();
+    PsiReference referenceExpression = (PsiReference)qualifier;
+    PsiElement referent = referenceExpression.resolve();
     if (referent == null) {
       return;
     }
@@ -70,12 +70,12 @@ class CollectionQueryCalledVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     super.visitMethodCallExpression(call);
-    final PsiReferenceExpression methodExpression =
+    PsiReferenceExpression methodExpression =
       call.getMethodExpression();
-    final boolean isStatement =
+    boolean isStatement =
       call.getParent() instanceof PsiExpressionStatement;
     if (isStatement) {
-      final String methodName = methodExpression.getReferenceName();
+      String methodName = methodExpression.getReferenceName();
       if (methodName == null) {
         return;
       }
@@ -92,7 +92,7 @@ class CollectionQueryCalledVisitor extends JavaRecursiveElementVisitor {
         }
       }
     }
-    final PsiExpression qualifier =
+    PsiExpression qualifier =
       methodExpression.getQualifierExpression();
     checkQualifier(qualifier);
   }
@@ -102,9 +102,9 @@ class CollectionQueryCalledVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     if (expression instanceof PsiReferenceExpression) {
-      final PsiReferenceExpression referenceExpression =
+      PsiReferenceExpression referenceExpression =
         (PsiReferenceExpression)expression;
-      final PsiElement referent = referenceExpression.resolve();
+      PsiElement referent = referenceExpression.resolve();
       if (referent == null) {
         return;
       }
@@ -113,17 +113,17 @@ class CollectionQueryCalledVisitor extends JavaRecursiveElementVisitor {
       }
     }
     else if (expression instanceof PsiParenthesizedExpression) {
-      final PsiParenthesizedExpression parenthesizedExpression =
+      PsiParenthesizedExpression parenthesizedExpression =
         (PsiParenthesizedExpression)expression;
       checkQualifier(parenthesizedExpression.getExpression());
     }
     else if (expression instanceof PsiConditionalExpression) {
-      final PsiConditionalExpression conditionalExpression =
+      PsiConditionalExpression conditionalExpression =
         (PsiConditionalExpression)expression;
-      final PsiExpression thenExpression =
+      PsiExpression thenExpression =
         conditionalExpression.getThenExpression();
       checkQualifier(thenExpression);
-      final PsiExpression elseExpression =
+      PsiExpression elseExpression =
         conditionalExpression.getElseExpression();
       checkQualifier(elseExpression);
     }

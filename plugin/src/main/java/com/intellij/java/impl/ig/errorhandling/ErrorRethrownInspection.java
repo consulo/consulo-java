@@ -59,10 +59,10 @@ public class ErrorRethrownInspection extends BaseInspection {
         @Override
         public void visitTryStatement(@Nonnull PsiTryStatement statement) {
             super.visitTryStatement(statement);
-            final PsiCatchSection[] catchSections = statement.getCatchSections();
+            PsiCatchSection[] catchSections = statement.getCatchSections();
             for (PsiCatchSection catchSection : catchSections) {
-                final PsiParameter parameter = catchSection.getParameter();
-                final PsiCodeBlock catchBlock = catchSection.getCatchBlock();
+                PsiParameter parameter = catchSection.getParameter();
+                PsiCodeBlock catchBlock = catchSection.getCatchBlock();
                 if (parameter != null && catchBlock != null) {
                     checkCatchBlock(parameter, catchBlock);
                 }
@@ -70,8 +70,8 @@ public class ErrorRethrownInspection extends BaseInspection {
         }
 
         private void checkCatchBlock(PsiParameter parameter, PsiCodeBlock catchBlock) {
-            final PsiType type = parameter.getType();
-            final PsiClass aClass = PsiUtil.resolveClassInType(type);
+            PsiType type = parameter.getType();
+            PsiClass aClass = PsiUtil.resolveClassInType(type);
             if (aClass == null) {
                 return;
             }
@@ -81,25 +81,25 @@ public class ErrorRethrownInspection extends BaseInspection {
             if (TypeUtils.typeEquals("java.lang.ThreadDeath", type)) {
                 return;
             }
-            final PsiTypeElement typeElement = parameter.getTypeElement();
-            final PsiStatement[] statements = catchBlock.getStatements();
+            PsiTypeElement typeElement = parameter.getTypeElement();
+            PsiStatement[] statements = catchBlock.getStatements();
             if (statements.length == 0) {
                 registerError(typeElement);
                 return;
             }
-            final PsiStatement lastStatement =
+            PsiStatement lastStatement =
                 statements[statements.length - 1];
             if (!(lastStatement instanceof PsiThrowStatement)) {
                 registerError(typeElement);
                 return;
             }
-            final PsiThrowStatement throwStatement = (PsiThrowStatement) lastStatement;
-            final PsiExpression exception = throwStatement.getException();
+            PsiThrowStatement throwStatement = (PsiThrowStatement) lastStatement;
+            PsiExpression exception = throwStatement.getException();
             if (!(exception instanceof PsiReferenceExpression)) {
                 registerError(typeElement);
                 return;
             }
-            final PsiElement element = ((PsiReference) exception).resolve();
+            PsiElement element = ((PsiReference) exception).resolve();
             if (parameter.equals(element)) {
                 return;
             }

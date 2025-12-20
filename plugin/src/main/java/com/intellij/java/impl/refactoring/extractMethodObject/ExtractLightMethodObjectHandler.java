@@ -72,9 +72,9 @@ public class ExtractLightMethodObjectHandler {
   @Nullable
   public static ExtractedData extractLightMethodObject(final Project project,
                                                        @Nullable PsiElement originalContext,
-                                                       @Nonnull final PsiCodeFragment fragment,
+                                                       @Nonnull PsiCodeFragment fragment,
                                                        final String methodName) throws PrepareFailedException {
-    final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
+    PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
     PsiElement[] elements = completeToStatementArray(fragment, elementFactory);
     if (elements == null) {
       elements = CodeInsightUtil.findStatementsInRange(fragment, 0, fragment.getTextLength());
@@ -89,28 +89,28 @@ public class ExtractLightMethodObjectHandler {
 
     PsiFile file = originalContext.getContainingFile();
 
-    final PsiFile copy = PsiFileFactory.getInstance(project).createFileFromText(file.getName(), file.getFileType(), file.getText(), file.getModificationStamp(), false);
+    PsiFile copy = PsiFileFactory.getInstance(project).createFileFromText(file.getName(), file.getFileType(), file.getText(), file.getModificationStamp(), false);
 
     if (originalContext instanceof PsiKeyword && PsiModifier.PRIVATE.equals(originalContext.getText())) {
-      final PsiNameIdentifierOwner identifierOwner = PsiTreeUtil.getParentOfType(originalContext, PsiNameIdentifierOwner.class);
+      PsiNameIdentifierOwner identifierOwner = PsiTreeUtil.getParentOfType(originalContext, PsiNameIdentifierOwner.class);
       if (identifierOwner != null) {
-        final PsiElement identifier = identifierOwner.getNameIdentifier();
+        PsiElement identifier = identifierOwner.getNameIdentifier();
         if (identifier != null) {
           originalContext = identifier;
         }
       }
     }
 
-    final TextRange range = originalContext.getTextRange();
+    TextRange range = originalContext.getTextRange();
     PsiElement originalAnchor = CodeInsightUtil.findElementInRange(copy, range.getStartOffset(), range.getEndOffset(), originalContext.getClass());
     if (originalAnchor == null) {
-      final PsiElement elementAt = copy.findElementAt(range.getStartOffset());
+      PsiElement elementAt = copy.findElementAt(range.getStartOffset());
       if (elementAt != null && elementAt.getClass() == originalContext.getClass()) {
         originalAnchor = PsiTreeUtil.skipSiblingsForward(elementAt, PsiWhiteSpace.class);
       }
     }
 
-    final PsiClass containingClass = PsiTreeUtil.getParentOfType(originalAnchor, PsiClass.class, false);
+    PsiClass containingClass = PsiTreeUtil.getParentOfType(originalAnchor, PsiClass.class, false);
     if (containingClass == null) {
       return null;
     }
@@ -122,7 +122,7 @@ public class ExtractLightMethodObjectHandler {
       }
     }
 
-    final PsiElement container;
+    PsiElement container;
     if (anchor == null) {
       container = ((PsiClassInitializer) containingClass.add(elementFactory.createClassInitializer())).getBody();
       anchor = container.getLastChild();
@@ -130,21 +130,21 @@ public class ExtractLightMethodObjectHandler {
       container = anchor.getParent();
     }
 
-    final PsiElement firstElementCopy = container.addRangeBefore(elements[0], elements[elements.length - 1], anchor);
+    PsiElement firstElementCopy = container.addRangeBefore(elements[0], elements[elements.length - 1], anchor);
     final PsiElement[] elementsCopy = CodeInsightUtil.findStatementsInRange(copy, firstElementCopy.getTextRange().getStartOffset(), anchor.getTextRange().getStartOffset());
     if (elementsCopy.length == 0) {
       return null;
     }
     if (elementsCopy[elementsCopy.length - 1] instanceof PsiExpressionStatement) {
-      final PsiExpression expr = ((PsiExpressionStatement) elementsCopy[elementsCopy.length - 1]).getExpression();
+      PsiExpression expr = ((PsiExpressionStatement) elementsCopy[elementsCopy.length - 1]).getExpression();
       if (!(expr instanceof PsiAssignmentExpression)) {
         PsiType expressionType = GenericsUtil.getVariableTypeByExpressionType(expr.getType());
         if (expressionType instanceof PsiDisjunctionType) {
           expressionType = ((PsiDisjunctionType) expressionType).getLeastUpperBound();
         }
         if (isValidVariableType(expressionType)) {
-          final String uniqueResultName = JavaCodeStyleManager.getInstance(project).suggestUniqueVariableName("result", elementsCopy[0], true);
-          final String statementText = expressionType.getCanonicalText() + " " + uniqueResultName + " = " + expr.getText() + ";";
+          String uniqueResultName = JavaCodeStyleManager.getInstance(project).suggestUniqueVariableName("result", elementsCopy[0], true);
+          String statementText = expressionType.getCanonicalText() + " " + uniqueResultName + " = " + expr.getText() + ";";
           elementsCopy[elementsCopy.length - 1] = elementsCopy[elementsCopy.length - 1].replace(elementFactory.createStatementFromText(statementText, elementsCopy[elementsCopy.length -
               1]));
         }
@@ -152,9 +152,9 @@ public class ExtractLightMethodObjectHandler {
     }
 
     LOG.assertTrue(elementsCopy[0].getParent() == container, "element: " + elementsCopy[0].getText() + "; container: " + container.getText());
-    final int startOffsetInContainer = elementsCopy[0].getStartOffsetInParent();
+    int startOffsetInContainer = elementsCopy[0].getStartOffsetInParent();
 
-    final ControlFlow controlFlow;
+    ControlFlow controlFlow;
     try {
       controlFlow = ControlFlowFactory.getInstance(project).getControlFlow(container, LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance(), ControlFlowOptions.NO_CONST_EVALUATE);
     } catch (AnalysisCanceledException e) {
@@ -169,7 +169,7 @@ public class ExtractLightMethodObjectHandler {
       return variableScope != null && PsiTreeUtil.isAncestor(variableScope, elementsCopy[elementsCopy.length - 1], true);
     });
 
-    final String outputVariables = StringUtil.join(variables, variable -> "\"variable: \" + " + variable.getName(), " +");
+    String outputVariables = StringUtil.join(variables, variable -> "\"variable: \" + " + variable.getName(), " +");
     PsiStatement outStatement = elementFactory.createStatementFromText("System.out.println(" + outputVariables + ");", anchor);
     outStatement = (PsiStatement) container.addAfter(outStatement, elementsCopy[elementsCopy.length - 1]);
 
@@ -193,7 +193,7 @@ public class ExtractLightMethodObjectHandler {
       }
     });
 
-    final ExtractMethodObjectProcessor extractMethodObjectProcessor = new ExtractMethodObjectProcessor(project, null, elementsCopy, "") {
+    ExtractMethodObjectProcessor extractMethodObjectProcessor = new ExtractMethodObjectProcessor(project, null, elementsCopy, "") {
       @Override
       protected AbstractExtractDialog createExtractMethodObjectDialog(MyExtractMethodProcessor processor) {
         return new LightExtractMethodObjectDialog(this, methodName);
@@ -206,12 +206,12 @@ public class ExtractLightMethodObjectHandler {
     };
     extractMethodObjectProcessor.getExtractProcessor().setShowErrorDialogs(false);
 
-    final ExtractMethodObjectProcessor.MyExtractMethodProcessor extractProcessor = extractMethodObjectProcessor.getExtractProcessor();
+    ExtractMethodObjectProcessor.MyExtractMethodProcessor extractProcessor = extractMethodObjectProcessor.getExtractProcessor();
     if (extractProcessor.prepare()) {
       if (extractProcessor.showDialog()) {
         try {
           extractProcessor.doExtract();
-          final UsageInfo[] usages = extractMethodObjectProcessor.findUsages();
+          UsageInfo[] usages = extractMethodObjectProcessor.findUsages();
           extractMethodObjectProcessor.performRefactoring(usages);
           extractMethodObjectProcessor.runChangeSignature();
         } catch (IncorrectOperationException e) {
@@ -220,7 +220,7 @@ public class ExtractLightMethodObjectHandler {
         if (extractMethodObjectProcessor.isCreateInnerClass()) {
           extractMethodObjectProcessor.changeInstanceAccess(project);
         }
-        final PsiElement method = extractMethodObjectProcessor.getMethod();
+        PsiElement method = extractMethodObjectProcessor.getMethod();
         LOG.assertTrue(method != null);
         method.delete();
       }
@@ -228,8 +228,8 @@ public class ExtractLightMethodObjectHandler {
       return null;
     }
 
-    final int startOffset = startOffsetInContainer + container.getTextRange().getStartOffset();
-    final String generatedCall = copy.getText().substring(startOffset, outStatement.getTextOffset());
+    int startOffset = startOffsetInContainer + container.getTextRange().getStartOffset();
+    String generatedCall = copy.getText().substring(startOffset, outStatement.getTextOffset());
     return new ExtractedData(generatedCall, (PsiClass) CodeStyleManager.getInstance(project).reformat(extractMethodObjectProcessor.getInnerClass()), originalAnchor);
   }
 
@@ -239,9 +239,9 @@ public class ExtractLightMethodObjectHandler {
     if (expression != null) {
       String completeExpressionText = null;
       if (expression instanceof PsiArrayInitializerExpression) {
-        final PsiExpression[] initializers = ((PsiArrayInitializerExpression) expression).getInitializers();
+        PsiExpression[] initializers = ((PsiArrayInitializerExpression) expression).getInitializers();
         if (initializers.length > 0) {
-          final PsiType type = initializers[0].getType();
+          PsiType type = initializers[0].getType();
           if (type != null) {
             completeExpressionText = "new " + type.getCanonicalText() + "[]" + expression.getText();
           }
@@ -280,7 +280,7 @@ public class ExtractLightMethodObjectHandler {
 
     @Override
     public VariableData[] getChosenParameters() {
-      final InputVariables inputVariables = myProcessor.getExtractProcessor().getInputVariables();
+      InputVariables inputVariables = myProcessor.getExtractProcessor().getInputVariables();
       return inputVariables.getInputVariables().toArray(new VariableData[inputVariables.getInputVariables().size()]);
     }
 

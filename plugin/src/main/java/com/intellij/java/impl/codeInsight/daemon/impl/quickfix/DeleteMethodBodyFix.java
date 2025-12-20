@@ -52,7 +52,7 @@ public class DeleteMethodBodyFix implements SyntheticIntentionAction {
   @Override
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(myMethod)) return;
-    final PsiCodeBlock body = myMethod.getBody();
+    PsiCodeBlock body = myMethod.getBody();
     assert body != null;
     body.delete();
   }

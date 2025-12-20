@@ -28,7 +28,7 @@ import javax.swing.table.DefaultTableCellRenderer;
  * To change this template use Options | File Templates.
  */
 public class ColorConfiguringCellRenderer extends DefaultTableCellRenderer {
-  protected void configureColors(boolean isSelected, JTable table, boolean hasFocus, final int row, final int column) {
+  protected void configureColors(boolean isSelected, JTable table, boolean hasFocus, int row, int column) {
 
     if (isSelected) {
       setForeground(table.getSelectionForeground());

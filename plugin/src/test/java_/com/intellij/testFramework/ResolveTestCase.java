@@ -37,13 +37,13 @@ public abstract class ResolveTestCase extends PsiTestCase {
   }
   
   protected PsiReference configureByFile(@TestDataFile @NonNls String filePath, @Nullable VirtualFile parentDir) throws Exception{
-    final String fullPath = getTestDataPath() + filePath;
-    final VirtualFile vFile = LocalFileSystem.getInstance().findFileByPath(fullPath.replace(File.separatorChar, '/'));
+    String fullPath = getTestDataPath() + filePath;
+    VirtualFile vFile = LocalFileSystem.getInstance().findFileByPath(fullPath.replace(File.separatorChar, '/'));
     assertNotNull("file " + filePath + " not found", vFile);
 
     String fileText = StringUtil.convertLineSeparators(VfsUtil.loadText(vFile));
 
-    final String fileName = vFile.getName();
+    String fileName = vFile.getName();
 
     return configureByFileText(fileText, fileName, parentDir);
   }
@@ -52,7 +52,7 @@ public abstract class ResolveTestCase extends PsiTestCase {
     return configureByFileText(fileText, fileName, null);
   }
   
-  protected PsiReference configureByFileText(String fileText, String fileName, @Nullable final VirtualFile parentDir) throws Exception {
+  protected PsiReference configureByFileText(String fileText, String fileName, @Nullable VirtualFile parentDir) throws Exception {
     int offset = fileText.indexOf(MARKER);
     assertTrue(offset >= 0);
     fileText = fileText.substring(0, offset) + fileText.substring(offset + MARKER.length());

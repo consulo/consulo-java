@@ -95,7 +95,7 @@ public class EmptyStatementBodyInspection extends BaseInspection {
      /* if (JspPsiUtil.isInJspFile(statement)) {
         return;
       }  */
-            final PsiStatement body = statement.getBody();
+            PsiStatement body = statement.getBody();
             if (body == null || !isEmpty(body)) {
                 return;
             }
@@ -108,14 +108,14 @@ public class EmptyStatementBodyInspection extends BaseInspection {
       /*if (JspPsiUtil.isInJspFile(statement)) {
         return;
       } */
-            final PsiStatement thenBranch = statement.getThenBranch();
+            PsiStatement thenBranch = statement.getThenBranch();
             if (thenBranch != null && isEmpty(thenBranch)) {
                 registerStatementError(statement);
                 return;
             }
-            final PsiStatement elseBranch = statement.getElseBranch();
+            PsiStatement elseBranch = statement.getElseBranch();
             if (elseBranch != null && isEmpty(elseBranch)) {
-                final PsiElement elseToken = statement.getElseElement();
+                PsiElement elseToken = statement.getElseElement();
                 if (elseToken == null) {
                     return;
                 }
@@ -129,7 +129,7 @@ public class EmptyStatementBodyInspection extends BaseInspection {
      /* if (JspPsiUtil.isInJspFile(statement)) {
         return;
       } */
-            final PsiCodeBlock body = statement.getBody();
+            PsiCodeBlock body = statement.getBody();
             if (body == null || !isEmpty(body)) {
                 return;
             }
@@ -141,12 +141,12 @@ public class EmptyStatementBodyInspection extends BaseInspection {
                 return true;
             }
             else if (body instanceof PsiBlockStatement) {
-                final PsiBlockStatement block = (PsiBlockStatement) body;
+                PsiBlockStatement block = (PsiBlockStatement) body;
                 return isEmpty(block.getCodeBlock());
             }
             else if (m_reportEmptyBlocks && body instanceof PsiCodeBlock) {
-                final PsiCodeBlock codeBlock = (PsiCodeBlock) body;
-                final PsiStatement[] statements = codeBlock.getStatements();
+                PsiCodeBlock codeBlock = (PsiCodeBlock) body;
+                PsiStatement[] statements = codeBlock.getStatements();
                 if (statements.length == 0) {
                     return true;
                 }

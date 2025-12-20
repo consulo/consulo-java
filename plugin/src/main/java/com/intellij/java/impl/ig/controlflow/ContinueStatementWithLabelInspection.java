@@ -45,11 +45,11 @@ public class ContinueStatementWithLabelInspection extends BaseInspection {
         @Override
         public void visitContinueStatement(@Nonnull PsiContinueStatement statement) {
             super.visitContinueStatement(statement);
-            final PsiIdentifier label = statement.getLabelIdentifier();
+            PsiIdentifier label = statement.getLabelIdentifier();
             if (label == null) {
                 return;
             }
-            final String labelText = label.getText();
+            String labelText = label.getText();
             if (labelText == null) {
                 return;
             }

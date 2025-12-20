@@ -38,18 +38,18 @@ import java.util.Set;
 public class PackageReferenceSet extends ReferenceSetBase<PsiPackageReference> {
   private final GlobalSearchScope mySearchScope;
 
-  public PackageReferenceSet(@Nonnull final String str, @Nonnull final PsiElement element, final int startInElement) {
+  public PackageReferenceSet(@Nonnull String str, @Nonnull PsiElement element, int startInElement) {
     this(str, element, startInElement, element.getResolveScope());
   }
 
-  public PackageReferenceSet(@Nonnull final String str, @Nonnull final PsiElement element, final int startInElement, @Nonnull GlobalSearchScope scope) {
+  public PackageReferenceSet(@Nonnull String str, @Nonnull PsiElement element, int startInElement, @Nonnull GlobalSearchScope scope) {
     super(str, element, startInElement, DOT_SEPARATOR);
     mySearchScope = scope;
   }
 
   @Override
   @Nonnull
-  protected PsiPackageReference createReference(final TextRange range, final int index) {
+  protected PsiPackageReference createReference(TextRange range, int index) {
     return new PsiPackageReference(this, range, index);
   }
 
@@ -71,7 +71,7 @@ public class PackageReferenceSet extends ReferenceSetBase<PsiPackageReference> {
   }
 
   public Collection<PsiJavaPackage> resolvePackage() {
-    final PsiPackageReference packageReference = getLastReference();
+    PsiPackageReference packageReference = getLastReference();
     if (packageReference == null) {
       return Collections.emptyList();
     }

@@ -57,16 +57,16 @@ public class ReplaceConditionalWithIfIntention extends Intention {
 
     @Override
     public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-        final PsiConditionalExpression expression = (PsiConditionalExpression) element;
+        PsiConditionalExpression expression = (PsiConditionalExpression) element;
         replaceConditionalWithIf(expression);
     }
 
     private static void replaceConditionalWithIf(PsiConditionalExpression expression) throws IncorrectOperationException {
-        final PsiStatement statement = PsiTreeUtil.getParentOfType(expression, PsiStatement.class);
+        PsiStatement statement = PsiTreeUtil.getParentOfType(expression, PsiStatement.class);
         if (statement == null) {
             return;
         }
-        final PsiVariable variable;
+        PsiVariable variable;
         if (statement instanceof PsiDeclarationStatement) {
             variable = PsiTreeUtil.getParentOfType(expression, PsiVariable.class);
         }
@@ -75,16 +75,16 @@ public class ReplaceConditionalWithIfIntention extends Intention {
         }
         PsiExpression thenExpression = expression.getThenExpression();
         PsiExpression elseExpression = expression.getElseExpression();
-        final PsiExpression condition = expression.getCondition();
-        final PsiExpression strippedCondition = ParenthesesUtils.stripParentheses(condition);
-        final StringBuilder newStatement = new StringBuilder();
+        PsiExpression condition = expression.getCondition();
+        PsiExpression strippedCondition = ParenthesesUtils.stripParentheses(condition);
+        StringBuilder newStatement = new StringBuilder();
         newStatement.append("if(");
         if (strippedCondition != null) {
             newStatement.append(strippedCondition.getText());
         }
         newStatement.append(')');
         if (variable != null) {
-            final String name = variable.getName();
+            String name = variable.getName();
             newStatement.append(name);
             newStatement.append('=');
             PsiExpression initializer = variable.getInitializer();
@@ -92,11 +92,11 @@ public class ReplaceConditionalWithIfIntention extends Intention {
                 return;
             }
             if (initializer instanceof PsiArrayInitializerExpression) {
-                final int conditionIdx = ArrayUtil.find(((PsiArrayInitializerExpression) initializer).getInitializers(), expression);
+                int conditionIdx = ArrayUtil.find(((PsiArrayInitializerExpression) initializer).getInitializers(), expression);
                 if (conditionIdx >= 0) {
                     initializer = (PsiExpression) initializer.replace(RefactoringUtil.convertInitializerToNormalExpression(initializer,
                         variable.getType()));
-                    final PsiArrayInitializerExpression arrayInitializer = ((PsiNewExpression) initializer).getArrayInitializer();
+                    PsiArrayInitializerExpression arrayInitializer = ((PsiNewExpression) initializer).getArrayInitializer();
                     LOG.assertTrue(arrayInitializer != null, initializer.getText());
                     expression = (PsiConditionalExpression) arrayInitializer.getInitializers()[conditionIdx];
                     thenExpression = expression.getThenExpression();
@@ -110,18 +110,18 @@ public class ReplaceConditionalWithIfIntention extends Intention {
             appendElementTextWithoutParentheses(initializer, expression, elseExpression, newStatement);
             newStatement.append(';');
             initializer.delete();
-            final PsiManager manager = statement.getManager();
-            final Project project = manager.getProject();
-            final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-            final PsiElementFactory factory = facade.getElementFactory();
-            final PsiStatement ifStatement = factory.createStatementFromText(newStatement.toString(), statement);
-            final PsiElement parent = statement.getParent();
-            final PsiElement addedElement = parent.addAfter(ifStatement, statement);
-            final CodeStyleManager styleManager = CodeStyleManager.getInstance(manager.getProject());
+            PsiManager manager = statement.getManager();
+            Project project = manager.getProject();
+            JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
+            PsiElementFactory factory = facade.getElementFactory();
+            PsiStatement ifStatement = factory.createStatementFromText(newStatement.toString(), statement);
+            PsiElement parent = statement.getParent();
+            PsiElement addedElement = parent.addAfter(ifStatement, statement);
+            CodeStyleManager styleManager = CodeStyleManager.getInstance(manager.getProject());
             styleManager.reformat(addedElement);
         }
         else {
-            final boolean addBraces = PsiTreeUtil.getParentOfType(expression, PsiIfStatement.class, true, PsiStatement.class) != null;
+            boolean addBraces = PsiTreeUtil.getParentOfType(expression, PsiIfStatement.class, true, PsiStatement.class) != null;
             if (addBraces || thenExpression == null) {
                 newStatement.append('{');
             }
@@ -148,9 +148,9 @@ public class ReplaceConditionalWithIfIntention extends Intention {
 
     private static void appendElementTextWithoutParentheses(@Nonnull PsiElement element, @Nonnull PsiElement elementToReplace,
                                                             @Nullable PsiExpression replacementExpression, @Nonnull StringBuilder out) {
-        final PsiElement expressionParent = elementToReplace.getParent();
+        PsiElement expressionParent = elementToReplace.getParent();
         if (expressionParent instanceof PsiParenthesizedExpression) {
-            final PsiElement grandParent = expressionParent.getParent();
+            PsiElement grandParent = expressionParent.getParent();
             if (replacementExpression == null || !(grandParent instanceof PsiExpression) ||
                 !ParenthesesUtils.areParenthesesNeeded(replacementExpression, (PsiExpression) grandParent, false)) {
                 appendElementText(element, expressionParent, replacementExpression, out);
@@ -163,16 +163,16 @@ public class ReplaceConditionalWithIfIntention extends Intention {
     private static void appendElementText(@Nonnull PsiElement element, @Nonnull PsiElement elementToReplace,
                                           @Nullable PsiExpression replacementExpression, @Nonnull StringBuilder out) {
         if (element.equals(elementToReplace)) {
-            final String replacementText = (replacementExpression == null) ? "" : replacementExpression.getText();
+            String replacementText = (replacementExpression == null) ? "" : replacementExpression.getText();
             out.append(replacementText);
             return;
         }
-        final PsiElement[] children = element.getChildren();
+        PsiElement[] children = element.getChildren();
         if (children.length == 0) {
             out.append(element.getText());
             if (element instanceof PsiComment) {
-                final PsiComment comment = (PsiComment) element;
-                final IElementType tokenType = comment.getTokenType();
+                PsiComment comment = (PsiComment) element;
+                IElementType tokenType = comment.getTokenType();
                 if (tokenType == JavaTokenType.END_OF_LINE_COMMENT) {
                     out.append('\n');
                 }

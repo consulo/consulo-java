@@ -46,36 +46,36 @@ public class SwapMethodCallArgumentsIntention extends MutablyNamedIntention {
 
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
-        final PsiExpressionList expressionList = (PsiExpressionList) element;
-        final PsiExpression[] expressions = expressionList.getExpressions();
-        final PsiExpression firstExpression = expressions[0];
-        final PsiExpression secondExpression = expressions[1];
+        PsiExpressionList expressionList = (PsiExpressionList) element;
+        PsiExpression[] expressions = expressionList.getExpressions();
+        PsiExpression firstExpression = expressions[0];
+        PsiExpression secondExpression = expressions[1];
         return IntentionPowerPackLocalize.swapMethodCallArgumentsIntentionName(StringUtil.first(firstExpression.getText(), 20, true), StringUtil.first(secondExpression.getText(), 20, true));
     }
 
     @Override
     protected void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiExpressionList argumentList = (PsiExpressionList) element;
-        final PsiExpression[] arguments = argumentList.getExpressions();
-        final PsiExpression firstArgument = arguments[0];
-        final PsiExpression secondArgument = arguments[1];
-        final String firstArgumentText = firstArgument.getText();
-        final String secondArgumentText = secondArgument.getText();
-        final PsiCallExpression callExpression =
+        PsiExpressionList argumentList = (PsiExpressionList) element;
+        PsiExpression[] arguments = argumentList.getExpressions();
+        PsiExpression firstArgument = arguments[0];
+        PsiExpression secondArgument = arguments[1];
+        String firstArgumentText = firstArgument.getText();
+        String secondArgumentText = secondArgument.getText();
+        PsiCallExpression callExpression =
             (PsiCallExpression) argumentList.getParent();
-        @NonNls final String callText;
+        @NonNls String callText;
         if (callExpression instanceof PsiMethodCallExpression) {
-            final PsiMethodCallExpression methodCallExpression =
+            PsiMethodCallExpression methodCallExpression =
                 (PsiMethodCallExpression) callExpression;
-            final PsiReferenceExpression methodExpression =
+            PsiReferenceExpression methodExpression =
                 methodCallExpression.getMethodExpression();
             callText = methodExpression.getText();
         }
         else if (callExpression instanceof PsiNewExpression) {
-            final PsiNewExpression newExpression =
+            PsiNewExpression newExpression =
                 (PsiNewExpression) callExpression;
-            final PsiJavaCodeReferenceElement classReference =
+            PsiJavaCodeReferenceElement classReference =
                 newExpression.getClassReference();
             assert classReference != null;
             callText = "new " + classReference.getText();
@@ -83,7 +83,7 @@ public class SwapMethodCallArgumentsIntention extends MutablyNamedIntention {
         else {
             return;
         }
-        final String newExpression = callText + '(' + secondArgumentText +
+        String newExpression = callText + '(' + secondArgumentText +
             ", " + firstArgumentText + ')';
         replaceExpression(newExpression, callExpression);
     }

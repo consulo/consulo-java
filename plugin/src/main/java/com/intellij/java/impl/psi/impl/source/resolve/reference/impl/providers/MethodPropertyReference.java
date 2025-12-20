@@ -34,30 +34,30 @@ import jakarta.annotation.Nullable;
 public class MethodPropertyReference extends BasicAttributeValueReference {
   private final boolean myReadable;
 
-  public MethodPropertyReference(final PsiElement element, boolean readable) {
+  public MethodPropertyReference(PsiElement element, boolean readable) {
     super(element);
     myReadable = readable;
   }
 
   protected PsiClass resolveClass() {
-    final PsiElement classReferencesElement = getClassReferencesElement();
+    PsiElement classReferencesElement = getClassReferencesElement();
 
     if (classReferencesElement != null) {
-      final PsiReference[] references = classReferencesElement.getReferences();
+      PsiReference[] references = classReferencesElement.getReferences();
 
       if (references.length > 0) {
-        final PsiElement psiElement = references[references.length - 1].resolve();
+        PsiElement psiElement = references[references.length - 1].resolve();
 
         if (psiElement instanceof XmlAttributeValue) {
-          final XmlTag beanTag = (XmlTag) psiElement.getParent().getParent();
+          XmlTag beanTag = (XmlTag) psiElement.getParent().getParent();
           XmlAttribute attribute = beanTag.getAttribute("class", null);
           if (attribute == null) attribute = beanTag.getAttribute("type", null);
 
           if (attribute != null) {
-            final PsiReference[] classReferences = attribute.getValueElement().getReferences();
+            PsiReference[] classReferences = attribute.getValueElement().getReferences();
 
             if (classReferences.length > 0) {
-              final PsiElement classElement = classReferences[classReferences.length - 1].resolve();
+              PsiElement classElement = classReferences[classReferences.length - 1].resolve();
 
               if (classElement instanceof PsiClass) return (PsiClass) classElement;
             }
@@ -77,8 +77,8 @@ public class MethodPropertyReference extends BasicAttributeValueReference {
   }
 
   protected PsiElement getClassReferencesElement() {
-    final XmlTag tag = (XmlTag) myElement.getParent().getParent();
-    final XmlAttribute name = tag.getAttribute("name", null);
+    XmlTag tag = (XmlTag) myElement.getParent().getParent();
+    XmlAttribute name = tag.getAttribute("name", null);
     if (name != null) {
       return name.getValueElement();
     }

@@ -45,11 +45,11 @@ public class PathUIUtils {
      * @param rootCandidates  a candidates for roots
      * @return a array of source folders or empty array if non was selected or dialog was canceled.
      */
-    public static VirtualFile[] scanAndSelectDetectedJavaSourceRoots(Component parentComponent, final VirtualFile[] rootCandidates) {
-        final List<OrderRoot> orderRoots = RootDetectionUtil.detectRoots(List.of(rootCandidates), parentComponent, null,
+    public static VirtualFile[] scanAndSelectDetectedJavaSourceRoots(Component parentComponent, VirtualFile[] rootCandidates) {
+        List<OrderRoot> orderRoots = RootDetectionUtil.detectRoots(List.of(rootCandidates), parentComponent, null,
             LibraryRootsDetector.of(Collections.singletonList(new JavaSourceRootDetector())),
             Collections.emptyList());
-        final List<VirtualFile> result = new ArrayList<VirtualFile>();
+        List<VirtualFile> result = new ArrayList<VirtualFile>();
         for (OrderRoot root : orderRoots) {
             result.add(root.getFile());
         }

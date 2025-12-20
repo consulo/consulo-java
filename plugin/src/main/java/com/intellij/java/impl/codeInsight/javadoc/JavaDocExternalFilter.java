@@ -100,8 +100,8 @@ public class JavaDocExternalFilter extends AbstractExternalFilter {
           }
           while (len > (len = stripped.length()));
 
-          final String elementRef = stripped.replaceAll("/", ".");
-          final String classRef = ourAnchorsuffix.matcher(elementRef).replaceAll("");
+          String elementRef = stripped.replaceAll("/", ".");
+          String classRef = ourAnchorsuffix.matcher(elementRef).replaceAll("");
 
           return (JavaPsiFacade.getInstance(myProject).findClass(classRef,
               GlobalSearchScope.allScope(myProject)) != null) ? DocumentationManagerProtocol
@@ -130,11 +130,11 @@ public class JavaDocExternalFilter extends AbstractExternalFilter {
 
   @Override
   @Nullable
-  public String getExternalDocInfoForElement(final String docURL, final PsiElement element) throws Exception {
+  public String getExternalDocInfoForElement(String docURL, final PsiElement element) throws Exception {
     String externalDoc = super.getExternalDocInfoForElement(docURL, element);
     if (externalDoc != null) {
       if (element instanceof PsiMethod) {
-        final String className = ApplicationManager.getApplication().runReadAction(new
+        String className = ApplicationManager.getApplication().runReadAction(new
                                                                                        Supplier<String>() {
                                                                                          @Override
                                                                                          @Nullable
@@ -144,7 +144,7 @@ public class JavaDocExternalFilter extends AbstractExternalFilter {
                                                                                          }
                                                                                        });
         Matcher matcher = ourMethodHeading.matcher(externalDoc);
-        final StringBuilder buffer = new StringBuilder();
+        StringBuilder buffer = new StringBuilder();
         createHyperlink(buffer, className, className, false);
         //noinspection HardCodedStringLiteral
         return matcher.replaceFirst("<H3>" + buffer.toString() + "</H3>");

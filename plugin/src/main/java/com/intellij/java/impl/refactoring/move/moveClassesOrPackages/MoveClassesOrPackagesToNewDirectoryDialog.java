@@ -67,14 +67,14 @@ public class MoveClassesOrPackagesToNewDirectoryDialog extends DialogWrapper {
   private final PsiElement[] myElementsToMove;
   private final MoveCallback myMoveCallback;
 
-  public MoveClassesOrPackagesToNewDirectoryDialog(@Nonnull final PsiDirectory directory, PsiElement[] elementsToMove,
-                                                   final MoveCallback moveCallback) {
+  public MoveClassesOrPackagesToNewDirectoryDialog(@Nonnull PsiDirectory directory, PsiElement[] elementsToMove,
+                                                   MoveCallback moveCallback) {
     this(directory, elementsToMove, true, moveCallback);
   }
 
   public MoveClassesOrPackagesToNewDirectoryDialog(@Nonnull final PsiDirectory directory, PsiElement[] elementsToMove,
                                                    boolean canShowPreserveSourceRoots,
-                                                   final MoveCallback moveCallback) {
+                                                   MoveCallback moveCallback) {
     super(false);
     setTitle(MoveHandler.REFACTORING_NAME);
     myDirectory = directory;
@@ -84,7 +84,7 @@ public class MoveClassesOrPackagesToNewDirectoryDialog extends DialogWrapper {
     final FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor();
     myDestDirectoryField.getButton().addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        final VirtualFile file = IdeaFileChooser.chooseFile(descriptor, myDirectory.getProject(), directory.getVirtualFile());
+        VirtualFile file = IdeaFileChooser.chooseFile(descriptor, myDirectory.getProject(), directory.getVirtualFile());
         if (file != null) {
           myDestDirectoryField.setText(FileUtil.toSystemDependentName(file.getPath()));
         }
@@ -104,7 +104,7 @@ public class MoveClassesOrPackagesToNewDirectoryDialog extends DialogWrapper {
           : RefactoringLocalize.moveSpecifiedPackages().get()
       );
     }
-    final JavaRefactoringSettings refactoringSettings = JavaRefactoringSettings.getInstance();
+    JavaRefactoringSettings refactoringSettings = JavaRefactoringSettings.getInstance();
     mySearchInCommentsAndStringsCheckBox.setSelected(refactoringSettings.MOVE_SEARCH_IN_COMMENTS);
     mySearchForTextOccurrencesCheckBox.setSelected(refactoringSettings.MOVE_SEARCH_FOR_TEXT);
 
@@ -115,19 +115,19 @@ public class MoveClassesOrPackagesToNewDirectoryDialog extends DialogWrapper {
     });
 
     if (canShowPreserveSourceRoots) {
-      final Set<VirtualFile> sourceRoots = new HashSet<VirtualFile>();
-      final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(directory.getProject()).getFileIndex();
-      final Module destinationModule = fileIndex.getModuleForFile(directory.getVirtualFile());
+      Set<VirtualFile> sourceRoots = new HashSet<VirtualFile>();
+      ProjectFileIndex fileIndex = ProjectRootManager.getInstance(directory.getProject()).getFileIndex();
+      Module destinationModule = fileIndex.getModuleForFile(directory.getVirtualFile());
       boolean sameModule = true;
       for (PsiElement element : elementsToMove) {
         if (element instanceof PsiJavaPackage) {
           for (PsiDirectory psiDirectory : ((PsiJavaPackage)element).getDirectories()) {
-            final VirtualFile virtualFile = psiDirectory.getVirtualFile();
+            VirtualFile virtualFile = psiDirectory.getVirtualFile();
             sourceRoots.add(fileIndex.getSourceRootForFile(virtualFile));
             //sameModule &= destinationModule == fileIndex.getModuleForFile(virtualFile);
           }
         } else if (element instanceof PsiClass) {
-          final VirtualFile virtualFile = element.getContainingFile().getVirtualFile();
+          VirtualFile virtualFile = element.getContainingFile().getVirtualFile();
           LOG.assertTrue(virtualFile != null);
           sourceRoots.add(fileIndex.getSourceRootForFile(virtualFile));
           sameModule &= destinationModule == fileIndex.getModuleForFile(virtualFile);
@@ -184,7 +184,7 @@ public class MoveClassesOrPackagesToNewDirectoryDialog extends DialogWrapper {
     }
 
     super.doOKAction();
-    final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
+    PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
     if (aPackage == null) {
       Messages.showErrorDialog(
         project,
@@ -194,9 +194,9 @@ public class MoveClassesOrPackagesToNewDirectoryDialog extends DialogWrapper {
       return;
     }
 
-    final JavaRefactoringSettings refactoringSettings = JavaRefactoringSettings.getInstance();
-    final boolean searchInComments = isSearchInComments();
-    final boolean searchForTextOccurences = isSearchInNonJavaFiles();
+    JavaRefactoringSettings refactoringSettings = JavaRefactoringSettings.getInstance();
+    boolean searchInComments = isSearchInComments();
+    boolean searchForTextOccurences = isSearchInNonJavaFiles();
     refactoringSettings.MOVE_SEARCH_IN_COMMENTS = searchInComments;
     refactoringSettings.MOVE_SEARCH_FOR_TEXT = searchForTextOccurences;
 
@@ -214,7 +214,7 @@ public class MoveClassesOrPackagesToNewDirectoryDialog extends DialogWrapper {
     boolean searchInComments,
     boolean searchForTextOccurences
   ) {
-    final VirtualFile sourceRoot = ProjectRootManager.getInstance(project).getFileIndex().getSourceRootForFile(directory.getVirtualFile());
+    VirtualFile sourceRoot = ProjectRootManager.getInstance(project).getFileIndex().getSourceRootForFile(directory.getVirtualFile());
     if (sourceRoot == null) {
       Messages.showErrorDialog(
         project,
@@ -223,8 +223,8 @@ public class MoveClassesOrPackagesToNewDirectoryDialog extends DialogWrapper {
       );
       return;
     }
-    final JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
-    final MoveDestination destination = myPreserveSourceRoot.isSelected() && myPreserveSourceRoot.isVisible()
+    JavaRefactoringFactory factory = JavaRefactoringFactory.getInstance(project);
+    MoveDestination destination = myPreserveSourceRoot.isSelected() && myPreserveSourceRoot.isVisible()
                                         ? factory.createSourceFolderPreservingMoveDestination(aPackage.getQualifiedName())
                                         : factory.createSourceRootMoveDestination(aPackage.getQualifiedName(), sourceRoot);
 

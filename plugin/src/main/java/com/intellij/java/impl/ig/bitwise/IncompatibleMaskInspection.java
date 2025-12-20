@@ -50,9 +50,9 @@ public class IncompatibleMaskInspection extends BaseInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiBinaryExpression binaryExpression =
+        PsiBinaryExpression binaryExpression =
             (PsiBinaryExpression) infos[0];
-        final IElementType tokenType = binaryExpression.getOperationTokenType();
+        IElementType tokenType = binaryExpression.getOperationTokenType();
         return JavaTokenType.EQEQ.equals(tokenType)
             ? InspectionGadgetsLocalize.incompatibleMaskOperationProblemDescriptorAlwaysFalse().get()
             : InspectionGadgetsLocalize.incompatibleMaskOperationProblemDescriptorAlwaysTrue().get();
@@ -74,20 +74,20 @@ public class IncompatibleMaskInspection extends BaseInspection {
             @Nonnull PsiBinaryExpression expression
         ) {
             super.visitBinaryExpression(expression);
-            final PsiExpression rhs = expression.getROperand();
+            PsiExpression rhs = expression.getROperand();
             if (!ComparisonUtils.isEqualityComparison(expression)) {
                 return;
             }
-            final PsiType expressionType = expression.getType();
+            PsiType expressionType = expression.getType();
             if (expressionType == null) {
                 return;
             }
-            final PsiExpression strippedRhs = ParenthesesUtils.stripParentheses(rhs);
+            PsiExpression strippedRhs = ParenthesesUtils.stripParentheses(rhs);
             if (strippedRhs == null) {
                 return;
             }
-            final PsiExpression lhs = expression.getLOperand();
-            final PsiExpression strippedLhs = ParenthesesUtils.stripParentheses(lhs);
+            PsiExpression lhs = expression.getLOperand();
+            PsiExpression strippedLhs = ParenthesesUtils.stripParentheses(lhs);
             if (strippedLhs == null) {
                 return;
             }
@@ -107,9 +107,9 @@ public class IncompatibleMaskInspection extends BaseInspection {
             PsiBinaryExpression maskExpression,
             PsiExpression constantExpression
         ) {
-            final IElementType tokenType =
+            IElementType tokenType =
                 maskExpression.getOperationTokenType();
-            final Object constantValue =
+            Object constantValue =
                 ConstantExpressionUtil.computeCastTo(
                     constantExpression,
                     PsiType.LONG
@@ -117,12 +117,12 @@ public class IncompatibleMaskInspection extends BaseInspection {
             if (constantValue == null) {
                 return false;
             }
-            final long constantLongValue = ((Long) constantValue).longValue();
-            final PsiExpression maskRhs = maskExpression.getROperand();
-            final PsiExpression maskLhs = maskExpression.getLOperand();
-            final long constantMaskValue;
+            long constantLongValue = ((Long) constantValue).longValue();
+            PsiExpression maskRhs = maskExpression.getROperand();
+            PsiExpression maskLhs = maskExpression.getLOperand();
+            long constantMaskValue;
             if (PsiUtil.isConstantExpression(maskRhs)) {
-                final Object rhsValue =
+                Object rhsValue =
                     ConstantExpressionUtil.computeCastTo(
                         maskRhs,
                         PsiType.LONG
@@ -134,7 +134,7 @@ public class IncompatibleMaskInspection extends BaseInspection {
                 constantMaskValue = ((Long) rhsValue).longValue();
             }
             else {
-                final Object lhsValue =
+                Object lhsValue =
                     ConstantExpressionUtil.computeCastTo(
                         maskLhs,
                         PsiType.LONG
@@ -165,19 +165,19 @@ public class IncompatibleMaskInspection extends BaseInspection {
             if (!(expression instanceof PsiBinaryExpression)) {
                 return false;
             }
-            final PsiBinaryExpression binaryExpression =
+            PsiBinaryExpression binaryExpression =
                 (PsiBinaryExpression) expression;
-            final IElementType tokenType =
+            IElementType tokenType =
                 binaryExpression.getOperationTokenType();
             if (!tokenType.equals(JavaTokenType.OR) &&
                 !tokenType.equals(JavaTokenType.AND)) {
                 return false;
             }
-            final PsiExpression rhs = binaryExpression.getROperand();
+            PsiExpression rhs = binaryExpression.getROperand();
             if (PsiUtil.isConstantExpression(rhs)) {
                 return true;
             }
-            final PsiExpression lhs = binaryExpression.getLOperand();
+            PsiExpression lhs = binaryExpression.getLOperand();
             return PsiUtil.isConstantExpression(lhs);
         }
     }

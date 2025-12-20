@@ -27,12 +27,12 @@ public class TodoUtil {
   }
 
   public static boolean isTodoComment(PsiComment comment) {
-    final PsiFile file = comment.getContainingFile();
-    final PsiTodoSearchHelper searchHelper = PsiTodoSearchHelper.getInstance(comment.getProject());
-    final TodoItem[] todoItems = searchHelper.findTodoItems(file);
-    for (final TodoItem todoItem : todoItems) {
-      final TextRange commentTextRange = comment.getTextRange();
-      final TextRange todoTextRange = todoItem.getTextRange();
+    PsiFile file = comment.getContainingFile();
+    PsiTodoSearchHelper searchHelper = PsiTodoSearchHelper.getInstance(comment.getProject());
+    TodoItem[] todoItems = searchHelper.findTodoItems(file);
+    for (TodoItem todoItem : todoItems) {
+      TextRange commentTextRange = comment.getTextRange();
+      TextRange todoTextRange = todoItem.getTextRange();
       if (commentTextRange.contains(todoTextRange)) {
         return true;
       }

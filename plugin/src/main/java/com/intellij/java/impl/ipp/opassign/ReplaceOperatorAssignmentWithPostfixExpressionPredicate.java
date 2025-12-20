@@ -31,17 +31,17 @@ class ReplaceOperatorAssignmentWithPostfixExpressionPredicate implements PsiElem
     if (!(element instanceof PsiAssignmentExpression)) {
       return false;
     }
-    final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression)element;
-    final IElementType tokenType = assignmentExpression.getOperationTokenType();
+    PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression)element;
+    IElementType tokenType = assignmentExpression.getOperationTokenType();
     if (!JavaTokenType.PLUSEQ.equals(tokenType) && !JavaTokenType.MINUSEQ.equals(tokenType)) {
       return false;
     }
-    final PsiExpression rhs = assignmentExpression.getRExpression();
+    PsiExpression rhs = assignmentExpression.getRExpression();
     if (!(rhs instanceof PsiLiteralExpression)) {
       return false;
     }
-    final PsiLiteralExpression literalExpression = (PsiLiteralExpression)rhs;
-    final Object value = literalExpression.getValue();
+    PsiLiteralExpression literalExpression = (PsiLiteralExpression)rhs;
+    Object value = literalExpression.getValue();
     return ONE == value;
   }
 }

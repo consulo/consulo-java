@@ -80,9 +80,9 @@ public class ClassWithoutNoArgConstructorInspection extends BaseInspection {
         }
 
         private boolean classHasNoArgConstructor(PsiClass aClass) {
-            final PsiMethod[] constructors = aClass.getConstructors();
-            for (final PsiMethod constructor : constructors) {
-                final PsiParameterList parameterList =
+            PsiMethod[] constructors = aClass.getConstructors();
+            for (PsiMethod constructor : constructors) {
+                PsiParameterList parameterList =
                     constructor.getParameterList();
                 if (parameterList.getParametersCount() == 0) {
                     return true;
@@ -92,7 +92,7 @@ public class ClassWithoutNoArgConstructorInspection extends BaseInspection {
         }
 
         private boolean classHasConstructor(PsiClass aClass) {
-            final PsiMethod[] constructors = aClass.getConstructors();
+            PsiMethod[] constructors = aClass.getConstructors();
             return constructors.length != 0;
         }
     }

@@ -34,8 +34,8 @@ public class CreateFieldFromParameterAction extends CreateFieldFromParameterActi
 
   @Override
   protected boolean isAvailable(PsiParameter psiParameter) {
-    final PsiType type = getSubstitutedType(psiParameter);
-    final PsiClass targetClass = PsiTreeUtil.getParentOfType(psiParameter, PsiClass.class);
+    PsiType type = getSubstitutedType(psiParameter);
+    PsiClass targetClass = PsiTreeUtil.getParentOfType(psiParameter, PsiClass.class);
     return FieldFromParameterUtils.isAvailable(psiParameter, type, targetClass) &&
            psiParameter.getLanguage().isKindOf(JavaLanguage.INSTANCE);
   }

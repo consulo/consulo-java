@@ -49,7 +49,7 @@ public interface ExpressionConverter extends LanguageExtension {
   public static PsiElement getExpression(PsiElement expression, Language language, Project project) {
     if (expression.getLanguage() == language) return expression;
 
-    final ExpressionConverter converter = forLanguage(language);
+    ExpressionConverter converter = forLanguage(language);
     if (converter == null) return null;
     return converter.convert(expression, project);
   }

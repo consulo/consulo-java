@@ -47,20 +47,20 @@ public abstract class CyclicPackageDependencyInspection extends BaseGlobalInspec
     if (!(refEntity instanceof RefPackage)) {
       return null;
     }
-    final RefPackage refPackage = (RefPackage)refEntity;
-    final Set<RefPackage> dependencies =
+    RefPackage refPackage = (RefPackage)refEntity;
+    Set<RefPackage> dependencies =
       DependencyUtils.calculateTransitiveDependenciesForPackage(refPackage);
-    final Set<RefPackage> dependents =
+    Set<RefPackage> dependents =
       DependencyUtils.calculateTransitiveDependentsForPackage(refPackage);
-    final Set<RefPackage> mutualDependents =
+    Set<RefPackage> mutualDependents =
       new HashSet<RefPackage>(dependencies);
     mutualDependents.retainAll(dependents);
-    final int numMutualDependents = mutualDependents.size();
+    int numMutualDependents = mutualDependents.size();
     if (numMutualDependents <= 1) {
       return null;
     }
-    final String packageName = refEntity.getName();
-    final LocalizeValue errorString =
+    String packageName = refEntity.getName();
+    LocalizeValue errorString =
       InspectionGadgetsLocalize.cyclicPackageDependencyProblemDescriptor(packageName, numMutualDependents - 1);
     return new CommonProblemDescriptor[]{
       inspectionManager.createProblemDescriptor(errorString.get())

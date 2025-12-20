@@ -62,7 +62,7 @@ class ScopeUtils {
     Arrays.sort(referenceElements, PsiElementOrderComparator.getInstance());
     PsiElement commonParent = null;
     for (PsiElement referenceElement : referenceElements) {
-      final PsiElement parent = PsiTreeUtil.getParentOfType(referenceElement, PsiCodeBlock.class, PsiForStatement.class);
+      PsiElement parent = PsiTreeUtil.getParentOfType(referenceElement, PsiCodeBlock.class, PsiForStatement.class);
       if (parent != null && commonParent != null) {
         if (!commonParent.equals(parent)) {
           commonParent = PsiTreeUtil.findCommonParent(commonParent, parent);
@@ -78,16 +78,16 @@ class ScopeUtils {
     // the initialization of the for statement or the initialization is
     // empty.
     if (commonParent instanceof PsiForStatement) {
-      final PsiForStatement forStatement = (PsiForStatement)commonParent;
-      final PsiElement referenceElement = referenceElements[0];
-      final PsiStatement initialization = forStatement.getInitialization();
+      PsiForStatement forStatement = (PsiForStatement)commonParent;
+      PsiElement referenceElement = referenceElements[0];
+      PsiStatement initialization = forStatement.getInitialization();
       if (!(initialization instanceof PsiEmptyStatement)) {
         if (initialization instanceof PsiExpressionStatement) {
-          final PsiExpressionStatement statement = (PsiExpressionStatement)initialization;
-          final PsiExpression expression = statement.getExpression();
+          PsiExpressionStatement statement = (PsiExpressionStatement)initialization;
+          PsiExpression expression = statement.getExpression();
           if (expression instanceof PsiAssignmentExpression) {
-            final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression)expression;
-            final PsiExpression lExpression = assignmentExpression.getLExpression();
+            PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression)expression;
+            PsiExpression lExpression = assignmentExpression.getLExpression();
             if (!lExpression.equals(referenceElement)) {
               commonParent = PsiTreeUtil.getParentOfType(commonParent, PsiCodeBlock.class);
             }
@@ -105,7 +105,7 @@ class ScopeUtils {
     // common parent may not be a switch() statement to avoid narrowing
     // scope to inside switch branch
     if (commonParent != null) {
-      final PsiElement parent = commonParent.getParent();
+      PsiElement parent = commonParent.getParent();
       if (parent instanceof PsiSwitchStatement) {
         if (referenceElements.length > 1) {
           commonParent = PsiTreeUtil.getParentOfType(parent, PsiCodeBlock.class, false);
@@ -126,9 +126,9 @@ class ScopeUtils {
       return result;
     }
     while (!result.equals(scope)) {
-      final PsiElement element = getChildWhichContainsElement(result, scope);
+      PsiElement element = getChildWhichContainsElement(result, scope);
       if (element instanceof PsiForStatement) {
-        final PsiForStatement forStatement = (PsiForStatement)element;
+        PsiForStatement forStatement = (PsiForStatement)element;
         if (forStatement.getInitialization() instanceof PsiEmptyStatement) {
           return element;
         }

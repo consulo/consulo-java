@@ -50,14 +50,14 @@ public class BraceEnforcer extends JavaRecursiveElementVisitor {
   @Override
   public void visitIfStatement(PsiIfStatement statement) {
     if (checkElementContainsRange(statement)) {
-      final SmartPsiElementPointer pointer = SmartPointerManager.getInstance(statement.getProject()).createSmartPsiElementPointer(statement);
+      SmartPsiElementPointer pointer = SmartPointerManager.getInstance(statement.getProject()).createSmartPsiElementPointer(statement);
       super.visitIfStatement(statement);
       statement = (PsiIfStatement) pointer.getElement();
       if (statement == null) {
         return;
       }
       processStatement(statement, statement.getThenBranch(), myPostProcessor.getSettings().IF_BRACE_FORCE);
-      final PsiStatement elseBranch = statement.getElseBranch();
+      PsiStatement elseBranch = statement.getElseBranch();
       if (!(elseBranch instanceof PsiIfStatement) || !myPostProcessor.getSettings().SPECIAL_ELSE_IF_TREATMENT) {
         processStatement(statement, elseBranch, myPostProcessor.getSettings().IF_BRACE_FORCE);
       }
@@ -125,9 +125,9 @@ public class BraceEnforcer extends JavaRecursiveElementVisitor {
       return;
     }
 
-    final PsiManager manager = statement.getManager();
+    PsiManager manager = statement.getManager();
     LOG.assertTrue(manager != null);
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
+    PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
 
     String oldText = blockCandidate.getText();
     // There is a possible case that target block to wrap ends with single-line comment. Example:
@@ -143,7 +143,7 @@ public class BraceEnforcer extends JavaRecursiveElementVisitor {
       buf.append("\n");
     }
     buf.append(" }");
-    final int oldTextLength = statement.getTextLength();
+    int oldTextLength = statement.getTextLength();
     try {
       CodeEditUtil.replaceChild(SourceTreeToPsiMap.psiElementToTree(statement),
           SourceTreeToPsiMap.psiElementToTree(blockCandidate),
@@ -156,15 +156,15 @@ public class BraceEnforcer extends JavaRecursiveElementVisitor {
     }
   }
 
-  protected void updateResultRange(final int oldTextLength, final int newTextLength) {
+  protected void updateResultRange(int oldTextLength, int newTextLength) {
     myPostProcessor.updateResultRange(oldTextLength, newTextLength);
   }
 
-  protected boolean checkElementContainsRange(final PsiElement element) {
+  protected boolean checkElementContainsRange(PsiElement element) {
     return myPostProcessor.isElementPartlyInRange(element);
   }
 
-  protected boolean checkRangeContainsElement(final PsiElement element) {
+  protected boolean checkRangeContainsElement(PsiElement element) {
     return myPostProcessor.isElementFullyInRange(element);
   }
 
@@ -175,7 +175,7 @@ public class BraceEnforcer extends JavaRecursiveElementVisitor {
 
   }
 
-  public TextRange processText(final PsiFile source, final TextRange rangeToReformat) {
+  public TextRange processText(PsiFile source, TextRange rangeToReformat) {
     myPostProcessor.setResultTextRange(rangeToReformat);
     source.accept(this);
     return myPostProcessor.getResultTextRange();

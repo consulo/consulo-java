@@ -30,21 +30,21 @@ class EqualsPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiMethodCallExpression)) {
       return false;
     }
-    final PsiMethodCallExpression expression =
+    PsiMethodCallExpression expression =
       (PsiMethodCallExpression)element;
-    final PsiExpressionList argumentList = expression.getArgumentList();
-    final PsiExpression[] arguments = argumentList.getExpressions();
+    PsiExpressionList argumentList = expression.getArgumentList();
+    PsiExpression[] arguments = argumentList.getExpressions();
     if (arguments.length != 1) {
       return false;
     }
-    final PsiReferenceExpression methodExpression =
+    PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
-    final PsiExpression qualifier =
+    PsiExpression qualifier =
       methodExpression.getQualifierExpression();
     if (qualifier == null) {
       return false;
     }
-    @NonNls final String methodName = methodExpression.getReferenceName();
+    @NonNls String methodName = methodExpression.getReferenceName();
     if (!"equals".equals(methodName)) {
       return false;
     }

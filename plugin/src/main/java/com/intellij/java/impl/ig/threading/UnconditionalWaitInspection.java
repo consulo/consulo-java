@@ -51,7 +51,7 @@ public class UnconditionalWaitInspection extends BaseInspection {
       if (!method.hasModifierProperty(PsiModifier.SYNCHRONIZED)) {
         return;
       }
-      final PsiCodeBlock body = method.getBody();
+      PsiCodeBlock body = method.getBody();
       if (body != null) {
         checkBody(body);
       }
@@ -61,57 +61,57 @@ public class UnconditionalWaitInspection extends BaseInspection {
     public void visitSynchronizedStatement(
       @Nonnull PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
-      final PsiCodeBlock body = statement.getBody();
+      PsiCodeBlock body = statement.getBody();
       if (body != null) {
         checkBody(body);
       }
     }
 
     private void checkBody(PsiCodeBlock body) {
-      final PsiStatement[] statements = body.getStatements();
+      PsiStatement[] statements = body.getStatements();
       if (statements.length == 0) {
         return;
       }
-      for (final PsiStatement statement : statements) {
+      for (PsiStatement statement : statements) {
         if (isConditional(statement)) {
           return;
         }
         if (!(statement instanceof PsiExpressionStatement)) {
           continue;
         }
-        final PsiExpression firstExpression =
+        PsiExpression firstExpression =
           ((PsiExpressionStatement)statement).getExpression();
         if (!(firstExpression instanceof PsiMethodCallExpression)) {
           continue;
         }
-        final PsiMethodCallExpression methodCallExpression =
+        PsiMethodCallExpression methodCallExpression =
           (PsiMethodCallExpression)firstExpression;
-        final PsiReferenceExpression methodExpression =
+        PsiReferenceExpression methodExpression =
           methodCallExpression.getMethodExpression();
-        @NonNls final String methodName =
+        @NonNls String methodName =
           methodExpression.getReferenceName();
         if (!HardcodedMethodConstants.WAIT.equals(methodName)) {
           continue;
         }
-        final PsiMethod method = methodCallExpression.resolveMethod();
+        PsiMethod method = methodCallExpression.resolveMethod();
         if (method == null) {
           continue;
         }
-        final PsiParameterList parameterList =
+        PsiParameterList parameterList =
           method.getParameterList();
-        final int numParams = parameterList.getParametersCount();
+        int numParams = parameterList.getParametersCount();
         if (numParams > 2) {
           continue;
         }
-        final PsiParameter[] parameters = parameterList.getParameters();
+        PsiParameter[] parameters = parameterList.getParameters();
         if (numParams > 0) {
-          final PsiType parameterType = parameters[0].getType();
+          PsiType parameterType = parameters[0].getType();
           if (!parameterType.equals(PsiType.LONG)) {
             continue;
           }
         }
         if (numParams > 1) {
-          final PsiType parameterType = parameters[1].getType();
+          PsiType parameterType = parameters[1].getType();
           if (!parameterType.equals(PsiType.INT)) {
             continue;
           }

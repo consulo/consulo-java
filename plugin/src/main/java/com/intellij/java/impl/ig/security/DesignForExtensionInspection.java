@@ -59,7 +59,7 @@ public class DesignForExtensionInspection extends BaseInspection {
           method.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }
-      final PsiClass containingClass = method.getContainingClass();
+      PsiClass containingClass = method.getContainingClass();
       if (containingClass == null) {
         return;
       }
@@ -72,11 +72,11 @@ public class DesignForExtensionInspection extends BaseInspection {
       if (containingClass instanceof PsiAnonymousClass) {
         return;
       }
-      final PsiCodeBlock body = method.getBody();
+      PsiCodeBlock body = method.getBody();
       if (body == null) {
         return;
       }
-      final PsiStatement[] statements = body.getStatements();
+      PsiStatement[] statements = body.getStatements();
       if (statements.length == 0) {
         return;
       }

@@ -71,18 +71,18 @@ public class ConstantOnLHSOfComparisonInspection extends BaseInspection {
 
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiBinaryExpression expression = (PsiBinaryExpression)descriptor.getPsiElement();
-      final PsiExpression rhs = expression.getROperand();
+      PsiBinaryExpression expression = (PsiBinaryExpression)descriptor.getPsiElement();
+      PsiExpression rhs = expression.getROperand();
       if (rhs == null) {
         return;
       }
-      final String flippedComparison = ComparisonUtils.getFlippedComparison(expression.getOperationTokenType());
+      String flippedComparison = ComparisonUtils.getFlippedComparison(expression.getOperationTokenType());
       if (flippedComparison == null) {
         return;
       }
-      final PsiExpression lhs = expression.getLOperand();
-      final String rhsText = rhs.getText();
-      final String lhsText = lhs.getText();
+      PsiExpression lhs = expression.getLOperand();
+      String rhsText = rhs.getText();
+      String lhsText = lhs.getText();
       replaceExpression(expression, rhsText + ' ' + flippedComparison + ' ' + lhsText);
     }
   }
@@ -95,8 +95,8 @@ public class ConstantOnLHSOfComparisonInspection extends BaseInspection {
       if (!ComparisonUtils.isComparison(expression)) {
         return;
       }
-      final PsiExpression lhs = expression.getLOperand();
-      final PsiExpression rhs = expression.getROperand();
+      PsiExpression lhs = expression.getLOperand();
+      PsiExpression rhs = expression.getROperand();
       if (rhs == null || !isConstantExpression(lhs) || isConstantExpression(rhs)) {
         return;
       }

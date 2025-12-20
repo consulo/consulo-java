@@ -70,7 +70,7 @@ public class JavaInheritorsGetter implements CompletionProvider {
   private static final Logger LOG = Logger.getInstance(JavaInheritorsGetter.class);
   private final ConstructorInsertHandler myConstructorInsertHandler;
 
-  public JavaInheritorsGetter(final ConstructorInsertHandler constructorInsertHandler) {
+  public JavaInheritorsGetter(ConstructorInsertHandler constructorInsertHandler) {
     myConstructorInsertHandler = constructorInsertHandler;
   }
 
@@ -83,18 +83,18 @@ public class JavaInheritorsGetter implements CompletionProvider {
   }
 
   @Override
-  public void addCompletions(@Nonnull final CompletionParameters parameters, final ProcessingContext matchingContext, @Nonnull final CompletionResultSet result) {
-    final ExpectedTypeInfo[] infos = JavaSmartCompletionContributor.getExpectedTypes(parameters);
+  public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext matchingContext, @Nonnull CompletionResultSet result) {
+    ExpectedTypeInfo[] infos = JavaSmartCompletionContributor.getExpectedTypes(parameters);
 
-    final List<ExpectedTypeInfo> infoCollection = Arrays.asList(infos);
+    List<ExpectedTypeInfo> infoCollection = Arrays.asList(infos);
     generateVariants(parameters, result.getPrefixMatcher(), infos, lookupElement -> result.addElement(JavaSmartCompletionContributor.decorate(lookupElement, infoCollection)));
   }
 
-  public void generateVariants(final CompletionParameters parameters, final PrefixMatcher prefixMatcher, final Consumer<LookupElement> consumer) {
+  public void generateVariants(CompletionParameters parameters, PrefixMatcher prefixMatcher, Consumer<LookupElement> consumer) {
     generateVariants(parameters, prefixMatcher, JavaSmartCompletionContributor.getExpectedTypes(parameters), consumer);
   }
 
-  private void generateVariants(final CompletionParameters parameters, final PrefixMatcher prefixMatcher, final ExpectedTypeInfo[] infos, final Consumer<LookupElement> consumer) {
+  private void generateVariants(CompletionParameters parameters, PrefixMatcher prefixMatcher, ExpectedTypeInfo[] infos, Consumer<LookupElement> consumer) {
 
     addArrayTypes(parameters.getPosition(), infos, consumer);
 
@@ -102,7 +102,7 @@ public class JavaInheritorsGetter implements CompletionProvider {
     boolean arraysWelcome = ContainerUtil.exists(ExpectedTypesGetter.extractTypes(infos, true), t -> t.getDeepComponentType().equalsToText(CommonClassNames.JAVA_LANG_OBJECT));
     processInheritors(parameters, classTypes, prefixMatcher, type ->
     {
-      final LookupElement element = addExpectedType(type, parameters);
+      LookupElement element = addExpectedType(type, parameters);
       if (element != null) {
         Supplier<PsiClassType> itemType = () -> (PsiClassType) ObjectUtil.assertNotNull(element.as(TypedLookupItem.CLASS_CONDITION_KEY)).getType();
         JavaConstructorCallElement.wrap(element, (PsiClass) element.getObject(), parameters.getPosition(), itemType).forEach(consumer::accept);
@@ -113,8 +113,8 @@ public class JavaInheritorsGetter implements CompletionProvider {
     });
   }
 
-  private static void addArrayTypes(PsiElement identifierCopy, ExpectedTypeInfo[] infos, final Consumer<LookupElement> consumer) {
-    for (final PsiType type : ExpectedTypesGetter.extractTypes(infos, true)) {
+  private static void addArrayTypes(PsiElement identifierCopy, ExpectedTypeInfo[] infos, Consumer<LookupElement> consumer) {
+    for (PsiType type : ExpectedTypesGetter.extractTypes(infos, true)) {
       if (type instanceof PsiArrayType) {
         consumer.accept(createNewArrayItem(identifierCopy, type));
 
@@ -132,10 +132,10 @@ public class JavaInheritorsGetter implements CompletionProvider {
   }
 
   private static List<PsiClassType> extractClassTypes(ExpectedTypeInfo[] infos) {
-    final List<PsiClassType> expectedClassTypes = new SmartList<>();
+    List<PsiClassType> expectedClassTypes = new SmartList<>();
     for (PsiType type : ExpectedTypesGetter.extractTypes(infos, true)) {
       if (type instanceof PsiClassType) {
-        final PsiClassType classType = (PsiClassType) type;
+        PsiClassType classType = (PsiClassType) type;
         if (classType.resolve() != null) {
           expectedClassTypes.add(classType);
         }
@@ -145,12 +145,12 @@ public class JavaInheritorsGetter implements CompletionProvider {
   }
 
   @Nullable
-  private LookupElement addExpectedType(final PsiType type, final CompletionParameters parameters) {
+  private LookupElement addExpectedType(PsiType type, CompletionParameters parameters) {
     if (!JavaCompletionUtil.hasAccessibleConstructor(type, parameters.getPosition())) {
       return null;
     }
 
-    final PsiClass psiClass = PsiUtil.resolveClassInType(type);
+    PsiClass psiClass = PsiUtil.resolveClassInType(type);
     if (psiClass == null || psiClass.getName() == null) {
       return null;
     }
@@ -163,9 +163,9 @@ public class JavaInheritorsGetter implements CompletionProvider {
 
     PsiType psiType = GenericsUtil.eliminateWildcards(type);
     if (JavaSmartCompletionContributor.AFTER_NEW.accepts(parameters.getOriginalPosition()) && PsiUtil.getLanguageLevel(parameters.getOriginalFile()).isAtLeast(LanguageLevel.JDK_1_7)) {
-      final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(psiClass.getProject());
+      PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(psiClass.getProject());
       if (psiClass.hasTypeParameters() && !((PsiClassType) type).isRaw()) {
-        final String erasedText = TypeConversionUtil.erasure(psiType).getCanonicalText();
+        String erasedText = TypeConversionUtil.erasure(psiType).getCanonicalText();
         String canonicalText = psiType.getCanonicalText();
         if (canonicalText.contains("?extends") || canonicalText.contains("?super")) {
           LOG.error("Malformed canonical text: " + canonicalText + "; presentable text: " + psiType + " of " + psiType.getClass() + "; " + (psiType instanceof PsiClassReferenceType ? (
@@ -173,12 +173,12 @@ public class JavaInheritorsGetter implements CompletionProvider {
           return null;
         }
         try {
-          final PsiStatement statement = elementFactory.createStatementFromText(canonicalText + " v = new " + erasedText + "<>()", parameters.getOriginalFile());
-          final PsiVariable declaredVar = (PsiVariable) ((PsiDeclarationStatement) statement).getDeclaredElements()[0];
-          final PsiNewExpression initializer = (PsiNewExpression) declaredVar.getInitializer();
-          final boolean hasDefaultConstructorOrNoGenericsOne = PsiDiamondTypeImpl.hasDefaultConstructor(psiClass) || !PsiDiamondTypeImpl.haveConstructorsGenericsParameters(psiClass);
+          PsiStatement statement = elementFactory.createStatementFromText(canonicalText + " v = new " + erasedText + "<>()", parameters.getOriginalFile());
+          PsiVariable declaredVar = (PsiVariable) ((PsiDeclarationStatement) statement).getDeclaredElements()[0];
+          PsiNewExpression initializer = (PsiNewExpression) declaredVar.getInitializer();
+          boolean hasDefaultConstructorOrNoGenericsOne = PsiDiamondTypeImpl.hasDefaultConstructor(psiClass) || !PsiDiamondTypeImpl.haveConstructorsGenericsParameters(psiClass);
           if (hasDefaultConstructorOrNoGenericsOne) {
-            final PsiDiamondTypeImpl.DiamondInferenceResult inferenceResult = PsiDiamondTypeImpl.resolveInferredTypes(initializer);
+            PsiDiamondTypeImpl.DiamondInferenceResult inferenceResult = PsiDiamondTypeImpl.resolveInferredTypes(initializer);
             if (inferenceResult.getErrorMessage() == null && !psiClass.hasModifierProperty(PsiModifier.ABSTRACT) && areInferredTypesApplicable(inferenceResult.getTypes(), parameters
                 .getPosition())) {
               psiType = initializer.getType();
@@ -188,7 +188,7 @@ public class JavaInheritorsGetter implements CompletionProvider {
         }
       }
     }
-    final PsiTypeLookupItem item = PsiTypeLookupItem.createLookupItem(psiType, position).setShowPackage();
+    PsiTypeLookupItem item = PsiTypeLookupItem.createLookupItem(psiType, position).setShowPackage();
 
     if (psiClass.isInterface() || psiClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
       item.setAutoCompletionPolicy(AutoCompletionPolicy.NEVER_AUTOCOMPLETE);
@@ -199,25 +199,25 @@ public class JavaInheritorsGetter implements CompletionProvider {
   }
 
   private static boolean areInferredTypesApplicable(@Nonnull PsiType[] types, PsiElement position) {
-    final PsiNewExpression newExpression = PsiTreeUtil.getParentOfType(position, PsiNewExpression.class, false);
+    PsiNewExpression newExpression = PsiTreeUtil.getParentOfType(position, PsiNewExpression.class, false);
     if (!PsiUtil.isLanguageLevel8OrHigher(position)) {
       return newExpression != null && PsiTypesUtil.getExpectedTypeByParent(newExpression) != null;
     }
-    final PsiCallExpression methodCallExpression = PsiTreeUtil.getParentOfType(newExpression, PsiCallExpression.class, false, PsiStatement.class);
+    PsiCallExpression methodCallExpression = PsiTreeUtil.getParentOfType(newExpression, PsiCallExpression.class, false, PsiStatement.class);
     if (methodCallExpression != null && PsiUtil.isLanguageLevel8OrHigher(methodCallExpression)) {
       PsiElement parent = PsiUtil.skipParenthesizedExprUp(newExpression.getParent());
       PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-      final int idx = argumentList != null ? ArrayUtil.find(argumentList.getExpressions(), parent) : -1;
+      int idx = argumentList != null ? ArrayUtil.find(argumentList.getExpressions(), parent) : -1;
       if (idx > -1) {
-        final JavaResolveResult resolveResult = methodCallExpression.resolveMethodGenerics();
-        final PsiMethod method = (PsiMethod) resolveResult.getElement();
+        JavaResolveResult resolveResult = methodCallExpression.resolveMethodGenerics();
+        PsiMethod method = (PsiMethod) resolveResult.getElement();
         if (method != null) {
-          final PsiParameter[] parameters = method.getParameterList().getParameters();
+          PsiParameter[] parameters = method.getParameterList().getParameters();
           if (idx < parameters.length) {
-            final PsiType expectedType = resolveResult.getSubstitutor().substitute(parameters[idx].getType());
-            final PsiClass aClass = PsiUtil.resolveClassInType(expectedType);
+            PsiType expectedType = resolveResult.getSubstitutor().substitute(parameters[idx].getType());
+            PsiClass aClass = PsiUtil.resolveClassInType(expectedType);
             if (aClass != null) {
-              final PsiClassType inferredArg = JavaPsiFacade.getElementFactory(method.getProject()).createType(aClass, types);
+              PsiClassType inferredArg = JavaPsiFacade.getElementFactory(method.getProject()).createType(aClass, types);
               return TypeConversionUtil.isAssignable(expectedType, inferredArg);
             }
           }
@@ -227,8 +227,8 @@ public class JavaInheritorsGetter implements CompletionProvider {
     return true;
   }
 
-  public static void processInheritors(final CompletionParameters parameters, Collection<PsiClassType> expectedClassTypes, final PrefixMatcher matcher, final Consumer<PsiType> consumer) {
-    final PsiElement context = parameters.getPosition();
+  public static void processInheritors(CompletionParameters parameters, Collection<PsiClassType> expectedClassTypes, PrefixMatcher matcher, Consumer<PsiType> consumer) {
+    PsiElement context = parameters.getPosition();
     GlobalSearchScope scope = context.getResolveScope();
     expectedClassTypes = ContainerUtil.mapNotNull(expectedClassTypes, type -> PsiClassImplUtil.correctType(type, scope));
 
@@ -238,30 +238,30 @@ public class JavaInheritorsGetter implements CompletionProvider {
     }
 
     //long
-    for (final PsiClassType type : expectedClassTypes) {
+    for (PsiClassType type : expectedClassTypes) {
       CodeInsightUtil.processSubTypes(type, context, false, matcher, consumer);
     }
   }
 
   private static boolean processMostProbableInheritors(PsiFile contextFile, PsiElement context, Collection<PsiClassType> expectedClassTypes, Consumer<PsiType> consumer) {
-    for (final PsiClassType type : expectedClassTypes) {
+    for (PsiClassType type : expectedClassTypes) {
       consumer.accept(type);
 
-      final PsiClassType.ClassResolveResult baseResult = JavaCompletionUtil.originalize(type).resolveGenerics();
-      final PsiClass baseClass = baseResult.getElement();
+      PsiClassType.ClassResolveResult baseResult = JavaCompletionUtil.originalize(type).resolveGenerics();
+      PsiClass baseClass = baseResult.getElement();
       if (baseClass == null) {
         return false;
       }
 
-      final PsiSubstitutor baseSubstitutor = baseResult.getSubstitutor();
+      PsiSubstitutor baseSubstitutor = baseResult.getSubstitutor();
 
-      final Processor<PsiClass> processor = CodeInsightUtil.createInheritorsProcessor(context, type, 0, false, consumer, baseClass, baseSubstitutor);
-      final StatisticsInfo[] stats = StatisticsManager.getInstance().getAllValues(JavaStatisticsManager.getAfterNewKey(type));
-      for (final StatisticsInfo statisticsInfo : stats) {
-        final String value = statisticsInfo.getValue();
+      Processor<PsiClass> processor = CodeInsightUtil.createInheritorsProcessor(context, type, 0, false, consumer, baseClass, baseSubstitutor);
+      StatisticsInfo[] stats = StatisticsManager.getInstance().getAllValues(JavaStatisticsManager.getAfterNewKey(type));
+      for (StatisticsInfo statisticsInfo : stats) {
+        String value = statisticsInfo.getValue();
         if (value.startsWith(JavaStatisticsManager.CLASS_PREFIX)) {
-          final String qname = value.substring(JavaStatisticsManager.CLASS_PREFIX.length());
-          final PsiClass psiClass = JavaPsiFacade.getInstance(contextFile.getProject()).findClass(qname, contextFile.getResolveScope());
+          String qname = value.substring(JavaStatisticsManager.CLASS_PREFIX.length());
+          PsiClass psiClass = JavaPsiFacade.getInstance(contextFile.getProject()).findClass(qname, contextFile.getResolveScope());
           if (psiClass != null && !PsiTreeUtil.isAncestor(contextFile, psiClass, true) && !processor.process(psiClass)) {
             break;
           }

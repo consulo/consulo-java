@@ -27,7 +27,7 @@ import consulo.language.util.IncorrectOperationException;
 public class RemoveQualifierUsageInfo extends FixableUsageInfo {
   private final PsiReferenceExpression myExpression;
 
-  public RemoveQualifierUsageInfo(final PsiReferenceExpression expression) {
+  public RemoveQualifierUsageInfo(PsiReferenceExpression expression) {
     super(expression);
     myExpression = expression;
   }

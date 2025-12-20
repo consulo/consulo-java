@@ -64,11 +64,11 @@ public class CachedNumberConstructorCallInspection
 
   @Override
   public InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiNewExpression expression = (PsiNewExpression)infos[0];
-    final PsiJavaCodeReferenceElement classReference =
+    PsiNewExpression expression = (PsiNewExpression)infos[0];
+    PsiJavaCodeReferenceElement classReference =
       expression.getClassReference();
     assert classReference != null;
-    final String className = classReference.getText();
+    String className = classReference.getText();
     return new CachedNumberConstructorCallFix(className);
   }
 
@@ -88,12 +88,12 @@ public class CachedNumberConstructorCallInspection
 
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiNewExpression expression = (PsiNewExpression)descriptor.getPsiElement();
-      final PsiExpressionList argList = expression.getArgumentList();
+      PsiNewExpression expression = (PsiNewExpression)descriptor.getPsiElement();
+      PsiExpressionList argList = expression.getArgumentList();
       assert argList != null;
-      final PsiExpression[] args = argList.getExpressions();
-      final PsiExpression arg = args[0];
-      final String text = arg.getText();
+      PsiExpression[] args = argList.getExpressions();
+      PsiExpression arg = args[0];
+      String text = arg.getText();
       replaceExpression(expression, className + ".valueOf(" + text + ')');
     }
   }
@@ -108,29 +108,29 @@ public class CachedNumberConstructorCallInspection
         return;
       }
       super.visitNewExpression(expression);
-      final PsiType type = expression.getType();
+      PsiType type = expression.getType();
       if (type == null) {
         return;
       }
-      final String canonicalText = type.getCanonicalText();
+      String canonicalText = type.getCanonicalText();
       if (!cachedNumberTypes.contains(canonicalText)) {
         return;
       }
-      final PsiClass aClass = ClassUtils.getContainingClass(expression);
+      PsiClass aClass = ClassUtils.getContainingClass(expression);
       if (aClass != null &&
           cachedNumberTypes.contains(aClass.getQualifiedName())) {
         return;
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpressionList argumentList = expression.getArgumentList();
       if (argumentList == null) {
         return;
       }
-      final PsiExpression[] arguments = argumentList.getExpressions();
+      PsiExpression[] arguments = argumentList.getExpressions();
       if (arguments.length != 1) {
         return;
       }
-      final PsiExpression argument = arguments[0];
-      final PsiType argumentType = argument.getType();
+      PsiExpression argument = arguments[0];
+      PsiType argumentType = argument.getType();
       if (argumentType == null ||
           argumentType.equalsToText(
             CommonClassNames.JAVA_LANG_STRING)) {

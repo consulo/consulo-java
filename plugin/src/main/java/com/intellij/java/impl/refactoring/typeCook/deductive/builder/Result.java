@@ -49,7 +49,7 @@ public class Result {
 
   private Binding myBinding;
 
-  public Result(final ReductionSystem system) {
+  public Result(ReductionSystem system) {
     myVictims = system.myElements;
     myTypes = system.myTypes;
     mySettings = system.mySettings;
@@ -57,7 +57,7 @@ public class Result {
     myCastsNumber = myCastToOperandType.size();
   }
 
-  public void incorporateSolution(final Binding binding) {
+  public void incorporateSolution(Binding binding) {
     if (myBinding == null) {
       myBinding = binding;
     }
@@ -66,20 +66,20 @@ public class Result {
     }
   }
 
-  public PsiType getCookedType(final PsiElement element) {
-    final PsiType originalType = Util.getType(element);
+  public PsiType getCookedType(PsiElement element) {
+    PsiType originalType = Util.getType(element);
 
     if (myBinding != null) {
-      final PsiType type = myBinding.substitute(myTypes.get(element));
+      PsiType type = myBinding.substitute(myTypes.get(element));
 
-      final String objectFQName = CommonClassNames.JAVA_LANG_OBJECT;
+      String objectFQName = CommonClassNames.JAVA_LANG_OBJECT;
       if (originalType.getCanonicalText().equals(objectFQName)) {
         if (type == null) {
           return originalType;
         }
 
         if (type instanceof PsiWildcardType){
-          final PsiType bound = ((PsiWildcardType)type).getBound();
+          PsiType bound = ((PsiWildcardType)type).getBound();
 
           if (bound != null){
             return bound;
@@ -98,12 +98,12 @@ public class Result {
   public HashSet<PsiElement> getCookedElements() {
     myCookedNumber = 0;
 
-    final HashSet<PsiElement> set = new HashSet<PsiElement>();
+    HashSet<PsiElement> set = new HashSet<PsiElement>();
 
-    for (final PsiElement element : myVictims) {
-      final PsiType originalType = Util.getType(element);
+    for (PsiElement element : myVictims) {
+      PsiType originalType = Util.getType(element);
 
-      final PsiType cookedType = getCookedType(element);
+      PsiType cookedType = getCookedType(element);
       if (cookedType != null && !originalType.equals(cookedType)) {
         set.add(element);
         myCookedNumber++;
@@ -113,10 +113,10 @@ public class Result {
     if (mySettings.dropObsoleteCasts()) {
       myCastsRemoved = 0;
       if (myBinding != null) {
-        for (final Map.Entry<PsiTypeCastExpression,PsiType> entry : myCastToOperandType.entrySet()) {
-          final PsiTypeCastExpression cast = entry.getKey();
-          final PsiType operandType = myBinding.apply(entry.getValue());
-          final PsiType castType = cast.getType();
+        for (Map.Entry<PsiTypeCastExpression,PsiType> entry : myCastToOperandType.entrySet()) {
+          PsiTypeCastExpression cast = entry.getKey();
+          PsiType operandType = myBinding.apply(entry.getValue());
+          PsiType castType = cast.getType();
           if (!(operandType instanceof PsiTypeVariable) && castType != null && !isBottomArgument(operandType) && castType.isAssignableFrom(operandType)) {
             set.add(cast);
           }
@@ -127,12 +127,12 @@ public class Result {
     return set;
   }
 
-  private static boolean isBottomArgument(final PsiType type) {
-    final PsiClassType.ClassResolveResult resolveResult = PsiUtil.resolveGenericsClassInType(type);
-    final PsiClass clazz = resolveResult.getElement();
+  private static boolean isBottomArgument(PsiType type) {
+    PsiClassType.ClassResolveResult resolveResult = PsiUtil.resolveGenericsClassInType(type);
+    PsiClass clazz = resolveResult.getElement();
     if (clazz != null) {
       for (PsiTypeParameter typeParameter : PsiUtil.typeParametersIterable(clazz)) {
-        final PsiType t = resolveResult.getSubstitutor().substitute(typeParameter);
+        PsiType t = resolveResult.getSubstitutor().substitute(typeParameter);
         if (t == Bottom.BOTTOM) return true;
       }
     }
@@ -140,10 +140,10 @@ public class Result {
     return false;
   }
 
-  public void apply(final HashSet<PsiElement> victims) {
-    for (final PsiElement element : victims) {
+  public void apply(HashSet<PsiElement> victims) {
+    for (PsiElement element : victims) {
       if (element instanceof PsiTypeCastExpression && myCastToOperandType.containsKey(element)) {
-        final PsiTypeCastExpression cast = ((PsiTypeCastExpression)element);
+        PsiTypeCastExpression cast = ((PsiTypeCastExpression)element);
         try {
           cast.replace(cast.getOperand());
           myCastsRemoved++;
@@ -158,8 +158,8 @@ public class Result {
     }
   }
 
-  private String getRatio(final int x, final int y) {
-    final String ratio = RefactoringBundle.message("type.cook.ratio.generified", x, y);
+  private String getRatio(int x, int y) {
+    String ratio = RefactoringBundle.message("type.cook.ratio.generified", x, y);
     return ratio + (y != 0 ? " (" + (x * 100 / y) + "%)" : "");
   }
 

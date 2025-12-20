@@ -33,9 +33,9 @@ public class WrapReturnValue extends FixableUsageInfo {
     }
 
     public void fixUsage() throws IncorrectOperationException {
-        final PsiExpression returnValue = statement.getReturnValue();
+        PsiExpression returnValue = statement.getReturnValue();
         assert returnValue != null;
-        @NonNls final String newExpression =
+        @NonNls String newExpression =
                 "new " + type + '(' + returnValue.getText() + ')';
         MutationUtils.replaceExpression(newExpression, returnValue);
     }

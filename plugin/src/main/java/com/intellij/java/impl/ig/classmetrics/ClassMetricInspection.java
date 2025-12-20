@@ -36,7 +36,7 @@ public abstract class ClassMetricInspection extends BaseInspection {
   }
 
   public JComponent createOptionsPanel() {
-    final String label = getConfigurationLabel();
+    String label = getConfigurationLabel();
     return new SingleIntegerFieldOptionsPanel(label,
                                               this, "m_limit");
   }

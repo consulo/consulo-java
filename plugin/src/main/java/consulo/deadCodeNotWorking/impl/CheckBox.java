@@ -33,15 +33,15 @@ public class CheckBox extends JCheckBox
 	public CheckBox(@Nonnull String label, @Nonnull InspectionTool owner, @NonNls String property)
 	{
 		super(label, getPropertyValue(owner, property));
-		final ButtonModel model = getModel();
-		final SingleCheckboxChangeListener listener = new SingleCheckboxChangeListener(owner, property, model);
+		ButtonModel model = getModel();
+		SingleCheckboxChangeListener listener = new SingleCheckboxChangeListener(owner, property, model);
 		model.addChangeListener(listener);
 	}
 
 	public CheckBox(@Nonnull String label, @Nonnull BooleanSupplier getter, @Nonnull BooleanConsumer setter)
 	{
 		super(label, getter.getAsBoolean());
-		final ButtonModel model = getModel();
+		ButtonModel model = getModel();
 		model.addChangeListener(e -> setter.accept(model.isSelected()));
 	}
 
@@ -49,8 +49,8 @@ public class CheckBox extends JCheckBox
 	{
 		try
 		{
-			final Class<? extends InspectionTool> aClass = owner.getClass();
-			final Field field = aClass.getField(property);
+			Class<? extends InspectionTool> aClass = owner.getClass();
+			Field field = aClass.getField(property);
 			return field.getBoolean(owner);
 		}
 		catch(IllegalAccessException ignore)
@@ -86,8 +86,8 @@ public class CheckBox extends JCheckBox
 		{
 			try
 			{
-				final Class<? extends InspectionTool> aClass = owner.getClass();
-				final Field field = aClass.getField(property);
+				Class<? extends InspectionTool> aClass = owner.getClass();
+				Field field = aClass.getField(property);
 				field.setBoolean(owner, selected);
 			}
 			catch(IllegalAccessException | NoSuchFieldException ignore)

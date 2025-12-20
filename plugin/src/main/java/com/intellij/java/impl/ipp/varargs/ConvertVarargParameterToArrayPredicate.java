@@ -29,11 +29,11 @@ class ConvertVarargParameterToArrayPredicate
     if (!(element instanceof PsiParameterList)) {
       return false;
     }
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!(parent instanceof PsiMethod)) {
       return false;
     }
-    final PsiMethod method = (PsiMethod)parent;
+    PsiMethod method = (PsiMethod)parent;
     return method.isVarArgs();
   }
 }

@@ -53,10 +53,10 @@ public class ChangeAnnotationParameterQuickFix extends LocalQuickFixAndIntention
       return;
     }
 
-    final PsiNameValuePair attribute = AnnotationUtil.findDeclaredAttribute(annotation, myName);
+    PsiNameValuePair attribute = AnnotationUtil.findDeclaredAttribute(annotation, myName);
     if (myNewValue != null) {
-      final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
-      final PsiAnnotation dummyAnnotation = elementFactory.createAnnotationFromText("@A" + "(" + myName + "=" + myNewValue + ")", null);
+      PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
+      PsiAnnotation dummyAnnotation = elementFactory.createAnnotationFromText("@A" + "(" + myName + "=" + myNewValue + ")", null);
       annotation.setDeclaredAttributeValue(myName, dummyAnnotation.getParameterList().getAttributes()[0].getValue());
     }
     else if (attribute != null) {

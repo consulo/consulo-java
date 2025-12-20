@@ -56,12 +56,12 @@ public class UsesAndInterfacesDependencyMemberInfoModel<T extends PsiMember, M e
 			@Override
 			public int checkForProblems(@Nonnull M memberInfo)
 			{
-				final int problem = super.checkForProblems(memberInfo);
+				int problem = super.checkForProblems(memberInfo);
 				if(problem == OK)
 				{
 					return OK;
 				}
-				final PsiMember member = memberInfo.getMember();
+				PsiMember member = memberInfo.getMember();
 				if(member instanceof PsiMethod)
 				{
 					if(interfaceContainmentVerifier.checkedInterfacesContain((PsiMethod) member))

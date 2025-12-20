@@ -52,7 +52,7 @@ public class ReadObjectInitializationInspection extends BaseInspection {
         @Override
         public void visitMethod(@Nonnull PsiMethod method) {
             // no call to super, so it doesn't drill down
-            final PsiClass aClass = method.getContainingClass();
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null) {
                 return;
             }
@@ -65,18 +65,18 @@ public class ReadObjectInitializationInspection extends BaseInspection {
             if (!SerializationUtils.isReadObject(method)) {
                 return;
             }
-            final boolean defaultReadObjectCalled =
+            boolean defaultReadObjectCalled =
                 ControlFlowUtils.elementContainsCallToMethod(method, "java.io.ObjectInputStream", PsiType.VOID, "defaultReadObject");
-            final PsiField[] fields = aClass.getFields();
+            PsiField[] fields = aClass.getFields();
             if (defaultReadObjectCalled) {
-                for (final PsiField field : fields) {
+                for (PsiField field : fields) {
                     if (field.hasModifierProperty(PsiModifier.TRANSIENT) && !isFieldInitialized(field, method)) {
                         registerFieldError(field);
                     }
                 }
             }
             else {
-                for (final PsiField field : fields) {
+                for (PsiField field : fields) {
                     if (!isFieldInitialized(field, method)) {
                         registerFieldError(field);
                     }

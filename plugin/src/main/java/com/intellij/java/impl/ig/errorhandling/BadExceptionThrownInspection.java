@@ -56,7 +56,7 @@ public class BadExceptionThrownInspection extends BaseInspection {
     public BadExceptionThrownInspection() {
         if (exceptionsString.length() != 0) {
             exceptions.clear();
-            final List<String> strings = StringUtil.split(exceptionsString, ",");
+            List<String> strings = StringUtil.split(exceptionsString, ",");
             for (String string : strings) {
                 exceptions.add(string);
             }
@@ -79,7 +79,7 @@ public class BadExceptionThrownInspection extends BaseInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final ListTable table =
+        ListTable table =
             new ListTable(new ListWrappingTableModel(exceptions, InspectionGadgetsLocalize.exceptionClassColumnName().get()));
         return UiUtils.createAddRemoveTreeClassChooserPanel(
             table,
@@ -91,8 +91,8 @@ public class BadExceptionThrownInspection extends BaseInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiType type = (PsiType) infos[0];
-        final String exceptionName = type.getPresentableText();
+        PsiType type = (PsiType) infos[0];
+        String exceptionName = type.getPresentableText();
         return InspectionGadgetsLocalize.badExceptionThrownProblemDescriptor(exceptionName).get();
     }
 
@@ -106,15 +106,15 @@ public class BadExceptionThrownInspection extends BaseInspection {
         @Override
         public void visitThrowStatement(PsiThrowStatement statement) {
             super.visitThrowStatement(statement);
-            final PsiExpression exception = statement.getException();
+            PsiExpression exception = statement.getException();
             if (exception == null) {
                 return;
             }
-            final PsiType type = exception.getType();
+            PsiType type = exception.getType();
             if (type == null) {
                 return;
             }
-            final String text = type.getCanonicalText();
+            String text = type.getCanonicalText();
             if (exceptions.contains(text)) {
                 registerStatementError(statement, type);
             }

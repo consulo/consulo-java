@@ -79,7 +79,7 @@ public class BlockContainingJavaBlock extends AbstractJavaBlock
 	@Override
 	protected List<Block> buildChildren()
 	{
-		final ArrayList<Block> result = new ArrayList<>();
+		ArrayList<Block> result = new ArrayList<>();
 		Alignment childAlignment = createChildAlignment();
 		Wrap childWrap = createChildWrap();
 
@@ -96,7 +96,7 @@ public class BlockContainingJavaBlock extends AbstractJavaBlock
 		return result;
 	}
 
-	private void buildChildren(final ArrayList<Block> result, final Alignment childAlignment, final Wrap childWrap)
+	private void buildChildren(ArrayList<Block> result, Alignment childAlignment, Wrap childWrap)
 	{
 		ASTNode child = myNode.getFirstChildNode();
 		ASTNode prevChild = null;
@@ -107,7 +107,7 @@ public class BlockContainingJavaBlock extends AbstractJavaBlock
 		{
 			if(!FormatterUtil.containsWhiteSpacesOnly(child) && child.getTextLength() > 0)
 			{
-				final Indent indent = calcIndent(child, state);
+				Indent indent = calcIndent(child, state);
 				myIndentsBefore.add(calcIndentBefore(child, state));
 				state = calcNewState(child, state);
 
@@ -145,7 +145,7 @@ public class BlockContainingJavaBlock extends AbstractJavaBlock
 		}
 	}
 
-	private static int calcNewState(final ASTNode child, final int state)
+	private static int calcNewState(ASTNode child, int state)
 	{
 		if(state == BEFORE_FIRST)
 		{
@@ -181,7 +181,7 @@ public class BlockContainingJavaBlock extends AbstractJavaBlock
 		return BEFORE_BLOCK;
 	}
 
-	private Indent calcIndent(final ASTNode child, final int state)
+	private Indent calcIndent(ASTNode child, int state)
 	{
 		if(state == AFTER_ELSE && child.getElementType() == JavaElementType.IF_STATEMENT)
 		{
@@ -240,7 +240,7 @@ public class BlockContainingJavaBlock extends AbstractJavaBlock
 		return node.getTreeParent() != null && node.getTreeParent().getElementType() == JavaElementType.METHOD;
 	}
 
-	private Indent calcIndentBefore(final ASTNode child, final int state)
+	private Indent calcIndentBefore(ASTNode child, int state)
 	{
 		if(state == AFTER_ELSE)
 		{
@@ -273,7 +273,7 @@ public class BlockContainingJavaBlock extends AbstractJavaBlock
 		return Indent.getContinuationIndent(myIndentSettings.USE_RELATIVE_INDENTS);
 	}
 
-	private static boolean isSimpleStatement(final ASTNode child)
+	private static boolean isSimpleStatement(ASTNode child)
 	{
 		if(child.getElementType() == JavaElementType.BLOCK_STATEMENT)
 		{
@@ -286,7 +286,7 @@ public class BlockContainingJavaBlock extends AbstractJavaBlock
 		return isStatement(child, child.getTreeParent());
 	}
 
-	private static boolean isPartOfCodeBlock(final ASTNode child)
+	private static boolean isPartOfCodeBlock(ASTNode child)
 	{
 		if(child == null)
 		{
@@ -315,7 +315,7 @@ public class BlockContainingJavaBlock extends AbstractJavaBlock
 
 	@Override
 	@Nonnull
-	public ChildAttributes getChildAttributes(final int newChildIndex)
+	public ChildAttributes getChildAttributes(int newChildIndex)
 	{
 		if(isAfter(newChildIndex, new IElementType[]{JavaDocElementType.DOC_COMMENT}))
 		{
@@ -374,16 +374,16 @@ public class BlockContainingJavaBlock extends AbstractJavaBlock
 		}
 	}
 
-	private boolean isInsideForParens(final int newChildIndex)
+	private boolean isInsideForParens(int newChildIndex)
 	{
-		final List<Block> subBlocks = getSubBlocks();
+		List<Block> subBlocks = getSubBlocks();
 		for(int i = 0; i < newChildIndex; i++)
 		{
 			if(i >= subBlocks.size())
 			{
 				return false;
 			}
-			final Block block = subBlocks.get(i);
+			Block block = subBlocks.get(i);
 			if(block instanceof LeafBlock)
 			{
 				if(((LeafBlock) block).getTreeNode().getElementType() == JavaTokenType.RPARENTH)

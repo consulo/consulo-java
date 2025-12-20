@@ -29,10 +29,10 @@ class ConvertIntegerToHexPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiLiteralExpression)) {
       return false;
     }
-    final PsiLiteralExpression expression = (PsiLiteralExpression)element;
-    final PsiType type = expression.getType();
+    PsiLiteralExpression expression = (PsiLiteralExpression)element;
+    PsiType type = expression.getType();
     if (PsiType.INT.equals(type) || PsiType.LONG.equals(type)) {
-      @NonNls final String text = expression.getText();
+      @NonNls String text = expression.getText();
       return !(text.startsWith("0x") || text.startsWith("0X"));
     }
     if (PsiType.DOUBLE.equals(type) || PsiType.FLOAT.equals(type)) {
@@ -42,7 +42,7 @@ class ConvertIntegerToHexPredicate implements PsiElementPredicate {
       if (!PsiUtil.isLanguageLevel5OrHigher(expression)) {
         return false;
       }
-      @NonNls final String text = expression.getText();
+      @NonNls String text = expression.getText();
       if (text == null) {
         return false;
       }

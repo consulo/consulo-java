@@ -300,7 +300,7 @@ public class CreatePropertyFromUsageFix extends CreateFromUsageBaseFix implement
       @Override
       public void templateFinished(Template template, boolean brokenOff) {
         PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
-        final int offset = editor.getCaretModel().getOffset();
+        int offset = editor.getCaretModel().getOffset();
         final PsiMethod generatedMethod = PsiTreeUtil.findElementOfClassAtOffset(file, offset, PsiMethod.class, false);
         if (generatedMethod != null) {
           ApplicationManager.getApplication().runWriteAction(new Runnable() {

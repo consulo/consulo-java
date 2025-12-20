@@ -44,17 +44,17 @@ public class SplitElseIfIntention extends Intention {
 
     public void processIntention(PsiElement element)
         throws IncorrectOperationException {
-        final PsiJavaToken token = (PsiJavaToken) element;
-        final PsiIfStatement parentStatement =
+        PsiJavaToken token = (PsiJavaToken) element;
+        PsiIfStatement parentStatement =
             (PsiIfStatement) token.getParent();
         if (parentStatement == null) {
             return;
         }
-        final PsiStatement elseBranch = parentStatement.getElseBranch();
+        PsiStatement elseBranch = parentStatement.getElseBranch();
         if (elseBranch == null) {
             return;
         }
-        final String newStatement = '{' + elseBranch.getText() + '}';
+        String newStatement = '{' + elseBranch.getText() + '}';
         replaceStatement(newStatement, elseBranch);
     }
 }

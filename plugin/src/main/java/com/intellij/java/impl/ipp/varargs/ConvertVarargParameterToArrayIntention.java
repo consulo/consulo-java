@@ -49,46 +49,46 @@ public class ConvertVarargParameterToArrayIntention extends Intention {
 
     protected void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiParameterList parameterList = (PsiParameterList) element;
+        PsiParameterList parameterList = (PsiParameterList) element;
         convertVarargsToArray(parameterList);
     }
 
     private static void convertVarargsToArray(PsiParameterList parameterList)
         throws IncorrectOperationException {
-        final PsiParameter[] parameters = parameterList.getParameters();
+        PsiParameter[] parameters = parameterList.getParameters();
         if (parameters.length == 0) {
             return;
         }
-        final PsiParameter lastParameter = parameters[parameters.length - 1];
+        PsiParameter lastParameter = parameters[parameters.length - 1];
         if (lastParameter == null || !lastParameter.isVarArgs()) {
             return;
         }
-        final PsiEllipsisType type =
+        PsiEllipsisType type =
             (PsiEllipsisType) lastParameter.getType();
-        final PsiMethod method = (PsiMethod) parameterList.getParent();
-        final Query<PsiReference> query = ReferencesSearch.search(method);
-        final PsiType componentType = type.getComponentType();
-        final String typeText = componentType.getCanonicalText();
-        final int parameterIndex =
+        PsiMethod method = (PsiMethod) parameterList.getParent();
+        Query<PsiReference> query = ReferencesSearch.search(method);
+        PsiType componentType = type.getComponentType();
+        String typeText = componentType.getCanonicalText();
+        int parameterIndex =
             parameterList.getParameterIndex(lastParameter);
         for (PsiReference reference : query) {
-            final PsiElement referenceElement = reference.getElement();
+            PsiElement referenceElement = reference.getElement();
             if (!(referenceElement instanceof PsiReferenceExpression)) {
                 continue;
             }
-            final PsiReferenceExpression referenceExpression =
+            PsiReferenceExpression referenceExpression =
                 (PsiReferenceExpression) referenceElement;
-            final PsiMethodCallExpression methodCallExpression =
+            PsiMethodCallExpression methodCallExpression =
                 (PsiMethodCallExpression) referenceExpression.getParent();
             modifyCall(methodCallExpression, typeText, parameterIndex);
         }
-        final PsiType arrayType = type.toArrayType();
-        final Project project = lastParameter.getProject();
-        final PsiElementFactory factory =
+        PsiType arrayType = type.toArrayType();
+        Project project = lastParameter.getProject();
+        PsiElementFactory factory =
             JavaPsiFacade.getElementFactory(project);
-        final PsiTypeElement newTypeElement =
+        PsiTypeElement newTypeElement =
             factory.createTypeElement(arrayType);
-        final PsiTypeElement typeElement =
+        PsiTypeElement typeElement =
             lastParameter.getTypeElement();
         typeElement.replace(newTypeElement);
     }
@@ -97,16 +97,16 @@ public class ConvertVarargParameterToArrayIntention extends Intention {
                                   String arrayTypeText,
                                   int indexOfFirstVarargArgument)
         throws IncorrectOperationException {
-        final PsiExpressionList argumentList =
+        PsiExpressionList argumentList =
             methodCallExpression.getArgumentList();
-        final PsiExpression[] arguments = argumentList.getExpressions();
-        @NonNls final StringBuilder builder = new StringBuilder("new ");
+        PsiExpression[] arguments = argumentList.getExpressions();
+        @NonNls StringBuilder builder = new StringBuilder("new ");
         builder.append(arrayTypeText);
         builder.append("[]{");
         if (arguments.length > indexOfFirstVarargArgument) {
-            final PsiExpression firstArgument =
+            PsiExpression firstArgument =
                 arguments[indexOfFirstVarargArgument];
-            final String firstArgumentText = firstArgument.getText();
+            String firstArgumentText = firstArgument.getText();
             builder.append(firstArgumentText);
             for (int i = indexOfFirstVarargArgument + 1;
                  i < arguments.length; i++) {
@@ -115,14 +115,14 @@ public class ConvertVarargParameterToArrayIntention extends Intention {
             }
         }
         builder.append('}');
-        final Project project = methodCallExpression.getProject();
-        final PsiElementFactory factory =
+        Project project = methodCallExpression.getProject();
+        PsiElementFactory factory =
             JavaPsiFacade.getElementFactory(project);
-        final PsiExpression arrayExpression =
+        PsiExpression arrayExpression =
             factory.createExpressionFromText(builder.toString(),
                 methodCallExpression);
         if (arguments.length > indexOfFirstVarargArgument) {
-            final PsiExpression firstArgument =
+            PsiExpression firstArgument =
                 arguments[indexOfFirstVarargArgument];
             argumentList.deleteChildRange(firstArgument,
                 arguments[arguments.length - 1]);
@@ -131,10 +131,10 @@ public class ConvertVarargParameterToArrayIntention extends Intention {
         else {
             argumentList.add(arrayExpression);
         }
-        final JavaCodeStyleManager javaCodeStyleManager =
+        JavaCodeStyleManager javaCodeStyleManager =
             JavaCodeStyleManager.getInstance(project);
         javaCodeStyleManager.shortenClassReferences(argumentList);
-        final CodeStyleManager codeStyleManager =
+        CodeStyleManager codeStyleManager =
             CodeStyleManager.getInstance(project);
         codeStyleManager.reformat(argumentList);
     }

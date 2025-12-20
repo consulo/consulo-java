@@ -40,29 +40,29 @@ class CommentOnLineWithSourcePredicate implements PsiElementPredicate {
       return false;
     }
 
-    final PsiComment comment = (PsiComment)element;
+    PsiComment comment = (PsiComment)element;
     if (comment instanceof PsiLanguageInjectionHost && InjectedLanguageManager.getInstance(comment.getProject()).getInjectedPsiFiles(comment) != null) {
       return false;
     }
-    final IElementType type = comment.getTokenType();
+    IElementType type = comment.getTokenType();
     if (!JavaTokenType.C_STYLE_COMMENT.equals(type) &&
         !JavaTokenType.END_OF_LINE_COMMENT.equals(type)) {
       return false; // can't move JSP comments
     }
-    final PsiElement prevSibling = PsiTreeUtil.prevLeaf(element);
+    PsiElement prevSibling = PsiTreeUtil.prevLeaf(element);
     if (!(prevSibling instanceof PsiWhiteSpace)) {
       return true;
     }
-    final String prevSiblingText = prevSibling.getText();
+    String prevSiblingText = prevSibling.getText();
     if (prevSiblingText.indexOf((int)'\n') < 0 &&
         prevSiblingText.indexOf((int)'\r') < 0) {
       return true;
     }
-    final PsiElement nextSibling = PsiTreeUtil.nextLeaf(element);
+    PsiElement nextSibling = PsiTreeUtil.nextLeaf(element);
     if (!(nextSibling instanceof PsiWhiteSpace)) {
       return true;
     }
-    final String nextSiblingText = nextSibling.getText();
+    String nextSiblingText = nextSibling.getText();
     return nextSiblingText.indexOf((int)'\n') < 0 &&
            nextSiblingText.indexOf((int)'\r') < 0;
   }

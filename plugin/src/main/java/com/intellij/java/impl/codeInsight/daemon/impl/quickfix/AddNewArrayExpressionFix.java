@@ -86,16 +86,16 @@ public class AddNewArrayExpressionFix implements SyntheticIntentionAction {
 
     @RequiredReadAction
     private static PsiType getType(PsiArrayInitializerExpression initializer) {
-        final PsiExpression[] initializers = initializer.getInitializers();
-        final PsiElement parent = initializer.getParent();
+        PsiExpression[] initializers = initializer.getInitializers();
+        PsiElement parent = initializer.getParent();
         if (!(parent instanceof PsiAssignmentExpression)) {
             if (initializers.length <= 0) {
                 return null;
             }
             return initializers[0].getType();
         }
-        final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) parent;
-        final PsiType type = assignmentExpression.getType();
+        PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) parent;
+        PsiType type = assignmentExpression.getType();
         if (!(type instanceof PsiArrayType)) {
             if (initializers.length <= 0) {
                 return null;

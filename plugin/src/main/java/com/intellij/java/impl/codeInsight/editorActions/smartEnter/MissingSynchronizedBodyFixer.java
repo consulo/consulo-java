@@ -39,7 +39,7 @@ public class MissingSynchronizedBodyFixer implements Fixer
 		}
 		PsiSynchronizedStatement syncStatement = (PsiSynchronizedStatement) psiElement;
 
-		final Document doc = editor.getDocument();
+		Document doc = editor.getDocument();
 
 		PsiElement body = syncStatement.getBody();
 		if(body != null)

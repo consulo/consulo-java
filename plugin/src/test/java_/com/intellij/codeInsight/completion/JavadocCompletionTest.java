@@ -156,7 +156,7 @@ public abstract class JavadocCompletionTest extends LightFixtureCompletionTestCa
     myFixture.completeBasic();
     type('#');
     checkResultByFile("FinishWithSharp_after.java");
-    final List<LookupElement> items = getLookup().getItems();
+    List<LookupElement> items = getLookup().getItems();
     assertEquals("bar", items.get(0).getLookupString());
     assertEquals("foo", items.get(1).getLookupString());
   }
@@ -213,7 +213,7 @@ public abstract class JavadocCompletionTest extends LightFixtureCompletionTestCa
     PsiReferenceProvider provider = new PsiReferenceProvider() {
       @Override
       @Nonnull
-      public PsiReference[] getReferencesByElement(@Nonnull final PsiElement element, @Nonnull final ProcessingContext context) {
+      public PsiReference[] getReferencesByElement(@Nonnull final PsiElement element, @Nonnull ProcessingContext context) {
         return new PsiReference[]{new PsiReferenceBase<PsiElement>(element) {
 
           @Override

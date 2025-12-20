@@ -34,20 +34,20 @@ public class UtilityClassUtil {
     if (aClass instanceof PsiTypeParameter || aClass instanceof PsiAnonymousClass) {
       return false;
     }
-    final PsiReferenceList extendsList = aClass.getExtendsList();
+    PsiReferenceList extendsList = aClass.getExtendsList();
     if (fullCheck && extendsList != null && extendsList.getReferenceElements().length > 0) {
       return false;
     }
-    final PsiReferenceList implementsList = aClass.getImplementsList();
+    PsiReferenceList implementsList = aClass.getImplementsList();
     if (implementsList != null && implementsList.getReferenceElements().length > 0) {
       return false;
     }
-    final PsiMethod[] methods = aClass.getMethods();
-    final int staticMethodCount = countStaticMethods(methods);
+    PsiMethod[] methods = aClass.getMethods();
+    int staticMethodCount = countStaticMethods(methods);
     if (staticMethodCount < 0) {
       return false;
     }
-    final PsiField[] fields = aClass.getFields();
+    PsiField[] fields = aClass.getFields();
     if (!allFieldsStatic(fields)) {
       return false;
     }
@@ -55,7 +55,7 @@ public class UtilityClassUtil {
   }
 
   private static boolean allFieldsStatic(PsiField[] fields) {
-    for (final PsiField field : fields) {
+    for (PsiField field : fields) {
       if (!field.hasModifierProperty(PsiModifier.STATIC)) {
         return false;
       }
@@ -68,7 +68,7 @@ public class UtilityClassUtil {
    */
   private static int countStaticMethods(PsiMethod[] methods) {
     int staticCount = 0;
-    for (final PsiMethod method : methods) {
+    for (PsiMethod method : methods) {
       if (method.isConstructor()) {
         continue;
       }

@@ -61,7 +61,7 @@ public class ShortenToStaticImportProcessor implements TemplateOptionalProcessor
     @Override
     public void processText(Project project, Template template, Document document, RangeMarker templateRange, Editor editor) {
         PsiDocumentManager.getInstance(project).commitDocument(document);
-        final PsiFile file = PsiUtilBase.getPsiFileInEditor(editor, project);
+        PsiFile file = PsiUtilBase.getPsiFileInEditor(editor, project);
         if (file == null) {
             return;
         }

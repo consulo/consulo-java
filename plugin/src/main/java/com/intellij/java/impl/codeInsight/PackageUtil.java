@@ -66,7 +66,7 @@ public class PackageUtil
 			PsiJavaPackage rootPackage = findLongestExistingPackage(module.getProject(), packageName);
 			if (rootPackage != null)
 			{
-				final PsiDirectory[] psiDirectories = getPackageDirectoriesInModule(rootPackage, module);
+				PsiDirectory[] psiDirectories = getPackageDirectoriesInModule(rootPackage, module);
 				if (psiDirectories.length > 0)
 				{
 					psiDirectory = psiDirectories[0];
@@ -74,9 +74,9 @@ public class PackageUtil
 			}
 		}
 		if (psiDirectory == null && checkSourceRootsConfigured(module)) {
-			final VirtualFile[] sourceRoots = ModuleRootManager.getInstance(module).getSourceRoots();
+			VirtualFile[] sourceRoots = ModuleRootManager.getInstance(module).getSourceRoots();
 			for (VirtualFile sourceRoot : sourceRoots) {
-				final PsiDirectory directory = PsiManager.getInstance(module.getProject()).findDirectory(sourceRoot);
+				PsiDirectory directory = PsiManager.getInstance(module.getProject()).findDirectory(sourceRoot);
 				if (directory != null) {
 					psiDirectory = directory;
 					break;
@@ -157,7 +157,7 @@ public class PackageUtil
 		boolean askedToCreate = false;
 		while (restOfName.length() > 0)
 		{
-			final String name = getLeftPart(restOfName);
+			String name = getLeftPart(restOfName);
 			PsiDirectory foundExistingDirectory = psiDirectory.findSubdirectory(name);
 			if (foundExistingDirectory == null)
 			{
@@ -186,11 +186,11 @@ public class PackageUtil
 		return psiDirectory;
 	}
 
-	private static PsiDirectory createSubdirectory(final PsiDirectory oldDirectory, final String name, Project project)
+	private static PsiDirectory createSubdirectory(PsiDirectory oldDirectory, String name, Project project)
 		throws IncorrectOperationException
 	{
-		final PsiDirectory[] psiDirectory = new PsiDirectory[1];
-		final IncorrectOperationException[] exception = new IncorrectOperationException[1];
+		PsiDirectory[] psiDirectory = new PsiDirectory[1];
+		IncorrectOperationException[] exception = new IncorrectOperationException[1];
 
 		CommandProcessor.getInstance().executeCommand(
 			project,
@@ -241,7 +241,7 @@ public class PackageUtil
 		boolean filterSourceDirsForBaseTestDirectory
 	) throws IncorrectOperationException
 	{
-		final Project project = module.getProject();
+		Project project = module.getProject();
 		PsiDirectory psiDirectory = null;
 		if (!packageName.isEmpty())
 		{
@@ -274,11 +274,11 @@ public class PackageUtil
 			{
 				return null;
 			}
-			final VirtualFile[] sourceRoots = ModuleRootManager.getInstance(module).getSourceRoots();
+			VirtualFile[] sourceRoots = ModuleRootManager.getInstance(module).getSourceRoots();
 			List<PsiDirectory> directoryList = new ArrayList<>();
 			for (VirtualFile sourceRoot : sourceRoots)
 			{
-				final PsiDirectory directory = PsiManager.getInstance(project).findDirectory(sourceRoot);
+				PsiDirectory directory = PsiManager.getInstance(project).findDirectory(sourceRoot);
 				if (directory != null)
 				{
 					directoryList.add(directory);
@@ -301,7 +301,7 @@ public class PackageUtil
 		boolean askedToCreate = false;
 		while (restOfName.length() > 0)
 		{
-			final String name = getLeftPart(restOfName);
+			String name = getLeftPart(restOfName);
 			PsiDirectory foundExistingDirectory = psiDirectory.findSubdirectory(name);
 			if (foundExistingDirectory == null)
 			{
@@ -323,7 +323,7 @@ public class PackageUtil
 					askedToCreate = true;
 				}
 
-				final PsiDirectory psiDirectory1 = psiDirectory;
+				PsiDirectory psiDirectory1 = psiDirectory;
 				try
 				{
 					psiDirectory = WriteAction.compute(() -> psiDirectory1.createSubdirectory(name));
@@ -348,7 +348,7 @@ public class PackageUtil
 
 	private static PsiDirectory[] filterSourceDirectories(PsiDirectory baseDir, Project project, PsiDirectory[] moduleDirectories)
 	{
-		final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
+		ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
 		if (fileIndex.isInTestSourceContent(baseDir.getVirtualFile()))
 		{
 			List<PsiDirectory> result = new ArrayList<>();
@@ -426,7 +426,7 @@ public class PackageUtil
 	@RequiredReadAction
 	private static PsiJavaPackage findLongestExistingPackage(Module module, String packageName)
 	{
-		final PsiManager manager = PsiManager.getInstance(module.getProject());
+		PsiManager manager = PsiManager.getInstance(module.getProject());
 
 		String nameToMatch = packageName;
 		while (true)
@@ -463,13 +463,13 @@ public class PackageUtil
 	}
 
 	@RequiredUIAccess
-	public static boolean checkSourceRootsConfigured(final Module module)
+	public static boolean checkSourceRootsConfigured(Module module)
 	{
 		return checkSourceRootsConfigured(module, true);
 	}
 
 	@RequiredUIAccess
-	public static boolean checkSourceRootsConfigured(final Module module, final boolean askUserToSetupSourceRoots)
+	public static boolean checkSourceRootsConfigured(Module module, boolean askUserToSetupSourceRoots)
 	{
 		VirtualFile[] sourceRoots = ModuleRootManager.getInstance(module).getSourceRoots();
 		if (sourceRoots.length == 0)
@@ -501,7 +501,7 @@ public class PackageUtil
 	}
 
 	@RequiredReadAction
-	public static PsiDirectory[] convertRoots(final Project project, VirtualFile[] roots)
+	public static PsiDirectory[] convertRoots(Project project, VirtualFile[] roots)
 	{
 		ArrayList<PsiDirectory> dirs = new ArrayList<>();
 
@@ -523,14 +523,14 @@ public class PackageUtil
 	}
 
 	@RequiredReadAction
-	public static PsiDirectory[] getSourceRootDirectories(final Project project)
+	public static PsiDirectory[] getSourceRootDirectories(Project project)
 	{
 		VirtualFile[] files = OrderEnumerator.orderEntries(project).sources().usingCache().getRoots();
 		return convertRoots(project, files);
 	}
 
 	@RequiredReadAction
-	public static PsiDirectory[] getAllContentRoots(final Project project)
+	public static PsiDirectory[] getAllContentRoots(Project project)
 	{
 		VirtualFile[] files = ProjectRootManager.getInstance(project).getContentRootsFromAllModules();
 		return convertRoots(project, files);

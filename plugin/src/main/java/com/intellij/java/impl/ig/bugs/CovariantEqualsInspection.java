@@ -47,27 +47,27 @@ public class CovariantEqualsInspection extends BaseInspection {
         @Override
         public void visitMethod(@Nonnull PsiMethod method) {
             // note: no call to super
-            final String name = method.getName();
+            String name = method.getName();
             if (!HardcodedMethodConstants.EQUALS.equals(name)) {
                 return;
             }
             if (!method.hasModifierProperty(PsiModifier.PUBLIC)) {
                 return;
             }
-            final PsiParameterList parameterList = method.getParameterList();
+            PsiParameterList parameterList = method.getParameterList();
             if (parameterList.getParametersCount() != 1) {
                 return;
             }
-            final PsiParameter[] parameters = parameterList.getParameters();
-            final PsiType argType = parameters[0].getType();
+            PsiParameter[] parameters = parameterList.getParameters();
+            PsiType argType = parameters[0].getType();
             if (TypeUtils.isJavaLangObject(argType)) {
                 return;
             }
-            final PsiClass aClass = method.getContainingClass();
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null || aClass.isInterface()) {
                 return;
             }
-            final PsiMethod[] methods = aClass.getMethods();
+            PsiMethod[] methods = aClass.getMethods();
             for (PsiMethod method1 : methods) {
                 if (isNonVariantEquals(method1)) {
                     return;
@@ -77,16 +77,16 @@ public class CovariantEqualsInspection extends BaseInspection {
         }
 
         private static boolean isNonVariantEquals(PsiMethod method) {
-            final String name = method.getName();
+            String name = method.getName();
             if (!HardcodedMethodConstants.EQUALS.equals(name)) {
                 return false;
             }
-            final PsiParameterList paramList = method.getParameterList();
-            final PsiParameter[] parameters = paramList.getParameters();
+            PsiParameterList paramList = method.getParameterList();
+            PsiParameter[] parameters = paramList.getParameters();
             if (parameters.length != 1) {
                 return false;
             }
-            final PsiType argType = parameters[0].getType();
+            PsiType argType = parameters[0].getType();
             return TypeUtils.isJavaLangObject(argType);
         }
     }

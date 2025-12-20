@@ -33,7 +33,7 @@ public class AddBracesIntention extends BaseBracesIntention {
     @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return element -> {
-            final PsiStatement statement = getSurroundingStatement(element);
+            PsiStatement statement = getSurroundingStatement(element);
             return statement != null && !(statement instanceof PsiBlockStatement);
         };
     }
@@ -51,11 +51,11 @@ public class AddBracesIntention extends BaseBracesIntention {
     }
 
     protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-        final PsiStatement statement = getSurroundingStatement(element);
+        PsiStatement statement = getSurroundingStatement(element);
         if (statement == null) {
             return;
         }
-        final String newStatement = "{\n" + statement.getText() + "\n}";
+        String newStatement = "{\n" + statement.getText() + "\n}";
         replaceStatement(newStatement, statement);
     }
 }

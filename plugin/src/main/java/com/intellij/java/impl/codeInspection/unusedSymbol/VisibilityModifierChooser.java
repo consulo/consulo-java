@@ -87,7 +87,7 @@ public class VisibilityModifierChooser extends JLabel implements UserActivityPro
         JSlider slider = new JSlider(SwingConstants.VERTICAL, 1, modifiers.length, 1);
         slider.addChangeListener(val ->
         {
-          final String modifier = modifiers[slider.getValue() - 1];
+          String modifier = modifiers[slider.getValue() - 1];
           if (myCurrentModifier != modifier) {
             myCurrentModifier = modifier;
             modifierChangedConsumer.accept(modifier);
@@ -101,7 +101,7 @@ public class VisibilityModifierChooser extends JLabel implements UserActivityPro
         slider.setPaintLabels(true);
         slider.setSnapToTicks(true);
         slider.setValue(ArrayUtil.find(modifiers, myCurrentModifier) + 1);
-        final JBPopup popup = JBPopupFactory.getInstance().createComponentPopupBuilder(slider, null).setTitle("Effective Visibility").setCancelOnClickOutside(true).setMovable(true)
+        JBPopup popup = JBPopupFactory.getInstance().createComponentPopupBuilder(slider, null).setTitle("Effective Visibility").setCancelOnClickOutside(true).setMovable(true)
             .createPopup();
         popup.show(new RelativePoint(VisibilityModifierChooser.this, new Point(getWidth(), 0)));
         return true;

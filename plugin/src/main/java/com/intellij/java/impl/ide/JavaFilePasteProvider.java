@@ -46,9 +46,9 @@ import java.awt.datatransfer.Transferable;
 @ExtensionImpl
 public class JavaFilePasteProvider implements FilePasteProvider {
   @RequiredReadAction
-  public void performPaste(@Nonnull final DataContext dataContext) {
+  public void performPaste(@Nonnull DataContext dataContext) {
     final Project project = dataContext.getData(Project.KEY);
-    final IdeView ideView = dataContext.getData(IdeView.KEY);
+    IdeView ideView = dataContext.getData(IdeView.KEY);
     if (project == null || ideView == null) {
       return;
     }
@@ -56,7 +56,7 @@ public class JavaFilePasteProvider implements FilePasteProvider {
     if (javaFile == null) {
       return;
     }
-    final PsiClass[] classes = javaFile.getClasses();
+    PsiClass[] classes = javaFile.getClasses();
     if (classes.length < 1) {
       return;
     }
@@ -82,7 +82,7 @@ public class JavaFilePasteProvider implements FilePasteProvider {
         } catch (IncorrectOperationException e) {
           return;
         }
-        final Document document = PsiDocumentManager.getInstance(project).getDocument(file);
+        Document document = PsiDocumentManager.getInstance(project).getDocument(file);
         document.setText(javaFile.getText());
         PsiDocumentManager.getInstance(project).commitDocument(document);
         if (file instanceof PsiJavaFile psiJavaFile) {
@@ -93,11 +93,11 @@ public class JavaFilePasteProvider implements FilePasteProvider {
     }.execute();
   }
 
-  private static void updatePackageStatement(final PsiJavaFile javaFile, final PsiDirectory targetDir) {
-    final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(targetDir);
+  private static void updatePackageStatement(PsiJavaFile javaFile, PsiDirectory targetDir) {
+    PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(targetDir);
     if (aPackage == null) return;
-    final PsiPackageStatement oldStatement = javaFile.getPackageStatement();
-    final Project project = javaFile.getProject();
+    PsiPackageStatement oldStatement = javaFile.getPackageStatement();
+    Project project = javaFile.getProject();
     if ((oldStatement != null && !oldStatement.getPackageName().equals(aPackage.getQualifiedName()) ||
         (oldStatement == null && aPackage.getQualifiedName().length() > 0))) {
       CommandProcessor.getInstance().executeCommand(
@@ -105,12 +105,12 @@ public class JavaFilePasteProvider implements FilePasteProvider {
         () -> {
           try {
             PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
-            final PsiPackageStatement newStatement = factory.createPackageStatement(aPackage.getQualifiedName());
+            PsiPackageStatement newStatement = factory.createPackageStatement(aPackage.getQualifiedName());
             if (oldStatement != null) {
               oldStatement.replace(newStatement);
             } else {
-              final PsiElement addedStatement = javaFile.addAfter(newStatement, null);
-              final TextRange textRange = addedStatement.getTextRange();
+              PsiElement addedStatement = javaFile.addAfter(newStatement, null);
+              TextRange textRange = addedStatement.getTextRange();
               // ensure line break is added after the statement
               CodeStyleManager.getInstance(project).reformatRange(javaFile, textRange.getStartOffset(), textRange.getEndOffset() + 1);
             }
@@ -124,13 +124,13 @@ public class JavaFilePasteProvider implements FilePasteProvider {
     }
   }
 
-  public boolean isPastePossible(@Nonnull final DataContext dataContext) {
+  public boolean isPastePossible(@Nonnull DataContext dataContext) {
     return true;
   }
 
-  public boolean isPasteEnabled(@Nonnull final DataContext dataContext) {
-    final Project project = dataContext.getData(Project.KEY);
-    final IdeView ideView = dataContext.getData(IdeView.KEY);
+  public boolean isPasteEnabled(@Nonnull DataContext dataContext) {
+    Project project = dataContext.getData(Project.KEY);
+    IdeView ideView = dataContext.getData(IdeView.KEY);
     if (project == null || ideView == null || ideView.getDirectories().length == 0) {
       return false;
     }
@@ -139,7 +139,7 @@ public class JavaFilePasteProvider implements FilePasteProvider {
   }
 
   @Nullable
-  private static PsiJavaFile createJavaFileFromClipboardContent(final Project project) {
+  private static PsiJavaFile createJavaFileFromClipboardContent(Project project) {
     PsiJavaFile file = null;
     Transferable content = CopyPasteManager.getInstance().getContents();
     if (content != null) {

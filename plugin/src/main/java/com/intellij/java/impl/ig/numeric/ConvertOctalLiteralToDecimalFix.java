@@ -39,15 +39,15 @@ class ConvertOctalLiteralToDecimalFix
   @Override
   protected void doFix(Project project, ProblemDescriptor descriptor)
     throws IncorrectOperationException {
-    final PsiElement element = descriptor.getPsiElement();
+    PsiElement element = descriptor.getPsiElement();
     if (!(element instanceof PsiLiteralExpression)) return;
 
-    final Object value = ((PsiLiteralExpression)element).getValue();
+    Object value = ((PsiLiteralExpression)element).getValue();
     if (value == null) return;
 
-    final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-    final PsiElementFactory factory = psiFacade.getElementFactory();
-    final PsiExpression decimalNumber =
+    JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+    PsiElementFactory factory = psiFacade.getElementFactory();
+    PsiExpression decimalNumber =
       factory.createExpressionFromText(value.toString(),
                                        element);
     element.replace(decimalNumber);

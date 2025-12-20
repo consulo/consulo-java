@@ -83,7 +83,7 @@ public class JDComment
 	@Nullable
 	public String generate(@Nonnull String indent)
 	{
-		final String prefix;
+		String prefix;
 
 		if(myFormatter.getSettings().JD_LEADING_ASTERISKS_ARE_ENABLED)
 		{
@@ -109,7 +109,7 @@ public class JDComment
 
 		generateSpecial(prefix, sb);
 
-		final String continuationPrefix = prefix + javadocContinuationIndent();
+		String continuationPrefix = prefix + javadocContinuationIndent();
 
 		if(!isNull(myUnknownList) && myFormatter.getSettings().JD_KEEP_INVALID_TAGS)
 		{

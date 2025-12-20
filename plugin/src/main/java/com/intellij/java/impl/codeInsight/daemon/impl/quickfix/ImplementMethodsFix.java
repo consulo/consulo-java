@@ -77,7 +77,7 @@ public class ImplementMethodsFix extends LocalQuickFixAndIntentionActionOnPsiEle
             return;
         }
         if (myPsiElement instanceof PsiEnumConstant) {
-            final boolean hasClassInitializer = ((PsiEnumConstant) myPsiElement).getInitializingClass() != null;
+            boolean hasClassInitializer = ((PsiEnumConstant) myPsiElement).getInitializingClass() != null;
             final MemberChooser<PsiMethodMember> chooser = chooseMethodsToImplement(editor, startElement,
                 ((PsiEnumConstant) myPsiElement).getContainingClass(), hasClassInitializer
             );
@@ -92,8 +92,8 @@ public class ImplementMethodsFix extends LocalQuickFixAndIntentionActionOnPsiEle
 
             new WriteCommandAction(project, file) {
                 @Override
-                protected void run(final Result result) throws Throwable {
-                    final PsiClass psiClass = ((PsiEnumConstant) myPsiElement).getOrCreateInitializingClass();
+                protected void run(Result result) throws Throwable {
+                    PsiClass psiClass = ((PsiEnumConstant) myPsiElement).getOrCreateInitializingClass();
                     OverrideImplementUtil.overrideOrImplementMethodsInRightPlace(
                         editor,
                         psiClass,
@@ -124,7 +124,7 @@ public class ImplementMethodsFix extends LocalQuickFixAndIntentionActionOnPsiEle
     ) {
         FeatureUsageTracker.getInstance().triggerFeatureUsed(ProductivityFeatureNames.CODEASSISTS_OVERRIDE_IMPLEMENT);
 
-        final Collection<CandidateInfo> overrideImplement =
+        Collection<CandidateInfo> overrideImplement =
             OverrideImplementExploreUtil.getMapToOverrideImplement(aClass, true, implemented).values();
         return OverrideImplementUtil
             .showOverrideImplementChooser(editor, startElement, true, overrideImplement, ContainerUtil.<CandidateInfo>newArrayList());

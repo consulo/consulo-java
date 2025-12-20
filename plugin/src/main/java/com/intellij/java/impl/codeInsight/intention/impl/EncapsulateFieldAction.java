@@ -50,13 +50,13 @@ public class EncapsulateFieldAction extends BaseRefactoringIntentionAction {
       return false;
     }
 
-    final PsiField field = getField(element);
+    PsiField field = getField(element);
     return field != null && !field.hasModifierProperty(PsiModifier.FINAL) && !field.hasModifierProperty(PsiModifier.PRIVATE);
   }
 
   @Override
   public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
-    final PsiField field = getField(element);
+    PsiField field = getField(element);
     if (field == null) {
       return;
     }
@@ -71,17 +71,17 @@ public class EncapsulateFieldAction extends BaseRefactoringIntentionAction {
       return null;
     }
 
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (parent == null || !(parent instanceof PsiReferenceExpression)) {
       return null;
     }
-    final PsiReferenceExpression ref = (PsiReferenceExpression)parent;
-    final PsiExpression qualifier = ref.getQualifierExpression();
+    PsiReferenceExpression ref = (PsiReferenceExpression)parent;
+    PsiExpression qualifier = ref.getQualifierExpression();
     if (qualifier == null || qualifier instanceof PsiThisExpression) {
       return null;
     }
 
-    final PsiElement resolved = ref.resolve();
+    PsiElement resolved = ref.resolve();
     return resolved instanceof PsiField field ? field : null;
   }
 }

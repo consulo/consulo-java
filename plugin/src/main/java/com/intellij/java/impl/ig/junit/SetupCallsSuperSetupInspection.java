@@ -62,20 +62,20 @@ public class SetupCallsSuperSetupInspection extends BaseInspection {
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement methodName = descriptor.getPsiElement();
-      final PsiMethod method = (PsiMethod)methodName.getParent();
+      PsiElement methodName = descriptor.getPsiElement();
+      PsiMethod method = (PsiMethod)methodName.getParent();
       assert method != null;
-      final PsiCodeBlock body = method.getBody();
+      PsiCodeBlock body = method.getBody();
       if (body == null) {
         return;
       }
-      final PsiElementFactory factory =
+      PsiElementFactory factory =
         JavaPsiFacade.getElementFactory(project);
-      final PsiStatement newStatement =
+      PsiStatement newStatement =
         factory.createStatementFromText("super.setUp();", null);
-      final CodeStyleManager styleManager =
+      CodeStyleManager styleManager =
         CodeStyleManager.getInstance(project);
-      final PsiJavaToken brace = body.getLBrace();
+      PsiJavaToken brace = body.getLBrace();
       body.addAfter(newStatement, brace);
       styleManager.reformat(body);
     }
@@ -97,7 +97,7 @@ public class SetupCallsSuperSetupInspection extends BaseInspection {
     @Override
     public void visitMethod(@Nonnull PsiMethod method) {
       //note: no call to super;
-      @NonNls final String methodName = method.getName();
+      @NonNls String methodName = method.getName();
       if (!"setUp".equals(methodName)) {
         return;
       }
@@ -107,11 +107,11 @@ public class SetupCallsSuperSetupInspection extends BaseInspection {
       if (method.getBody() == null) {
         return;
       }
-      final PsiParameterList parameterList = method.getParameterList();
+      PsiParameterList parameterList = method.getParameterList();
       if (parameterList.getParametersCount() != 0) {
         return;
       }
-      final PsiClass targetClass = method.getContainingClass();
+      PsiClass targetClass = method.getContainingClass();
       if (targetClass == null) {
         return;
       }
@@ -119,7 +119,7 @@ public class SetupCallsSuperSetupInspection extends BaseInspection {
                                        "junit.framework.TestCase")) {
         return;
       }
-      final CallToSuperSetupVisitor visitor =
+      CallToSuperSetupVisitor visitor =
         new CallToSuperSetupVisitor();
       method.accept(visitor);
       if (visitor.isCallToSuperSetupFound()) {

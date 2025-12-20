@@ -56,7 +56,7 @@ public class CodeInsightServicesUtil {
             }
           }
           if (tokenType == JavaTokenType.ANDAND && booleanExpression.getParent() instanceof PsiExpression) {
-            final PsiParenthesizedExpression parth = (PsiParenthesizedExpression)factory.createExpressionFromText("(a)", expression);
+            PsiParenthesizedExpression parth = (PsiParenthesizedExpression)factory.createExpressionFromText("(a)", expression);
             parth.getExpression().replace(expression);
             return parth;
           }
@@ -99,7 +99,7 @@ public class CodeInsightServicesUtil {
   }
 
   private static PsiElement createOperationToken(PsiElementFactory factory, IElementType tokenType) throws IncorrectOperationException {
-    final String s;
+    String s;
     if (tokenType == JavaTokenType.EQEQ) {
       s = "==";
     }

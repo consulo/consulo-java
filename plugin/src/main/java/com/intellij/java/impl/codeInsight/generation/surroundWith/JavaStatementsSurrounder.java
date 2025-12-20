@@ -46,5 +46,5 @@ abstract class JavaStatementsSurrounder implements Surrounder {
   }
 
  @Nullable
- protected abstract TextRange surroundStatements(final Project project, final Editor editor, final PsiElement container, final PsiElement[] statements) throws IncorrectOperationException;
+ protected abstract TextRange surroundStatements(Project project, Editor editor, PsiElement container, PsiElement[] statements) throws IncorrectOperationException;
 }

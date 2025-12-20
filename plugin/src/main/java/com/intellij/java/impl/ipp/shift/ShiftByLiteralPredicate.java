@@ -37,20 +37,20 @@ class ShiftByLiteralPredicate implements PsiElementPredicate {
 
   private static boolean isAssignmentShiftByLiteral(
     PsiAssignmentExpression expression) {
-    final IElementType tokenType = expression.getOperationTokenType();
+    IElementType tokenType = expression.getOperationTokenType();
     if (!tokenType.equals(JavaTokenType.LTLTEQ) &&
         !tokenType.equals(JavaTokenType.GTGTEQ)) {
       return false;
     }
-    final PsiExpression lhs = expression.getLExpression();
-    final PsiType lhsType = lhs.getType();
+    PsiExpression lhs = expression.getLExpression();
+    PsiType lhsType = lhs.getType();
     if (lhsType == null) {
       return false;
     }
     if (!ShiftUtils.isIntegral(lhsType)) {
       return false;
     }
-    final PsiExpression rhs = expression.getRExpression();
+    PsiExpression rhs = expression.getRExpression();
     if (rhs == null) {
       return false;
     }
@@ -59,17 +59,17 @@ class ShiftByLiteralPredicate implements PsiElementPredicate {
 
   private static boolean isBinaryShiftByLiteral(
     PsiBinaryExpression expression) {
-    final IElementType tokenType = expression.getOperationTokenType();
+    IElementType tokenType = expression.getOperationTokenType();
     if (!tokenType.equals(JavaTokenType.LTLT) &&
         !tokenType.equals(JavaTokenType.GTGT)) {
       return false;
     }
-    final PsiExpression lOperand = expression.getLOperand();
-    final PsiType lhsType = lOperand.getType();
+    PsiExpression lOperand = expression.getLOperand();
+    PsiType lhsType = lOperand.getType();
     if (!ShiftUtils.isIntegral(lhsType)) {
       return false;
     }
-    final PsiExpression rhs = expression.getROperand();
+    PsiExpression rhs = expression.getROperand();
     return ShiftUtils.isIntLiteral(rhs);
   }
 }

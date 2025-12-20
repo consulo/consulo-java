@@ -79,20 +79,20 @@ public class MultipleDeclarationInspection extends BaseInspection {
             if (statement.getDeclaredElements().length <= 1) {
                 return;
             }
-            final PsiElement parent = statement.getParent();
+            PsiElement parent = statement.getParent();
             if (ignoreForLoopDeclarations &&
                 parent instanceof PsiForStatement) {
                 return;
             }
-            final PsiElement[] declaredElements =
+            PsiElement[] declaredElements =
                 statement.getDeclaredElements();
             for (int i = 1; i < declaredElements.length; i++) {
                 //skip the first one;
-                final PsiElement declaredElement = declaredElements[i];
+                PsiElement declaredElement = declaredElements[i];
                 if (!(declaredElement instanceof PsiVariable)) {
                     continue;
                 }
-                final PsiVariable variable =
+                PsiVariable variable =
                     (PsiVariable) declaredElement;
                 registerVariableError(variable);
             }
@@ -111,7 +111,7 @@ public class MultipleDeclarationInspection extends BaseInspection {
         }
 
         public boolean childrenContainTypeElement(PsiElement field) {
-            final PsiElement[] children = field.getChildren();
+            PsiElement[] children = field.getChildren();
             for (PsiElement aChildren : children) {
                 if (aChildren instanceof PsiTypeElement) {
                     return true;

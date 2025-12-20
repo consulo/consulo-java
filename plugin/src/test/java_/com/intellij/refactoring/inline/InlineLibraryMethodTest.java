@@ -71,9 +71,9 @@ public abstract class InlineLibraryMethodTest extends RefactoringTestCase {
     }
     assertNotNull(element);
     PsiMethod method = (PsiMethod)element;
-    final boolean condition = InlineMethodProcessor.checkBadReturns(method) && !InlineUtil.allUsagesAreTailCalls(method);
+    boolean condition = InlineMethodProcessor.checkBadReturns(method) && !InlineUtil.allUsagesAreTailCalls(method);
     assertFalse("Bad returns found", condition);
-    final InlineMethodProcessor processor = new InlineMethodProcessor(getProject(), method, null, myEditor, false);
+    InlineMethodProcessor processor = new InlineMethodProcessor(getProject(), method, null, myEditor, false);
     processor.run();
     checkResultByFile(fileName + ".after");
   }

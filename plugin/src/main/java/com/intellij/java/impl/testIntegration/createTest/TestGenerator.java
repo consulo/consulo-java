@@ -46,7 +46,7 @@ public interface TestGenerator extends LanguageExtension {
    * @return generated test (i.e. PsiClass)
    */
   @Nullable
-  PsiElement generateTest(final Project project, final CreateTestDialog d);
+  PsiElement generateTest(Project project, CreateTestDialog d);
 
   /**
    * should return text to show in dialog

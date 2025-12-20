@@ -24,11 +24,11 @@ import jakarta.annotation.Nonnull;
 public class FormatCommentsProcessor implements PreFormatProcessor {
   @Nonnull
   @Override
-  public TextRange process(@Nonnull final ASTNode element, @Nonnull final TextRange range) {
+  public TextRange process(@Nonnull ASTNode element, @Nonnull TextRange range) {
     PsiElement e = SourceTreeToPsiMap.treeElementToPsi(element);
     assert e != null && e.isValid();
-    final PsiFile file = e.getContainingFile();
-    final Project project = e.getProject();
+    PsiFile file = e.getContainingFile();
+    Project project = e.getProject();
     if (!CodeStyle.getCustomSettings(file, JavaCodeStyleSettings.class).ENABLE_JAVADOC_FORMATTING ||
         element.getPsi().getContainingFile().getLanguage() != JavaLanguage.INSTANCE
         || InjectedLanguageManager.getInstance(project).isInjectedFragment(element.getPsi().getContainingFile())) {
@@ -41,16 +41,16 @@ public class FormatCommentsProcessor implements PreFormatProcessor {
    * Formats PsiDocComments of current ASTNode element and all his children PsiDocComments
    */
   @Nonnull
-  private static TextRange formatCommentsInner(@Nonnull Project project, @Nonnull ASTNode element, @Nonnull final TextRange markedRange) {
+  private static TextRange formatCommentsInner(@Nonnull Project project, @Nonnull ASTNode element, @Nonnull TextRange markedRange) {
     TextRange resultTextRange = markedRange;
-    final PsiElement elementPsi = element.getPsi();
+    PsiElement elementPsi = element.getPsi();
     assert elementPsi.isValid();
-    final PsiFile file = elementPsi.getContainingFile();
+    PsiFile file = elementPsi.getContainingFile();
     boolean shouldFormat = markedRange.contains(element.getTextRange());
 
     if (shouldFormat) {
 
-      final ASTNode rangeAnchor;
+      ASTNode rangeAnchor;
       // There are two possible cases:
       //   1. Given element correspond to comment's owner (e.g. field or method);
       //   2. Given element corresponds to comment itself;

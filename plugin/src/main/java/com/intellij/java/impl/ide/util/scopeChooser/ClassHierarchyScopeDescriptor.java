@@ -42,7 +42,7 @@ public class ClassHierarchyScopeDescriptor extends ScopeDescriptor {
   private SearchScope myCachedScope;
   private final Project myProject;
 
-  public ClassHierarchyScopeDescriptor(final Project project) {
+  public ClassHierarchyScopeDescriptor(Project project) {
     super(null);
     myProject = project;
   }

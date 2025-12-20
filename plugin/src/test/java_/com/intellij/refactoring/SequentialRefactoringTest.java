@@ -66,14 +66,14 @@ public abstract class SequentialRefactoringTest extends LightCodeInsightTestCase
     configureFromFileText("test.java", text);
     
     // Perform inline.
-    final PsiClass clazz = ((PsiClassOwner)myFile).getClasses()[0];
-    final PsiMethod[] methods = clazz.findMethodsByName("getData", false);
-    final PsiReferenceExpression ref = (PsiReferenceExpression)myFile.findReferenceAt(text.indexOf("getData") + 1);
-    final InlineMethodProcessor processor = new InlineMethodProcessor(getProject(), methods[0], ref, myEditor, false);
+    PsiClass clazz = ((PsiClassOwner)myFile).getClasses()[0];
+    PsiMethod[] methods = clazz.findMethodsByName("getData", false);
+    PsiReferenceExpression ref = (PsiReferenceExpression)myFile.findReferenceAt(text.indexOf("getData") + 1);
+    InlineMethodProcessor processor = new InlineMethodProcessor(getProject(), methods[0], ref, myEditor, false);
     processor.run();
     
     // Perform extract.
-    final String currentText = myEditor.getDocument().getText();
+    String currentText = myEditor.getDocument().getText();
     int start = currentText.indexOf("String[] args");
     int end = currentText.indexOf("\n", currentText.indexOf("int k"));
     myEditor.getSelectionModel().setSelection(start, end);

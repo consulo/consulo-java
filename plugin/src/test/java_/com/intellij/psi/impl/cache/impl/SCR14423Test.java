@@ -83,7 +83,7 @@ public abstract class SCR14423Test extends PsiTestCase {
         assertNull(psiClass);
 
         ModifiableRootModel rootModel = ModuleRootManager.getInstance(myModule).getModifiableModel();
-        final ContentEntry content = rootModel.getContentEntries()[0];
+        ContentEntry content = rootModel.getContentEntries()[0];
         content.removeFolder(content.getFolders(ContentFolderScopes.excluded())[0]);
         rootModel.commit();
 
@@ -106,7 +106,7 @@ public abstract class SCR14423Test extends PsiTestCase {
         assertFalse(psiClass.isValid());
 
         ModifiableRootModel rootModel = ModuleRootManager.getInstance(myModule).getModifiableModel();
-        final ContentEntry content = rootModel.getContentEntries()[0];
+        ContentEntry content = rootModel.getContentEntries()[0];
         content.removeFolder(content.getFolders(ContentFolderScopes.excluded())[0]);
         rootModel.commit();
 
@@ -121,14 +121,14 @@ public abstract class SCR14423Test extends PsiTestCase {
       public void run() {
         FileDocumentManager.getInstance().saveAllDocuments();
         PsiClass psiClass = myJavaFacade.findClass("p.A");
-        final VirtualFile vFile = psiClass.getContainingFile().getVirtualFile();
+        VirtualFile vFile = psiClass.getContainingFile().getVirtualFile();
         File ioFile = VfsUtil.virtualToIoFile(vFile);
         ioFile.setLastModified(5);
 
         LocalFileSystem.getInstance().refresh(false);
 
         ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(myModule);
-        final ModifiableRootModel modifiableModel = moduleRootManager.getModifiableModel();
+        ModifiableRootModel modifiableModel = moduleRootManager.getModifiableModel();
         JavaMutableModuleExtensionImpl
           javaModuleExtension = (JavaMutableModuleExtensionImpl)modifiableModel.getExtension(JavaModuleExtensionImpl.class);
         assert javaModuleExtension != null;

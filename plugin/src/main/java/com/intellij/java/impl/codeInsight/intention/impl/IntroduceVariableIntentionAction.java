@@ -51,19 +51,19 @@ public class IntroduceVariableIntentionAction extends BaseRefactoringIntentionAc
       return false;
     }
 
-    final PsiExpressionStatement statement = PsiTreeUtil.getParentOfType(element,PsiExpressionStatement.class);
+    PsiExpressionStatement statement = PsiTreeUtil.getParentOfType(element,PsiExpressionStatement.class);
     if (statement == null){
       return false;
     }
 
-    final PsiExpression expression = statement.getExpression();
+    PsiExpression expression = statement.getExpression();
 
     return !PsiType.VOID.equals(expression.getType()) && !(expression instanceof PsiAssignmentExpression);
   }
 
   @Override
   public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
-    final PsiExpressionStatement statement = PsiTreeUtil.getParentOfType(element,PsiExpressionStatement.class);
+    PsiExpressionStatement statement = PsiTreeUtil.getParentOfType(element,PsiExpressionStatement.class);
     if (statement == null){
       return;
     }

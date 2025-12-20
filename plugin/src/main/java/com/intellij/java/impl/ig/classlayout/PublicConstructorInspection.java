@@ -77,12 +77,12 @@ public class PublicConstructorInspection extends BaseInspection {
         }
 
         @Override
-        protected void doFix(final Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiClass.class, PsiMethod.class);
-            final AsyncResult<DataContext> context = DataManager.getInstance().getDataContextFromFocus();
+        protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+            PsiElement element = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiClass.class, PsiMethod.class);
+            AsyncResult<DataContext> context = DataManager.getInstance().getDataContextFromFocus();
             context.doWhenDone(dataContext -> {
-                final JavaRefactoringActionHandlerFactory factory = JavaRefactoringActionHandlerFactory.getInstance();
-                final RefactoringActionHandler handler = factory.createReplaceConstructorWithFactoryHandler();
+                JavaRefactoringActionHandlerFactory factory = JavaRefactoringActionHandlerFactory.getInstance();
+                RefactoringActionHandler handler = factory.createReplaceConstructorWithFactoryHandler();
                 handler.invoke(project, new PsiElement[]{element}, dataContext);
             });
         }
@@ -104,12 +104,12 @@ public class PublicConstructorInspection extends BaseInspection {
             if (!method.hasModifierProperty(PsiModifier.PUBLIC)) {
                 return;
             }
-            final PsiClass aClass = method.getContainingClass();
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null || aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
                 return;
             }
             if (SerializationUtils.isExternalizable(aClass)) {
-                final PsiParameterList parameterList = method.getParameterList();
+                PsiParameterList parameterList = method.getParameterList();
                 if (parameterList.getParametersCount() == 0) {
                     return;
                 }
@@ -126,7 +126,7 @@ public class PublicConstructorInspection extends BaseInspection {
             if (!aClass.hasModifierProperty(PsiModifier.PUBLIC) || aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
                 return;
             }
-            final PsiMethod[] constructors = aClass.getConstructors();
+            PsiMethod[] constructors = aClass.getConstructors();
             if (constructors.length > 0) {
                 return;
             }

@@ -29,7 +29,7 @@ public class PsiMethodMember extends PsiElementClassMember<PsiMethod> {
   private static final int PARAM_OPTIONS = PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_TYPE | PsiFormatUtilBase.TYPE_AFTER;
   private static final int METHOD_OPTIONS = PARAM_OPTIONS | PsiFormatUtilBase.SHOW_PARAMETERS;
 
-  public PsiMethodMember(final PsiMethod method) {
+  public PsiMethodMember(PsiMethod method) {
     this(method, PsiSubstitutor.EMPTY);
   }
 
@@ -37,7 +37,7 @@ public class PsiMethodMember extends PsiElementClassMember<PsiMethod> {
     this((PsiMethod)info.getElement(), info.getSubstitutor());
   }
 
-  public PsiMethodMember(final PsiMethod method, final PsiSubstitutor substitutor) {
+  public PsiMethodMember(PsiMethod method, PsiSubstitutor substitutor) {
     super(method, substitutor, PsiFormatUtil.formatMethod(method, PsiSubstitutor.EMPTY, METHOD_OPTIONS, PARAM_OPTIONS));
   }
 

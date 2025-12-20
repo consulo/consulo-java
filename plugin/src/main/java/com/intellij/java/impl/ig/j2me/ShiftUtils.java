@@ -28,8 +28,8 @@ class ShiftUtils {
     if (!(rhs instanceof PsiLiteralExpression)) {
       return false;
     }
-    final PsiLiteralExpression literal = (PsiLiteralExpression)rhs;
-    final Object value = literal.getValue();
+    PsiLiteralExpression literal = (PsiLiteralExpression)rhs;
+    Object value = literal.getValue();
     if (!(value instanceof Number)) {
       return false;
     }
@@ -47,8 +47,8 @@ class ShiftUtils {
   }
 
   public static int getLogBaseTwo(PsiExpression rhs) {
-    final PsiLiteralExpression literal = (PsiLiteralExpression)rhs;
-    final Object value = literal.getValue();
+    PsiLiteralExpression literal = (PsiLiteralExpression)rhs;
+    Object value = literal.getValue();
     int log = 0;
     if (value == null) {
       return log;

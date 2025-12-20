@@ -58,7 +58,7 @@ public abstract class UseOfAnotherObjectsPrivateFieldInspection extends BaseInsp
 
     @Override
     public JComponent createOptionsPanel() {
-        final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+        MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
         panel.addCheckbox(InspectionGadgetsLocalize.ignoreAccessesFromTheSameClass().get(), "ignoreSameClass");
         panel.addCheckbox(InspectionGadgetsLocalize.ignoreAccessesFromEqualsMethod().get(), "ignoreEquals");
         return panel;
@@ -66,7 +66,7 @@ public abstract class UseOfAnotherObjectsPrivateFieldInspection extends BaseInsp
 
     @Override
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiField field = (PsiField) infos[0];
+        PsiField field = (PsiField) infos[0];
         return new EncapsulateVariableFix(field.getName());
     }
 
@@ -83,26 +83,26 @@ public abstract class UseOfAnotherObjectsPrivateFieldInspection extends BaseInsp
             @Nonnull PsiReferenceExpression expression
         ) {
             super.visitReferenceExpression(expression);
-            final PsiExpression qualifier = expression.getQualifierExpression();
+            PsiExpression qualifier = expression.getQualifierExpression();
             if (qualifier == null || qualifier instanceof PsiThisExpression) {
                 return;
             }
             if (ignoreEquals) {
-                final PsiMethod method =
+                PsiMethod method =
                     PsiTreeUtil.getParentOfType(expression, PsiMethod.class);
                 if (MethodUtils.isEquals(method)) {
                     return;
                 }
             }
-            final PsiElement referent = expression.resolve();
+            PsiElement referent = expression.resolve();
             if (!(referent instanceof PsiField)) {
                 return;
             }
-            final PsiField field = (PsiField) referent;
+            PsiField field = (PsiField) referent;
             if (ignoreSameClass) {
-                final PsiClass parent =
+                PsiClass parent =
                     PsiTreeUtil.getParentOfType(expression, PsiClass.class);
-                final PsiClass containingClass = field.getContainingClass();
+                PsiClass containingClass = field.getContainingClass();
                 if (parent != null && parent.equals(containingClass)) {
                     return;
                 }
@@ -114,7 +114,7 @@ public abstract class UseOfAnotherObjectsPrivateFieldInspection extends BaseInsp
             if (field.hasModifierProperty(PsiModifier.STATIC)) {
                 return;
             }
-            final PsiElement fieldNameElement =
+            PsiElement fieldNameElement =
                 expression.getReferenceNameElement();
             if (fieldNameElement == null) {
                 return;

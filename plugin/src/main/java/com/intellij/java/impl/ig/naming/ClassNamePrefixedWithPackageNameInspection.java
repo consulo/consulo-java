@@ -60,20 +60,20 @@ public class ClassNamePrefixedWithPackageNameInspection
     @Override
     public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so it doesn't drill down into inner classes
-      final String className = aClass.getName();
+      String className = aClass.getName();
       if (className == null) {
         return;
       }
-      final PsiClass outerClass =
+      PsiClass outerClass =
         ClassUtils.getOutermostContainingClass(aClass);
-      final String qualifiedName = outerClass.getQualifiedName();
+      String qualifiedName = outerClass.getQualifiedName();
       if (qualifiedName == null) {
         return;
       }
       if (className.equals(qualifiedName)) {
         return;
       }
-      final StringTokenizer tokenizer =
+      StringTokenizer tokenizer =
         new StringTokenizer(qualifiedName, ".");
       String currentPackageName = null;
       String lastPackageName = null;
@@ -84,8 +84,8 @@ public class ClassNamePrefixedWithPackageNameInspection
       if (lastPackageName == null) {
         return;
       }
-      final String lowercaseClassName = className.toLowerCase();
-      final String lowercasePackageName = lastPackageName.toLowerCase();
+      String lowercaseClassName = className.toLowerCase();
+      String lowercasePackageName = lastPackageName.toLowerCase();
       if (!lowercaseClassName.startsWith(lowercasePackageName)) {
         return;
       }

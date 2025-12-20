@@ -30,16 +30,16 @@ class SimplifyIfElsePredicate implements PsiElementPredicate {
     if (!(element instanceof PsiJavaToken)) {
       return false;
     }
-    final PsiJavaToken token = (PsiJavaToken)element;
-    final PsiElement parent = token.getParent();
+    PsiJavaToken token = (PsiJavaToken)element;
+    PsiElement parent = token.getParent();
     if (!(parent instanceof PsiIfStatement)) {
       return false;
     }
-    final PsiIfStatement ifStatement = (PsiIfStatement)parent;
+    PsiIfStatement ifStatement = (PsiIfStatement)parent;
     if (ErrorUtil.containsError(ifStatement)) {
       return false;
     }
-    final PsiExpression condition = ifStatement.getCondition();
+    PsiExpression condition = ifStatement.getCondition();
     if (condition == null) {
       return false;
     }
@@ -74,13 +74,13 @@ class SimplifyIfElsePredicate implements PsiElementPredicate {
     if (ifStatement.getElseBranch() != null) {
       return false;
     }
-    final PsiElement nextStatement =
+    PsiElement nextStatement =
       PsiTreeUtil.skipSiblingsForward(ifStatement,
                                       PsiWhiteSpace.class);
     if (!(nextStatement instanceof PsiStatement)) {
       return false;
     }
-    final PsiStatement elseBranch = (PsiStatement)nextStatement;
+    PsiStatement elseBranch = (PsiStatement)nextStatement;
     return ConditionalUtils.isReturn(thenBranch, "true")
            && ConditionalUtils.isReturn(elseBranch, "false");
   }
@@ -92,13 +92,13 @@ class SimplifyIfElsePredicate implements PsiElementPredicate {
     if (ifStatement.getElseBranch() != null) {
       return false;
     }
-    final PsiElement nextStatement =
+    PsiElement nextStatement =
       PsiTreeUtil.skipSiblingsForward(ifStatement,
                                       PsiWhiteSpace.class);
     if (!(nextStatement instanceof PsiStatement)) {
       return false;
     }
-    final PsiStatement elseBranch = (PsiStatement)nextStatement;
+    PsiStatement elseBranch = (PsiStatement)nextStatement;
     return ConditionalUtils.isReturn(thenBranch, "false")
            && ConditionalUtils.isReturn(elseBranch, "true");
   }
@@ -131,22 +131,22 @@ class SimplifyIfElsePredicate implements PsiElementPredicate {
           ConditionalUtils.isAssignment(elseBranch, "false"))) {
       return false;
     }
-    final PsiExpressionStatement thenExpressionStatement =
+    PsiExpressionStatement thenExpressionStatement =
       (PsiExpressionStatement)thenBranch;
-    final PsiAssignmentExpression thenExpression =
+    PsiAssignmentExpression thenExpression =
       (PsiAssignmentExpression)
         thenExpressionStatement.getExpression();
-    final PsiExpressionStatement elseExpressionStatement =
+    PsiExpressionStatement elseExpressionStatement =
       (PsiExpressionStatement)elseBranch;
-    final PsiAssignmentExpression elseExpression =
+    PsiAssignmentExpression elseExpression =
       (PsiAssignmentExpression)
         elseExpressionStatement.getExpression();
-    final IElementType thenTokenType = thenExpression.getOperationTokenType();
+    IElementType thenTokenType = thenExpression.getOperationTokenType();
     if (!thenTokenType.equals(elseExpression.getOperationTokenType())) {
       return false;
     }
-    final PsiExpression thenLhs = thenExpression.getLExpression();
-    final PsiExpression elseLhs = elseExpression.getLExpression();
+    PsiExpression thenLhs = thenExpression.getLExpression();
+    PsiExpression elseLhs = elseExpression.getLExpression();
     return EquivalenceChecker.expressionsAreEquivalent(thenLhs, elseLhs);
   }
 
@@ -160,22 +160,22 @@ class SimplifyIfElsePredicate implements PsiElementPredicate {
         !ConditionalUtils.isAssignment(elseBranch, "true")) {
       return false;
     }
-    final PsiExpressionStatement thenExpressionStatement =
+    PsiExpressionStatement thenExpressionStatement =
       (PsiExpressionStatement)thenBranch;
-    final PsiAssignmentExpression thenExpression =
+    PsiAssignmentExpression thenExpression =
       (PsiAssignmentExpression)
         thenExpressionStatement.getExpression();
-    final PsiExpressionStatement elseExpressionStatement =
+    PsiExpressionStatement elseExpressionStatement =
       (PsiExpressionStatement)elseBranch;
-    final PsiAssignmentExpression elseExpression =
+    PsiAssignmentExpression elseExpression =
       (PsiAssignmentExpression)
         elseExpressionStatement.getExpression();
-    final IElementType thenTokenType = thenExpression.getOperationTokenType();
+    IElementType thenTokenType = thenExpression.getOperationTokenType();
     if (!thenTokenType.equals(elseExpression.getOperationTokenType())) {
       return false;
     }
-    final PsiExpression thenLhs = thenExpression.getLExpression();
-    final PsiExpression elseLhs = elseExpression.getLExpression();
+    PsiExpression thenLhs = thenExpression.getLExpression();
+    PsiExpression elseLhs = elseExpression.getLExpression();
     return EquivalenceChecker.expressionsAreEquivalent(thenLhs, elseLhs);
   }
 
@@ -186,7 +186,7 @@ class SimplifyIfElsePredicate implements PsiElementPredicate {
     }
     PsiStatement thenBranch = ifStatement.getThenBranch();
     thenBranch = ConditionalUtils.stripBraces(thenBranch);
-    final PsiElement previousStatement =
+    PsiElement previousStatement =
       PsiTreeUtil.skipSiblingsBackward(ifStatement,
                                        PsiWhiteSpace.class);
     if (!(previousStatement instanceof PsiStatement)) {
@@ -198,18 +198,18 @@ class SimplifyIfElsePredicate implements PsiElementPredicate {
         !ConditionalUtils.isAssignment(elseBranch, "false")) {
       return false;
     }
-    final PsiAssignmentExpression thenExpression =
+    PsiAssignmentExpression thenExpression =
       (PsiAssignmentExpression)
         ((PsiExpressionStatement)thenBranch).getExpression();
-    final PsiAssignmentExpression elseExpression =
+    PsiAssignmentExpression elseExpression =
       (PsiAssignmentExpression)
         ((PsiExpressionStatement)elseBranch).getExpression();
-    final IElementType thenTokenType = thenExpression.getOperationTokenType();
+    IElementType thenTokenType = thenExpression.getOperationTokenType();
     if (!thenTokenType.equals(elseExpression.getOperationTokenType())) {
       return false;
     }
-    final PsiExpression thenLhs = thenExpression.getLExpression();
-    final PsiExpression elseLhs = elseExpression.getLExpression();
+    PsiExpression thenLhs = thenExpression.getLExpression();
+    PsiExpression elseLhs = elseExpression.getLExpression();
     return EquivalenceChecker.expressionsAreEquivalent(thenLhs, elseLhs);
   }
 
@@ -220,7 +220,7 @@ class SimplifyIfElsePredicate implements PsiElementPredicate {
     }
     PsiStatement thenBranch = ifStatement.getThenBranch();
     thenBranch = ConditionalUtils.stripBraces(thenBranch);
-    final PsiElement previousStatement =
+    PsiElement previousStatement =
       PsiTreeUtil.skipSiblingsBackward(ifStatement,
                                        PsiWhiteSpace.class);
     if (!(previousStatement instanceof PsiStatement)) {
@@ -232,22 +232,22 @@ class SimplifyIfElsePredicate implements PsiElementPredicate {
         !ConditionalUtils.isAssignment(elseBranch, "true")) {
       return false;
     }
-    final PsiExpressionStatement thenExpressionStatement =
+    PsiExpressionStatement thenExpressionStatement =
       (PsiExpressionStatement)thenBranch;
-    final PsiAssignmentExpression thenExpression =
+    PsiAssignmentExpression thenExpression =
       (PsiAssignmentExpression)
         thenExpressionStatement.getExpression();
-    final PsiExpressionStatement elseExpressionStatement =
+    PsiExpressionStatement elseExpressionStatement =
       (PsiExpressionStatement)elseBranch;
-    final PsiAssignmentExpression elseExpression =
+    PsiAssignmentExpression elseExpression =
       (PsiAssignmentExpression)
         elseExpressionStatement.getExpression();
-    final IElementType thenTokenType = thenExpression.getOperationTokenType();
+    IElementType thenTokenType = thenExpression.getOperationTokenType();
     if (!thenTokenType.equals(elseExpression.getOperationTokenType())) {
       return false;
     }
-    final PsiExpression thenLhs = thenExpression.getLExpression();
-    final PsiExpression elseLhs = elseExpression.getLExpression();
+    PsiExpression thenLhs = thenExpression.getLExpression();
+    PsiExpression elseLhs = elseExpression.getLExpression();
     return EquivalenceChecker.expressionsAreEquivalent(thenLhs, elseLhs);
   }
 }

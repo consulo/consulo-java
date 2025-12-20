@@ -59,7 +59,7 @@ public class JavaThrownExceptionInfo implements ThrownExceptionInfo {
   }
 
   @Nullable
-  public PsiType createType(PsiElement context, final PsiManager manager) throws IncorrectOperationException {
+  public PsiType createType(PsiElement context, PsiManager manager) throws IncorrectOperationException {
     if (myType != null) {
       return myType.getType(context, manager);
     }

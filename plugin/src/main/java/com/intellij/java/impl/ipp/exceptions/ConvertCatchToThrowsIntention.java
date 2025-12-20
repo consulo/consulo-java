@@ -48,8 +48,8 @@ public class ConvertCatchToThrowsIntention extends Intention {
 
     @Override
     protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-        final PsiCatchSection catchSection = (PsiCatchSection) element.getParent();
-        final PsiMethod method = PsiTreeUtil.getParentOfType(catchSection, PsiMethod.class);
+        PsiCatchSection catchSection = (PsiCatchSection) element.getParent();
+        PsiMethod method = PsiTreeUtil.getParentOfType(catchSection, PsiMethod.class);
         if (method == null) {
             return;
         }
@@ -58,21 +58,21 @@ public class ConvertCatchToThrowsIntention extends Intention {
         // "Method xx() of class XX implements/overrides method of class
         // YY. Do you want to modify the base method?"
         //                                             [Yes][No][Cancel]
-        final PsiReferenceList throwsList = method.getThrowsList();
-        final PsiType catchType = catchSection.getCatchType();
+        PsiReferenceList throwsList = method.getThrowsList();
+        PsiType catchType = catchSection.getCatchType();
         addToThrowsList(throwsList, catchType);
-        final PsiTryStatement tryStatement = catchSection.getTryStatement();
-        final PsiCatchSection[] catchSections = tryStatement.getCatchSections();
+        PsiTryStatement tryStatement = catchSection.getTryStatement();
+        PsiCatchSection[] catchSections = tryStatement.getCatchSections();
         if (catchSections.length > 1 || tryStatement.getResourceList() != null) {
             catchSection.delete();
         }
         else {
-            final PsiCodeBlock tryBlock = tryStatement.getTryBlock();
+            PsiCodeBlock tryBlock = tryStatement.getTryBlock();
             if (tryBlock == null) {
                 return;
             }
-            final PsiElement first = tryBlock.getFirstBodyElement();
-            final PsiElement last = tryBlock.getLastBodyElement();
+            PsiElement first = tryBlock.getFirstBodyElement();
+            PsiElement last = tryBlock.getLastBodyElement();
             if (first != null && last != null) {
                 tryStatement.getParent().addRangeAfter(first, last, tryStatement);
             }
@@ -82,21 +82,21 @@ public class ConvertCatchToThrowsIntention extends Intention {
 
     private static void addToThrowsList(PsiReferenceList throwsList, PsiType catchType) {
         if (catchType instanceof PsiClassType) {
-            final PsiClassType classType = (PsiClassType) catchType;
-            final PsiClassType[] types = throwsList.getReferencedTypes();
+            PsiClassType classType = (PsiClassType) catchType;
+            PsiClassType[] types = throwsList.getReferencedTypes();
             for (PsiClassType type : types) {
                 if (catchType.equals(type)) {
                     return;
                 }
             }
-            final Project project = throwsList.getProject();
-            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-            final PsiJavaCodeReferenceElement referenceElement = factory.createReferenceElementByType(classType);
+            Project project = throwsList.getProject();
+            PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+            PsiJavaCodeReferenceElement referenceElement = factory.createReferenceElementByType(classType);
             throwsList.add(referenceElement);
         }
         else if (catchType instanceof PsiDisjunctionType) {
-            final PsiDisjunctionType disjunctionType = (PsiDisjunctionType) catchType;
-            final List<PsiType> disjunctions = disjunctionType.getDisjunctions();
+            PsiDisjunctionType disjunctionType = (PsiDisjunctionType) catchType;
+            List<PsiType> disjunctions = disjunctionType.getDisjunctions();
             for (PsiType disjunction : disjunctions) {
                 addToThrowsList(throwsList, disjunction);
             }

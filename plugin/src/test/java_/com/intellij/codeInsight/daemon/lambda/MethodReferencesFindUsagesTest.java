@@ -34,12 +34,12 @@ public abstract class MethodReferencesFindUsagesTest extends LightDaemonAnalyzer
   
 
   public void testConstructorUsages() throws Exception {
-    final String testName = getTestName(false);
+    String testName = getTestName(false);
     configureByFile(BASE_PATH + testName + ".java");
 
-    final PsiClass aClass = getJavaFacade().findClass(testName);
+    PsiClass aClass = getJavaFacade().findClass(testName);
     assertNotNull(aClass);
-    final PsiMethod[] constructors = aClass.getConstructors();
+    PsiMethod[] constructors = aClass.getConstructors();
     assertEquals(constructors.length, 1);
     Collection<PsiReference> references = MethodReferencesSearch.search(constructors[0]).findAll();
     assertEquals(1, references.size());

@@ -58,9 +58,9 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
 
     int offset = editor.getCaretModel().getOffset();
-    final PsiIfStatement ifStatement = PsiTreeUtil.getParentOfType(element, PsiIfStatement.class);
+    PsiIfStatement ifStatement = PsiTreeUtil.getParentOfType(element, PsiIfStatement.class);
     if (ifStatement == null) return false;
-    final PsiExpression condition = ifStatement.getCondition();
+    PsiExpression condition = ifStatement.getCondition();
     if (condition == null) return false;
     if (ifStatement.getThenBranch() == null) return false;
     if (element instanceof PsiKeyword keyword) {
@@ -69,7 +69,7 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
         return true;
       }
     }
-    final TextRange condTextRange = condition.getTextRange();
+    TextRange condTextRange = condition.getTextRange();
     if (condTextRange == null) return false;
     if (!condTextRange.contains(offset)) return false;
     PsiElement block = findCodeBlock(ifStatement);
@@ -104,14 +104,14 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
   }
 
   private static void formatIf(PsiIfStatement ifStatement) throws IncorrectOperationException {
-    final Project project = ifStatement.getProject();
+    Project project = ifStatement.getProject();
     PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
 
     PsiElement thenBranch = ifStatement.getThenBranch().copy();
     PsiElement elseBranch = ifStatement.getElseBranch() != null ? ifStatement.getElseBranch().copy() : null;
     PsiElement condition = ifStatement.getCondition().copy();
 
-    final CodeStyleManager codeStyle = CodeStyleManager.getInstance(project);
+    CodeStyleManager codeStyle = CodeStyleManager.getInstance(project);
 
     PsiBlockStatement codeBlock = (PsiBlockStatement) factory.createStatementFromText("{}", null);
     codeBlock = (PsiBlockStatement) codeStyle.reformat(codeBlock);
@@ -191,7 +191,7 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
       return;
     }
 
-    final CodeStyleManager codeStyle = CodeStyleManager.getInstance(project);
+    CodeStyleManager codeStyle = CodeStyleManager.getInstance(project);
     if (flow.getSize() == 0) {
       ifStatement.setElseBranch(thenBranch);
       PsiStatement statement = factory.createStatementFromText("{}", null);
@@ -306,11 +306,11 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
   private static void setElseBranch(PsiIfStatement ifStatement, PsiStatement thenBranch, ControlFlow flow)
       throws IncorrectOperationException {
     if (flow.getEndOffset(ifStatement) == flow.getEndOffset(thenBranch)) {
-      final PsiLoopStatement loopStmt = PsiTreeUtil.getParentOfType(ifStatement, PsiLoopStatement.class);
+      PsiLoopStatement loopStmt = PsiTreeUtil.getParentOfType(ifStatement, PsiLoopStatement.class);
       if (loopStmt != null) {
-        final PsiStatement body = loopStmt.getBody();
+        PsiStatement body = loopStmt.getBody();
         if (body instanceof PsiBlockStatement blockStatement) {
-          final PsiStatement[] statements = blockStatement.getCodeBlock().getStatements();
+          PsiStatement[] statements = blockStatement.getCodeBlock().getStatements();
           if (statements.length > 0 && !PsiTreeUtil.isAncestor(statements[statements.length - 1], ifStatement, false) &&
               ArrayUtil.find(statements, ifStatement) < 0) {
             ifStatement.setElseBranch(thenBranch);

@@ -36,9 +36,9 @@ public abstract class JavaStatisticsManager {
   @NonNls
   public static final String CLASS_PREFIX = "class#";
 
-  private static StatisticsInfo createVariableUseInfo(final String name, final VariableKind variableKind,
-                                                      final String propertyName,
-                                                      final String canonicalTypeText) {
+  private static StatisticsInfo createVariableUseInfo(String name, VariableKind variableKind,
+                                                      String propertyName,
+                                                      String canonicalTypeText) {
     String key1 = getVariableNameUseKey1(propertyName, canonicalTypeText);
     String key2 = getVariableNameUseKey2(variableKind, name);
     return new StatisticsInfo(key1, key2);
@@ -79,11 +79,11 @@ public abstract class JavaStatisticsManager {
 
   @Nullable
   public static String getName(String key2) {
-    final int startIndex = key2.indexOf("#");
+    int startIndex = key2.indexOf("#");
     LOG.assertTrue(startIndex >= 0);
     @NonNls String s = key2.substring(0, startIndex);
     if (!"variableName".equals(s)) return null;
-    final int index = key2.indexOf("#", startIndex + 1);
+    int index = key2.indexOf("#", startIndex + 1);
     LOG.assertTrue(index >= 0);
     return key2.substring(index + 1);
   }
@@ -129,7 +129,7 @@ public abstract class JavaStatisticsManager {
     return CLASS_PREFIX + ((PsiClass)member).getQualifiedName();
   }
 
-  public static StatisticsInfo createInfo(@Nullable final PsiType qualifierType, final PsiMember member) {
+  public static StatisticsInfo createInfo(@Nullable PsiType qualifierType, PsiMember member) {
     return new StatisticsInfo(getMemberUseKey1(qualifierType), getMemberUseKey2(member));
   }
 

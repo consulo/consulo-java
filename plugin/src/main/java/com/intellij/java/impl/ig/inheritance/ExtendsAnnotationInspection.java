@@ -51,7 +51,7 @@ public class ExtendsAnnotationInspection extends BaseInspection {
     @Nonnull
     @RequiredReadAction
     public String buildErrorString(Object... infos) {
-        final PsiClass containingClass = (PsiClass) infos[0];
+        PsiClass containingClass = (PsiClass) infos[0];
         return InspectionGadgetsLocalize.extendsAnnotationProblemDescriptor(containingClass.getName()).get();
     }
 
@@ -70,9 +70,9 @@ public class ExtendsAnnotationInspection extends BaseInspection {
             if (aClass.isAnnotationType()) {
                 return;
             }
-            final PsiReferenceList extendsList = aClass.getExtendsList();
+            PsiReferenceList extendsList = aClass.getExtendsList();
             checkReferenceList(extendsList, aClass);
-            final PsiReferenceList implementsList = aClass.getImplementsList();
+            PsiReferenceList implementsList = aClass.getImplementsList();
             checkReferenceList(implementsList, aClass);
         }
 
@@ -83,14 +83,14 @@ public class ExtendsAnnotationInspection extends BaseInspection {
             if (referenceList == null) {
                 return;
             }
-            final PsiJavaCodeReferenceElement[] elements =
+            PsiJavaCodeReferenceElement[] elements =
                 referenceList.getReferenceElements();
-            for (final PsiJavaCodeReferenceElement element : elements) {
-                final PsiElement referent = element.resolve();
+            for (PsiJavaCodeReferenceElement element : elements) {
+                PsiElement referent = element.resolve();
                 if (!(referent instanceof PsiClass)) {
                     continue;
                 }
-                final PsiClass psiClass = (PsiClass) referent;
+                PsiClass psiClass = (PsiClass) referent;
                 psiClass.isAnnotationType();
                 if (psiClass.isAnnotationType()) {
                     registerError(element, containingClass);

@@ -34,18 +34,18 @@ import jakarta.annotation.Nullable;
  * @author Konstantin Bulenkov
  */
 public class PsiPackageConverter extends Converter<PsiJavaPackage> implements CustomReferenceConverter<PsiJavaPackage> {
-  public PsiJavaPackage fromString(@Nullable @NonNls String s, final ConvertContext context) {
+  public PsiJavaPackage fromString(@Nullable @NonNls String s, ConvertContext context) {
     if (s == null) return null;
     return JavaPsiFacade.getInstance(context.getPsiManager().getProject()).findPackage(s);
   }
 
-  public String toString(@Nullable PsiJavaPackage psiPackage, final ConvertContext context) {
+  public String toString(@Nullable PsiJavaPackage psiPackage, ConvertContext context) {
     return psiPackage == null ? null : psiPackage.getQualifiedName();
   }
 
   @Nonnull
   public PsiReference[] createReferences(GenericDomValue<PsiJavaPackage> genericDomValue, PsiElement element, ConvertContext context) {
-    final String s = genericDomValue.getStringValue();
+    String s = genericDomValue.getStringValue();
     if (s == null) {
       return PsiReference.EMPTY_ARRAY;
     }

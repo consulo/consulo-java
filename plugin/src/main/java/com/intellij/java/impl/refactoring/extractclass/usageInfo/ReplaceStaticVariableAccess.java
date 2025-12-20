@@ -40,51 +40,51 @@ public class ReplaceStaticVariableAccess extends FixableUsageInfo {
 
   public void fixUsage() throws IncorrectOperationException {
     if (myEnumConstant) {
-      final PsiSwitchLabelStatement switchStatement = PsiTreeUtil.getParentOfType(expression, PsiSwitchLabelStatement.class);
+      PsiSwitchLabelStatement switchStatement = PsiTreeUtil.getParentOfType(expression, PsiSwitchLabelStatement.class);
       if (switchStatement != null) {
         MutationUtils.replaceExpression(expression.getReferenceName(), expression);
         return;
       }
     }
-    final boolean replaceWithGetEnumValue = myEnumConstant && !alreadyMigratedToEnum();
-    final String link = replaceWithGetEnumValue ? "." + PropertyUtil.suggestGetterName("value", expression.getType()) + "()" : "";
+    boolean replaceWithGetEnumValue = myEnumConstant && !alreadyMigratedToEnum();
+    String link = replaceWithGetEnumValue ? "." + PropertyUtil.suggestGetterName("value", expression.getType()) + "()" : "";
     MutationUtils.replaceExpression(delegateClass + '.' + expression.getReferenceName() + link, expression);
   }
 
   private boolean alreadyMigratedToEnum() {
-    final PsiMethodCallExpression callExpression = PsiTreeUtil.getParentOfType(expression, PsiMethodCallExpression.class);
+    PsiMethodCallExpression callExpression = PsiTreeUtil.getParentOfType(expression, PsiMethodCallExpression.class);
     if (callExpression != null) {
-      final PsiElement resolved = callExpression.getMethodExpression().resolve();
+      PsiElement resolved = callExpression.getMethodExpression().resolve();
       if (resolved instanceof PsiMethod) {
-        final PsiParameter[] parameters = ((PsiMethod)resolved).getParameterList().getParameters();
-        final PsiExpression[] args = callExpression.getArgumentList().getExpressions();
-        final int idx = ArrayUtil.find(args, expression);
+        PsiParameter[] parameters = ((PsiMethod)resolved).getParameterList().getParameters();
+        PsiExpression[] args = callExpression.getArgumentList().getExpressions();
+        int idx = ArrayUtil.find(args, expression);
         if (idx != -1 && parameters[idx].getType().equalsToText(delegateClass)) {
           return true;
         }
       }
     }
     else {
-      final PsiReturnStatement returnStatement = PsiTreeUtil.getParentOfType(expression, PsiReturnStatement.class);
+      PsiReturnStatement returnStatement = PsiTreeUtil.getParentOfType(expression, PsiReturnStatement.class);
       if (returnStatement != null) {
-        final PsiMethod psiMethod = PsiTreeUtil.getParentOfType(expression, PsiMethod.class);
+        PsiMethod psiMethod = PsiTreeUtil.getParentOfType(expression, PsiMethod.class);
         LOGGER.assertTrue(psiMethod != null);
-        final PsiType returnType = psiMethod.getReturnType();
+        PsiType returnType = psiMethod.getReturnType();
         if (returnType != null && returnType.getCanonicalText().equals(delegateClass)) {
           return true;
         }
       } else {
-        final PsiVariable psiVariable = PsiTreeUtil.getParentOfType(expression, PsiVariable.class);
+        PsiVariable psiVariable = PsiTreeUtil.getParentOfType(expression, PsiVariable.class);
         if (psiVariable != null) {
           if (psiVariable.getType().equalsToText(delegateClass)) {
             return true;
           }
         } else {
-          final PsiAssignmentExpression assignmentExpression = PsiTreeUtil.getParentOfType(expression, PsiAssignmentExpression.class);
+          PsiAssignmentExpression assignmentExpression = PsiTreeUtil.getParentOfType(expression, PsiAssignmentExpression.class);
           if (assignmentExpression != null && assignmentExpression.getRExpression() == expression) {
-            final PsiExpression lExpression = assignmentExpression.getLExpression();
+            PsiExpression lExpression = assignmentExpression.getLExpression();
             if (lExpression instanceof PsiReferenceExpression) {
-              final PsiElement resolve = ((PsiReferenceExpression)lExpression).resolve();
+              PsiElement resolve = ((PsiReferenceExpression)lExpression).resolve();
               if (resolve instanceof PsiVariable && ((PsiVariable)resolve).getType().equalsToText(delegateClass)) {
                 return true;
               }

@@ -71,8 +71,8 @@ public class RemoveRedundantElseAction extends PsiElementBaseIntentionAction {
 
   @Nullable
   private static PsiStatement getPrevThenBranch(@Nonnull PsiElement thenBranch) {
-    final PsiElement ifStatement = thenBranch.getParent();
-    final PsiElement parent = ifStatement.getParent();
+    PsiElement ifStatement = thenBranch.getParent();
+    PsiElement parent = ifStatement.getParent();
     if (parent instanceof PsiIfStatement && ((PsiIfStatement) parent).getElseBranch() == ifStatement) {
       return ((PsiIfStatement) parent).getThenBranch();
     }

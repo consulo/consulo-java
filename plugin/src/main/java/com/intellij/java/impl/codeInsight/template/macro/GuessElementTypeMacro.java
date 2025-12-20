@@ -61,7 +61,7 @@ public class GuessElementTypeMacro extends Macro {
 
   @Override
   @RequiredReadAction
-  public Result calculateResult(@Nonnull Expression[] params, final ExpressionContext context) {
+  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
     PsiType[] types = guessTypes(params, context);
     if (types == null || types.length == 0) return null;
     return new PsiTypeResult(types[0], context.getProject());
@@ -83,7 +83,7 @@ public class GuessElementTypeMacro extends Macro {
   @RequiredReadAction
   private static PsiType[] guessTypes(Expression[] params, ExpressionContext context) {
     if (params.length != 1) return null;
-    final Result result = params[0].calculateResult(context);
+    Result result = params[0].calculateResult(context);
     if (result == null) return null;
 
     Project project = context.getProject();

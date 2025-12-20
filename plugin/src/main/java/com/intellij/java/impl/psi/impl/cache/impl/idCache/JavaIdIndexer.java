@@ -29,7 +29,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class JavaIdIndexer extends LexerBasedIdIndexer {
   @Override
-  public Lexer createLexer(final OccurrenceConsumer consumer) {
+  public Lexer createLexer(OccurrenceConsumer consumer) {
     return createIndexingLexer(consumer);
   }
 

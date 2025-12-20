@@ -75,22 +75,22 @@ public class AssertsWithoutMessagesInspection extends BaseInspection {
         @Override
         public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            String methodName = methodExpression.getReferenceName();
             if (methodName == null || !s_assertMethods.contains(methodName)) {
                 return;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (!InheritanceUtil.isInheritor(containingClass, "junit.framework.Assert") &&
                 !InheritanceUtil.isInheritor(containingClass, "org.junit.Assert")) {
                 return;
             }
-            final PsiParameterList parameterList = method.getParameterList();
-            final int parameterCount = parameterList.getParametersCount();
+            PsiParameterList parameterList = method.getParameterList();
+            int parameterCount = parameterList.getParametersCount();
             if (parameterCount < 2 && methodName.startsWith("assert")) {
                 registerMethodCallError(expression);
                 return;
@@ -99,9 +99,9 @@ public class AssertsWithoutMessagesInspection extends BaseInspection {
                 registerMethodCallError(expression);
                 return;
             }
-            final PsiType stringType = TypeUtils.getStringType(expression);
-            final PsiParameter[] parameters = parameterList.getParameters();
-            final PsiType parameterType1 = parameters[0].getType();
+            PsiType stringType = TypeUtils.getStringType(expression);
+            PsiParameter[] parameters = parameterList.getParameters();
+            PsiType parameterType1 = parameters[0].getType();
             if (!parameterType1.equals(stringType)) {
                 registerMethodCallError(expression);
                 return;
@@ -109,7 +109,7 @@ public class AssertsWithoutMessagesInspection extends BaseInspection {
             if (parameters.length != 2) {
                 return;
             }
-            final PsiType parameterType2 = parameters[1].getType();
+            PsiType parameterType2 = parameters[1].getType();
             if (!parameterType2.equals(stringType)) {
                 return;
             }

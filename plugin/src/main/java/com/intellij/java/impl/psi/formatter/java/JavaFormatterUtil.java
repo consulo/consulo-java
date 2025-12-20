@@ -260,7 +260,7 @@ public class JavaFormatterUtil {
         return suggestedWrap;
       }
       if (role == ChildRole.LOOP_BODY) {
-        final boolean dontWrap = (childType == JavaElementType.CODE_BLOCK || childType == JavaElementType.BLOCK_STATEMENT) &&
+        boolean dontWrap = (childType == JavaElementType.CODE_BLOCK || childType == JavaElementType.BLOCK_STATEMENT) &&
           settings.BRACE_STYLE == CommonCodeStyleSettings.END_OF_LINE;
         return Wrap.createWrap(dontWrap ? WrapType.NONE : WrapType.NORMAL, true);
       }
@@ -530,7 +530,7 @@ public class JavaFormatterUtil {
     ASTNode node = block.getNode();
     Wrap wrap = block.getWrap();
     if (node == null) return null;
-    final IElementType nodeType = node.getElementType();
+    IElementType nodeType = node.getElementType();
     if (nodeType == JavaElementType.EXTENDS_LIST ||
       nodeType == JavaElementType.IMPLEMENTS_LIST ||
       nodeType == JavaElementType.PERMITS_LIST) {

@@ -23,12 +23,12 @@ import java.util.Map;
  */
 @ExtensionImpl
 public class JavaReferenceContributor extends PsiReferenceContributor {
-  public void registerReferenceProviders(final PsiReferenceRegistrar registrar) {
-    final PsiReferenceProvider filePathReferenceProvider = new FilePathReferenceProvider();
+  public void registerReferenceProviders(PsiReferenceRegistrar registrar) {
+    PsiReferenceProvider filePathReferenceProvider = new FilePathReferenceProvider();
     registrar.registerReferenceProvider(PlatformPatterns.psiElement(PsiLiteralExpression.class).and(new FilterPattern(new ElementFilter() {
       public boolean isAcceptable(Object element, PsiElement context) {
         PsiLiteralExpression literalExpression = (PsiLiteralExpression) context;
-        final Map<String, Object> annotationParams = new HashMap<String, Object>();
+        Map<String, Object> annotationParams = new HashMap<String, Object>();
         annotationParams.put(AnnotationUtil.PROPERTY_KEY_RESOURCE_BUNDLE_PARAMETER, null);
         return !JavaI18nUtil.mustBePropertyKey(context.getProject(), literalExpression, annotationParams);
       }

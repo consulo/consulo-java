@@ -64,12 +64,12 @@ class TypeArgumentCompletionProvider implements CompletionProvider {
 
   @RequiredReadAction
   @Override
-  public void addCompletions(@Nonnull final CompletionParameters parameters, final ProcessingContext processingContext, @Nonnull final CompletionResultSet resultSet) {
+  public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext processingContext, @Nonnull CompletionResultSet resultSet) {
     addTypeArgumentVariants(parameters, resultSet, resultSet.getPrefixMatcher());
   }
 
   void addTypeArgumentVariants(CompletionParameters parameters, Consumer<LookupElement> result, PrefixMatcher matcher) {
-    final Pair<PsiTypeParameterListOwner, Integer> pair = getTypeParameterInfo(parameters.getPosition());
+    Pair<PsiTypeParameterListOwner, Integer> pair = getTypeParameterInfo(parameters.getPosition());
     if (pair == null) {
       return;
     }
@@ -106,7 +106,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider {
   private static List<PsiType> getExpectedTypeArgs(PsiElement context, PsiTypeParameterListOwner paramOwner, JBIterable<PsiTypeParameter> typeParams, PsiClassType expectedType) {
     if (paramOwner instanceof PsiClass) {
       PsiClassType.ClassResolveResult resolve = expectedType.resolveGenerics();
-      final PsiClass expectedClass = resolve.getElement();
+      PsiClass expectedClass = resolve.getElement();
 
       if (!InheritanceUtil.isInheritorOrSelf((PsiClass) paramOwner, expectedClass, true)) {
         return typeParams.map(p -> (PsiType) null).toList();
@@ -150,9 +150,9 @@ class TypeArgumentCompletionProvider implements CompletionProvider {
     PsiClass expectedClass = expectedType.getElement();
     assert expectedClass != null;
     for (PsiTypeParameter parameter : PsiUtil.typeParametersIterable(expectedClass)) {
-      final PsiType argSubstitution = expectedType.getSubstitutor().substitute(parameter);
-      final PsiType paramSubstitution = currentSubstitutor.substitute(parameter);
-      final PsiType substitution = JavaPsiFacade.getInstance(context.getProject()).getResolveHelper().getSubstitutionForTypeParameter(typeParam, paramSubstitution, argSubstitution, false,
+      PsiType argSubstitution = expectedType.getSubstitutor().substitute(parameter);
+      PsiType paramSubstitution = currentSubstitutor.substitute(parameter);
+      PsiType substitution = JavaPsiFacade.getInstance(context.getProject()).getResolveHelper().getSubstitutionForTypeParameter(typeParam, paramSubstitution, argSubstitution, false,
           PsiUtil.getLanguageLevel(context));
       if (substitution != null && substitution != PsiType.NULL) {
         return substitution;
@@ -162,10 +162,10 @@ class TypeArgumentCompletionProvider implements CompletionProvider {
   }
 
   private static void addInheritors(CompletionParameters parameters, Consumer<LookupElement> resultSet, PsiClass referencedClass, int parameterIndex, PrefixMatcher matcher) {
-    final List<PsiClassType> typeList = Collections.singletonList((PsiClassType) TypeConversionUtil.typeParameterErasure(referencedClass.getTypeParameters()[parameterIndex]));
+    List<PsiClassType> typeList = Collections.singletonList((PsiClassType) TypeConversionUtil.typeParameterErasure(referencedClass.getTypeParameters()[parameterIndex]));
     JavaInheritorsGetter.processInheritors(parameters, typeList, matcher, type ->
     {
-      final PsiClass psiClass = PsiUtil.resolveClassInType(type);
+      PsiClass psiClass = PsiUtil.resolveClassInType(type);
       if (psiClass == null) {
         return;
       }
@@ -180,7 +180,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider {
 
   @Nullable
   static Pair<PsiTypeParameterListOwner, Integer> getTypeParameterInfo(PsiElement context) {
-    final PsiReferenceParameterList parameterList = PsiTreeUtil.getContextOfType(context, PsiReferenceParameterList.class, true);
+    PsiReferenceParameterList parameterList = PsiTreeUtil.getContextOfType(context, PsiReferenceParameterList.class, true);
     if (parameterList == null) {
       return null;
     }
@@ -190,15 +190,15 @@ class TypeArgumentCompletionProvider implements CompletionProvider {
       return null;
     }
 
-    final PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement) parent;
-    final int parameterIndex;
+    PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement) parent;
+    int parameterIndex;
 
     int index = 0;
-    final PsiTypeElement typeElement = PsiTreeUtil.getContextOfType(context, PsiTypeElement.class, true);
+    PsiTypeElement typeElement = PsiTreeUtil.getContextOfType(context, PsiTypeElement.class, true);
     if (typeElement != null) {
-      final PsiTypeElement[] elements = referenceElement.getParameterList().getTypeParameterElements();
+      PsiTypeElement[] elements = referenceElement.getParameterList().getTypeParameterElements();
       while (index < elements.length) {
-        final PsiTypeElement element = elements[index++];
+        PsiTypeElement element = elements[index++];
         if (element == typeElement) {
           break;
         }
@@ -209,13 +209,13 @@ class TypeArgumentCompletionProvider implements CompletionProvider {
     if (parameterIndex < 0) {
       return null;
     }
-    final PsiElement target = referenceElement.resolve();
+    PsiElement target = referenceElement.resolve();
     if (!(target instanceof PsiClass) && !(target instanceof PsiMethod)) {
       return null;
     }
 
-    final PsiTypeParameterListOwner referencedClass = (PsiTypeParameterListOwner) target;
-    final PsiTypeParameter[] typeParameters = referencedClass.getTypeParameters();
+    PsiTypeParameterListOwner referencedClass = (PsiTypeParameterListOwner) target;
+    PsiTypeParameter[] typeParameters = referencedClass.getTypeParameters();
     if (typeParameters.length <= parameterIndex) {
       return null;
     }

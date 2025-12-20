@@ -62,7 +62,7 @@ public abstract class AbstractMethodOverridesAbstractMethodInspection extends Ba
 
     @Override
     public JComponent createOptionsPanel() {
-        final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+        MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
         panel.addCheckbox(
             InspectionGadgetsLocalize.abstractMethodOverridesAbstractMethodIgnoreDifferentJavadocOption().get(),
             "ignoreJavaDoc"
@@ -83,8 +83,8 @@ public abstract class AbstractMethodOverridesAbstractMethodInspection extends Ba
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement methodNameIdentifier = descriptor.getPsiElement();
-            final PsiElement method = methodNameIdentifier.getParent();
+            PsiElement methodNameIdentifier = descriptor.getPsiElement();
+            PsiElement method = methodNameIdentifier.getParent();
             assert method != null;
             deleteElement(method);
         }
@@ -106,15 +106,15 @@ public abstract class AbstractMethodOverridesAbstractMethodInspection extends Ba
             if (!isAbstract(method)) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return;
             }
             if (!method.hasModifierProperty(PsiModifier.ABSTRACT) && !containingClass.isInterface()) {
                 return;
             }
-            final PsiMethod[] superMethods = method.findSuperMethods();
-            for (final PsiMethod superMethod : superMethods) {
+            PsiMethod[] superMethods = method.findSuperMethods();
+            for (PsiMethod superMethod : superMethods) {
                 if (!isAbstract(superMethod)) {
                     continue;
                 }
@@ -136,13 +136,13 @@ public abstract class AbstractMethodOverridesAbstractMethodInspection extends Ba
             if (!haveSameAnnotations(method, superMethod)) {
                 return false;
             }
-            final PsiParameterList superParameterList = superMethod.getParameterList();
-            final PsiParameter[] superParameters = superParameterList.getParameters();
-            final PsiParameterList parameterList = method.getParameterList();
-            final PsiParameter[] parameters = parameterList.getParameters();
+            PsiParameterList superParameterList = superMethod.getParameterList();
+            PsiParameter[] superParameters = superParameterList.getParameters();
+            PsiParameterList parameterList = method.getParameterList();
+            PsiParameter[] parameters = parameterList.getParameters();
             for (int i = 0, length = superParameters.length; i < length; i++) {
-                final PsiParameter superParameter = superParameters[i];
-                final PsiParameter parameter = parameters[i];
+                PsiParameter superParameter = superParameters[i];
+                PsiParameter parameter = parameters[i];
                 if (!haveSameAnnotations(parameter, superParameter)) {
                     return false;
                 }
@@ -151,19 +151,19 @@ public abstract class AbstractMethodOverridesAbstractMethodInspection extends Ba
         }
 
         private boolean haveSameAnnotations(PsiModifierListOwner owner1, PsiModifierListOwner owner2) {
-            final PsiModifierList modifierList = owner1.getModifierList();
-            final PsiModifierList superModifierList = owner2.getModifierList();
+            PsiModifierList modifierList = owner1.getModifierList();
+            PsiModifierList superModifierList = owner2.getModifierList();
             if (superModifierList == null) {
                 return modifierList == null;
             }
             else if (modifierList == null) {
                 return false;
             }
-            final PsiAnnotation[] superAnnotations = superModifierList.getAnnotations();
-            final PsiAnnotation[] annotations = modifierList.getAnnotations();
-            final Set<PsiAnnotation> annotationsSet = new HashSet<PsiAnnotation>(Arrays.asList(superAnnotations));
+            PsiAnnotation[] superAnnotations = superModifierList.getAnnotations();
+            PsiAnnotation[] annotations = modifierList.getAnnotations();
+            Set<PsiAnnotation> annotationsSet = new HashSet<PsiAnnotation>(Arrays.asList(superAnnotations));
             for (PsiAnnotation annotation : annotations) {
-                final String qualifiedName = annotation.getQualifiedName();
+                String qualifiedName = annotation.getQualifiedName();
                 if (CommonClassNames.JAVA_LANG_OVERRIDE.equals(qualifiedName)) {
                     continue;
                 }
@@ -175,8 +175,8 @@ public abstract class AbstractMethodOverridesAbstractMethodInspection extends Ba
         }
 
         private boolean haveSameJavaDoc(PsiMethod method, PsiMethod superMethod) {
-            final PsiDocComment superDocComment = superMethod.getDocComment();
-            final PsiDocComment docComment = method.getDocComment();
+            PsiDocComment superDocComment = superMethod.getDocComment();
+            PsiDocComment docComment = method.getDocComment();
             if (superDocComment == null) {
                 if (docComment != null) {
                     return false;
@@ -191,14 +191,14 @@ public abstract class AbstractMethodOverridesAbstractMethodInspection extends Ba
         }
 
         private boolean haveSameExceptionSignatures(PsiMethod method1, PsiMethod method2) {
-            final PsiReferenceList list1 = method1.getThrowsList();
-            final PsiClassType[] exceptions1 = list1.getReferencedTypes();
-            final PsiReferenceList list2 = method2.getThrowsList();
-            final PsiClassType[] exceptions2 = list2.getReferencedTypes();
+            PsiReferenceList list1 = method1.getThrowsList();
+            PsiClassType[] exceptions1 = list1.getReferencedTypes();
+            PsiReferenceList list2 = method2.getThrowsList();
+            PsiClassType[] exceptions2 = list2.getReferencedTypes();
             if (exceptions1.length != exceptions2.length) {
                 return false;
             }
-            final Set<PsiClassType> set1 = new HashSet<PsiClassType>(Arrays.asList(exceptions1));
+            Set<PsiClassType> set1 = new HashSet<PsiClassType>(Arrays.asList(exceptions1));
             for (PsiClassType anException : exceptions2) {
                 if (!set1.contains(anException)) {
                     return false;
@@ -208,17 +208,17 @@ public abstract class AbstractMethodOverridesAbstractMethodInspection extends Ba
         }
 
         private boolean methodsHaveSameReturnTypes(PsiMethod method1, PsiMethod method2) {
-            final PsiType type1 = method1.getReturnType();
+            PsiType type1 = method1.getReturnType();
             if (type1 == null) {
                 return false;
             }
-            final PsiClass superClass = method2.getContainingClass();
-            final PsiClass aClass = method1.getContainingClass();
+            PsiClass superClass = method2.getContainingClass();
+            PsiClass aClass = method1.getContainingClass();
             if (aClass == null || superClass == null) {
                 return false;
             }
-            final PsiSubstitutor substitutor = TypeConversionUtil.getSuperClassSubstitutor(superClass, aClass, PsiSubstitutor.EMPTY);
-            final PsiType type2 = method2.getReturnType();
+            PsiSubstitutor substitutor = TypeConversionUtil.getSuperClassSubstitutor(superClass, aClass, PsiSubstitutor.EMPTY);
+            PsiType type2 = method2.getReturnType();
             return Comparing.equal(TypeConversionUtil.erasure(type1), TypeConversionUtil.erasure(substitutor.substitute(type2)));
         }
 
@@ -226,7 +226,7 @@ public abstract class AbstractMethodOverridesAbstractMethodInspection extends Ba
             if (method.hasModifierProperty(PsiModifier.ABSTRACT)) {
                 return true;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             return containingClass != null && containingClass.isInterface();
         }
     }

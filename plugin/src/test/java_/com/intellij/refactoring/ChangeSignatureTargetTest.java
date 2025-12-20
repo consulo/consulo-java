@@ -53,9 +53,9 @@ public abstract class ChangeSignatureTargetTest extends LightCodeInsightTestCase
 
   private void doTest(String expectedMemberName) throws Exception {
     String basePath = "/refactoring/changeSignatureTarget/" + getTestName(true);
-    @NonNls final String filePath = basePath + ".java";
+    @NonNls String filePath = basePath + ".java";
     configureByFile(filePath);
-    final PsiElement member = new JavaChangeSignatureHandler().findTargetMember(getFile(), getEditor());
+    PsiElement member = new JavaChangeSignatureHandler().findTargetMember(getFile(), getEditor());
     assertNotNull(member);
     assertEquals(expectedMemberName, ((PsiMember)member).getName());
   }

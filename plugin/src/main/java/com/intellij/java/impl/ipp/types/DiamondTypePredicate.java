@@ -28,15 +28,15 @@ class DiamondTypePredicate implements PsiElementPredicate {
     if (!(element instanceof PsiReferenceParameterList)) {
       return false;
     }
-    final PsiReferenceParameterList referenceParameterList =
+    PsiReferenceParameterList referenceParameterList =
       (PsiReferenceParameterList)element;
-    final PsiTypeElement[] typeParameterElements =
+    PsiTypeElement[] typeParameterElements =
       referenceParameterList.getTypeParameterElements();
     if (typeParameterElements.length != 1) {
       return false;
     }
-    final PsiTypeElement typeParameterElement = typeParameterElements[0];
-    final PsiType type = typeParameterElement.getType();
+    PsiTypeElement typeParameterElement = typeParameterElements[0];
+    PsiType type = typeParameterElement.getType();
     return type instanceof PsiDiamondType;
   }
 }

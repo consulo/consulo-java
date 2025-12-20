@@ -36,7 +36,7 @@ public abstract class ReplaceConstructorWithFactoryTest extends LightRefactoring
 
   public void testConstructorTypeParameters() throws Exception { runTest("08", null); }
 
-  private void runTest(final String testIndex, @NonNls String targetClassName) throws Exception {
+  private void runTest(String testIndex, @NonNls String targetClassName) throws Exception {
     configureByFile("/refactoring/replaceConstructorWithFactory/before" + testIndex + ".java");
     perform(targetClassName);
     checkResultByFile("/refactoring/replaceConstructorWithFactory/after" + testIndex + ".java");
@@ -71,7 +71,7 @@ public abstract class ReplaceConstructorWithFactoryTest extends LightRefactoring
       assertTrue(targetClass != null);
     }
 
-    final ReplaceConstructorWithFactoryProcessor replaceConstructorWithFactoryProcessor;
+    ReplaceConstructorWithFactoryProcessor replaceConstructorWithFactoryProcessor;
     if (constructor != null) {
       if (targetClass == null) {
         targetClass = constructor.getContainingClass();

@@ -42,7 +42,7 @@ public abstract class OverlyLargePrimitiveArrayInitializerInspection extends Bas
 
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final Integer numElements = (Integer) infos[0];
+        Integer numElements = (Integer) infos[0];
         return InspectionGadgetsLocalize.largeInitializerPrimitiveTypeArrayProblemDescriptor(numElements).get();
     }
 
@@ -59,15 +59,15 @@ public abstract class OverlyLargePrimitiveArrayInitializerInspection extends Bas
         @Override
         public void visitArrayInitializerExpression(PsiArrayInitializerExpression expression) {
             super.visitArrayInitializerExpression(expression);
-            final PsiType type = expression.getType();
+            PsiType type = expression.getType();
             if (type == null) {
                 return;
             }
-            final PsiType componentType = type.getDeepComponentType();
+            PsiType componentType = type.getDeepComponentType();
             if (!(componentType instanceof PsiPrimitiveType)) {
                 return;
             }
-            final int numElements = calculateNumElements(expression);
+            int numElements = calculateNumElements(expression);
             if (numElements <= m_limit) {
                 return;
             }
@@ -76,10 +76,10 @@ public abstract class OverlyLargePrimitiveArrayInitializerInspection extends Bas
 
         private int calculateNumElements(PsiExpression expression) {
             if (expression instanceof PsiArrayInitializerExpression) {
-                final PsiArrayInitializerExpression arrayExpression = (PsiArrayInitializerExpression) expression;
-                final PsiExpression[] initializers = arrayExpression.getInitializers();
+                PsiArrayInitializerExpression arrayExpression = (PsiArrayInitializerExpression) expression;
+                PsiExpression[] initializers = arrayExpression.getInitializers();
                 int out = 0;
-                for (final PsiExpression initializer : initializers) {
+                for (PsiExpression initializer : initializers) {
                     out += calculateNumElements(initializer);
                 }
                 return out;

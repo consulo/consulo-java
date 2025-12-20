@@ -25,13 +25,13 @@ import consulo.language.psi.*;
  */
 public abstract class Visitor extends JavaRecursiveElementWalkingVisitor {
   @Override
-  public void visitPackage(final PsiJavaPackage aPackage) {
-    final PsiDirectory[] dirs = aPackage.getDirectories();
+  public void visitPackage(PsiJavaPackage aPackage) {
+    PsiDirectory[] dirs = aPackage.getDirectories();
 
     for (PsiDirectory dir : dirs) {
-      final PsiFile[] files = dir.getFiles();
+      PsiFile[] files = dir.getFiles();
 
-      for (final PsiFile file : files) {
+      for (PsiFile file : files) {
         if (file instanceof PsiJavaFile) {
           super.visitJavaFile(((PsiJavaFile)file));
         }

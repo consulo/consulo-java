@@ -88,8 +88,8 @@ public class MethodOrClassSelectioner extends BasicSelectioner {
   }
 
   private static Collection<TextRange> selectWithTypeParameters(@Nonnull PsiClass psiClass) {
-    final PsiIdentifier identifier = psiClass.getNameIdentifier();
-    final PsiTypeParameterList list = psiClass.getTypeParameterList();
+    PsiIdentifier identifier = psiClass.getNameIdentifier();
+    PsiTypeParameterList list = psiClass.getTypeParameterList();
     if (identifier != null && list != null) {
       return Collections.singletonList(new TextRange(identifier.getTextRange().getStartOffset(), list.getTextRange().getEndOffset()));
     }

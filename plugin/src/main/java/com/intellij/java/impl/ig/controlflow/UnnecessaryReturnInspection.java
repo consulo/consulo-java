@@ -89,18 +89,18 @@ public class UnnecessaryReturnInspection extends BaseInspection {
             if (statement.getReturnValue() != null) {
                 return;
             }
-            final PsiElement methodParent = PsiTreeUtil.getParentOfType(statement, PsiMethod.class, PsiLambdaExpression.class);
+            PsiElement methodParent = PsiTreeUtil.getParentOfType(statement, PsiMethod.class, PsiLambdaExpression.class);
             PsiCodeBlock codeBlock = null;
-            final boolean constructor;
+            boolean constructor;
             if (methodParent instanceof PsiMethod) {
-                final PsiMethod method = (PsiMethod) methodParent;
+                PsiMethod method = (PsiMethod) methodParent;
                 codeBlock = method.getBody();
                 constructor = method.isConstructor();
             }
             else if (methodParent instanceof PsiLambdaExpression) {
                 constructor = false;
-                final PsiLambdaExpression lambdaExpression = (PsiLambdaExpression) methodParent;
-                final PsiElement lambdaBody = lambdaExpression.getBody();
+                PsiLambdaExpression lambdaExpression = (PsiLambdaExpression) methodParent;
+                PsiElement lambdaBody = lambdaExpression.getBody();
                 if (lambdaBody instanceof PsiCodeBlock) {
                     codeBlock = (PsiCodeBlock) lambdaBody;
                 }
@@ -121,12 +121,12 @@ public class UnnecessaryReturnInspection extends BaseInspection {
         }
 
         private boolean isInThenBranch(PsiStatement statement) {
-            final PsiIfStatement ifStatement =
+            PsiIfStatement ifStatement =
                 PsiTreeUtil.getParentOfType(statement, PsiIfStatement.class, true, PsiMethod.class, PsiLambdaExpression.class);
             if (ifStatement == null) {
                 return false;
             }
-            final PsiStatement elseBranch = ifStatement.getElseBranch();
+            PsiStatement elseBranch = ifStatement.getElseBranch();
             return elseBranch != null && !PsiTreeUtil.isAncestor(elseBranch, statement, true);
         }
     }

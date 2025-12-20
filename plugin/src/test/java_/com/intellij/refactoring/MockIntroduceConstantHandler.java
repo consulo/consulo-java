@@ -15,14 +15,14 @@ import com.intellij.java.impl.refactoring.introduceField.IntroduceConstantHandle
 public class MockIntroduceConstantHandler extends IntroduceConstantHandlerImpl {
   private final PsiClass myTargetClass;
 
-  public MockIntroduceConstantHandler(final PsiClass targetClass) {
+  public MockIntroduceConstantHandler(PsiClass targetClass) {
     myTargetClass = targetClass;
   }
 
   @Override
-  protected Settings showRefactoringDialog(final Project project, final Editor editor, final PsiClass parentClass, final PsiExpression expr,
-                                           final PsiType type, final PsiExpression[] occurrences, final PsiElement anchorElement,
-                                           final PsiElement anchorElementIfAll) {
+  protected Settings showRefactoringDialog(Project project, Editor editor, PsiClass parentClass, PsiExpression expr,
+                                           PsiType type, PsiExpression[] occurrences, PsiElement anchorElement,
+                                           PsiElement anchorElementIfAll) {
     return new Settings("xxx", expr, occurrences, true, true, true, InitializationPlace.IN_FIELD_DECLARATION, getVisibility(), null, null, false,
                         myTargetClass != null ? myTargetClass : parentClass, false, false);
   }

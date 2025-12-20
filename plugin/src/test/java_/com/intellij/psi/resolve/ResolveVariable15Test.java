@@ -15,7 +15,7 @@ public abstract class ResolveVariable15Test extends Resolve15TestCase {
 
   public void testDuplicateStaticImport() throws Exception {
     PsiReference ref = configure();
-    final JavaResolveResult result = ((PsiJavaReference)ref).advancedResolve(true);
+    JavaResolveResult result = ((PsiJavaReference)ref).advancedResolve(true);
     PsiElement target = result.getElement();
     assertNotNull(target);
     assertTrue(result.isValidResult());
@@ -23,7 +23,7 @@ public abstract class ResolveVariable15Test extends Resolve15TestCase {
 
   public void testRhombExtending() throws Exception {
     PsiReference ref = configure();
-    final JavaResolveResult result = ((PsiJavaReference)ref).advancedResolve(true);
+    JavaResolveResult result = ((PsiJavaReference)ref).advancedResolve(true);
     PsiElement target = result.getElement();
     assertNotNull(target);
     assertTrue(result.isValidResult());

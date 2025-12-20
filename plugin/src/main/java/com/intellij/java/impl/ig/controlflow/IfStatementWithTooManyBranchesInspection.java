@@ -50,7 +50,7 @@ public abstract class IfStatementWithTooManyBranchesInspection extends BaseInspe
 
     @Nonnull
     protected String buildErrorString(Object... infos) {
-        final Integer branchCount = (Integer) infos[0];
+        Integer branchCount = (Integer) infos[0];
         return InspectionGadgetsLocalize.ifStatementWithTooManyBranchesProblemDescriptor(branchCount).get();
     }
 
@@ -62,15 +62,15 @@ public abstract class IfStatementWithTooManyBranchesInspection extends BaseInspe
         @Override
         public void visitIfStatement(@Nonnull PsiIfStatement statement) {
             super.visitIfStatement(statement);
-            final PsiElement parent = statement.getParent();
+            PsiElement parent = statement.getParent();
             if (parent instanceof PsiIfStatement) {
-                final PsiIfStatement parentStatement = (PsiIfStatement) parent;
-                final PsiStatement elseBranch = parentStatement.getElseBranch();
+                PsiIfStatement parentStatement = (PsiIfStatement) parent;
+                PsiStatement elseBranch = parentStatement.getElseBranch();
                 if (statement.equals(elseBranch)) {
                     return;
                 }
             }
-            final int branchCount = calculateBranchCount(statement);
+            int branchCount = calculateBranchCount(statement);
             if (branchCount <= m_limit) {
                 return;
             }
@@ -78,7 +78,7 @@ public abstract class IfStatementWithTooManyBranchesInspection extends BaseInspe
         }
 
         private int calculateBranchCount(PsiIfStatement statement) {
-            final PsiStatement branch = statement.getElseBranch();
+            PsiStatement branch = statement.getElseBranch();
             if (branch == null) {
                 return 1;
             }

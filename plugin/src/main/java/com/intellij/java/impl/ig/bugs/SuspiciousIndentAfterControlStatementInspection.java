@@ -79,12 +79,12 @@ public class SuspiciousIndentAfterControlStatementInspection extends BaseInspect
         @Override
         public void visitIfStatement(PsiIfStatement statement) {
             super.visitIfStatement(statement);
-            final PsiStatement elseStatement = statement.getElseBranch();
+            PsiStatement elseStatement = statement.getElseBranch();
             if (elseStatement instanceof PsiBlockStatement) {
                 return;
             }
             else if (elseStatement == null) {
-                final PsiStatement thenStatement = statement.getThenBranch();
+                PsiStatement thenStatement = statement.getThenBranch();
                 if (thenStatement instanceof PsiBlockStatement) {
                     return;
                 }
@@ -99,7 +99,7 @@ public class SuspiciousIndentAfterControlStatementInspection extends BaseInspect
                     return;
                 }
             }
-            final PsiStatement nextStatement =
+            PsiStatement nextStatement =
                 PsiTreeUtil.getNextSiblingOfType(
                     statement,
                     PsiStatement.class
@@ -111,14 +111,14 @@ public class SuspiciousIndentAfterControlStatementInspection extends BaseInspect
         }
 
         private void checkLoopStatement(PsiLoopStatement statement) {
-            final PsiStatement body = statement.getBody();
+            PsiStatement body = statement.getBody();
             if (body instanceof PsiBlockStatement || body == null) {
                 return;
             }
             if (!isWhitespaceSuspicious(statement, body)) {
                 return;
             }
-            final PsiStatement nextStatement =
+            PsiStatement nextStatement =
                 PsiTreeUtil.getNextSiblingOfType(
                     statement,
                     PsiStatement.class
@@ -133,7 +133,7 @@ public class SuspiciousIndentAfterControlStatementInspection extends BaseInspect
             PsiStatement statement,
             PsiStatement body
         ) {
-            final boolean lineBreakBeforeBody;
+            boolean lineBreakBeforeBody;
             PsiElement prevSibling = body.getPrevSibling();
             if (!(prevSibling instanceof PsiWhiteSpace)) {
                 lineBreakBeforeBody = false;
@@ -143,8 +143,8 @@ public class SuspiciousIndentAfterControlStatementInspection extends BaseInspect
                 }
             }
             else {
-                final String text = prevSibling.getText();
-                final int lineBreakIndex = getLineBreakIndex(text);
+                String text = prevSibling.getText();
+                int lineBreakIndex = getLineBreakIndex(text);
                 if (lineBreakIndex < 0) {
                     lineBreakBeforeBody = false;
                     prevSibling = statement.getPrevSibling();
@@ -156,7 +156,7 @@ public class SuspiciousIndentAfterControlStatementInspection extends BaseInspect
                     lineBreakBeforeBody = true;
                 }
             }
-            final PsiStatement nextStatement =
+            PsiStatement nextStatement =
                 PsiTreeUtil.getNextSiblingOfType(
                     statement,
                     PsiStatement.class
@@ -164,22 +164,22 @@ public class SuspiciousIndentAfterControlStatementInspection extends BaseInspect
             if (nextStatement == null) {
                 return false;
             }
-            final String text = prevSibling.getText();
-            final int index = getLineBreakIndex(text);
+            String text = prevSibling.getText();
+            int index = getLineBreakIndex(text);
             if (index < 0) {
                 return false;
             }
-            final String indent = text.substring(index + 1);
-            final PsiElement nextSibling = nextStatement.getPrevSibling();
+            String indent = text.substring(index + 1);
+            PsiElement nextSibling = nextStatement.getPrevSibling();
             if (!(nextSibling instanceof PsiWhiteSpace)) {
                 return false;
             }
-            final String nextText = nextSibling.getText();
-            final int nextIndex = getLineBreakIndex(nextText);
+            String nextText = nextSibling.getText();
+            int nextIndex = getLineBreakIndex(nextText);
             if (nextIndex < 0) {
                 return false;
             }
-            final String nextIndent = nextText.substring(nextIndex + 1);
+            String nextIndent = nextText.substring(nextIndex + 1);
             if (lineBreakBeforeBody) {
                 return indent.equals(nextIndent);
             }
@@ -189,8 +189,8 @@ public class SuspiciousIndentAfterControlStatementInspection extends BaseInspect
         }
 
         private static int getLineBreakIndex(String text) {
-            final int newLineIndex1 = text.lastIndexOf('\n');
-            final int carriageReturnIndex1 = text.lastIndexOf('\r');
+            int newLineIndex1 = text.lastIndexOf('\n');
+            int carriageReturnIndex1 = text.lastIndexOf('\r');
             return Math.max(newLineIndex1, carriageReturnIndex1);
         }
     }

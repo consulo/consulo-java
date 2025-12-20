@@ -32,17 +32,17 @@ public class NonNlsUtils {
   @Nullable
   public static PsiModifierListOwner getAnnotatableArgument(
     PsiMethodCallExpression methodCallExpression) {
-    final PsiExpressionList argumentList =
+    PsiExpressionList argumentList =
       methodCallExpression.getArgumentList();
-    final PsiExpression[] arguments = argumentList.getExpressions();
+    PsiExpression[] arguments = argumentList.getExpressions();
     if (arguments.length < 1) {
       return null;
     }
-    final PsiExpression argument = arguments[0];
+    PsiExpression argument = arguments[0];
     if (argument instanceof PsiReferenceExpression) {
-      final PsiReferenceExpression referenceExpression =
+      PsiReferenceExpression referenceExpression =
         (PsiReferenceExpression)argument;
-      final PsiElement element = referenceExpression.resolve();
+      PsiElement element = referenceExpression.resolve();
       if (element instanceof PsiModifierListOwner) {
         return (PsiModifierListOwner)element;
       }
@@ -53,12 +53,12 @@ public class NonNlsUtils {
   @Nullable
   public static PsiModifierListOwner getAnnotatableQualifier(
     PsiReferenceExpression expression) {
-    final PsiExpression qualifierExpression =
+    PsiExpression qualifierExpression =
       expression.getQualifierExpression();
     if (qualifierExpression instanceof PsiReferenceExpression) {
-      final PsiReferenceExpression referenceExpression =
+      PsiReferenceExpression referenceExpression =
         (PsiReferenceExpression)qualifierExpression;
-      final PsiElement element = referenceExpression.resolve();
+      PsiElement element = referenceExpression.resolve();
       if (element instanceof PsiModifierListOwner) {
         return (PsiModifierListOwner)element;
       }
@@ -72,22 +72,22 @@ public class NonNlsUtils {
       return true;
     }
     if (expression instanceof PsiMethodCallExpression) {
-      final PsiMethodCallExpression methodCallExpression =
+      PsiMethodCallExpression methodCallExpression =
         (PsiMethodCallExpression)expression;
-      final PsiMethod method = methodCallExpression.resolveMethod();
+      PsiMethod method = methodCallExpression.resolveMethod();
       if (isNonNlsAnnotatedModifierListOwner(method)) {
         return true;
       }
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         methodCallExpression.getMethodExpression();
-      final PsiExpression qualifier =
+      PsiExpression qualifier =
         methodExpression.getQualifierExpression();
       return isNonNlsAnnotated(qualifier);
     }
     else if (expression instanceof PsiArrayAccessExpression) {
-      final PsiArrayAccessExpression arrayAccessExpression =
+      PsiArrayAccessExpression arrayAccessExpression =
         (PsiArrayAccessExpression)expression;
-      final PsiExpression arrayExpression =
+      PsiExpression arrayExpression =
         arrayAccessExpression.getArrayExpression();
       return isNonNlsAnnotated(arrayExpression);
     }
@@ -99,19 +99,19 @@ public class NonNlsUtils {
     if (expression == null) {
       return false;
     }
-    final Boolean value = getCachedValue(expression, KEY);
+    Boolean value = getCachedValue(expression, KEY);
     if (value != null) {
       return value.booleanValue();
     }
-    final PsiElement element =
+    PsiElement element =
       PsiTreeUtil.getParentOfType(expression,
                                   PsiExpressionList.class,
                                   PsiAssignmentExpression.class,
                                   PsiVariable.class,
                                   PsiReturnStatement.class);
-    final boolean result;
+    boolean result;
     if (element instanceof PsiExpressionList) {
-      final PsiExpressionList expressionList =
+      PsiExpressionList expressionList =
         (PsiExpressionList)element;
       result = isNonNlsAnnotatedParameter(expression, expressionList);
     }
@@ -119,13 +119,13 @@ public class NonNlsUtils {
       result = isNonNlsAnnotatedModifierListOwner(element);
     }
     else if (element instanceof PsiAssignmentExpression) {
-      final PsiAssignmentExpression assignmentExpression =
+      PsiAssignmentExpression assignmentExpression =
         (PsiAssignmentExpression)element;
       result =
         isAssignmentToNonNlsAnnotatedVariable(assignmentExpression);
     }
     else if (element instanceof PsiReturnStatement) {
-      final PsiMethod method =
+      PsiMethod method =
         PsiTreeUtil.getParentOfType(element, PsiMethod.class);
       result = isNonNlsAnnotatedModifierListOwner(method);
     }
@@ -145,19 +145,19 @@ public class NonNlsUtils {
 
   @Nullable
   private static <T> T getCachedValue(PsiExpression expression, Key<T> key) {
-    final T data = expression.getUserData(key);
+    T data = expression.getUserData(key);
     if (!(expression instanceof PsiBinaryExpression)) {
       return data;
     }
-    final PsiBinaryExpression binaryExpression =
+    PsiBinaryExpression binaryExpression =
       (PsiBinaryExpression)expression;
-    final PsiExpression lhs = binaryExpression.getLOperand();
+    PsiExpression lhs = binaryExpression.getLOperand();
     T childData = null;
     if (lhs instanceof PsiBinaryExpression) {
       childData = lhs.getUserData(key);
     }
     if (childData == null) {
-      final PsiExpression rhs = binaryExpression.getROperand();
+      PsiExpression rhs = binaryExpression.getROperand();
       if (rhs instanceof PsiBinaryExpression) {
         childData = rhs.getUserData(key);
       }
@@ -170,7 +170,7 @@ public class NonNlsUtils {
 
   private static boolean isAssignmentToNonNlsAnnotatedVariable(
     PsiAssignmentExpression assignmentExpression) {
-    final PsiExpression lhs = assignmentExpression.getLExpression();
+    PsiExpression lhs = assignmentExpression.getLExpression();
     return isReferenceToNonNlsAnnotatedElement(lhs);
   }
 
@@ -179,32 +179,32 @@ public class NonNlsUtils {
     if (!(expression instanceof PsiReferenceExpression)) {
       return false;
     }
-    final PsiReferenceExpression referenceExpression =
+    PsiReferenceExpression referenceExpression =
       (PsiReferenceExpression)expression;
-    final PsiElement target = referenceExpression.resolve();
+    PsiElement target = referenceExpression.resolve();
     return isNonNlsAnnotatedModifierListOwner(target);
   }
 
   private static boolean isNonNlsAnnotatedParameter(
     PsiExpression expression,
     PsiExpressionList expressionList) {
-    final PsiElement parent = expressionList.getParent();
-    final PsiParameterList parameterList;
+    PsiElement parent = expressionList.getParent();
+    PsiParameterList parameterList;
     if (parent instanceof PsiMethodCallExpression) {
-      final PsiMethodCallExpression methodCallExpression =
+      PsiMethodCallExpression methodCallExpression =
         (PsiMethodCallExpression)parent;
       if (isQualifierNonNlsAnnotated(methodCallExpression)) {
         return true;
       }
-      final PsiMethod method = methodCallExpression.resolveMethod();
+      PsiMethod method = methodCallExpression.resolveMethod();
       if (method == null) {
         return false;
       }
       parameterList = method.getParameterList();
     }
     else if (parent instanceof PsiNewExpression) {
-      final PsiNewExpression newExpression = (PsiNewExpression)parent;
-      final PsiMethod constructor = newExpression.resolveConstructor();
+      PsiNewExpression newExpression = (PsiNewExpression)parent;
+      PsiMethod constructor = newExpression.resolveConstructor();
       if (constructor == null) {
         return false;
       }
@@ -213,19 +213,19 @@ public class NonNlsUtils {
     else {
       return false;
     }
-    final PsiExpression[] expressions = expressionList.getExpressions();
+    PsiExpression[] expressions = expressionList.getExpressions();
     int index = -1;
     for (int i = 0; i < expressions.length; i++) {
-      final PsiExpression argument = expressions[i];
+      PsiExpression argument = expressions[i];
       if (PsiTreeUtil.isAncestor(argument, expression, false)) {
         index = i;
       }
     }
-    final PsiParameter[] parameters = parameterList.getParameters();
+    PsiParameter[] parameters = parameterList.getParameters();
     if (parameters.length == 0) {
       return false;
     }
-    final PsiParameter parameter;
+    PsiParameter parameter;
     if (index < parameters.length) {
       parameter = parameters[index];
     }
@@ -237,20 +237,20 @@ public class NonNlsUtils {
 
   private static boolean isQualifierNonNlsAnnotated(
     PsiMethodCallExpression methodCallExpression) {
-    final PsiReferenceExpression methodExpression =
+    PsiReferenceExpression methodExpression =
       methodCallExpression.getMethodExpression();
-    final PsiExpression qualifier =
+    PsiExpression qualifier =
       methodExpression.getQualifierExpression();
     if (isReferenceToNonNlsAnnotatedElement(qualifier)) {
       return true;
     }
     if (qualifier instanceof PsiMethodCallExpression) {
-      final PsiMethod method = methodCallExpression.resolveMethod();
+      PsiMethod method = methodCallExpression.resolveMethod();
       if (method == null) {
         return false;
       }
       if (isChainable(method)) {
-        final PsiMethodCallExpression expression =
+        PsiMethodCallExpression expression =
           (PsiMethodCallExpression)qualifier;
         if (isQualifierNonNlsAnnotated(expression)) {
           return true;
@@ -265,21 +265,21 @@ public class NonNlsUtils {
       return false;
     }
     method = (PsiMethod)method.getNavigationElement();
-    final PsiCodeBlock body = method.getBody();
+    PsiCodeBlock body = method.getBody();
     if (body == null) {
       return false;
     }
-    final PsiStatement[] statements = body.getStatements();
+    PsiStatement[] statements = body.getStatements();
     if (statements.length == 0) {
       return false;
     }
-    final PsiStatement lastStatement = statements[statements.length - 1];
+    PsiStatement lastStatement = statements[statements.length - 1];
     if (!(lastStatement instanceof PsiReturnStatement)) {
       return false;
     }
-    final PsiReturnStatement returnStatement =
+    PsiReturnStatement returnStatement =
       (PsiReturnStatement)lastStatement;
-    final PsiExpression returnValue = returnStatement.getReturnValue();
+    PsiExpression returnValue = returnStatement.getReturnValue();
     return returnValue instanceof PsiThisExpression;
   }
 
@@ -288,7 +288,7 @@ public class NonNlsUtils {
     if (!(element instanceof PsiModifierListOwner)) {
       return false;
     }
-    final PsiModifierListOwner variable = (PsiModifierListOwner)element;
+    PsiModifierListOwner variable = (PsiModifierListOwner)element;
     return AnnotationUtil.isAnnotated(variable,
                                       AnnotationUtil.NON_NLS, false, false);
   }

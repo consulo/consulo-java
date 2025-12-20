@@ -38,14 +38,14 @@ public class AddSerialVersionUIDFix extends InspectionGadgetsFix {
 
   public void doFix(Project project, ProblemDescriptor descriptor)
     throws IncorrectOperationException {
-    final PsiElement classIdentifier = descriptor.getPsiElement();
-    final PsiClass aClass = (PsiClass)classIdentifier.getParent();
+    PsiElement classIdentifier = descriptor.getPsiElement();
+    PsiClass aClass = (PsiClass)classIdentifier.getParent();
     assert aClass != null;
-    final PsiManager psiManager = aClass.getManager();
-    final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(psiManager.getProject()).getElementFactory();
-    final long serialVersionUID =
+    PsiManager psiManager = aClass.getManager();
+    PsiElementFactory elementFactory = JavaPsiFacade.getInstance(psiManager.getProject()).getElementFactory();
+    long serialVersionUID =
       SerialVersionUIDBuilder.computeDefaultSUID(aClass);
-    final PsiField field =
+    PsiField field =
       elementFactory.createFieldFromText("private static final long serialVersionUID = " +
                                          serialVersionUID + "L;", aClass);
     aClass.add(field);

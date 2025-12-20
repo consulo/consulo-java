@@ -65,36 +65,36 @@ public class ReplaceOperatorAssignmentWithAssignmentIntention extends MutablyNam
 
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
-        final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) element;
-        final PsiJavaToken sign = assignmentExpression.getOperationSign();
-        final String operator = sign.getText();
+        PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) element;
+        PsiJavaToken sign = assignmentExpression.getOperationSign();
+        String operator = sign.getText();
         return IntentionPowerPackLocalize.replaceOperatorAssignmentWithAssignmentIntentionName(operator);
     }
 
     @Override
     protected void processIntention(@Nonnull PsiElement element) {
-        final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) element;
-        final PsiJavaToken sign = assignmentExpression.getOperationSign();
-        final PsiExpression lhs = assignmentExpression.getLExpression();
-        final PsiExpression rhs = assignmentExpression.getRExpression();
-        final String operator = sign.getText();
-        final String newOperator = operator.substring(0, operator.length() - 1);
-        final String lhsText = lhs.getText();
-        final String rhsText = (rhs == null) ? "" : rhs.getText();
-        final boolean parentheses;
+        PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) element;
+        PsiJavaToken sign = assignmentExpression.getOperationSign();
+        PsiExpression lhs = assignmentExpression.getLExpression();
+        PsiExpression rhs = assignmentExpression.getRExpression();
+        String operator = sign.getText();
+        String newOperator = operator.substring(0, operator.length() - 1);
+        String lhsText = lhs.getText();
+        String rhsText = (rhs == null) ? "" : rhs.getText();
+        boolean parentheses;
         if (rhs instanceof PsiPolyadicExpression) {
-            final PsiPolyadicExpression binaryExpression = (PsiPolyadicExpression) rhs;
-            final int precedence1 = ParenthesesUtils.getPrecedenceForOperator(binaryExpression.getOperationTokenType());
-            final IElementType signTokenType = sign.getTokenType();
-            final IElementType newOperatorToken = tokenMap.get(signTokenType);
-            final int precedence2 = ParenthesesUtils.getPrecedenceForOperator(newOperatorToken);
+            PsiPolyadicExpression binaryExpression = (PsiPolyadicExpression) rhs;
+            int precedence1 = ParenthesesUtils.getPrecedenceForOperator(binaryExpression.getOperationTokenType());
+            IElementType signTokenType = sign.getTokenType();
+            IElementType newOperatorToken = tokenMap.get(signTokenType);
+            int precedence2 = ParenthesesUtils.getPrecedenceForOperator(newOperatorToken);
             parentheses = precedence1 >= precedence2 || !ParenthesesUtils.isCommutativeOperator(newOperatorToken);
         }
         else {
             parentheses = false;
         }
-        final String cast = getCastString(lhs, rhs);
-        final StringBuilder newExpression = new StringBuilder(lhsText);
+        String cast = getCastString(lhs, rhs);
+        StringBuilder newExpression = new StringBuilder(lhsText);
         newExpression.append('=').append(cast);
         if (!cast.isEmpty()) {
             newExpression.append('(');
@@ -113,8 +113,8 @@ public class ReplaceOperatorAssignmentWithAssignmentIntention extends MutablyNam
     }
 
     private static String getCastString(PsiExpression lhs, PsiExpression rhs) {
-        final PsiType lType = lhs.getType();
-        final PsiType rType = rhs.getType();
+        PsiType lType = lhs.getType();
+        PsiType rType = rhs.getType();
         if (lType == null || rType == null ||
             TypeConversionUtil.isAssignable(lType, rType) || !TypeConversionUtil.areTypesConvertible(lType, rType)) {
             return "";

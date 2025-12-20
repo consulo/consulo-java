@@ -66,7 +66,7 @@ public class MakeStaticUtil {
             }
           }
           else {
-            final PsiClass memberContainingClass = member.getContainingClass();
+            PsiClass memberContainingClass = member.getContainingClass();
             if (!(originalMember instanceof PsiClass) || !isPartOf(memberContainingClass, (PsiClass)originalMember)) {
               if (isPartOf(memberContainingClass, containingClass)) {
                 classRefs.add(new InternalUsageInfo(element, member));
@@ -81,7 +81,7 @@ public class MakeStaticUtil {
       PsiElement refElement = qualifier != null ?
           qualifier.resolve() : PsiTreeUtil.getParentOfType(element, PsiClass.class);
       if (refElement instanceof PsiClass && !refElement.equals(originalMember) && isPartOf((PsiClass)refElement, containingClass)) {
-        final PsiElement parent = element.getParent();
+        PsiElement parent = element.getParent();
         if (parent instanceof PsiReferenceExpression && ((PsiReferenceExpression)parent).isReferenceTo(originalMember)) {
           if (includeSelf) {
             classRefs.add(new SelfUsageInfo(parent, originalMember));
@@ -134,7 +134,7 @@ public class MakeStaticUtil {
   }
 
   public static boolean buildVariableData(PsiTypeParameterListOwner member, ArrayList<VariableData> result) {
-    final InternalUsageInfo[] classRefsInMethod = findClassRefsInMember(member, false);
+    InternalUsageInfo[] classRefsInMethod = findClassRefsInMember(member, false);
     return collectVariableData(member, classRefsInMethod, result);
   }
 
@@ -144,7 +144,7 @@ public class MakeStaticUtil {
     HashSet<PsiField> accessedForWriting = new HashSet<PsiField>();
     boolean needClassParameter = false;
     for (InternalUsageInfo usage : internalUsages) {
-      final PsiElement referencedElement = usage.getReferencedElement();
+      PsiElement referencedElement = usage.getReferencedElement();
       if (usage.isWriting()) {
         accessedForWriting.add((PsiField)referencedElement);
         needClassParameter = true;
@@ -158,13 +158,13 @@ public class MakeStaticUtil {
       }
     }
 
-    final ArrayList<PsiField> psiFields = new ArrayList<PsiField>(reported);
+    ArrayList<PsiField> psiFields = new ArrayList<PsiField>(reported);
     Collections.sort(psiFields, new Comparator<PsiField>() {
       public int compare(PsiField psiField, PsiField psiField1) {
         return psiField.getName().compareTo(psiField1.getName());
       }
     });
-    for (final PsiField field : psiFields) {
+    for (PsiField field : psiFields) {
       if (accessedForWriting.contains(field)) continue;
       VariableData data = new VariableData(field);
       JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(member.getProject());

@@ -69,7 +69,7 @@ public class PreferByKindWeigher extends LookupElementWeigher {
   private final Condition<PsiClass> myRequiredSuper;
   private final ExpectedTypeInfo[] myExpectedTypes;
 
-  public PreferByKindWeigher(CompletionType completionType, final PsiElement position, ExpectedTypeInfo[] expectedTypes) {
+  public PreferByKindWeigher(CompletionType completionType, PsiElement position, ExpectedTypeInfo[] expectedTypes) {
     super("kind");
     myCompletionType = completionType;
     myPosition = position;
@@ -79,10 +79,10 @@ public class PreferByKindWeigher extends LookupElementWeigher {
   }
 
   @Nonnull
-  private static Condition<PsiClass> createSuitabilityCondition(final PsiElement position) {
+  private static Condition<PsiClass> createSuitabilityCondition(PsiElement position) {
     if (IN_CATCH_TYPE.accepts(position) || IN_MULTI_CATCH_TYPE.accepts(position)) {
       PsiTryStatement tryStatement = PsiTreeUtil.getParentOfType(position, PsiTryStatement.class);
-      final List<PsiClass> thrownExceptions = ContainerUtil.newArrayList();
+      List<PsiClass> thrownExceptions = ContainerUtil.newArrayList();
       if (tryStatement != null && tryStatement.getTryBlock() != null) {
         for (PsiClassType type : ExceptionUtil.getThrownExceptions(tryStatement.getTryBlock())) {
           ContainerUtil.addIfNotNull(thrownExceptions, type.resolve());
@@ -109,9 +109,9 @@ public class PreferByKindWeigher extends LookupElementWeigher {
     }
 
     if (psiElement().withParents(PsiJavaCodeReferenceElement.class, PsiAnnotation.class).accepts(position)) {
-      final PsiAnnotation annotation = PsiTreeUtil.getParentOfType(position, PsiAnnotation.class);
+      PsiAnnotation annotation = PsiTreeUtil.getParentOfType(position, PsiAnnotation.class);
       assert annotation != null;
-      final PsiAnnotation.TargetType[] targets = AnnotationTargetUtil.getTargetsForLocation(annotation.getOwner());
+      PsiAnnotation.TargetType[] targets = AnnotationTargetUtil.getTargetsForLocation(annotation.getOwner());
       return psiClass -> psiClass.isAnnotationType() && AnnotationTargetUtil.findAnnotationTarget(psiClass, targets) != null;
     }
 
@@ -143,7 +143,7 @@ public class PreferByKindWeigher extends LookupElementWeigher {
   @Nonnull
   @Override
   public MyResult weigh(@Nonnull LookupElement item) {
-    final Object object = item.getObject();
+    Object object = item.getObject();
 
     if (object instanceof PsiKeyword) {
       ThreeState result = isProbableKeyword(((PsiKeyword) object).getText());
@@ -183,7 +183,7 @@ public class PreferByKindWeigher extends LookupElementWeigher {
     if (item instanceof TypeArgumentCompletionProvider.TypeArgsLookupElement) {
       return MyResult.expectedTypeArgument;
     }
-    final JavaChainLookupElement chain = item.as(JavaChainLookupElement.CLASS_CONDITION_KEY);
+    JavaChainLookupElement chain = item.as(JavaChainLookupElement.CLASS_CONDITION_KEY);
     if (chain != null) {
       Object qualifier = chain.getQualifier().getObject();
       if (qualifier instanceof PsiLocalVariable || qualifier instanceof PsiParameter) {

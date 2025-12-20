@@ -35,7 +35,7 @@ public class ClassHidesUnqualifiableClassUsageInfo extends UnresolvableCollision
   }
 
   public String getDescription() {
-    final PsiElement container = ConflictsUtil.getContainer(myHiddenClass);
+    PsiElement container = ConflictsUtil.getContainer(myHiddenClass);
     return RefactoringLocalize.renamedClassWillHide0In1(
       RefactoringUIUtil.getDescription(myHiddenClass, false),
       RefactoringUIUtil.getDescription(container, false)

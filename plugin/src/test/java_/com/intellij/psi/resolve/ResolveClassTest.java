@@ -51,7 +51,7 @@ public abstract class ResolveClassTest extends ResolveTestCase {
 
   public void testPrivateInExtends() throws Exception {
     PsiReference ref = configure();
-    final JavaResolveResult result = ((PsiJavaReference)ref).advancedResolve(true);
+    JavaResolveResult result = ((PsiJavaReference)ref).advancedResolve(true);
     PsiElement target = result.getElement();
     assertTrue(target instanceof PsiClass);
     assertFalse(result.isAccessible());
@@ -65,7 +65,7 @@ public abstract class ResolveClassTest extends ResolveTestCase {
 
   public void testInnerPrivateMember1() throws Exception {
     PsiReference ref = configure();
-    final JavaResolveResult result = ((PsiJavaReference)ref).advancedResolve(true);
+    JavaResolveResult result = ((PsiJavaReference)ref).advancedResolve(true);
     PsiElement target = result.getElement();
     assertTrue(target instanceof PsiClass);
     assertTrue(result.isValidResult());
@@ -152,7 +152,7 @@ public abstract class ResolveClassTest extends ResolveTestCase {
   public void testStaticImportVsImplicit() throws Exception {
     PsiReference ref = configure();
     JavaResolveResult result = ((PsiJavaReference)ref).advancedResolve(true);
-    final PsiElement element = result.getElement();
+    PsiElement element = result.getElement();
     assertTrue(element instanceof PsiClass);
     assertTrue("Outer.Double".equals(((PsiClass)element).getQualifiedName()));
   }
@@ -172,8 +172,8 @@ public abstract class ResolveClassTest extends ResolveTestCase {
   }
 
   public void testModuleSourceAsLibrarySource() throws Exception {
-    final PsiReference ref = configure();
-    final VirtualFile file = ref.getElement().getContainingFile().getVirtualFile();
+    PsiReference ref = configure();
+    VirtualFile file = ref.getElement().getContainingFile().getVirtualFile();
     assertNotNull(file);
     createFile(myModule, file.getParent(), "ModuleSourceAsLibrarySourceDep.java", loadFile("class/ModuleSourceAsLibrarySourceDep.java"));
     ModuleRootModificationUtil.addModuleLibrary(myModule, "lib", Collections.<String>emptyList(), Collections.singletonList(file.getParent().getUrl()));
@@ -182,9 +182,9 @@ public abstract class ResolveClassTest extends ResolveTestCase {
   }
 
   public void testModuleSourceAsLibraryClasses() throws Exception {
-    final PsiReference ref = configure();
+    PsiReference ref = configure();
     PsiFile psiFile = ref.getElement().getContainingFile();
-    final VirtualFile file = psiFile.getVirtualFile();
+    VirtualFile file = psiFile.getVirtualFile();
     assertNotNull(file);
     createFile(myModule, file.getParent(), "ModuleSourceAsLibraryClassesDep.java", loadFile("class/ModuleSourceAsLibraryClassesDep.java"));
     ModuleRootModificationUtil.addModuleLibrary(myModule, "lib", Collections.singletonList(file.getParent().getUrl()), Collections.<String>emptyList());

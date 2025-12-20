@@ -17,8 +17,8 @@ public abstract class EmptyMethodTest extends InspectionTestCase {
     doTest(false);
   }
 
-  private void doTest(final boolean checkRange) throws Exception {
-    final EmptyMethodInspection tool = new EmptyMethodInspection();
+  private void doTest(boolean checkRange) throws Exception {
+    EmptyMethodInspection tool = new EmptyMethodInspection();
     doTest("emptyMethod/" + getTestName(true), tool, checkRange);
   }
 

@@ -50,41 +50,41 @@ public class ReverseForLoopDirectionIntention extends Intention {
     @Override
     protected void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiForStatement forStatement =
+        PsiForStatement forStatement =
             (PsiForStatement) element.getParent();
-        final PsiDeclarationStatement initialization =
+        PsiDeclarationStatement initialization =
             (PsiDeclarationStatement) forStatement.getInitialization();
         if (initialization == null) {
             return;
         }
-        final PsiBinaryExpression condition =
+        PsiBinaryExpression condition =
             (PsiBinaryExpression) forStatement.getCondition();
         if (condition == null) {
             return;
         }
-        final PsiLocalVariable variable =
+        PsiLocalVariable variable =
             (PsiLocalVariable) initialization.getDeclaredElements()[0];
-        final PsiExpression initializer = variable.getInitializer();
+        PsiExpression initializer = variable.getInitializer();
         if (initializer == null) {
             return;
         }
-        final PsiExpression lhs = condition.getLOperand();
-        final PsiExpression rhs = condition.getROperand();
+        PsiExpression lhs = condition.getLOperand();
+        PsiExpression rhs = condition.getROperand();
         if (rhs == null) {
             return;
         }
-        final PsiExpressionStatement update =
+        PsiExpressionStatement update =
             (PsiExpressionStatement) forStatement.getUpdate();
         if (update == null) {
             return;
         }
-        final PsiExpression updateExpression = update.getExpression();
-        final String variableName = variable.getName();
-        final StringBuilder newUpdateText = new StringBuilder();
+        PsiExpression updateExpression = update.getExpression();
+        String variableName = variable.getName();
+        StringBuilder newUpdateText = new StringBuilder();
         if (updateExpression instanceof PsiPrefixExpression) {
-            final PsiPrefixExpression prefixExpression =
+            PsiPrefixExpression prefixExpression =
                 (PsiPrefixExpression) updateExpression;
-            final IElementType tokenType =
+            IElementType tokenType =
                 prefixExpression.getOperationTokenType();
             if (JavaTokenType.PLUSPLUS == tokenType) {
                 newUpdateText.append("--");
@@ -99,9 +99,9 @@ public class ReverseForLoopDirectionIntention extends Intention {
         }
         else if (updateExpression instanceof PsiPostfixExpression) {
             newUpdateText.append(variableName);
-            final PsiPostfixExpression postfixExpression =
+            PsiPostfixExpression postfixExpression =
                 (PsiPostfixExpression) updateExpression;
-            final IElementType tokenType =
+            IElementType tokenType =
                 postfixExpression.getOperationTokenType();
             if (JavaTokenType.PLUSPLUS == tokenType) {
                 newUpdateText.append("--");
@@ -116,16 +116,16 @@ public class ReverseForLoopDirectionIntention extends Intention {
         else {
             return;
         }
-        final Project project = element.getProject();
-        final PsiElementFactory factory =
+        Project project = element.getProject();
+        PsiElementFactory factory =
             JavaPsiFacade.getElementFactory(project);
-        final PsiExpression newUpdate = factory.createExpressionFromText(
+        PsiExpression newUpdate = factory.createExpressionFromText(
             newUpdateText.toString(), element);
         updateExpression.replace(newUpdate);
-        final IElementType sign = condition.getOperationTokenType();
-        final String negatedSign = ComparisonUtils.getNegatedComparison(sign);
-        final StringBuilder conditionText = new StringBuilder();
-        final StringBuilder newInitializerText = new StringBuilder();
+        IElementType sign = condition.getOperationTokenType();
+        String negatedSign = ComparisonUtils.getNegatedComparison(sign);
+        StringBuilder conditionText = new StringBuilder();
+        StringBuilder newInitializerText = new StringBuilder();
         if (VariableAccessUtils.evaluatesToVariable(lhs, variable)) {
             conditionText.append(variableName);
             conditionText.append(negatedSign);
@@ -173,10 +173,10 @@ public class ReverseForLoopDirectionIntention extends Intention {
         else {
             return;
         }
-        final PsiExpression newInitializer = factory.createExpressionFromText(
+        PsiExpression newInitializer = factory.createExpressionFromText(
             newInitializerText.toString(), element);
         variable.setInitializer(newInitializer);
-        final PsiExpression newCondition = factory.createExpressionFromText(
+        PsiExpression newCondition = factory.createExpressionFromText(
             conditionText.toString(), element);
         condition.replace(newCondition);
     }
@@ -184,9 +184,9 @@ public class ReverseForLoopDirectionIntention extends Intention {
     private static String incrementExpression(PsiExpression expression,
                                               boolean positive) {
         if (expression instanceof PsiLiteralExpression) {
-            final PsiLiteralExpression literalExpression =
+            PsiLiteralExpression literalExpression =
                 (PsiLiteralExpression) expression;
-            final Number value = (Number) literalExpression.getValue();
+            Number value = (Number) literalExpression.getValue();
             if (value == null) {
                 return null;
             }
@@ -200,11 +200,11 @@ public class ReverseForLoopDirectionIntention extends Intention {
         else {
             if (expression instanceof PsiBinaryExpression) {
                 // see if we can remove a -1 instead of adding a +1
-                final PsiBinaryExpression binaryExpression =
+                PsiBinaryExpression binaryExpression =
                     (PsiBinaryExpression) expression;
-                final PsiExpression rhs = binaryExpression.getROperand();
+                PsiExpression rhs = binaryExpression.getROperand();
                 if (ExpressionUtils.isOne(rhs)) {
-                    final IElementType tokenType =
+                    IElementType tokenType =
                         binaryExpression.getOperationTokenType();
                     if (tokenType == JavaTokenType.MINUS && positive) {
                         return binaryExpression.getLOperand().getText();
@@ -214,7 +214,7 @@ public class ReverseForLoopDirectionIntention extends Intention {
                     }
                 }
             }
-            final String expressionText;
+            String expressionText;
             if (ParenthesesUtils.getPrecedence(expression) >
                 ParenthesesUtils.ADDITIVE_PRECEDENCE) {
                 expressionText = '(' + expression.getText() + ')';

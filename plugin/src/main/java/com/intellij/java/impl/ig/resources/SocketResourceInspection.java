@@ -47,10 +47,10 @@ public class SocketResourceInspection extends ResourceInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiExpression expression = (PsiExpression) infos[0];
-        final PsiType type = expression.getType();
+        PsiExpression expression = (PsiExpression) infos[0];
+        PsiType type = expression.getType();
         assert type != null;
-        final String text = type.getPresentableText();
+        String text = type.getPresentableText();
         return InspectionGadgetsLocalize.resourceOpenedNotClosedProblemDescriptor(text).get();
     }
 
@@ -72,11 +72,11 @@ public class SocketResourceInspection extends ResourceInspection {
             if (!isSocketFactoryMethod(expression)) {
                 return;
             }
-            final PsiElement parent = getExpressionParent(expression);
+            PsiElement parent = getExpressionParent(expression);
             if (parent instanceof PsiReturnStatement || parent instanceof PsiResourceVariable) {
                 return;
             }
-            final PsiVariable boundVariable = getVariable(parent);
+            PsiVariable boundVariable = getVariable(parent);
             if (isSafelyClosed(boundVariable, expression, insideTryAllowed)) {
                 return;
             }
@@ -92,11 +92,11 @@ public class SocketResourceInspection extends ResourceInspection {
             if (!isSocketResource(expression)) {
                 return;
             }
-            final PsiElement parent = getExpressionParent(expression);
+            PsiElement parent = getExpressionParent(expression);
             if (parent instanceof PsiReturnStatement || parent instanceof PsiResourceVariable) {
                 return;
             }
-            final PsiVariable boundVariable = getVariable(parent);
+            PsiVariable boundVariable = getVariable(parent);
             if (isSafelyClosed(boundVariable, expression, insideTryAllowed)) {
                 return;
             }
@@ -116,12 +116,12 @@ public class SocketResourceInspection extends ResourceInspection {
         }
 
         private boolean isSocketFactoryMethod(PsiMethodCallExpression expression) {
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            String methodName = methodExpression.getReferenceName();
             if (!"accept".equals(methodName)) {
                 return false;
             }
-            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
             if (qualifier == null) {
                 return false;
             }

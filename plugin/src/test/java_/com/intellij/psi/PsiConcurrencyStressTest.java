@@ -69,7 +69,7 @@ public abstract class PsiConcurrencyStressTest extends PsiTestCase {
     int iterations = Timings.adjustAccordingToMySpeed(20, true);
     System.out.println("iterations = " + iterations);
     final int readIterations = iterations * 3;
-    final int writeIterations = iterations;
+    int writeIterations = iterations;
 
     synchronized (this) {
       PsiClass myClass = myJavaFacade.findClass("StressClass", GlobalSearchScope.allScope(myProject));
@@ -107,7 +107,7 @@ public abstract class PsiConcurrencyStressTest extends PsiTestCase {
       Thread.sleep(100);
       new WriteCommandAction(myProject, myFile) {
         @Override
-        protected void run(final Result result) throws Throwable {
+        protected void run(Result result) throws Throwable {
           writeActionInProgress = true;
           documentManager.commitAllDocuments();
           writeStep(random);
@@ -121,7 +121,7 @@ public abstract class PsiConcurrencyStressTest extends PsiTestCase {
     assertTrue("Timed out", reads.await(5, TimeUnit.MINUTES));
   }
 
-  private static void mark(final String s) {
+  private static void mark(String s) {
     //System.out.print(s);
     //System.out.flush();
   }
@@ -154,7 +154,7 @@ public abstract class PsiConcurrencyStressTest extends PsiTestCase {
     }
   }
 
-  private void readStep(final Random random) {
+  private void readStep(Random random) {
     PsiClass aClass = getPsiClass();
     switch (random.nextInt(4)) {
       case 0:
@@ -177,7 +177,7 @@ public abstract class PsiConcurrencyStressTest extends PsiTestCase {
           public void visitElement(final PsiElement element) {
             super.visitElement(element);
 
-            final HighlightInfoHolder infoHolder = new HighlightInfoHolder(myFile);
+            HighlightInfoHolder infoHolder = new HighlightInfoHolder(myFile);
             final HighlightVisitorImpl visitor = new HighlightVisitorImpl(PsiResolveHelper.SERVICE.getInstance(getProject()));
             visitor.analyze(myFile, false, infoHolder, new Runnable() {
               @Override
@@ -199,7 +199,7 @@ public abstract class PsiConcurrencyStressTest extends PsiTestCase {
   }
 
   @Override
-  protected void invokeTestRunnable(final Runnable runnable) throws Exception {
+  protected void invokeTestRunnable(Runnable runnable) throws Exception {
     runnable.run();
   }
 }

@@ -116,7 +116,7 @@ public class RefactoringHierarchyUtil {
     InheritanceUtil.getSuperClasses(subClass, bases, includeNonProject);
 
     if (!subClass.isInterface()) {
-      final PsiManager manager = subClass.getManager();
+      PsiManager manager = subClass.getManager();
       PsiClass javaLangObject = JavaPsiFacade.getInstance(manager.getProject()).findClass(CommonClassNames.JAVA_LANG_OBJECT, subClass.getResolveScope());
       if (includeNonProject && javaLangObject != null && !manager.areElementsEquivalent(javaLangObject, subClass)) {
         bases.add(javaLangObject);
@@ -129,8 +129,8 @@ public class RefactoringHierarchyUtil {
       Collections.sort(
           basesList, new Comparator<PsiClass>() {
             public int compare(PsiClass c1, PsiClass c2) {
-              final String fqn1 = c1.getQualifiedName();
-              final String fqn2 = c2.getQualifiedName();
+              String fqn1 = c1.getQualifiedName();
+              String fqn2 = c2.getQualifiedName();
               if (fqn1 != null && fqn2 != null) return fqn1.compareTo(fqn2);
               if (fqn1 == null && fqn2 == null) {
                 return Comparing.compare(c1.getName(), c2.getName());
@@ -182,7 +182,7 @@ public class RefactoringHierarchyUtil {
         }
       }
     } else {
-      final PsiType[] superTypes = type.getSuperTypes();
+      PsiType[] superTypes = type.getSuperTypes();
       for (PsiType superType : superTypes) {
         visitor.visitType(superType);
         processSuperTypes(superType, visitor, visited);
@@ -198,8 +198,8 @@ public class RefactoringHierarchyUtil {
       classesRemoved = false;
       loop1:
       for (Iterator<PsiClass> iterator = result.iterator(); iterator.hasNext(); ) {
-        final PsiClass psiClass = iterator.next();
-        for (final PsiClass aClass : result) {
+        PsiClass psiClass = iterator.next();
+        for (PsiClass aClass : result) {
           if (psiClass.isInheritor(aClass, true)) {
             iterator.remove();
             classesRemoved = true;

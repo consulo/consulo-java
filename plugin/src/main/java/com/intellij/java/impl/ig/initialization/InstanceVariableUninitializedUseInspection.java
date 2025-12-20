@@ -91,16 +91,16 @@ public class InstanceVariableUninitializedUseInspection extends BaseInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final JComponent panel = new JPanel(new GridBagLayout());
+        JComponent panel = new JPanel(new GridBagLayout());
 
-        final JPanel annotationsPanel = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
+        JPanel annotationsPanel = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
             annotationNames,
             InspectionGadgetsLocalize.ignoreIfAnnotatedBy().get()
         );
-        final CheckBox checkBox =
+        CheckBox checkBox =
             new CheckBox(InspectionGadgetsLocalize.primitiveFieldsIgnoreOption().get(), this, "m_ignorePrimitives");
 
-        final GridBagConstraints constraints = new GridBagConstraints();
+        GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.weightx = 1.0;
@@ -119,7 +119,7 @@ public class InstanceVariableUninitializedUseInspection extends BaseInspection {
     @Nonnull
     @Override
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
-        final PsiField field = (PsiField) infos[0];
+        PsiField field = (PsiField) infos[0];
         return AddToIgnoreIfAnnotatedByListQuickFix.build(field, annotationNames);
     }
 
@@ -138,17 +138,17 @@ public class InstanceVariableUninitializedUseInspection extends BaseInspection {
             if (field.getInitializer() != null) {
                 return;
             }
-            final PsiAnnotation annotation = AnnotationUtil.findAnnotation(field, annotationNames);
+            PsiAnnotation annotation = AnnotationUtil.findAnnotation(field, annotationNames);
             if (annotation != null) {
                 return;
             }
             if (m_ignorePrimitives) {
-                final PsiType fieldType = field.getType();
+                PsiType fieldType = field.getType();
                 if (ClassUtils.isPrimitive(fieldType)) {
                     return;
                 }
             }
-            final PsiClass aClass = field.getContainingClass();
+            PsiClass aClass = field.getContainingClass();
             if (aClass == null) {
                 return;
             }
@@ -156,29 +156,29 @@ public class InstanceVariableUninitializedUseInspection extends BaseInspection {
             if (project.getExtensionPoint(ImplicitUsageProvider.class).findFirstSafe(it -> it.isImplicitWrite(field)) != null) {
                 return;
             }
-            final UninitializedReadCollector uninitializedReadsCollector = new UninitializedReadCollector();
+            UninitializedReadCollector uninitializedReadsCollector = new UninitializedReadCollector();
             if (!isInitializedInInitializer(field, uninitializedReadsCollector)) {
-                final PsiMethod[] constructors = aClass.getConstructors();
-                for (final PsiMethod constructor : constructors) {
-                    final PsiCodeBlock body = constructor.getBody();
+                PsiMethod[] constructors = aClass.getConstructors();
+                for (PsiMethod constructor : constructors) {
+                    PsiCodeBlock body = constructor.getBody();
                     uninitializedReadsCollector.blockAssignsVariable(body, field);
                 }
             }
-            final PsiExpression[] badReads = uninitializedReadsCollector.getUninitializedReads();
+            PsiExpression[] badReads = uninitializedReadsCollector.getUninitializedReads();
             for (PsiExpression expression : badReads) {
                 registerError(expression, field);
             }
         }
 
         private boolean isInitializedInInitializer(@Nonnull PsiField field, UninitializedReadCollector uninitializedReadsCollector) {
-            final PsiClass aClass = field.getContainingClass();
+            PsiClass aClass = field.getContainingClass();
             if (aClass == null) {
                 return false;
             }
-            final PsiClassInitializer[] initializers = aClass.getInitializers();
-            for (final PsiClassInitializer initializer : initializers) {
+            PsiClassInitializer[] initializers = aClass.getInitializers();
+            for (PsiClassInitializer initializer : initializers) {
                 if (!initializer.hasModifierProperty(PsiModifier.STATIC)) {
-                    final PsiCodeBlock body = initializer.getBody();
+                    PsiCodeBlock body = initializer.getBody();
                     if (uninitializedReadsCollector.blockAssignsVariable(body, field)) {
                         return true;
                     }

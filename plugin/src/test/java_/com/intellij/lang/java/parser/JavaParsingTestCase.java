@@ -44,7 +44,7 @@ public abstract class JavaParsingTestCase extends ParsingTestCase
 	private LanguageLevel myLanguageLevel;
 
 	@SuppressWarnings({"JUnitTestCaseWithNonTrivialConstructors"})
-	public JavaParsingTestCase(@NonNls final String dataPath)
+	public JavaParsingTestCase(@NonNls String dataPath)
 	{
 		super("psi/" + dataPath, "java");
 	}
@@ -80,9 +80,9 @@ public abstract class JavaParsingTestCase extends ParsingTestCase
 		void parse(PsiBuilder builder);
 	}
 
-	protected void doParserTest(final String text, final TestParser parser)
+	protected void doParserTest(String text, TestParser parser)
 	{
-		final String name = getTestName(false);
+		String name = getTestName(false);
 		myFile = createPsiFile(name, text, parser);
 		myFile.putUserData(PsiUtil.FILE_LANGUAGE_LEVEL_KEY, myLanguageLevel);
 		try
@@ -98,7 +98,7 @@ public abstract class JavaParsingTestCase extends ParsingTestCase
 	private static IFileElementType TEST_FILE_ELEMENT_TYPE = null;
 	private static TestParser TEST_PARSER;
 
-	private PsiFile createPsiFile(final String name, final String text, final TestParser parser)
+	private PsiFile createPsiFile(String name, String text, TestParser parser)
 	{
 		if(TEST_FILE_ELEMENT_TYPE == null)
 		{
@@ -107,22 +107,22 @@ public abstract class JavaParsingTestCase extends ParsingTestCase
 
 		TEST_PARSER = parser;
 
-		final LightVirtualFile virtualFile = new LightVirtualFile(name + JavaFileType.DOT_DEFAULT_EXTENSION, JavaFileType.INSTANCE, text, -1);
+		LightVirtualFile virtualFile = new LightVirtualFile(name + JavaFileType.DOT_DEFAULT_EXTENSION, JavaFileType.INSTANCE, text, -1);
 		final FileViewProvider viewProvider = new SingleRootFileViewProvider(PsiManager.getInstance(myProject), virtualFile, true);
 		return new PsiJavaFileImpl(viewProvider)
 		{
 			@Nonnull
 			@Override
-			protected FileElement createFileElement(final CharSequence text)
+			protected FileElement createFileElement(CharSequence text)
 			{
 				return new FileElement(TEST_FILE_ELEMENT_TYPE, text);
 			}
 		};
 	}
 
-	private static PsiBuilder createBuilder(final ASTNode chameleon)
+	private static PsiBuilder createBuilder(ASTNode chameleon)
 	{
-		final PsiBuilder builder = JavaParserUtil.createBuilder(chameleon);
+		PsiBuilder builder = JavaParserUtil.createBuilder(chameleon);
 		builder.setDebugMode(true);
 		return builder;
 	}
@@ -135,15 +135,15 @@ public abstract class JavaParsingTestCase extends ParsingTestCase
 		}
 
 		@Override
-		public ASTNode parseContents(final ASTNode chameleon)
+		public ASTNode parseContents(ASTNode chameleon)
 		{
-			final PsiBuilder builder = createBuilder(chameleon);
+			PsiBuilder builder = createBuilder(chameleon);
 
-			final PsiBuilder.Marker root = builder.mark();
+			PsiBuilder.Marker root = builder.mark();
 			TEST_PARSER.parse(builder);
 			if(!builder.eof())
 			{
-				final PsiBuilder.Marker unparsed = builder.mark();
+				PsiBuilder.Marker unparsed = builder.mark();
 				while(!builder.eof())
 				{
 					builder.advanceLexer();
@@ -152,7 +152,7 @@ public abstract class JavaParsingTestCase extends ParsingTestCase
 			}
 			root.done(this);
 
-			final ASTNode rootNode = builder.getTreeBuilt();
+			ASTNode rootNode = builder.getTreeBuilt();
 			return rootNode.getFirstChildNode();
 		}
 	}

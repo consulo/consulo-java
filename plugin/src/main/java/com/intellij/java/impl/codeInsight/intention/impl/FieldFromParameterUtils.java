@@ -48,14 +48,14 @@ import java.util.Map;
 public final class FieldFromParameterUtils {
   @Nullable
   public static PsiParameter findParameterAtCursor(@Nonnull PsiFile file, @Nonnull Editor editor) {
-    final int offset = editor.getCaretModel().getOffset();
-    final PsiParameterList parameterList = PsiTreeUtil.findElementOfClassAtOffset(file, offset, PsiParameterList.class, false);
+    int offset = editor.getCaretModel().getOffset();
+    PsiParameterList parameterList = PsiTreeUtil.findElementOfClassAtOffset(file, offset, PsiParameterList.class, false);
     if (parameterList == null) {
       return null;
     }
-    final PsiParameter[] parameters = parameterList.getParameters();
+    PsiParameter[] parameters = parameterList.getParameters();
     for (PsiParameter parameter : parameters) {
-      final TextRange range = parameter.getTextRange();
+      TextRange range = parameter.getTextRange();
       if (range.getStartOffset() <= offset && offset <= range.getEndOffset()) {
         return parameter;
       }
@@ -78,18 +78,18 @@ public final class FieldFromParameterUtils {
       return null;
     }
 
-    final PsiType type = getType(parameter);
+    PsiType type = getType(parameter);
 
     if (type instanceof PsiArrayType) {
       return type;
     }
 
-    final PsiClassType.ClassResolveResult result = PsiUtil.resolveGenericsClassInType(type);
-    final PsiClass psiClass = result.getElement();
+    PsiClassType.ClassResolveResult result = PsiUtil.resolveGenericsClassInType(type);
+    PsiClass psiClass = result.getElement();
     if (psiClass == null) {
       return type;
     }
-    final HashSet<PsiTypeParameter> usedTypeParameters = new HashSet<PsiTypeParameter>();
+    HashSet<PsiTypeParameter> usedTypeParameters = new HashSet<PsiTypeParameter>();
     RefactoringUtil.collectTypeParameters(usedTypeParameters, parameter);
     for (Iterator<PsiTypeParameter> iterator = usedTypeParameters.iterator(); iterator.hasNext(); ) {
       PsiTypeParameter usedTypeParameter = iterator.next();
@@ -97,39 +97,39 @@ public final class FieldFromParameterUtils {
         iterator.remove();
       }
     }
-    final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(parameter.getProject());
+    PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(parameter.getProject());
     PsiSubstitutor subst = PsiSubstitutor.EMPTY;
     for (PsiTypeParameter usedTypeParameter : usedTypeParameters) {
       subst = subst.put(usedTypeParameter, TypeConversionUtil.typeParameterErasure(usedTypeParameter));
     }
     PsiSubstitutor substitutor = PsiSubstitutor.EMPTY;
-    final Map<PsiTypeParameter, PsiType> typeMap = result.getSubstitutor().getSubstitutionMap();
+    Map<PsiTypeParameter, PsiType> typeMap = result.getSubstitutor().getSubstitutionMap();
     for (PsiTypeParameter typeParameter : typeMap.keySet()) {
-      final PsiType psiType = typeMap.get(typeParameter);
+      PsiType psiType = typeMap.get(typeParameter);
       substitutor = substitutor.put(typeParameter, psiType != null ? subst.substitute(psiType) : null);
     }
     return psiClass instanceof PsiTypeParameter ? subst.substitute((PsiTypeParameter) psiClass) : elementFactory.createType(psiClass, substitutor);
   }
 
   @Nullable
-  public static PsiField getParameterAssignedToField(final PsiParameter parameter) {
+  public static PsiField getParameterAssignedToField(PsiParameter parameter) {
     for (PsiReference reference : ReferencesSearch.search(parameter, new LocalSearchScope(parameter.getDeclarationScope()), false)) {
       if (!(reference instanceof PsiReferenceExpression)) {
         continue;
       }
-      final PsiReferenceExpression expression = (PsiReferenceExpression) reference;
+      PsiReferenceExpression expression = (PsiReferenceExpression) reference;
       if (!(expression.getParent() instanceof PsiAssignmentExpression)) {
         continue;
       }
-      final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) expression.getParent();
+      PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) expression.getParent();
       if (assignmentExpression.getRExpression() != expression) {
         continue;
       }
-      final PsiExpression lExpression = assignmentExpression.getLExpression();
+      PsiExpression lExpression = assignmentExpression.getLExpression();
       if (!(lExpression instanceof PsiReferenceExpression)) {
         continue;
       }
-      final PsiElement element = ((PsiReferenceExpression) lExpression).resolve();
+      PsiElement element = ((PsiReferenceExpression) lExpression).resolve();
       if (element instanceof PsiField) {
         return (PsiField) element;
       }
@@ -137,10 +137,10 @@ public final class FieldFromParameterUtils {
     return null;
   }
 
-  public static int findFieldAssignmentAnchor(final PsiStatement[] statements,
-                                              final @Nullable Ref<Pair<PsiField, Boolean>> anchorRef,
-                                              final PsiClass targetClass,
-                                              final PsiParameter myParameter) {
+  public static int findFieldAssignmentAnchor(PsiStatement[] statements,
+                                              @Nullable Ref<Pair<PsiField, Boolean>> anchorRef,
+                                              PsiClass targetClass,
+                                              PsiParameter myParameter) {
     int i = 0;
     for (; i < statements.length; i++) {
       PsiStatement psiStatement = statements[i];
@@ -200,15 +200,15 @@ public final class FieldFromParameterUtils {
     return i;
   }
 
-  public static void createFieldAndAddAssignment(final @Nonnull Project project,
-                                                 final @Nonnull PsiClass targetClass,
-                                                 final @Nonnull PsiMethod method,
-                                                 final @Nonnull PsiParameter parameter,
-                                                 final @Nonnull PsiType fieldType, final @Nonnull String fieldName,
-                                                 final boolean isStatic, final boolean isFinal) throws IncorrectOperationException {
+  public static void createFieldAndAddAssignment(@Nonnull Project project,
+                                                 @Nonnull PsiClass targetClass,
+                                                 @Nonnull PsiMethod method,
+                                                 @Nonnull PsiParameter parameter,
+                                                 @Nonnull PsiType fieldType, @Nonnull String fieldName,
+                                                 boolean isStatic, boolean isFinal) throws IncorrectOperationException {
 
     PsiManager psiManager = PsiManager.getInstance(project);
-    final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(psiManager.getProject());
+    JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(psiManager.getProject());
     PsiElementFactory factory = psiFacade.getElementFactory();
 
     PsiField field = factory.createField(fieldName, fieldType);
@@ -237,7 +237,7 @@ public final class FieldFromParameterUtils {
 
     String stmtText = fieldName + " = " + parameter.getName() + ";";
 
-    final PsiVariable variable = psiFacade.getResolveHelper().resolveReferencedVariable(fieldName, methodBody);
+    PsiVariable variable = psiFacade.getResolveHelper().resolveReferencedVariable(fieldName, methodBody);
     if (variable != null && !(variable instanceof PsiField)) {
       String prefix = isStatic ? targetClass.getName() == null ? "" : targetClass.getName() + "." : "this.";
       stmtText = prefix + stmtText;

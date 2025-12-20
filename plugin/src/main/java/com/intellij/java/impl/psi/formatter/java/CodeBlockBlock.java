@@ -114,7 +114,7 @@ public class CodeBlockBlock extends AbstractJavaBlock
 	@Override
 	protected List<Block> buildChildren()
 	{
-		final List<Block> result = new ArrayList<>();
+		List<Block> result = new ArrayList<>();
 		Alignment childAlignment = createChildAlignment();
 		Wrap childWrap = createChildWrap();
 
@@ -123,7 +123,7 @@ public class CodeBlockBlock extends AbstractJavaBlock
 		return result;
 	}
 
-	private void buildChildren(final List<Block> result, final Alignment childAlignment, final Wrap childWrap)
+	private void buildChildren(List<Block> result, Alignment childAlignment, Wrap childWrap)
 	{
 		ASTNode child = myNode.getFirstChildNode();
 
@@ -140,7 +140,7 @@ public class CodeBlockBlock extends AbstractJavaBlock
 			if(!FormatterUtil.containsWhiteSpacesOnly(child) && child.getTextLength() > 0)
 			{
 				AlignmentStrategy alignmentStrategy = provider.getNextChildStrategy(child);
-				final Indent indent = calcCurrentIndent(child, state);
+				Indent indent = calcCurrentIndent(child, state);
 				state = calcNewState(child, state);
 
 				if(child.getElementType() == JavaElementType.SWITCH_LABEL_STATEMENT)
@@ -171,13 +171,13 @@ public class CodeBlockBlock extends AbstractJavaBlock
 	}
 
 	@Nullable
-	private ASTNode processCaseAndStatementAfter(final List<Block> result,
-												 ASTNode child,
-												 final Alignment childAlignment,
-												 final Wrap childWrap,
-												 final Indent indent)
+	private ASTNode processCaseAndStatementAfter(List<Block> result,
+                                                 ASTNode child,
+                                                 Alignment childAlignment,
+                                                 Wrap childWrap,
+                                                 Indent indent)
 	{
-		final List<Block> localResult = new ArrayList<>();
+		List<Block> localResult = new ArrayList<>();
 		processChild(localResult, child, AlignmentStrategy.getNullStrategy(), null, Indent.getNoneIndent());
 		child = child.getTreeNext();
 		Indent childIndent = Indent.getNormalIndent();
@@ -212,7 +212,7 @@ public class CodeBlockBlock extends AbstractJavaBlock
 		return null;
 	}
 
-	private static boolean isBreakOrReturn(final ASTNode child)
+	private static boolean isBreakOrReturn(ASTNode child)
 	{
 		IElementType elementType = child.getElementType();
 		return JavaElementType.BREAK_STATEMENT == elementType || JavaElementType.RETURN_STATEMENT == elementType;
@@ -223,16 +223,16 @@ public class CodeBlockBlock extends AbstractJavaBlock
 													  final Indent indent,
 													  final Wrap childWrap)
 	{
-		final SyntheticCodeBlock result = new SyntheticCodeBlock(localResult, childAlignment, getSettings(), myJavaSettings, indent, childWrap)
+		SyntheticCodeBlock result = new SyntheticCodeBlock(localResult, childAlignment, getSettings(), myJavaSettings, indent, childWrap)
 		{
 			@Override
 			@Nonnull
-			public ChildAttributes getChildAttributes(final int newChildIndex)
+			public ChildAttributes getChildAttributes(int newChildIndex)
 			{
 				IElementType prevElementType = null;
 				if(newChildIndex > 0)
 				{
-					final Block previousBlock = getSubBlocks().get(newChildIndex - 1);
+					Block previousBlock = getSubBlocks().get(newChildIndex - 1);
 					if(previousBlock instanceof AbstractBlock)
 					{
 						prevElementType = ((AbstractBlock) previousBlock).getNode().getElementType();
@@ -257,7 +257,7 @@ public class CodeBlockBlock extends AbstractJavaBlock
 		return result;
 	}
 
-	private static int calcNewState(final ASTNode child, int state)
+	private static int calcNewState(ASTNode child, int state)
 	{
 		switch(state)
 		{
@@ -291,7 +291,7 @@ public class CodeBlockBlock extends AbstractJavaBlock
 		return INSIDE_BODY;
 	}
 
-	private Indent calcCurrentIndent(final ASTNode child, final int state)
+	private Indent calcCurrentIndent(ASTNode child, int state)
 	{
 		IElementType elementType = child.getElementType();
 
@@ -335,7 +335,7 @@ public class CodeBlockBlock extends AbstractJavaBlock
 
 	@Override
 	@Nonnull
-	public ChildAttributes getChildAttributes(final int newChildIndex)
+	public ChildAttributes getChildAttributes(int newChildIndex)
 	{
 		if(isAfter(newChildIndex, new IElementType[]{
 				JavaDocElementType.DOC_COMMENT,

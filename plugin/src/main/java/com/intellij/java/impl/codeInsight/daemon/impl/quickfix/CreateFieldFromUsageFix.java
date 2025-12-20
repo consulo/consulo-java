@@ -57,8 +57,8 @@ public class CreateFieldFromUsageFix extends CreateVarFromUsageFix {
   }
 
   @Override
-  protected void invokeImpl(final PsiClass targetClass) {
-    final Project project = myReferenceExpression.getProject();
+  protected void invokeImpl(PsiClass targetClass) {
+    Project project = myReferenceExpression.getProject();
     JVMElementFactory factory = JVMElementFactories.getFactory(targetClass.getLanguage(), project);
     if (factory == null) factory = JavaPsiFacade.getElementFactory(project);
 
@@ -100,12 +100,12 @@ public class CreateFieldFromUsageFix extends CreateVarFromUsageFix {
     createFieldFromUsageTemplate(targetClass, project, expectedTypes, field, createConstantField(), myReferenceExpression);
   }
 
-  public static void createFieldFromUsageTemplate(final PsiClass targetClass,
+  public static void createFieldFromUsageTemplate(PsiClass targetClass,
                                                   final Project project,
-                                                  final ExpectedTypeInfo[] expectedTypes,
-                                                  final PsiField field,
-                                                  final boolean createConstantField,
-                                                  final PsiElement context) {
+                                                  ExpectedTypeInfo[] expectedTypes,
+                                                  PsiField field,
+                                                  boolean createConstantField,
+                                                  PsiElement context) {
     final PsiFile targetFile = targetClass.getContainingFile();
     final Editor newEditor = positionCursor(project, targetFile, field);
     if (newEditor == null) return;
@@ -116,7 +116,7 @@ public class CreateFieldFromUsageFix extends CreateVarFromUsageFix {
       @Override
       public void templateFinished(Template template, boolean brokenOff) {
         PsiDocumentManager.getInstance(project).commitDocument(newEditor.getDocument());
-        final int offset = newEditor.getCaretModel().getOffset();
+        int offset = newEditor.getCaretModel().getOffset();
         final PsiField psiField = PsiTreeUtil.findElementOfClassAtOffset(targetFile, offset, PsiField.class, false);
         if (psiField != null) {
           ApplicationManager.getApplication().runWriteAction(new Runnable() {
@@ -135,7 +135,7 @@ public class CreateFieldFromUsageFix extends CreateVarFromUsageFix {
     if (!PsiTreeUtil.isAncestor(targetClass, ref, true)) {
       return false;
     }
-    final PsiElement element = PsiTreeUtil.getParentOfType(ref, PsiClassInitializer.class, PsiMethod.class);
+    PsiElement element = PsiTreeUtil.getParentOfType(ref, PsiClassInitializer.class, PsiMethod.class);
     if (element instanceof PsiClassInitializer) {
       return true;
     }

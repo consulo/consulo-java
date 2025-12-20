@@ -53,12 +53,12 @@ class JavaClassNameInsertHandler implements InsertHandler<JavaPsiClassReferenceE
   static final InsertHandler<JavaPsiClassReferenceElement> JAVA_CLASS_INSERT_HANDLER = new JavaClassNameInsertHandler();
 
   @Override
-  public void handleInsert(final InsertionContext context, final JavaPsiClassReferenceElement item) {
+  public void handleInsert(InsertionContext context, JavaPsiClassReferenceElement item) {
     int offset = context.getTailOffset() - 1;
-    final PsiFile file = context.getFile();
+    PsiFile file = context.getFile();
     if (PsiTreeUtil.findElementOfClassAtOffset(file, offset, PsiImportStatementBase.class, false) != null) {
-      final PsiJavaCodeReferenceElement ref = PsiTreeUtil.findElementOfClassAtOffset(file, offset, PsiJavaCodeReferenceElement.class, false);
-      final String qname = item.getQualifiedName();
+      PsiJavaCodeReferenceElement ref = PsiTreeUtil.findElementOfClassAtOffset(file, offset, PsiJavaCodeReferenceElement.class, false);
+      String qname = item.getQualifiedName();
       if (qname != null && (ref == null || !qname.equals(ref.getCanonicalText()))) {
         AllClassesGetter.INSERT_FQN.handleInsert(context, item);
       }
@@ -68,10 +68,10 @@ class JavaClassNameInsertHandler implements InsertHandler<JavaPsiClassReferenceE
     PsiElement position = file.findElementAt(offset);
     PsiJavaCodeReferenceElement ref = position != null && position.getParent() instanceof PsiJavaCodeReferenceElement ? (PsiJavaCodeReferenceElement) position.getParent() : null;
     PsiClass psiClass = item.getObject();
-    final Project project = context.getProject();
+    Project project = context.getProject();
 
-    final Editor editor = context.getEditor();
-    final char c = context.getCompletionChar();
+    Editor editor = context.getEditor();
+    char c = context.getCompletionChar();
     if (c == '#') {
       context.setLaterRunnable(() -> new CodeCompletionHandlerBase(CompletionType.BASIC).invokeCompletion(project, editor));
     } else if (c == '.' && PsiTreeUtil.getParentOfType(position, PsiParameterList.class) == null) {
@@ -147,17 +147,17 @@ class JavaClassNameInsertHandler implements InsertHandler<JavaPsiClassReferenceE
   }
 
   private static boolean shouldInsertParentheses(PsiElement position) {
-    final PsiJavaCodeReferenceElement ref = PsiTreeUtil.getParentOfType(position, PsiJavaCodeReferenceElement.class);
+    PsiJavaCodeReferenceElement ref = PsiTreeUtil.getParentOfType(position, PsiJavaCodeReferenceElement.class);
     if (ref == null) {
       return false;
     }
 
-    final PsiReferenceParameterList parameterList = ref.getParameterList();
+    PsiReferenceParameterList parameterList = ref.getParameterList();
     if (parameterList != null && parameterList.getTextLength() > 0) {
       return false;
     }
 
-    final PsiElement prevElement = FilterPositionUtil.searchNonSpaceNonCommentBack(ref);
+    PsiElement prevElement = FilterPositionUtil.searchNonSpaceNonCommentBack(ref);
     if (prevElement != null && prevElement.getParent() instanceof PsiNewExpression) {
       return !isArrayTypeExpected((PsiExpression) prevElement.getParent());
     }
@@ -170,7 +170,7 @@ class JavaClassNameInsertHandler implements InsertHandler<JavaPsiClassReferenceE
   }
 
   private static boolean insertingAnnotation(InsertionContext context, LookupElement item) {
-    final Object obj = item.getObject();
+    Object obj = item.getObject();
     if (!(obj instanceof PsiClass) || !((PsiClass) obj).isAnnotationType()) {
       return false;
     }

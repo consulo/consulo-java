@@ -43,21 +43,21 @@ public class MissingMethodBodyFixer implements Fixer
 			return;
 		}
 		PsiMethod method = (PsiMethod) psiElement;
-		final PsiClass containingClass = method.getContainingClass();
+		PsiClass containingClass = method.getContainingClass();
 		if(!shouldHaveBody(method))
 		{
 			return;
 		}
 
-		final PsiCodeBlock body = method.getBody();
-		final Document doc = editor.getDocument();
+		PsiCodeBlock body = method.getBody();
+		Document doc = editor.getDocument();
 		if(body != null)
 		{
 			// See IDEADEV-1093. This is quite hacky heuristic but it seem to be best we can do.
 			String bodyText = body.getText();
 			if(bodyText.startsWith("{"))
 			{
-				final PsiStatement[] statements = body.getStatements();
+				PsiStatement[] statements = body.getStatements();
 				if(statements.length > 0)
 				{
 					if(statements[0] instanceof PsiDeclarationStatement)

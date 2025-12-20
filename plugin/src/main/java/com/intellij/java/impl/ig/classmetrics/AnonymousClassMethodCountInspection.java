@@ -67,7 +67,7 @@ public class AnonymousClassMethodCountInspection extends ClassMetricInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final Integer count = (Integer) infos[0];
+        Integer count = (Integer) infos[0];
         return InspectionGadgetsLocalize.anonymousInnerClassWithTooManyMethodsProblemDescriptor(count).get();
     }
 
@@ -91,7 +91,7 @@ public class AnonymousClassMethodCountInspection extends ClassMetricInspection {
             if (aClass instanceof PsiEnumConstantInitializer) {
                 return;
             }
-            final int totalMethodCount = calculateTotalMethodCount(aClass);
+            int totalMethodCount = calculateTotalMethodCount(aClass);
             if (totalMethodCount <= getLimit()) {
                 return;
             }

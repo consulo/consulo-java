@@ -50,20 +50,20 @@ public class ReplaceAssignmentWithPostfixExpressionIntention
     @Nonnull
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
-        final PsiAssignmentExpression assignmentExpression =
+        PsiAssignmentExpression assignmentExpression =
             (PsiAssignmentExpression) element;
-        final PsiBinaryExpression rhs =
+        PsiBinaryExpression rhs =
             (PsiBinaryExpression) assignmentExpression.getRExpression();
-        final PsiExpression lhs = assignmentExpression.getLExpression();
-        final String lhsText = lhs.getText();
-        final IElementType tokenType;
+        PsiExpression lhs = assignmentExpression.getLExpression();
+        String lhsText = lhs.getText();
+        IElementType tokenType;
         if (rhs == null) {
             tokenType = null;
         }
         else {
             tokenType = rhs.getOperationTokenType();
         }
-        final String replacementText;
+        String replacementText;
         if (JavaTokenType.MINUS.equals(tokenType)) {
             replacementText = lhsText + "--";
         }
@@ -76,16 +76,16 @@ public class ReplaceAssignmentWithPostfixExpressionIntention
     @Override
     protected void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiAssignmentExpression assignmentExpression =
+        PsiAssignmentExpression assignmentExpression =
             (PsiAssignmentExpression) element;
-        final PsiExpression lhs = assignmentExpression.getLExpression();
-        final String lhsText = lhs.getText();
-        final PsiExpression rhs = assignmentExpression.getRExpression();
+        PsiExpression lhs = assignmentExpression.getLExpression();
+        String lhsText = lhs.getText();
+        PsiExpression rhs = assignmentExpression.getRExpression();
         if (!(rhs instanceof PsiBinaryExpression)) {
             return;
         }
-        final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) rhs;
-        final IElementType tokenType = binaryExpression.getOperationTokenType();
+        PsiBinaryExpression binaryExpression = (PsiBinaryExpression) rhs;
+        IElementType tokenType = binaryExpression.getOperationTokenType();
         if (JavaTokenType.PLUS.equals(tokenType)) {
             replaceExpression(lhsText + "++", assignmentExpression);
         }

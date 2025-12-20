@@ -45,7 +45,7 @@ public class StringLiteralCopyPasteProcessor implements CopyPastePreProcessor {
 
   @SuppressWarnings("ForLoopThatDoesntUseLoopVariable")
   @Override
-  public String preprocessOnCopy(final PsiFile file, final int[] startOffsets, final int[] endOffsets, final String text) {
+  public String preprocessOnCopy(PsiFile file, int[] startOffsets, int[] endOffsets, String text) {
     // The main idea is to un-escape string/char literals content if necessary.
     // Example:
     //    Suppose we have a following text at the editor: String s = "first <selection>line \n second</selection> line"
@@ -65,10 +65,10 @@ public class StringLiteralCopyPasteProcessor implements CopyPastePreProcessor {
         buffer.append('\n'); // LF is added for block selection
       }
       // Calculate offsets offsets of the selection interval being processed now.
-      final int fileStartOffset = startOffsets[i];
-      final int fileEndOffset = endOffsets[i];
+      int fileStartOffset = startOffsets[i];
+      int fileEndOffset = endOffsets[i];
       int givenTextStartOffset = Math.min(givenTextOffset, text.length());
-      final int givenTextEndOffset = Math.min(givenTextOffset + (fileEndOffset - fileStartOffset), text.length());
+      int givenTextEndOffset = Math.min(givenTextOffset + (fileEndOffset - fileStartOffset), text.length());
       givenTextOffset = givenTextEndOffset;
       for (
           PsiElement element = file.findElementAt(fileStartOffset);
@@ -122,14 +122,14 @@ public class StringLiteralCopyPasteProcessor implements CopyPastePreProcessor {
   }
 
   @Override
-  public String preprocessOnPaste(final Project project, final PsiFile file, final Editor editor, String text, final RawText rawText) {
-    final Document document = editor.getDocument();
+  public String preprocessOnPaste(Project project, PsiFile file, Editor editor, String text, RawText rawText) {
+    Document document = editor.getDocument();
     PsiDocumentManager.getInstance(project).commitDocument(document);
-    final SelectionModel selectionModel = editor.getSelectionModel();
+    SelectionModel selectionModel = editor.getSelectionModel();
 
     // pastes in block selection mode (column mode) are not handled by a CopyPasteProcessor
-    final int selectionStart = selectionModel.getSelectionStart();
-    final int selectionEnd = selectionModel.getSelectionEnd();
+    int selectionStart = selectionModel.getSelectionStart();
+    int selectionEnd = selectionModel.getSelectionEnd();
     PsiElement token = findLiteralTokenType(file, selectionStart, selectionEnd);
     if (token == null) {
       return text;
@@ -138,7 +138,7 @@ public class StringLiteralCopyPasteProcessor implements CopyPastePreProcessor {
     if (isStringLiteral(token)) {
       StringBuilder buffer = new StringBuilder(text.length());
       @NonNls String breaker = getLineBreaker(token);
-      final String[] lines = LineTokenizer.tokenize(text.toCharArray(), false, true);
+      String[] lines = LineTokenizer.tokenize(text.toCharArray(), false, true);
       for (int i = 0; i < lines.length; i++) {
         buffer.append(escapeCharCharacters(lines[i], token));
         if (i != lines.length - 1) {
@@ -161,7 +161,7 @@ public class StringLiteralCopyPasteProcessor implements CopyPastePreProcessor {
 
   @Nullable
   protected PsiElement findLiteralTokenType(PsiFile file, int selectionStart, int selectionEnd) {
-    final PsiElement elementAtSelectionStart = file.findElementAt(selectionStart);
+    PsiElement elementAtSelectionStart = file.findElementAt(selectionStart);
     if (elementAtSelectionStart == null) {
       return null;
     }
@@ -170,7 +170,7 @@ public class StringLiteralCopyPasteProcessor implements CopyPastePreProcessor {
     }
 
     if (elementAtSelectionStart.getTextRange().getEndOffset() < selectionEnd) {
-      final PsiElement elementAtSelectionEnd = file.findElementAt(selectionEnd);
+      PsiElement elementAtSelectionEnd = file.findElementAt(selectionEnd);
       if (elementAtSelectionEnd == null) {
         return null;
       }
@@ -180,7 +180,7 @@ public class StringLiteralCopyPasteProcessor implements CopyPastePreProcessor {
       }
     }
 
-    final TextRange textRange = elementAtSelectionStart.getTextRange();
+    TextRange textRange = elementAtSelectionStart.getTextRange();
     if (selectionStart <= textRange.getStartOffset() || selectionEnd >= textRange.getEndOffset()) {
       return null;
     }

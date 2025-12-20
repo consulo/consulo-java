@@ -23,11 +23,11 @@ public abstract class FindParameterTest extends PsiTestCase {
             "  };" +
             "  System.out.println(i);" +
             "}";
-    final PsiManager psiManager = PsiManager.getInstance(myProject);
-    final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(psiManager.getProject()).getElementFactory();
-    final PsiMethod methodFromText = elementFactory.createMethodFromText(text, null);
-    final PsiParameter[] parameters = methodFromText.getParameterList().getParameters();
-    final PsiReference[] references =
+    PsiManager psiManager = PsiManager.getInstance(myProject);
+    PsiElementFactory elementFactory = JavaPsiFacade.getInstance(psiManager.getProject()).getElementFactory();
+    PsiMethod methodFromText = elementFactory.createMethodFromText(text, null);
+    PsiParameter[] parameters = methodFromText.getParameterList().getParameters();
+    PsiReference[] references =
       ReferencesSearch.search(parameters[0], new LocalSearchScope(methodFromText), false).toArray(new PsiReference[0]);
     Assert.assertEquals(references.length, 2);
   }

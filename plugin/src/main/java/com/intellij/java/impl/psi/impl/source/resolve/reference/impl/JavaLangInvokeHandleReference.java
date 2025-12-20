@@ -59,13 +59,13 @@ public class JavaLangInvokeHandleReference extends PsiReferenceBase<PsiLiteralEx
   @Nullable
   @Override
   public PsiElement resolve() {
-    final Object value = myElement.getValue();
+    Object value = myElement.getValue();
     if (value instanceof String) {
-      final String name = (String) value;
-      final String type = getMemberType(myElement);
+      String name = (String) value;
+      String type = getMemberType(myElement);
 
       if (type != null) {
-        final ReflectiveClass reflectiveClass = getReflectiveClass(myContext);
+        ReflectiveClass reflectiveClass = getReflectiveClass(myContext);
         if (reflectiveClass != null) {
           switch (type) {
             case FIND_GETTER:
@@ -94,24 +94,24 @@ public class JavaLangInvokeHandleReference extends PsiReferenceBase<PsiLiteralEx
   }
 
   private static PsiElement resolveField(@Nonnull String name, @Nonnull PsiClass psiClass, Condition<? super PsiField> filter) {
-    final PsiField field = psiClass.findFieldByName(name, true);
+    PsiField field = psiClass.findFieldByName(name, true);
     return field != null && filter.value(field) ? field : null;
   }
 
   private static PsiElement resolveMethod(@Nonnull String name, @Nonnull PsiClass psiClass, Condition<? super PsiMethod> filter) {
-    final PsiMethod[] methods = psiClass.findMethodsByName(name, true);
+    PsiMethod[] methods = psiClass.findMethodsByName(name, true);
     return ContainerUtil.find(methods, filter);
   }
 
   @Nonnull
   @Override
   public Object[] getVariants() {
-    final Object value = myElement.getValue();
+    Object value = myElement.getValue();
     if (value instanceof String) {
-      final String type = getMemberType(myElement);
+      String type = getMemberType(myElement);
 
       if (type != null) {
-        final ReflectiveClass reflectiveClass = getReflectiveClass(myContext);
+        ReflectiveClass reflectiveClass = getReflectiveClass(myContext);
         if (reflectiveClass != null) {
           switch (type) {
             case FIND_GETTER:
@@ -144,7 +144,7 @@ public class JavaLangInvokeHandleReference extends PsiReferenceBase<PsiLiteralEx
   }
 
   private Object[] lookupFields(@Nonnull PsiClass psiClass, Predicate<? super PsiField> filter) {
-    final Set<String> uniqueNames = new HashSet<>();
+    Set<String> uniqueNames = new HashSet<>();
     return Arrays.stream(psiClass.getAllFields()).filter(field -> field != null && (field.getContainingClass() == psiClass || !field.hasModifierProperty(PsiModifier.PRIVATE)) && field.getName()
         != null && uniqueNames.add(field.getName())).filter(filter).sorted(Comparator.comparing((PsiField field) -> isPublic(field) ? 0 : 1).thenComparing(PsiField::getName)).map(field ->
         withPriority(JavaLookupElementBuilder.forField(field).withInsertHandler(this), isPublic(field))).toArray();
@@ -168,18 +168,18 @@ public class JavaLangInvokeHandleReference extends PsiReferenceBase<PsiLiteralEx
 
   @Override
   public void handleInsert(@Nonnull InsertionContext context, @Nonnull LookupElement item) {
-    final Object object = item.getObject();
+    Object object = item.getObject();
 
     if (object instanceof PsiMethod) {
-      final ReflectiveSignature signature = getMethodSignature((PsiMethod) object);
+      ReflectiveSignature signature = getMethodSignature((PsiMethod) object);
       if (signature != null) {
-        final String text = ", " + getMethodTypeExpressionText(signature);
+        String text = ", " + getMethodTypeExpressionText(signature);
         replaceText(context, text);
       }
     } else if (object instanceof PsiField) {
-      final PsiField field = (PsiField) object;
-      final String typeText = getTypeText(field.getType());
-      final String text = ", " + typeText + ".class";
+      PsiField field = (PsiField) object;
+      String typeText = getTypeText(field.getType());
+      String text = ", " + typeText + ".class";
       replaceText(context, text);
     }
   }
@@ -189,12 +189,12 @@ public class JavaLangInvokeHandleReference extends PsiReferenceBase<PsiLiteralEx
     @Override
     public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context) {
       if (element instanceof PsiLiteralExpression) {
-        final PsiLiteralExpression literal = (PsiLiteralExpression) element;
+        PsiLiteralExpression literal = (PsiLiteralExpression) element;
         if (literal.getValue() instanceof String) {
-          final PsiElement parent = element.getParent();
+          PsiElement parent = element.getParent();
           if (parent instanceof PsiExpressionList) {
-            final PsiExpression[] expressions = ((PsiExpressionList) parent).getExpressions();
-            final PsiExpression qualifier = expressions.length != 0 ? expressions[0] : null;
+            PsiExpression[] expressions = ((PsiExpressionList) parent).getExpressions();
+            PsiExpression qualifier = expressions.length != 0 ? expressions[0] : null;
             if (qualifier != null) {
               return new PsiReference[]{new JavaLangInvokeHandleReference(literal, qualifier)};
             }

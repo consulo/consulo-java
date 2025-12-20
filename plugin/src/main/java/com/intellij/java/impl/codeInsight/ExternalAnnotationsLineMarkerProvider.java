@@ -74,7 +74,7 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
   @RequiredReadAction
   @Nullable
   @Override
-  public LineMarkerInfo getLineMarkerInfo(@Nonnull final PsiElement element) {
+  public LineMarkerInfo getLineMarkerInfo(@Nonnull PsiElement element) {
     PsiModifierListOwner owner = getAnnotationOwner(element);
     if (owner == null) {
       return null;
@@ -137,20 +137,20 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
     @RequiredUIAccess
     @Override
     public void navigate(MouseEvent e, PsiElement nameIdentifier) {
-      final PsiElement listOwner = nameIdentifier.getParent();
-      final PsiFile containingFile = listOwner.getContainingFile();
-      final VirtualFile virtualFile = PsiUtilCore.getVirtualFile(listOwner);
+      PsiElement listOwner = nameIdentifier.getParent();
+      PsiFile containingFile = listOwner.getContainingFile();
+      VirtualFile virtualFile = PsiUtilCore.getVirtualFile(listOwner);
 
       if (virtualFile != null && containingFile != null) {
-        final Project project = listOwner.getProject();
-        final Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+        Project project = listOwner.getProject();
+        Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
 
         if (editor != null) {
           editor.getCaretModel().moveToOffset(nameIdentifier.getTextOffset());
-          final PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
+          PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
 
           if (file != null && virtualFile.equals(file.getVirtualFile())) {
-            final JBPopup popup = createActionGroupPopup(containingFile, project, editor, e.getComponent());
+            JBPopup popup = createActionGroupPopup(containingFile, project, editor, e.getComponent());
             if (popup != null) {
               popup.show(new RelativePoint(e));
             }
@@ -161,15 +161,15 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
 
     @Nullable
     protected JBPopup createActionGroupPopup(PsiFile file, Project project, Editor editor, Component component) {
-      final ActionGroup.Builder group = ActionGroup.newImmutableBuilder();
-      for (final IntentionAction action : IntentionManager.getInstance().getAvailableIntentionActions()) {
+      ActionGroup.Builder group = ActionGroup.newImmutableBuilder();
+      for (IntentionAction action : IntentionManager.getInstance().getAvailableIntentionActions()) {
         if (shouldShowInGutterPopup(action) && action.isAvailable(project, editor, file)) {
           group.add(new ApplyIntentionAction(action, action.getText(), editor, file));
         }
       }
 
       if (!group.isEmpty()) {
-        final DataContext context = DataManager.getInstance().getDataContext(component);
+        DataContext context = DataManager.getInstance().getDataContext(component);
         return JBPopupFactory.getInstance().createActionGroupPopup(null, group.build(), context, JBPopupFactory.ActionSelectionAid.SPEEDSEARCH, true);
       }
 

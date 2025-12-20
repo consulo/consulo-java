@@ -55,7 +55,7 @@ public class AssignmentToStaticFieldFromInstanceMethodInspection extends BaseIns
             if (!WellFormednessUtils.isWellFormed(expression)) {
                 return;
             }
-            final PsiExpression lhs = expression.getLExpression();
+            PsiExpression lhs = expression.getLExpression();
             checkForStaticFieldAccess(lhs);
         }
 
@@ -63,12 +63,12 @@ public class AssignmentToStaticFieldFromInstanceMethodInspection extends BaseIns
         public void visitPrefixExpression(
             @Nonnull PsiPrefixExpression expression
         ) {
-            final IElementType tokenType = expression.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&
                 !tokenType.equals(JavaTokenType.MINUSMINUS)) {
                 return;
             }
-            final PsiExpression operand = expression.getOperand();
+            PsiExpression operand = expression.getOperand();
             if (operand == null) {
                 return;
             }
@@ -79,12 +79,12 @@ public class AssignmentToStaticFieldFromInstanceMethodInspection extends BaseIns
         public void visitPostfixExpression(
             @Nonnull PsiPostfixExpression expression
         ) {
-            final IElementType tokenType = expression.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&
                 !tokenType.equals(JavaTokenType.MINUSMINUS)) {
                 return;
             }
-            final PsiExpression operand = expression.getOperand();
+            PsiExpression operand = expression.getOperand();
             checkForStaticFieldAccess(operand);
         }
 
@@ -95,21 +95,21 @@ public class AssignmentToStaticFieldFromInstanceMethodInspection extends BaseIns
             if (isInStaticMethod(expression)) {
                 return;
             }
-            final PsiElement referent = ((PsiReference) expression).resolve();
+            PsiElement referent = ((PsiReference) expression).resolve();
             if (referent == null) {
                 return;
             }
             if (!(referent instanceof PsiField)) {
                 return;
             }
-            final PsiField fieldReferenced = (PsiField) referent;
+            PsiField fieldReferenced = (PsiField) referent;
             if (fieldReferenced.hasModifierProperty(PsiModifier.STATIC)) {
                 registerError(expression);
             }
         }
 
         private static boolean isInStaticMethod(PsiElement element) {
-            final PsiMember member =
+            PsiMember member =
                 PsiTreeUtil.getParentOfType(element,
                     PsiMethod.class, PsiClassInitializer.class
                 );

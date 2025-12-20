@@ -49,7 +49,7 @@ import static com.intellij.java.impl.codeInsight.daemon.impl.quickfix.CreateClas
  */
 public class CreateInnerClassFromUsageFix extends CreateClassFromUsageBaseFix implements SyntheticIntentionAction {
 
-  public CreateInnerClassFromUsageFix(final PsiJavaCodeReferenceElement refElement, final CreateClassKind kind) {
+  public CreateInnerClassFromUsageFix(PsiJavaCodeReferenceElement refElement, CreateClassKind kind) {
     super(kind, refElement);
   }
 
@@ -60,9 +60,9 @@ public class CreateInnerClassFromUsageFix extends CreateClassFromUsageBaseFix im
 
   @Override
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
-    final PsiJavaCodeReferenceElement element = getRefElement();
+    PsiJavaCodeReferenceElement element = getRefElement();
     assert element != null;
-    final String superClassName = getSuperClassName(element);
+    String superClassName = getSuperClassName(element);
     PsiClass[] targets = getPossibleTargets(element);
     LOG.assertTrue(targets.length > 0);
     if (targets.length == 1) {
@@ -74,12 +74,12 @@ public class CreateInnerClassFromUsageFix extends CreateClassFromUsageBaseFix im
   }
 
   @Override
-  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return super.isAvailable(project, editor, file) && getPossibleTargets(getRefElement()).length > 0;
   }
 
   @Nonnull
-  private static PsiClass[] getPossibleTargets(final PsiJavaCodeReferenceElement element) {
+  private static PsiClass[] getPossibleTargets(PsiJavaCodeReferenceElement element) {
     List<PsiClass> result = new ArrayList<PsiClass>();
     PsiElement run = element;
     PsiMember contextMember = PsiTreeUtil.getParentOfType(run, PsiMember.class);
@@ -98,8 +98,8 @@ public class CreateInnerClassFromUsageFix extends CreateClassFromUsageBaseFix im
   }
 
   private static boolean isUsedInExtends(PsiElement element, PsiClass psiClass) {
-    final PsiReferenceList extendsList = psiClass.getExtendsList();
-    final PsiReferenceList implementsList = psiClass.getImplementsList();
+    PsiReferenceList extendsList = psiClass.getExtendsList();
+    PsiReferenceList implementsList = psiClass.getImplementsList();
     if (extendsList != null && PsiTreeUtil.isAncestor(extendsList, element, false)) {
       return true;
     }
@@ -110,14 +110,14 @@ public class CreateInnerClassFromUsageFix extends CreateClassFromUsageBaseFix im
     return false;
   }
 
-  private void chooseTargetClass(PsiClass[] classes, final Editor editor, final String superClassName) {
+  private void chooseTargetClass(PsiClass[] classes, Editor editor, final String superClassName) {
     final Project project = classes[0].getProject();
 
     final JList list = new JBList(classes);
     PsiElementListCellRenderer renderer = new PsiClassListCellRenderer();
     list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     list.setCellRenderer(renderer);
-    final PopupChooserBuilder builder = new PopupChooserBuilder(list);
+    PopupChooserBuilder builder = new PopupChooserBuilder(list);
     renderer.installSpeedSearch(builder);
 
     Runnable runnable = new Runnable() {
@@ -154,7 +154,7 @@ public class CreateInnerClassFromUsageFix extends CreateClassFromUsageBaseFix im
     EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, popup);
   }
 
-  private void doInvoke(final PsiClass aClass, final String superClassName) throws IncorrectOperationException {
+  private void doInvoke(PsiClass aClass, String superClassName) throws IncorrectOperationException {
     PsiJavaCodeReferenceElement ref = getRefElement();
     assert ref != null;
     String refName = ref.getReferenceName();
@@ -163,7 +163,7 @@ public class CreateInnerClassFromUsageFix extends CreateClassFromUsageBaseFix im
     PsiClass created = myKind == INTERFACE
                       ? elementFactory.createInterface(refName)
                       : myKind == CLASS ? elementFactory.createClass(refName) : elementFactory.createEnum(refName);
-    final PsiModifierList modifierList = created.getModifierList();
+    PsiModifierList modifierList = created.getModifierList();
     LOG.assertTrue(modifierList != null);
     if (aClass.isInterface()) {
       modifierList.setModifierProperty(PsiModifier.PACKAGE_LOCAL, true);
@@ -176,7 +176,7 @@ public class CreateInnerClassFromUsageFix extends CreateClassFromUsageBaseFix im
     if (superClassName != null) {
       PsiJavaCodeReferenceElement superClass =
         elementFactory.createReferenceElementByFQClassName(superClassName, created.getResolveScope());
-      final PsiReferenceList extendsList = created.getExtendsList();
+      PsiReferenceList extendsList = created.getExtendsList();
       LOG.assertTrue(extendsList != null);
       extendsList.add(superClass);
     }

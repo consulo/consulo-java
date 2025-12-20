@@ -41,8 +41,8 @@ public class JavaRefactoringListenerManagerImpl extends JavaRefactoringListenerM
     myMoveMemberListeners.remove(moveMembersListener);
   }
 
-  public void fireMemberMoved(final PsiClass sourceClass, final PsiMember member) {
-    for (final MoveMemberListener listener : myMoveMemberListeners) {
+  public void fireMemberMoved(PsiClass sourceClass, PsiMember member) {
+    for (MoveMemberListener listener : myMoveMemberListeners) {
       listener.memberMoved(sourceClass, member);
     }
   }

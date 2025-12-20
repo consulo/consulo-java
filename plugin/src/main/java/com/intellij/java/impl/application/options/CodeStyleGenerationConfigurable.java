@@ -72,7 +72,7 @@ public class CodeStyleGenerationConfigurable implements Configurable {
     @RequiredUIAccess
     @Override
     public JComponent createComponent() {
-        final JPanel panel = ToolbarDecorator.createDecorator(myMembersOrderList).disableAddAction().disableRemoveAction().createPanel();
+        JPanel panel = ToolbarDecorator.createDecorator(myMembersOrderList).disableAddAction().disableRemoveAction().createPanel();
         myMembersPanel.add(panel, BorderLayout.CENTER);
         return myPanel;
     }
@@ -225,7 +225,7 @@ public class CodeStyleGenerationConfigurable implements Configurable {
             setVisibleRowCount(PROPERTIES.size());
         }
 
-        public void reset(final CodeStyleSettings settings) {
+        public void reset(CodeStyleSettings settings) {
             myModel.removeAllElements();
             for (String string : getPropertyNames(settings)) {
                 myModel.addElement(string);

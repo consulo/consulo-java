@@ -55,7 +55,7 @@ public class JavaWithIfSurrounder extends JavaStatementsSurrounder{
 
     ifStatement = (PsiIfStatement)container.addAfter(ifStatement, statements[statements.length - 1]);
 
-    final PsiStatement thenBranch = ifStatement.getThenBranch();
+    PsiStatement thenBranch = ifStatement.getThenBranch();
     if (thenBranch != null) {
       PsiCodeBlock thenBlock = ((PsiBlockStatement)thenBranch).getCodeBlock();
       SurroundWithUtil.indentCommentIfNecessary(thenBlock, statements);
@@ -68,7 +68,7 @@ public class JavaWithIfSurrounder extends JavaStatementsSurrounder{
       return null;
     }
 
-    final PsiExpression condition = ifStatement.getCondition();
+    PsiExpression condition = ifStatement.getCondition();
     if (condition != null) {
       TextRange range = condition.getTextRange();
       TextRange textRange = new TextRange(range.getStartOffset(), range.getStartOffset());

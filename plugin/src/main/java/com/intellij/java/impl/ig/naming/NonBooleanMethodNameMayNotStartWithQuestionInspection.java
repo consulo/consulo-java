@@ -89,16 +89,16 @@ public class NonBooleanMethodNameMayNotStartWithQuestionInspection extends BaseI
 
   @Override
   public JComponent createOptionsPanel() {
-    final JPanel panel = new JPanel(new BorderLayout());
-    final ListTable table = new ListTable(new ListWrappingTableModel(
+    JPanel panel = new JPanel(new BorderLayout());
+    ListTable table = new ListTable(new ListWrappingTableModel(
       questionList,
       InspectionGadgetsLocalize.booleanMethodNameMustStartWithQuestionTableColumnName().get()
     ));
-    final JPanel tablePanel = UiUtils.createAddRemovePanel(table);
+    JPanel tablePanel = UiUtils.createAddRemovePanel(table);
 
-    final CheckBox checkBox1 =
+    CheckBox checkBox1 =
       new CheckBox(InspectionGadgetsLocalize.ignoreMethodsWithBooleanReturnTypeOption().get(), this, "ignoreBooleanMethods");
-    final CheckBox checkBox2 =
+    CheckBox checkBox2 =
       new CheckBox(InspectionGadgetsLocalize.ignoreMethodsOverridingSuperMethod().get(), this, "onlyWarnOnBaseMethods");
 
     panel.add(tablePanel, BorderLayout.CENTER);
@@ -127,14 +127,14 @@ public class NonBooleanMethodNameMayNotStartWithQuestionInspection extends BaseI
     @Override
     public void visitMethod(@Nonnull PsiMethod method) {
       super.visitMethod(method);
-      final PsiType returnType = method.getReturnType();
+      PsiType returnType = method.getReturnType();
       if (returnType == null || returnType.equals(PsiType.BOOLEAN)) {
         return;
       }
       if (ignoreBooleanMethods && returnType.equalsToText(CommonClassNames.JAVA_LANG_BOOLEAN)) {
         return;
       }
-      final String name = method.getName();
+      String name = method.getName();
       boolean startsWithQuestionWord = false;
       for (String question : questionList) {
         if (name.startsWith(question)) {
@@ -142,7 +142,7 @@ public class NonBooleanMethodNameMayNotStartWithQuestionInspection extends BaseI
             startsWithQuestionWord = true;
             break;
           }
-          final char nextChar = name.charAt(question.length());
+          char nextChar = name.charAt(question.length());
           if (Character.isUpperCase(nextChar) || nextChar == '_') {
             startsWithQuestionWord = true;
             break;

@@ -63,26 +63,26 @@ public class NumberEqualityInspection extends BaseInspection {
             @Nonnull PsiBinaryExpression expression
         ) {
             super.visitBinaryExpression(expression);
-            final PsiExpression rhs = expression.getROperand();
+            PsiExpression rhs = expression.getROperand();
             if (rhs == null) {
                 return;
             }
             if (!ComparisonUtils.isEqualityComparison(expression)) {
                 return;
             }
-            final PsiExpression lhs = expression.getLOperand();
+            PsiExpression lhs = expression.getLOperand();
             if (!hasNumberType(lhs) || !hasNumberType(rhs)) {
                 return;
             }
-            final String lhsText = lhs.getText();
+            String lhsText = lhs.getText();
             if (PsiKeyword.NULL.equals(lhsText)) {
                 return;
             }
-            final String rhsText = rhs.getText();
+            String rhsText = rhs.getText();
             if (PsiKeyword.NULL.equals(rhsText)) {
                 return;
             }
-            final PsiJavaToken sign = expression.getOperationSign();
+            PsiJavaToken sign = expression.getOperationSign();
             registerError(sign);
         }
 

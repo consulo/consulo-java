@@ -85,16 +85,16 @@ public class UnnecessaryBlockStatementInspection extends BaseInspection {
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement leftBrace = descriptor.getPsiElement();
-            final PsiElement parent = leftBrace.getParent();
+            PsiElement leftBrace = descriptor.getPsiElement();
+            PsiElement parent = leftBrace.getParent();
             if (!(parent instanceof PsiCodeBlock)) {
                 return;
             }
-            final PsiCodeBlock block = (PsiCodeBlock) parent;
-            final PsiBlockStatement blockStatement = (PsiBlockStatement) block.getParent();
-            final PsiElement[] children = block.getChildren();
+            PsiCodeBlock block = (PsiCodeBlock) parent;
+            PsiBlockStatement blockStatement = (PsiBlockStatement) block.getParent();
+            PsiElement[] children = block.getChildren();
             if (children.length > 2) {
-                final PsiElement element = blockStatement.getParent();
+                PsiElement element = blockStatement.getParent();
                 element.addRangeBefore(children[1], children[children.length - 2], blockStatement);
             }
             blockStatement.delete();
@@ -106,27 +106,27 @@ public class UnnecessaryBlockStatementInspection extends BaseInspection {
         public void visitBlockStatement(PsiBlockStatement blockStatement) {
             super.visitBlockStatement(blockStatement);
             if (ignoreSwitchBranches) {
-                final PsiElement prevStatement = PsiTreeUtil.skipSiblingsBackward(blockStatement, PsiWhiteSpace.class);
+                PsiElement prevStatement = PsiTreeUtil.skipSiblingsBackward(blockStatement, PsiWhiteSpace.class);
                 if (prevStatement instanceof PsiSwitchLabelStatement) {
                     return;
                 }
             }
-            final PsiElement parent = blockStatement.getParent();
+            PsiElement parent = blockStatement.getParent();
             if (!(parent instanceof PsiCodeBlock)) {
                 return;
             }
-            final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
-            final PsiJavaToken brace = codeBlock.getLBrace();
+            PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
+            PsiJavaToken brace = codeBlock.getLBrace();
             if (brace == null) {
                 return;
             }
-            final PsiCodeBlock parentBlock = (PsiCodeBlock) parent;
+            PsiCodeBlock parentBlock = (PsiCodeBlock) parent;
             if (parentBlock.getStatements().length > 1 &&
                 VariableSearchUtils.containsConflictingDeclarations(codeBlock, parentBlock)) {
                 return;
             }
             registerError(brace);
-            final PsiJavaToken rbrace = codeBlock.getRBrace();
+            PsiJavaToken rbrace = codeBlock.getRBrace();
             if (rbrace != null) {
                 registerError(rbrace);
             }

@@ -41,7 +41,7 @@ public abstract class ExceptionVariablesInferenceTest extends LightDaemonAnalyze
     doTest(false);
   }
 
-  private void doTest(final boolean checkWarnings) throws Exception {
+  private void doTest(boolean checkWarnings) throws Exception {
     doTest(BASE_PATH + "/" + getTestName(false) + ".java", checkWarnings, false);
   }
 }

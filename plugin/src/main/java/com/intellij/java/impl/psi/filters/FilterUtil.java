@@ -58,7 +58,7 @@ public class FilterUtil {
     return null;
   }
 
-  public static PsiType getKeywordItemType(PsiElement context, final String keyword) {
+  public static PsiType getKeywordItemType(PsiElement context, String keyword) {
     if (PsiKeyword.CLASS.equals(keyword)) {
       return PsiType.getJavaLangClass(context.getManager(), context.getResolveScope());
     } else if (PsiKeyword.TRUE.equals(keyword) || PsiKeyword.FALSE.equals(keyword)) {
@@ -69,7 +69,7 @@ public class FilterUtil {
         previousElement = getPreviousElement(previousElement, false);
         assert previousElement != null;
 
-        final String className = previousElement.getText();
+        String className = previousElement.getText();
         PsiElement walker = context;
         while (walker != null) {
           if (walker instanceof PsiClass && !(walker instanceof PsiAnonymousClass)) {
@@ -79,7 +79,7 @@ public class FilterUtil {
           walker = walker.getContext();
         }
       } else {
-        final PsiClass owner = PsiTreeUtil.getContextOfType(context, PsiClass.class, true);
+        PsiClass owner = PsiTreeUtil.getContextOfType(context, PsiClass.class, true);
         return getTypeByElement(owner, context);
       }
     }
@@ -87,7 +87,7 @@ public class FilterUtil {
   }
 
   @Nullable
-  public static PsiElement getPreviousElement(final PsiElement element, boolean skipReference) {
+  public static PsiElement getPreviousElement(PsiElement element, boolean skipReference) {
     PsiElement prev = element;
     if (element != null) {
       if (skipReference) {

@@ -386,7 +386,7 @@ public abstract class ExtractMethodTest extends LightCodeInsightTestCase {
   }
 
   public void testForceBraces() throws Exception {
-    final CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(getProject());
+    CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(getProject());
     int old = settings.IF_BRACE_FORCE;
     settings.IF_BRACE_FORCE = CodeStyleSettings.FORCE_BRACES_ALWAYS;
     try {
@@ -420,7 +420,7 @@ public abstract class ExtractMethodTest extends LightCodeInsightTestCase {
     doTest();
   }
 
-  private void doChainedConstructorTest(final boolean replaceAllDuplicates) throws Exception {
+  private void doChainedConstructorTest(boolean replaceAllDuplicates) throws Exception {
     configureByFile(BASE_PATH + getTestName(false) + ".java");
     boolean success = performExtractMethod(true, replaceAllDuplicates, getEditor(), getFile(), getProject(), true);
     assertTrue(success);
@@ -428,7 +428,7 @@ public abstract class ExtractMethodTest extends LightCodeInsightTestCase {
   }
 
   public void testReassignedVarAfterCall() throws Exception {
-    final CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(getProject());
+    CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(getProject());
     boolean oldGenerateFinalLocals = settings.GENERATE_FINAL_LOCALS;
     try {
       settings.GENERATE_FINAL_LOCALS = true;
@@ -584,7 +584,7 @@ public abstract class ExtractMethodTest extends LightCodeInsightTestCase {
   }
 
   private void doTestDisabledParam() throws PrepareFailedException {
-    final CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(getProject());
+    CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(getProject());
     settings.ELSE_ON_NEW_LINE = true;
     settings.CATCH_ON_NEW_LINE = myCatchOnNewLine;
     configureByFile(BASE_PATH + getTestName(false) + ".java");
@@ -593,7 +593,7 @@ public abstract class ExtractMethodTest extends LightCodeInsightTestCase {
     checkResultByFile(BASE_PATH + getTestName(false) + "_after.java");
   }
 
-  private void doPrepareErrorTest(final String expectedMessage) throws Exception {
+  private void doPrepareErrorTest(String expectedMessage) throws Exception {
     String expectedError = null;
     try {
       doExitPointsTest(false);
@@ -612,7 +612,7 @@ public abstract class ExtractMethodTest extends LightCodeInsightTestCase {
   }
 
   void doTest() throws Exception {
-    final CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(getProject());
+    CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(getProject());
     settings.ELSE_ON_NEW_LINE = true;
     settings.CATCH_ON_NEW_LINE = myCatchOnNewLine;
     doTest(true);
@@ -635,7 +635,7 @@ public abstract class ExtractMethodTest extends LightCodeInsightTestCase {
   }
 
   public static boolean performExtractMethod(boolean doRefactor, boolean replaceAllDuplicates, Editor editor, PsiFile file, Project project,
-                                             final boolean extractChainedConstructor)
+                                             boolean extractChainedConstructor)
     throws PrepareFailedException, IncorrectOperationException {
     return performExtractMethod(doRefactor, replaceAllDuplicates, editor, file, project, extractChainedConstructor, null);
   }
@@ -645,7 +645,7 @@ public abstract class ExtractMethodTest extends LightCodeInsightTestCase {
                                              Editor editor,
                                              PsiFile file,
                                              Project project,
-                                             final boolean extractChainedConstructor,
+                                             boolean extractChainedConstructor,
                                              int... disabledParams)
     throws PrepareFailedException, IncorrectOperationException {
     int startOffset = editor.getSelectionModel().getSelectionStart();
@@ -660,14 +660,14 @@ public abstract class ExtractMethodTest extends LightCodeInsightTestCase {
       elements = CodeInsightUtil.findStatementsInRange(file, startOffset, endOffset);
     }
     if (elements.length == 0) {
-      final PsiExpression expression = IntroduceVariableBase.getSelectedExpression(project, file, startOffset, endOffset);
+      PsiExpression expression = IntroduceVariableBase.getSelectedExpression(project, file, startOffset, endOffset);
       if (expression != null) {
         elements = new PsiElement[]{expression};
       }
     }
     assertTrue(elements.length > 0);
 
-    final ExtractMethodProcessor processor =
+    ExtractMethodProcessor processor =
       new ExtractMethodProcessor(project, editor, elements, null, "Extract Method", "newMethod", null);
     processor.setShowErrorDialogs(false);
     processor.setChainedConstructor(extractChainedConstructor);
@@ -687,8 +687,8 @@ public abstract class ExtractMethodTest extends LightCodeInsightTestCase {
     }
 
     if (replaceAllDuplicates) {
-      final List<Match> duplicates = processor.getDuplicates();
-      for (final Match match : duplicates) {
+      List<Match> duplicates = processor.getDuplicates();
+      for (Match match : duplicates) {
         if (!match.getMatchStart().isValid() || !match.getMatchEnd().isValid()) continue;
         PsiDocumentManager.getInstance(project).commitAllDocuments();
         processor.processMatch(match);

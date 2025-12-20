@@ -26,8 +26,8 @@ import consulo.language.psi.PsiFile;
  */
 public class JavaTemplateLookupSelectionHandler implements TemplateLookupSelectionHandler {
   @Override
-  public void itemSelected(final LookupElement item,
-                           final PsiFile psiFile, final Document document, final int segmentStart, final int segmentEnd) {
+  public void itemSelected(LookupElement item,
+                           PsiFile psiFile, Document document, int segmentStart, int segmentEnd) {
     JavaTemplateUtilImpl.updateTypeBindings(item.getObject(), psiFile, document, segmentStart, segmentEnd);
   }
 }

@@ -48,15 +48,15 @@ public class MergeNestedTryStatementsIntention extends Intention {
 
     @Override
     protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-        final PsiTryStatement tryStatement1 = (PsiTryStatement) element.getParent();
-        final StringBuilder newTryStatement = new StringBuilder("try ");
-        final PsiResourceList list1 = tryStatement1.getResourceList();
+        PsiTryStatement tryStatement1 = (PsiTryStatement) element.getParent();
+        StringBuilder newTryStatement = new StringBuilder("try ");
+        PsiResourceList list1 = tryStatement1.getResourceList();
         boolean semicolon = false;
         boolean resourceList = false;
         if (list1 != null) {
             resourceList = true;
             newTryStatement.append('(');
-            final List<PsiResourceVariable> variables1 = list1.getResourceVariables();
+            List<PsiResourceVariable> variables1 = list1.getResourceVariables();
             for (PsiResourceVariable variable : variables1) {
                 if (semicolon) {
                     newTryStatement.append(';');
@@ -67,22 +67,22 @@ public class MergeNestedTryStatementsIntention extends Intention {
                 newTryStatement.append(variable.getText());
             }
         }
-        final PsiCodeBlock tryBlock1 = tryStatement1.getTryBlock();
+        PsiCodeBlock tryBlock1 = tryStatement1.getTryBlock();
         if (tryBlock1 == null) {
             return;
         }
-        final PsiStatement[] statements = tryBlock1.getStatements();
+        PsiStatement[] statements = tryBlock1.getStatements();
         if (statements.length != 1) {
             return;
         }
-        final PsiTryStatement tryStatement2 = (PsiTryStatement) statements[0];
-        final PsiResourceList list2 = tryStatement2.getResourceList();
+        PsiTryStatement tryStatement2 = (PsiTryStatement) statements[0];
+        PsiResourceList list2 = tryStatement2.getResourceList();
         if (list2 != null) {
             if (!resourceList) {
                 newTryStatement.append('(');
             }
             resourceList = true;
-            final List<PsiResourceVariable> variables2 = list2.getResourceVariables();
+            List<PsiResourceVariable> variables2 = list2.getResourceVariables();
             for (PsiResourceVariable variable : variables2) {
                 if (semicolon) {
                     newTryStatement.append(';');
@@ -96,21 +96,21 @@ public class MergeNestedTryStatementsIntention extends Intention {
         if (resourceList) {
             newTryStatement.append(")");
         }
-        final PsiCodeBlock tryBlock2 = tryStatement2.getTryBlock();
+        PsiCodeBlock tryBlock2 = tryStatement2.getTryBlock();
         if (tryBlock2 == null) {
             return;
         }
         newTryStatement.append(tryBlock2.getText());
-        final PsiCatchSection[] catchSections2 = tryStatement2.getCatchSections();
+        PsiCatchSection[] catchSections2 = tryStatement2.getCatchSections();
         for (PsiCatchSection section : catchSections2) {
             newTryStatement.append(section.getText());
         }
-        final PsiCatchSection[] catchSections1 = tryStatement1.getCatchSections();
+        PsiCatchSection[] catchSections1 = tryStatement1.getCatchSections();
         for (PsiCatchSection section : catchSections1) {
             newTryStatement.append(section.getText());
         }
-        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
-        final PsiStatement newStatement = factory.createStatementFromText(newTryStatement.toString(), element);
+        PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
+        PsiStatement newStatement = factory.createStatementFromText(newTryStatement.toString(), element);
         tryStatement1.replace(newStatement);
     }
 }

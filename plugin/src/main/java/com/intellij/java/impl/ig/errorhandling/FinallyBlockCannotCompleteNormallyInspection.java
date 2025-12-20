@@ -62,16 +62,16 @@ public class FinallyBlockCannotCompleteNormallyInspection extends BaseInspection
         @Override
         public void visitTryStatement(@Nonnull PsiTryStatement statement) {
             super.visitTryStatement(statement);
-            final PsiCodeBlock finallyBlock = statement.getFinallyBlock();
+            PsiCodeBlock finallyBlock = statement.getFinallyBlock();
             if (finallyBlock == null) {
                 return;
             }
             if (ControlFlowUtils.codeBlockMayCompleteNormally(finallyBlock)) {
                 return;
             }
-            final PsiElement[] children = statement.getChildren();
-            for (final PsiElement child : children) {
-                final String childText = child.getText();
+            PsiElement[] children = statement.getChildren();
+            for (PsiElement child : children) {
+                String childText = child.getText();
                 if (PsiKeyword.FINALLY.equals(childText)) {
                     registerError(child);
                     return;

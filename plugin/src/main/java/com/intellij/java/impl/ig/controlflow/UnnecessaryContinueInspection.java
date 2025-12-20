@@ -71,22 +71,22 @@ public class UnnecessaryContinueInspection extends BaseInspection {
       /*if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
         return;
       }   */
-            final PsiStatement continuedStatement = statement.findContinuedStatement();
+            PsiStatement continuedStatement = statement.findContinuedStatement();
             PsiStatement body = null;
             if (continuedStatement instanceof PsiForeachStatement) {
-                final PsiForeachStatement foreachStatement = (PsiForeachStatement) continuedStatement;
+                PsiForeachStatement foreachStatement = (PsiForeachStatement) continuedStatement;
                 body = foreachStatement.getBody();
             }
             else if (continuedStatement instanceof PsiForStatement) {
-                final PsiForStatement forStatement = (PsiForStatement) continuedStatement;
+                PsiForStatement forStatement = (PsiForStatement) continuedStatement;
                 body = forStatement.getBody();
             }
             else if (continuedStatement instanceof PsiDoWhileStatement) {
-                final PsiDoWhileStatement doWhileStatement = (PsiDoWhileStatement) continuedStatement;
+                PsiDoWhileStatement doWhileStatement = (PsiDoWhileStatement) continuedStatement;
                 body = doWhileStatement.getBody();
             }
             else if (continuedStatement instanceof PsiWhileStatement) {
-                final PsiWhileStatement whileStatement = (PsiWhileStatement) continuedStatement;
+                PsiWhileStatement whileStatement = (PsiWhileStatement) continuedStatement;
                 body = whileStatement.getBody();
             }
             if (body == null) {
@@ -96,8 +96,8 @@ public class UnnecessaryContinueInspection extends BaseInspection {
                 return;
             }
             if (body instanceof PsiBlockStatement) {
-                final PsiBlockStatement blockStatement = (PsiBlockStatement) body;
-                final PsiCodeBlock block = blockStatement.getCodeBlock();
+                PsiBlockStatement blockStatement = (PsiBlockStatement) body;
+                PsiCodeBlock block = blockStatement.getCodeBlock();
                 if (ControlFlowUtils.blockCompletesWithStatement(block, statement)) {
                     registerStatementError(statement);
                 }
@@ -108,12 +108,12 @@ public class UnnecessaryContinueInspection extends BaseInspection {
         }
 
         private boolean isInThenBranch(PsiStatement statement) {
-            final PsiIfStatement ifStatement =
+            PsiIfStatement ifStatement =
                 PsiTreeUtil.getParentOfType(statement, PsiIfStatement.class, true, PsiMethod.class, PsiLambdaExpression.class);
             if (ifStatement == null) {
                 return false;
             }
-            final PsiStatement elseBranch = ifStatement.getElseBranch();
+            PsiStatement elseBranch = ifStatement.getElseBranch();
             return elseBranch != null && !PsiTreeUtil.isAncestor(elseBranch, statement, true);
         }
     }

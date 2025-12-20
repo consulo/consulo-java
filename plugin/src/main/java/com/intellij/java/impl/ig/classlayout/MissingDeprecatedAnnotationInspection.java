@@ -63,14 +63,14 @@ public class MissingDeprecatedAnnotationInspection extends BaseInspection {
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) {
-            final PsiElement identifier = descriptor.getPsiElement();
-            final PsiModifierListOwner parent = (PsiModifierListOwner) identifier.getParent();
+            PsiElement identifier = descriptor.getPsiElement();
+            PsiModifierListOwner parent = (PsiModifierListOwner) identifier.getParent();
             if (parent == null) {
                 return;
             }
-            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-            final PsiAnnotation annotation = factory.createAnnotationFromText("@java.lang.Deprecated", parent);
-            final PsiModifierList modifierList = parent.getModifierList();
+            PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+            PsiAnnotation annotation = factory.createAnnotationFromText("@java.lang.Deprecated", parent);
+            PsiModifierList modifierList = parent.getModifierList();
             if (modifierList == null) {
                 return;
             }
@@ -123,20 +123,20 @@ public class MissingDeprecatedAnnotationInspection extends BaseInspection {
         }
 
         private static boolean hasDeprecatedAnnotation(PsiModifierListOwner element) {
-            final PsiModifierList modifierList = element.getModifierList();
+            PsiModifierList modifierList = element.getModifierList();
             if (modifierList == null) {
                 return false;
             }
-            final PsiAnnotation annotation = modifierList.findAnnotation(CommonClassNames.JAVA_LANG_DEPRECATED);
+            PsiAnnotation annotation = modifierList.findAnnotation(CommonClassNames.JAVA_LANG_DEPRECATED);
             return annotation != null;
         }
 
         private static boolean hasDeprecatedComment(PsiDocCommentOwner element) {
-            final PsiDocComment comment = element.getDocComment();
+            PsiDocComment comment = element.getDocComment();
             if (comment == null) {
                 return false;
             }
-            final PsiDocTag deprecatedTag = comment.findTagByName("deprecated");
+            PsiDocTag deprecatedTag = comment.findTagByName("deprecated");
             return deprecatedTag != null;
         }
     }

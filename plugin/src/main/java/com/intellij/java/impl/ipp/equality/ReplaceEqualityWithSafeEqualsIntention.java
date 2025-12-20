@@ -48,29 +48,29 @@ public class ReplaceEqualityWithSafeEqualsIntention extends Intention {
 
     public void processIntention(PsiElement element)
         throws IncorrectOperationException {
-        final PsiBinaryExpression exp =
+        PsiBinaryExpression exp =
             (PsiBinaryExpression) element;
-        final PsiExpression lhs = exp.getLOperand();
-        final PsiExpression rhs = exp.getROperand();
+        PsiExpression lhs = exp.getLOperand();
+        PsiExpression rhs = exp.getROperand();
         if (rhs == null) {
             return;
         }
-        final PsiExpression strippedLhs =
+        PsiExpression strippedLhs =
             ParenthesesUtils.stripParentheses(lhs);
         if (strippedLhs == null) {
             return;
         }
-        final PsiExpression strippedRhs =
+        PsiExpression strippedRhs =
             ParenthesesUtils.stripParentheses(rhs);
         if (strippedRhs == null) {
             return;
         }
-        final String lhsText = strippedLhs.getText();
-        final String rhsText = strippedRhs.getText();
-        final PsiJavaToken operationSign = exp.getOperationSign();
-        final IElementType tokenType = operationSign.getTokenType();
-        final String signText = operationSign.getText();
-        @NonNls final StringBuilder buffer = new StringBuilder(lhsText);
+        String lhsText = strippedLhs.getText();
+        String rhsText = strippedRhs.getText();
+        PsiJavaToken operationSign = exp.getOperationSign();
+        IElementType tokenType = operationSign.getTokenType();
+        String signText = operationSign.getText();
+        @NonNls StringBuilder buffer = new StringBuilder(lhsText);
         buffer.append("==null?");
         buffer.append(rhsText);
         buffer.append(signText);

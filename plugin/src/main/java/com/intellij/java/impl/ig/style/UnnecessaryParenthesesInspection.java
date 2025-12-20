@@ -54,7 +54,7 @@ public abstract class UnnecessaryParenthesesInspection extends BaseInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
+        MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
         optionsPanel.addCheckbox(InspectionGadgetsLocalize.unnecessaryParenthesesOption().get(), "ignoreClarifyingParentheses");
         optionsPanel.addCheckbox(
             InspectionGadgetsLocalize.unnecessaryParenthesesConditionalOption().get(),
@@ -80,12 +80,12 @@ public abstract class UnnecessaryParenthesesInspection extends BaseInspection {
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) {
-            final PsiElement element = descriptor.getPsiElement();
+            PsiElement element = descriptor.getPsiElement();
             if (element instanceof PsiParameterList) {
-                final PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
-                final PsiParameterList parameterList = (PsiParameterList) element;
-                final String text = parameterList.getParameters()[0].getName() + "->{}";
-                final PsiLambdaExpression expression = (PsiLambdaExpression) factory.createExpressionFromText(text, element);
+                PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
+                PsiParameterList parameterList = (PsiParameterList) element;
+                String text = parameterList.getParameters()[0].getName() + "->{}";
+                PsiLambdaExpression expression = (PsiLambdaExpression) factory.createExpressionFromText(text, element);
                 element.replace(expression.getParameterList());
             }
             else {
@@ -104,7 +104,7 @@ public abstract class UnnecessaryParenthesesInspection extends BaseInspection {
         public void visitParameterList(PsiParameterList list) {
             super.visitParameterList(list);
             if (!ignoreParenthesesOnLambdaParameter && list.getParent() instanceof PsiLambdaExpression && list.getParametersCount() == 1) {
-                final PsiParameter parameter = list.getParameters()[0];
+                PsiParameter parameter = list.getParameters()[0];
                 if (parameter.getTypeElement() == null && list.getFirstChild() != parameter && list.getLastChild() != parameter) {
                     registerError(list);
                 }
@@ -113,13 +113,13 @@ public abstract class UnnecessaryParenthesesInspection extends BaseInspection {
 
         @Override
         public void visitParenthesizedExpression(PsiParenthesizedExpression expression) {
-            final PsiElement parent = expression.getParent();
+            PsiElement parent = expression.getParent();
             if (parent instanceof PsiParenthesizedExpression) {
                 return;
             }
             if (ignoreParenthesesOnConditionals && parent instanceof PsiConditionalExpression) {
-                final PsiConditionalExpression conditionalExpression = (PsiConditionalExpression) parent;
-                final PsiExpression condition = conditionalExpression.getCondition();
+                PsiConditionalExpression conditionalExpression = (PsiConditionalExpression) parent;
+                PsiExpression condition = conditionalExpression.getCondition();
                 if (expression == condition) {
                     return;
                 }

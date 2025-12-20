@@ -56,11 +56,11 @@ public class ClassWithoutConstructorInspection extends BaseInspection {
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement classIdentifier = descriptor.getPsiElement();
-            final PsiClass aClass = (PsiClass) classIdentifier.getParent();
-            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-            final PsiMethod constructor = factory.createConstructor();
-            final PsiModifierList modifierList = constructor.getModifierList();
+            PsiElement classIdentifier = descriptor.getPsiElement();
+            PsiClass aClass = (PsiClass) classIdentifier.getParent();
+            PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+            PsiMethod constructor = factory.createConstructor();
+            PsiModifierList modifierList = constructor.getModifierList();
             if (aClass == null) {
                 return;
             }
@@ -80,7 +80,7 @@ public class ClassWithoutConstructorInspection extends BaseInspection {
                 modifierList.setModifierProperty(PsiModifier.PUBLIC, false);
             }
             aClass.add(constructor);
-            final CodeStyleManager styleManager = CodeStyleManager.getInstance(project);
+            CodeStyleManager styleManager = CodeStyleManager.getInstance(project);
             styleManager.reformat(constructor);
         }
     }
@@ -104,7 +104,7 @@ public class ClassWithoutConstructorInspection extends BaseInspection {
                 aClass instanceof PsiAnonymousClass) {
                 return;
             }
-            final PsiMethod[] constructors = aClass.getConstructors();
+            PsiMethod[] constructors = aClass.getConstructors();
             if (constructors.length > 0) {
                 return;
             }

@@ -63,7 +63,7 @@ public class CreateLocalFromUsageFix extends CreateVarFromUsageFix {
   }
 
   @Override
-  protected void invokeImpl(final PsiClass targetClass) {
+  protected void invokeImpl(PsiClass targetClass) {
     if (CreateFromUsageUtils.isValidReference(myReferenceExpression, false)) {
       return;
     }
@@ -95,10 +95,10 @@ public class CreateLocalFromUsageFix extends CreateVarFromUsageFix {
     TypeExpression expression = new TypeExpression(project, expectedTypes);
 
     if (isInline) {
-      final PsiExpression expr = ((PsiExpressionStatement)anchor).getExpression();
-      final PsiElement semicolon = expr.getNextSibling();
+      PsiExpression expr = ((PsiExpressionStatement)anchor).getExpression();
+      PsiElement semicolon = expr.getNextSibling();
       if (semicolon != null) {
-        final PsiElement nextSibling = semicolon.getNextSibling();
+        PsiElement nextSibling = semicolon.getNextSibling();
         if (nextSibling != null) {
           decl.addRange(nextSibling, anchor.getLastChild());
         }
@@ -130,7 +130,7 @@ public class CreateLocalFromUsageFix extends CreateVarFromUsageFix {
       @Override
       public void templateFinished(Template template, boolean brokenOff) {
         PsiDocumentManager.getInstance(project).commitDocument(newEditor.getDocument());
-        final int offset = newEditor.getCaretModel().getOffset();
+        int offset = newEditor.getCaretModel().getOffset();
         final PsiLocalVariable localVariable = PsiTreeUtil.findElementOfClassAtOffset(targetFile, offset, PsiLocalVariable.class, false);
         if (localVariable != null) {
           ApplicationManager.getApplication().runWriteAction(new Runnable() {
@@ -158,7 +158,7 @@ public class CreateLocalFromUsageFix extends CreateVarFromUsageFix {
       minOffset = Math.min(minOffset, expressionOccurences[i].getTextRange().getStartOffset());
     }
 
-    final PsiCodeBlock block = PsiTreeUtil.getParentOfType(parent, PsiCodeBlock.class, false);
+    PsiCodeBlock block = PsiTreeUtil.getParentOfType(parent, PsiCodeBlock.class, false);
     LOG.assertTrue(block != null && block.getStatements().length > 0, "block: " + block + "; parent: " + parent);
     PsiStatement[] statements = block.getStatements();
     for (int i = 1; i < statements.length; i++) {

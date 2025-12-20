@@ -138,7 +138,7 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
         @Nonnull PsiElement startElement,
         @Nonnull PsiElement endElement
     ) {
-        final PsiModifierList myModifierList = (PsiModifierList)startElement;
+        PsiModifierList myModifierList = (PsiModifierList)startElement;
         PsiVariable variable = myVariable == null ? null : myVariable.getElement();
         return myModifierList.isValid()
             && myModifierList.getManager().isInProject(myModifierList)
@@ -164,14 +164,14 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
         @Nonnull PsiElement startElement,
         @Nonnull PsiElement endElement
     ) {
-        final PsiModifierList myModifierList = (PsiModifierList)startElement;
-        final PsiVariable variable = myVariable == null ? null : myVariable.getElement();
+        PsiModifierList myModifierList = (PsiModifierList)startElement;
+        PsiVariable variable = myVariable == null ? null : myVariable.getElement();
         if (!FileModificationService.getInstance().preparePsiElementForWrite(myModifierList)) {
             return;
         }
-        final List<PsiModifierList> modifierLists = new ArrayList<>();
-        final PsiFile containingFile = myModifierList.getContainingFile();
-        final PsiModifierList modifierList;
+        List<PsiModifierList> modifierLists = new ArrayList<>();
+        PsiFile containingFile = myModifierList.getContainingFile();
+        PsiModifierList modifierList;
         if (variable != null && variable.isValid()) {
             project.getApplication().runWriteAction(() -> {
                 try {
@@ -191,7 +191,7 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
         if (owner instanceof PsiMethod method) {
             PsiModifierList copy = (PsiModifierList)myModifierList.copy();
             changeModifierList(copy);
-            final int accessLevel = PsiUtil.getAccessLevel(copy);
+            int accessLevel = PsiUtil.getAccessLevel(copy);
 
             OverridingMethodsSearch.search(method, owner.getResolveScope(), true)
                 .forEach(new PsiElementProcessorAdapter<>((PsiElementProcessor<PsiMethod>)inheritor -> {
@@ -219,7 +219,7 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
                         return;
                     }
 
-                    for (final PsiModifierList modifierList1 : modifierLists) {
+                    for (PsiModifierList modifierList1 : modifierLists) {
                         changeModifierList(modifierList1);
                     }
                 });

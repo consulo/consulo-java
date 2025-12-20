@@ -24,7 +24,7 @@ public abstract class FixMethodJavadocTest extends FileSetTestCase {
   }
 
   private static String findPath() {
-    final URL res = FixMethodJavadocTest.class.getResource("/" + FixMethodJavadocTest.class.getName().replace('.', '/') + ".class");
+    URL res = FixMethodJavadocTest.class.getResource("/" + FixMethodJavadocTest.class.getName().replace('.', '/') + ".class");
     File f = new File(res.getFile());
     String result = f.getParent() + File.separatorChar + "methodJavaDocData";
     result = result.replaceAll("classes", "");
@@ -33,12 +33,12 @@ public abstract class FixMethodJavadocTest extends FileSetTestCase {
 
   @Override
   public String transform(String testName, String[] data) throws Exception {
-    final PsiManager manager = PsiManager.getInstance(myProject);
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-    final PsiMethod method = factory.createMethodFromText(data[0], null);
-    final HashSet<PsiParameter> newParameters = new HashSet<PsiParameter>();
+    PsiManager manager = PsiManager.getInstance(myProject);
+    PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
+    PsiMethod method = factory.createMethodFromText(data[0], null);
+    HashSet<PsiParameter> newParameters = new HashSet<PsiParameter>();
     if (data.length == 2) {
-      final String[] strings = data[1].split("\\s+");
+      String[] strings = data[1].split("\\s+");
       collectNewParameters(method, strings, newParameters);
     }
     RefactoringUtil.fixJavadocsForParams(method, newParameters);
@@ -47,7 +47,7 @@ public abstract class FixMethodJavadocTest extends FileSetTestCase {
 
   private void collectNewParameters(PsiMethod method, String[] names, Set<PsiParameter> newParameters) {
     Set<String> newNames = new HashSet<String>(Arrays.asList(names));
-    final PsiParameter[] parameters = method.getParameterList().getParameters();
+    PsiParameter[] parameters = method.getParameterList().getParameters();
     for (int i = 0; i < parameters.length; i++) {
       PsiParameter parameter = parameters[i];
       if (newNames.contains(parameter.getName())) {

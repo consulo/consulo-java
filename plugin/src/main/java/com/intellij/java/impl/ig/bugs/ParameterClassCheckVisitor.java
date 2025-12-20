@@ -57,96 +57,96 @@ class ParameterClassCheckVisitor extends JavaRecursiveElementWalkingVisitor
 
 	private boolean isGetInstanceCall(PsiMethodCallExpression methodCallExpression)
 	{
-		final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-		final String methodName = methodExpression.getReferenceName();
+		PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+		String methodName = methodExpression.getReferenceName();
 		if(!HardcodedMethodConstants.IS_INSTANCE.equals(methodName))
 		{
 			return false;
 		}
-		final PsiMethod method = methodCallExpression.resolveMethod();
+		PsiMethod method = methodCallExpression.resolveMethod();
 		if(method == null)
 		{
 			return false;
 		}
-		final PsiClass aClass = method.getContainingClass();
+		PsiClass aClass = method.getContainingClass();
 		if(aClass == null)
 		{
 			return false;
 		}
-		final String className = aClass.getQualifiedName();
+		String className = aClass.getQualifiedName();
 		if(!CommonClassNames.JAVA_LANG_CLASS.equals(className))
 		{
 			return false;
 		}
-		final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-		final PsiExpression[] expressions = argumentList.getExpressions();
+		PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+		PsiExpression[] expressions = argumentList.getExpressions();
 		if(expressions.length != 1)
 		{
 			return false;
 		}
-		final PsiExpression expression = expressions[0];
+		PsiExpression expression = expressions[0];
 		return isParameterReference(expression);
 	}
 
 	private boolean isGetClassCall(PsiMethodCallExpression methodCallExpression)
 	{
-		final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-		final String methodName = methodExpression.getReferenceName();
+		PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+		String methodName = methodExpression.getReferenceName();
 		if(!HardcodedMethodConstants.GET_CLASS.equals(methodName))
 		{
 			return false;
 		}
-		final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-		final PsiExpression[] arguments = argumentList.getExpressions();
+		PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+		PsiExpression[] arguments = argumentList.getExpressions();
 		if(arguments.length != 0)
 		{
 			return false;
 		}
-		final PsiMethod method = methodCallExpression.resolveMethod();
+		PsiMethod method = methodCallExpression.resolveMethod();
 		if(method == null)
 		{
 			return false;
 		}
-		final PsiClass aClass = method.getContainingClass();
+		PsiClass aClass = method.getContainingClass();
 		if(aClass == null)
 		{
 			return false;
 		}
-		final String className = aClass.getQualifiedName();
+		String className = aClass.getQualifiedName();
 		if(!CommonClassNames.JAVA_LANG_OBJECT.equals(className))
 		{
 			return false;
 		}
-		final PsiExpression qualifier = methodExpression.getQualifierExpression();
+		PsiExpression qualifier = methodExpression.getQualifierExpression();
 		return isParameterReference(qualifier);
 	}
 
 	private boolean isCallToSuperEquals(PsiMethodCallExpression methodCallExpression)
 	{
-		final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-		final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
+		PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+		PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
 		if(!(qualifierExpression instanceof PsiSuperExpression))
 		{
 			return false;
 		}
-		final String name = methodExpression.getReferenceName();
+		String name = methodExpression.getReferenceName();
 		if(!HardcodedMethodConstants.EQUALS.equals(name))
 		{
 			return false;
 		}
-		final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-		final PsiExpression[] arguments = argumentList.getExpressions();
+		PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+		PsiExpression[] arguments = argumentList.getExpressions();
 		if(arguments.length != 1)
 		{
 			return false;
 		}
-		final PsiExpression argument = arguments[0];
+		PsiExpression argument = arguments[0];
 		if(!(argument instanceof PsiReferenceExpression))
 		{
 			return false;
 		}
-		final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) argument;
-		final PsiElement target = referenceExpression.resolve();
+		PsiReferenceExpression referenceExpression = (PsiReferenceExpression) argument;
+		PsiElement target = referenceExpression.resolve();
 		return parameter.equals(target);
 	}
 
@@ -158,7 +158,7 @@ class ParameterClassCheckVisitor extends JavaRecursiveElementWalkingVisitor
 			return;
 		}
 		super.visitInstanceOfExpression(expression);
-		final PsiExpression operand = expression.getOperand();
+		PsiExpression operand = expression.getOperand();
 		if(isParameterReference(operand))
 		{
 			checked = true;
@@ -173,17 +173,17 @@ class ParameterClassCheckVisitor extends JavaRecursiveElementWalkingVisitor
 			return;
 		}
 		super.visitTypeCastExpression(expression);
-		final PsiExpression operand = expression.getOperand();
+		PsiExpression operand = expression.getOperand();
 		if(!isParameterReference(operand))
 		{
 			return;
 		}
-		final PsiTryStatement statement = PsiTreeUtil.getParentOfType(expression, PsiTryStatement.class);
+		PsiTryStatement statement = PsiTreeUtil.getParentOfType(expression, PsiTryStatement.class);
 		if(statement == null)
 		{
 			return;
 		}
-		final PsiParameter[] parameters = statement.getCatchBlockParameters();
+		PsiParameter[] parameters = statement.getCatchBlockParameters();
 		if(parameters.length < 2)
 		{
 			return;
@@ -192,7 +192,7 @@ class ParameterClassCheckVisitor extends JavaRecursiveElementWalkingVisitor
 		boolean classCastExceptionFound = false;
 		for(PsiParameter parameter : parameters)
 		{
-			final PsiType type = parameter.getType();
+			PsiType type = parameter.getType();
 			if(type.equalsToText(CommonClassNames.JAVA_LANG_NULL_POINTER_EXCEPTION))
 			{
 				nullPointerExceptionFound = true;
@@ -226,8 +226,8 @@ class ParameterClassCheckVisitor extends JavaRecursiveElementWalkingVisitor
 		{
 			return false;
 		}
-		final PsiReferenceExpression expression = (PsiReferenceExpression) operand;
-		final PsiElement referent = expression.resolve();
+		PsiReferenceExpression expression = (PsiReferenceExpression) operand;
+		PsiElement referent = expression.resolve();
 		return referent != null && referent.equals(parameter);
 	}
 

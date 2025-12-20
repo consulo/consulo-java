@@ -34,17 +34,17 @@ public class CopyAbstractMethodImplementationAction extends ImplementAbstractMet
   }
 
   @Override
-  protected LocalizeValue getIntentionName(final PsiMethod method) {
+  protected LocalizeValue getIntentionName(PsiMethod method) {
     return CodeInsightLocalize.copyAbstractMethodIntentionName(method.getName());
   }
 
   @Override
-  protected boolean isAvailable(final MyElementProcessor processor) {
+  protected boolean isAvailable(MyElementProcessor processor) {
     return processor.hasMissingImplementations() && processor.hasExistingImplementations();
   }
 
   @Override
-  protected void invokeHandler(final Project project, final Editor editor, final PsiMethod method) {
+  protected void invokeHandler(Project project, Editor editor, PsiMethod method) {
     new CopyAbstractMethodImplementationHandler(project, editor, method).invoke();
   }
 }

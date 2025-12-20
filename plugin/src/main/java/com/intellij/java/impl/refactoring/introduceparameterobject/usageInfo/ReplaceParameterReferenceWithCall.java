@@ -33,7 +33,7 @@ public class ReplaceParameterReferenceWithCall extends FixableUsageInfo {
   }
 
   public void fixUsage() throws IncorrectOperationException {
-    final String newExpression = newParameterName + '.' + parameterGetterName + "()";
+    String newExpression = newParameterName + '.' + parameterGetterName + "()";
     if (expression.isValid()) {
       MutationUtils.replaceExpression(newExpression, expression);
     }

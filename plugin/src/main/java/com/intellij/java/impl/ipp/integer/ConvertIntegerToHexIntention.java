@@ -39,21 +39,21 @@ public class ConvertIntegerToHexIntention extends ConvertNumberIntentionBase {
     }
 
     @Override
-    protected String convertValue(final Number value, final PsiType type, final boolean negated) {
+    protected String convertValue(Number value, PsiType type, boolean negated) {
         if (PsiType.INT.equals(type)) {
-            final int intValue = negated ? -value.intValue() : value.intValue();
+            int intValue = negated ? -value.intValue() : value.intValue();
             return "0x" + Integer.toHexString(intValue);
         }
         else if (PsiType.LONG.equals(type)) {
-            final long longValue = negated ? -value.longValue() : value.longValue();
+            long longValue = negated ? -value.longValue() : value.longValue();
             return "0x" + Long.toHexString(longValue) + "L";
         }
         else if (PsiType.FLOAT.equals(type)) {
-            final float floatValue = negated ? -value.floatValue() : value.floatValue();
+            float floatValue = negated ? -value.floatValue() : value.floatValue();
             return Float.toHexString(floatValue) + 'f';
         }
         else if (PsiType.DOUBLE.equals(type)) {
-            final double doubleValue = negated ? -value.doubleValue() : value.doubleValue();
+            double doubleValue = negated ? -value.doubleValue() : value.doubleValue();
             return Double.toHexString(doubleValue);
         }
 

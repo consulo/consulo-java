@@ -38,7 +38,7 @@ public class RemoveQualifierFix implements SyntheticIntentionAction {
   private final PsiReferenceExpression myExpression;
   private final PsiClass myResolved;
 
-  public RemoveQualifierFix(final PsiExpression qualifier, final PsiReferenceExpression expression, final PsiClass resolved) {
+  public RemoveQualifierFix(PsiExpression qualifier, PsiReferenceExpression expression, PsiClass resolved) {
     myQualifier = qualifier;
     myExpression = expression;
     myResolved = resolved;

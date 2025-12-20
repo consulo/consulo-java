@@ -27,20 +27,20 @@ class VarargArgumentsPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiExpressionList)) {
       return false;
     }
-    final PsiExpressionList argumentList = (PsiExpressionList)element;
-    final PsiElement grandParent = argumentList.getParent();
+    PsiExpressionList argumentList = (PsiExpressionList)element;
+    PsiElement grandParent = argumentList.getParent();
     if (!(grandParent instanceof PsiMethodCallExpression)) {
       return false;
     }
-    final PsiMethodCallExpression methodCallExpression =
+    PsiMethodCallExpression methodCallExpression =
       (PsiMethodCallExpression)grandParent;
-    final PsiMethod method = methodCallExpression.resolveMethod();
+    PsiMethod method = methodCallExpression.resolveMethod();
     if (method == null || !method.isVarArgs()) {
       return false;
     }
-    final PsiParameterList parameterList = method.getParameterList();
-    final int parametersCount = parameterList.getParametersCount();
-    final PsiExpression[] arguments = argumentList.getExpressions();
+    PsiParameterList parameterList = method.getParameterList();
+    int parametersCount = parameterList.getParametersCount();
+    PsiExpression[] arguments = argumentList.getExpressions();
     if (arguments.length < parametersCount) {
       return false;
     }
@@ -49,15 +49,15 @@ class VarargArgumentsPredicate implements PsiElementPredicate {
     // "Unnecessarily qualified static usage" inspection
     // the psi gets into a bad state, this guards against that.
     // http://www.jetbrains.net/jira/browse/IDEADEV-40124
-    final PsiReferenceExpression methodExpression =
+    PsiReferenceExpression methodExpression =
       methodCallExpression.getMethodExpression();
-    final PsiExpression qualifier =
+    PsiExpression qualifier =
       methodExpression.getQualifierExpression();
     if (qualifier == null) {
-      final PsiReferenceParameterList typeParameterList =
+      PsiReferenceParameterList typeParameterList =
         methodExpression.getParameterList();
       if (typeParameterList != null) {
-        final PsiTypeElement[] typeParameterElements =
+        PsiTypeElement[] typeParameterElements =
           typeParameterList.getTypeParameterElements();
         if (typeParameterElements.length > 0) {
           return false;
@@ -68,33 +68,33 @@ class VarargArgumentsPredicate implements PsiElementPredicate {
     if (arguments.length != parametersCount) {
       return true;
     }
-    final PsiExpression lastExpression =
+    PsiExpression lastExpression =
       arguments[arguments.length - 1];
-    final PsiExpression expression = PsiUtil.deparenthesizeExpression(
+    PsiExpression expression = PsiUtil.deparenthesizeExpression(
       lastExpression);
     if (expression instanceof PsiLiteralExpression) {
-      final String text = expression.getText();
+      String text = expression.getText();
       if ("null".equals(text)) {
         // a single null argument is not wrapped in an array
         // on a vararg method call, but just passed as a null value
         return false;
       }
     }
-    final PsiType lastArgumentType = lastExpression.getType();
+    PsiType lastArgumentType = lastExpression.getType();
     if (!(lastArgumentType instanceof PsiArrayType)) {
       return true;
     }
-    final PsiArrayType arrayType = (PsiArrayType)lastArgumentType;
-    final PsiType type = arrayType.getComponentType();
-    final PsiParameter[] parameters = parameterList.getParameters();
-    final PsiParameter lastParameter = parameters[parameters.length - 1];
-    final PsiEllipsisType lastParameterType =
+    PsiArrayType arrayType = (PsiArrayType)lastArgumentType;
+    PsiType type = arrayType.getComponentType();
+    PsiParameter[] parameters = parameterList.getParameters();
+    PsiParameter lastParameter = parameters[parameters.length - 1];
+    PsiEllipsisType lastParameterType =
       (PsiEllipsisType)lastParameter.getType();
-    final PsiType lastType = lastParameterType.getComponentType();
-    final JavaResolveResult resolveResult =
+    PsiType lastType = lastParameterType.getComponentType();
+    JavaResolveResult resolveResult =
       methodCallExpression.resolveMethodGenerics();
-    final PsiSubstitutor substitutor = resolveResult.getSubstitutor();
-    final PsiType substitutedType = substitutor.substitute(lastType);
+    PsiSubstitutor substitutor = resolveResult.getSubstitutor();
+    PsiType substitutedType = substitutor.substitute(lastType);
     return !substitutedType.equals(type);
   }
 }

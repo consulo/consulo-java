@@ -31,20 +31,20 @@ import consulo.ide.impl.idea.util.properties.EncodingAwareProperties;
 @SuppressWarnings({"HardCodedStringLiteral"})
 public abstract class FileTemplatesTest extends IdeaTestCase {
   public void testAllTemplates() throws Exception {
-    final File testsDir = new File("/ide/fileTemplates");
+    File testsDir = new File("/ide/fileTemplates");
 
-    final String includeTemplateName = "include1.inc";
-    final String includeTemplateExtension = "txt";
-    final String customIncludeFileName = includeTemplateName + "." + includeTemplateExtension;
-    final File customInclude = new File(testsDir, customIncludeFileName);
-    final String includeText = FileUtil.loadFile(customInclude, FileTemplate.ourEncoding);
+    String includeTemplateName = "include1.inc";
+    String includeTemplateExtension = "txt";
+    String customIncludeFileName = includeTemplateName + "." + includeTemplateExtension;
+    File customInclude = new File(testsDir, customIncludeFileName);
+    String includeText = FileUtil.loadFile(customInclude, FileTemplate.ourEncoding);
 
-    final FileTemplateManager templateManager = FileTemplateManager.getDefaultInstance();
-    final ArrayList<FileTemplate> originalIncludes = new ArrayList<FileTemplate>(Arrays.asList(templateManager.getAllPatterns()));
+    FileTemplateManager templateManager = FileTemplateManager.getDefaultInstance();
+    ArrayList<FileTemplate> originalIncludes = new ArrayList<FileTemplate>(Arrays.asList(templateManager.getAllPatterns()));
     try {
       // configure custom include
-      final List<FileTemplate> allIncludes = new ArrayList<FileTemplate>(originalIncludes);
-      final CustomFileTemplate custom = new CustomFileTemplate(includeTemplateName, includeTemplateExtension);
+      List<FileTemplate> allIncludes = new ArrayList<FileTemplate>(originalIncludes);
+      CustomFileTemplate custom = new CustomFileTemplate(includeTemplateName, includeTemplateExtension);
       custom.setText(includeText);
       allIncludes.add(custom);
       templateManager.setTemplates(FileTemplateManager.INCLUDES_TEMPLATES_CATEGORY, allIncludes);
@@ -84,7 +84,7 @@ public abstract class FileTemplatesTest extends IdeaTestCase {
     inputString = StringUtil.convertLineSeparators(inputString);
     expected = StringUtil.convertLineSeparators(expected);
     
-    final String result = FileTemplateUtil.mergeTemplate(properties, inputString, false);
+    String result = FileTemplateUtil.mergeTemplate(properties, inputString, false);
     assertEquals(expected, result);
 
     List attrs = Arrays.asList(FileTemplateUtil.calculateAttributes(inputString, new HashMap<>(), false, null));
@@ -110,7 +110,7 @@ public abstract class FileTemplatesTest extends IdeaTestCase {
       File temp = FileUtil.createTempDirectory(getTestName(true), "");
 
       myFilesToDelete.add(temp);
-      final VirtualFile tempDir = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(temp);
+      VirtualFile tempDir = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(temp);
 
       PsiTestUtil.addSourceRoot(getModule(), tempDir);
 

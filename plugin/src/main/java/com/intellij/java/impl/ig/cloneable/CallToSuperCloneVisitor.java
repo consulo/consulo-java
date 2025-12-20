@@ -39,13 +39,13 @@ class CallToSuperCloneVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     super.visitMethodCallExpression(expression);
-    final PsiReferenceExpression methodExpression =
+    PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
-    final PsiExpression target = methodExpression.getQualifierExpression();
+    PsiExpression target = methodExpression.getQualifierExpression();
     if (!(target instanceof PsiSuperExpression)) {
       return;
     }
-    final String methodName = methodExpression.getReferenceName();
+    String methodName = methodExpression.getReferenceName();
     if (!HardcodedMethodConstants.CLONE.equals(methodName)) {
       return;
     }

@@ -68,24 +68,24 @@ public class RefusedBequestInspection extends BaseInspection {
         @Override
         public void visitMethod(@Nonnull PsiMethod method) {
             super.visitMethod(method);
-            final PsiCodeBlock body = method.getBody();
+            PsiCodeBlock body = method.getBody();
             if (body == null) {
                 return;
             }
             if (method.getNameIdentifier() == null) {
                 return;
             }
-            final PsiMethod leastConcreteSuperMethod = getLeastConcreteSuperMethod(method);
+            PsiMethod leastConcreteSuperMethod = getLeastConcreteSuperMethod(method);
             if (leastConcreteSuperMethod == null) {
                 return;
             }
-            final PsiClass objectClass = ClassUtils.findObjectClass(method);
-            final PsiMethod[] superMethods = method.findSuperMethods(objectClass);
+            PsiClass objectClass = ClassUtils.findObjectClass(method);
+            PsiMethod[] superMethods = method.findSuperMethods(objectClass);
             if (superMethods.length > 0) {
                 return;
             }
             if (ignoreEmptySuperMethods) {
-                final PsiMethod superMethod = (PsiMethod) leastConcreteSuperMethod.getNavigationElement();
+                PsiMethod superMethod = (PsiMethod) leastConcreteSuperMethod.getNavigationElement();
                 if (isTrivial(superMethod)) {
                     return;
                 }
@@ -100,24 +100,24 @@ public class RefusedBequestInspection extends BaseInspection {
         }
 
         private boolean isTrivial(PsiMethod method) {
-            final PsiCodeBlock body = method.getBody();
+            PsiCodeBlock body = method.getBody();
             if (body == null) {
                 return true;
             }
-            final PsiStatement[] statements = body.getStatements();
+            PsiStatement[] statements = body.getStatements();
             if (statements.length == 0) {
                 return true;
             }
             if (statements.length > 1) {
                 return false;
             }
-            final PsiStatement statement = statements[0];
+            PsiStatement statement = statements[0];
             if (statement instanceof PsiThrowStatement) {
                 return true;
             }
             if (statement instanceof PsiReturnStatement) {
-                final PsiReturnStatement returnStatement = (PsiReturnStatement) statement;
-                final PsiExpression returnValue = returnStatement.getReturnValue();
+                PsiReturnStatement returnStatement = (PsiReturnStatement) statement;
+                PsiExpression returnValue = returnStatement.getReturnValue();
                 if (returnValue instanceof PsiLiteralExpression) {
                     return true;
                 }
@@ -127,9 +127,9 @@ public class RefusedBequestInspection extends BaseInspection {
 
         @Nullable
         private PsiMethod getLeastConcreteSuperMethod(PsiMethod method) {
-            final PsiMethod[] superMethods = method.findSuperMethods(true);
-            for (final PsiMethod superMethod : superMethods) {
-                final PsiClass containingClass = superMethod.getContainingClass();
+            PsiMethod[] superMethods = method.findSuperMethods(true);
+            for (PsiMethod superMethod : superMethods) {
+                PsiClass containingClass = superMethod.getContainingClass();
                 if (containingClass != null && !superMethod.hasModifierProperty(PsiModifier.ABSTRACT) && !containingClass.isInterface()) {
                     return superMethod;
                 }
@@ -138,7 +138,7 @@ public class RefusedBequestInspection extends BaseInspection {
         }
 
         private boolean containsSuperCall(@Nonnull PsiElement context, @Nonnull PsiMethod method) {
-            final SuperCallVisitor visitor = new SuperCallVisitor(method);
+            SuperCallVisitor visitor = new SuperCallVisitor(method);
             context.accept(visitor);
             return visitor.hasSuperCall();
         }
@@ -169,16 +169,16 @@ public class RefusedBequestInspection extends BaseInspection {
                 return;
             }
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
             if (qualifier == null) {
                 return;
             }
-            final String text = qualifier.getText();
+            String text = qualifier.getText();
             if (!PsiKeyword.SUPER.equals(text)) {
                 return;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return;
             }

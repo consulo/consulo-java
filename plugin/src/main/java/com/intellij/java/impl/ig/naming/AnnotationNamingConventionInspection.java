@@ -45,7 +45,7 @@ public class AnnotationNamingConventionInspection extends ConventionInspection {
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final String annotationName = (String)infos[0];
+    String annotationName = (String)infos[0];
     if (annotationName.length() < getMinLength()) {
       return InspectionGadgetsLocalize.annotationNamingConventionProblemDescriptorShort().get();
     }
@@ -78,7 +78,7 @@ public class AnnotationNamingConventionInspection extends ConventionInspection {
       if (!aClass.isAnnotationType()) {
         return;
       }
-      final String name = aClass.getName();
+      String name = aClass.getName();
       if (name == null) {
         return;
       }

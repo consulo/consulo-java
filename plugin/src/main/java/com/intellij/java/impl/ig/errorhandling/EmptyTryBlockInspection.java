@@ -54,7 +54,7 @@ public class EmptyTryBlockInspection extends BaseInspection {
             /*if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
                 return;
             }*/
-            final PsiCodeBlock finallyBlock = statement.getTryBlock();
+            PsiCodeBlock finallyBlock = statement.getTryBlock();
             if (finallyBlock == null) {
                 return;
             }

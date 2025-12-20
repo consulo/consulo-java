@@ -26,12 +26,12 @@ import consulo.language.editor.completion.lookup.TailType;
  */
 public abstract class ParenthesesTailType extends TailType {
 
-  protected abstract boolean isSpaceBeforeParentheses(CommonCodeStyleSettings styleSettings, Editor editor, final int tailOffset);
+  protected abstract boolean isSpaceBeforeParentheses(CommonCodeStyleSettings styleSettings, Editor editor, int tailOffset);
 
-  protected abstract boolean isSpaceWithinParentheses(CommonCodeStyleSettings styleSettings, Editor editor, final int tailOffset);
+  protected abstract boolean isSpaceWithinParentheses(CommonCodeStyleSettings styleSettings, Editor editor, int tailOffset);
 
   @Override
-  public int processTail(final Editor editor, int tailOffset) {
+  public int processTail(Editor editor, int tailOffset) {
     CommonCodeStyleSettings styleSettings = EditorCodeStyle.getLocalLanguageSettings(editor, tailOffset);
     if (isSpaceBeforeParentheses(styleSettings, editor, tailOffset)) {
       tailOffset = insertChar(editor, tailOffset, ' ');

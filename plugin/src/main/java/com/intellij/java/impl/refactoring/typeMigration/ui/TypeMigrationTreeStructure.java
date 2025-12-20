@@ -29,11 +29,11 @@ import java.util.List;
 public class TypeMigrationTreeStructure extends AbstractTreeStructureBase {
   private MigrationRootNode myRoot;
 
-  public TypeMigrationTreeStructure(final Project project) {
+  public TypeMigrationTreeStructure(Project project) {
     super(project);
   }
 
-  public void setRoots(final MigrationRootNode root) {
+  public void setRoots(MigrationRootNode root) {
     myRoot = root;
   }
 
@@ -59,7 +59,7 @@ public class TypeMigrationTreeStructure extends AbstractTreeStructureBase {
   }
 
   @Override
-  public boolean isToBuildChildrenInBackground(final Object element) {
+  public boolean isToBuildChildrenInBackground(Object element) {
     return true;
   }
 }

@@ -76,22 +76,22 @@ public class FieldCountInspection extends ClassMetricInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final String configurationLabel = getConfigurationLabel();
-        final JLabel label = new JLabel(configurationLabel);
-        final JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
+        String configurationLabel = getConfigurationLabel();
+        JLabel label = new JLabel(configurationLabel);
+        JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
 
-        final CheckBox includeCheckBox = new CheckBox(
+        CheckBox includeCheckBox = new CheckBox(
             InspectionGadgetsLocalize.fieldCountInspectionIncludeConstantFieldsInCountCheckbox().get(),
             this,
             "m_countConstantFields"
         );
-        final CheckBox considerCheckBox = new CheckBox(
+        CheckBox considerCheckBox = new CheckBox(
             InspectionGadgetsLocalize.fieldCountInspectionStaticFinalFieldsCountAsConstantCheckbox().get(),
             this,
             "m_considerStaticFinalFieldsConstant"
         );
 
-        final GridBagConstraints constraints = new GridBagConstraints();
+        GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.weightx = 0.0;
@@ -99,7 +99,7 @@ public class FieldCountInspection extends ClassMetricInspection {
         constraints.insets.right = UIUtil.DEFAULT_HGAP;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.fill = GridBagConstraints.NONE;
-        final JPanel panel = new JPanel(new GridBagLayout());
+        JPanel panel = new JPanel(new GridBagLayout());
         panel.add(label, constraints);
         constraints.gridx = 1;
         constraints.gridy = 0;
@@ -132,7 +132,7 @@ public class FieldCountInspection extends ClassMetricInspection {
         @Override
         public void visitClass(@Nonnull PsiClass aClass) {
             // note: no call to super
-            final int totalFields = countFields(aClass);
+            int totalFields = countFields(aClass);
             if (totalFields <= getLimit()) {
                 return;
             }
@@ -141,8 +141,8 @@ public class FieldCountInspection extends ClassMetricInspection {
 
         private int countFields(PsiClass aClass) {
             int totalFields = 0;
-            final PsiField[] fields = aClass.getFields();
-            for (final PsiField field : fields) {
+            PsiField[] fields = aClass.getFields();
+            for (PsiField field : fields) {
                 if (m_countConstantFields) {
                     totalFields++;
                 }
@@ -165,7 +165,7 @@ public class FieldCountInspection extends ClassMetricInspection {
             if (m_considerStaticFinalFieldsConstant) {
                 return true;
             }
-            final PsiType type = field.getType();
+            PsiType type = field.getType();
             return ClassUtils.isImmutable(type);
         }
     }

@@ -27,10 +27,10 @@ class ConvertIntegerToDecimalPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiLiteralExpression)) {
       return false;
     }
-    final PsiLiteralExpression expression = (PsiLiteralExpression)element;
-    final PsiType type = expression.getType();
+    PsiLiteralExpression expression = (PsiLiteralExpression)element;
+    PsiType type = expression.getType();
     if (PsiType.INT.equals(type) || PsiType.LONG.equals(type)) {
-      @NonNls final String text = expression.getText();
+      @NonNls String text = expression.getText();
       if (text == null || text.length() < 2) {
         return false;
       }
@@ -40,7 +40,7 @@ class ConvertIntegerToDecimalPredicate implements PsiElementPredicate {
       return text.charAt(0) == '0';
     }
     if (PsiType.DOUBLE.equals(type) || PsiType.FLOAT.equals(type)) {
-      @NonNls final String text = expression.getText();
+      @NonNls String text = expression.getText();
       if (text == null || text.length() < 2) {
         return false;
       }

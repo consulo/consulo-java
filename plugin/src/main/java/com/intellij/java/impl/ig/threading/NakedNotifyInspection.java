@@ -50,7 +50,7 @@ public class NakedNotifyInspection extends BaseInspection {
       if (!method.hasModifierProperty(PsiModifier.SYNCHRONIZED)) {
         return;
       }
-      final PsiCodeBlock body = method.getBody();
+      PsiCodeBlock body = method.getBody();
       if (body != null) {
         checkBody(body);
       }
@@ -60,37 +60,37 @@ public class NakedNotifyInspection extends BaseInspection {
     public void visitSynchronizedStatement(
       @Nonnull PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
-      final PsiCodeBlock body = statement.getBody();
+      PsiCodeBlock body = statement.getBody();
       if (body != null) {
         checkBody(body);
       }
     }
 
     private void checkBody(PsiCodeBlock body) {
-      final PsiStatement[] statements = body.getStatements();
+      PsiStatement[] statements = body.getStatements();
       if (statements.length == 0) {
         return;
       }
-      final PsiStatement firstStatement = statements[0];
+      PsiStatement firstStatement = statements[0];
       if (!(firstStatement instanceof PsiExpressionStatement)) {
         return;
       }
-      final PsiExpression firstExpression =
+      PsiExpression firstExpression =
         ((PsiExpressionStatement)firstStatement).getExpression();
       if (!(firstExpression instanceof PsiMethodCallExpression)) {
         return;
       }
-      final PsiMethodCallExpression methodCallExpression =
+      PsiMethodCallExpression methodCallExpression =
         (PsiMethodCallExpression)firstExpression;
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         methodCallExpression.getMethodExpression();
-      @NonNls final String methodName =
+      @NonNls String methodName =
         methodExpression.getReferenceName();
       if (!HardcodedMethodConstants.NOTIFY.equals(methodName) &&
           !HardcodedMethodConstants.NOTIFY_ALL.equals(methodName)) {
         return;
       }
-      final PsiExpressionList argumentList =
+      PsiExpressionList argumentList =
         methodCallExpression.getArgumentList();
       if (argumentList.getExpressions().length != 0) {
         return;

@@ -56,28 +56,28 @@ public class TimeToStringInspection extends BaseInspection {
             @Nonnull PsiMethodCallExpression expression
         ) {
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression =
+            PsiReferenceExpression methodExpression =
                 expression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            String methodName = methodExpression.getReferenceName();
             if (!HardcodedMethodConstants.TO_STRING.equals(methodName)) {
                 return;
             }
             if (NonNlsUtils.isNonNlsAnnotatedUse(expression)) {
                 return;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return;
             }
-            final PsiParameterList parameterList = method.getParameterList();
+            PsiParameterList parameterList = method.getParameterList();
             if (parameterList.getParametersCount() != 0) {
                 return;
             }
-            final PsiClass aClass = method.getContainingClass();
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null) {
                 return;
             }
-            final String className = aClass.getQualifiedName();
+            String className = aClass.getQualifiedName();
             if (!"java.sql.Time".equals(className)) {
                 return;
             }

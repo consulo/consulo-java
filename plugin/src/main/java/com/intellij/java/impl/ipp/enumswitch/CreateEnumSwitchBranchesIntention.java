@@ -50,57 +50,57 @@ public class CreateEnumSwitchBranchesIntention extends Intention {
         if (element instanceof PsiWhiteSpace) {
             element = element.getPrevSibling();
         }
-        final PsiSwitchStatement switchStatement = (PsiSwitchStatement) element;
-        final PsiCodeBlock body = switchStatement.getBody();
-        final PsiExpression switchExpression = switchStatement.getExpression();
+        PsiSwitchStatement switchStatement = (PsiSwitchStatement) element;
+        PsiCodeBlock body = switchStatement.getBody();
+        PsiExpression switchExpression = switchStatement.getExpression();
         if (switchExpression == null) {
             return;
         }
-        final PsiClassType switchType =
+        PsiClassType switchType =
             (PsiClassType) switchExpression.getType();
         if (switchType == null) {
             return;
         }
-        final PsiClass enumClass = switchType.resolve();
+        PsiClass enumClass = switchType.resolve();
         if (enumClass == null) {
             return;
         }
-        final PsiField[] fields = enumClass.getFields();
-        final List<String> missingEnumElements =
+        PsiField[] fields = enumClass.getFields();
+        List<String> missingEnumElements =
             new ArrayList<String>(fields.length);
-        for (final PsiField field : fields) {
+        for (PsiField field : fields) {
             if (field instanceof PsiEnumConstant) {
                 missingEnumElements.add(field.getName());
             }
         }
         if (body != null) {
-            final PsiStatement[] statements = body.getStatements();
-            for (final PsiStatement statement : statements) {
+            PsiStatement[] statements = body.getStatements();
+            for (PsiStatement statement : statements) {
                 if (!(statement instanceof PsiSwitchLabelStatement)) {
                     continue;
                 }
-                final PsiSwitchLabelStatement labelStatement =
+                PsiSwitchLabelStatement labelStatement =
                     (PsiSwitchLabelStatement) statement;
-                final PsiExpression value = labelStatement.getCaseValue();
+                PsiExpression value = labelStatement.getCaseValue();
                 if (!(value instanceof PsiReferenceExpression)) {
                     continue;
                 }
-                final PsiReferenceExpression reference =
+                PsiReferenceExpression reference =
                     (PsiReferenceExpression) value;
-                final PsiElement resolved = reference.resolve();
+                PsiElement resolved = reference.resolve();
                 if (!(resolved instanceof PsiEnumConstant)) {
                     continue;
                 }
-                final PsiEnumConstant enumConstant = (PsiEnumConstant) resolved;
+                PsiEnumConstant enumConstant = (PsiEnumConstant) resolved;
                 missingEnumElements.remove(enumConstant.getName());
             }
         }
-        @NonNls final StringBuilder buffer = new StringBuilder();
+        @NonNls StringBuilder buffer = new StringBuilder();
         buffer.append("switch(");
         buffer.append(switchExpression.getText());
         buffer.append("){");
         if (body != null) {
-            final PsiElement[] children = body.getChildren();
+            PsiElement[] children = body.getChildren();
             for (int i = 1; i < children.length - 1; i++) {
                 buffer.append(children[i].getText());
             }
@@ -111,7 +111,7 @@ public class CreateEnumSwitchBranchesIntention extends Intention {
             buffer.append(": break;");
         }
         buffer.append('}');
-        final String newStatement = buffer.toString();
+        String newStatement = buffer.toString();
         replaceStatement(newStatement, switchStatement);
     }
 }

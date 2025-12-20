@@ -88,10 +88,10 @@ public abstract class RenameMembersInplaceTest extends LightCodeInsightTestCase 
     fail("Conflict was not detected");
   }
 
-  private void doTestInplaceRename(final String newName) throws Exception {
+  private void doTestInplaceRename(String newName) throws Exception {
     configureByFile(BASE_PATH + "/" + getTestName(false) + ".java");
 
-    final PsiElement element = TargetElementUtil.findTargetElement(myEditor, TargetElementUtil.getAllAccepted());
+    PsiElement element = TargetElementUtil.findTargetElement(myEditor, TargetElementUtil.getAllAccepted());
     assertNotNull(element);
 
     CodeInsightTestUtil.doInlineRename(new MemberInplaceRenameHandler(), newName, getEditor(), element);

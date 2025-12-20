@@ -92,7 +92,7 @@ public abstract class AccessStaticViaInstanceBase extends BaseJavaBatchLocalInsp
     if (qualifierExpression == null) return;
 
     if (qualifierExpression instanceof PsiReferenceExpression referenceExpression) {
-      final PsiElement qualifierResolved = referenceExpression.resolve();
+      PsiElement qualifierResolved = referenceExpression.resolve();
       if (qualifierResolved instanceof PsiClass || qualifierResolved instanceof PsiPackage) {
         return;
       }

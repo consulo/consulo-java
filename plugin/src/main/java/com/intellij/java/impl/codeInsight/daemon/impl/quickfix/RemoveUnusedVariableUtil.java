@@ -86,7 +86,7 @@ public class RemoveUnusedVariableUtil {
   public static boolean checkSideEffects(PsiElement element, PsiVariable variable, List<PsiElement> sideEffects) {
     if (sideEffects == null || element == null) return false;
     if (element instanceof PsiMethodCallExpression) {
-      final PsiMethod psiMethod = ((PsiMethodCallExpression)element).resolveMethod();
+      PsiMethod psiMethod = ((PsiMethodCallExpression)element).resolveMethod();
       if (psiMethod == null || !PropertyUtil.isSimpleGetter(psiMethod) && !PropertyUtil.isSimpleSetter(psiMethod)) {
         sideEffects.add(element);
         return true;

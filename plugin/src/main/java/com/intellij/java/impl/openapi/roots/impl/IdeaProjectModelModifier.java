@@ -66,7 +66,7 @@ public class IdeaProjectModelModifier extends JavaProjectModelModifier {
   }
 
   @Override
-  public AsyncResult<Void> addExternalLibraryDependency(@Nonnull final Collection<Module> modules, @Nonnull final ExternalLibraryDescriptor descriptor, @Nonnull final DependencyScope scope) {
+  public AsyncResult<Void> addExternalLibraryDependency(@Nonnull Collection<Module> modules, @Nonnull ExternalLibraryDescriptor descriptor, @Nonnull DependencyScope scope) {
     List<String> defaultRoots = descriptor.getLibraryClassesRoots();
     Module firstModule = ContainerUtil.getFirstItem(modules);
     LOG.assertTrue(firstModule != null);
@@ -74,7 +74,7 @@ public class IdeaProjectModelModifier extends JavaProjectModelModifier {
     List<String> classesRoots = dialog.showAndGetResult();
     if (!classesRoots.isEmpty()) {
       String libraryName = classesRoots.size() > 1 ? descriptor.getPresentableName() : null;
-      final List<String> urls = OrderEntryFix.refreshAndConvertToUrls(classesRoots);
+      List<String> urls = OrderEntryFix.refreshAndConvertToUrls(classesRoots);
       if (modules.size() == 1) {
         ModuleRootModificationUtil.addModuleLibrary(firstModule, libraryName, urls, Collections.emptyList(), scope);
       } else {
@@ -105,7 +105,7 @@ public class IdeaProjectModelModifier extends JavaProjectModelModifier {
   @RequiredReadAction
   public AsyncResult<Void> changeLanguageLevel(@Nonnull Module module, @Nonnull LanguageLevel level) {
     if (JavaSdkUtil.isLanguageLevelAcceptable(myProject, module, level)) {
-      final ModifiableRootModel rootModel = ModuleRootManager.getInstance(module).getModifiableModel();
+      ModifiableRootModel rootModel = ModuleRootManager.getInstance(module).getModifiableModel();
       rootModel.getExtension(JavaMutableModuleExtension.class).getInheritableLanguageLevel().set(null, level);
       rootModel.commit();
     }

@@ -29,15 +29,15 @@ import static org.junit.Assert.assertTrue;
 public abstract class ControlFlowTest extends LightCodeInsightTestCase {
   @NonNls private static final String BASE_PATH = "/psi/controlFlow";
 
-  private static void doTestFor(final File file) throws Exception {
+  private static void doTestFor(File file) throws Exception {
     String contents = StringUtil.convertLineSeparators(FileUtil.loadFile(file));
     configureFromFileText(file.getName(), contents);
     // extract factory policy class name
     Pattern pattern = Pattern.compile("^// (\\S*).*", Pattern.DOTALL);
     Matcher matcher = pattern.matcher(contents);
     assertTrue(matcher.matches());
-    final String policyClassName = matcher.group(1);
-    final ControlFlowPolicy policy;
+    String policyClassName = matcher.group(1);
+    ControlFlowPolicy policy;
     if ("LocalsOrMyInstanceFieldsControlFlowPolicy".equals(policyClassName)) {
       policy = LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance();
     }
@@ -45,7 +45,7 @@ public abstract class ControlFlowTest extends LightCodeInsightTestCase {
       policy = null;
     }
 
-    final int offset = getEditor().getCaretModel().getOffset();
+    int offset = getEditor().getCaretModel().getOffset();
     PsiElement element = getFile().findElementAt(offset);
     element = PsiTreeUtil.getParentOfType(element, PsiCodeBlock.class, false);
     assertTrue("Selected element: "+element, element instanceof PsiCodeBlock);
@@ -53,7 +53,7 @@ public abstract class ControlFlowTest extends LightCodeInsightTestCase {
     ControlFlow controlFlow = ControlFlowFactory.getInstance(getProject()).getControlFlow(element, policy);
     String result = controlFlow.toString().trim();
 
-    final String expectedFullPath = StringUtil.trimEnd(file.getPath(),".java") + ".txt";
+    String expectedFullPath = StringUtil.trimEnd(file.getPath(),".java") + ".txt";
     VirtualFile expectedFile = LocalFileSystem.getInstance().findFileByPath(expectedFullPath);
     String expected = new String(expectedFile.contentsToByteArray()).trim();
     expected = expected.replaceAll("\r","");
@@ -61,9 +61,9 @@ public abstract class ControlFlowTest extends LightCodeInsightTestCase {
   }
 
   private static void doAllTests() throws Exception {
-    final String testDirPath = BASE_PATH;
+    String testDirPath = BASE_PATH;
     File testDir = new File(testDirPath);
-    final File[] files = testDir.listFiles(new FilenameFilter() {
+    File[] files = testDir.listFiles(new FilenameFilter() {
       @Override
       public boolean accept(File dir, String name) {
         return name.endsWith(".java");
@@ -88,7 +88,7 @@ public abstract class ControlFlowTest extends LightCodeInsightTestCase {
                                     "    } while (f);\n" +
                                     "  }\n" +
                                     "}");
-    final PsiCodeBlock body = ((PsiJavaFile)getFile()).getClasses()[0].getMethods()[0].getBody();
+    PsiCodeBlock body = ((PsiJavaFile)getFile()).getClasses()[0].getMethods()[0].getBody();
     ControlFlow flow = ControlFlowFactory.getInstance(getProject()).getControlFlow(body, new LocalsControlFlowPolicy(body), false);
     IntList exitPoints = IntLists.newArrayList();
     ControlFlowUtil.findExitPointsAndStatements(flow, 0, flow.getSize() -1 , exitPoints, ControlFlowUtil.DEFAULT_EXIT_STATEMENTS_CLASSES);

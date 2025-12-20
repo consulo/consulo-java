@@ -52,7 +52,7 @@ public class JavaLambdaTreeElement extends JavaClassTreeElementBase<PsiLambdaExp
 		{
 			return myName;
 		}
-		final PsiLambdaExpression element = getElement();
+		PsiLambdaExpression element = getElement();
 
 		if(element != null)
 		{
@@ -77,7 +77,7 @@ public class JavaLambdaTreeElement extends JavaClassTreeElementBase<PsiLambdaExp
 			PsiLambdaExpression lambdaExpression = getElement();
 			if(lambdaExpression != null && !DumbService.isDumb(lambdaExpression.getProject()))
 			{
-				final PsiType interfaceType = lambdaExpression.getFunctionalInterfaceType();
+				PsiType interfaceType = lambdaExpression.getFunctionalInterfaceType();
 				if(interfaceType != null)
 				{
 					myFunctionalName = interfaceType.getPresentableText();

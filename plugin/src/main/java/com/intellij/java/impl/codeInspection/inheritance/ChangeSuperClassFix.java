@@ -38,7 +38,7 @@ public class ChangeSuperClassFix implements LocalQuickFix {
     private final PsiClass myOldSuperClass;
     private final int myPercent;
 
-    public ChangeSuperClassFix(@Nonnull final PsiClass newSuperClass, final int percent, @Nonnull final PsiClass oldSuperClass) {
+    public ChangeSuperClassFix(@Nonnull PsiClass newSuperClass, int percent, @Nonnull PsiClass oldSuperClass) {
         myNewSuperClass = newSuperClass;
         myOldSuperClass = oldSuperClass;
         myPercent = percent;
@@ -62,7 +62,7 @@ public class ChangeSuperClassFix implements LocalQuickFix {
     }
 
     @Override
-    public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor problemDescriptor) {
+    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor problemDescriptor) {
         changeSuperClass((PsiClass) problemDescriptor.getPsiElement(), myOldSuperClass, myNewSuperClass);
     }
 
@@ -89,26 +89,26 @@ public class ChangeSuperClassFix implements LocalQuickFix {
                     ((PsiAnonymousClass) aClass).getBaseClassReference().replace(factory.createClassReferenceElement(newSuperClass));
                 }
                 else if (oldSuperClass.isInterface()) {
-                    final PsiReferenceList interfaceList = aClass.getImplementsList();
+                    PsiReferenceList interfaceList = aClass.getImplementsList();
                     if (interfaceList != null) {
-                        for (final PsiJavaCodeReferenceElement interfaceRef : interfaceList.getReferenceElements()) {
-                            final PsiElement aInterface = interfaceRef.resolve();
+                        for (PsiJavaCodeReferenceElement interfaceRef : interfaceList.getReferenceElements()) {
+                            PsiElement aInterface = interfaceRef.resolve();
                             if (aInterface != null && aInterface.isEquivalentTo(oldSuperClass)) {
                                 interfaceRef.delete();
                             }
                         }
                     }
 
-                    final PsiReferenceList extendsList = aClass.getExtendsList();
+                    PsiReferenceList extendsList = aClass.getExtendsList();
                     if (extendsList != null) {
-                        final PsiJavaCodeReferenceElement newClassReference = factory.createClassReferenceElement(newSuperClass);
+                        PsiJavaCodeReferenceElement newClassReference = factory.createClassReferenceElement(newSuperClass);
                         if (extendsList.getReferenceElements().length == 0) {
                             extendsList.add(newClassReference);
                         }
                     }
                 }
                 else {
-                    final PsiReferenceList extendsList = aClass.getExtendsList();
+                    PsiReferenceList extendsList = aClass.getExtendsList();
                     if (extendsList != null && extendsList.getReferenceElements().length == 1) {
                         extendsList.getReferenceElements()[0].delete();
                         PsiElement ref = extendsList.add(factory.createClassReferenceElement(newSuperClass));
@@ -120,7 +120,7 @@ public class ChangeSuperClassFix implements LocalQuickFix {
     }
 
     public static class LowPriority extends ChangeSuperClassFix implements LowPriorityAction {
-        public LowPriority(@Nonnull final PsiClass newSuperClass, final int percent, @Nonnull final PsiClass oldSuperClass) {
+        public LowPriority(@Nonnull PsiClass newSuperClass, int percent, @Nonnull PsiClass oldSuperClass) {
             super(newSuperClass, percent, oldSuperClass);
         }
     }

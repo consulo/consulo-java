@@ -43,16 +43,16 @@ public class EnumSwitchStatementWhichMissesCasesInspection extends BaseInspectio
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiSwitchStatement switchStatement =
+        PsiSwitchStatement switchStatement =
             (PsiSwitchStatement) infos[0];
         assert switchStatement != null;
-        final PsiExpression switchStatementExpression =
+        PsiExpression switchStatementExpression =
             switchStatement.getExpression();
         assert switchStatementExpression != null;
-        final PsiType switchStatementType =
+        PsiType switchStatementType =
             switchStatementExpression.getType();
         assert switchStatementType != null;
-        final String switchStatementTypeText =
+        String switchStatementTypeText =
             switchStatementType.getPresentableText();
         return InspectionGadgetsLocalize.enumSwitchStatementWhichMissesCasesProblemDescriptor(switchStatementTypeText).get();
     }
@@ -86,28 +86,28 @@ public class EnumSwitchStatementWhichMissesCasesInspection extends BaseInspectio
         private boolean switchStatementMissingCases(
             PsiSwitchStatement statement
         ) {
-            final PsiExpression expression = statement.getExpression();
+            PsiExpression expression = statement.getExpression();
             if (expression == null) {
                 return false;
             }
-            final PsiType type = expression.getType();
+            PsiType type = expression.getType();
             if (!(type instanceof PsiClassType)) {
                 return false;
             }
-            final PsiClassType classType = (PsiClassType) type;
-            final PsiClass aClass = classType.resolve();
+            PsiClassType classType = (PsiClassType) type;
+            PsiClass aClass = classType.resolve();
             if (aClass == null || !aClass.isEnum()) {
                 return false;
             }
-            final PsiCodeBlock body = statement.getBody();
+            PsiCodeBlock body = statement.getBody();
             if (body == null) {
                 return false;
             }
-            final PsiStatement[] statements = body.getStatements();
+            PsiStatement[] statements = body.getStatements();
             int numCases = 0;
-            for (final PsiStatement child : statements) {
+            for (PsiStatement child : statements) {
                 if (child instanceof PsiSwitchLabelStatement) {
-                    final PsiSwitchLabelStatement switchLabelStatement =
+                    PsiSwitchLabelStatement switchLabelStatement =
                         (PsiSwitchLabelStatement) child;
                     if (!switchLabelStatement.isDefaultCase()) {
                         numCases++;
@@ -117,9 +117,9 @@ public class EnumSwitchStatementWhichMissesCasesInspection extends BaseInspectio
                     }
                 }
             }
-            final PsiField[] fields = aClass.getFields();
+            PsiField[] fields = aClass.getFields();
             int numEnums = 0;
-            for (final PsiField field : fields) {
+            for (PsiField field : fields) {
                 if (!(field instanceof PsiEnumConstant)) {
                     continue;
                 }

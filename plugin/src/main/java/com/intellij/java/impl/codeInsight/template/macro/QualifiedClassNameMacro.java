@@ -44,7 +44,7 @@ public class QualifiedClassNameMacro extends Macro {
   }
 
   @Override
-  public Result calculateResult(@Nonnull Expression[] params, final ExpressionContext context) {
+  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
     PsiElement place = context.getPsiElementAtStartOffset();
     while (place != null){
       if (place instanceof PsiClass psiClass && !(place instanceof PsiAnonymousClass) && !(place instanceof PsiTypeParameter)){

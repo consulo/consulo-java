@@ -36,7 +36,7 @@ public abstract class ProjectLibrariesTest extends IdeaTestCase {
       }
     });
     ModuleRootModificationUtil.addDependency(myModule, lib);
-    final JavaPsiFacade manager = getJavaFacade();
+    JavaPsiFacade manager = getJavaFacade();
     assertNull(manager.findClass("pack.MyClass", GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule)));
     final File file = new File("/psi/repositoryUse/cls");
     final VirtualFile root = ApplicationManager.getApplication().runWriteAction(new Computable<VirtualFile>() {
@@ -54,7 +54,7 @@ public abstract class ProjectLibrariesTest extends IdeaTestCase {
         modifyableModel.commit();
       }
     });
-    final PsiClass aClass = manager.findClass("pack.MyClass", GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule));
+    PsiClass aClass = manager.findClass("pack.MyClass", GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule));
     assertNotNull(aClass);
   }
 
@@ -67,7 +67,7 @@ public abstract class ProjectLibrariesTest extends IdeaTestCase {
       }
     });
     ModuleRootModificationUtil.addDependency(myModule, lib);
-    final JavaPsiFacade manager = getJavaFacade();
+    JavaPsiFacade manager = getJavaFacade();
     assertNull(manager.findClass("pack.MyClass", GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule)));
 
     final ModifiableRootModel rootModel2 = ModuleRootManager.getInstance(myModule).getModifiableModel();
@@ -88,7 +88,7 @@ public abstract class ProjectLibrariesTest extends IdeaTestCase {
         modifyableModel.commit();
       }
     });
-    final PsiClass aClass = manager.findClass("pack.MyClass", GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule));
+    PsiClass aClass = manager.findClass("pack.MyClass", GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule));
     assertNotNull(aClass);
     assertTrue(Arrays.asList(rootModel2.orderEntries().librariesOnly().classes().getRoots()).contains(root));
     ApplicationManager.getApplication().runWriteAction(new Runnable() {
@@ -97,7 +97,7 @@ public abstract class ProjectLibrariesTest extends IdeaTestCase {
         rootModel2.commit();
       }
     });
-    final PsiClass aClass1 = manager.findClass("pack.MyClass", GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule));
+    PsiClass aClass1 = manager.findClass("pack.MyClass", GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule));
     assertNotNull(aClass1);
   }
 }

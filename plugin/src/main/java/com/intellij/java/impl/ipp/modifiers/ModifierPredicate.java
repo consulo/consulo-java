@@ -35,7 +35,7 @@ class ModifierPredicate implements PsiElementPredicate {
 
   @Override
   public boolean satisfiedBy(PsiElement element) {
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!(parent instanceof PsiClass || parent instanceof PsiField || parent instanceof PsiMethod)) {
       return false;
     }
@@ -43,8 +43,8 @@ class ModifierPredicate implements PsiElementPredicate {
       return false;
     }
     if (parent instanceof PsiClass) {
-      final PsiClass aClass = (PsiClass)parent;
-      final PsiElement brace = aClass.getLBrace();
+      PsiClass aClass = (PsiClass)parent;
+      PsiElement brace = aClass.getLBrace();
       if (brace != null && brace.getTextOffset() < element.getTextOffset()) {
         return false;
       }
@@ -53,14 +53,14 @@ class ModifierPredicate implements PsiElementPredicate {
         return false;
       }
     } else if (parent instanceof PsiMethod) {
-      final PsiMethod method = (PsiMethod)parent;
-      final PsiClass containingClass = method.getContainingClass();
+      PsiMethod method = (PsiMethod)parent;
+      PsiClass containingClass = method.getContainingClass();
       if (containingClass == null || containingClass.isInterface()) {
         return false;
       }
     }
-    final PsiModifierListOwner owner = (PsiModifierListOwner)parent;
-    final PsiModifierList modifierList = owner.getModifierList();
+    PsiModifierListOwner owner = (PsiModifierListOwner)parent;
+    PsiModifierList modifierList = owner.getModifierList();
     if (modifierList == null) {
       return false;
     }

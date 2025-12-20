@@ -44,11 +44,11 @@ public class ReplacePostfixExpressionWithAssignmentIntention
     @Nonnull
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
-        final PsiPostfixExpression postfixExpression =
+        PsiPostfixExpression postfixExpression =
             (PsiPostfixExpression) element;
-        final PsiJavaToken sign = postfixExpression.getOperationSign();
-        final String signText = sign.getText();
-        final String replacementText = "=";
+        PsiJavaToken sign = postfixExpression.getOperationSign();
+        String signText = sign.getText();
+        String replacementText = "=";
         return IntentionPowerPackLocalize.replaceSomeOperatorWithOtherIntentionName(signText, replacementText);
     }
 
@@ -61,11 +61,11 @@ public class ReplacePostfixExpressionWithAssignmentIntention
     @Override
     protected void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiPostfixExpression postfixExpression =
+        PsiPostfixExpression postfixExpression =
             (PsiPostfixExpression) element;
-        final PsiExpression operand = postfixExpression.getOperand();
-        final String operandText = operand.getText();
-        final IElementType tokenType =
+        PsiExpression operand = postfixExpression.getOperand();
+        String operandText = operand.getText();
+        IElementType tokenType =
             postfixExpression.getOperationTokenType();
         if (JavaTokenType.PLUSPLUS.equals(tokenType)) {
             replaceExpression(operandText + '=' + operandText + "+1",

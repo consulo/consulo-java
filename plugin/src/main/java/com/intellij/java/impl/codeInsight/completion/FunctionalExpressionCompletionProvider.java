@@ -69,7 +69,7 @@ public class FunctionalExpressionCompletionProvider implements CompletionProvide
   };
 
   private static boolean isLambdaContext(@Nonnull PsiElement element) {
-    final PsiElement rulezzRef = element.getParent();
+    PsiElement rulezzRef = element.getParent();
     return rulezzRef != null && rulezzRef instanceof PsiReferenceExpression && ((PsiReferenceExpression) rulezzRef).getQualifier() == null && LambdaUtil.isValidLambdaContext(rulezzRef.getParent
         ());
   }
@@ -87,19 +87,19 @@ public class FunctionalExpressionCompletionProvider implements CompletionProvide
 
     ExpectedTypeInfo[] expectedTypes = JavaSmartCompletionContributor.getExpectedTypes(parameters);
     for (ExpectedTypeInfo expectedType : expectedTypes) {
-      final PsiType defaultType = expectedType.getDefaultType();
+      PsiType defaultType = expectedType.getDefaultType();
       if (LambdaUtil.isFunctionalType(defaultType)) {
-        final PsiType functionalInterfaceType = FunctionalInterfaceParameterizationUtil.getGroundTargetType(defaultType);
-        final PsiMethod functionalInterfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(functionalInterfaceType);
+        PsiType functionalInterfaceType = FunctionalInterfaceParameterizationUtil.getGroundTargetType(defaultType);
+        PsiMethod functionalInterfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(functionalInterfaceType);
         if (functionalInterfaceMethod != null) {
           PsiParameter[] params = PsiParameter.EMPTY_ARRAY;
-          final PsiElement originalPosition = parameters.getPosition();
-          final PsiSubstitutor substitutor = LambdaUtil.getSubstitutor(functionalInterfaceMethod, PsiUtil.resolveGenericsClassInType(functionalInterfaceType));
+          PsiElement originalPosition = parameters.getPosition();
+          PsiSubstitutor substitutor = LambdaUtil.getSubstitutor(functionalInterfaceMethod, PsiUtil.resolveGenericsClassInType(functionalInterfaceType));
           if (!functionalInterfaceMethod.hasTypeParameters()) {
             params = functionalInterfaceMethod.getParameterList().getParameters();
-            final Project project = functionalInterfaceMethod.getProject();
-            final JVMElementFactory jvmElementFactory = JVMElementFactories.getFactory(originalPosition.getLanguage(), project);
-            final JavaCodeStyleManager javaCodeStyleManager = JavaCodeStyleManager.getInstance(project);
+            Project project = functionalInterfaceMethod.getProject();
+            JVMElementFactory jvmElementFactory = JVMElementFactories.getFactory(originalPosition.getLanguage(), project);
+            JavaCodeStyleManager javaCodeStyleManager = JavaCodeStyleManager.getInstance(project);
             if (jvmElementFactory != null) {
               params = GenerateMembersUtil.overriddenParameters(params, jvmElementFactory, javaCodeStyleManager, substitutor, originalPosition);
             }
@@ -107,11 +107,11 @@ public class FunctionalExpressionCompletionProvider implements CompletionProvide
             String paramsString = params.length == 1 ? getParamName(params[0], originalPosition) : "(" + StringUtil.join(params, parameter -> getParamName(parameter, originalPosition),
                 ",") + ")";
 
-            final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+            CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
             PsiLambdaExpression lambdaExpression = (PsiLambdaExpression) JavaPsiFacade.getElementFactory(project).createExpressionFromText(paramsString + " -> {}", null);
             lambdaExpression = (PsiLambdaExpression) codeStyleManager.reformat(lambdaExpression);
             paramsString = lambdaExpression.getParameterList().getText();
-            final LookupElementBuilder builder = LookupElementBuilder.create(functionalInterfaceMethod, paramsString + " -> ").withPresentableText(paramsString + " -> {}").withTypeText
+            LookupElementBuilder builder = LookupElementBuilder.create(functionalInterfaceMethod, paramsString + " -> ").withPresentableText(paramsString + " -> {}").withTypeText
                 (functionalInterfaceType.getPresentableText()).withIcon(AllIcons.Nodes.Function);
             LookupElement lambdaElement = builder.withAutoCompletionPolicy(AutoCompletionPolicy.NEVER_AUTOCOMPLETE);
             result.accept(smart ? lambdaElement : PrioritizedLookupElement.withPriority(lambdaElement, 1));
@@ -134,7 +134,7 @@ public class FunctionalExpressionCompletionProvider implements CompletionProvide
                                                  PsiElement originalPosition,
                                                  PsiSubstitutor substitutor,
                                                  Consumer<LookupElement> result) {
-    final PsiType expectedReturnType = substitutor.substitute(functionalInterfaceMethod.getReturnType());
+    PsiType expectedReturnType = substitutor.substitute(functionalInterfaceMethod.getReturnType());
     if (expectedReturnType == null) {
       return;
     }
@@ -248,10 +248,10 @@ public class FunctionalExpressionCompletionProvider implements CompletionProvide
                                                                PsiSubstitutor substitutor,
                                                                PsiType expectedReturnType) {
     List<LookupElement> result = new ArrayList<>();
-    final PsiType functionalInterfaceParamType = substitutor.substitute(params[0].getType());
-    final PsiClass paramClass = PsiUtil.resolveClassInClassTypeOnly(functionalInterfaceParamType);
+    PsiType functionalInterfaceParamType = substitutor.substitute(params[0].getType());
+    PsiClass paramClass = PsiUtil.resolveClassInClassTypeOnly(functionalInterfaceParamType);
     if (paramClass != null && !paramClass.hasTypeParameters()) {
-      final Set<String> visited = new HashSet<>();
+      Set<String> visited = new HashSet<>();
       for (PsiMethod psiMethod : paramClass.getAllMethods()) {
         PsiClass containingClass = psiMethod.getContainingClass();
         PsiClass qualifierClass = containingClass != null ? containingClass : paramClass;
@@ -274,9 +274,9 @@ public class FunctionalExpressionCompletionProvider implements CompletionProvide
   }
 
   private static boolean areParameterTypesAppropriate(PsiMethod psiMethod, PsiParameter[] params, PsiSubstitutor substitutor, int offset) {
-    final PsiParameterList parameterList = psiMethod.getParameterList();
+    PsiParameterList parameterList = psiMethod.getParameterList();
     if (parameterList.getParametersCount() == params.length - offset) {
-      final PsiParameter[] referenceMethodParams = parameterList.getParameters();
+      PsiParameter[] referenceMethodParams = parameterList.getParameters();
       for (int i = 0; i < params.length - offset; i++) {
         if (!Comparing.equal(referenceMethodParams[i].getType(), substitutor.substitute(params[i + offset].getType()))) {
           return false;

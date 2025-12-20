@@ -81,11 +81,11 @@ public class PointlessArithmeticExpressionInspection extends BaseInspection {
     }
 
     String calculateReplacementExpression(PsiExpression expression) {
-        final PsiBinaryExpression exp = (PsiBinaryExpression) expression;
-        final PsiExpression lhs = exp.getLOperand();
-        final PsiExpression rhs = exp.getROperand();
+        PsiBinaryExpression exp = (PsiBinaryExpression) expression;
+        PsiExpression lhs = exp.getLOperand();
+        PsiExpression rhs = exp.getROperand();
         assert rhs != null;
-        final IElementType tokenType = exp.getOperationTokenType();
+        IElementType tokenType = exp.getOperationTokenType();
         if (tokenType.equals(JavaTokenType.PLUS)) {
             if (isZero(lhs)) {
                 return rhs.getText();
@@ -138,8 +138,8 @@ public class PointlessArithmeticExpressionInspection extends BaseInspection {
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiExpression expression = (PsiExpression) descriptor.getPsiElement();
-            final String newExpression = calculateReplacementExpression(expression);
+            PsiExpression expression = (PsiExpression) descriptor.getPsiElement();
+            String newExpression = calculateReplacementExpression(expression);
             replaceExpression(expression, newExpression);
         }
     }
@@ -153,11 +153,11 @@ public class PointlessArithmeticExpressionInspection extends BaseInspection {
         @Override
         public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
             super.visitBinaryExpression(expression);
-            final PsiExpression rhs = expression.getROperand();
+            PsiExpression rhs = expression.getROperand();
             if (rhs == null) {
                 return;
             }
-            final PsiType expressionType = expression.getType();
+            PsiType expressionType = expression.getType();
             if (PsiType.DOUBLE.equals(expressionType) || PsiType.FLOAT.equals(expressionType)) {
                 return;
             }
@@ -167,9 +167,9 @@ public class PointlessArithmeticExpressionInspection extends BaseInspection {
             if (ExpressionUtils.hasStringType(expression)) {
                 return;
             }
-            final PsiExpression lhs = expression.getLOperand();
-            final IElementType tokenType = expression.getOperationTokenType();
-            final boolean isPointless;
+            PsiExpression lhs = expression.getLOperand();
+            IElementType tokenType = expression.getOperationTokenType();
+            boolean isPointless;
             if (tokenType.equals(JavaTokenType.PLUS)) {
                 isPointless = additionExpressionIsPointless(lhs, rhs);
             }
@@ -275,47 +275,47 @@ public class PointlessArithmeticExpressionInspection extends BaseInspection {
     }
 
     private static boolean isMinDouble(PsiExpression expression) {
-        final Double value = (Double) ConstantExpressionUtil.computeCastTo(expression, PsiType.DOUBLE);
+        Double value = (Double) ConstantExpressionUtil.computeCastTo(expression, PsiType.DOUBLE);
         return value != null && value.doubleValue() == Double.MIN_VALUE;
     }
 
     private static boolean isMaxDouble(PsiExpression expression) {
-        final Double value = (Double) ConstantExpressionUtil.computeCastTo(expression, PsiType.DOUBLE);
+        Double value = (Double) ConstantExpressionUtil.computeCastTo(expression, PsiType.DOUBLE);
         //noinspection FloatingPointEquality
         return value != null && value.doubleValue() == Double.MAX_VALUE;
     }
 
     private static boolean isMinFloat(PsiExpression expression) {
-        final Float value = (Float) ConstantExpressionUtil.computeCastTo(expression, PsiType.FLOAT);
+        Float value = (Float) ConstantExpressionUtil.computeCastTo(expression, PsiType.FLOAT);
         //noinspection FloatingPointEquality
         return value != null && value.floatValue() == Float.MIN_VALUE;
     }
 
     private static boolean isMaxFloat(PsiExpression expression) {
-        final Float value = (Float) ConstantExpressionUtil.computeCastTo(expression, PsiType.FLOAT);
+        Float value = (Float) ConstantExpressionUtil.computeCastTo(expression, PsiType.FLOAT);
         //noinspection FloatingPointEquality
         return value != null && value.floatValue() == Float.MAX_VALUE;
     }
 
     private static boolean isMinInt(PsiExpression expression) {
-        final Integer value = (Integer) ConstantExpressionUtil.computeCastTo(expression, PsiType.INT);
+        Integer value = (Integer) ConstantExpressionUtil.computeCastTo(expression, PsiType.INT);
         return value != null && value.intValue() == Integer.MIN_VALUE;
     }
 
     private static boolean isMaxInt(PsiExpression expression) {
-        final Integer value = (Integer)
+        Integer value = (Integer)
             ConstantExpressionUtil.computeCastTo(
                 expression, PsiType.INT);
         return value != null && value.intValue() == Integer.MAX_VALUE;
     }
 
     private static boolean isMinLong(PsiExpression expression) {
-        final Long value = (Long) ConstantExpressionUtil.computeCastTo(expression, PsiType.LONG);
+        Long value = (Long) ConstantExpressionUtil.computeCastTo(expression, PsiType.LONG);
         return value != null && value.longValue() == Long.MIN_VALUE;
     }
 
     private static boolean isMaxLong(PsiExpression expression) {
-        final Long value = (Long) ConstantExpressionUtil.computeCastTo(expression, PsiType.LONG);
+        Long value = (Long) ConstantExpressionUtil.computeCastTo(expression, PsiType.LONG);
         return value != null && value.longValue() == Long.MAX_VALUE;
     }
 }

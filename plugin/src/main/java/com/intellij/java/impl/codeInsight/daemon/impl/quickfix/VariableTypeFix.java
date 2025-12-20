@@ -76,7 +76,7 @@ public class VariableTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement
         @Nonnull PsiElement startElement,
         @Nonnull PsiElement endElement
     ) {
-        final PsiVariable myVariable = (PsiVariable) startElement;
+        PsiVariable myVariable = (PsiVariable) startElement;
         return myVariable.isValid()
             && myVariable.getTypeElement() != null
             && myVariable.getManager().isInProject(myVariable)
@@ -106,9 +106,9 @@ public class VariableTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement
             protected void run() throws Throwable {
                 try {
                     myVariable.normalizeDeclaration();
-                    final PsiTypeElement typeElement = myVariable.getTypeElement();
+                    PsiTypeElement typeElement = myVariable.getTypeElement();
                     LOG.assertTrue(typeElement != null, myVariable.getClass());
-                    final PsiTypeElement newTypeElement =
+                    PsiTypeElement newTypeElement =
                         JavaPsiFacade.getInstance(file.getProject()).getElementFactory().createTypeElement(getReturnType());
                     typeElement.replace(newTypeElement);
                     JavaCodeStyleManager.getInstance(project).shortenClassReferences(myVariable);
@@ -123,26 +123,26 @@ public class VariableTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement
 
     private boolean changeMethodSignatureIfNeeded(PsiVariable myVariable) {
         if (myVariable instanceof PsiParameter) {
-            final PsiElement scope = ((PsiParameter) myVariable).getDeclarationScope();
+            PsiElement scope = ((PsiParameter) myVariable).getDeclarationScope();
             if (scope instanceof PsiMethod) {
-                final PsiMethod method = (PsiMethod) scope;
-                final PsiMethod psiMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringLocalize.toRefactor().get());
+                PsiMethod method = (PsiMethod) scope;
+                PsiMethod psiMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringLocalize.toRefactor().get());
                 if (psiMethod == null) {
                     return true;
                 }
-                final int parameterIndex = method.getParameterList().getParameterIndex((PsiParameter) myVariable);
+                int parameterIndex = method.getParameterList().getParameterIndex((PsiParameter) myVariable);
                 if (!FileModificationService.getInstance().prepareFileForWrite(psiMethod.getContainingFile())) {
                     return true;
                 }
-                final ArrayList<ParameterInfoImpl> infos = new ArrayList<ParameterInfoImpl>();
+                ArrayList<ParameterInfoImpl> infos = new ArrayList<ParameterInfoImpl>();
                 int i = 0;
                 for (PsiParameter parameter : psiMethod.getParameterList().getParameters()) {
-                    final boolean changeType = i == parameterIndex;
+                    boolean changeType = i == parameterIndex;
                     infos.add(new ParameterInfoImpl(i++, parameter.getName(), changeType ? getReturnType() : parameter.getType()));
                 }
 
                 if (!ApplicationManager.getApplication().isUnitTestMode()) {
-                    final JavaChangeSignatureDialog dialog =
+                    JavaChangeSignatureDialog dialog =
                         new JavaChangeSignatureDialog(psiMethod.getProject(), psiMethod, false, myVariable);
                     dialog.setParameterInfos(infos);
                     dialog.show();

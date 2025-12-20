@@ -47,8 +47,8 @@ public class AnnotationInitializerBlocksBuilder
 
 	public List<Block> buildBlocks()
 	{
-		final Wrap wrap = Wrap.createWrap(getWrapType(myJavaSettings.ANNOTATION_PARAMETER_WRAP), false);
-		final Alignment alignment = myJavaSettings.ALIGN_MULTILINE_ANNOTATION_PARAMETERS ? Alignment.createAlignment() : null;
+		Wrap wrap = Wrap.createWrap(getWrapType(myJavaSettings.ANNOTATION_PARAMETER_WRAP), false);
+		Alignment alignment = myJavaSettings.ALIGN_MULTILINE_ANNOTATION_PARAMETERS ? Alignment.createAlignment() : null;
 
 		ChildrenBlocksBuilder.Config config = new ChildrenBlocksBuilder.Config().setDefaultIndent(Indent.getContinuationWithoutFirstIndent()).setIndent(JavaTokenType.RPARENTH, Indent.getNoneIndent()
 		).setIndent(JavaTokenType.LPARENTH, Indent.getNoneIndent())

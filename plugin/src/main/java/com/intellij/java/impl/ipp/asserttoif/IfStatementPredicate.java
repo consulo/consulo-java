@@ -25,54 +25,54 @@ class IfStatementPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiJavaToken)) {
       return false;
     }
-    final PsiJavaToken token = (PsiJavaToken)element;
+    PsiJavaToken token = (PsiJavaToken)element;
     if (token.getTokenType() != JavaTokenType.IF_KEYWORD) {
       return false;
     }
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!(parent instanceof PsiIfStatement)) {
       return false;
     }
-    final PsiIfStatement statement = (PsiIfStatement)parent;
-    final PsiStatement elseBranch = statement.getElseBranch();
+    PsiIfStatement statement = (PsiIfStatement)parent;
+    PsiStatement elseBranch = statement.getElseBranch();
     if (elseBranch != null) {
       return false;
     }
-    final PsiStatement thenBranch = statement.getThenBranch();
+    PsiStatement thenBranch = statement.getThenBranch();
     return isThrowNewAssertionError(thenBranch);
   }
 
   private static boolean isThrowNewAssertionError(PsiElement element) {
     if (element instanceof PsiThrowStatement) {
-      final PsiThrowStatement throwStatement =
+      PsiThrowStatement throwStatement =
         (PsiThrowStatement)element;
-      final PsiExpression exception = throwStatement.getException();
+      PsiExpression exception = throwStatement.getException();
       if (!(exception instanceof PsiNewExpression)) {
         return false;
       }
-      final PsiNewExpression newExpression = (PsiNewExpression)exception;
-      final PsiJavaCodeReferenceElement classReference =
+      PsiNewExpression newExpression = (PsiNewExpression)exception;
+      PsiJavaCodeReferenceElement classReference =
         newExpression.getClassReference();
       if (classReference == null) {
         return false;
       }
-      final PsiElement target = classReference.resolve();
+      PsiElement target = classReference.resolve();
       if (!(target instanceof PsiClass)) {
         return false;
       }
-      final PsiClass aClass = (PsiClass)target;
-      final String qualifiedName = aClass.getQualifiedName();
+      PsiClass aClass = (PsiClass)target;
+      String qualifiedName = aClass.getQualifiedName();
       return CommonClassNames.JAVA_LANG_ASSERTION_ERROR.equals(qualifiedName);
     }
     else if (element instanceof PsiBlockStatement) {
-      final PsiBlockStatement blockStatement =
+      PsiBlockStatement blockStatement =
         (PsiBlockStatement)element;
-      final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
-      final PsiStatement[] statements = codeBlock.getStatements();
+      PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
+      PsiStatement[] statements = codeBlock.getStatements();
       if (statements.length != 1) {
         return false;
       }
-      final PsiStatement statement = statements[0];
+      PsiStatement statement = statements[0];
       return isThrowNewAssertionError(statement);
     }
     return false;

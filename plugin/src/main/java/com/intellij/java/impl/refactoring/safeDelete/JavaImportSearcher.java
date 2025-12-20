@@ -29,7 +29,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 public class JavaImportSearcher extends ImportSearcher {
   @Override
   public PsiElement findImport(PsiElement element, boolean onlyNonStatic) {
-    final PsiFile containingFile = element.getContainingFile();
+    PsiFile containingFile = element.getContainingFile();
     if (!(containingFile instanceof PsiJavaFile)) return null;
 
     if (onlyNonStatic) {

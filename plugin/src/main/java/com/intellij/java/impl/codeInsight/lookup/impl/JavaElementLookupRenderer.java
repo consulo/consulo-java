@@ -38,12 +38,12 @@ import java.util.List;
 @ExtensionImpl
 public class JavaElementLookupRenderer implements ElementLookupRenderer {
   @Override
-  public boolean handlesItem(final Object element) {
+  public boolean handlesItem(Object element) {
     return element instanceof BeanPropertyElement;
   }
 
   @Override
-  public void renderElement(final LookupItem item, final Object element, final LookupElementPresentation presentation) {
+  public void renderElement(LookupItem item, Object element, LookupElementPresentation presentation) {
     presentation.setIcon(DefaultLookupItemRenderer.getRawIcon(item, presentation.isReal()));
 
     presentation.setItemText(PsiUtilCore.getName((PsiElement) element));
@@ -56,7 +56,7 @@ public class JavaElementLookupRenderer implements ElementLookupRenderer {
   }
 
   public static boolean isToStrikeout(LookupElement item) {
-    final List<PsiMethod> allMethods = JavaCompletionUtil.getAllMethods(item);
+    List<PsiMethod> allMethods = JavaCompletionUtil.getAllMethods(item);
     if (allMethods != null) {
       for (PsiMethod method : allMethods) {
         if (!method.isValid()) { //?

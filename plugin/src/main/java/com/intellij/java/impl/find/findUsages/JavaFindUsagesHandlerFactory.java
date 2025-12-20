@@ -57,19 +57,19 @@ public class JavaFindUsagesHandlerFactory extends FindUsagesHandlerFactory {
   }
 
   @Override
-  public boolean canFindUsages(@Nonnull final PsiElement element) {
+  public boolean canFindUsages(@Nonnull PsiElement element) {
     return new JavaFindUsagesProvider().canFindUsagesFor(element);
   }
 
   @Override
-  public FindUsagesHandler createFindUsagesHandler(@Nonnull final PsiElement element, final boolean forHighlightUsages) {
+  public FindUsagesHandler createFindUsagesHandler(@Nonnull PsiElement element, boolean forHighlightUsages) {
     if (element instanceof PsiDirectory directory) {
-      final PsiJavaPackage psiPackage = JavaDirectoryService.getInstance().getPackage(directory);
+      PsiJavaPackage psiPackage = JavaDirectoryService.getInstance().getPackage(directory);
       return psiPackage == null ? null : new JavaFindUsagesHandler(psiPackage, this);
     }
 
     if (element instanceof PsiMethod method && !forHighlightUsages) {
-      final PsiMethod[] methods = SuperMethodWarningUtil.checkSuperMethods(
+      PsiMethod[] methods = SuperMethodWarningUtil.checkSuperMethods(
         method,
         FindBundle.message("find.super.method.warning.action.verb")
       );

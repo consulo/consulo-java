@@ -104,7 +104,7 @@ public class JavaVfsSourceRootDetectionUtil {
                 int index1 = packageName.lastIndexOf('.', index - 1);
                 String token = packageName.substring(index1 + 1, index);
                 String dirName = root.getName();
-                final boolean equalsToToken = Platform.current().fs().isCaseSensitive() ? dirName.equals(token) : dirName.equalsIgnoreCase(token);
+                boolean equalsToToken = Platform.current().fs().isCaseSensitive() ? dirName.equals(token) : dirName.equalsIgnoreCase(token);
                 if (!equalsToToken) {
                     return null;
                 }

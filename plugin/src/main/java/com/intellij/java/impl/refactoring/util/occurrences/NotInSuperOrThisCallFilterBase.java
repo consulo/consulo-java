@@ -33,7 +33,7 @@ public abstract class NotInSuperOrThisCallFilterBase implements OccurrenceFilter
     if(!(parent instanceof PsiExpressionList)) return true;
     parent = parent.getParent();
     if(!(parent instanceof PsiMethodCallExpression)) return true;
-    final String text = ((PsiMethodCallExpression) parent).getMethodExpression().getText();
+    String text = ((PsiMethodCallExpression) parent).getMethodExpression().getText();
     return !getKeywordText().equals(text);
   }
 

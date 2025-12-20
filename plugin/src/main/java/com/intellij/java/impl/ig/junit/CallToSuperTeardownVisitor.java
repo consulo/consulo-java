@@ -39,13 +39,13 @@ class CallToSuperTeardownVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     super.visitMethodCallExpression(expression);
-    final PsiReferenceExpression methodExpression =
+    PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
-    @NonNls final String methodName = methodExpression.getReferenceName();
+    @NonNls String methodName = methodExpression.getReferenceName();
     if (!"tearDown".equals(methodName)) {
       return;
     }
-    final PsiExpression target = methodExpression.getQualifierExpression();
+    PsiExpression target = methodExpression.getQualifierExpression();
     if (!(target instanceof PsiSuperExpression)) {
       return;
     }

@@ -25,7 +25,7 @@ public abstract class ExtendsConcreteCollectionInspection extends ExtendsConcret
 
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiClass aClass = (PsiClass) infos[1];
+    PsiClass aClass = (PsiClass) infos[1];
     // skip inheritance with delegation for anonymous classes
     // or better suggest to replace anonymous with inner and then replace with delegation
     if (aClass instanceof PsiAnonymousClass) {

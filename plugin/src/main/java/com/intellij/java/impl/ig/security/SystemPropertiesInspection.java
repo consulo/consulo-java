@@ -40,8 +40,8 @@ public class SystemPropertiesInspection extends BaseInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final boolean isGetSystemProperty = (Boolean) infos[0];
-        final boolean isIntegerGetInteger = (Boolean) infos[1];
+        boolean isGetSystemProperty = (Boolean) infos[0];
+        boolean isIntegerGetInteger = (Boolean) infos[1];
         if (isGetSystemProperty) {
             return InspectionGadgetsLocalize.systemSetProblemDescriptor().get();
         }
@@ -62,9 +62,9 @@ public class SystemPropertiesInspection extends BaseInspection {
         @Override
         public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
-            final boolean isGetSystemProperty = isGetSystemProperty(expression);
-            final boolean isIntegerGetInteger = isIntegerGetInteger(expression);
-            final boolean isBooleanGetBoolean = isBooleanGetBoolean(expression);
+            boolean isGetSystemProperty = isGetSystemProperty(expression);
+            boolean isIntegerGetInteger = isIntegerGetInteger(expression);
+            boolean isBooleanGetBoolean = isBooleanGetBoolean(expression);
             if (!(isGetSystemProperty || isIntegerGetInteger || isBooleanGetBoolean)) {
                 return;
             }
@@ -72,8 +72,8 @@ public class SystemPropertiesInspection extends BaseInspection {
         }
 
         private static boolean isGetSystemProperty(PsiMethodCallExpression expression) {
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            String methodName = methodExpression.getReferenceName();
             if (!"getProperty".equals(methodName)
                 && !"getProperties".equals(methodName)
                 && !"setProperty".equals(methodName)
@@ -82,15 +82,15 @@ public class SystemPropertiesInspection extends BaseInspection {
             ) {
                 return false;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return false;
             }
-            final PsiClass aClass = method.getContainingClass();
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null) {
                 return false;
             }
-            final String className = aClass.getQualifiedName();
+            String className = aClass.getQualifiedName();
             if (className == null) {
                 return false;
             }
@@ -98,20 +98,20 @@ public class SystemPropertiesInspection extends BaseInspection {
         }
 
         private static boolean isIntegerGetInteger(PsiMethodCallExpression expression) {
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            String methodName = methodExpression.getReferenceName();
             if (!"getInteger".equals(methodName)) {
                 return false;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return false;
             }
-            final PsiClass aClass = method.getContainingClass();
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null) {
                 return false;
             }
-            final String className = aClass.getQualifiedName();
+            String className = aClass.getQualifiedName();
             if (className == null) {
                 return false;
             }
@@ -119,20 +119,20 @@ public class SystemPropertiesInspection extends BaseInspection {
         }
 
         private static boolean isBooleanGetBoolean(PsiMethodCallExpression expression) {
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            String methodName = methodExpression.getReferenceName();
             if (!"getBoolean".equals(methodName)) {
                 return false;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return false;
             }
-            final PsiClass aClass = method.getContainingClass();
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null) {
                 return false;
             }
-            final String className = aClass.getQualifiedName();
+            String className = aClass.getQualifiedName();
             if (className == null) {
                 return false;
             }

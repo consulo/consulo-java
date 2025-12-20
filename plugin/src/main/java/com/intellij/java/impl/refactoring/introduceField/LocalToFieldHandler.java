@@ -83,8 +83,8 @@ public abstract class LocalToFieldHandler {
     }
 
     if (classes.isEmpty()) return false;
-    final AbstractInplaceIntroducer activeIntroducer = AbstractInplaceIntroducer.getActiveIntroducer(editor);
-    final boolean shouldSuggestDialog = activeIntroducer instanceof InplaceIntroduceConstantPopup &&
+    AbstractInplaceIntroducer activeIntroducer = AbstractInplaceIntroducer.getActiveIntroducer(editor);
+    boolean shouldSuggestDialog = activeIntroducer instanceof InplaceIntroduceConstantPopup &&
         activeIntroducer.startsOnTheSameElement(null, local);
     if (classes.size() == 1 || ApplicationManager.getApplication().isUnitTestMode() || shouldSuggestDialog) {
       if (convertLocalToField(local, classes.get(getChosenClassIndex(classes)), editor, tempIsStatic)) return false;
@@ -108,23 +108,23 @@ public abstract class LocalToFieldHandler {
   }
 
   private boolean convertLocalToField(PsiLocalVariable local, PsiClass aClass, Editor editor, boolean isStatic) {
-    final PsiExpression[] occurences = CodeInsightUtil.findReferenceExpressions(RefactoringUtil.getVariableScope(local), local);
+    PsiExpression[] occurences = CodeInsightUtil.findReferenceExpressions(RefactoringUtil.getVariableScope(local), local);
     if (editor != null) {
       RefactoringUtil.highlightAllOccurrences(myProject, occurences, editor);
     }
 
-    final BaseExpressionToFieldHandler.Settings settings = showRefactoringDialog(aClass, local, occurences, isStatic);
+    BaseExpressionToFieldHandler.Settings settings = showRefactoringDialog(aClass, local, occurences, isStatic);
     if (settings == null) return true;
     //LocalToFieldDialog dialog = new LocalToFieldDialog(project, aClass, local, isStatic);
-    final PsiClass destinationClass = settings.getDestinationClass();
+    PsiClass destinationClass = settings.getDestinationClass();
     boolean rebindNeeded = false;
     if (destinationClass != null) {
       aClass = destinationClass;
       rebindNeeded = true;
     }
 
-    final PsiClass aaClass = aClass;
-    final boolean rebindNeeded1 = rebindNeeded;
+    PsiClass aaClass = aClass;
+    boolean rebindNeeded1 = rebindNeeded;
     final Runnable runnable =
         new IntroduceFieldRunnable(rebindNeeded1, local, aaClass, settings, isStatic, occurences);
     CommandProcessor.getInstance().executeCommand(myProject, new Runnable() {
@@ -146,7 +146,7 @@ public abstract class LocalToFieldHandler {
       pattern.append("=0");
     }
     pattern.append(";");
-    final Project project = local.getProject();
+    Project project = local.getProject();
     PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
     try {
       PsiField field = factory.createFieldFromText(pattern.toString(), null);
@@ -175,7 +175,7 @@ public abstract class LocalToFieldHandler {
       statement = (PsiExpressionStatement) CodeStyleManager.getInstance(local.getProject()).reformat(statement);
 
       PsiAssignmentExpression expr = (PsiAssignmentExpression) statement.getExpression();
-      final PsiExpression initializer = RefactoringUtil.convertInitializerToNormalExpression(local.getInitializer(), local.getType());
+      PsiExpression initializer = RefactoringUtil.convertInitializerToNormalExpression(local.getInitializer(), local.getType());
       expr.getRExpression().replace(initializer);
 
       return statement;
@@ -185,12 +185,12 @@ public abstract class LocalToFieldHandler {
     }
   }
 
-  private static PsiStatement addInitializationToSetUp(final PsiLocalVariable local, final PsiField field, final PsiElementFactory factory)
+  private static PsiStatement addInitializationToSetUp(PsiLocalVariable local, PsiField field, PsiElementFactory factory)
       throws IncorrectOperationException {
     PsiMethod inClass = TestFrameworks.getInstance().findOrCreateSetUpMethod(field.getContainingClass());
     assert inClass != null;
     PsiStatement assignment = createAssignment(local, field.getName(), factory);
-    final PsiCodeBlock body = inClass.getBody();
+    PsiCodeBlock body = inClass.getBody();
     assert body != null;
     if (PsiTreeUtil.isAncestor(body, local, false)) {
       assignment = (PsiStatement) body.addBefore(assignment, PsiTreeUtil.getParentOfType(local, PsiStatement.class));
@@ -238,7 +238,7 @@ public abstract class LocalToFieldHandler {
     }
     if (!added && enclosingConstructor == null) {
       if (aClass instanceof PsiAnonymousClass) {
-        final PsiClassInitializer classInitializer = (PsiClassInitializer) aClass.addAfter(factory.createClassInitializer(), field);
+        PsiClassInitializer classInitializer = (PsiClassInitializer) aClass.addAfter(factory.createClassInitializer(), field);
         assignment = (PsiStatement) classInitializer.getBody().add(assignment);
       } else {
         PsiMethod constructor = (PsiMethod) aClass.add(factory.createConstructor());
@@ -282,15 +282,15 @@ public abstract class LocalToFieldHandler {
 
     public void run() {
       try {
-        final boolean rebindNeeded2 = !myVariableName.equals(myFieldName) || myRebindNeeded;
-        final PsiReference[] refs;
+        boolean rebindNeeded2 = !myVariableName.equals(myFieldName) || myRebindNeeded;
+        PsiReference[] refs;
         if (rebindNeeded2) {
           refs = ReferencesSearch.search(myLocal, GlobalSearchScope.projectScope(myProject), false).toArray(new PsiReference[0]);
         } else {
           refs = null;
         }
 
-        final PsiMethod enclosingConstructor = BaseExpressionToFieldHandler.getEnclosingConstructor(myDestinationClass, myLocal);
+        PsiMethod enclosingConstructor = BaseExpressionToFieldHandler.getEnclosingConstructor(myDestinationClass, myLocal);
         myField = mySettings.isIntroduceEnumConstant() ? EnumConstantsUtil.createEnumConstant(myDestinationClass, myLocal, myFieldName)
             : createField(myLocal, mySettings.getForcedType(), myFieldName, myInitializerPlace == IN_FIELD_DECLARATION);
         myField = (PsiField) myDestinationClass.add(myField);
@@ -301,13 +301,13 @@ public abstract class LocalToFieldHandler {
 
         myLocal.normalizeDeclaration();
         PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement) myLocal.getParent();
-        final BaseExpressionToFieldHandler.InitializationPlace finalInitializerPlace;
+        BaseExpressionToFieldHandler.InitializationPlace finalInitializerPlace;
         if (myLocal.getInitializer() == null) {
           finalInitializerPlace = IN_FIELD_DECLARATION;
         } else {
           finalInitializerPlace = myInitializerPlace;
         }
-        final PsiElementFactory factory = JavaPsiFacade.getInstance(myProject).getElementFactory();
+        PsiElementFactory factory = JavaPsiFacade.getInstance(myProject).getElementFactory();
 
         switch (finalInitializerPlace) {
           case IN_FIELD_DECLARATION:
@@ -332,7 +332,7 @@ public abstract class LocalToFieldHandler {
         }
 
         if (rebindNeeded2) {
-          for (final PsiReference reference : refs) {
+          for (PsiReference reference : refs) {
             if (reference != null) {
               //expr = RefactoringUtil.outermostParenthesizedExpression(expr);
               RefactoringUtil.replaceOccurenceWithFieldRef((PsiExpression) reference, myField, myDestinationClass);

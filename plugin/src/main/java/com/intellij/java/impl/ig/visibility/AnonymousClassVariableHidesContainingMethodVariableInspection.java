@@ -37,7 +37,7 @@ public class AnonymousClassVariableHidesContainingMethodVariableInspection
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final Object info = infos[0];
+    Object info = infos[0];
     if (info instanceof PsiParameter) {
       return InspectionGadgetsLocalize.anonymousClassParameterHidesContainingMethodVariableProblemDescriptor().get();
     }

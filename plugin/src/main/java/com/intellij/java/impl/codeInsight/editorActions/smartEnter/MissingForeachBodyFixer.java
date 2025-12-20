@@ -39,7 +39,7 @@ public class MissingForeachBodyFixer implements Fixer
 			return;
 		}
 
-		final Document doc = editor.getDocument();
+		Document doc = editor.getDocument();
 
 		PsiElement body = forStatement.getBody();
 		if(body instanceof PsiBlockStatement)

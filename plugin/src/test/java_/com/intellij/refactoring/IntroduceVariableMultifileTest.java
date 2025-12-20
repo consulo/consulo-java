@@ -78,13 +78,13 @@ public abstract class IntroduceVariableMultifileTest extends MultiFileTestCase {
     return new PerformAction() {
       @Override
       public void performAction(VirtualFile vroot, VirtualFile rootAfter) {
-        final JavaPsiFacade psiManager = getJavaFacade();
-        final PsiClass aClass = psiManager.findClass(className, GlobalSearchScope.allScope(myProject));
+        JavaPsiFacade psiManager = getJavaFacade();
+        PsiClass aClass = psiManager.findClass(className, GlobalSearchScope.allScope(myProject));
         assertTrue(className + " class not found", aClass != null);
-        final PsiFile containingFile = aClass.getContainingFile();
-        final VirtualFile virtualFile = containingFile.getVirtualFile();
+        PsiFile containingFile = aClass.getContainingFile();
+        VirtualFile virtualFile = containingFile.getVirtualFile();
         assertTrue(virtualFile != null);
-        final Editor editor = createEditor(virtualFile);
+        Editor editor = createEditor(virtualFile);
         setupCursorAndSelection(editor);
         testMe.invoke(myProject, editor, containingFile, null);
         FileDocumentManager.getInstance().saveAllDocuments();

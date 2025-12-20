@@ -91,9 +91,9 @@ public class ClassLiteralLookupElement extends LookupElement implements TypedLoo
 
   @Override
   public void handleInsert(InsertionContext context) {
-    final Document document = context.getEditor().getDocument();
+    Document document = context.getEditor().getDocument();
     document.replaceString(context.getStartOffset(), context.getTailOffset(), myCanonicalText + DOT_CLASS);
-    final Project project = context.getProject();
+    Project project = context.getProject();
     PsiDocumentManager.getInstance(project).commitDocument(document);
     JavaCodeStyleManager.getInstance(project).shortenClassReferences(context.getFile(), context.getStartOffset(), context.getTailOffset());
   }

@@ -47,7 +47,7 @@ public abstract class SwitchStatementDensityInspection extends BaseInspection {
     @Override
     @Nonnull
     protected String buildErrorString(Object... infos) {
-        final Integer intDensity = (Integer) infos[0];
+        Integer intDensity = (Integer) infos[0];
         return InspectionGadgetsLocalize.switchStatementDensityProblemDescriptor(intDensity).get();
     }
 
@@ -59,16 +59,16 @@ public abstract class SwitchStatementDensityInspection extends BaseInspection {
     private class SwitchStatementDensityVisitor extends BaseInspectionVisitor {
         @Override
         public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
-            final PsiCodeBlock body = statement.getBody();
+            PsiCodeBlock body = statement.getBody();
             if (body == null) {
                 return;
             }
-            final int branchCount = SwitchUtils.calculateBranchCount(statement);
+            int branchCount = SwitchUtils.calculateBranchCount(statement);
             if (branchCount == 0) {
                 return;
             }
-            final double density = calculateDensity(body, branchCount);
-            final int intDensity = (int) (density * 100.0);
+            double density = calculateDensity(body, branchCount);
+            int intDensity = (int) (density * 100.0);
             if (intDensity > m_limit) {
                 return;
             }
@@ -76,7 +76,7 @@ public abstract class SwitchStatementDensityInspection extends BaseInspection {
         }
 
         private double calculateDensity(@Nonnull PsiCodeBlock body, int branchCount) {
-            final StatementCountVisitor visitor = new StatementCountVisitor();
+            StatementCountVisitor visitor = new StatementCountVisitor();
             body.accept(visitor);
             return (double) branchCount / (double) visitor.getStatementCount();
         }

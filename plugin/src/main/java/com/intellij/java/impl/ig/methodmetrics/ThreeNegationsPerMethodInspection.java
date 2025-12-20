@@ -51,7 +51,7 @@ public class ThreeNegationsPerMethodInspection extends BaseInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+        MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
         panel.addCheckbox(InspectionGadgetsLocalize.threeNegationsPerMethodIgnoreOption().get(), "m_ignoreInEquals");
         panel.addCheckbox(InspectionGadgetsLocalize.threeNegationsPerMethodIgnoreAssertOption().get(), "ignoreInAssert");
         return panel;
@@ -60,7 +60,7 @@ public class ThreeNegationsPerMethodInspection extends BaseInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final Integer negationCount = (Integer) infos[0];
+        Integer negationCount = (Integer) infos[0];
         return InspectionGadgetsLocalize.threeNegationsPerMethodProblemDescriptor(negationCount).get();
     }
 
@@ -77,9 +77,9 @@ public class ThreeNegationsPerMethodInspection extends BaseInspection {
             if (method.getNameIdentifier() == null) {
                 return;
             }
-            final NegationCountVisitor visitor = new NegationCountVisitor(ignoreInAssert);
+            NegationCountVisitor visitor = new NegationCountVisitor(ignoreInAssert);
             method.accept(visitor);
-            final int negationCount = visitor.getCount();
+            int negationCount = visitor.getCount();
             if (negationCount <= 3) {
                 return;
             }

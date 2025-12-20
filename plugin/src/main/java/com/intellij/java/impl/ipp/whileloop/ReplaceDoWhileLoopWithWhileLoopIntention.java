@@ -42,42 +42,42 @@ public class ReplaceDoWhileLoopWithWhileLoopIntention extends Intention {
 
     protected void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiDoWhileStatement doWhileStatement =
+        PsiDoWhileStatement doWhileStatement =
             (PsiDoWhileStatement) element.getParent();
         if (doWhileStatement == null) {
             return;
         }
-        final PsiStatement body = doWhileStatement.getBody();
-        final PsiElement parent = doWhileStatement.getParent();
-        final StringBuilder whileStatementText = new StringBuilder("while(");
-        final PsiExpression condition = doWhileStatement.getCondition();
+        PsiStatement body = doWhileStatement.getBody();
+        PsiElement parent = doWhileStatement.getParent();
+        StringBuilder whileStatementText = new StringBuilder("while(");
+        PsiExpression condition = doWhileStatement.getCondition();
         if (condition != null) {
             whileStatementText.append(condition.getText());
         }
         whileStatementText.append(')');
         if (body instanceof PsiBlockStatement) {
             whileStatementText.append('{');
-            final PsiBlockStatement blockStatement = (PsiBlockStatement) body;
-            final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
-            final PsiElement[] children = codeBlock.getChildren();
+            PsiBlockStatement blockStatement = (PsiBlockStatement) body;
+            PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
+            PsiElement[] children = codeBlock.getChildren();
             if (children.length > 2) {
                 for (int i = 1; i < children.length - 1; i++) {
-                    final PsiElement child = children[i];
+                    PsiElement child = children[i];
                     parent.addBefore(child, doWhileStatement);
                     if (child instanceof PsiDeclarationStatement) {
-                        final PsiDeclarationStatement declarationStatement =
+                        PsiDeclarationStatement declarationStatement =
                             (PsiDeclarationStatement) child;
-                        final PsiElement[] declaredElements =
+                        PsiElement[] declaredElements =
                             declarationStatement.getDeclaredElements();
                         for (PsiElement declaredElement : declaredElements) {
                             if (declaredElement instanceof PsiVariable) {
                                 // prevent duplicate variable declarations.
-                                final PsiVariable variable =
+                                PsiVariable variable =
                                     (PsiVariable) declaredElement;
-                                final PsiExpression initializer =
+                                PsiExpression initializer =
                                     variable.getInitializer();
                                 if (initializer != null) {
-                                    final String name = variable.getName();
+                                    String name = variable.getName();
                                     whileStatementText.append(name);
                                     whileStatementText.append(" = ");
                                     whileStatementText.append(

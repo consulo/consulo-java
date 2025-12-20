@@ -54,7 +54,7 @@ public class ThrowsRuntimeExceptionInspection extends BaseInspection {
     @Nonnull
     @Override
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
-        final String exceptionName = (String) infos[0];
+        String exceptionName = (String) infos[0];
         if (MoveExceptionToJavadocFix.isApplicable((PsiJavaCodeReferenceElement) infos[1])) {
             return new InspectionGadgetsFix[]{
                 new ThrowsRuntimeExceptionFix(exceptionName),
@@ -80,30 +80,30 @@ public class ThrowsRuntimeExceptionInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = element.getParent();
-            final PsiElement grandParent = parent.getParent();
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement parent = element.getParent();
+            PsiElement grandParent = parent.getParent();
             if (!(grandParent instanceof PsiMethod)) {
                 return;
             }
-            final PsiMethod method = (PsiMethod) grandParent;
-            final PsiDocComment comment = method.getDocComment();
-            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+            PsiMethod method = (PsiMethod) grandParent;
+            PsiDocComment comment = method.getDocComment();
+            PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
             if (comment != null) {
-                final PsiDocTag docTag = factory.createDocTagFromText("@throws " + element.getText());
+                PsiDocTag docTag = factory.createDocTagFromText("@throws " + element.getText());
                 comment.add(docTag);
             }
             else {
-                final PsiDocComment docComment = factory.createDocCommentFromText("/** */");
-                final PsiComment resultComment = (PsiComment) method.addBefore(docComment, method.getModifierList());
-                final DocumentationProvider documentationProvider =
+                PsiDocComment docComment = factory.createDocCommentFromText("/** */");
+                PsiComment resultComment = (PsiComment) method.addBefore(docComment, method.getModifierList());
+                DocumentationProvider documentationProvider =
                     LanguageDocumentationProvider.forLanguageComposite(method.getLanguage());
-                final CodeDocumentationProvider codeDocumentationProvider;
+                CodeDocumentationProvider codeDocumentationProvider;
                 if (documentationProvider instanceof CodeDocumentationProvider) {
                     codeDocumentationProvider = (CodeDocumentationProvider) documentationProvider;
                 }
                 else if (documentationProvider instanceof CompositeDocumentationProvider) {
-                    final CompositeDocumentationProvider compositeDocumentationProvider =
+                    CompositeDocumentationProvider compositeDocumentationProvider =
                         (CompositeDocumentationProvider) documentationProvider;
                     codeDocumentationProvider = compositeDocumentationProvider.getFirstCodeDocumentationProvider();
                     if (codeDocumentationProvider == null) {
@@ -113,44 +113,44 @@ public class ThrowsRuntimeExceptionInspection extends BaseInspection {
                 else {
                     return;
                 }
-                final String commentStub = codeDocumentationProvider.generateDocumentationContentStub(resultComment);
-                final PsiDocComment newComment = factory.createDocCommentFromText("/**\n" + commentStub + "*/");
+                String commentStub = codeDocumentationProvider.generateDocumentationContentStub(resultComment);
+                PsiDocComment newComment = factory.createDocCommentFromText("/**\n" + commentStub + "*/");
                 resultComment.replace(newComment);
             }
             element.delete();
         }
 
         public static boolean isApplicable(@Nonnull PsiJavaCodeReferenceElement reference) {
-            final PsiElement parent = reference.getParent();
-            final PsiElement grandParent = parent.getParent();
+            PsiElement parent = reference.getParent();
+            PsiElement grandParent = parent.getParent();
             if (!(grandParent instanceof PsiMethod)) {
                 return false;
             }
-            final PsiMethod method = (PsiMethod) grandParent;
-            final PsiDocComment docComment = method.getDocComment();
+            PsiMethod method = (PsiMethod) grandParent;
+            PsiDocComment docComment = method.getDocComment();
             if (docComment == null) {
                 return true;
             }
-            final PsiElement throwsTarget = reference.resolve();
+            PsiElement throwsTarget = reference.resolve();
             if (throwsTarget == null) {
                 return true;
             }
-            final PsiDocTag[] tags = docComment.findTagsByName("throws");
+            PsiDocTag[] tags = docComment.findTagsByName("throws");
             for (PsiDocTag tag : tags) {
-                final PsiDocTagValue valueElement = tag.getValueElement();
+                PsiDocTagValue valueElement = tag.getValueElement();
                 if (valueElement == null) {
                     continue;
                 }
-                final PsiElement child = valueElement.getFirstChild();
+                PsiElement child = valueElement.getFirstChild();
                 if (child == null) {
                     continue;
                 }
-                final PsiElement grandChild = child.getFirstChild();
+                PsiElement grandChild = child.getFirstChild();
                 if (!(grandChild instanceof PsiJavaCodeReferenceElement)) {
                     continue;
                 }
-                final PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement) grandChild;
-                final PsiElement target = referenceElement.resolve();
+                PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement) grandChild;
+                PsiElement target = referenceElement.resolve();
                 if (throwsTarget.equals(target)) {
                     return false;
                 }
@@ -189,18 +189,18 @@ public class ThrowsRuntimeExceptionInspection extends BaseInspection {
         @Override
         public void visitMethod(PsiMethod method) {
             super.visitMethod(method);
-            final PsiReferenceList throwsList = method.getThrowsList();
-            final PsiJavaCodeReferenceElement[] referenceElements = throwsList.getReferenceElements();
+            PsiReferenceList throwsList = method.getThrowsList();
+            PsiJavaCodeReferenceElement[] referenceElements = throwsList.getReferenceElements();
             for (PsiJavaCodeReferenceElement referenceElement : referenceElements) {
-                final PsiElement target = referenceElement.resolve();
+                PsiElement target = referenceElement.resolve();
                 if (!(target instanceof PsiClass)) {
                     continue;
                 }
-                final PsiClass aClass = (PsiClass) target;
+                PsiClass aClass = (PsiClass) target;
                 if (!InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION)) {
                     continue;
                 }
-                final String className = aClass.getName();
+                String className = aClass.getName();
                 registerError(referenceElement, className, referenceElement);
             }
         }

@@ -47,13 +47,13 @@ public class ClassNameDiffersFromFileNameInspection extends BaseInspection {
     @Override
     @Nullable
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiJavaFile file = (PsiJavaFile) infos[0];
-        final String fileName = file.getName();
-        final int prefixIndex = fileName.indexOf((int) '.');
-        final String filenameWithoutPrefix = fileName.substring(0, prefixIndex);
-        final PsiClass[] classes = file.getClasses();
+        PsiJavaFile file = (PsiJavaFile) infos[0];
+        String fileName = file.getName();
+        int prefixIndex = fileName.indexOf((int) '.');
+        String filenameWithoutPrefix = fileName.substring(0, prefixIndex);
+        PsiClass[] classes = file.getClasses();
         for (PsiClass psiClass : classes) {
-            final String className = psiClass.getName();
+            String className = psiClass.getName();
             if (filenameWithoutPrefix.equals(className)) {
                 return null;
             }
@@ -75,21 +75,21 @@ public class ClassNameDiffersFromFileNameInspection extends BaseInspection {
 
         @Override
         public void visitClass(@Nonnull PsiClass aClass) {
-            final PsiElement parent = aClass.getParent();
+            PsiElement parent = aClass.getParent();
             if (!(parent instanceof PsiJavaFile)) {
                 return;
             }
-            final PsiJavaFile file = (PsiJavaFile) parent;
-            final String className = aClass.getName();
+            PsiJavaFile file = (PsiJavaFile) parent;
+            String className = aClass.getName();
             if (className == null) {
                 return;
             }
-            final String fileName = file.getName();
-            final int prefixIndex = fileName.indexOf((int) '.');
+            String fileName = file.getName();
+            int prefixIndex = fileName.indexOf((int) '.');
             if (prefixIndex < 0) {
                 return;
             }
-            final String filenameWithoutPrefix = fileName.substring(0, prefixIndex);
+            String filenameWithoutPrefix = fileName.substring(0, prefixIndex);
             if (className.equals(filenameWithoutPrefix)) {
                 return;
             }

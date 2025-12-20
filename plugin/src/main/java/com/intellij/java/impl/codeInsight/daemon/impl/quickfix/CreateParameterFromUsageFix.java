@@ -100,7 +100,7 @@ public class CreateParameterFromUsageFix extends CreateVarFromUsageFix {
       parameterInfos.add(parameterInfos.size() - 1, parameterInfo);
     }
 
-    final Application application = ApplicationManager.getApplication();
+    Application application = ApplicationManager.getApplication();
     if (application.isUnitTestMode()) {
       ParameterInfoImpl[] array = parameterInfos.toArray(new ParameterInfoImpl[parameterInfos.size()]);
       String modifier = PsiUtil.getAccessModifier(PsiUtil.getAccessLevel(method.getModifierList()));
@@ -121,13 +121,13 @@ public class CreateParameterFromUsageFix extends CreateVarFromUsageFix {
             if (dialog.isOK()) {
               for (ParameterInfoImpl info : parameterInfos) {
                 if (info.getOldIndex() == -1) {
-                  final String newParamName = info.getName();
+                  String newParamName = info.getName();
                   if (!Comparing.strEqual(varName, newParamName)) {
                     final PsiExpression newExpr = JavaPsiFacade.getElementFactory(project).createExpressionFromText(newParamName, finalMethod);
                     new WriteCommandAction(project){
                       @Override
                       protected void run(Result result) throws Throwable {
-                        final PsiReferenceExpression[] refs =
+                        PsiReferenceExpression[] refs =
                           CreateFromUsageUtils.collectExpressions(myReferenceExpression, PsiMember.class, PsiFile.class);
                         for (PsiReferenceExpression ref : refs) {
                           ref.replace(newExpr.copy());

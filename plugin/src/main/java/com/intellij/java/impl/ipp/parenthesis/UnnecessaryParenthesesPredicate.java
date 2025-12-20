@@ -30,11 +30,11 @@ class UnnecessaryParenthesesPredicate implements PsiElementPredicate
 	{
 		if(element instanceof PsiParameterList)
 		{
-			final PsiParameterList parameterList = (PsiParameterList) element;
-			final PsiElement parent = element.getParent();
+			PsiParameterList parameterList = (PsiParameterList) element;
+			PsiElement parent = element.getParent();
 			if(parent instanceof PsiLambdaExpression && parameterList.getParametersCount() == 1)
 			{
-				final PsiParameter parameter = parameterList.getParameters()[0];
+				PsiParameter parameter = parameterList.getParameters()[0];
 				return parameter.getTypeElement() == null && element.getFirstChild() != parameter && element.getLastChild() != parameter;
 			}
 		}
@@ -42,7 +42,7 @@ class UnnecessaryParenthesesPredicate implements PsiElementPredicate
 		{
 			return false;
 		}
-		final PsiParenthesizedExpression expression = (PsiParenthesizedExpression) element;
+		PsiParenthesizedExpression expression = (PsiParenthesizedExpression) element;
 		return !ParenthesesUtils.areParenthesesNeeded(expression, false);
 	}
 }

@@ -115,19 +115,19 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
             return null;
         }
 
-        final ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
-        final Set<VirtualFile> usedRoots = refModule.getUserData(UnusedLibraryGraphAnnotator.USED_LIBRARY_ROOTS);
+        ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
+        Set<VirtualFile> usedRoots = refModule.getUserData(UnusedLibraryGraphAnnotator.USED_LIBRARY_ROOTS);
 
         if (usedRoots != null) {
             appendUsedRootDependencies(usedRoots, givenRoots);
         }
 
         return AccessRule.read(() -> {
-            final List<CommonProblemDescriptor> result = new ArrayList<>();
+            List<CommonProblemDescriptor> result = new ArrayList<>();
             for (OrderEntry entry : moduleRootManager.getOrderEntries()) {
                 if (entry instanceof LibraryOrderEntry libraryOrderEntry &&
                     !libraryOrderEntry.isExported() && libraryOrderEntry.getScope() != DependencyScope.RUNTIME) {
-                    final Set<VirtualFile> files =
+                    Set<VirtualFile> files =
                         consulo.ide.impl.idea.util.containers.ContainerUtil.set(entry.getFiles(BinariesOrderRootType.getInstance()));
                     boolean allRootsUnused = usedRoots == null || !files.removeAll(usedRoots);
                     if (allRootsUnused) {
@@ -138,7 +138,7 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
                         ));
                     }
                     else if (!files.isEmpty() && !IGNORE_LIBRARY_PARTS) {
-                        final String unusedLibraryRoots = StringUtil.join(files, VirtualFile::getPresentableName, ",");
+                        String unusedLibraryRoots = StringUtil.join(files, VirtualFile::getPresentableName, ",");
                         LocalizeValue message =
                             JavaAnalysisLocalize.unusedLibraryRootsProblemDescriptor(unusedLibraryRoots, entry.getPresentableName());
                         CommonProblemDescriptor descriptor = ((LibraryOrderEntry) entry).isModuleLevel()
@@ -265,7 +265,7 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
         private final Set<? extends VirtualFile> myFiles;
         private final String myLibraryName;
 
-        RemoveUnusedLibrary(String libraryName, final Set<? extends VirtualFile> files) {
+        RemoveUnusedLibrary(String libraryName, Set<? extends VirtualFile> files) {
             myLibraryName = libraryName;
             myFiles = files;
         }
@@ -279,19 +279,19 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
 
         @Override
         @RequiredWriteAction
-        public void applyFix(@Nonnull final Project project, @Nonnull final ModuleProblemDescriptor descriptor) {
-            final Module module = descriptor.getModule();
+        public void applyFix(@Nonnull Project project, @Nonnull ModuleProblemDescriptor descriptor) {
+            Module module = descriptor.getModule();
 
-            final ModifiableRootModel model = ModuleRootManager.getInstance(module).getModifiableModel();
+            ModifiableRootModel model = ModuleRootManager.getInstance(module).getModifiableModel();
             for (OrderEntry entry : model.getOrderEntries()) {
                 if (entry instanceof LibraryOrderEntry && Comparing.strEqual(entry.getPresentableName(), myLibraryName)) {
                     if (myFiles == null) {
                         model.removeOrderEntry(entry);
                     }
                     else {
-                        final Library library = ((LibraryOrderEntry) entry).getLibrary();
+                        Library library = ((LibraryOrderEntry) entry).getLibrary();
                         if (library != null) {
-                            final Library.ModifiableModel modifiableModel = library.getModifiableModel();
+                            Library.ModifiableModel modifiableModel = library.getModifiableModel();
                             for (VirtualFile file : myFiles) {
                                 modifiableModel.removeRoot(file.getUrl(), BinariesOrderRootType.getInstance());
                             }
@@ -318,14 +318,14 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
         @RequiredReadAction
         public void onMarkReferenced(PsiElement what, PsiElement from, boolean referencedFromClassInitializer) {
             if (what != null && from != null) {
-                final VirtualFile virtualFile = PsiUtilCore.getVirtualFile(what);
-                final VirtualFile containingDir = virtualFile != null ? virtualFile.getParent() : null;
+                VirtualFile virtualFile = PsiUtilCore.getVirtualFile(what);
+                VirtualFile containingDir = virtualFile != null ? virtualFile.getParent() : null;
                 if (containingDir != null) {
-                    final VirtualFile libraryClassRoot = myFileIndex.getClassRootForFile(containingDir);
+                    VirtualFile libraryClassRoot = myFileIndex.getClassRootForFile(containingDir);
                     if (libraryClassRoot != null) {
-                        final Module fromModule = ModuleUtilCore.findModuleForPsiElement(from);
+                        Module fromModule = ModuleUtilCore.findModuleForPsiElement(from);
                         if (fromModule != null) {
-                            final RefModule refModule = myManager.getRefModule(fromModule);
+                            RefModule refModule = myManager.getRefModule(fromModule);
                             if (refModule != null) {
                                 Set<VirtualFile> usedRoots = refModule.getUserData(USED_LIBRARY_ROOTS);
                                 if (usedRoots == null) {

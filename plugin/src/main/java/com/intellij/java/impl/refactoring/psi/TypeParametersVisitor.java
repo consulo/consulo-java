@@ -30,9 +30,9 @@ public class TypeParametersVisitor extends JavaRecursiveElementWalkingVisitor {
 
    public void visitTypeElement(PsiTypeElement typeElement) {
        super.visitTypeElement(typeElement);
-       final PsiType type = typeElement.getType();
+       PsiType type = typeElement.getType();
        if (type instanceof PsiClassType) {
-           final PsiClass referent = ((PsiClassType) type).resolve();
+           PsiClass referent = ((PsiClassType) type).resolve();
            if (referent instanceof PsiTypeParameter) {
                params.add((PsiTypeParameter) referent);
            }

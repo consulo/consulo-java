@@ -27,7 +27,7 @@ public class JavaSmartCompletionParameters {
   private final CompletionParameters myParameters;
   private final ExpectedTypeInfo myExpectedType;
 
-  public JavaSmartCompletionParameters(CompletionParameters parameters, final ExpectedTypeInfo expectedType) {
+  public JavaSmartCompletionParameters(CompletionParameters parameters, ExpectedTypeInfo expectedType) {
     myParameters = parameters;
     myExpectedType = expectedType;
   }

@@ -36,15 +36,15 @@ import java.awt.event.MouseEvent;
  */
 public class ConvertToInstanceMethodDialog  extends MoveInstanceMethodDialogBase {
   private static final Logger LOG = Logger.getInstance(ConvertToInstanceMethodDialog.class);
-  public ConvertToInstanceMethodDialog(final PsiMethod method, final PsiParameter[] variables) {
+  public ConvertToInstanceMethodDialog(PsiMethod method, PsiParameter[] variables) {
     super(method, variables, ConvertToInstanceMethodHandler.REFACTORING_NAME);
     init();
   }
 
   protected void doAction() {
-    final PsiVariable targetVariable = (PsiVariable)myList.getSelectedValue();
+    PsiVariable targetVariable = (PsiVariable)myList.getSelectedValue();
     LOG.assertTrue(targetVariable instanceof PsiParameter);
-    final ConvertToInstanceMethodProcessor processor = new ConvertToInstanceMethodProcessor(myMethod.getProject(),
+    ConvertToInstanceMethodProcessor processor = new ConvertToInstanceMethodProcessor(myMethod.getProject(),
                                                                                             myMethod, (PsiParameter)targetVariable,
                                                                                             myVisibilityPanel.getVisibility());
     if (!verifyTargetClass(processor.getTargetClass())) return;
@@ -57,7 +57,7 @@ public class ConvertToInstanceMethodDialog  extends MoveInstanceMethodDialogBase
 
   protected JComponent createCenterPanel() {
     JPanel panel = new JPanel(new BorderLayout(UIUtil.DEFAULT_HGAP, UIUtil.DEFAULT_VGAP));
-    final JLabel label = new JLabel(RefactoringLocalize.moveinstancemethodSelectAnInstanceParameter().get());
+    JLabel label = new JLabel(RefactoringLocalize.moveinstancemethodSelectAnInstanceParameter().get());
     panel.add(label, BorderLayout.NORTH);
     panel.add(createListAndVisibilityPanels(), BorderLayout.CENTER);
     return panel;

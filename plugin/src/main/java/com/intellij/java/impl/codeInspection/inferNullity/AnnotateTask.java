@@ -54,7 +54,7 @@ class AnnotateTask implements SequentialTask
 	@Override
 	public boolean iteration()
 	{
-		final ProgressIndicator indicator = myTask.getIndicator();
+		ProgressIndicator indicator = myTask.getIndicator();
 		if(indicator != null)
 		{
 			indicator.setFraction(((double) myCount) / myTotal);

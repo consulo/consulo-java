@@ -113,7 +113,7 @@ class RecursionWeigher extends LookupElementWeigher {
   @Nonnull
   @Override
   public Result weigh(@Nonnull LookupElement element) {
-    final Object object = element.getObject();
+    Object object = element.getObject();
     if (!(object instanceof PsiMethod || object instanceof PsiVariable || object instanceof PsiExpression)) {
       return Result.normal;
     }
@@ -127,12 +127,12 @@ class RecursionWeigher extends LookupElementWeigher {
     }
 
     if (myExpectedInfos != null) {
-      final PsiType itemType = JavaCompletionUtil.getLookupElementType(element);
+      PsiType itemType = JavaCompletionUtil.getLookupElementType(element);
       if (itemType != null) {
         boolean hasRecursiveInvocations = false;
         boolean hasOtherInvocations = false;
 
-        for (final ExpectedTypeInfo expectedInfo : myExpectedInfos) {
+        for (ExpectedTypeInfo expectedInfo : myExpectedInfos) {
           PsiMethod calledMethod = expectedInfo.getCalledMethod();
           if (!expectedInfo.getType().isAssignableFrom(itemType)) {
             continue;
@@ -154,7 +154,7 @@ class RecursionWeigher extends LookupElementWeigher {
     }
 
     if (object instanceof PsiMethod && myPositionMethod != null) {
-      final PsiMethod method = (PsiMethod) object;
+      PsiMethod method = (PsiMethod) object;
       if (PsiTreeUtil.isAncestor(myReference, myPosition, false) && Comparing.equal(method.getName(), myPositionMethod.getName())) {
         if (!myDelegate && findDeepestSuper(method).equals(findDeepestSuper(myPositionMethod))) {
           return Result.recursive;
@@ -205,10 +205,10 @@ class RecursionWeigher extends LookupElementWeigher {
   }
 
   @Nonnull
-  public static PsiMethod findDeepestSuper(@Nonnull final PsiMethod method) {
+  public static PsiMethod findDeepestSuper(@Nonnull PsiMethod method) {
     CommonProcessors.FindFirstProcessor<PsiMethod> processor = new CommonProcessors.FindFirstProcessor<>();
     MethodDeepestSuperSearcher.processDeepestSuperMethods(method, processor);
-    final PsiMethod first = processor.getFoundValue();
+    PsiMethod first = processor.getFoundValue();
     return first == null ? method : first;
   }
 }

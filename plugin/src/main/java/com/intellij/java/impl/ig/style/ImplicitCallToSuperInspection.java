@@ -72,22 +72,22 @@ public class ImplicitCallToSuperInspection extends BaseInspection {
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement methodName = descriptor.getPsiElement();
-      final PsiMethod method = (PsiMethod)methodName.getParent();
+      PsiElement methodName = descriptor.getPsiElement();
+      PsiMethod method = (PsiMethod)methodName.getParent();
       if (method == null) {
         return;
       }
-      final PsiCodeBlock body = method.getBody();
-      final PsiElementFactory factory =
+      PsiCodeBlock body = method.getBody();
+      PsiElementFactory factory =
         JavaPsiFacade.getElementFactory(project);
-      final PsiStatement newStatement =
+      PsiStatement newStatement =
         factory.createStatementFromText("super();", null);
-      final CodeStyleManager styleManager =
+      CodeStyleManager styleManager =
         CodeStyleManager.getInstance(project);
       if (body == null) {
         return;
       }
-      final PsiJavaToken brace = body.getLBrace();
+      PsiJavaToken brace = body.getLBrace();
       body.addAfter(newStatement, brace);
       styleManager.reformat(body);
     }
@@ -106,7 +106,7 @@ public class ImplicitCallToSuperInspection extends BaseInspection {
       if (!method.isConstructor()) {
         return;
       }
-      final PsiClass containingClass = method.getContainingClass();
+      PsiClass containingClass = method.getContainingClass();
       if (containingClass == null) {
         return;
       }
@@ -114,24 +114,24 @@ public class ImplicitCallToSuperInspection extends BaseInspection {
         return;
       }
       if (m_ignoreForObjectSubclasses) {
-        final PsiClass superClass = containingClass.getSuperClass();
+        PsiClass superClass = containingClass.getSuperClass();
         if (superClass != null) {
-          final String superClassName = superClass.getQualifiedName();
+          String superClassName = superClass.getQualifiedName();
           if (CommonClassNames.JAVA_LANG_OBJECT.equals(superClassName)) {
             return;
           }
         }
       }
-      final PsiCodeBlock body = method.getBody();
+      PsiCodeBlock body = method.getBody();
       if (body == null) {
         return;
       }
-      final PsiStatement[] statements = body.getStatements();
+      PsiStatement[] statements = body.getStatements();
       if (statements.length == 0) {
         registerMethodError(method);
         return;
       }
-      final PsiStatement firstStatement = statements[0];
+      PsiStatement firstStatement = statements[0];
       if (isConstructorCall(firstStatement)) {
         return;
       }
@@ -142,9 +142,9 @@ public class ImplicitCallToSuperInspection extends BaseInspection {
       if (!(statement instanceof PsiExpressionStatement)) {
         return false;
       }
-      final PsiExpressionStatement expressionStatement =
+      PsiExpressionStatement expressionStatement =
         (PsiExpressionStatement)statement;
-      final PsiExpression expression =
+      PsiExpression expression =
         expressionStatement.getExpression();
       return ExpressionUtils.isConstructorInvocation(expression);
     }

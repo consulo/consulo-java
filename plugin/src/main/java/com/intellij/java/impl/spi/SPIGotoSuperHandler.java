@@ -35,7 +35,7 @@ public class SPIGotoSuperHandler extends BaseJavaGotoSuperHandler {
   @RequiredReadAction
   @Override
   protected PsiNameIdentifierOwner getElement(PsiFile file, int offset) {
-    final SPIClassProviderReferenceElement
+    SPIClassProviderReferenceElement
       providerElement = PsiTreeUtil.getParentOfType(file.findElementAt(offset), SPIClassProviderReferenceElement.class);
     if (providerElement != null) {
       return (PsiClass)providerElement.resolve();

@@ -48,7 +48,7 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
         if (!isWritable(project, element)) {
             return;
         }
-        final PsiElement matchingElement = findMatchingElement(element, editor);
+        PsiElement matchingElement = findMatchingElement(element, editor);
         if (matchingElement == null) {
             return;
         }
@@ -65,29 +65,29 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
     protected abstract PsiElementPredicate getElementPredicate();
 
     protected static void replaceExpression(@Nonnull String newExpression, @Nonnull PsiExpression expression) {
-        final Project project = expression.getProject();
-        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-        final PsiExpression newCall = factory.createExpressionFromText(newExpression, expression);
-        final PsiElement insertedElement = expression.replace(newCall);
-        final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+        Project project = expression.getProject();
+        PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+        PsiExpression newCall = factory.createExpressionFromText(newExpression, expression);
+        PsiElement insertedElement = expression.replace(newCall);
+        CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
         codeStyleManager.reformat(insertedElement);
     }
 
     protected static void replaceExpressionWithNegatedExpression(@Nonnull PsiExpression newExpression, @Nonnull PsiExpression expression) {
-        final Project project = expression.getProject();
-        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+        Project project = expression.getProject();
+        PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
         PsiExpression expressionToReplace = expression;
-        final String newExpressionText = newExpression.getText();
-        final String expString;
+        String newExpressionText = newExpression.getText();
+        String expString;
         if (BoolUtils.isNegated(expression)) {
             expressionToReplace = BoolUtils.findNegation(expression);
             expString = newExpressionText;
         }
         else if (ComparisonUtils.isComparison(newExpression)) {
-            final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) newExpression;
-            final String negatedComparison = ComparisonUtils.getNegatedComparison(binaryExpression.getOperationTokenType());
-            final PsiExpression lhs = binaryExpression.getLOperand();
-            final PsiExpression rhs = binaryExpression.getROperand();
+            PsiBinaryExpression binaryExpression = (PsiBinaryExpression) newExpression;
+            String negatedComparison = ComparisonUtils.getNegatedComparison(binaryExpression.getOperationTokenType());
+            PsiExpression lhs = binaryExpression.getLOperand();
+            PsiExpression rhs = binaryExpression.getROperand();
             assert rhs != null;
             expString = lhs.getText() + negatedComparison + rhs.getText();
         }
@@ -99,19 +99,19 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
                 expString = '!' + newExpressionText;
             }
         }
-        final PsiExpression newCall = factory.createExpressionFromText(expString, expression);
+        PsiExpression newCall = factory.createExpressionFromText(expString, expression);
         assert expressionToReplace != null;
-        final PsiElement insertedElement = expressionToReplace.replace(newCall);
-        final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+        PsiElement insertedElement = expressionToReplace.replace(newCall);
+        CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
         codeStyleManager.reformat(insertedElement);
     }
 
     protected static void replaceExpressionWithNegatedExpressionString(@Nonnull String newExpression, @Nonnull PsiExpression expression) {
-        final Project project = expression.getProject();
-        final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-        final PsiElementFactory factory = psiFacade.getElementFactory();
+        Project project = expression.getProject();
+        JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+        PsiElementFactory factory = psiFacade.getElementFactory();
         PsiExpression expressionToReplace = expression;
-        final String expString;
+        String expString;
         if (BoolUtils.isNegated(expression)) {
             expressionToReplace = BoolUtils.findNegation(expressionToReplace);
             expString = newExpression;
@@ -124,39 +124,39 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
             }
             expString = "!(" + newExpression + ')';
         }
-        final PsiExpression newCall = factory.createExpressionFromText(expString, expression);
+        PsiExpression newCall = factory.createExpressionFromText(expString, expression);
         assert expressionToReplace != null;
-        final PsiElement insertedElement = expressionToReplace.replace(newCall);
-        final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+        PsiElement insertedElement = expressionToReplace.replace(newCall);
+        CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
         codeStyleManager.reformat(insertedElement);
     }
 
     protected static void replaceStatement(@NonNls @Nonnull String newStatementText, @NonNls @Nonnull PsiStatement statement) {
-        final Project project = statement.getProject();
-        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-        final PsiStatement newStatement = factory.createStatementFromText(newStatementText, statement);
-        final PsiElement insertedElement = statement.replace(newStatement);
-        final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+        Project project = statement.getProject();
+        PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+        PsiStatement newStatement = factory.createStatementFromText(newStatementText, statement);
+        PsiElement insertedElement = statement.replace(newStatement);
+        CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
         codeStyleManager.reformat(insertedElement);
     }
 
     protected static void replaceStatementAndShorten(@NonNls @Nonnull String newStatementText, @NonNls @Nonnull PsiStatement statement) {
-        final Project project = statement.getProject();
-        final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-        final PsiElementFactory factory = psiFacade.getElementFactory();
-        final PsiStatement newStatement = factory.createStatementFromText(newStatementText, statement);
-        final PsiElement insertedElement = statement.replace(newStatement);
-        final JavaCodeStyleManager javaCodeStyleManager = JavaCodeStyleManager.getInstance(project);
-        final PsiElement shortenedElement = javaCodeStyleManager.shortenClassReferences(insertedElement);
-        final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+        Project project = statement.getProject();
+        JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+        PsiElementFactory factory = psiFacade.getElementFactory();
+        PsiStatement newStatement = factory.createStatementFromText(newStatementText, statement);
+        PsiElement insertedElement = statement.replace(newStatement);
+        JavaCodeStyleManager javaCodeStyleManager = JavaCodeStyleManager.getInstance(project);
+        PsiElement shortenedElement = javaCodeStyleManager.shortenClassReferences(insertedElement);
+        CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
         codeStyleManager.reformat(shortenedElement);
     }
 
     protected static void addStatementBefore(String newStatementText, PsiReturnStatement anchor) {
-        final Project project = anchor.getProject();
-        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-        final PsiStatement newStatement = factory.createStatementFromText(newStatementText, anchor);
-        final PsiElement addedStatement = anchor.getParent().addBefore(newStatement, anchor);
+        Project project = anchor.getProject();
+        PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+        PsiStatement newStatement = factory.createStatementFromText(newStatementText, anchor);
+        PsiElement addedStatement = anchor.getParent().addBefore(newStatement, anchor);
         CodeStyleManager.getInstance(project).reformat(addedStatement);
     }
 
@@ -193,12 +193,12 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
     }
 
     private static boolean isWritable(Project project, PsiElement element) {
-        final VirtualFile virtualFile = PsiUtilCore.getVirtualFile(element);
+        VirtualFile virtualFile = PsiUtilCore.getVirtualFile(element);
         if (virtualFile == null) {
             return true;
         }
-        final ReadonlyStatusHandler readonlyStatusHandler = ReadonlyStatusHandler.getInstance(project);
-        final ReadonlyStatusHandler.OperationStatus operationStatus = readonlyStatusHandler.ensureFilesWritable(virtualFile);
+        ReadonlyStatusHandler readonlyStatusHandler = ReadonlyStatusHandler.getInstance(project);
+        ReadonlyStatusHandler.OperationStatus operationStatus = readonlyStatusHandler.ensureFilesWritable(virtualFile);
         return !operationStatus.hasReadonlyFiles();
     }
 

@@ -55,7 +55,7 @@ public abstract class EmptyIntentionInspectionQuickFixTest extends LightQuickFix
       public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
         return new JavaElementVisitor() {
           @Override public void visitLiteralExpression(PsiLiteralExpression expression) {
-            final String s = (String)expression.getValue();
+            String s = (String)expression.getValue();
             if (s.contains("a")) holder.registerProblem(expression, "Look ma! This String contains 'a'");
             if (s.contains("b")) holder.registerProblem(expression, "Look ma! This String contains 'b'");
           }
@@ -79,7 +79,7 @@ public abstract class EmptyIntentionInspectionQuickFixTest extends LightQuickFix
     List<IntentionAction> emptyActions = getAvailableActions();
     int i = 0;
     for(;i < emptyActions.size(); i++) {
-      final IntentionAction intentionAction = emptyActions.get(i);
+      IntentionAction intentionAction = emptyActions.get(i);
       if ("Make 'i' not final".equals(intentionAction.getText())) {
         break;
       }

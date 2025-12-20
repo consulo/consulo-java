@@ -54,13 +54,13 @@ public class ReplaceConcatenationWithFormatStringIntention extends Intention {
             expression = (PsiPolyadicExpression) parent;
             parent = expression.getParent();
         }
-        final StringBuilder formatString = new StringBuilder();
-        final List<PsiExpression> formatParameters = new ArrayList();
+        StringBuilder formatString = new StringBuilder();
+        List<PsiExpression> formatParameters = new ArrayList();
         PsiConcatenationUtil.buildFormatString(expression, formatString, formatParameters, true);
         if (replaceWithPrintfExpression(expression, formatString, formatParameters)) {
             return;
         }
-        final StringBuilder newExpression = new StringBuilder();
+        StringBuilder newExpression = new StringBuilder();
         newExpression.append("java.lang.String.format(\"");
         newExpression.append(formatString);
         newExpression.append('\"');
@@ -74,18 +74,18 @@ public class ReplaceConcatenationWithFormatStringIntention extends Intention {
 
     private static boolean replaceWithPrintfExpression(PsiExpression expression, CharSequence formatString,
                                                        List<PsiExpression> formatParameters) throws IncorrectOperationException {
-        final PsiElement expressionParent = expression.getParent();
+        PsiElement expressionParent = expression.getParent();
         if (!(expressionParent instanceof PsiExpressionList)) {
             return false;
         }
-        final PsiElement grandParent = expressionParent.getParent();
+        PsiElement grandParent = expressionParent.getParent();
         if (!(grandParent instanceof PsiMethodCallExpression)) {
             return false;
         }
-        final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) grandParent;
-        final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-        final String name = methodExpression.getReferenceName();
-        final boolean insertNewline;
+        PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) grandParent;
+        PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+        String name = methodExpression.getReferenceName();
+        boolean insertNewline;
         if ("println".equals(name)) {
             insertNewline = true;
         }
@@ -95,21 +95,21 @@ public class ReplaceConcatenationWithFormatStringIntention extends Intention {
         else {
             return false;
         }
-        final PsiMethod method = methodCallExpression.resolveMethod();
+        PsiMethod method = methodCallExpression.resolveMethod();
         if (method == null) {
             return false;
         }
-        final PsiClass containingClass = method.getContainingClass();
+        PsiClass containingClass = method.getContainingClass();
         if (containingClass == null) {
             return false;
         }
-        final String qualifiedName = containingClass.getQualifiedName();
+        String qualifiedName = containingClass.getQualifiedName();
         if (!CommonClassNames.JAVA_IO_PRINT_STREAM.equals(qualifiedName)
             && !CommonClassNames.JAVA_IO_PRINT_WRITER.equals(qualifiedName)) {
             return false;
         }
-        final StringBuilder newExpression = new StringBuilder();
-        final PsiExpression qualifier = methodExpression.getQualifierExpression();
+        StringBuilder newExpression = new StringBuilder();
+        PsiExpression qualifier = methodExpression.getQualifierExpression();
         if (qualifier != null) {
             newExpression.append(qualifier.getText());
             newExpression.append('.');

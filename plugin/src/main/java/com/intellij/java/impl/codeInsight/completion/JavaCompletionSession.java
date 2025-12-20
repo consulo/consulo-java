@@ -70,7 +70,7 @@ public class JavaCompletionSession {
 
   @Nullable
   private static PsiClass extractClass(LookupElement lookupElement) {
-    final Object object = lookupElement.getObject();
+    Object object = lookupElement.getObject();
     if (object instanceof PsiClass) {
       return (PsiClass) object;
     }
@@ -91,12 +91,12 @@ public class JavaCompletionSession {
   }
 
   public boolean alreadyProcessed(@Nonnull LookupElement element) {
-    final PsiClass psiClass = extractClass(element);
+    PsiClass psiClass = extractClass(element);
     return psiClass != null && alreadyProcessed(psiClass);
   }
 
   public boolean alreadyProcessed(@Nonnull PsiClass object) {
-    final String name = getClassName(object);
+    String name = getClassName(object);
     return name == null || myAddedClasses.contains(name);
   }
 

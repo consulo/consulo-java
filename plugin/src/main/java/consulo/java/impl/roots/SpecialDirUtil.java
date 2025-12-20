@@ -40,7 +40,7 @@ public class SpecialDirUtil {
 
   @Nullable
   public static String getSpecialDirLocation(@Nonnull Module module, @Nonnull String name) {
-    final JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
+    JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
     if(extension == null) {
       return null;
     }
@@ -50,13 +50,13 @@ public class SpecialDirUtil {
         return module.getModuleDirPath() + File.separator + name;
       case SOURCE_DIR:
         ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
-        final VirtualFile[] contentFolders = moduleRootManager.getContentFolderFiles(LanguageContentFolderScopes.all(false));
+        VirtualFile[] contentFolders = moduleRootManager.getContentFolderFiles(LanguageContentFolderScopes.all(false));
         if(contentFolders.length == 0) {
           return null;
         }
 
         for(VirtualFile virtualFile : contentFolders) {
-          final VirtualFile child = virtualFile.findChild(name);
+          VirtualFile child = virtualFile.findChild(name);
           if(child != null) {
             return child.getPath();
           }
@@ -69,30 +69,30 @@ public class SpecialDirUtil {
 
   @Nonnull
   public static List<VirtualFile> collectSpecialDirs(@Nonnull Module module, @Nonnull String name) {
-    final JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
+    JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
     if(extension == null) {
       return Collections.emptyList();
     }
 
     switch(extension.getSpecialDirLocation()) {
       case MODULE_DIR:
-        final String specialDirLocation = getSpecialDirLocation(module, name);
+        String specialDirLocation = getSpecialDirLocation(module, name);
         assert specialDirLocation != null;
-        final VirtualFile virtualFile = VcsUtil.getVirtualFile(specialDirLocation);
+        VirtualFile virtualFile = VcsUtil.getVirtualFile(specialDirLocation);
         if(virtualFile == null) {
           return Collections.emptyList();
         }
         return Collections.singletonList(virtualFile);
       case SOURCE_DIR:
         ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
-        final VirtualFile[] sourceRoots = moduleRootManager.getContentFolderFiles(LanguageContentFolderScopes.all(false));
+        VirtualFile[] sourceRoots = moduleRootManager.getContentFolderFiles(LanguageContentFolderScopes.all(false));
         if(sourceRoots.length == 0) {
           return Collections.emptyList();
         }
 
         List<VirtualFile> list = new ArrayList<VirtualFile>(2);
         for(VirtualFile sourceRoot : sourceRoots) {
-          final VirtualFile child = sourceRoot.findChild(name);
+          VirtualFile child = sourceRoot.findChild(name);
           if(child != null) {
             list.add(child);
           }

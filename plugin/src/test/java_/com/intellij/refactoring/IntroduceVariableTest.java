@@ -146,7 +146,7 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
       }
 
       @Override
-      protected boolean reportConflicts(MultiMap<PsiElement,String> conflicts, final Project project, IntroduceVariableSettings dialog) {
+      protected boolean reportConflicts(MultiMap<PsiElement,String> conflicts, Project project, IntroduceVariableSettings dialog) {
         assertEquals(2, conflicts.size());
         Collection<? extends String> conflictsMessages = conflicts.values();
         assertTrue(conflictsMessages.contains("Introducing variable may break code logic."));
@@ -321,8 +321,8 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
                                                    boolean declareFinalIfAll,
                                                    boolean anyAssignmentLHS,
                                                    InputValidator validator,
-                                                   PsiElement anchor, final OccurrencesChooser.ReplaceChoice replaceChoice) {
-        final PsiType type = typeSelectorManager.getDefaultType();
+                                                   PsiElement anchor, OccurrencesChooser.ReplaceChoice replaceChoice) {
+        PsiType type = typeSelectorManager.getDefaultType();
         Assert.assertTrue(type.getPresentableText(), type.getPresentableText().equals(expectedTypeName));
         Assert.assertEquals("path", IntroduceVariableBase.getSuggestedName(type, expr).names[0]);
         return super.getSettings(project, editor, expr, occurrences, typeSelectorManager, declareFinalIfAll, anyAssignmentLHS,
@@ -340,8 +340,8 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
                                                    boolean declareFinalIfAll,
                                                    boolean anyAssignmentLHS,
                                                    InputValidator validator,
-                                                   PsiElement anchor, final OccurrencesChooser.ReplaceChoice replaceChoice) {
-        final PsiType type = typeSelectorManager.getDefaultType();
+                                                   PsiElement anchor, OccurrencesChooser.ReplaceChoice replaceChoice) {
+        PsiType type = typeSelectorManager.getDefaultType();
         Assert.assertTrue(type.getPresentableText(), type.getPresentableText().equals("B"));
         return super.getSettings(project, editor, expr, occurrences, typeSelectorManager, declareFinalIfAll, anyAssignmentLHS,
                                  validator, anchor, replaceChoice);

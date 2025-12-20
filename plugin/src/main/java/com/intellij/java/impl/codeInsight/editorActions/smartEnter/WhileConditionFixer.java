@@ -36,16 +36,16 @@ public class WhileConditionFixer implements Fixer {
   @Override
   public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException {
     if (psiElement instanceof PsiWhileStatement) {
-      final Document doc = editor.getDocument();
-      final PsiWhileStatement whileStatement = (PsiWhileStatement) psiElement;
-      final PsiJavaToken rParenth = whileStatement.getRParenth();
-      final PsiJavaToken lParenth = whileStatement.getLParenth();
-      final PsiExpression condition = whileStatement.getCondition();
+      Document doc = editor.getDocument();
+      PsiWhileStatement whileStatement = (PsiWhileStatement) psiElement;
+      PsiJavaToken rParenth = whileStatement.getRParenth();
+      PsiJavaToken lParenth = whileStatement.getLParenth();
+      PsiExpression condition = whileStatement.getCondition();
 
       if (condition == null) {
         if (lParenth == null || rParenth == null) {
           int stopOffset = doc.getLineEndOffset(doc.getLineNumber(whileStatement.getTextRange().getStartOffset()));
-          final PsiStatement block = whileStatement.getBody();
+          PsiStatement block = whileStatement.getBody();
           if (block != null) {
             stopOffset = Math.min(stopOffset, block.getTextRange().getStartOffset());
           }

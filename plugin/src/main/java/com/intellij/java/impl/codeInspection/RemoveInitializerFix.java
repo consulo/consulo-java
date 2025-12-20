@@ -48,7 +48,7 @@ public class RemoveInitializerFix implements LocalQuickFix {
     @Override
     @RequiredWriteAction
     public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
-        final PsiElement psiInitializer = descriptor.getPsiElement();
+        PsiElement psiInitializer = descriptor.getPsiElement();
         if (!(psiInitializer instanceof PsiExpression)) {
             return;
         }
@@ -56,7 +56,7 @@ public class RemoveInitializerFix implements LocalQuickFix {
             return;
         }
 
-        final PsiVariable variable = (PsiVariable) psiInitializer.getParent();
+        PsiVariable variable = (PsiVariable) psiInitializer.getParent();
         sideEffectAwareRemove(project, psiInitializer, psiInitializer, variable);
     }
 
@@ -66,8 +66,8 @@ public class RemoveInitializerFix implements LocalQuickFix {
             return;
         }
 
-        final PsiElement declaration = variable.getParent();
-        final List<PsiElement> sideEffects = new ArrayList<>();
+        PsiElement declaration = variable.getParent();
+        List<PsiElement> sideEffects = new ArrayList<>();
         boolean hasSideEffects = RemoveUnusedVariableUtil.checkSideEffects(psiInitializer, variable, sideEffects);
         int res;
         if (hasSideEffects) {
@@ -90,9 +90,9 @@ public class RemoveInitializerFix implements LocalQuickFix {
             elementToDelete.delete();
         }
         else if (res == RemoveUnusedVariableUtil.MAKE_STATEMENT) {
-            final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
-            final PsiStatement statementFromText = factory.createStatementFromText(psiInitializer.getText() + ";", null);
-            final PsiElement parent = elementToDelete.getParent();
+            PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
+            PsiStatement statementFromText = factory.createStatementFromText(psiInitializer.getText() + ";", null);
+            PsiElement parent = elementToDelete.getParent();
             if (parent instanceof PsiExpressionStatement) {
                 parent.replace(statementFromText);
             }

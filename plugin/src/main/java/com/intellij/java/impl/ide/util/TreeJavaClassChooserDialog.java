@@ -57,7 +57,7 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
     String title,
     @Nonnull Project project,
     GlobalSearchScope scope,
-    final ClassFilter classFilter,
+    ClassFilter classFilter,
     @Nullable PsiClass initialClass
   ) {
     super(title, project, scope, PsiClass.class, createFilter(classFilter), initialClass);
@@ -88,14 +88,14 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
     String title,
     @Nonnull Project project,
     GlobalSearchScope scope,
-    final ClassFilter classFilter,
+    ClassFilter classFilter,
     @Nullable PsiClass initialClass
   ) {
     return new TreeJavaClassChooserDialog(title, project, scope, classFilter, null, initialClass, true);
   }
 
   @Nullable
-  private static Predicate<PsiClass> createFilter(@Nullable final ClassFilter classFilter) {
+  private static Predicate<PsiClass> createFilter(@Nullable ClassFilter classFilter) {
     if (classFilter == null) {
       return null;
     } else {
@@ -105,12 +105,12 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
 
   @Nonnull
   protected List<PsiClass> getClassesByName(
-    final String name,
-    final boolean checkBoxState,
-    final String pattern,
-    final ProjectAwareSearchScope searchScope
+    String name,
+    boolean checkBoxState,
+    String pattern,
+    ProjectAwareSearchScope searchScope
   ) {
-    final PsiShortNamesCache cache = PsiShortNamesCache.getInstance(getProject());
+    PsiShortNamesCache cache = PsiShortNamesCache.getInstance(getProject());
     PsiClass[] classes = cache.getClassesByName(
       name,
       checkBoxState ? (GlobalSearchScope) searchScope

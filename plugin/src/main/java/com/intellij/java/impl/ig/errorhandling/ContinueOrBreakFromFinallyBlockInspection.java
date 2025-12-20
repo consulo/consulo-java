@@ -58,7 +58,7 @@ public class ContinueOrBreakFromFinallyBlockInspection extends BaseInspection {
             if (!ControlFlowUtils.isInFinallyBlock(statement)) {
                 return;
             }
-            final PsiStatement continuedStatement =
+            PsiStatement continuedStatement =
                 statement.findContinuedStatement();
             if (continuedStatement == null) {
                 return;
@@ -75,7 +75,7 @@ public class ContinueOrBreakFromFinallyBlockInspection extends BaseInspection {
             if (!ControlFlowUtils.isInFinallyBlock(statement)) {
                 return;
             }
-            final PsiStatement exitedStatement = statement.findExitedStatement();
+            PsiStatement exitedStatement = statement.findExitedStatement();
             if (exitedStatement == null) {
                 return;
             }

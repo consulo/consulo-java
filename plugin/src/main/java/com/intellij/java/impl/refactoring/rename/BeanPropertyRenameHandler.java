@@ -54,24 +54,24 @@ public abstract class BeanPropertyRenameHandler implements RenameHandler {
   }
 
   private void performInvoke(@Nullable Editor editor, DataContext dataContext) {
-    final BeanProperty property = getProperty(dataContext);
+    BeanProperty property = getProperty(dataContext);
     new PropertyRenameDialog(property, editor).show();
   }
 
-  public static void doRename(@Nonnull final BeanProperty property, final String newName, final boolean searchInComments, boolean isPreview) {
-    final PsiElement psiElement = property.getPsiElement();
-    final RenameRefactoring rename = RefactoringFactory.getInstance(psiElement.getProject()).createRename(psiElement, newName, searchInComments, false);
+  public static void doRename(@Nonnull BeanProperty property, String newName, boolean searchInComments, boolean isPreview) {
+    PsiElement psiElement = property.getPsiElement();
+    RenameRefactoring rename = RefactoringFactory.getInstance(psiElement.getProject()).createRename(psiElement, newName, searchInComments, false);
     rename.setPreviewUsages(isPreview);
 
-    final PsiMethod setter = property.getSetter();
+    PsiMethod setter = property.getSetter();
     if (setter != null) {
-      final String setterName = PropertyUtil.suggestSetterName(newName);
+      String setterName = PropertyUtil.suggestSetterName(newName);
       rename.addElement(setter, setterName);
     }
 
-    final PsiMethod getter = property.getGetter();
+    PsiMethod getter = property.getGetter();
     if (getter != null) {
-      final String getterName = PropertyUtil.suggestGetterName(newName, getter.getReturnType());
+      String getterName = PropertyUtil.suggestGetterName(newName, getter.getReturnType());
       rename.addElement(getter, getterName);
     }
 
@@ -85,14 +85,14 @@ public abstract class BeanPropertyRenameHandler implements RenameHandler {
 
     private final BeanProperty myProperty;
 
-    protected PropertyRenameDialog(BeanProperty property, final Editor editor) {
+    protected PropertyRenameDialog(BeanProperty property, Editor editor) {
       super(property.getMethod().getProject(), property.getPsiElement(), null, editor);
       myProperty = property;
     }
 
     protected void doAction() {
-      final String newName = getNewName();
-      final boolean searchInComments = isSearchInComments();
+      String newName = getNewName();
+      boolean searchInComments = isSearchInComments();
       doRename(myProperty, newName, searchInComments, isPreviewUsages());
       close(DialogWrapper.OK_EXIT_CODE);
     }

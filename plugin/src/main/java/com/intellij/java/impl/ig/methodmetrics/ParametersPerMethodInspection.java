@@ -39,7 +39,7 @@ public class ParametersPerMethodInspection extends MethodMetricInspection {
 
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final Integer parameterCount = (Integer) infos[0];
+        Integer parameterCount = (Integer) infos[0];
         return InspectionGadgetsLocalize.parametersPerMethodProblemDescriptor(parameterCount).get();
     }
 
@@ -66,8 +66,8 @@ public class ParametersPerMethodInspection extends MethodMetricInspection {
             if (method.isConstructor()) {
                 return;
             }
-            final PsiParameterList parameterList = method.getParameterList();
-            final int parametersCount = parameterList.getParametersCount();
+            PsiParameterList parameterList = method.getParameterList();
+            int parametersCount = parameterList.getParametersCount();
             if (parametersCount <= getLimit()) {
                 return;
             }

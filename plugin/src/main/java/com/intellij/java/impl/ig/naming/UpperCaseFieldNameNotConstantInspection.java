@@ -72,7 +72,7 @@ public class UpperCaseFieldNameNotConstantInspection extends BaseInspection {
           field.hasModifierProperty(PsiModifier.FINAL)) {
         return;
       }
-      final String fieldName = field.getName();
+      String fieldName = field.getName();
       if (fieldName == null) {
         return;
       }

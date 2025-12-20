@@ -43,9 +43,9 @@ public class ReplaceForEachLoopWithOptimizedIndexedForLoopIntention extends Repl
                                             PsiExpression iteratedValue,
                                             boolean isArray,
                                             String iteratedValueText,
-                                            StringBuilder newStatement, final String indexText) {
+                                            StringBuilder newStatement, String indexText) {
 
-        final String lengthText;
+        String lengthText;
         if (isArray) {
             lengthText = createVariableName(iteratedValueText + "Length", PsiType.INT, statement);
         }

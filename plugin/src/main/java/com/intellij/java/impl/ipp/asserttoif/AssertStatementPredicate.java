@@ -26,7 +26,7 @@ class AssertStatementPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiAssertStatement)) {
       return false;
     }
-    final PsiAssertStatement assertStatement =
+    PsiAssertStatement assertStatement =
       (PsiAssertStatement)element;
     if (assertStatement.getAssertCondition() == null) {
       return false;

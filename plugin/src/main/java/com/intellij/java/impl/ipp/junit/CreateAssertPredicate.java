@@ -31,18 +31,18 @@ class CreateAssertPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiExpressionStatement)) {
       return false;
     }
-    final PsiExpressionStatement statement =
+    PsiExpressionStatement statement =
       (PsiExpressionStatement)element;
-    final PsiExpression expression = statement.getExpression();
-    final PsiElement parent = expression.getParent();
+    PsiExpression expression = statement.getExpression();
+    PsiElement parent = expression.getParent();
     if (!(parent instanceof PsiExpressionStatement)) {
       return false;
     }
-    final PsiType type = expression.getType();
+    PsiType type = expression.getType();
     if (!PsiType.BOOLEAN.equals(type)) {
       return false;
     }
-    final PsiMethod containingMethod =
+    PsiMethod containingMethod =
       PsiTreeUtil.getParentOfType(expression, PsiMethod.class);
     return isTestMethod(containingMethod);
   }
@@ -58,23 +58,23 @@ class CreateAssertPredicate implements PsiElementPredicate {
         !method.hasModifierProperty(PsiModifier.PUBLIC)) {
       return false;
     }
-    final PsiType returnType = method.getReturnType();
+    PsiType returnType = method.getReturnType();
     if (returnType == null) {
       return false;
     }
     if (!returnType.equals(PsiType.VOID)) {
       return false;
     }
-    final PsiParameterList parameterList = method.getParameterList();
-    final PsiParameter[] parameters = parameterList.getParameters();
+    PsiParameterList parameterList = method.getParameterList();
+    PsiParameter[] parameters = parameterList.getParameters();
     if (parameters.length != 0) {
       return false;
     }
-    @NonNls final String methodName = method.getName();
+    @NonNls String methodName = method.getName();
     if (!methodName.startsWith("test")) {
       return false;
     }
-    final PsiClass containingClass = method.getContainingClass();
+    PsiClass containingClass = method.getContainingClass();
     return isTestClass(containingClass);
   }
 
@@ -82,10 +82,10 @@ class CreateAssertPredicate implements PsiElementPredicate {
     if (aClass == null) {
       return false;
     }
-    final Project project = aClass.getProject();
-    final GlobalSearchScope scope = GlobalSearchScope.allScope(project);
-    final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-    final PsiClass ancestorClass = psiFacade.findClass("junit.framework.TestCase", scope);
+    Project project = aClass.getProject();
+    GlobalSearchScope scope = GlobalSearchScope.allScope(project);
+    JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+    PsiClass ancestorClass = psiFacade.findClass("junit.framework.TestCase", scope);
     return InheritanceUtil.isInheritorOrSelf(aClass, ancestorClass, true);
   }
 }

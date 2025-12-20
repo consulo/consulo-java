@@ -36,10 +36,10 @@ public class FlipCommutativeMethodCallIntention extends MutablyNamedIntention {
 
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
-        final PsiMethodCallExpression call = (PsiMethodCallExpression) element;
-        final PsiReferenceExpression methodExpression =
+        PsiMethodCallExpression call = (PsiMethodCallExpression) element;
+        PsiReferenceExpression methodExpression =
             call.getMethodExpression();
-        final String methodName = methodExpression.getReferenceName();
+        String methodName = methodExpression.getReferenceName();
         assert methodName != null;
         if ("equals".equals(methodName) ||
             "equalsIgnoreCase".equals(methodName)) {
@@ -65,28 +65,28 @@ public class FlipCommutativeMethodCallIntention extends MutablyNamedIntention {
     @Override
     public void processIntention(PsiElement element)
         throws IncorrectOperationException {
-        final PsiMethodCallExpression call =
+        PsiMethodCallExpression call =
             (PsiMethodCallExpression) element;
-        final PsiReferenceExpression methodExpression =
+        PsiReferenceExpression methodExpression =
             call.getMethodExpression();
-        final String methodName = methodExpression.getReferenceName();
-        final PsiExpression target = methodExpression.getQualifierExpression();
+        String methodName = methodExpression.getReferenceName();
+        PsiExpression target = methodExpression.getQualifierExpression();
         if (target == null) {
             return;
         }
-        final PsiExpressionList argumentList = call.getArgumentList();
-        final PsiExpression arg = argumentList.getExpressions()[0];
-        final PsiExpression strippedTarget =
+        PsiExpressionList argumentList = call.getArgumentList();
+        PsiExpression arg = argumentList.getExpressions()[0];
+        PsiExpression strippedTarget =
             ParenthesesUtils.stripParentheses(target);
         if (strippedTarget == null) {
             return;
         }
-        final PsiExpression strippedArg =
+        PsiExpression strippedArg =
             ParenthesesUtils.stripParentheses(arg);
         if (strippedArg == null) {
             return;
         }
-        final String callString;
+        String callString;
         if (ParenthesesUtils.getPrecedence(strippedArg) >
             ParenthesesUtils.METHOD_CALL_PRECEDENCE) {
             callString = '(' + strippedArg.getText() + ")." + methodName + '(' +

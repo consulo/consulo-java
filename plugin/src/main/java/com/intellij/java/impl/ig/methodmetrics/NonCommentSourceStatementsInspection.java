@@ -48,7 +48,7 @@ public class NonCommentSourceStatementsInspection
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final Integer statementCount = (Integer)infos[0];
+    Integer statementCount = (Integer)infos[0];
     return InspectionGadgetsLocalize.nonCommentSourceStatementsProblemDescriptor(statementCount).get();
   }
 
@@ -65,9 +65,9 @@ public class NonCommentSourceStatementsInspection
       if (method.getNameIdentifier() == null) {
         return;
       }
-      final NCSSVisitor visitor = new NCSSVisitor();
+      NCSSVisitor visitor = new NCSSVisitor();
       method.accept(visitor);
-      final int count = visitor.getStatementCount();
+      int count = visitor.getStatementCount();
       if (count <= getLimit()) {
         return;
       }

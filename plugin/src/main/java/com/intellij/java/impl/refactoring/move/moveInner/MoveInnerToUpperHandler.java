@@ -32,7 +32,7 @@ import jakarta.annotation.Nullable;
 
 @ExtensionImpl
 public class MoveInnerToUpperHandler extends MoveHandlerDelegate {
-  public boolean canMove(final PsiElement[] elements, @Nullable final PsiElement targetContainer) {
+  public boolean canMove(PsiElement[] elements, @Nullable PsiElement targetContainer) {
     if (elements.length != 1) return false;
     PsiElement element = elements [0];
     return isNonStaticInnerClass(element) &&
@@ -40,21 +40,21 @@ public class MoveInnerToUpperHandler extends MoveHandlerDelegate {
                                                                         
   }
 
-  private static boolean isNonStaticInnerClass(final PsiElement element) {
+  private static boolean isNonStaticInnerClass(PsiElement element) {
     return element instanceof PsiClass && element.getParent() instanceof PsiClass &&
            !((PsiClass) element).hasModifierProperty(PsiModifier.STATIC);
   }
 
-  public void doMove(final Project project, final PsiElement[] elements, final PsiElement targetContainer, final MoveCallback callback) {
+  public void doMove(Project project, PsiElement[] elements, PsiElement targetContainer, MoveCallback callback) {
     MoveInnerImpl.doMove(project, elements, callback);
   }
 
-  public boolean tryToMove(final PsiElement element, final Project project, final DataContext dataContext, final PsiReference reference,
-                           final Editor editor) {
+  public boolean tryToMove(PsiElement element, Project project, DataContext dataContext, PsiReference reference,
+                           Editor editor) {
     if (isNonStaticInnerClass(element) && !JavaMoveClassesOrPackagesHandler.isReferenceInAnonymousClass(reference)) {
       PsiClass aClass = (PsiClass) element;
       FeatureUsageTracker.getInstance().triggerFeatureUsed("refactoring.move.moveInner");
-      final PsiClass containingClass = aClass.getContainingClass();
+      PsiClass containingClass = aClass.getContainingClass();
      /* if (containingClass instanceof JspClass) {
         CommonRefactoringUtil.showErrorHint(project, editor, RefactoringBundle.message("move.nonstatic.class.from.jsp.not.supported"),
                                             RefactoringBundle.message("move.title"), null);

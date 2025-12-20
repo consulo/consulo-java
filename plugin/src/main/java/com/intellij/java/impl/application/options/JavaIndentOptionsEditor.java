@@ -61,7 +61,7 @@ public class JavaIndentOptionsEditor extends SmartIndentOptionsEditor {
     }
 
     @Override
-    public boolean isModified(final CodeStyleSettings settings, final CommonCodeStyleSettings.IndentOptions options) {
+    public boolean isModified(CodeStyleSettings settings, CommonCodeStyleSettings.IndentOptions options) {
         boolean isModified = super.isModified(settings, options);
         CommonCodeStyleSettings javaSettings = settings.getCommonSettings(JavaLanguage.INSTANCE);
 
@@ -74,7 +74,7 @@ public class JavaIndentOptionsEditor extends SmartIndentOptionsEditor {
     }
 
     @Override
-    public void apply(final CodeStyleSettings settings, final CommonCodeStyleSettings.IndentOptions options) {
+    public void apply(CodeStyleSettings settings, CommonCodeStyleSettings.IndentOptions options) {
         super.apply(settings, options);
         options.LABEL_INDENT_SIZE = myLabelIndent.getValue();
 
@@ -85,7 +85,7 @@ public class JavaIndentOptionsEditor extends SmartIndentOptionsEditor {
     }
 
     @Override
-    public void reset(@Nonnull final CodeStyleSettings settings, @Nonnull final CommonCodeStyleSettings.IndentOptions options) {
+    public void reset(@Nonnull CodeStyleSettings settings, @Nonnull CommonCodeStyleSettings.IndentOptions options) {
         super.reset(settings, options);
         myLabelIndent.setValue(options.LABEL_INDENT_SIZE);
         myLabelIndentAbsolute.setSelected(options.LABEL_INDENT_ABSOLUTE);
@@ -95,7 +95,7 @@ public class JavaIndentOptionsEditor extends SmartIndentOptionsEditor {
     }
 
     @Override
-    public void setEnabled(final boolean enabled) {
+    public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
         myLabelIndent.setEnabled(enabled);
         myLabelIndentLabel.setEnabled(enabled);

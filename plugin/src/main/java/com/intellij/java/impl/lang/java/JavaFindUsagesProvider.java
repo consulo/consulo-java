@@ -118,8 +118,8 @@ public class JavaFindUsagesProvider implements FindUsagesProvider {
       return LangBundle.message("java.terms.variable");
     }
     if (element instanceof PsiMethod) {
-      final PsiMethod psiMethod = (PsiMethod) element;
-      final boolean isConstructor = psiMethod.isConstructor();
+      PsiMethod psiMethod = (PsiMethod) element;
+      boolean isConstructor = psiMethod.isConstructor();
       if (isConstructor) {
         return LangBundle.message("java.terms.constructor");
       }
@@ -129,7 +129,7 @@ public class JavaFindUsagesProvider implements FindUsagesProvider {
       return LangBundle.message("java.terms.expression");
     }
 
-    final String name = TypePresentationService.getInstance().getPresentableName(element);
+    String name = TypePresentationService.getInstance().getPresentableName(element);
     if (name != null) {
       return name;
     }
@@ -138,7 +138,7 @@ public class JavaFindUsagesProvider implements FindUsagesProvider {
 
   @Override
   @Nonnull
-  public String getDescriptiveName(@Nonnull final PsiElement element) {
+  public String getDescriptiveName(@Nonnull PsiElement element) {
     if (ThrowSearchUtil.isSearchable(element)) {
       return ThrowSearchUtil.getSearchableTypeName(element);
     }
@@ -158,7 +158,7 @@ public class JavaFindUsagesProvider implements FindUsagesProvider {
       if (element instanceof PsiAnonymousClass) {
         return LangBundle.message("java.terms.anonymous.class");
       } else {
-        final PsiClass aClass = (PsiClass) element;
+        PsiClass aClass = (PsiClass) element;
         String qName = aClass.getQualifiedName();
         return qName == null ? aClass.getName() : qName;
       }
@@ -198,8 +198,8 @@ public class JavaFindUsagesProvider implements FindUsagesProvider {
     if (aClass instanceof PsiAnonymousClass) {
       return LangBundle.message("java.terms.of.anonymous.class", formatted);
     } else {
-      final String qualifiedName = aClass.getQualifiedName();
-      final String className = qualifiedName != null ? qualifiedName : aClass.getName();
+      String qualifiedName = aClass.getQualifiedName();
+      String className = qualifiedName != null ? qualifiedName : aClass.getName();
       if (aClass.isInterface()) {
         return LangBundle.message("java.terms.of.interface", formatted, className);
       }
@@ -247,9 +247,9 @@ public class JavaFindUsagesProvider implements FindUsagesProvider {
         String s = PsiFormatUtil.formatMethod((PsiMethod) element, PsiSubstitutor.EMPTY, PsiFormatUtilBase.TYPE_AFTER | PsiFormatUtilBase.SHOW_TYPE |
             PsiFormatUtilBase.SHOW_NAME |
             PsiFormatUtilBase.SHOW_PARAMETERS, PsiFormatUtilBase.SHOW_TYPE | PsiFormatUtilBase.SHOW_NAME);
-        final PsiClass psiClass = psiMethod.getContainingClass();
+        PsiClass psiClass = psiMethod.getContainingClass();
         if (psiClass != null) {
-          final String qName = psiClass.getQualifiedName();
+          String qName = psiClass.getQualifiedName();
           if (qName != null) {
             if (psiClass.isInterface()) {
               s = LangBundle.message("java.terms.of.interface", s, qName);
@@ -270,7 +270,7 @@ public class JavaFindUsagesProvider implements FindUsagesProvider {
           PsiFormatUtilBase.SHOW_NAME, PsiSubstitutor.EMPTY), PsiFormatUtil.formatMethod(method, PsiSubstitutor.EMPTY, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS,
           PsiFormatUtilBase.SHOW_TYPE));
 
-      final PsiClass psiClass = method.getContainingClass();
+      PsiClass psiClass = method.getContainingClass();
       if (psiClass != null && psiClass.getQualifiedName() != null) {
         if (psiClass.isInterface()) {
           s = LangBundle.message("java.terms.of.interface", s, psiClass.getQualifiedName());
@@ -321,8 +321,8 @@ public class JavaFindUsagesProvider implements FindUsagesProvider {
 
   public static String getRootDirectoryForPackage(PsiDirectory directory) {
     PsiManager manager = directory.getManager();
-    final VirtualFile virtualFile = directory.getVirtualFile();
-    final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(manager.getProject()).getFileIndex();
+    VirtualFile virtualFile = directory.getVirtualFile();
+    ProjectFileIndex fileIndex = ProjectRootManager.getInstance(manager.getProject()).getFileIndex();
     VirtualFile root = fileIndex.getSourceRootForFile(virtualFile);
 
     if (root == null) {

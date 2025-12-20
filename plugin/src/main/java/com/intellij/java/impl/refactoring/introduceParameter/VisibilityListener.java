@@ -24,15 +24,15 @@ public abstract class VisibilityListener {
   /**
    * to be performed in write action
    */
-  public void perform(final PsiVariable variable) {
+  public void perform(PsiVariable variable) {
     ApplicationManager.getApplication().assertWriteAccessAllowed();
 
     final Document document = myEditor.getDocument();
     LOG.assertTrue(variable != null);
-    final PsiModifierList modifierList = variable.getModifierList();
+    PsiModifierList modifierList = variable.getModifierList();
     LOG.assertTrue(modifierList != null);
     int textOffset = modifierList.getTextOffset();
-    final String modifierListText = modifierList.getText();
+    String modifierListText = modifierList.getText();
 
     int length = PsiModifier.PUBLIC.length();
     int idx = modifierListText.indexOf(PsiModifier.PUBLIC);
@@ -52,8 +52,8 @@ public abstract class VisibilityListener {
       visibility = "";
     }
 
-    final boolean wasPackageLocal = idx == -1;
-    final boolean isPackageLocal = visibility.isEmpty();
+    boolean wasPackageLocal = idx == -1;
+    boolean isPackageLocal = visibility.isEmpty();
 
     final int startOffset = textOffset + (wasPackageLocal ? 0 : idx);
     final int endOffset;
@@ -73,7 +73,7 @@ public abstract class VisibilityListener {
       }
     };
 
-    final LookupEx lookup = LookupManager.getActiveLookup(myEditor);
+    LookupEx lookup = LookupManager.getActiveLookup(myEditor);
     if (lookup != null) {
       lookup.performGuardedChange(runnable);
     } else {

@@ -87,31 +87,31 @@ public abstract class PackageNamingConventionInspection extends BaseGlobalInspec
 		{
 			return null;
 		}
-		@NonNls final String name = refEntity.getName();
+		@NonNls String name = refEntity.getName();
 		if(name == null || "default package".equals(name))
 		{
 			return null;
 		}
 
-		final int length = name.length();
+		int length = name.length();
 		if(length < m_minLength)
 		{
-			final LocalizeValue errorString = InspectionGadgetsLocalize.packageNamingConventionProblemDescriptorShort(name);
+			LocalizeValue errorString = InspectionGadgetsLocalize.packageNamingConventionProblemDescriptorShort(name);
 			return new CommonProblemDescriptor[]{inspectionManager.createProblemDescriptor(errorString.get())};
 		}
 		if(length > m_maxLength)
 		{
-			final LocalizeValue errorString = InspectionGadgetsLocalize.packageNamingConventionProblemDescriptorLong(name);
+			LocalizeValue errorString = InspectionGadgetsLocalize.packageNamingConventionProblemDescriptorLong(name);
 			return new CommonProblemDescriptor[]{inspectionManager.createProblemDescriptor(errorString.get())};
 		}
-		final Matcher matcher = m_regexPattern.matcher(name);
+		Matcher matcher = m_regexPattern.matcher(name);
 		if(matcher.matches())
 		{
 			return null;
 		}
 		else
 		{
-			final LocalizeValue errorString = InspectionGadgetsLocalize.packageNamingConventionProblemDescriptorRegexMismatch(name, m_regex);
+			LocalizeValue errorString = InspectionGadgetsLocalize.packageNamingConventionProblemDescriptorRegexMismatch(name, m_regex);
 			return new CommonProblemDescriptor[]{inspectionManager.createProblemDescriptor(errorString.get())};
 		}
 	}
@@ -128,25 +128,25 @@ public abstract class PackageNamingConventionInspection extends BaseGlobalInspec
 	@Override
 	public JComponent createOptionsPanel()
 	{
-		final GridBagLayout layout = new GridBagLayout();
-		final JPanel panel = new JPanel(layout);
+		GridBagLayout layout = new GridBagLayout();
+		JPanel panel = new JPanel(layout);
 
-		final JLabel patternLabel = new JLabel(InspectionGadgetsLocalize.conventionPatternOption().get());
-		final JLabel minLengthLabel = new JLabel(InspectionGadgetsLocalize.conventionMinLengthOption().get());
-		final JLabel maxLengthLabel = new JLabel(InspectionGadgetsLocalize.conventionMaxLengthOption().get());
+		JLabel patternLabel = new JLabel(InspectionGadgetsLocalize.conventionPatternOption().get());
+		JLabel minLengthLabel = new JLabel(InspectionGadgetsLocalize.conventionMinLengthOption().get());
+		JLabel maxLengthLabel = new JLabel(InspectionGadgetsLocalize.conventionMaxLengthOption().get());
 
-		final NumberFormat numberFormat = NumberFormat.getIntegerInstance();
+		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
 		numberFormat.setParseIntegerOnly(true);
 		numberFormat.setMinimumIntegerDigits(1);
 		numberFormat.setMaximumIntegerDigits(2);
-		final InternationalFormatter formatter =
+		InternationalFormatter formatter =
 				new InternationalFormatter(numberFormat);
 		formatter.setAllowsInvalid(false);
 		formatter.setCommitsOnValidEdit(true);
 
 		final JFormattedTextField minLengthField =
 				new JFormattedTextField(formatter);
-		final Font panelFont = panel.getFont();
+		Font panelFont = panel.getFont();
 		minLengthField.setFont(panelFont);
 		minLengthField.setValue(m_minLength);
 		minLengthField.setColumns(2);
@@ -167,7 +167,7 @@ public abstract class PackageNamingConventionInspection extends BaseGlobalInspec
 		regexField.setInputVerifier(new RegExInputVerifier());
 		regexField.setFocusLostBehavior(JFormattedTextField.COMMIT);
 		UIUtil.fixFormattedField(regexField);
-		final DocumentListener listener = new DocumentAdapter()
+		DocumentListener listener = new DocumentAdapter()
 		{
 			@Override
 			public void textChanged(DocumentEvent e)
@@ -188,14 +188,14 @@ public abstract class PackageNamingConventionInspection extends BaseGlobalInspec
 				}
 			}
 		};
-		final Document regexDocument = regexField.getDocument();
+		Document regexDocument = regexField.getDocument();
 		regexDocument.addDocumentListener(listener);
-		final Document minLengthDocument = minLengthField.getDocument();
+		Document minLengthDocument = minLengthField.getDocument();
 		minLengthDocument.addDocumentListener(listener);
-		final Document maxLengthDocument = maxLengthField.getDocument();
+		Document maxLengthDocument = maxLengthField.getDocument();
 		maxLengthDocument.addDocumentListener(listener);
 
-		final GridBagConstraints constraints = new GridBagConstraints();
+		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.weightx = 0.0;

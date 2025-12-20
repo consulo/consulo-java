@@ -44,11 +44,11 @@ public abstract class PullOverrideMethodUpFixTest extends LightQuickFixTestCase 
     doTestActionAvailable(5, "Extract superclass");
   }
 
-  private void doTestActionAvailable(final int suffix, final String actionText) {
-    final String testFullPath = getBasePath() + "/before" + suffix + ".java";
+  private void doTestActionAvailable(int suffix, String actionText) {
+    String testFullPath = getBasePath() + "/before" + suffix + ".java";
     configureByFile(testFullPath);
     doHighlighting();
-    final IntentionAction action = findActionWithText(actionText);
+    IntentionAction action = findActionWithText(actionText);
     assertNotNull(action);
   }
 

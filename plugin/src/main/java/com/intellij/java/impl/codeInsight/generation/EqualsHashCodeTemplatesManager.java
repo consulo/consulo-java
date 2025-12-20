@@ -124,7 +124,7 @@ public class EqualsHashCodeTemplatesManager extends TemplatesManager {
   }
 
   public String[] getTemplateNames() {
-    final Set<String> names = new LinkedHashSet<String>();
+    Set<String> names = new LinkedHashSet<String>();
     for (TemplateResource resource : getAllTemplates()) {
       names.add(getTemplateBaseName(resource));
     }
@@ -137,11 +137,11 @@ public class EqualsHashCodeTemplatesManager extends TemplatesManager {
   }
 
   private TemplateResource getDefaultTemplate(String selfSuffix, String oppositeSuffix, TemplateResource defaultTemplate) {
-    final String fileName = defaultTemplate.getFileName();
+    String fileName = defaultTemplate.getFileName();
     if (fileName.endsWith(selfSuffix)) {
       return defaultTemplate;
     }
-    final String equalsTemplateName = StringUtil.trimEnd(fileName, oppositeSuffix) + selfSuffix;
+    String equalsTemplateName = StringUtil.trimEnd(fileName, oppositeSuffix) + selfSuffix;
     for (TemplateResource resource : getAllTemplates()) {
       if (equalsTemplateName.equals(resource.getFileName())) {
         return resource;
@@ -174,12 +174,12 @@ public class EqualsHashCodeTemplatesManager extends TemplatesManager {
   }
 
   public Collection<Couple<TemplateResource>> getTemplateCouples() {
-    final LinkedHashMap<String, Couple<TemplateResource>> resources = new LinkedHashMap<String, Couple<TemplateResource>>();
+    LinkedHashMap<String, Couple<TemplateResource>> resources = new LinkedHashMap<String, Couple<TemplateResource>>();
     for (TemplateResource resource : getAllTemplates()) {
-      final String baseName = getTemplateBaseName(resource);
+      String baseName = getTemplateBaseName(resource);
       TemplateResource eq = toEqualsName(baseName).equals(resource.getFileName()) ? resource : null;
       TemplateResource hc = toHashCodeName(baseName).equals(resource.getFileName()) ? resource : null;
-      final Couple<TemplateResource> couple = resources.get(baseName);
+      Couple<TemplateResource> couple = resources.get(baseName);
       if (couple != null) {
         resources.put(baseName, Couple.of(couple.first != null ? couple.first : eq, couple.second != null ? couple.second : hc));
       }

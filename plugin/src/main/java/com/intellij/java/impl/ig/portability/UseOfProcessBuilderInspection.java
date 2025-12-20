@@ -49,12 +49,12 @@ public class UseOfProcessBuilderInspection extends BaseInspection {
     @Override
     public void visitVariable(@Nonnull PsiVariable variable) {
       super.visitVariable(variable);
-      final PsiType type = variable.getType();
-      final String typeString = type.getCanonicalText();
+      PsiType type = variable.getType();
+      String typeString = type.getCanonicalText();
       if (!"java.lang.ProcessBuilder".equals(typeString)) {
         return;
       }
-      final PsiTypeElement typeElement = variable.getTypeElement();
+      PsiTypeElement typeElement = variable.getTypeElement();
       if (typeElement == null) {
         return;
       }
@@ -65,11 +65,11 @@ public class UseOfProcessBuilderInspection extends BaseInspection {
     public void visitNewExpression(
       @Nonnull PsiNewExpression newExpression) {
       super.visitNewExpression(newExpression);
-      final PsiType type = newExpression.getType();
+      PsiType type = newExpression.getType();
       if (type == null) {
         return;
       }
-      @NonNls final String typeString = type.getCanonicalText();
+      @NonNls String typeString = type.getCanonicalText();
       if (!"java.lang.ProcessBuilder".equals(typeString)) {
         return;
       }

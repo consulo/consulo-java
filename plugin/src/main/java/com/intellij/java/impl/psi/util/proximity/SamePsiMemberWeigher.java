@@ -46,10 +46,10 @@ public class SamePsiMemberWeigher extends ProximityWeigher {
       PsiElement position = location.getPosition();
       assert position != null;
       if (!position.isPhysical()) {
-        final PsiFile file = position.getContainingFile();
+        PsiFile file = position.getContainingFile();
         if (file != null) {
-          final PsiFile originalFile = file.getOriginalFile();
-          final int offset = position.getTextRange().getStartOffset();
+          PsiFile originalFile = file.getOriginalFile();
+          int offset = position.getTextRange().getStartOffset();
           PsiElement candidate = originalFile.findElementAt(offset);
           if (candidate == null) {
             candidate = originalFile.findElementAt(offset - 1);
@@ -64,7 +64,7 @@ public class SamePsiMemberWeigher extends ProximityWeigher {
   });
 
   @Override
-  public Comparable weigh(@Nonnull final PsiElement element, @Nonnull final ProximityLocation location) {
+  public Comparable weigh(@Nonnull PsiElement element, @Nonnull ProximityLocation location) {
     PsiElement position = location.getPosition();
     if (position == null) {
       return null;
@@ -76,7 +76,7 @@ public class SamePsiMemberWeigher extends ProximityWeigher {
       position = PHYSICAL_POSITION.getValue(location);
     }
 
-    final PsiMember member = PsiTreeUtil.getContextOfType(PsiTreeUtil.findCommonContext(position, element), PsiMember.class, false);
+    PsiMember member = PsiTreeUtil.getContextOfType(PsiTreeUtil.findCommonContext(position, element), PsiMember.class, false);
     if (member instanceof PsiClass) {
       return 1;
     }

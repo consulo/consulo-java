@@ -40,7 +40,7 @@ public class SafeDeletePrivatizeMethod extends SafeDeleteUsageInfo implements Sa
   @Override
   public void performRefactoring() throws IncorrectOperationException {
     PsiUtil.setModifierProperty(getMethod(), PsiModifier.PRIVATE, true);
-    final PsiAnnotation annotation = AnnotationUtil.findAnnotation(getMethod(), true, CommonClassNames.JAVA_LANG_OVERRIDE);
+    PsiAnnotation annotation = AnnotationUtil.findAnnotation(getMethod(), true, CommonClassNames.JAVA_LANG_OVERRIDE);
     if (annotation != null) {
       annotation.delete();
     }

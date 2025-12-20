@@ -96,21 +96,21 @@ public abstract class AbstractEditorTest extends LightPlatformCodeInsightTestCas
 		return getTestName(false) + type.getExtension();
 	}
 
-	protected static FoldRegion addFoldRegion(final int startOffset, final int endOffset, final String placeholder)
+	protected static FoldRegion addFoldRegion(int startOffset, int endOffset, String placeholder)
 	{
-		final FoldRegion[] result = new FoldRegion[1];
+		FoldRegion[] result = new FoldRegion[1];
 		myEditor.getFoldingModel().runBatchFoldingOperation(() -> result[0] = myEditor.getFoldingModel().addFoldRegion(startOffset, endOffset, placeholder));
 		return result[0];
 	}
 
-	protected static FoldRegion addCollapsedFoldRegion(final int startOffset, final int endOffset, final String placeholder)
+	protected static FoldRegion addCollapsedFoldRegion(int startOffset, int endOffset, String placeholder)
 	{
 		FoldRegion region = addFoldRegion(startOffset, endOffset, placeholder);
 		toggleFoldRegionState(region, false);
 		return region;
 	}
 
-	protected static void toggleFoldRegionState(final FoldRegion foldRegion, final boolean expanded)
+	protected static void toggleFoldRegionState(FoldRegion foldRegion, boolean expanded)
 	{
 		myEditor.getFoldingModel().runBatchFoldingOperation(() -> foldRegion.setExpanded(expanded));
 	}
@@ -129,9 +129,9 @@ public abstract class AbstractEditorTest extends LightPlatformCodeInsightTestCas
 				myEditor.getDocument().getCharsSequence()));
 	}
 
-	protected static void foldOccurrences(String textToFoldRegexp, final String placeholder)
+	protected static void foldOccurrences(String textToFoldRegexp, String placeholder)
 	{
-		final Matcher matcher = Pattern.compile(textToFoldRegexp).matcher(myEditor.getDocument().getCharsSequence());
+		Matcher matcher = Pattern.compile(textToFoldRegexp).matcher(myEditor.getDocument().getCharsSequence());
 		myEditor.getFoldingModel().runBatchFoldingOperation(() ->
 		{
 			while(matcher.find())

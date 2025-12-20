@@ -52,11 +52,11 @@ public class ThrowablePrintStackTraceInspection extends BaseInspection {
         @Override
         public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
-            final String methodName = MethodCallUtils.getMethodName(expression);
+            String methodName = MethodCallUtils.getMethodName(expression);
             if (!HardcodedMethodConstants.PRINT_STACK_TRACE.equals(methodName)) {
                 return;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpressionList argumentList = expression.getArgumentList();
             if (argumentList.getExpressions().length != 0) {
                 return;
             }

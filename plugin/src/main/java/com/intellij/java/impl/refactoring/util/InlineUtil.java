@@ -56,7 +56,7 @@ public class InlineUtil {
     PsiClass thisClass = RefactoringChangeUtil.getThisClass(initializer);
     PsiClass refParent = RefactoringChangeUtil.getThisClass(ref);
     boolean insertCastWhenUnchecked = ref.getParent() instanceof PsiForeachStatement;
-    final PsiType varType = variable.getType();
+    PsiType varType = variable.getType();
     initializer = RefactoringUtil.convertInitializerToNormalExpression(initializer, varType);
 
     ChangeContextUtil.encodeContextInfo(initializer, false);
@@ -67,27 +67,27 @@ public class InlineUtil {
         || insertCastWhenUnchecked && JavaGenericsUtil.isRawToGeneric(varType, exprType))) {
       boolean matchedTypes = false;
       //try explicit type arguments
-      final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
+      PsiElementFactory elementFactory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
       if (expr instanceof PsiCallExpression && ((PsiCallExpression) expr).getTypeArguments().length == 0) {
-        final JavaResolveResult resolveResult = ((PsiCallExpression) initializer).resolveMethodGenerics();
-        final PsiElement resolved = resolveResult.getElement();
+        JavaResolveResult resolveResult = ((PsiCallExpression) initializer).resolveMethodGenerics();
+        PsiElement resolved = resolveResult.getElement();
         if (resolved instanceof PsiMethod) {
-          final PsiTypeParameter[] typeParameters = ((PsiMethod) resolved).getTypeParameters();
+          PsiTypeParameter[] typeParameters = ((PsiMethod) resolved).getTypeParameters();
           if (typeParameters.length > 0) {
-            final PsiCallExpression copy = (PsiCallExpression) expr.copy();
-            for (final PsiTypeParameter typeParameter : typeParameters) {
-              final PsiType substituted = resolveResult.getSubstitutor().substitute(typeParameter);
+            PsiCallExpression copy = (PsiCallExpression) expr.copy();
+            for (PsiTypeParameter typeParameter : typeParameters) {
+              PsiType substituted = resolveResult.getSubstitutor().substitute(typeParameter);
               if (substituted == null) break;
               copy.getTypeArgumentList().add(elementFactory.createTypeElement(substituted));
             }
             if (varType.equals(copy.getType())) {
               ((PsiCallExpression) expr).getTypeArgumentList().replace(copy.getTypeArgumentList());
               if (expr instanceof PsiMethodCallExpression) {
-                final PsiReferenceExpression methodExpression = ((PsiMethodCallExpression) expr).getMethodExpression();
-                final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
+                PsiReferenceExpression methodExpression = ((PsiMethodCallExpression) expr).getMethodExpression();
+                PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
                 if (qualifierExpression == null) {
-                  final PsiMethod method = (PsiMethod) resolved;
-                  final PsiClass containingClass = method.getContainingClass();
+                  PsiMethod method = (PsiMethod) resolved;
+                  PsiClass containingClass = method.getContainingClass();
                   LOG.assertTrue(containingClass != null);
                   if (method.getModifierList().hasModifierProperty(PsiModifier.STATIC)) {
                     methodExpression.setQualifierExpression(elementFactory.createReferenceExpression(containingClass));
@@ -105,11 +105,11 @@ public class InlineUtil {
       if (!matchedTypes) {
         if (varType instanceof PsiEllipsisType && ((PsiEllipsisType) varType).getComponentType().equals(exprType)) { //convert vararg to array
 
-          final PsiExpressionList argumentList = PsiTreeUtil.getParentOfType(expr, PsiExpressionList.class);
+          PsiExpressionList argumentList = PsiTreeUtil.getParentOfType(expr, PsiExpressionList.class);
           LOG.assertTrue(argumentList != null);
-          final PsiExpression[] arguments = argumentList.getExpressions();
+          PsiExpression[] arguments = argumentList.getExpressions();
 
-          @NonNls final StringBuilder builder = new StringBuilder("new ");
+          @NonNls StringBuilder builder = new StringBuilder("new ");
           builder.append(exprType.getCanonicalText());
           builder.append("[]{");
           builder.append(StringUtil.join(Arrays.asList(arguments), expr1 -> expr1.getText(), ","));
@@ -123,7 +123,7 @@ public class InlineUtil {
           PsiTypeElement castTypeElement = cast.getCastType();
           assert castTypeElement != null;
           castTypeElement.replace(variable.getTypeElement());
-          final PsiExpression operand = cast.getOperand();
+          PsiExpression operand = cast.getOperand();
           assert operand != null;
           operand.replace(expr);
           PsiExpression exprCopy = (PsiExpression) expr.copy();
@@ -153,13 +153,13 @@ public class InlineUtil {
   }
 
   private static PsiExpression surroundWithCast(PsiVariable variable, PsiExpression expr, PsiExpression expression) {
-    final PsiElement parent = expression.getParent();
+    PsiElement parent = expression.getParent();
     if (parent instanceof PsiReferenceExpression || parent instanceof PsiExpressionList) {
       PsiTypeCastExpression cast = (PsiTypeCastExpression) JavaPsiFacade.getElementFactory(expr.getProject()).createExpressionFromText("(t)a", null);
       PsiTypeElement castTypeElement = cast.getCastType();
       assert castTypeElement != null;
       castTypeElement.replace(variable.getTypeElement());
-      final PsiExpression operand = cast.getOperand();
+      PsiExpression operand = cast.getOperand();
       assert operand != null;
       operand.replace(expr);
       expr = (PsiTypeCastExpression) expr.replace(cast);
@@ -182,10 +182,10 @@ public class InlineUtil {
     return thisAccessExpr;
   }
 
-  public static void tryToInlineArrayCreationForVarargs(final PsiExpression expr) {
+  public static void tryToInlineArrayCreationForVarargs(PsiExpression expr) {
     if (expr instanceof PsiNewExpression && ((PsiNewExpression) expr).getArrayInitializer() != null) {
       if (expr.getParent() instanceof PsiExpressionList) {
-        final PsiExpressionList exprList = (PsiExpressionList) expr.getParent();
+        PsiExpressionList exprList = (PsiExpressionList) expr.getParent();
         if (exprList.getParent() instanceof PsiCall) {
           if (isSafeToInlineVarargsArgument((PsiCall) exprList.getParent())) {
             inlineArrayCreationForVarargs(((PsiNewExpression) expr));
@@ -195,7 +195,7 @@ public class InlineUtil {
     }
   }
 
-  public static void inlineArrayCreationForVarargs(final PsiNewExpression arrayCreation) {
+  public static void inlineArrayCreationForVarargs(PsiNewExpression arrayCreation) {
     PsiExpressionList argumentList = (PsiExpressionList) arrayCreation.getParent();
     if (argumentList == null) return;
     PsiExpression[] args = argumentList.getExpressions();
@@ -210,7 +210,7 @@ public class InlineUtil {
       if (initializers.length > 0) {
         PsiElement lastInitializerSibling = initializers[initializers.length - 1];
         while (lastInitializerSibling != null) {
-          final PsiElement nextSibling = lastInitializerSibling.getNextSibling();
+          PsiElement nextSibling = lastInitializerSibling.getNextSibling();
           if (nextSibling == null) {
             break;
           }
@@ -232,9 +232,9 @@ public class InlineUtil {
   }
 
   private static boolean isSafeToInlineVarargsArgument(PsiCall expression) {
-    final JavaResolveResult resolveResult = expression.resolveMethodGenerics();
+    JavaResolveResult resolveResult = expression.resolveMethodGenerics();
     PsiElement element = resolveResult.getElement();
-    final PsiSubstitutor substitutor = resolveResult.getSubstitutor();
+    PsiSubstitutor substitutor = resolveResult.getSubstitutor();
     if (element instanceof PsiMethod && ((PsiMethod) element).isVarArgs()) {
       PsiMethod method = (PsiMethod) element;
       PsiParameter[] parameters = method.getParameterList().getParameters();
@@ -247,7 +247,7 @@ public class InlineUtil {
           PsiType lastParamType = lastParameter.getType();
           LOG.assertTrue(lastParamType instanceof PsiEllipsisType);
           if (lastArg instanceof PsiNewExpression) {
-            final PsiType lastArgType = lastArg.getType();
+            PsiType lastArgType = lastArg.getType();
             if (lastArgType != null && substitutor.substitute(((PsiEllipsisType) lastParamType).toArrayType()).isAssignableFrom(lastArgType)) {
               PsiArrayInitializerExpression arrayInitializer = ((PsiNewExpression) lastArg).getArrayInitializer();
               PsiExpression[] initializers = arrayInitializer != null ? arrayInitializer.getInitializers() : PsiExpression.EMPTY_ARRAY;
@@ -284,7 +284,7 @@ public class InlineUtil {
     boolean result = ProgressManager.getInstance().runProcessWithProgressSynchronously(new Runnable() {
       public void run() {
         ReferencesSearch.search(method).forEach(new Processor<PsiReference>() {
-          public boolean process(final PsiReference psiReference) {
+          public boolean process(PsiReference psiReference) {
             ProgressManager.checkCanceled();
             if (getTailCallType(psiReference) == TailCallType.None) {
               nonTailCallUsages.add(psiReference);
@@ -298,7 +298,7 @@ public class InlineUtil {
     return result && nonTailCallUsages.isEmpty();
   }
 
-  public static TailCallType getTailCallType(@Nonnull final PsiReference psiReference) {
+  public static TailCallType getTailCallType(@Nonnull PsiReference psiReference) {
     PsiElement element = psiReference.getElement();
     PsiExpression methodCall = PsiTreeUtil.getParentOfType(element, PsiMethodCallExpression.class);
     if (methodCall == null) return TailCallType.None;
@@ -307,7 +307,7 @@ public class InlineUtil {
       PsiStatement callStatement = (PsiStatement) methodCall.getParent();
       PsiMethod callerMethod = PsiTreeUtil.getParentOfType(callStatement, PsiMethod.class);
       if (callerMethod != null) {
-        final PsiStatement[] psiStatements = callerMethod.getBody().getStatements();
+        PsiStatement[] psiStatements = callerMethod.getBody().getStatements();
         return psiStatements.length > 0 && callStatement == psiStatements[psiStatements.length - 1] ? TailCallType.Simple : TailCallType.None;
       }
     }
@@ -347,26 +347,26 @@ public class InlineUtil {
 
   private static PsiElement replaceDiamondWithInferredTypesIfNeeded(PsiExpression initializer, PsiElement ref) {
     if (initializer instanceof PsiNewExpression) {
-      final PsiJavaCodeReferenceElement classReference = ((PsiNewExpression) initializer).getClassOrAnonymousClassReference();
+      PsiJavaCodeReferenceElement classReference = ((PsiNewExpression) initializer).getClassOrAnonymousClassReference();
       if (classReference != null) {
-        final PsiReferenceParameterList parameterList = classReference.getParameterList();
+        PsiReferenceParameterList parameterList = classReference.getParameterList();
         if (parameterList != null) {
-          final PsiTypeElement[] typeParameterElements = parameterList.getTypeParameterElements();
+          PsiTypeElement[] typeParameterElements = parameterList.getTypeParameterElements();
           if (typeParameterElements.length == 1) {
-            final PsiType type = typeParameterElements[0].getType();
+            PsiType type = typeParameterElements[0].getType();
             if (type instanceof PsiDiamondType) {
-              final PsiDiamondType.DiamondInferenceResult inferenceResult = ((PsiDiamondType) type).resolveInferredTypes();
+              PsiDiamondType.DiamondInferenceResult inferenceResult = ((PsiDiamondType) type).resolveInferredTypes();
               if (inferenceResult.getErrorMessage() == null) {
-                final PsiElement copy = ref.copy();
-                final PsiElement parent = ref.replace(initializer);
-                final PsiDiamondType.DiamondInferenceResult result = PsiDiamondTypeImpl.resolveInferredTypes((PsiNewExpression) initializer, parent);
+                PsiElement copy = ref.copy();
+                PsiElement parent = ref.replace(initializer);
+                PsiDiamondType.DiamondInferenceResult result = PsiDiamondTypeImpl.resolveInferredTypes((PsiNewExpression) initializer, parent);
                 ref = parent.replace(copy);
                 if (!result.equals(inferenceResult)) {
-                  final String inferredTypeText = StringUtil.join(inferenceResult.getTypes(),
+                  String inferredTypeText = StringUtil.join(inferenceResult.getTypes(),
                       psiType -> psiType.getCanonicalText(), ", ");
-                  final PsiExpressionList argumentList = ((PsiNewExpression) initializer).getArgumentList();
+                  PsiExpressionList argumentList = ((PsiNewExpression) initializer).getArgumentList();
                   if (argumentList != null) {
-                    final PsiExpression expression = JavaPsiFacade.getElementFactory(initializer.getProject())
+                    PsiExpression expression = JavaPsiFacade.getElementFactory(initializer.getProject())
                         .createExpressionFromText("new " + classReference.getReferenceName() + "<" + inferredTypeText + ">" + argumentList.getText(), initializer);
                     return ref.replace(expression);
                   }

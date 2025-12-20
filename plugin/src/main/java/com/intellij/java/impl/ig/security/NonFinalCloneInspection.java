@@ -48,11 +48,11 @@ public class NonFinalCloneInspection extends BaseInspection {
         @Override
         public void visitMethod(@Nonnull PsiMethod method) {
             super.visitMethod(method);
-            final String name = method.getName();
+            String name = method.getName();
             if (!HardcodedMethodConstants.CLONE.equals(name)) {
                 return;
             }
-            final PsiParameterList parameterList = method.getParameterList();
+            PsiParameterList parameterList = method.getParameterList();
             if (parameterList.getParametersCount() != 0) {
                 return;
             }
@@ -60,7 +60,7 @@ public class NonFinalCloneInspection extends BaseInspection {
                 || method.hasModifierProperty(PsiModifier.ABSTRACT)) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return;
             }

@@ -25,10 +25,10 @@ public class PackageNameUtil {
 
     public static boolean containsNonIdentifier(PsiNameHelper nameHelper, String packageName) {
 
-        final StringTokenizer tokenizer = new StringTokenizer(packageName, ".");
+        StringTokenizer tokenizer = new StringTokenizer(packageName, ".");
         while(tokenizer.hasMoreTokens())
         {
-            final String component = tokenizer.nextToken();
+            String component = tokenizer.nextToken();
             if (!nameHelper.isIdentifier(component)) {
                 return true;
             }

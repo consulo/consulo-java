@@ -13,11 +13,11 @@ import java.util.ArrayList;
 public abstract class ConcatenationToMessageFormatActionTest extends LightIdeaTestCase {
   
   public void test1() throws Exception{
-    final String text = "\"aaa 'bbb' '\" + ((java.lang.String)ccc) + \"'\"";
-    final PsiExpression expression = JavaPsiFacade.getInstance(getProject()).getElementFactory().createExpressionFromText(
+    String text = "\"aaa 'bbb' '\" + ((java.lang.String)ccc) + \"'\"";
+    PsiExpression expression = JavaPsiFacade.getInstance(getProject()).getElementFactory().createExpressionFromText(
       text, null
     );
-    final StringBuilder result = new StringBuilder();
+    StringBuilder result = new StringBuilder();
     ConcatenationToMessageFormatAction.buildMessageFormatString(expression,
                                                                 result,
                                                                 new ArrayList<PsiExpression>());
@@ -25,10 +25,10 @@ public abstract class ConcatenationToMessageFormatActionTest extends LightIdeaTe
   }
   
   public void test2() throws Exception {
-    final String text = "1 + 2 + 3 + \"{}'\" + '\\n' + ((java.lang.String)ccc)";
-    final PsiExpression expression = JavaPsiFacade.getElementFactory(getProject()).createExpressionFromText(text, null);
-    final StringBuilder result = new StringBuilder();
-    final ArrayList<PsiExpression> args = new ArrayList<PsiExpression>();
+    String text = "1 + 2 + 3 + \"{}'\" + '\\n' + ((java.lang.String)ccc)";
+    PsiExpression expression = JavaPsiFacade.getElementFactory(getProject()).createExpressionFromText(text, null);
+    StringBuilder result = new StringBuilder();
+    ArrayList<PsiExpression> args = new ArrayList<PsiExpression>();
     ConcatenationToMessageFormatAction.buildMessageFormatString(expression, result, args);
     assertEquals("{0}'{'}''\\n{1}", result.toString());
     assertEquals(2, args.size());

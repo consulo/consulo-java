@@ -73,21 +73,21 @@ public class ReplaceFullyQualifiedNameWithImportIntention extends Intention {
         if (!(target instanceof PsiClass)) {
             return;
         }
-        final PsiClass aClass = (PsiClass) target;
-        final String qualifiedName = aClass.getQualifiedName();
+        PsiClass aClass = (PsiClass) target;
+        String qualifiedName = aClass.getQualifiedName();
         if (qualifiedName == null) {
             return;
         }
-        final PsiJavaFile file =
+        PsiJavaFile file =
             PsiTreeUtil.getParentOfType(reference, PsiJavaFile.class);
         if (file == null) {
             return;
         }
         ImportUtils.addImportIfNeeded(aClass, reference);
-        final String fullyQualifiedText = reference.getText();
-        final QualificationRemover qualificationRemover = new QualificationRemover(fullyQualifiedText);
+        String fullyQualifiedText = reference.getText();
+        QualificationRemover qualificationRemover = new QualificationRemover(fullyQualifiedText);
         file.accept(qualificationRemover);
-        final Collection<PsiJavaCodeReferenceElement> shortenedElements = qualificationRemover.getShortenedElements();
+        Collection<PsiJavaCodeReferenceElement> shortenedElements = qualificationRemover.getShortenedElements();
         HighlightUtil.highlightElements(shortenedElements);
     }
 
@@ -107,15 +107,15 @@ public class ReplaceFullyQualifiedNameWithImportIntention extends Intention {
         @Override
         public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
             super.visitReferenceElement(reference);
-            final PsiElement parent = reference.getParent();
+            PsiElement parent = reference.getParent();
             if (parent instanceof PsiImportStatement) {
                 return;
             }
-            final String text = reference.getText();
+            String text = reference.getText();
             if (!text.equals(fullyQualifiedText)) {
                 return;
             }
-            final PsiElement qualifier = reference.getQualifier();
+            PsiElement qualifier = reference.getQualifier();
             if (qualifier == null) {
                 return;
             }
@@ -123,9 +123,9 @@ public class ReplaceFullyQualifiedNameWithImportIntention extends Intention {
                 qualifier.delete();
             }
             catch (IncorrectOperationException e) {
-                final Class<? extends QualificationRemover> aClass = getClass();
-                final String className = aClass.getName();
-                final Logger logger = Logger.getInstance(className);
+                Class<? extends QualificationRemover> aClass = getClass();
+                String className = aClass.getName();
+                Logger logger = Logger.getInstance(className);
                 logger.error(e);
             }
             shortenedElements.add(reference);

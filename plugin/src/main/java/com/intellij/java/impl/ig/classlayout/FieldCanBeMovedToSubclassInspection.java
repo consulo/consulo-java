@@ -52,22 +52,22 @@ public abstract class FieldCanBeMovedToSubclassInspection extends BaseGlobalInsp
     if (!(refEntity instanceof RefField)) {
       return null;
     }
-    final RefField refField = (RefField) refEntity;
-    final PsiField field = refField.getElement();
+    RefField refField = (RefField) refEntity;
+    PsiField field = refField.getElement();
     if (field == null) {
       return null;
     }
-    final PsiType type = field.getType();
+    PsiType type = field.getType();
     if (!type.equals(PsiType.BOOLEAN)) {
       return null;
     }
 
-    final RefClass fieldClass = refField.getOwnerClass();
-    final Collection<RefElement> inReferences = refField.getInReferences();
-    final RefJavaUtil refUtil = RefJavaUtil.getInstance();
-    final Set<RefClass> classesUsed = new HashSet<RefClass>();
+    RefClass fieldClass = refField.getOwnerClass();
+    Collection<RefElement> inReferences = refField.getInReferences();
+    RefJavaUtil refUtil = RefJavaUtil.getInstance();
+    Set<RefClass> classesUsed = new HashSet<RefClass>();
     for (RefElement inReference : inReferences) {
-      final RefClass referringClass = refUtil.getOwnerClass(inReference);
+      RefClass referringClass = refUtil.getOwnerClass(inReference);
       if (referringClass == null) {
         return null;
       }
@@ -82,9 +82,9 @@ public abstract class FieldCanBeMovedToSubclassInspection extends BaseGlobalInsp
     if (classesUsed.size() != 1) {
       return null;
     }
-    final RefClass referencingClass = classesUsed.iterator().next();
+    RefClass referencingClass = classesUsed.iterator().next();
     //TODO: check that referencing class is a subclass of the field class
-    final String errorString = "Field " + refEntity.getName() + " is only accessed in subclass " + referencingClass.getName();
+    String errorString = "Field " + refEntity.getName() + " is only accessed in subclass " + referencingClass.getName();
     return new CommonProblemDescriptor[]{inspectionManager.createProblemDescriptor(errorString)};
   }
 }

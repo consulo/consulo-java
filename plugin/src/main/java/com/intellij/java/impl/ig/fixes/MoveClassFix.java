@@ -37,16 +37,16 @@ public class MoveClassFix extends InspectionGadgetsFix {
   }
 
   public void doFix(@Nonnull final Project project, ProblemDescriptor descriptor) {
-    final PsiElement nameElement = descriptor.getPsiElement();
+    PsiElement nameElement = descriptor.getPsiElement();
     final PsiClass aClass = (PsiClass)nameElement.getParent();
-    final Application application = ApplicationManager.getApplication();
+    Application application = ApplicationManager.getApplication();
     application.invokeLater(new Runnable() {
 
       public void run() {
-        final RefactoringActionHandlerFactory factory = RefactoringActionHandlerFactory.getInstance();
-        final RefactoringActionHandler moveHandler = factory.createMoveHandler();
-        final DataManager dataManager = DataManager.getInstance();
-        final DataContext dataContext = dataManager.getDataContext();
+        RefactoringActionHandlerFactory factory = RefactoringActionHandlerFactory.getInstance();
+        RefactoringActionHandler moveHandler = factory.createMoveHandler();
+        DataManager dataManager = DataManager.getInstance();
+        DataContext dataContext = dataManager.getDataContext();
         moveHandler.invoke(project, new PsiElement[]{aClass}, dataContext);
       }
     });

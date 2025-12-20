@@ -113,7 +113,7 @@ public class JavaTestGenerator implements TestGenerator {
     }
   }
 
-  private static void showErrorLater(final Project project, final String targetClassName) {
+  private static void showErrorLater(Project project, String targetClassName) {
     project.getApplication().invokeLater(() -> Messages.showErrorDialog(
       project,
       CodeInsightLocalize.intentionErrorCannotCreateClassMessage(targetClassName).get(),

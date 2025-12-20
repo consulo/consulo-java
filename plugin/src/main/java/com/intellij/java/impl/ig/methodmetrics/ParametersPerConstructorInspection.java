@@ -78,7 +78,7 @@ public class ParametersPerConstructorInspection extends MethodMetricInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final Integer parameterCount = (Integer) infos[0];
+        Integer parameterCount = (Integer) infos[0];
         return InspectionGadgetsLocalize.parametersPerConstructorProblemDescriptor(parameterCount).get();
     }
 
@@ -94,10 +94,10 @@ public class ParametersPerConstructorInspection extends MethodMetricInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final JPanel panel = new JPanel();
-        final JLabel textFieldLabel = new JLabel(getConfigurationLabel());
-        final JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
-        final JLabel comboBoxLabel = new JLabel(InspectionGadgetsLocalize.constructorVisibilityOption().get());
+        JPanel panel = new JPanel();
+        JLabel textFieldLabel = new JLabel(getConfigurationLabel());
+        JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
+        JLabel comboBoxLabel = new JLabel(InspectionGadgetsLocalize.constructorVisibilityOption().get());
         final JComboBox comboBox = new JComboBox();
         comboBox.addItem(Scope.NONE);
         comboBox.addItem(Scope.PRIVATE);
@@ -120,17 +120,17 @@ public class ParametersPerConstructorInspection extends MethodMetricInspection {
         });
         comboBox.setPrototypeDisplayValue(Scope.PROTECTED);
 
-        final GroupLayout layout = new GroupLayout(panel);
+        GroupLayout layout = new GroupLayout(panel);
         layout.setAutoCreateGaps(true);
         panel.setLayout(layout);
-        final GroupLayout.ParallelGroup horizontal = layout.createParallelGroup();
+        GroupLayout.ParallelGroup horizontal = layout.createParallelGroup();
         horizontal.addGroup(layout.createSequentialGroup()
             .addComponent(textFieldLabel)
             .addComponent(valueField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE));
         horizontal.addGroup(layout.createSequentialGroup()
             .addComponent(comboBoxLabel).addComponent(comboBox, 100, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE));
         layout.setHorizontalGroup(horizontal);
-        final GroupLayout.SequentialGroup vertical = layout.createSequentialGroup();
+        GroupLayout.SequentialGroup vertical = layout.createSequentialGroup();
         vertical.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
             .addComponent(textFieldLabel)
             .addComponent(valueField));
@@ -174,8 +174,8 @@ public class ParametersPerConstructorInspection extends MethodMetricInspection {
                         }
                 }
             }
-            final PsiParameterList parameterList = method.getParameterList();
-            final int parametersCount = parameterList.getParametersCount();
+            PsiParameterList parameterList = method.getParameterList();
+            int parametersCount = parameterList.getParametersCount();
             if (parametersCount <= getLimit()) {
                 return;
             }

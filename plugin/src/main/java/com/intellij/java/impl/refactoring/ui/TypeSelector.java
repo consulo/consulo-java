@@ -75,14 +75,14 @@ public class TypeSelector {
   }
 
   public PsiType[] getTypes() {
-    final PsiType[] types = new PsiType[myComboBoxModel.mySuggestions.length];
+    PsiType[] types = new PsiType[myComboBoxModel.mySuggestions.length];
     for (int i = 0; i < types.length; i++) {
       types[i] = myComboBoxModel.mySuggestions[i].getType();
     }
     return types;
   }
 
-  private static PsiTypeItem[] wrapToItems(final PsiType[] types, Project project) {
+  private static PsiTypeItem[] wrapToItems(PsiType[] types, Project project) {
     PsiTypeItem[] result = new PsiTypeItem[types.length];
     for (int i = 0; i < result.length; i++) {
       result [i] = new PsiTypeItem(types [i], project);
@@ -128,7 +128,7 @@ public class TypeSelector {
     if (myComponent instanceof JLabel) {
       return myType;
     } else {
-      final PsiTypeItem selItem = (PsiTypeItem)((JComboBox)myComponent).getSelectedItem();
+      PsiTypeItem selItem = (PsiTypeItem)((JComboBox)myComponent).getSelectedItem();
       return selItem == null ? null : selItem.getType();
     }
   }
@@ -167,7 +167,7 @@ public class TypeSelector {
     private final PsiType myType;
     private final SmartTypePointer myTypePointer;
 
-    private PsiTypeItem(final PsiType type, Project project) {
+    private PsiTypeItem(PsiType type, Project project) {
       myType = type;
       myTypePointer = SmartTypePointerManager.getInstance(project).createSmartTypePointer(type);
     }

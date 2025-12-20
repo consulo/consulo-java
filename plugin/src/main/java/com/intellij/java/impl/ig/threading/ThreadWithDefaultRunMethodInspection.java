@@ -54,18 +54,18 @@ public class ThreadWithDefaultRunMethodInspection extends BaseInspection {
     @Override
     public void visitNewExpression(@Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
-      final PsiAnonymousClass anonymousClass =
+      PsiAnonymousClass anonymousClass =
         expression.getAnonymousClass();
 
       if (anonymousClass != null) {
-        final PsiJavaCodeReferenceElement baseClassReference =
+        PsiJavaCodeReferenceElement baseClassReference =
           anonymousClass.getBaseClassReference();
-        final PsiElement referent = baseClassReference.resolve();
+        PsiElement referent = baseClassReference.resolve();
         if (referent == null) {
           return;
         }
-        final PsiClass referencedClass = (PsiClass)referent;
-        final String referencedClassName =
+        PsiClass referencedClass = (PsiClass)referent;
+        String referencedClassName =
           referencedClass.getQualifiedName();
         if (!"java.lang.Thread".equals(referencedClassName)) {
           return;
@@ -73,12 +73,12 @@ public class ThreadWithDefaultRunMethodInspection extends BaseInspection {
         if (definesRun(anonymousClass)) {
           return;
         }
-        final PsiExpressionList argumentList =
+        PsiExpressionList argumentList =
           expression.getArgumentList();
         if (argumentList == null) {
           return;
         }
-        final PsiExpression[] arguments = argumentList.getExpressions();
+        PsiExpression[] arguments = argumentList.getExpressions();
         for (PsiExpression argument : arguments) {
           if (TypeUtils.expressionHasTypeOrSubtype(argument, CommonClassNames.JAVA_LANG_RUNNABLE)) {
             return;
@@ -87,27 +87,27 @@ public class ThreadWithDefaultRunMethodInspection extends BaseInspection {
         registerNewExpressionError(expression);
       }
       else {
-        final PsiJavaCodeReferenceElement classReference =
+        PsiJavaCodeReferenceElement classReference =
           expression.getClassReference();
         if (classReference == null) {
           return;
         }
-        final PsiElement referent = classReference.resolve();
+        PsiElement referent = classReference.resolve();
         if (referent == null) {
           return;
         }
-        final PsiClass referencedClass = (PsiClass)referent;
-        final String referencedClassName =
+        PsiClass referencedClass = (PsiClass)referent;
+        String referencedClassName =
           referencedClass.getQualifiedName();
         if (!"java.lang.Thread".equals(referencedClassName)) {
           return;
         }
-        final PsiExpressionList argumentList =
+        PsiExpressionList argumentList =
           expression.getArgumentList();
         if (argumentList == null) {
           return;
         }
-        final PsiExpression[] arguments = argumentList.getExpressions();
+        PsiExpression[] arguments = argumentList.getExpressions();
         for (PsiExpression argument : arguments) {
           if (TypeUtils.expressionHasTypeOrSubtype(argument, CommonClassNames.JAVA_LANG_RUNNABLE)) {
             return;
@@ -118,11 +118,11 @@ public class ThreadWithDefaultRunMethodInspection extends BaseInspection {
     }
 
     private static boolean definesRun(PsiAnonymousClass aClass) {
-      final PsiMethod[] methods = aClass.getMethods();
-      for (final PsiMethod method : methods) {
-        final String methodName = method.getName();
+      PsiMethod[] methods = aClass.getMethods();
+      for (PsiMethod method : methods) {
+        String methodName = method.getName();
         if (HardcodedMethodConstants.RUN.equals(methodName)) {
-          final PsiParameterList parameterList =
+          PsiParameterList parameterList =
             method.getParameterList();
           if (parameterList.getParametersCount() == 0) {
             return true;

@@ -43,7 +43,7 @@ public abstract class ConvertToBasicLatinTest extends JavaCodeInsightFixtureTest
   public void testDocTag() { doTest(); }
 
   private void doTest() {
-    final String name = getTestName(false);
+    String name = getTestName(false);
     CodeInsightTestUtil.doIntentionTest(myFixture, myIntention, name + ".java", name + "_after.java");
   }
 }

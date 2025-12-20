@@ -45,7 +45,7 @@ public class ConfigFileFactoryImpl extends ConfigFileFactory {
   private static final Logger LOG = Logger.getInstance(ConfigFileFactoryImpl.class);
 
   @Override
-  public ConfigFileMetaDataProvider createMetaDataProvider(final ConfigFileMetaData... metaDatas) {
+  public ConfigFileMetaDataProvider createMetaDataProvider(ConfigFileMetaData... metaDatas) {
     return new ConfigFileMetaDataRegistryImpl(metaDatas);
   }
 
@@ -55,18 +55,18 @@ public class ConfigFileFactoryImpl extends ConfigFileFactory {
   }
 
   @Override
-  public ConfigFileInfoSet createConfigFileInfoSet(final ConfigFileMetaDataProvider metaDataProvider) {
+  public ConfigFileInfoSet createConfigFileInfoSet(ConfigFileMetaDataProvider metaDataProvider) {
     return new ConfigFileInfoSetImpl(metaDataProvider);
   }
 
   @Override
-  public ConfigFileContainer createConfigFileContainer(final Project project, final ConfigFileMetaDataProvider metaDataProvider, final ConfigFileInfoSet configuration) {
+  public ConfigFileContainer createConfigFileContainer(Project project, ConfigFileMetaDataProvider metaDataProvider, ConfigFileInfoSet configuration) {
     return new ConfigFileContainerImpl(project, metaDataProvider, (ConfigFileInfoSetImpl) configuration);
   }
 
-  private static String getText(final String templateName, @Nullable Project project) throws IOException {
-    final FileTemplateManager templateManager = project == null ? FileTemplateManager.getDefaultInstance() : FileTemplateManager.getInstance(project);
-    final FileTemplate template = templateManager.getJ2eeTemplate(templateName);
+  private static String getText(String templateName, @Nullable Project project) throws IOException {
+    FileTemplateManager templateManager = project == null ? FileTemplateManager.getDefaultInstance() : FileTemplateManager.getInstance(project);
+    FileTemplate template = templateManager.getJ2eeTemplate(templateName);
     if (template == null) {
       return "";
     }
@@ -75,14 +75,14 @@ public class ConfigFileFactoryImpl extends ConfigFileFactory {
 
   @Override
   @Nullable
-  public VirtualFile createFile(@Nullable Project project, String url, ConfigFileVersion version, final boolean forceNew) {
+  public VirtualFile createFile(@Nullable Project project, String url, ConfigFileVersion version, boolean forceNew) {
     return createFileFromTemplate(project, url, version.getTemplateName(), forceNew);
   }
 
   @Nullable
-  private VirtualFile createFileFromTemplate(@Nullable final Project project, String url, final String templateName, final boolean forceNew) {
-    final LocalFileSystem fileSystem = LocalFileSystem.getInstance();
-    final File file = new File(VirtualFileUtil.urlToPath(url));
+  private VirtualFile createFileFromTemplate(@Nullable Project project, String url, String templateName, boolean forceNew) {
+    LocalFileSystem fileSystem = LocalFileSystem.getInstance();
+    File file = new File(VirtualFileUtil.urlToPath(url));
     VirtualFile existingFile = fileSystem.refreshAndFindFileByIoFile(file);
     if (existingFile != null) {
       existingFile.refresh(false, false);
@@ -96,9 +96,9 @@ public class ConfigFileFactoryImpl extends ConfigFileFactory {
     }
     try {
       String text = getText(templateName, project);
-      final VirtualFile childData;
+      VirtualFile childData;
       if (existingFile == null || existingFile.isDirectory()) {
-        final VirtualFile virtualFile;
+        VirtualFile virtualFile;
         if (!FileUtil.createParentDirs(file) || (virtualFile = fileSystem.refreshAndFindFileByIoFile(file.getParentFile())) == null) {
           throw new IOException(IdeLocalize.errorMessageUnableToCreateFile(file.getPath()).get());
         }
@@ -108,7 +108,7 @@ public class ConfigFileFactoryImpl extends ConfigFileFactory {
       }
       LanguageFileContentUtil.setFileText(project, childData, text);
       return childData;
-    } catch (final IOException e) {
+    } catch (IOException e) {
       LOG.info(e);
       Application.get().invokeLater(() -> Messages.showErrorDialog(
         IdeLocalize.messageTextErrorCreatingDeploymentDescriptor(e.getLocalizedMessage()).get(),
@@ -120,7 +120,7 @@ public class ConfigFileFactoryImpl extends ConfigFileFactory {
 
   @Override
   public ConfigFileContainer createSingleFileContainer(Project project, ConfigFileMetaData metaData) {
-    final ConfigFileMetaDataProvider metaDataProvider = createMetaDataProvider(metaData);
+    ConfigFileMetaDataProvider metaDataProvider = createMetaDataProvider(metaData);
     return createConfigFileContainer(project, metaDataProvider, createConfigFileInfoSet(metaDataProvider));
   }
 }

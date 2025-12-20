@@ -27,19 +27,19 @@ class ConvertIntegerToOctalPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiLiteralExpression)) {
       return false;
     }
-    final PsiLiteralExpression expression = (PsiLiteralExpression)element;
-    final PsiType type = expression.getType();
+    PsiLiteralExpression expression = (PsiLiteralExpression)element;
+    PsiType type = expression.getType();
     if (!(PsiType.INT.equals(type) || PsiType.LONG.equals(type))) {
       return false;
     }
-    @NonNls final String text = expression.getText();
+    @NonNls String text = expression.getText();
     if (text.charAt(0) != '0') {
       return true;
     }
     if (text.length() < 2) {
       return true;
     }
-    final char c1 = text.charAt(1);
+    char c1 = text.charAt(1);
     if (c1 != '_' && (c1 < '0' || c1 > '7')) {
       return true;
     }

@@ -35,18 +35,18 @@ public class IfConditionFixer implements Fixer
 	{
 		if(psiElement instanceof PsiIfStatement)
 		{
-			final Document doc = editor.getDocument();
-			final PsiIfStatement ifStatement = (PsiIfStatement) psiElement;
-			final PsiJavaToken rParen = ifStatement.getRParenth();
-			final PsiJavaToken lParen = ifStatement.getLParenth();
-			final PsiExpression condition = ifStatement.getCondition();
+			Document doc = editor.getDocument();
+			PsiIfStatement ifStatement = (PsiIfStatement) psiElement;
+			PsiJavaToken rParen = ifStatement.getRParenth();
+			PsiJavaToken lParen = ifStatement.getLParenth();
+			PsiExpression condition = ifStatement.getCondition();
 
 			if(condition == null)
 			{
 				if(lParen == null || rParen == null)
 				{
 					int stopOffset = doc.getLineEndOffset(doc.getLineNumber(ifStatement.getTextRange().getStartOffset()));
-					final PsiStatement then = ifStatement.getThenBranch();
+					PsiStatement then = ifStatement.getThenBranch();
 					if(then != null)
 					{
 						stopOffset = Math.min(stopOffset, then.getTextRange().getStartOffset());

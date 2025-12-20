@@ -61,30 +61,30 @@ public class JavaPreviewHintProvider implements PreviewHintProvider {
 
   @Override
   public JComponent getPreviewComponent(@Nonnull PsiElement element) {
-    final PsiNewExpression psiNewExpression = PsiTreeUtil.getParentOfType(element, PsiNewExpression.class);
+    PsiNewExpression psiNewExpression = PsiTreeUtil.getParentOfType(element, PsiNewExpression.class);
 
     if (psiNewExpression != null) {
-      final PsiJavaCodeReferenceElement referenceElement = PsiTreeUtil.getChildOfType(psiNewExpression, PsiJavaCodeReferenceElement.class);
+      PsiJavaCodeReferenceElement referenceElement = PsiTreeUtil.getChildOfType(psiNewExpression, PsiJavaCodeReferenceElement.class);
 
       if (referenceElement != null) {
-        final PsiReference reference = referenceElement.getReference();
+        PsiReference reference = referenceElement.getReference();
 
         if (reference != null) {
-          final PsiElement psiElement = reference.resolve();
+          PsiElement psiElement = reference.resolve();
 
           if (psiElement instanceof PsiClass && "java.awt.Color".equals(((PsiClass) psiElement).getQualifiedName())) {
-            final PsiExpressionList argumentList = psiNewExpression.getArgumentList();
+            PsiExpressionList argumentList = psiNewExpression.getArgumentList();
 
             if (argumentList != null) {
-              final PsiExpression[] expressions = argumentList.getExpressions();
+              PsiExpression[] expressions = argumentList.getExpressions();
               int[] values = ArrayUtil.newIntArray(expressions.length);
               float[] values2 = new float[expressions.length];
               int i = 0;
               int j = 0;
 
-              final PsiConstantEvaluationHelper helper = JavaPsiFacade.getInstance(element.getProject()).getConstantEvaluationHelper();
-              for (final PsiExpression each : expressions) {
-                final Object o = helper.computeConstantExpression(each);
+              PsiConstantEvaluationHelper helper = JavaPsiFacade.getInstance(element.getProject()).getConstantEvaluationHelper();
+              for (PsiExpression each : expressions) {
+                Object o = helper.computeConstantExpression(each);
                 if (o instanceof Integer) {
                   values[i] = ((Integer) o).intValue();
                   if (expressions.length != 1) {
@@ -142,7 +142,7 @@ public class JavaPreviewHintProvider implements PreviewHintProvider {
     }
 
     if (isInsideDecodeOrGetColorMethod(element)) {
-      final String color = StringUtil.unquoteString(element.getText());
+      String color = StringUtil.unquoteString(element.getText());
       try {
         return new ColorPreviewComponent(Color.decode(color));
       } catch (NumberFormatException ignore) {
@@ -150,15 +150,15 @@ public class JavaPreviewHintProvider implements PreviewHintProvider {
     }
 
     if (PlatformPatterns.psiElement(PsiIdentifier.class).withParent(PlatformPatterns.psiElement(PsiReferenceExpression.class)).accepts(element)) {
-      final PsiReference reference = element.getParent().getReference();
+      PsiReference reference = element.getParent().getReference();
 
       if (reference != null) {
-        final PsiElement psiElement = reference.resolve();
+        PsiElement psiElement = reference.resolve();
 
         if (psiElement instanceof PsiField) {
           if ("java.awt.Color".equals(((PsiField) psiElement).getContainingClass().getQualifiedName())) {
-            final String colorName = ((PsiField) psiElement).getName().toLowerCase().replace("_", "");
-            final String hex = ColorSampleLookupValue.getHexCodeForColorName(colorName);
+            String colorName = ((PsiField) psiElement).getName().toLowerCase().replace("_", "");
+            String hex = ColorSampleLookupValue.getHexCodeForColorName(colorName);
             return new ColorPreviewComponent(Color.decode("0x" + hex.substring(1)));
           }
         }
@@ -166,7 +166,7 @@ public class JavaPreviewHintProvider implements PreviewHintProvider {
     }
 
     if (PlatformPatterns.psiElement().withParent(PlatformPatterns.psiElement(PsiLiteralExpression.class)).accepts(element)) {
-      final PsiLiteralExpression psiLiteralExpression = (PsiLiteralExpression) element.getParent();
+      PsiLiteralExpression psiLiteralExpression = (PsiLiteralExpression) element.getParent();
       if (psiLiteralExpression != null) {
         return ImagePreviewComponent.getPreviewComponent(psiLiteralExpression);
       }

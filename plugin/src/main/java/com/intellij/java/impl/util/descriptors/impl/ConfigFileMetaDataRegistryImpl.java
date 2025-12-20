@@ -53,11 +53,11 @@ public class ConfigFileMetaDataRegistryImpl implements ConfigFileMetaDataRegistr
   }
 
   @Nullable
-  public ConfigFileMetaData findMetaData(@NonNls @Nonnull final String id) {
+  public ConfigFileMetaData findMetaData(@NonNls @Nonnull String id) {
     return myId2MetaData.get(id);
   }
 
-  public void registerMetaData(@Nonnull final ConfigFileMetaData... metaData) {
+  public void registerMetaData(@Nonnull ConfigFileMetaData... metaData) {
     for (ConfigFileMetaData data : metaData) {
       myMetaData.add(data);
       myId2MetaData.put(data.getId(), data);

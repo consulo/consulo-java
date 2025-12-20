@@ -35,27 +35,27 @@ public class EnterInJavadocParamDescriptionHandler extends EnterHandlerDelegateA
     {
       return Result.Continue;
     }
-    final CaretModel caretModel = editor.getCaretModel();
+    CaretModel caretModel = editor.getCaretModel();
     final int caretOffset = caretModel.getOffset();
-    final Pair<JavadocHelper.JavadocParameterInfo,List<JavadocHelper.JavadocParameterInfo>> pair
+    Pair<JavadocHelper.JavadocParameterInfo,List<JavadocHelper.JavadocParameterInfo>> pair
       = myHelper.parse(file, editor, caretOffset);
     if (pair.first == null || pair.first.parameterDescriptionStartPosition == null) {
       return Result.Continue;
     }
 
-    final LogicalPosition caretPosition = caretModel.getLogicalPosition();
-    final LogicalPosition nameEndPosition = pair.first.parameterNameEndPosition;
+    LogicalPosition caretPosition = caretModel.getLogicalPosition();
+    LogicalPosition nameEndPosition = pair.first.parameterNameEndPosition;
     if (nameEndPosition.line == caretPosition.line && caretPosition.column <= nameEndPosition.column) {
       return Result.Continue;
     }
     
-    final int descriptionStartColumn = pair.first.parameterDescriptionStartPosition.column;
-    final LogicalPosition desiredPosition = new LogicalPosition(caretPosition.line, descriptionStartColumn);
+    int descriptionStartColumn = pair.first.parameterDescriptionStartPosition.column;
+    LogicalPosition desiredPosition = new LogicalPosition(caretPosition.line, descriptionStartColumn);
     final Document document = editor.getDocument();
-    final CharSequence text = document.getCharsSequence();
-    final int offsetAfterLastWs = CharArrayUtil.shiftForward(text, caretOffset, " \t");
+    CharSequence text = document.getCharsSequence();
+    int offsetAfterLastWs = CharArrayUtil.shiftForward(text, caretOffset, " \t");
     if (editor.offsetToLogicalPosition(offsetAfterLastWs).column < desiredPosition.column) {
-      final int lineStartOffset = document.getLineStartOffset(desiredPosition.line);
+      int lineStartOffset = document.getLineStartOffset(desiredPosition.line);
       final String toInsert = StringUtil.repeat(" ", desiredPosition.column - (offsetAfterLastWs - lineStartOffset));
       ApplicationManager.getApplication().runWriteAction(new Runnable() {
         @Override

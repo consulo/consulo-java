@@ -142,7 +142,7 @@ public class TemplatesPanel extends NamedItemsListEditor<TemplateResource> {
   public void apply() throws ConfigurationException {
     super.apply();
     myTemplatesManager.setTemplates(getItems());
-    final TemplateResource selection = getSelectedItem();
+    TemplateResource selection = getSelectedItem();
     if (selection != null) {
       myTemplatesManager.setDefaultTemplate(selection);
     }

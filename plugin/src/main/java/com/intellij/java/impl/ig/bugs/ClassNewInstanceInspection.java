@@ -63,23 +63,23 @@ public class ClassNewInstanceInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = element.getParent();
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement parent = element.getParent();
             if (!(parent instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiReferenceExpression methodExpression = (PsiReferenceExpression) parent;
-            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            PsiReferenceExpression methodExpression = (PsiReferenceExpression) parent;
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
             if (qualifier == null) {
                 return;
             }
-            final PsiElement grandParent = parent.getParent();
+            PsiElement grandParent = parent.getParent();
             if (!(grandParent instanceof PsiMethodCallExpression)) {
                 return;
             }
-            final PsiElement parentOfType = PsiTreeUtil.getParentOfType(element, PsiMethod.class, PsiTryStatement.class);
+            PsiElement parentOfType = PsiTreeUtil.getParentOfType(element, PsiMethod.class, PsiTryStatement.class);
             if (parentOfType instanceof PsiTryStatement) {
-                final PsiTryStatement tryStatement =
+                PsiTryStatement tryStatement =
                     (PsiTryStatement) parentOfType;
                 addCatchBlock(
                     tryStatement,
@@ -88,60 +88,60 @@ public class ClassNewInstanceInspection extends BaseInspection {
                 );
             }
             else {
-                final PsiMethod method = (PsiMethod) parentOfType;
+                PsiMethod method = (PsiMethod) parentOfType;
                 addThrowsClause(
                     method,
                     "java.lang.NoSuchMethodException",
                     "java.lang.reflect.InvocationTargetException"
                 );
             }
-            final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) grandParent;
-            @NonNls final String newExpression = qualifier.getText() + ".getConstructor().newInstance()";
+            PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) grandParent;
+            @NonNls String newExpression = qualifier.getText() + ".getConstructor().newInstance()";
             replaceExpression(methodCallExpression, newExpression);
         }
 
         private static void addThrowsClause(PsiMethod method, String... exceptionNames) {
-            final PsiReferenceList throwsList = method.getThrowsList();
-            final PsiClassType[] referencedTypes = throwsList.getReferencedTypes();
-            final Set<String> presentExceptionNames = new HashSet();
+            PsiReferenceList throwsList = method.getThrowsList();
+            PsiClassType[] referencedTypes = throwsList.getReferencedTypes();
+            Set<String> presentExceptionNames = new HashSet();
             for (PsiClassType referencedType : referencedTypes) {
-                final String exceptionName = referencedType.getCanonicalText();
+                String exceptionName = referencedType.getCanonicalText();
                 presentExceptionNames.add(exceptionName);
             }
-            final Project project = method.getProject();
-            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-            final JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
-            final GlobalSearchScope scope = method.getResolveScope();
+            Project project = method.getProject();
+            PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+            JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
+            GlobalSearchScope scope = method.getResolveScope();
             for (String exceptionName : exceptionNames) {
                 if (presentExceptionNames.contains(exceptionName)) {
                     continue;
                 }
-                final PsiJavaCodeReferenceElement throwsReference = factory.createReferenceElementByFQClassName(exceptionName, scope);
-                final PsiElement element = throwsList.add(throwsReference);
+                PsiJavaCodeReferenceElement throwsReference = factory.createReferenceElementByFQClassName(exceptionName, scope);
+                PsiElement element = throwsList.add(throwsReference);
                 codeStyleManager.shortenClassReferences(element);
             }
         }
 
         protected static void addCatchBlock(PsiTryStatement tryStatement, String... exceptionNames)
             throws IncorrectOperationException {
-            final Project project = tryStatement.getProject();
-            final PsiParameter[] parameters = tryStatement.getCatchBlockParameters();
-            final Set<String> presentExceptionNames = new HashSet();
+            Project project = tryStatement.getProject();
+            PsiParameter[] parameters = tryStatement.getCatchBlockParameters();
+            Set<String> presentExceptionNames = new HashSet();
             for (PsiParameter parameter : parameters) {
-                final PsiType type = parameter.getType();
-                final String exceptionName = type.getCanonicalText();
+                PsiType type = parameter.getType();
+                String exceptionName = type.getCanonicalText();
                 presentExceptionNames.add(exceptionName);
             }
-            final JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
-            final String name = codeStyleManager.suggestUniqueVariableName("e", tryStatement.getTryBlock(), false);
-            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+            JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
+            String name = codeStyleManager.suggestUniqueVariableName("e", tryStatement.getTryBlock(), false);
+            PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
             for (String exceptionName : exceptionNames) {
                 if (presentExceptionNames.contains(exceptionName)) {
                     continue;
                 }
-                final PsiClassType type = (PsiClassType) factory.createTypeFromText(exceptionName, tryStatement);
-                final PsiCatchSection section = factory.createCatchSection(type, name, tryStatement);
-                final PsiCatchSection element = (PsiCatchSection) tryStatement.add(section);
+                PsiClassType type = (PsiClassType) factory.createTypeFromText(exceptionName, tryStatement);
+                PsiCatchSection section = factory.createCatchSection(type, name, tryStatement);
+                PsiCatchSection element = (PsiCatchSection) tryStatement.add(section);
                 codeStyleManager.shortenClassReferences(element);
             }
         }
@@ -157,25 +157,25 @@ public class ClassNewInstanceInspection extends BaseInspection {
         public void visitMethodCallExpression(
             PsiMethodCallExpression expression
         ) {
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            @NonNls final String methodName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            @NonNls String methodName = methodExpression.getReferenceName();
             if (!"newInstance".equals(methodName)) {
                 return;
             }
-            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
             if (qualifier == null) {
                 return;
             }
-            final PsiType qualifierType = qualifier.getType();
+            PsiType qualifierType = qualifier.getType();
             if (!(qualifierType instanceof PsiClassType)) {
                 return;
             }
-            final PsiClassType classType = (PsiClassType) qualifierType;
-            final PsiClass aClass = classType.resolve();
+            PsiClassType classType = (PsiClassType) qualifierType;
+            PsiClass aClass = classType.resolve();
             if (aClass == null) {
                 return;
             }
-            final String className = aClass.getQualifiedName();
+            String className = aClass.getQualifiedName();
             if (!CommonClassNames.JAVA_LANG_CLASS.equals(className)) {
                 return;
             }

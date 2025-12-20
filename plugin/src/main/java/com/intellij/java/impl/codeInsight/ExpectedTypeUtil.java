@@ -143,20 +143,20 @@ public class ExpectedTypeUtil {
     }
 
     @Override
-    public PsiField[] findDeclaredFields(final PsiManager manager, String name) {
+    public PsiField[] findDeclaredFields(PsiManager manager, String name) {
       List<PsiField> fields = new ArrayList<PsiField>();
       for (PsiClass aClass : myOccurrenceClasses) {
-        final PsiField field = aClass.findFieldByName(name, true);
+        PsiField field = aClass.findFieldByName(name, true);
         if (field != null) fields.add(field);
       }
       return fields.toArray(new PsiField[fields.size()]);
     }
 
     @Override
-    public PsiMethod[] findDeclaredMethods(final PsiManager manager, String name) {
+    public PsiMethod[] findDeclaredMethods(PsiManager manager, String name) {
       List<PsiMethod> methods = new ArrayList<PsiMethod>();
       for (PsiClass aClass : myOccurrenceClasses) {
-        final PsiMethod[] occMethod = aClass.findMethodsByName(name, true);
+        PsiMethod[] occMethod = aClass.findMethodsByName(name, true);
         ContainerUtil.addAll(methods, occMethod);
       }
       return methods.toArray(new PsiMethod[methods.size()]);
@@ -164,9 +164,9 @@ public class ExpectedTypeUtil {
   }
 
   @Nullable
-  public static PsiSubstitutor inferSubstitutor(final PsiMethod method, final PsiMethodCallExpression callExpr, boolean forCompletion) {
-    final PsiResolveHelper helper = JavaPsiFacade.getInstance(method.getProject()).getResolveHelper();
-    final PsiParameter[] parameters = method.getParameterList().getParameters();
+  public static PsiSubstitutor inferSubstitutor(PsiMethod method, PsiMethodCallExpression callExpr, boolean forCompletion) {
+    PsiResolveHelper helper = JavaPsiFacade.getInstance(method.getProject()).getResolveHelper();
+    PsiParameter[] parameters = method.getParameterList().getParameters();
     PsiExpression[] args = callExpr.getArgumentList().getExpressions();
     PsiSubstitutor result = PsiSubstitutor.EMPTY;
     for (PsiTypeParameter typeParameter : PsiUtil.typeParametersIterable(method.getContainingClass())) {

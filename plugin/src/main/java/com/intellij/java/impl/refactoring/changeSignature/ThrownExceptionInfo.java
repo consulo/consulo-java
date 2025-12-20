@@ -29,7 +29,7 @@ public interface ThrownExceptionInfo {
   void setType(PsiClassType type);
 
   @Nullable
-  PsiType createType(PsiElement context, final PsiManager manager) throws IncorrectOperationException;
+  PsiType createType(PsiElement context, PsiManager manager) throws IncorrectOperationException;
 
   void updateFromMethod(PsiMethod method);
 

@@ -36,7 +36,7 @@ import consulo.disposer.Disposer;
  * @author cdr
  */
 public abstract class SliceTreeTest extends LightDaemonAnalyzerTestCase {
-  private SliceTreeStructure configureTree(@NonNls final String name) throws Exception {
+  private SliceTreeStructure configureTree(@NonNls String name) throws Exception {
     configureByFile("/codeInsight/slice/backward/"+ name +".java");
     PsiDocumentManager.getInstance(getProject()).commitAllDocuments();
     PsiElement element = new SliceHandler(true).getExpressionAtCaret(getEditor(), getFile());
@@ -78,7 +78,7 @@ public abstract class SliceTreeTest extends LightDaemonAnalyzerTestCase {
     return (SliceTreeStructure)panel.getBuilder().getTreeStructure();
   }
 
-  private static void expandNodesTo(final SliceNode node, List<SliceNode> to) {
+  private static void expandNodesTo(SliceNode node, List<SliceNode> to) {
     node.update();
     node.calculateDupNode();
     to.add(node);
@@ -191,7 +191,7 @@ public abstract class SliceTreeTest extends LightDaemonAnalyzerTestCase {
   }
   public void testNullness() throws Exception {
     SliceTreeStructure treeStructure = configureTree("Nulls");
-    final SliceRootNode root = (SliceRootNode)treeStructure.getRootElement();
+    SliceRootNode root = (SliceRootNode)treeStructure.getRootElement();
     Map<SliceNode, SliceNullnessAnalyzer.NullAnalysisResult> map = SliceNullnessAnalyzer.createMap();
     SliceNullnessAnalyzer.NullAnalysisResult leaves = SliceNullnessAnalyzer.calcNullableLeaves(root, treeStructure, map);
 
@@ -265,7 +265,7 @@ public abstract class SliceTreeTest extends LightDaemonAnalyzerTestCase {
                             "");
   }
 
-  private static void checkStructure(final SliceNode root, @NonNls String dataExpected) {
+  private static void checkStructure(SliceNode root, @NonNls String dataExpected) {
     List<SliceNode> actualNodes = new ArrayList<SliceNode>((Collection<? extends SliceNode>)root.getChildren());
     Collections.sort(actualNodes, SliceTreeBuilder.SLICE_NODE_COMPARATOR);
 
@@ -304,7 +304,7 @@ public abstract class SliceTreeTest extends LightDaemonAnalyzerTestCase {
 
   public void testDoubleNullness() throws Exception {
     SliceTreeStructure treeStructure = configureTree("DoubleNulls");
-    final SliceRootNode root = (SliceRootNode)treeStructure.getRootElement();
+    SliceRootNode root = (SliceRootNode)treeStructure.getRootElement();
     Map<SliceNode, SliceNullnessAnalyzer.NullAnalysisResult> map = SliceNullnessAnalyzer.createMap();
     SliceNullnessAnalyzer.NullAnalysisResult leaves = SliceNullnessAnalyzer.calcNullableLeaves(root, treeStructure, map);
 

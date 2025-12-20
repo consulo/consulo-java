@@ -125,10 +125,10 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		}
 		builder.withText(LocalizeValue.localizeTODO(text));
 
-		final VirtualFile sourceFile = JavaEditorFileSwapper.findSourceFile(myProject, file);
+		VirtualFile sourceFile = JavaEditorFileSwapper.findSourceFile(myProject, file);
 		if (sourceFile == null)
 		{
-			final List<LibraryOrderEntry> libraries = findLibraryEntriesForFile(file);
+			List<LibraryOrderEntry> libraries = findLibraryEntriesForFile(file);
 			if (libraries != null)
 			{
 				List<AttachSourcesProvider.AttachSourcesAction> actions = new ArrayList<>();
@@ -161,7 +161,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 					findSourceFileInSameJar(file) != null ? new AttachJarAsSourcesAction(file) : new ChooseAndAttachSourcesAction(myProject);
 				actions.add(defaultAction);
 
-				for (final AttachSourcesProvider.AttachSourcesAction action : actions)
+				for (AttachSourcesProvider.AttachSourcesAction action : actions)
 				{
 					TextWithMnemonic textWithMnemonic = TextWithMnemonic.parse(action.getName());
 					builder.withAction(LocalizeValue.localizeTODO(textWithMnemonic.getText()), (e) -> {
@@ -290,20 +290,20 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		@Override
 		public AsyncResult<Void> perform(List<LibraryOrderEntry> orderEntriesContainingFile, @Nonnull ComponentEvent<Component> e)
 		{
-			final List<Library.ModifiableModel> modelsToCommit = new ArrayList<>();
+			List<Library.ModifiableModel> modelsToCommit = new ArrayList<>();
 			for (LibraryOrderEntry orderEntry : orderEntriesContainingFile)
 			{
-				final Library library = orderEntry.getLibrary();
+				Library library = orderEntry.getLibrary();
 				if (library == null)
 				{
 					continue;
 				}
-				final VirtualFile root = findRoot(library);
+				VirtualFile root = findRoot(library);
 				if (root == null)
 				{
 					continue;
 				}
-				final Library.ModifiableModel model = library.getModifiableModel();
+				Library.ModifiableModel model = library.getModifiableModel();
 				model.addRoot(root, SourcesOrderRootType.getInstance());
 				modelsToCommit.add(model);
 			}
@@ -358,7 +358,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 
 		@Override
 		@RequiredUIAccess
-		public AsyncResult<Void> perform(final List<LibraryOrderEntry> libraries, ComponentEvent<Component> e)
+		public AsyncResult<Void> perform(List<LibraryOrderEntry> libraries, ComponentEvent<Component> e)
 		{
 			FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createMultipleJavaPathDescriptor();
 			descriptor.withTitleValue(ProjectLocalize.libraryAttachSourcesAction());
@@ -429,7 +429,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		}
 
 		@RequiredUIAccess
-		private static void appendSources(final Library library, final VirtualFile[] files)
+		private static void appendSources(Library library, VirtualFile[] files)
 		{
 			Application.get().runWriteAction(() -> {
 				Library.ModifiableModel model = library.getModifiableModel();

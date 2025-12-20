@@ -31,14 +31,14 @@ class BooleanLiteralEqualityPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiBinaryExpression)) {
       return false;
     }
-    final PsiBinaryExpression expression = (PsiBinaryExpression)element;
-    final IElementType tokenType = expression.getOperationTokenType();
+    PsiBinaryExpression expression = (PsiBinaryExpression)element;
+    IElementType tokenType = expression.getOperationTokenType();
     if (!tokenType.equals(JavaTokenType.EQEQ) &&
         !tokenType.equals(JavaTokenType.NE)) {
       return false;
     }
-    final PsiExpression lhs = expression.getLOperand();
-    final PsiExpression rhs = expression.getROperand();
+    PsiExpression lhs = expression.getLOperand();
+    PsiExpression rhs = expression.getROperand();
     if (rhs == null) {
       return false;
     }
@@ -46,7 +46,7 @@ class BooleanLiteralEqualityPredicate implements PsiElementPredicate {
         !BoolUtils.isBooleanLiteral(rhs)) {
       return false;
     }
-    final PsiType type = expression.getType();
+    PsiType type = expression.getType();
     if (!PsiType.BOOLEAN.equals(type)) {
       return false;
     }

@@ -129,7 +129,7 @@ public class RefFieldImpl extends RefJavaElementImpl implements RefField {
   public void buildReferences() {
     PsiField psiField = getElement();
     if (psiField != null) {
-      final RefJavaUtil refUtil = RefJavaUtil.getInstance();
+      RefJavaUtil refUtil = RefJavaUtil.getInstance();
       refUtil.addReferences(psiField, this, psiField.getInitializer());
       refUtil.addReferences(psiField, this, psiField.getModifierList());
       if (psiField instanceof PsiEnumConstant) {
@@ -188,9 +188,9 @@ public class RefFieldImpl extends RefJavaElementImpl implements RefField {
   public static PsiField findPsiField(PsiManager manager, String externalName) {
     int classNameDelimeter = externalName.lastIndexOf(' ');
     if (classNameDelimeter > 0 && classNameDelimeter < externalName.length() - 1) {
-      final String className = externalName.substring(0, classNameDelimeter);
-      final String fieldName = externalName.substring(classNameDelimeter + 1);
-      final PsiClass psiClass = ClassUtil.findPsiClass(manager, className);
+      String className = externalName.substring(0, classNameDelimeter);
+      String fieldName = externalName.substring(classNameDelimeter + 1);
+      PsiClass psiClass = ClassUtil.findPsiClass(manager, className);
       if (psiClass != null) {
         return psiClass.findFieldByName(fieldName, false);
       }

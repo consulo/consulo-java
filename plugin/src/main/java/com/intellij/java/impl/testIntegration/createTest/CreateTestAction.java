@@ -105,18 +105,18 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
   @Override
   @RequiredReadAction
   @RequiredUIAccess
-  public void invoke(final @Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
-    final Module srcModule = ModuleUtilCore.findModuleForPsiElement(element);
-    final PsiClass srcClass = getContainingClass(element);
+    Module srcModule = ModuleUtilCore.findModuleForPsiElement(element);
+    PsiClass srcClass = getContainingClass(element);
 
     if (srcClass == null) return;
 
     PsiDirectory srcDir = element.getContainingFile().getContainingDirectory();
     PsiJavaPackage srcPackage = JavaDirectoryService.getInstance().getPackage(srcDir);
 
-    final ApplicationPropertiesComponent propertiesComponent = ApplicationPropertiesComponent.getInstance();
-    final HashSet<VirtualFile> testFolders = new HashSet<>();
+    ApplicationPropertiesComponent propertiesComponent = ApplicationPropertiesComponent.getInstance();
+    HashSet<VirtualFile> testFolders = new HashSet<>();
     checkForTestRoots(srcModule, testFolders);
     if (testFolders.isEmpty() && !propertiesComponent.getBoolean(CREATE_TEST_IN_THE_SAME_ROOT, false)) {
       if (Messages.showOkCancelDialog(
@@ -131,7 +131,7 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
       propertiesComponent.setValue(CREATE_TEST_IN_THE_SAME_ROOT, String.valueOf(true));
     }
 
-    final CreateTestDialog d = new CreateTestDialog(project, getText(), srcClass, srcPackage, srcModule);
+    CreateTestDialog d = new CreateTestDialog(project, getText(), srcClass, srcPackage, srcModule);
     d.show();
     if (!d.isOK()) return;
 
@@ -153,14 +153,14 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
   }
 
   @RequiredReadAction
-  private static void checkForTestRoots(final Module srcModule, final Set<VirtualFile> testFolders, final Set<Module> processed) {
-    final boolean isFirst = processed.isEmpty();
+  private static void checkForTestRoots(Module srcModule, Set<VirtualFile> testFolders, Set<Module> processed) {
+    boolean isFirst = processed.isEmpty();
     if (!processed.add(srcModule)) return;
 
-    final ContentEntry[] entries = ModuleRootManager.getInstance(srcModule).getContentEntries();
+    ContentEntry[] entries = ModuleRootManager.getInstance(srcModule).getContentEntries();
     for (ContentEntry entry : entries) {
       for (ContentFolder sourceFolder : entry.getFolders(LanguageContentFolderScopes.of(TestContentFolderTypeProvider.getInstance()))) {
-        final VirtualFile sourceFolderFile = sourceFolder.getFile();
+        VirtualFile sourceFolderFile = sourceFolder.getFile();
         if (sourceFolderFile != null) {
           testFolders.add(sourceFolderFile);
         }
@@ -168,7 +168,7 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
     }
     if (isFirst && !testFolders.isEmpty()) return;
 
-    final HashSet<Module> modules = new HashSet<>();
+    HashSet<Module> modules = new HashSet<>();
     ModuleUtilCore.collectModulesDependsOn(srcModule, modules);
     for (Module module : modules) {
       checkForTestRoots(module, testFolders, processed);
@@ -177,11 +177,11 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
 
   @Nullable
   private static PsiClass getContainingClass(PsiElement element) {
-    final PsiClass psiClass = PsiTreeUtil.getParentOfType(element, PsiClass.class, false);
+    PsiClass psiClass = PsiTreeUtil.getParentOfType(element, PsiClass.class, false);
     if (psiClass == null) {
-      final PsiFile containingFile = element.getContainingFile();
+      PsiFile containingFile = element.getContainingFile();
       if (containingFile instanceof PsiClassOwner classOwner) {
-        final PsiClass[] classes = classOwner.getClasses();
+        PsiClass[] classes = classOwner.getClasses();
         if (classes.length == 1) {
           return classes[0];
         }

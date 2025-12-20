@@ -53,24 +53,24 @@ public class ReplaceConstructorWithFactoryHandler
       }
 
       if (element instanceof PsiReferenceExpression) {
-        final PsiElement psiElement = ((PsiReferenceExpression)element).resolve();
+        PsiElement psiElement = ((PsiReferenceExpression)element).resolve();
         if (psiElement instanceof PsiMethod && ((PsiMethod) psiElement).isConstructor()) {
           invoke(project, new PsiElement[] { psiElement }, dataContext);
           return;
         }
       }
       else if (element instanceof PsiConstructorCall) {
-        final PsiConstructorCall constructorCall = (PsiConstructorCall)element;
-        final PsiMethod method = constructorCall.resolveConstructor();
+        PsiConstructorCall constructorCall = (PsiConstructorCall)element;
+        PsiMethod method = constructorCall.resolveConstructor();
         if (method != null) {
           invoke(project, new PsiElement[] { method }, dataContext);
           return;
         }
         // handle default constructor
         if (element instanceof PsiNewExpression) {
-          final PsiJavaCodeReferenceElement classReference = ((PsiNewExpression)element).getClassReference();
+          PsiJavaCodeReferenceElement classReference = ((PsiNewExpression)element).getClassReference();
           if (classReference != null) {
-            final PsiElement classElement = classReference.resolve();
+            PsiElement classElement = classReference.resolve();
             if (classElement instanceof PsiClass) {
               invoke(project, new PsiElement[] { classElement }, dataContext);
               return;
@@ -112,14 +112,14 @@ public class ReplaceConstructorWithFactoryHandler
       return;
     }
     if (!checkAbstractClassOrInterfaceMessage(aClass, editor)) return;
-    final PsiMethod[] constructors = aClass.getConstructors();
+    PsiMethod[] constructors = aClass.getConstructors();
     if (constructors.length > 0) {
       String message =
         RefactoringLocalize.classDoesNotHaveImplicitDefaultConstructor(aClass.getQualifiedName()).get();
       CommonRefactoringUtil.showErrorHint(myProject, editor, message, REFACTORING_NAME, HelpID.REPLACE_CONSTRUCTOR_WITH_FACTORY);
       return;
     }
-    final int answer = Messages.showYesNoDialog(
+    int answer = Messages.showYesNoDialog(
       myProject,
       RefactoringLocalize.wouldYouLikeToReplaceDefaultConstructorOf0WithFactoryMethod(aClass.getQualifiedName()).get(),
       REFACTORING_NAME,
@@ -146,7 +146,7 @@ public class ReplaceConstructorWithFactoryHandler
     return false;
   }
 
-  private void invoke(final PsiMethod method, Editor editor) {
+  private void invoke(PsiMethod method, Editor editor) {
     if (!method.isConstructor()) {
       LocalizeValue message =
         RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.methodIsNotAConstructor());

@@ -31,12 +31,12 @@ public class SafeDeleteReferenceJavaDeleteUsageInfo extends SafeDeleteReferenceS
     super(element, referencedElement, isSafeDelete);
   }
 
-  public SafeDeleteReferenceJavaDeleteUsageInfo(final PsiElement element,
-                                                final PsiElement referencedElement,
-                                                final int startOffset,
-                                                final int endOffset,
-                                                final boolean isNonCodeUsage,
-                                                final boolean isSafeDelete) {
+  public SafeDeleteReferenceJavaDeleteUsageInfo(PsiElement element,
+                                                PsiElement referencedElement,
+                                                int startOffset,
+                                                int endOffset,
+                                                boolean isNonCodeUsage,
+                                                boolean isSafeDelete) {
     super(element, referencedElement, startOffset, endOffset, isNonCodeUsage, isSafeDelete);
   }
 

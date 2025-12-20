@@ -70,8 +70,8 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiField field = (PsiField) infos[0];
-        final PsiType type = field.getType();
+        PsiField field = (PsiField) infos[0];
+        PsiType type = field.getType();
         return type instanceof PsiArrayType
             ? InspectionGadgetsLocalize.returnOfCollectionArrayFieldProblemDescriptorArray().get()
             : InspectionGadgetsLocalize.returnOfCollectionArrayFieldProblemDescriptorCollection().get();
@@ -80,8 +80,8 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
     @Override
     @Nullable
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) infos[1];
-        final String text = referenceExpression.getText();
+        PsiReferenceExpression referenceExpression = (PsiReferenceExpression) infos[1];
+        String text = referenceExpression.getText();
         if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_MAP)) {
             if (TypeUtils.expressionHasTypeOrSubtype(referenceExpression, CommonClassNames.JAVA_UTIL_SORTED_MAP)) {
                 return new ReturnOfCollectionFieldFix(
@@ -144,42 +144,42 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
+            PsiElement element = descriptor.getPsiElement();
             if (!(element instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) element;
+            PsiReferenceExpression referenceExpression = (PsiReferenceExpression) element;
             fixContainingMethodReturnType(referenceExpression);
             replaceExpressionAndShorten(referenceExpression, myReplacementText);
         }
 
         private void fixContainingMethodReturnType(PsiReferenceExpression referenceExpression) {
-            final PsiMethod method = PsiTreeUtil.getParentOfType(referenceExpression, PsiMethod.class, true);
+            PsiMethod method = PsiTreeUtil.getParentOfType(referenceExpression, PsiMethod.class, true);
             if (method == null) {
                 return;
             }
-            final PsiTypeElement returnTypeElement = method.getReturnTypeElement();
+            PsiTypeElement returnTypeElement = method.getReturnTypeElement();
             if (returnTypeElement == null) {
                 return;
             }
-            final PsiType type = returnTypeElement.getType();
+            PsiType type = returnTypeElement.getType();
             if (!InheritanceUtil.isInheritor(type, myQualifiedClassName)) {
                 return;
             }
             if (!(type instanceof PsiClassType)) {
                 return;
             }
-            final Project project = referenceExpression.getProject();
-            final PsiClassType classType = (PsiClassType) type;
-            final PsiClass aClass = classType.resolve();
+            Project project = referenceExpression.getProject();
+            PsiClassType classType = (PsiClassType) type;
+            PsiClass aClass = classType.resolve();
             if (aClass == null || myQualifiedClassName.equals(aClass.getQualifiedName())) {
                 return;
             }
-            final PsiType[] parameters = classType.getParameters();
-            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-            final String typeText;
+            PsiType[] parameters = classType.getParameters();
+            PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+            String typeText;
             if (parameters.length > 0) {
-                final StringBuilder builder = new StringBuilder(myQualifiedClassName);
+                StringBuilder builder = new StringBuilder(myQualifiedClassName);
                 builder.append('<');
                 boolean comma = false;
                 for (PsiType parameter : parameters) {
@@ -197,9 +197,9 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
             else {
                 typeText = myQualifiedClassName;
             }
-            final PsiTypeElement newTypeElement = factory.createTypeElementFromText(typeText, referenceExpression);
-            final PsiElement replacement = returnTypeElement.replace(newTypeElement);
-            final JavaCodeStyleManager javaCodeStyleManager = JavaCodeStyleManager.getInstance(project);
+            PsiTypeElement newTypeElement = factory.createTypeElementFromText(typeText, referenceExpression);
+            PsiElement replacement = returnTypeElement.replace(newTypeElement);
+            JavaCodeStyleManager javaCodeStyleManager = JavaCodeStyleManager.getInstance(project);
             javaCodeStyleManager.shortenClassReferences(replacement);
             HighlightUtils.highlightElement(replacement);
         }
@@ -210,31 +210,31 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
         @Override
         public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
             super.visitReturnStatement(statement);
-            final PsiExpression returnValue = statement.getReturnValue();
+            PsiExpression returnValue = statement.getReturnValue();
             if (returnValue == null) {
                 return;
             }
-            final PsiMethod containingMethod = PsiTreeUtil.getParentOfType(statement, PsiMethod.class);
+            PsiMethod containingMethod = PsiTreeUtil.getParentOfType(statement, PsiMethod.class);
             if (containingMethod == null) {
                 return;
             }
             if (ignorePrivateMethods && containingMethod.hasModifierProperty(PsiModifier.PRIVATE)) {
                 return;
             }
-            final PsiClass returnStatementClass = containingMethod.getContainingClass();
+            PsiClass returnStatementClass = containingMethod.getContainingClass();
             if (returnStatementClass == null) {
                 return;
             }
             if (!(returnValue instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) returnValue;
-            final PsiElement referent = referenceExpression.resolve();
+            PsiReferenceExpression referenceExpression = (PsiReferenceExpression) returnValue;
+            PsiElement referent = referenceExpression.resolve();
             if (!(referent instanceof PsiField)) {
                 return;
             }
-            final PsiField field = (PsiField) referent;
-            final PsiClass fieldClass = field.getContainingClass();
+            PsiField field = (PsiField) referent;
+            PsiClass fieldClass = field.getContainingClass();
             if (!returnStatementClass.equals(fieldClass)) {
                 return;
             }

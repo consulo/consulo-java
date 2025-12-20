@@ -110,14 +110,14 @@ public class ProjectIconsAccessor implements Disposable
 
 		for(FileReference ref : refs)
 		{
-			final PsiFileSystemItem psiFileSystemItem = ref.resolve();
+			PsiFileSystemItem psiFileSystemItem = ref.resolve();
 			VirtualFile file = null;
 			if(psiFileSystemItem == null)
 			{
-				final ResolveResult[] results = ref.multiResolve(false);
+				ResolveResult[] results = ref.multiResolve(false);
 				for(ResolveResult result : results)
 				{
-					final PsiElement element = result.getElement();
+					PsiElement element = result.getElement();
 					if(element instanceof PsiBinaryFile)
 					{
 						file = ((PsiFile) element).getVirtualFile();
@@ -143,14 +143,14 @@ public class ProjectIconsAccessor implements Disposable
 	@Nullable
 	public Image getIcon(@Nonnull VirtualFile file, @Nullable PsiElement element)
 	{
-		final String path = file.getPath();
-		final long stamp = file.getModificationStamp();
+		String path = file.getPath();
+		long stamp = file.getModificationStamp();
 		Pair<Long, Image> iconInfo = myIconsCache.get(path);
 		if(iconInfo == null || iconInfo.getFirst() < stamp)
 		{
 			try
 			{
-				final Image icon = createOrFindBetterIcon(file);
+				Image icon = createOrFindBetterIcon(file);
 				iconInfo = new Pair<>(stamp, prepareImage(icon));
 				myIconsCache.put(file.getPath(), iconInfo);
 			}

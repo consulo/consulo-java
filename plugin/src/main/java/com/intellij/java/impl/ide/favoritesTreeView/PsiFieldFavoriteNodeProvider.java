@@ -46,20 +46,20 @@ import java.util.Collection;
 @ExtensionImpl
 public class PsiFieldFavoriteNodeProvider implements BookmarkNodeProvider {
   @Override
-  public Collection<AbstractTreeNode> getFavoriteNodes(final DataContext context, final ViewSettings viewSettings) {
-    final Project project = context.getData(Project.KEY);
+  public Collection<AbstractTreeNode> getFavoriteNodes(DataContext context, ViewSettings viewSettings) {
+    Project project = context.getData(Project.KEY);
     if (project == null) {
       return null;
     }
     PsiElement[] elements = context.getData(PsiElement.KEY_OF_ARRAY);
     if (elements == null) {
-      final PsiElement element = context.getData(PsiElement.KEY);
+      PsiElement element = context.getData(PsiElement.KEY);
       if (element != null) {
         elements = new PsiElement[]{element};
       }
     }
     if (elements != null) {
-      final Collection<AbstractTreeNode> result = new ArrayList<>();
+      Collection<AbstractTreeNode> result = new ArrayList<>();
       for (PsiElement element : elements) {
         if (element instanceof PsiField) {
           result.add(new FieldSmartPointerNode(project, element, viewSettings));
@@ -71,7 +71,7 @@ public class PsiFieldFavoriteNodeProvider implements BookmarkNodeProvider {
   }
 
   @Override
-  public AbstractTreeNode createNode(final Project project, final Object element, final ViewSettings viewSettings) {
+  public AbstractTreeNode createNode(Project project, Object element, ViewSettings viewSettings) {
     if (element instanceof PsiField) {
       return new FieldSmartPointerNode(project, element, viewSettings);
     }
@@ -79,19 +79,19 @@ public class PsiFieldFavoriteNodeProvider implements BookmarkNodeProvider {
   }
 
   @Override
-  public boolean elementContainsFile(final Object element, final VirtualFile vFile) {
+  public boolean elementContainsFile(Object element, VirtualFile vFile) {
     return false;
   }
 
   @Override
-  public int getElementWeight(final Object value, final boolean isSortByType) {
+  public int getElementWeight(Object value, boolean isSortByType) {
     return value instanceof PsiField ? 4 : -1;
   }
 
   @Override
-  public String getElementLocation(final Object element) {
+  public String getElementLocation(Object element) {
     if (element instanceof PsiField) {
-      final PsiClass psiClass = ((PsiField) element).getContainingClass();
+      PsiClass psiClass = ((PsiField) element).getContainingClass();
       if (psiClass != null) {
         return ClassPresentationUtil.getNameForClass(psiClass, true);
       }
@@ -100,7 +100,7 @@ public class PsiFieldFavoriteNodeProvider implements BookmarkNodeProvider {
   }
 
   @Override
-  public boolean isInvalidElement(final Object element) {
+  public boolean isInvalidElement(Object element) {
     return element instanceof PsiField field && !field.isValid();
   }
 
@@ -111,15 +111,15 @@ public class PsiFieldFavoriteNodeProvider implements BookmarkNodeProvider {
   }
 
   @Override
-  public String getElementUrl(final Object element) {
+  public String getElementUrl(Object element) {
     return element instanceof PsiField field ? field.getContainingClass().getQualifiedName() + ";" + field.getName() : null;
   }
 
   @Override
   @RequiredReadAction
-  public String getElementModuleName(final Object element) {
+  public String getElementModuleName(Object element) {
     if (element instanceof PsiField) {
-      final Module module = ModuleUtilCore.findModuleForPsiElement((PsiField) element);
+      Module module = ModuleUtilCore.findModuleForPsiElement((PsiField) element);
       return module != null ? module.getName() : null;
     }
     return null;
@@ -127,18 +127,18 @@ public class PsiFieldFavoriteNodeProvider implements BookmarkNodeProvider {
 
   @Override
   @RequiredReadAction
-  public Object[] createPathFromUrl(final Project project, final String url, final String moduleName) {
-    final Module module = moduleName != null ? ModuleManager.getInstance(project).findModuleByName(moduleName) : null;
-    final GlobalSearchScope scope = module != null ? GlobalSearchScope.moduleScope(module) : GlobalSearchScope.allScope(project);
-    final String[] paths = url.split(";");
+  public Object[] createPathFromUrl(Project project, String url, String moduleName) {
+    Module module = moduleName != null ? ModuleManager.getInstance(project).findModuleByName(moduleName) : null;
+    GlobalSearchScope scope = module != null ? GlobalSearchScope.moduleScope(module) : GlobalSearchScope.allScope(project);
+    String[] paths = url.split(";");
     if (paths == null || paths.length != 2) {
       return null;
     }
-    final PsiClass aClass = JavaPsiFacade.getInstance(project).findClass(paths[0], scope);
+    PsiClass aClass = JavaPsiFacade.getInstance(project).findClass(paths[0], scope);
     if (aClass == null) {
       return null;
     }
-    final PsiField aField = aClass.findFieldByName(paths[1], false);
+    PsiField aField = aClass.findFieldByName(paths[1], false);
     return new Object[]{aField};
   }
 

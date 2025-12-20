@@ -64,23 +64,23 @@ public class MalformedRegexInspection extends BaseInspection {
         @Override
         public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
-            final PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpressionList argumentList = expression.getArgumentList();
             if (argumentList == null) {
                 return;
             }
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length == 0) {
                 return;
             }
-            final PsiExpression argument = arguments[0];
+            PsiExpression argument = arguments[0];
             if (!ExpressionUtils.hasStringType(argument)) {
                 return;
             }
             if (!PsiUtil.isConstantExpression(argument)) {
                 return;
             }
-            final PsiType regexType = argument.getType();
-            final String value = (String) ConstantExpressionUtil.computeCastTo(argument, regexType);
+            PsiType regexType = argument.getType();
+            String value = (String) ConstantExpressionUtil.computeCastTo(argument, regexType);
             if (value == null) {
                 return;
             }

@@ -70,12 +70,12 @@ public class ParameterHidingMemberVariableInspection extends BaseInspection {
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final PsiClass aClass = (PsiClass)infos[0];
+    PsiClass aClass = (PsiClass)infos[0];
     return InspectionGadgetsLocalize.parameterHidesMemberVariableProblemDescriptor(aClass.getName()).get();
   }
 
   public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
+    MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
     optionsPanel.addCheckbox(
       InspectionGadgetsLocalize.parameterHidesMemberVariableIgnoreSettersOption().get(),
       "m_ignoreForPropertySetters"
@@ -107,11 +107,11 @@ public class ParameterHidingMemberVariableInspection extends BaseInspection {
     @Override
     public void visitParameter(@Nonnull PsiParameter variable) {
       super.visitParameter(variable);
-      final PsiElement declarationScope = variable.getDeclarationScope();
+      PsiElement declarationScope = variable.getDeclarationScope();
       if (!(declarationScope instanceof PsiMethod)) {
         return;
       }
-      final PsiMethod method = (PsiMethod)declarationScope;
+      PsiMethod method = (PsiMethod)declarationScope;
       if (m_ignoreForConstructors && method.isConstructor()) {
         return;
       }
@@ -119,19 +119,19 @@ public class ParameterHidingMemberVariableInspection extends BaseInspection {
         if (method.hasModifierProperty(PsiModifier.ABSTRACT)) {
           return;
         }
-        final PsiClass containingClass = method.getContainingClass();
+        PsiClass containingClass = method.getContainingClass();
         if (containingClass != null && containingClass.isInterface()) {
           return;
         }
       }
       if (m_ignoreForPropertySetters) {
-        final String methodName = method.getName();
-        final PsiType returnType = method.getReturnType();
+        String methodName = method.getName();
+        PsiType returnType = method.getReturnType();
         if (methodName.startsWith(HardcodedMethodConstants.SET) && PsiType.VOID.equals(returnType)) {
           return;
         }
       }
-      final PsiClass aClass = checkFieldName(variable, method);
+      PsiClass aClass = checkFieldName(variable, method);
       if (aClass ==  null) {
         return;
       }
@@ -140,15 +140,15 @@ public class ParameterHidingMemberVariableInspection extends BaseInspection {
 
     @Nullable
     private PsiClass checkFieldName(PsiVariable variable, PsiMethod method) {
-      final String variableName = variable.getName();
+      String variableName = variable.getName();
       if (variableName == null) {
         return null;
       }
       PsiClass aClass = ClassUtils.getContainingClass(variable);
       while (aClass != null) {
-        final PsiField[] fields = aClass.getAllFields();
+        PsiField[] fields = aClass.getAllFields();
         for (PsiField field : fields) {
-          final String fieldName = field.getName();
+          String fieldName = field.getName();
           if (!variableName.equals(fieldName)) {
             continue;
           }

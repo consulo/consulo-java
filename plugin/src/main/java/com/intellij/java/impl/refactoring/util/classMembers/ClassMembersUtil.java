@@ -23,7 +23,7 @@ import consulo.language.editor.refactoring.classMember.MemberInfoBase;
 
 public class ClassMembersUtil {
   public static boolean isProperMember(MemberInfoBase memberInfo) {
-    final PsiElement member = memberInfo.getMember();
+    PsiElement member = memberInfo.getMember();
     return member instanceof PsiField || member instanceof PsiMethod
                 || (member instanceof PsiClass && memberInfo.getOverrides() == null);
   }

@@ -39,10 +39,10 @@ public abstract class ChangeSignaturePropagationTest extends LightRefactoringTes
   }
 
   public void testParamTypeSubst() throws Exception {
-    final PsiMethod method = getPrimaryMethod();
-    final HashSet<PsiMethod> methods = new HashSet<PsiMethod>();
+    PsiMethod method = getPrimaryMethod();
+    HashSet<PsiMethod> methods = new HashSet<PsiMethod>();
     for (PsiReference reference : ReferencesSearch.search(method)) {
-      final PsiMethod psiMethod = PsiTreeUtil.getParentOfType(reference.getElement(), PsiMethod.class);
+      PsiMethod psiMethod = PsiTreeUtil.getParentOfType(reference.getElement(), PsiMethod.class);
       if (psiMethod != null) {
         methods.add(psiMethod);
       }
@@ -59,21 +59,21 @@ public abstract class ChangeSignaturePropagationTest extends LightRefactoringTes
   }
 
   public void testParamWithNoConstructor() throws Exception {
-    final PsiMethod method = getPrimaryMethod();
+    PsiMethod method = getPrimaryMethod();
     parameterPropagationTest(method, collectNonPhysicalMethodsToPropagate(method), JavaPsiFacade.getElementFactory(getProject()).createTypeByFQClassName("java.lang.Class", GlobalSearchScope.allScope(getProject())));
   }
 
    public void testExceptionWithNoConstructor() throws Exception {
-    final PsiMethod method = getPrimaryMethod();
+    PsiMethod method = getPrimaryMethod();
      exceptionPropagationTest(method, collectNonPhysicalMethodsToPropagate(method));
   }
 
   private static HashSet<PsiMethod> collectNonPhysicalMethodsToPropagate(PsiMethod method) {
-    final HashSet<PsiMethod> methodsToPropagate = new HashSet<PsiMethod>();
-    final PsiReference[] references =
+    HashSet<PsiMethod> methodsToPropagate = new HashSet<PsiMethod>();
+    PsiReference[] references =
       MethodReferencesSearch.search(method, GlobalSearchScope.allScope(getProject()), true).toArray(PsiReference.EMPTY_ARRAY);
     for (PsiReference reference : references) {
-      final PsiElement element = reference.getElement();
+      PsiElement element = reference.getElement();
       Assert.assertTrue(element instanceof PsiClass);
       PsiClass containingClass = (PsiClass)element;
       methodsToPropagate.add(JavaPsiFacade.getElementFactory(getProject()).createMethodFromText(containingClass.getName() + "(){}", containingClass));
@@ -82,22 +82,22 @@ public abstract class ChangeSignaturePropagationTest extends LightRefactoringTes
   }
 
   public void testParamWithImplicitConstructor() throws Exception {
-    final PsiMethod method = getPrimaryMethod();
+    PsiMethod method = getPrimaryMethod();
     parameterPropagationTest(method, collectDefaultConstructorsToPropagate(method), JavaPsiFacade.getElementFactory(getProject()).createTypeByFQClassName("java.lang.Class", GlobalSearchScope.allScope(getProject())));
   }
 
   public void testParamWithImplicitConstructors() throws Exception {
-    final PsiMethod method = getPrimaryMethod();
+    PsiMethod method = getPrimaryMethod();
     parameterPropagationTest(method, collectDefaultConstructorsToPropagate(method), JavaPsiFacade.getElementFactory(getProject()).createTypeByFQClassName("java.lang.Class", GlobalSearchScope.allScope(getProject())));
   }
 
   public void testExceptionWithImplicitConstructor() throws Exception {
-    final PsiMethod method = getPrimaryMethod();
+    PsiMethod method = getPrimaryMethod();
     exceptionPropagationTest(method, collectDefaultConstructorsToPropagate(method));
   }
 
   private static HashSet<PsiMethod> collectDefaultConstructorsToPropagate(PsiMethod method) {
-    final HashSet<PsiMethod> methodsToPropagate = new HashSet<PsiMethod>();
+    HashSet<PsiMethod> methodsToPropagate = new HashSet<PsiMethod>();
     for (PsiClass inheritor : ClassInheritorsSearch.search(method.getContainingClass())) {
       methodsToPropagate.add(inheritor.getConstructors()[0]);
     }
@@ -109,37 +109,37 @@ public abstract class ChangeSignaturePropagationTest extends LightRefactoringTes
                                .createTypeByFQClassName("java.lang.Class", GlobalSearchScope.allScope(getProject())));
   }
 
-  private void parameterPropagationTest(final PsiClassType paramType) throws Exception {
-    final PsiMethod method = getPrimaryMethod();
+  private void parameterPropagationTest(PsiClassType paramType) throws Exception {
+    PsiMethod method = getPrimaryMethod();
     parameterPropagationTest(method, new HashSet<PsiMethod>(Arrays.asList(method.getContainingClass().getMethods())),
                              paramType);
   }
 
-  private void parameterPropagationTest(final PsiMethod method, final HashSet<PsiMethod> psiMethods, final PsiType paramType) throws Exception {
-    final ParameterInfoImpl[] newParameters = new ParameterInfoImpl[]{new ParameterInfoImpl(-1, "clazz", paramType, "null")};
+  private void parameterPropagationTest(PsiMethod method, HashSet<PsiMethod> psiMethods, PsiType paramType) throws Exception {
+    ParameterInfoImpl[] newParameters = new ParameterInfoImpl[]{new ParameterInfoImpl(-1, "clazz", paramType, "null")};
     doTest(newParameters, new ThrownExceptionInfo[0], psiMethods, null, method);
   }
 
   private void exceptionPropagationTest() throws Exception {
-    final PsiMethod method = getPrimaryMethod();
+    PsiMethod method = getPrimaryMethod();
     exceptionPropagationTest(method, new HashSet<PsiMethod>(Arrays.asList(method.getContainingClass().getMethods())));
   }
 
-  private void exceptionPropagationTest(final PsiMethod method, final Set<PsiMethod> methodsToPropagateExceptions) throws Exception {
+  private void exceptionPropagationTest(PsiMethod method, Set<PsiMethod> methodsToPropagateExceptions) throws Exception {
     PsiClassType newExceptionType = JavaPsiFacade.getElementFactory(getProject())
       .createTypeByFQClassName(CommonClassNames.JAVA_LANG_EXCEPTION, GlobalSearchScope.allScope(getProject()));
-    final ThrownExceptionInfo[] newExceptions = new ThrownExceptionInfo[]{new JavaThrownExceptionInfo(-1, newExceptionType)};
+    ThrownExceptionInfo[] newExceptions = new ThrownExceptionInfo[]{new JavaThrownExceptionInfo(-1, newExceptionType)};
     doTest(new ParameterInfoImpl[0], newExceptions, null, methodsToPropagateExceptions, method);
   }
 
   private void doTest(ParameterInfoImpl[] newParameters,
-                      final ThrownExceptionInfo[] newExceptions,
+                      ThrownExceptionInfo[] newExceptions,
                       Set<PsiMethod> methodsToPropagateParameterChanges,
                       Set<PsiMethod> methodsToPropagateExceptionChanges,
                       PsiMethod primaryMethod) throws Exception {
-    final String filePath = getBasePath() + getTestName(false) + ".java";
-    final PsiType returnType = primaryMethod.getReturnType();
-    final CanonicalTypes.Type type = returnType == null ? null : CanonicalTypes.createTypeWrapper(returnType);
+    String filePath = getBasePath() + getTestName(false) + ".java";
+    PsiType returnType = primaryMethod.getReturnType();
+    CanonicalTypes.Type type = returnType == null ? null : CanonicalTypes.createTypeWrapper(returnType);
     new ChangeSignatureProcessor(getProject(), primaryMethod, false, null,
                                  primaryMethod.getName(),
                                  type,
@@ -151,9 +151,9 @@ public abstract class ChangeSignaturePropagationTest extends LightRefactoringTes
   }
 
   private PsiMethod getPrimaryMethod() throws Exception {
-    final String filePath = getBasePath() + getTestName(false) + ".java";
+    String filePath = getBasePath() + getTestName(false) + ".java";
     configureByFile(filePath);
-    final PsiElement targetElement = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
+    PsiElement targetElement = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue("<caret> is not on method name", targetElement instanceof PsiMethod);
     return (PsiMethod) targetElement;
   }
@@ -163,7 +163,7 @@ public abstract class ChangeSignaturePropagationTest extends LightRefactoringTes
   }
 
   private static ParameterInfoImpl[] generateParameterInfos (PsiMethod method, ParameterInfoImpl[] newParameters) {
-    final PsiParameter[] parameters = method.getParameterList().getParameters();
+    PsiParameter[] parameters = method.getParameterList().getParameters();
     ParameterInfoImpl[] result = new ParameterInfoImpl[parameters.length + newParameters.length];
     for (int i = 0; i < parameters.length; i++) {
       result[i] = new ParameterInfoImpl(i);
@@ -173,7 +173,7 @@ public abstract class ChangeSignaturePropagationTest extends LightRefactoringTes
   }
 
   private static ThrownExceptionInfo[] generateExceptionInfos (PsiMethod method, ThrownExceptionInfo[] newExceptions) {
-    final PsiClassType[] exceptions = method.getThrowsList().getReferencedTypes();
+    PsiClassType[] exceptions = method.getThrowsList().getReferencedTypes();
     ThrownExceptionInfo[] result = new ThrownExceptionInfo[exceptions.length + newExceptions.length];
     for (int i = 0; i < exceptions.length; i++) {
       result[i] = new JavaThrownExceptionInfo(i);

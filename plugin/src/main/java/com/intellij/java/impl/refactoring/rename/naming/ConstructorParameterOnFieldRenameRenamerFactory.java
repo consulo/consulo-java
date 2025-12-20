@@ -28,7 +28,7 @@ import java.util.Collection;
 
 @ExtensionImpl
 public class ConstructorParameterOnFieldRenameRenamerFactory implements AutomaticRenamerFactory {
-  public boolean isApplicable(final PsiElement element) {
+  public boolean isApplicable(PsiElement element) {
     return element instanceof PsiField;
   }
 
@@ -41,10 +41,10 @@ public class ConstructorParameterOnFieldRenameRenamerFactory implements Automati
     return false;
   }
 
-  public void setEnabled(final boolean enabled) {
+  public void setEnabled(boolean enabled) {
   }
 
-  public AutomaticRenamer createRenamer(final PsiElement element, final String newName, final Collection<UsageInfo> usages) {
+  public AutomaticRenamer createRenamer(PsiElement element, String newName, Collection<UsageInfo> usages) {
     return new ConstructorParameterOnFieldRenameRenamer((PsiField) element, newName);
   }
 }

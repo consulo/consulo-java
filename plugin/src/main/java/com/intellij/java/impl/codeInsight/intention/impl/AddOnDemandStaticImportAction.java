@@ -73,7 +73,7 @@ public class AddOnDemandStaticImportAction extends PsiElementBaseIntentionAction
         if (refExpr instanceof PsiMethodReferenceExpression) {
             return null;
         }
-        final PsiElement gParent = refExpr.getParent();
+        PsiElement gParent = refExpr.getParent();
         if (gParent instanceof PsiMethodReferenceExpression
             || !(gParent instanceof PsiJavaCodeReferenceElement codeReference && !isParameterizedReference(codeReference))) {
             return null;
@@ -116,12 +116,12 @@ public class AddOnDemandStaticImportAction extends PsiElementBaseIntentionAction
     }
 
     @RequiredReadAction
-    public static void invoke(final Project project, PsiFile file, final Editor editor, PsiElement element) {
+    public static void invoke(Project project, PsiFile file, Editor editor, PsiElement element) {
         if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
             return;
         }
 
-        final PsiJavaCodeReferenceElement refExpr = (PsiJavaCodeReferenceElement) element.getParent();
+        PsiJavaCodeReferenceElement refExpr = (PsiJavaCodeReferenceElement) element.getParent();
         final PsiClass aClass = (PsiClass) refExpr.resolve();
         if (aClass == null) {
             return;
@@ -135,7 +135,7 @@ public class AddOnDemandStaticImportAction extends PsiElementBaseIntentionAction
         importList.add(importStaticStatement);
 
         List<PsiFile> roots = file.getViewProvider().getAllFiles();
-        for (final PsiFile root : roots) {
+        for (PsiFile root : roots) {
             PsiElement copy = root.copy();
             final PsiManager manager = root.getManager();
 
@@ -201,7 +201,7 @@ public class AddOnDemandStaticImportAction extends PsiElementBaseIntentionAction
     }
 
     @RequiredReadAction
-    private static boolean isParameterizedReference(final PsiJavaCodeReferenceElement expression) {
+    private static boolean isParameterizedReference(PsiJavaCodeReferenceElement expression) {
         if (expression.getParameterList() == null) {
             return false;
         }

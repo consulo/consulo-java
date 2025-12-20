@@ -53,7 +53,7 @@ public abstract class CopyClassTest extends CodeInsightTestCase {
     doTest(CommonClassNames.JAVA_UTIL_ARRAY_LIST, "Bar");
   }
 
-  private void doTest(final String oldName, final String copyName) throws Exception {
+  private void doTest(String oldName, String copyName) throws Exception {
     String root = JavaTestUtil.getJavaTestDataPath() + "/refactoring/copyClass/" + getTestName(true);
 
     PsiTestUtil.removeAllRoots(myModule, IdeaTestUtil.getMockJdk17("java 1.5"));
@@ -70,7 +70,7 @@ public abstract class CopyClassTest extends CodeInsightTestCase {
     PlatformTestUtil.assertFilesEqual(fileExpected, fileAfter);
   }
 
-  private PsiElement performAction(final String oldName, final String copyName) throws IncorrectOperationException {
+  private PsiElement performAction(String oldName, String copyName) throws IncorrectOperationException {
     PsiClass oldClass = JavaPsiFacade.getInstance(myProject).findClass(oldName, ProjectScope.getAllScope(myProject));
     return CopyClassesHandler.doCopyClasses(Collections.singletonMap(oldClass.getNavigationElement().getContainingFile(), new PsiClass[]{oldClass}), copyName, myPsiManager.findDirectory(myRootDir),
                                      myProject);
@@ -91,16 +91,16 @@ public abstract class CopyClassTest extends CodeInsightTestCase {
     PsiTestUtil.removeAllRoots(myModule, IdeaTestUtil.getMockJdk17());
     VirtualFile rootDir = PsiTestUtil.createTestProjectStructure(myProject, myModule, rootBefore, myFilesToDelete);
 
-    final HashMap<PsiFile, PsiClass[]> map = new HashMap<PsiFile, PsiClass[]>();
-    final VirtualFile sourceDir = rootDir.findChild("p1");
+    HashMap<PsiFile, PsiClass[]> map = new HashMap<PsiFile, PsiClass[]>();
+    VirtualFile sourceDir = rootDir.findChild("p1");
     for (VirtualFile file : sourceDir.getChildren()) {
-      final PsiFile psiFile = myPsiManager.findFile(file);
+      PsiFile psiFile = myPsiManager.findFile(file);
       if (psiFile instanceof PsiJavaFile) {
         map.put(psiFile, ((PsiJavaFile)psiFile).getClasses());
       }
     }
 
-    final VirtualFile targetVDir = rootDir.findChild("p2");
+    VirtualFile targetVDir = rootDir.findChild("p2");
     CopyClassesHandler.doCopyClasses(map, null, myPsiManager.findDirectory(targetVDir), myProject);
 
     String rootAfter = root + "/after";
@@ -123,9 +123,9 @@ public abstract class CopyClassTest extends CodeInsightTestCase {
     PsiTestUtil.removeAllRoots(myModule, IdeaTestUtil.getMockJdk17());
     VirtualFile rootDir = PsiTestUtil.createTestProjectStructure(myProject, myModule, rootBefore, myFilesToDelete);
 
-    final VirtualFile targetVDir = rootDir.findChild("p2");
-    final PsiDirectory sourceP1Dir = myPsiManager.findDirectory(rootDir.findChild("p1"));
-    final PsiDirectory targetP2Dir = myPsiManager.findDirectory(targetVDir);
+    VirtualFile targetVDir = rootDir.findChild("p2");
+    PsiDirectory sourceP1Dir = myPsiManager.findDirectory(rootDir.findChild("p1"));
+    PsiDirectory targetP2Dir = myPsiManager.findDirectory(targetVDir);
     new CopyClassesHandler().doCopy(new PsiElement[]{sourceP1Dir}, targetP2Dir);
 
     String rootAfter = root + "/after";

@@ -85,7 +85,7 @@ public class AutomaticUsageRenamingDialog<T> extends DialogWrapper {
   }
 
   protected JComponent createNorthPanel() {
-    final Box box = Box.createHorizontalBox();
+    Box box = Box.createHorizontalBox();
     box.add(new JLabel(myRenamer.getDialogDescription()));
     box.add(Box.createHorizontalGlue());
     return box;
@@ -101,7 +101,7 @@ public class AutomaticUsageRenamingDialog<T> extends DialogWrapper {
 
     boolean okActionEnabled = true;
     for (T element : getElements()) {
-      final String errorText = getErrorText(element);
+      String errorText = getErrorText(element);
       if (errorText != null) {
         okActionEnabled = false;
       }
@@ -137,7 +137,7 @@ public class AutomaticUsageRenamingDialog<T> extends DialogWrapper {
   }
 
   protected JComponent createCenterPanel() {
-    final Box box = Box.createVerticalBox();
+    Box box = Box.createVerticalBox();
     setupTable();
 
     myTableModel.addTableModelListener(e -> handleChanges());
@@ -155,12 +155,12 @@ public class AutomaticUsageRenamingDialog<T> extends DialogWrapper {
     myValidatingComponent.doInitialize();
 
     box.add(myValidatingComponent);
-    final Box buttonBox = Box.createHorizontalBox();
+    Box buttonBox = Box.createHorizontalBox();
     buttonBox.add(Box.createHorizontalGlue());
-    final JButton selectAllButton = new JButton(RefactoringLocalize.selectAllButton().get());
+    JButton selectAllButton = new JButton(RefactoringLocalize.selectAllButton().get());
     buttonBox.add(selectAllButton);
     buttonBox.add(Box.createHorizontalStrut(4));
-    final JButton deselectAllButton = new JButton(RefactoringLocalize.unselectAllButton().get());
+    JButton deselectAllButton = new JButton(RefactoringLocalize.unselectAllButton().get());
     buttonBox.add(deselectAllButton);
     selectAllButton.addActionListener(e -> {
       for (int i = 0; i < getElementCount(); i++) {

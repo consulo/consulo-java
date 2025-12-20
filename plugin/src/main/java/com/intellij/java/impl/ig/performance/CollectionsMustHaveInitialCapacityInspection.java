@@ -40,7 +40,7 @@ public class CollectionsMustHaveInitialCapacityInspection extends BaseInspection
   private final CollectionsListSettings mySettings = new CollectionsListSettings() {
     @Override
     protected Set<String> getDefaultSettings() {
-      final Set<String> classes = new TreeSet<>(DEFAULT_COLLECTION_LIST);
+      Set<String> classes = new TreeSet<>(DEFAULT_COLLECTION_LIST);
       classes.add("java.util.BitSet");
       return classes;
     }
@@ -103,11 +103,11 @@ public class CollectionsMustHaveInitialCapacityInspection extends BaseInspection
         return;
       }
 
-      final PsiType type = expression.getType();
+      PsiType type = expression.getType();
       if (!isCollectionWithInitialCapacity(type)) {
         return;
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpressionList argumentList = expression.getArgumentList();
       if (argumentList == null || argumentList.getExpressions().length != 0) {
         return;
       }
@@ -118,12 +118,12 @@ public class CollectionsMustHaveInitialCapacityInspection extends BaseInspection
       if (!(type instanceof PsiClassType)) {
         return false;
       }
-      final PsiClassType classType = (PsiClassType) type;
-      final PsiClass resolved = classType.resolve();
+      PsiClassType classType = (PsiClassType) type;
+      PsiClass resolved = classType.resolve();
       if (resolved == null) {
         return false;
       }
-      final String className = resolved.getQualifiedName();
+      String className = resolved.getQualifiedName();
       return mySettings.getCollectionClassesRequiringCapacity().contains(className);
     }
   }

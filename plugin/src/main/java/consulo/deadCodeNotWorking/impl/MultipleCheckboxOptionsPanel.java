@@ -37,16 +37,16 @@ public class MultipleCheckboxOptionsPanel extends JPanel
 
 	public void addCheckbox(String label, @NonNls String property)
 	{
-		final boolean selected = getPropertyValue(owner, property);
-		final JCheckBox checkBox = new JCheckBox(label, selected);
+		boolean selected = getPropertyValue(owner, property);
+		JCheckBox checkBox = new JCheckBox(label, selected);
 		configureCheckbox(owner, property, checkBox);
-		final GridBagConstraints constraints = new GridBagConstraints();
+		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.anchor = GridBagConstraints.FIRST_LINE_START;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.weightx = 1.0;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		final Component[] components = getComponents();
+		Component[] components = getComponents();
 		removeAll();
 		for(Component component : components)
 		{
@@ -59,8 +59,8 @@ public class MultipleCheckboxOptionsPanel extends JPanel
 
 	private static void configureCheckbox(InspectionTool owner, String property, JCheckBox checkBox)
 	{
-		final ButtonModel model = checkBox.getModel();
-		final CheckboxChangeListener changeListener = new CheckboxChangeListener(owner, property, model);
+		ButtonModel model = checkBox.getModel();
+		CheckboxChangeListener changeListener = new CheckboxChangeListener(owner, property, model);
 		model.addChangeListener(changeListener);
 	}
 
@@ -74,8 +74,8 @@ public class MultipleCheckboxOptionsPanel extends JPanel
 	{
 		try
 		{
-			final Class<? extends InspectionTool> aClass = owner.getClass();
-			final Field field = aClass.getField(property);
+			Class<? extends InspectionTool> aClass = owner.getClass();
+			Field field = aClass.getField(property);
 			return field.getBoolean(owner);
 		}
 		catch(IllegalAccessException ignored)
@@ -111,8 +111,8 @@ public class MultipleCheckboxOptionsPanel extends JPanel
 		{
 			try
 			{
-				final Class<? extends InspectionTool> aClass = owner.getClass();
-				final Field field = aClass.getField(property);
+				Class<? extends InspectionTool> aClass = owner.getClass();
+				Field field = aClass.getField(property);
 				field.setBoolean(owner, selected);
 			}
 			catch(IllegalAccessException ignored)

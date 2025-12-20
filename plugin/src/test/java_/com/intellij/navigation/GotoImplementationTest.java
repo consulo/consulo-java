@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 public abstract class GotoImplementationTest extends CodeInsightTestCase
 {
 
-	private static Collection<PsiClass> getClassImplementations(final PsiClass psiClass)
+	private static Collection<PsiClass> getClassImplementations(PsiClass psiClass)
 	{
 		List<PsiClass> list = new ArrayList<>();
 		ClassImplementationsSearch.processImplementations(psiClass, element ->

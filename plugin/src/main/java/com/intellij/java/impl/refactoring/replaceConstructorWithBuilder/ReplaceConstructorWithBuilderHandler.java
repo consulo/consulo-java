@@ -36,16 +36,16 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public class ReplaceConstructorWithBuilderHandler implements RefactoringActionHandler {
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file, final DataContext dataContext) {
-    final int offset = editor.getCaretModel().getOffset();
-    final PsiElement element = file.findElementAt(offset);
-    final PsiClass psiClass = getParentNamedClass(element);
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+    int offset = editor.getCaretModel().getOffset();
+    PsiElement element = file.findElementAt(offset);
+    PsiClass psiClass = getParentNamedClass(element);
     if (psiClass == null) {
       showErrorMessage("The caret should be positioned inside a class which constructors are to be replaced with builder.", project, editor);
       return;
     }
 
-    final PsiMethod[] constructors = psiClass.getConstructors();
+    PsiMethod[] constructors = psiClass.getConstructors();
     if (constructors.length == 0) {
       showErrorMessage("Current class doesn't have constructors to replace with builder.", project, editor);
       return;
@@ -57,20 +57,20 @@ public class ReplaceConstructorWithBuilderHandler implements RefactoringActionHa
   @Nullable
   public static PsiClass getParentNamedClass(PsiElement element) {
     if (element != null) {
-      final PsiElement parent = element.getParent();
+      PsiElement parent = element.getParent();
       if (parent instanceof PsiJavaCodeReferenceElement) {
-        final PsiElement resolve = ((PsiJavaCodeReferenceElement)parent).resolve();
+        PsiElement resolve = ((PsiJavaCodeReferenceElement)parent).resolve();
         if (resolve instanceof PsiClass) return (PsiClass)resolve;
       }
     }
-    final PsiClass psiClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
+    PsiClass psiClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
     if (psiClass instanceof PsiAnonymousClass) {
       return getParentNamedClass(psiClass);
     }
     return psiClass;
   }
 
-  public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, final DataContext dataContext) {
+  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     throw new UnsupportedOperationException();
   }
 

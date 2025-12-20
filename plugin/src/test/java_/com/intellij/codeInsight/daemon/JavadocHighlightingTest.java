@@ -27,21 +27,21 @@ public abstract class JavadocHighlightingTest extends LightDaemonAnalyzerTestCas
   }
 
   public void testJavadocPeriod() throws Exception {
-    final JavaDocLocalInspection javaDocLocalInspection = new JavaDocLocalInspection();
+    JavaDocLocalInspection javaDocLocalInspection = new JavaDocLocalInspection();
     javaDocLocalInspection.IGNORE_JAVADOC_PERIOD = false;
     enableInspectionTool(javaDocLocalInspection);
     doTest();
   }
 
   public void testJavadocPeriod1() throws Exception {
-    final JavaDocLocalInspection javaDocLocalInspection = new JavaDocLocalInspection();
+    JavaDocLocalInspection javaDocLocalInspection = new JavaDocLocalInspection();
     javaDocLocalInspection.IGNORE_JAVADOC_PERIOD = false;
     enableInspectionTool(javaDocLocalInspection);
     doTest();
   }
 
   public void testJavadocPeriod2() throws Exception {
-    final JavaDocLocalInspection javaDocLocalInspection = new JavaDocLocalInspection();
+    JavaDocLocalInspection javaDocLocalInspection = new JavaDocLocalInspection();
     javaDocLocalInspection.IGNORE_JAVADOC_PERIOD = false;
     enableInspectionTool(javaDocLocalInspection);
     doTest();
@@ -68,7 +68,7 @@ public abstract class JavadocHighlightingTest extends LightDaemonAnalyzerTestCas
   public void testException2() throws Exception { doTest(); }
   public void testException3() throws Exception { doTest(); }
   public void testException4() throws Exception { 
-    final JavaDocLocalInspection javaDocLocalInspection = new JavaDocLocalInspection();
+    JavaDocLocalInspection javaDocLocalInspection = new JavaDocLocalInspection();
     javaDocLocalInspection.METHOD_OPTIONS.ACCESS_JAVADOC_REQUIRED_FOR = "package";
     enableInspectionTool(javaDocLocalInspection);
     doTest(); 
@@ -99,7 +99,7 @@ public abstract class JavadocHighlightingTest extends LightDaemonAnalyzerTestCas
 
   public void testMissingReturnDescription() throws Exception { doTest(); }
 
-  private void doTestWithLangLevel(final LanguageLevel langLevel) throws Exception {
+  private void doTestWithLangLevel(LanguageLevel langLevel) throws Exception {
     //LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(langLevel);
     doTest();
   }

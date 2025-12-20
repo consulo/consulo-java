@@ -58,19 +58,19 @@ public class ExtractSuperClassUtil {
     }
 
     public static PsiClass extractSuperClass(
-        final Project project,
-        final PsiDirectory targetDirectory,
-        final String superclassName,
-        final PsiClass subclass,
-        final MemberInfo[] selectedMemberInfos,
-        final DocCommentPolicy javaDocPolicy
+        Project project,
+        PsiDirectory targetDirectory,
+        String superclassName,
+        PsiClass subclass,
+        MemberInfo[] selectedMemberInfos,
+        DocCommentPolicy javaDocPolicy
     )
         throws IncorrectOperationException {
         PsiClass superclass = JavaDirectoryService.getInstance().createClass(targetDirectory, superclassName);
-        final PsiModifierList superClassModifierList = superclass.getModifierList();
+        PsiModifierList superClassModifierList = superclass.getModifierList();
         assert superClassModifierList != null;
         superClassModifierList.setModifierProperty(PsiModifier.FINAL, false);
-        final PsiReferenceList subClassExtends = subclass.getExtendsList();
+        PsiReferenceList subClassExtends = subclass.getExtendsList();
         assert subClassExtends != null : subclass;
         copyPsiReferenceList(subClassExtends, superclass.getExtendsList());
 
@@ -103,7 +103,7 @@ public class ExtractSuperClassUtil {
 
     private static void createConstructorsByPattern(
         Project project,
-        final PsiClass superclass,
+        PsiClass superclass,
         PsiMethod[] patternConstructors
     ) throws IncorrectOperationException {
         PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
@@ -114,13 +114,13 @@ public class ExtractSuperClassUtil {
             PsiParameter[] baseParams = baseConstructor.getParameterList().getParameters();
             @NonNls StringBuilder superCallText = new StringBuilder();
             superCallText.append("super(");
-            final PsiClass baseClass = baseConstructor.getContainingClass();
+            PsiClass baseClass = baseConstructor.getContainingClass();
             LOG.assertTrue(baseClass != null);
-            final PsiSubstitutor classSubstitutor =
+            PsiSubstitutor classSubstitutor =
                 TypeConversionUtil.getSuperClassSubstitutor(baseClass, superclass, PsiSubstitutor.EMPTY);
             for (int i = 0; i < baseParams.length; i++) {
-                final PsiParameter baseParam = baseParams[i];
-                final PsiParameter newParam = (PsiParameter) paramList.add(factory.createParameter(
+                PsiParameter baseParam = baseParams[i];
+                PsiParameter newParam = (PsiParameter) paramList.add(factory.createParameter(
                     baseParam.getName(),
                     classSubstitutor.substitute(baseParam.getType())
                 ));
@@ -132,14 +132,14 @@ public class ExtractSuperClassUtil {
             superCallText.append(");");
             PsiStatement statement = factory.createStatementFromText(superCallText.toString(), null);
             statement = (PsiStatement) styleManager.reformat(statement);
-            final PsiCodeBlock body = constructor.getBody();
+            PsiCodeBlock body = constructor.getBody();
             assert body != null;
             body.add(statement);
             constructor.getThrowsList().replace(baseConstructor.getThrowsList());
         }
     }
 
-    private static PsiMethod[] getCalledBaseConstructors(final PsiClass subclass) {
+    private static PsiMethod[] getCalledBaseConstructors(PsiClass subclass) {
         Set<PsiMethod> baseConstructors = new HashSet<PsiMethod>();
         PsiMethod[] constructors = subclass.getConstructors();
         for (PsiMethod constructor : constructors) {
@@ -187,16 +187,16 @@ public class ExtractSuperClassUtil {
     }
 
     public static PsiJavaCodeReferenceElement createExtendingReference(
-        final PsiClass superClass,
+        PsiClass superClass,
         final PsiClass derivedClass,
-        final MemberInfo[] selectedMembers
+        MemberInfo[] selectedMembers
     ) throws IncorrectOperationException {
-        final PsiManager manager = derivedClass.getManager();
+        PsiManager manager = derivedClass.getManager();
         Set<PsiElement> movedElements = new HashSet<PsiElement>();
-        for (final MemberInfo info : selectedMembers) {
+        for (MemberInfo info : selectedMembers) {
             movedElements.add(info.getMember());
         }
-        final PsiTypeParameterList typeParameterList = RefactoringUtil.createTypeParameterListWithUsedTypeParameters(null,
+        PsiTypeParameterList typeParameterList = RefactoringUtil.createTypeParameterListWithUsedTypeParameters(null,
             new Condition<PsiTypeParameter>() {
                 @Override
                 public boolean value(
@@ -213,25 +213,25 @@ public class ExtractSuperClassUtil {
             }, PsiUtilBase
                 .toPsiElementArray(movedElements)
         );
-        final PsiTypeParameterList originalTypeParameterList = superClass.getTypeParameterList();
+        PsiTypeParameterList originalTypeParameterList = superClass.getTypeParameterList();
         assert originalTypeParameterList != null;
-        final PsiTypeParameterList newList =
+        PsiTypeParameterList newList =
             typeParameterList != null ? (PsiTypeParameterList) originalTypeParameterList.replace(typeParameterList) : originalTypeParameterList;
-        final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
+        PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
         Map<PsiTypeParameter, PsiType> substitutionMap = new HashMap<PsiTypeParameter, PsiType>();
-        for (final PsiTypeParameter parameter : newList.getTypeParameters()) {
-            final PsiTypeParameter parameterInDerived = findTypeParameterInDerived(derivedClass, parameter.getName());
+        for (PsiTypeParameter parameter : newList.getTypeParameters()) {
+            PsiTypeParameter parameterInDerived = findTypeParameterInDerived(derivedClass, parameter.getName());
             if (parameterInDerived != null) {
                 substitutionMap.put(parameter, factory.createType(parameterInDerived));
             }
         }
 
-        final PsiClassType type = factory.createType(superClass, factory.createSubstitutor(substitutionMap));
+        PsiClassType type = factory.createType(superClass, factory.createSubstitutor(substitutionMap));
         return factory.createReferenceElementByType(type);
     }
 
     @Nullable
-    public static PsiTypeParameter findTypeParameterInDerived(final PsiClass aClass, final String name) {
+    public static PsiTypeParameter findTypeParameterInDerived(PsiClass aClass, String name) {
         for (PsiTypeParameter typeParameter : PsiUtil.typeParametersIterable(aClass)) {
             if (name.equals(typeParameter.getName())) {
                 return typeParameter;
@@ -242,11 +242,11 @@ public class ExtractSuperClassUtil {
     }
 
     public static void checkSuperAccessible(PsiDirectory targetDirectory, MultiMap<PsiElement, LocalizeValue> conflicts, PsiClass subclass) {
-        final VirtualFile virtualFile = subclass.getContainingFile().getVirtualFile();
+        VirtualFile virtualFile = subclass.getContainingFile().getVirtualFile();
         if (virtualFile != null) {
-            final boolean inTestSourceContent =
+            boolean inTestSourceContent =
                 ProjectRootManager.getInstance(subclass.getProject()).getFileIndex().isInTestSourceContent(virtualFile);
-            final Module module = ModuleUtil.findModuleForFile(virtualFile, subclass.getProject());
+            Module module = ModuleUtil.findModuleForFile(virtualFile, subclass.getProject());
             if (targetDirectory != null &&
                 module != null &&
                 !GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module, inTestSourceContent)

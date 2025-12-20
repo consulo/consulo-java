@@ -46,21 +46,21 @@ public class PushConditionInCallAction extends PsiElementBaseIntentionAction {
     if (!element.getManager().isInProject(element)) return false;
 
    // if (!(element instanceof PsiJavaToken && ((PsiJavaToken)element).getTokenType() == JavaTokenType.QUEST)) return false;
-    final PsiConditionalExpression conditionalExpression = PsiTreeUtil.getParentOfType(element, PsiConditionalExpression.class);
+    PsiConditionalExpression conditionalExpression = PsiTreeUtil.getParentOfType(element, PsiConditionalExpression.class);
     if (conditionalExpression == null) return false;
-    final PsiExpression thenExpression = conditionalExpression.getThenExpression();
+    PsiExpression thenExpression = conditionalExpression.getThenExpression();
     if (!(thenExpression instanceof PsiCallExpression)) return false;
-    final PsiMethod thenMethod = ((PsiCallExpression)thenExpression).resolveMethod();
-    final PsiExpressionList thenArgsList = ((PsiCallExpression)thenExpression).getArgumentList();
+    PsiMethod thenMethod = ((PsiCallExpression)thenExpression).resolveMethod();
+    PsiExpressionList thenArgsList = ((PsiCallExpression)thenExpression).getArgumentList();
     if (thenArgsList == null) return false;
-    final PsiExpression[] thenExpressions = thenArgsList.getExpressions();
+    PsiExpression[] thenExpressions = thenArgsList.getExpressions();
 
-    final PsiExpression elseExpression = conditionalExpression.getElseExpression();
+    PsiExpression elseExpression = conditionalExpression.getElseExpression();
     if (!(elseExpression instanceof PsiCallExpression)) return false;
-    final PsiMethod elseMethod = ((PsiCallExpression)elseExpression).resolveMethod();
-    final PsiExpressionList elseArgsList = ((PsiCallExpression)elseExpression).getArgumentList();
+    PsiMethod elseMethod = ((PsiCallExpression)elseExpression).resolveMethod();
+    PsiExpressionList elseArgsList = ((PsiCallExpression)elseExpression).getArgumentList();
     if (elseArgsList == null) return false;
-    final PsiExpression[] elseExpressions = elseArgsList.getExpressions();
+    PsiExpression[] elseExpressions = elseArgsList.getExpressions();
 
     if (thenMethod != elseMethod || thenMethod == null) return false;
 
@@ -91,14 +91,14 @@ public class PushConditionInCallAction extends PsiElementBaseIntentionAction {
   public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
 
-    final PsiConditionalExpression conditionalExpression = PsiTreeUtil.getParentOfType(element, PsiConditionalExpression.class);
-    final PsiExpression thenExpression = (PsiExpression)conditionalExpression.getThenExpression().copy();
-    final PsiExpressionList thenArgsList = ((PsiCallExpression)thenExpression).getArgumentList();
-    final PsiExpression[] thenExpressions = thenArgsList.getExpressions();
+    PsiConditionalExpression conditionalExpression = PsiTreeUtil.getParentOfType(element, PsiConditionalExpression.class);
+    PsiExpression thenExpression = (PsiExpression)conditionalExpression.getThenExpression().copy();
+    PsiExpressionList thenArgsList = ((PsiCallExpression)thenExpression).getArgumentList();
+    PsiExpression[] thenExpressions = thenArgsList.getExpressions();
 
-    final PsiExpression elseExpression = conditionalExpression.getElseExpression();
-    final PsiExpressionList elseArgsList = ((PsiCallExpression)elseExpression).getArgumentList();
-    final PsiExpression[] elseExpressions = elseArgsList.getExpressions();
+    PsiExpression elseExpression = conditionalExpression.getElseExpression();
+    PsiExpressionList elseArgsList = ((PsiCallExpression)elseExpression).getArgumentList();
+    PsiExpression[] elseExpressions = elseArgsList.getExpressions();
 
 
     for (int i = 0; i < thenExpressions.length; i++) {

@@ -52,7 +52,7 @@ public class UnnecessaryDefaultInspection extends BaseInspection {
             @Nonnull PsiSwitchStatement statement
         ) {
             super.visitSwitchStatement(statement);
-            final PsiSwitchLabelStatement defaultStatement =
+            PsiSwitchLabelStatement defaultStatement =
                 retrieveUnnecessaryDefault(statement);
             if (defaultStatement == null) {
                 return;
@@ -81,26 +81,26 @@ public class UnnecessaryDefaultInspection extends BaseInspection {
             if (!(statement instanceof PsiExpressionStatement)) {
                 return false;
             }
-            final PsiExpressionStatement expressionStatement =
+            PsiExpressionStatement expressionStatement =
                 (PsiExpressionStatement) statement;
-            final PsiExpression expression =
+            PsiExpression expression =
                 expressionStatement.getExpression();
             if (!(expression instanceof PsiAssignmentExpression)) {
                 return false;
             }
-            final PsiAssignmentExpression assignmentExpression =
+            PsiAssignmentExpression assignmentExpression =
                 (PsiAssignmentExpression) expression;
-            final PsiExpression lhs = assignmentExpression.getLExpression();
+            PsiExpression lhs = assignmentExpression.getLExpression();
             if (!(lhs instanceof PsiReferenceExpression)) {
                 return false;
             }
-            final PsiReferenceExpression referenceExpression =
+            PsiReferenceExpression referenceExpression =
                 (PsiReferenceExpression) lhs;
-            final PsiElement target = referenceExpression.resolve();
+            PsiElement target = referenceExpression.resolve();
             if (!(target instanceof PsiLocalVariable)) {
                 return false;
             }
-            final PsiLocalVariable variable = (PsiLocalVariable) target;
+            PsiLocalVariable variable = (PsiLocalVariable) target;
             return InitializationUtils.switchStatementAssignsVariableOrFails(
                 switchStatement, variable, true);
         }
@@ -109,31 +109,31 @@ public class UnnecessaryDefaultInspection extends BaseInspection {
         private static PsiSwitchLabelStatement retrieveUnnecessaryDefault(
             PsiSwitchStatement statement
         ) {
-            final PsiExpression expression = statement.getExpression();
+            PsiExpression expression = statement.getExpression();
             if (expression == null) {
                 return null;
             }
-            final PsiType type = expression.getType();
+            PsiType type = expression.getType();
             if (!(type instanceof PsiClassType)) {
                 return null;
             }
-            final PsiClassType classType = (PsiClassType) type;
-            final PsiClass aClass = classType.resolve();
+            PsiClassType classType = (PsiClassType) type;
+            PsiClass aClass = classType.resolve();
             if (aClass == null || !aClass.isEnum()) {
                 return null;
             }
-            final PsiCodeBlock body = statement.getBody();
+            PsiCodeBlock body = statement.getBody();
             if (body == null) {
                 return null;
             }
-            final PsiStatement[] statements = body.getStatements();
+            PsiStatement[] statements = body.getStatements();
             int numCases = 0;
             PsiSwitchLabelStatement result = null;
-            for (final PsiStatement child : statements) {
+            for (PsiStatement child : statements) {
                 if (!(child instanceof PsiSwitchLabelStatement)) {
                     continue;
                 }
-                final PsiSwitchLabelStatement labelStatement =
+                PsiSwitchLabelStatement labelStatement =
                     (PsiSwitchLabelStatement) child;
                 if (labelStatement.isDefaultCase()) {
                     result = labelStatement;
@@ -145,10 +145,10 @@ public class UnnecessaryDefaultInspection extends BaseInspection {
             if (result == null) {
                 return null;
             }
-            final PsiField[] fields = aClass.getFields();
+            PsiField[] fields = aClass.getFields();
             int numEnums = 0;
-            for (final PsiField field : fields) {
-                final PsiType fieldType = field.getType();
+            for (PsiField field : fields) {
+                PsiType fieldType = field.getType();
                 if (fieldType.equals(type)) {
                     numEnums++;
                 }

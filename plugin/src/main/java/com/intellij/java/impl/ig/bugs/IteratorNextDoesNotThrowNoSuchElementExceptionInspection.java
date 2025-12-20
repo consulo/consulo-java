@@ -66,9 +66,9 @@ public class IteratorNextDoesNotThrowNoSuchElementExceptionInspection extends Ba
             if (!MethodUtils.methodMatches(method, CommonClassNames.JAVA_UTIL_ITERATOR, null, HardcodedMethodConstants.NEXT)) {
                 return;
             }
-            final Set<PsiClassType> exceptions =
+            Set<PsiClassType> exceptions =
                 ExceptionUtils.calculateExceptionsThrown(method);
-            for (final PsiType exception : exceptions) {
+            for (PsiType exception : exceptions) {
                 if (exception.equalsToText(
                     "java.util.NoSuchElementException")) {
                     return;
@@ -77,7 +77,7 @@ public class IteratorNextDoesNotThrowNoSuchElementExceptionInspection extends Ba
             if (IteratorUtils.containsCallToIteratorNext(method, null, false)) {
                 return;
             }
-            final CalledMethodsVisitor visitor = new CalledMethodsVisitor();
+            CalledMethodsVisitor visitor = new CalledMethodsVisitor();
             method.accept(visitor);
             if (visitor.isNoSuchElementExceptionThrown()) {
                 return;
@@ -99,15 +99,15 @@ public class IteratorNextDoesNotThrowNoSuchElementExceptionInspection extends Ba
                 return;
             }
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression =
+            PsiReferenceExpression methodExpression =
                 expression.getMethodExpression();
-            final PsiElement method = methodExpression.resolve();
+            PsiElement method = methodExpression.resolve();
             if (method == null) {
                 return;
             }
-            final Set<PsiClassType> exceptions =
+            Set<PsiClassType> exceptions =
                 ExceptionUtils.calculateExceptionsThrown(method);
-            for (final PsiType exception : exceptions) {
+            for (PsiType exception : exceptions) {
                 if (exception.equalsToText(
                     "java.util.NoSuchElementException")) {
                     noSuchElementExceptionThrown = true;

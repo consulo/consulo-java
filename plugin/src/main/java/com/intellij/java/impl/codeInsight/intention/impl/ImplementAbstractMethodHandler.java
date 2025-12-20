@@ -69,18 +69,18 @@ public class ImplementAbstractMethodHandler {
   public void invoke() {
     PsiDocumentManager.getInstance(myProject).commitAllDocuments();
 
-    final PsiElement[][] result = new PsiElement[1][];
+    PsiElement[][] result = new PsiElement[1][];
     ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> myProject.getApplication().runReadAction(() -> {
-      final PsiClass psiClass = myMethod.getContainingClass();
+      PsiClass psiClass = myMethod.getContainingClass();
       if (!psiClass.isValid()) return;
       if (!psiClass.isEnum()) {
         result[0] = getClassImplementations(psiClass);
       }
       else {
-        final List<PsiElement> enumConstants = new ArrayList<>();
+        List<PsiElement> enumConstants = new ArrayList<>();
         for (PsiField field : psiClass.getFields()) {
           if (field instanceof PsiEnumConstant enumConstant) {
-            final PsiEnumConstantInitializer initializingClass = enumConstant.getInitializingClass();
+            PsiEnumConstantInitializer initializingClass = enumConstant.getInitializingClass();
             if (initializingClass != null) {
               PsiMethod method = initializingClass.findMethodBySignature(myMethod, true);
               if (method == null || !method.getContainingClass().equals(initializingClass)) {
@@ -113,17 +113,17 @@ public class ImplementAbstractMethodHandler {
       return;
     }
 
-    final MyPsiElementListCellRenderer elementListCellRenderer = new MyPsiElementListCellRenderer();
+    MyPsiElementListCellRenderer elementListCellRenderer = new MyPsiElementListCellRenderer();
     elementListCellRenderer.sort(result[0]);
     myList = new JBList(result[0]);
     myList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-    final Runnable runnable = () -> {
+    Runnable runnable = () -> {
       int index = myList.getSelectedIndex();
       if (index < 0) return;
       implementInClass(myList.getSelectedValues());
     };
     myList.setCellRenderer(elementListCellRenderer);
-    final PopupChooserBuilder builder = new PopupChooserBuilder(myList);
+    PopupChooserBuilder builder = new PopupChooserBuilder(myList);
     elementListCellRenderer.installSpeedSearch(builder);
 
     JBPopup popup = builder.setTitle(CodeInsightLocalize.intentionImplementAbstractMethodClassChooserTitle().get())
@@ -134,15 +134,15 @@ public class ImplementAbstractMethodHandler {
   }
 
   @RequiredUIAccess
-  public void implementInClass(final Object[] selection) {
+  public void implementInClass(Object[] selection) {
     for (Object o : selection) {
       if (!((PsiElement)o).isValid()) return;
     }
     CommandProcessor.getInstance().executeCommand(
       myProject,
       () -> {
-        final LinkedHashSet<PsiClass> classes = new LinkedHashSet<>();
-        for (final Object o : selection) {
+        LinkedHashSet<PsiClass> classes = new LinkedHashSet<>();
+        for (Object o : selection) {
           if (o instanceof PsiEnumConstant enumConstant) {
             classes.add(myProject.getApplication().runWriteAction(new Computable<>(){
               @Override
@@ -172,7 +172,7 @@ public class ImplementAbstractMethodHandler {
     );
   }
 
-  private PsiClass[] getClassImplementations(final PsiClass psiClass) {
+  private PsiClass[] getClassImplementations(PsiClass psiClass) {
     ArrayList<PsiClass> list = new ArrayList<>();
     for (PsiClass inheritor : ClassInheritorsSearch.search(psiClass, true)) {
       if (!inheritor.isInterface()) {
@@ -193,7 +193,7 @@ public class ImplementAbstractMethodHandler {
     }
 
     void sort(PsiElement[] result) {
-      final Comparator<PsiClass> comparator = myRenderer.getComparator();
+      Comparator<PsiClass> comparator = myRenderer.getComparator();
       Arrays.sort(result, (o1, o2) -> {
         if (o1 instanceof PsiEnumConstant enumConstant1 && o2 instanceof PsiEnumConstant enumConstant2) {
           return enumConstant1.getName().compareTo(enumConstant2.getName());

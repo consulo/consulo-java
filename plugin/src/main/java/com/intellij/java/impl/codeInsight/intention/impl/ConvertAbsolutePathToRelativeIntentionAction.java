@@ -45,18 +45,18 @@ public class ConvertAbsolutePathToRelativeIntentionAction extends BaseIntentionA
 
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    final int offset = editor.getCaretModel().getOffset();
-    final PsiElement element = file.findElementAt(offset);
+    int offset = editor.getCaretModel().getOffset();
+    PsiElement element = file.findElementAt(offset);
     if (element == null || element instanceof PsiWhiteSpace) {
       return false;
     }
 
-    final PsiReference reference = file.findReferenceAt(offset);
-    final FileReference fileReference = reference == null ? null : FileReference.findFileReference(reference);
+    PsiReference reference = file.findReferenceAt(offset);
+    FileReference fileReference = reference == null ? null : FileReference.findFileReference(reference);
 
     if (fileReference != null) {
-      final FileReferenceSet set = fileReference.getFileReferenceSet();
-      final FileReference lastReference = set.getLastReference();
+      FileReferenceSet set = fileReference.getFileReferenceSet();
+      FileReference lastReference = set.getLastReference();
       return set.couldBeConvertedTo(isConvertToRelative()) && lastReference != null &&
           (!isConvertToRelative() && !set.isAbsolutePathReference() || isConvertToRelative() && set.isAbsolutePathReference()) &&
           lastReference.resolve() != null;
@@ -71,10 +71,10 @@ public class ConvertAbsolutePathToRelativeIntentionAction extends BaseIntentionA
       return;
     }
 
-    final PsiReference reference = file.findReferenceAt(editor.getCaretModel().getOffset());
-    final FileReference fileReference = reference == null ? null : FileReference.findFileReference(reference);
+    PsiReference reference = file.findReferenceAt(editor.getCaretModel().getOffset());
+    FileReference fileReference = reference == null ? null : FileReference.findFileReference(reference);
     if (fileReference != null) {
-      final FileReference lastReference = fileReference.getFileReferenceSet().getLastReference();
+      FileReference lastReference = fileReference.getFileReferenceSet().getLastReference();
       if (lastReference != null) {
         lastReference.bindToElement(lastReference.resolve(), !isConvertToRelative());
       }

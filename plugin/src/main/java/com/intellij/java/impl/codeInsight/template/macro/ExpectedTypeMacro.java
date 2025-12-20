@@ -81,15 +81,15 @@ public class ExpectedTypeMacro extends Macro {
   }
 
   @Nullable
-  private static PsiType[] getExpectedTypes(Expression[] params, final ExpressionContext context) {
+  private static PsiType[] getExpectedTypes(Expression[] params, ExpressionContext context) {
     if (params.length != 0) return null;
 
-    final Project project = context.getProject();
+    Project project = context.getProject();
     PsiType[] types = null;
 
     PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
     assert file != null;
-    final PsiFile fileCopy = (PsiFile)file.copy();
+    PsiFile fileCopy = (PsiFile)file.copy();
     ReparseRangeUtil.reparseRange(
       fileCopy,
       context.getTemplateStartOffset(),

@@ -53,7 +53,7 @@ public class PsiBasedFormatterModelWithShiftIndentInside extends PsiBasedFormatt
   }
 
   @RequiredReadAction
-  private TextRange shiftIndentInsideWithPsi(ASTNode node, final TextRange textRange, final int shift) {
+  private TextRange shiftIndentInsideWithPsi(ASTNode node, TextRange textRange, int shift) {
     if (node != null && node.getTextRange().equals(textRange) && ShiftIndentInsideHelper.mayShiftIndentInside(node)) {
       return new ShiftIndentInsideHelper(JavaFileType.INSTANCE, myProject).shiftIndentInside(node,
           shift).getTextRange();
@@ -64,7 +64,7 @@ public class PsiBasedFormatterModelWithShiftIndentInside extends PsiBasedFormatt
   }
 
   @Override
-  protected String replaceWithPsiInLeaf(final TextRange textRange, String whiteSpace, ASTNode leafElement) {
+  protected String replaceWithPsiInLeaf(TextRange textRange, String whiteSpace, ASTNode leafElement) {
     if (!myCanModifyAllWhiteSpaces) {
       if (leafElement.getElementType() == TokenType.WHITE_SPACE) {
         return null;
@@ -74,10 +74,10 @@ public class PsiBasedFormatterModelWithShiftIndentInside extends PsiBasedFormatt
       if (prevNode != null) {
         IElementType type = prevNode.getElementType();
         if (type == TokenType.WHITE_SPACE) {
-          final String text = prevNode.getText();
+          String text = prevNode.getText();
 
-          @NonNls final String cdataStartMarker = "<![CDATA[";
-          final int cdataPos = text.indexOf(cdataStartMarker);
+          @NonNls String cdataStartMarker = "<![CDATA[";
+          int cdataPos = text.indexOf(cdataStartMarker);
           if (cdataPos != -1 && whiteSpace.indexOf(cdataStartMarker) == -1) {
             whiteSpace = DocumentBasedFormattingModel.mergeWsWithCdataMarker(whiteSpace, text, cdataPos);
             if (whiteSpace == null) {
@@ -89,13 +89,13 @@ public class PsiBasedFormatterModelWithShiftIndentInside extends PsiBasedFormatt
           type = prevNode != null ? prevNode.getElementType() : null;
         }
 
-        @NonNls final String cdataEndMarker = "]]>";
+        @NonNls String cdataEndMarker = "]]>";
         if (type == XmlTokenType.XML_CDATA_END && whiteSpace.indexOf(cdataEndMarker) == -1) {
-          final ASTNode at = findElementAt(prevNode.getStartOffset());
+          ASTNode at = findElementAt(prevNode.getStartOffset());
 
           if (at != null && at.getPsi() instanceof PsiWhiteSpace) {
-            final String s = at.getText();
-            final int cdataEndPos = s.indexOf(cdataEndMarker);
+            String s = at.getText();
+            int cdataEndPos = s.indexOf(cdataEndMarker);
             whiteSpace = DocumentBasedFormattingModel.mergeWsWithCdataMarker(whiteSpace, s, cdataEndPos);
             leafElement = at;
           } else {

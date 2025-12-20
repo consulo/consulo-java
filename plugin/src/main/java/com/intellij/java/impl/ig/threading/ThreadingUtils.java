@@ -28,30 +28,30 @@ class ThreadingUtils {
 
   public static boolean isWaitCall(
     @Nonnull PsiMethodCallExpression expression) {
-    final PsiReferenceExpression methodExpression =
+    PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
-    final String methodName = methodExpression.getReferenceName();
+    String methodName = methodExpression.getReferenceName();
     if (!"wait".equals(methodName)) {
       return false;
     }
-    final PsiMethod method = expression.resolveMethod();
+    PsiMethod method = expression.resolveMethod();
     if (method == null) {
       return false;
     }
-    final PsiParameterList parameterList = method.getParameterList();
-    final int numParams = parameterList.getParametersCount();
+    PsiParameterList parameterList = method.getParameterList();
+    int numParams = parameterList.getParametersCount();
     if (numParams > 2) {
       return false;
     }
-    final PsiParameter[] parameters = parameterList.getParameters();
+    PsiParameter[] parameters = parameterList.getParameters();
     if (numParams > 0) {
-      final PsiType parameterType = parameters[0].getType();
+      PsiType parameterType = parameters[0].getType();
       if (!parameterType.equals(PsiType.LONG)) {
         return false;
       }
     }
     if (numParams > 1) {
-      final PsiType parameterType = parameters[1].getType();
+      PsiType parameterType = parameters[1].getType();
       if (!parameterType.equals(PsiType.INT)) {
         return false;
       }
@@ -61,35 +61,35 @@ class ThreadingUtils {
 
   public static boolean isNotifyOrNotifyAllCall(
     @Nonnull PsiMethodCallExpression expression) {
-    final PsiReferenceExpression methodExpression =
+    PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
-    @NonNls final String methodName = methodExpression.getReferenceName();
+    @NonNls String methodName = methodExpression.getReferenceName();
     if (!"notify".equals(methodName) && !"notifyAll".equals(methodName)) {
       return false;
     }
-    final PsiExpressionList argumentList = expression.getArgumentList();
-    final PsiExpression[] args = argumentList.getExpressions();
+    PsiExpressionList argumentList = expression.getArgumentList();
+    PsiExpression[] args = argumentList.getExpressions();
     return args.length == 0;
   }
 
   public static boolean isSignalOrSignalAllCall(
     @Nonnull PsiMethodCallExpression expression) {
-    final PsiReferenceExpression methodExpression =
+    PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
-    @NonNls final String methodName = methodExpression.getReferenceName();
+    @NonNls String methodName = methodExpression.getReferenceName();
     if (!"signal".equals(methodName) && !"signalAll".equals(methodName)) {
       return false;
     }
-    final PsiExpressionList argumentList = expression.getArgumentList();
-    final PsiExpression[] args = argumentList.getExpressions();
+    PsiExpressionList argumentList = expression.getArgumentList();
+    PsiExpression[] args = argumentList.getExpressions();
     if (args.length != 0) {
       return false;
     }
-    final PsiMethod method = expression.resolveMethod();
+    PsiMethod method = expression.resolveMethod();
     if (method == null) {
       return false;
     }
-    final PsiClass containingClass = method.getContainingClass();
+    PsiClass containingClass = method.getContainingClass();
     if (containingClass == null) {
       return false;
     }
@@ -99,20 +99,20 @@ class ThreadingUtils {
 
   public static boolean isAwaitCall(
     @Nonnull PsiMethodCallExpression expression) {
-    final PsiReferenceExpression methodExpression =
+    PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
-    @NonNls final String methodName = methodExpression.getReferenceName();
+    @NonNls String methodName = methodExpression.getReferenceName();
     if (!"await".equals(methodName)
         && !"awaitUntil".equals(methodName)
         && !"awaitUninterruptibly".equals(methodName)
         && !"awaitNanos".equals(methodName)) {
       return false;
     }
-    final PsiMethod method = expression.resolveMethod();
+    PsiMethod method = expression.resolveMethod();
     if (method == null) {
       return false;
     }
-    final PsiClass containingClass = method.getContainingClass();
+    PsiClass containingClass = method.getContainingClass();
     if (containingClass == null) {
       return false;
     }

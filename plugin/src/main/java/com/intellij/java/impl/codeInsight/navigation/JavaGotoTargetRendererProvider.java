@@ -30,7 +30,7 @@ import consulo.language.psi.PsiElement;
 @ExtensionImpl
 public class JavaGotoTargetRendererProvider implements GotoTargetRendererProvider {
   @Override
-  public PsiElementListCellRenderer getRenderer(final PsiElement element, Options options) {
+  public PsiElementListCellRenderer getRenderer(PsiElement element, Options options) {
     if (element instanceof PsiMethod) {
       return new MethodCellRenderer(options.hasDifferentNames());
     } else if (element instanceof PsiClass) {

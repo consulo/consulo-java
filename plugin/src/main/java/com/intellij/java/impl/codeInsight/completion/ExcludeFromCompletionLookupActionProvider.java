@@ -44,12 +44,12 @@ public class ExcludeFromCompletionLookupActionProvider implements LookupActionPr
       PsiClass clazz = (PsiClass) o;
       addExcludes(consumer, clazz, clazz.getQualifiedName());
     } else if (o instanceof PsiMethod) {
-      final PsiMethod method = (PsiMethod) o;
+      PsiMethod method = (PsiMethod) o;
       if (method.hasModifierProperty(PsiModifier.STATIC)) {
         addExcludes(consumer, method, PsiUtil.getMemberQualifiedName(method));
       }
     } else if (o instanceof PsiField) {
-      final PsiField field = (PsiField) o;
+      PsiField field = (PsiField) o;
       if (field.hasModifierProperty(PsiModifier.STATIC)) {
         addExcludes(consumer, field, PsiUtil.getMemberQualifiedName(field));
       }
@@ -60,8 +60,8 @@ public class ExcludeFromCompletionLookupActionProvider implements LookupActionPr
     if (qname == null) {
       return;
     }
-    final Project project = element.getProject();
-    for (final String s : AddImportAction.getAllExcludableStrings(qname)) {
+    Project project = element.getProject();
+    for (String s : AddImportAction.getAllExcludableStrings(qname)) {
       consumer.accept(new ExcludeFromCompletionAction(project, s));
     }
   }

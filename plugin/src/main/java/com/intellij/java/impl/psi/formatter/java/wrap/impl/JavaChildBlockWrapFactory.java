@@ -56,7 +56,7 @@ public class JavaChildBlockWrapFactory
 	{
 		ASTNode node = block.getNode();
 		Wrap wrap = block.getWrap();
-		final IElementType nodeType = node.getElementType();
+		IElementType nodeType = node.getElementType();
 		if(nodeType == JavaElementType.EXTENDS_LIST || nodeType == JavaElementType.IMPLEMENTS_LIST)
 		{
 			return Wrap.createWrap(settings.EXTENDS_LIST_WRAP, false);

@@ -43,26 +43,26 @@ public class HighlightUtil {
   private HighlightUtil() {
   }
 
-  public static void highlightElements(@Nonnull final Collection<? extends PsiElement> elementCollection) {
+  public static void highlightElements(@Nonnull Collection<? extends PsiElement> elementCollection) {
     if (elementCollection.isEmpty()) {
       return;
     }
-    final Application application = Application.get();
+    Application application = Application.get();
     application.invokeLater(() -> {
-      final PsiElement[] elements = PsiUtilCore.toPsiElementArray(elementCollection);
-      final PsiElement firstElement = elements[0];
+      PsiElement[] elements = PsiUtilCore.toPsiElementArray(elementCollection);
+      PsiElement firstElement = elements[0];
       if (!firstElement.isValid()) {
         return;
       }
-      final Project project = firstElement.getProject();
-      final FileEditorManager editorManager = FileEditorManager.getInstance(project);
-      final Editor editor = editorManager.getSelectedTextEditor();
+      Project project = firstElement.getProject();
+      FileEditorManager editorManager = FileEditorManager.getInstance(project);
+      Editor editor = editorManager.getSelectedTextEditor();
       if (editor == null) {
         return;
       }
-      final HighlightManager highlightManager = HighlightManager.getInstance(project);
+      HighlightManager highlightManager = HighlightManager.getInstance(project);
       highlightManager.addOccurrenceHighlights(editor, elements, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
-      final FindManager findmanager = FindManager.getInstance(project);
+      FindManager findmanager = FindManager.getInstance(project);
       FindModel findmodel = findmanager.getFindNextModel();
       if (findmodel == null) {
         findmodel = findmanager.getFindInFileModel();
@@ -74,7 +74,7 @@ public class HighlightUtil {
   }
 
   public static void highlightElement(@Nonnull PsiElement element) {
-    final List<PsiElement> elements = Collections.singletonList(element);
+    List<PsiElement> elements = Collections.singletonList(element);
     highlightElements(elements);
   }
 
@@ -91,7 +91,7 @@ public class HighlightUtil {
     if (element instanceof PsiWhiteSpace) {
       return builder.append(' ');
     }
-    final PsiElement[] children = element.getChildren();
+    PsiElement[] children = element.getChildren();
     if (children.length != 0) {
       for (PsiElement child : children) {
         getPresentableText(child, builder);
@@ -106,26 +106,26 @@ public class HighlightUtil {
   @RequiredReadAction
   public static void showRenameTemplate(PsiElement context, PsiNameIdentifierOwner element) {
     context = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(context);
-    final Query<PsiReference> query = ReferencesSearch.search(element, element.getUseScope());
-    final Collection<PsiReference> references = query.findAll();
-    final Project project = context.getProject();
-    final FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
-    final Editor editor = fileEditorManager.getSelectedTextEditor();
+    Query<PsiReference> query = ReferencesSearch.search(element, element.getUseScope());
+    Collection<PsiReference> references = query.findAll();
+    Project project = context.getProject();
+    FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
+    Editor editor = fileEditorManager.getSelectedTextEditor();
     if (editor == null) {
       return;
     }
-    final TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(context);
-    final Expression macroCallNode = new MacroCallNode(new SuggestVariableNameMacro());
-    final PsiElement identifier = element.getNameIdentifier();
+    TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(context);
+    Expression macroCallNode = new MacroCallNode(new SuggestVariableNameMacro());
+    PsiElement identifier = element.getNameIdentifier();
     builder.replaceElement(identifier, "PATTERN", macroCallNode, true);
     for (PsiReference reference : references) {
       builder.replaceElement(reference, "PATTERN", "PATTERN", false);
     }
-    final Template template = builder.buildInlineTemplate();
-    final TextRange textRange = context.getTextRange();
-    final int startOffset = textRange.getStartOffset();
+    Template template = builder.buildInlineTemplate();
+    TextRange textRange = context.getTextRange();
+    int startOffset = textRange.getStartOffset();
     editor.getCaretModel().moveToOffset(startOffset);
-    final TemplateManager templateManager = TemplateManager.getInstance(project);
+    TemplateManager templateManager = TemplateManager.getInstance(project);
     templateManager.startTemplate(editor, template);
   }
 }

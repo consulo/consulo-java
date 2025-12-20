@@ -63,7 +63,7 @@ public class InstanceofInterfacesInspection extends BaseInspection {
     public void visitInstanceOfExpression(
       @Nonnull PsiInstanceOfExpression expression) {
       super.visitInstanceOfExpression(expression);
-      final PsiTypeElement typeElement = expression.getCheckType();
+      PsiTypeElement typeElement = expression.getCheckType();
       if (!ConcreteClassUtil.typeIsConcreteClass(typeElement,
                                                  ignoreAbstractClasses)) {
         return;

@@ -64,15 +64,15 @@ public class DeannotateIntentionAction implements IntentionAction {
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     PsiModifierListOwner listOwner = getContainer(editor, file);
     if (listOwner != null) {
-      final ExternalAnnotationsManager externalAnnotationsManager = ExternalAnnotationsManager.getInstance(project);
-      final PsiAnnotation[] annotations = externalAnnotationsManager.findExternalAnnotations(listOwner);
+      ExternalAnnotationsManager externalAnnotationsManager = ExternalAnnotationsManager.getInstance(project);
+      PsiAnnotation[] annotations = externalAnnotationsManager.findExternalAnnotations(listOwner);
       if (annotations != null && annotations.length > 0) {
         if (annotations.length == 1) {
           myAnnotationName = annotations[0].getQualifiedName();
         }
-        final List<PsiFile> files = externalAnnotationsManager.findExternalAnnotationsFiles(listOwner);
+        List<PsiFile> files = externalAnnotationsManager.findExternalAnnotationsFiles(listOwner);
         if (files == null || files.isEmpty()) return false;
-        final VirtualFile virtualFile = files.get(0).getVirtualFile();
+        VirtualFile virtualFile = files.get(0).getVirtualFile();
         return virtualFile != null && (virtualFile.isWritable() || virtualFile.isInLocalFileSystem());
       }
     }
@@ -80,11 +80,11 @@ public class DeannotateIntentionAction implements IntentionAction {
   }
 
   @Nullable
-  public static PsiModifierListOwner getContainer(final Editor editor, final PsiFile file) {
-    final PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
+  public static PsiModifierListOwner getContainer(Editor editor, PsiFile file) {
+    PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
     PsiModifierListOwner listOwner = PsiTreeUtil.getParentOfType(element, PsiParameter.class, false);
     if (listOwner == null) {
-      final PsiIdentifier psiIdentifier = PsiTreeUtil.getParentOfType(element, PsiIdentifier.class, false);
+      PsiIdentifier psiIdentifier = PsiTreeUtil.getParentOfType(element, PsiIdentifier.class, false);
       if (psiIdentifier != null && psiIdentifier.getParent() instanceof PsiModifierListOwner modifierListOwner) {
         listOwner = modifierListOwner;
       } else {
@@ -95,15 +95,15 @@ public class DeannotateIntentionAction implements IntentionAction {
             if (expression instanceof PsiAssignmentExpression) break;
           }
           if (expression instanceof PsiMethodCallExpression methodCallExpression) {
-            final PsiMethod psiMethod = methodCallExpression.resolveMethod();
+            PsiMethod psiMethod = methodCallExpression.resolveMethod();
             if (psiMethod != null) {
               return psiMethod;
             }
           }
-          final PsiElement parent = expression.getParent();
+          PsiElement parent = expression.getParent();
           if (parent instanceof PsiExpressionList expressionList) {  //try to find corresponding formal parameter
             int idx = -1;
-            final PsiExpression[] args = expressionList.getExpressions();
+            PsiExpression[] args = expressionList.getExpressions();
             for (int i = 0; i < args.length; i++) {
               PsiExpression arg = args[i];
               if (PsiTreeUtil.isAncestor(arg, expression, false)) {
@@ -117,7 +117,7 @@ public class DeannotateIntentionAction implements IntentionAction {
               if (grParent instanceof PsiCall call) {
                 PsiMethod method = call.resolveMethod();
                 if (method != null) {
-                  final PsiParameter[] parameters = method.getParameterList().getParameters();
+                  PsiParameter[] parameters = method.getParameterList().getParameters();
                   if (parameters.length > idx) {
                     return parameters[idx];
                   }
@@ -147,15 +147,15 @@ public class DeannotateIntentionAction implements IntentionAction {
       externalAnnotations
     ) {
       @Override
-      public PopupStep onChosen(final PsiAnnotation selectedValue, final boolean finalChoice) {
+      public PopupStep onChosen(PsiAnnotation selectedValue, boolean finalChoice) {
         deannotate(selectedValue, project, file, annotationsManager, listOwner);
         return PopupStep.FINAL_CHOICE;
       }
 
       @Override
       @Nonnull
-      public String getTextFor(final PsiAnnotation value) {
-        final String qualifiedName = value.getQualifiedName();
+      public String getTextFor(PsiAnnotation value) {
+        String qualifiedName = value.getQualifiedName();
         LOG.assertTrue(qualifiedName != null);
         return qualifiedName;
       }
@@ -173,8 +173,8 @@ public class DeannotateIntentionAction implements IntentionAction {
   ) {
     new WriteCommandAction(project, getText().get()) {
       @Override
-      protected void run(final Result result) throws Throwable {
-        final VirtualFile virtualFile = file.getVirtualFile();
+      protected void run(Result result) throws Throwable {
+        VirtualFile virtualFile = file.getVirtualFile();
         String qualifiedName = annotation.getQualifiedName();
         LOG.assertTrue(qualifiedName != null);
         if (annotationsManager.deannotate(listOwner, qualifiedName) && virtualFile != null && virtualFile.isInLocalFileSystem()) {

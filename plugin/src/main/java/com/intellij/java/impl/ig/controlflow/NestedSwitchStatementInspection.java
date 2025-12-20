@@ -49,7 +49,7 @@ public class NestedSwitchStatementInspection extends BaseInspection {
             @Nonnull PsiSwitchStatement statement
         ) {
             super.visitSwitchStatement(statement);
-            final PsiElement containingSwitchStatement =
+            PsiElement containingSwitchStatement =
                 PsiTreeUtil.getParentOfType(
                     statement,
                     PsiSwitchStatement.class
@@ -57,9 +57,9 @@ public class NestedSwitchStatementInspection extends BaseInspection {
             if (containingSwitchStatement == null) {
                 return;
             }
-            final PsiMethod containingMethod =
+            PsiMethod containingMethod =
                 PsiTreeUtil.getParentOfType(statement, PsiMethod.class);
-            final PsiMethod containingContainingMethod =
+            PsiMethod containingContainingMethod =
                 PsiTreeUtil.getParentOfType(
                     containingSwitchStatement,
                     PsiMethod.class

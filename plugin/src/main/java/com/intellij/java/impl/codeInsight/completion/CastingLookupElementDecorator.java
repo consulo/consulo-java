@@ -42,7 +42,7 @@ public class CastingLookupElementDecorator extends LookupElementDecorator<Lookup
 
   @Nullable
   private static String getItemText(LookupElementPresentation base, LookupElement castItem) {
-    final LookupElementPresentation castPresentation = new LookupElementPresentation();
+    LookupElementPresentation castPresentation = new LookupElementPresentation();
     castItem.renderElement(castPresentation);
     return castPresentation.getItemText();
   }
@@ -66,17 +66,17 @@ public class CastingLookupElementDecorator extends LookupElementDecorator<Lookup
   @Override
   public void renderElement(LookupElementPresentation presentation) {
     getDelegate().renderElement(presentation);
-    final String castType = getItemText(presentation, getCastItem());
+    String castType = getItemText(presentation, getCastItem());
     presentation.setItemText("(" + castType + ")" + presentation.getItemText());
     presentation.setTypeText(castType);
   }
 
   @Override
   public void handleInsert(InsertionContext context) {
-    final CommonCodeStyleSettings settings = CompletionStyleUtil.getCodeStyleSettings(context);
+    CommonCodeStyleSettings settings = CompletionStyleUtil.getCodeStyleSettings(context);
     String spaceWithin = settings.SPACE_WITHIN_CAST_PARENTHESES ? " " : "";
     String spaceAfter = settings.SPACE_AFTER_TYPE_CAST ? " " : "";
-    final Editor editor = context.getEditor();
+    Editor editor = context.getEditor();
     editor.getDocument().replaceString(context.getStartOffset(), context.getTailOffset(), "(" + spaceWithin + spaceWithin + ")" + spaceAfter);
     CompletionUtilCore.emulateInsertion(context, context.getStartOffset() + 1 + spaceWithin.length(), myCastItem);
 
@@ -87,7 +87,7 @@ public class CastingLookupElementDecorator extends LookupElementDecorator<Lookup
     return myCastItem;
   }
 
-  static LookupElement createCastingElement(final LookupElement delegate, PsiType castTo) {
+  static LookupElement createCastingElement(LookupElement delegate, PsiType castTo) {
     return new CastingLookupElementDecorator(delegate, castTo);
   }
 }

@@ -69,15 +69,15 @@ public class UnusedLabelInspection extends BaseInspection {
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement label = descriptor.getPsiElement();
-      final PsiLabeledStatement labeledStatement =
+      PsiElement label = descriptor.getPsiElement();
+      PsiLabeledStatement labeledStatement =
         (PsiLabeledStatement)label.getParent();
       assert labeledStatement != null;
-      final PsiStatement statement = labeledStatement.getStatement();
+      PsiStatement statement = labeledStatement.getStatement();
       if (statement == null) {
         return;
       }
-      final String statementText = statement.getText();
+      String statementText = statement.getText();
       replaceStatement(labeledStatement, statementText);
     }
   }
@@ -90,14 +90,14 @@ public class UnusedLabelInspection extends BaseInspection {
       if (containsBreakOrContinueForLabel(statement)) {
         return;
       }
-      final PsiIdentifier labelIdentifier =
+      PsiIdentifier labelIdentifier =
         statement.getLabelIdentifier();
       registerError(labelIdentifier);
     }
 
     private static boolean containsBreakOrContinueForLabel(
       PsiLabeledStatement statement) {
-      final LabelFinder labelFinder = new LabelFinder(statement);
+      LabelFinder labelFinder = new LabelFinder(statement);
       statement.accept(labelFinder);
       return labelFinder.jumpFound();
     }
@@ -109,7 +109,7 @@ public class UnusedLabelInspection extends BaseInspection {
     private String label = null;
 
     private LabelFinder(PsiLabeledStatement target) {
-      final PsiIdentifier labelIdentifier = target.getLabelIdentifier();
+      PsiIdentifier labelIdentifier = target.getLabelIdentifier();
       label = labelIdentifier.getText();
     }
 
@@ -128,7 +128,7 @@ public class UnusedLabelInspection extends BaseInspection {
         return;
       }
       super.visitContinueStatement(continueStatement);
-      final PsiIdentifier labelIdentifier =
+      PsiIdentifier labelIdentifier =
         continueStatement.getLabelIdentifier();
       if (labelMatches(labelIdentifier)) {
         found = true;
@@ -142,7 +142,7 @@ public class UnusedLabelInspection extends BaseInspection {
         return;
       }
       super.visitBreakStatement(breakStatement);
-      final PsiIdentifier labelIdentifier =
+      PsiIdentifier labelIdentifier =
         breakStatement.getLabelIdentifier();
       if (labelMatches(labelIdentifier)) {
         found = true;
@@ -153,7 +153,7 @@ public class UnusedLabelInspection extends BaseInspection {
       if (labelIdentifier == null) {
         return false;
       }
-      final String labelText = labelIdentifier.getText();
+      String labelText = labelIdentifier.getText();
       return labelText.equals(label);
     }
 

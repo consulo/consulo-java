@@ -22,7 +22,7 @@ public class FinalListener {
     myEditor = editor;
   }
 
-  public void perform(final boolean generateFinal, PsiVariable variable) {
+  public void perform(boolean generateFinal, PsiVariable variable) {
     perform(generateFinal, PsiModifier.FINAL, variable);
   }
 
@@ -33,20 +33,20 @@ public class FinalListener {
     LOG.assertTrue(modifierList != null);
     final int textOffset = modifierList.getTextOffset();
 
-    final Runnable runnable = new Runnable() {
+    Runnable runnable = new Runnable() {
       public void run() {
         if (generateFinal) {
-          final PsiTypeElement typeElement = variable.getTypeElement();
-          final int typeOffset = typeElement != null ? typeElement.getTextOffset() : textOffset;
+          PsiTypeElement typeElement = variable.getTypeElement();
+          int typeOffset = typeElement != null ? typeElement.getTextOffset() : textOffset;
           document.insertString(typeOffset, modifier + " ");
         }
         else {
-          final int idx = modifierList.getText().indexOf(modifier);
+          int idx = modifierList.getText().indexOf(modifier);
           document.deleteString(textOffset + idx, textOffset + idx + modifier.length() + 1);
         }
       }
     };
-    final LookupEx lookup = LookupManager.getActiveLookup(myEditor);
+    LookupEx lookup = LookupManager.getActiveLookup(myEditor);
     if (lookup != null) {
       lookup.performGuardedChange(runnable);
     } else {

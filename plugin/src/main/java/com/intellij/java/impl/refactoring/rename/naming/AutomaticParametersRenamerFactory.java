@@ -38,7 +38,7 @@ import java.util.Collection;
 public class AutomaticParametersRenamerFactory implements AutomaticRenamerFactory {
   public boolean isApplicable(PsiElement element) {
     if (element instanceof PsiParameter) {
-      final PsiElement declarationScope = ((PsiParameter) element).getDeclarationScope();
+      PsiElement declarationScope = ((PsiParameter) element).getDeclarationScope();
       if (declarationScope instanceof PsiMethod && !((PsiMethod) declarationScope).hasModifierProperty(PsiModifier.STATIC)) {
         return true;
       }

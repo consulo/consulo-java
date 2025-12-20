@@ -49,7 +49,7 @@ public class PackageWrapper {
     while (qName.endsWith(".")) {
       qName = StringUtil.trimEnd(qName, ".");
     }
-    final PsiJavaPackage aPackage = JavaPsiFacade.getInstance(myManager.getProject()).findPackage(qName);
+    PsiJavaPackage aPackage = JavaPsiFacade.getInstance(myManager.getProject()).findPackage(qName);
     if (aPackage != null) {
       return aPackage.getDirectories();
     } else {

@@ -57,7 +57,7 @@ public class SurroundWithArrayFix extends PsiElementBaseIntentionAction implemen
     }
 
     @Override
-    public boolean isAvailable(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) {
+    public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
         return getExpression(element) != null;
     }
 
@@ -66,16 +66,16 @@ public class SurroundWithArrayFix extends PsiElementBaseIntentionAction implemen
         if (myMethodCall == null || !myMethodCall.isValid()) {
             return myExpression == null || !myExpression.isValid() ? null : myExpression;
         }
-        final PsiElement method = myMethodCall.resolveMethod();
+        PsiElement method = myMethodCall.resolveMethod();
         if (method != null) {
-            final PsiMethod psiMethod = (PsiMethod) method;
+            PsiMethod psiMethod = (PsiMethod) method;
             return checkMethod(element, psiMethod);
         }
         else if (myMethodCall instanceof PsiMethodCallExpression) {
-            final Collection<PsiElement> psiElements = TargetElementUtil.getTargetCandidates(((PsiMethodCallExpression) myMethodCall).getMethodExpression());
+            Collection<PsiElement> psiElements = TargetElementUtil.getTargetCandidates(((PsiMethodCallExpression) myMethodCall).getMethodExpression());
             for (PsiElement psiElement : psiElements) {
                 if (psiElement instanceof PsiMethod) {
-                    final PsiExpression expression = checkMethod(element, (PsiMethod) psiElement);
+                    PsiExpression expression = checkMethod(element, (PsiMethod) psiElement);
                     if (expression != null) {
                         return expression;
                     }
@@ -86,22 +86,22 @@ public class SurroundWithArrayFix extends PsiElementBaseIntentionAction implemen
     }
 
     @Nullable
-    private PsiExpression checkMethod(final PsiElement element, final PsiMethod psiMethod) {
-        final PsiParameter[] psiParameters = psiMethod.getParameterList().getParameters();
-        final PsiExpressionList argumentList = myMethodCall.getArgumentList();
+    private PsiExpression checkMethod(PsiElement element, PsiMethod psiMethod) {
+        PsiParameter[] psiParameters = psiMethod.getParameterList().getParameters();
+        PsiExpressionList argumentList = myMethodCall.getArgumentList();
         int idx = 0;
         for (PsiExpression expression : argumentList.getExpressions()) {
             if (element != null && PsiTreeUtil.isAncestor(expression, element, false)) {
                 if (psiParameters.length > idx) {
-                    final PsiType paramType = psiParameters[idx].getType();
+                    PsiType paramType = psiParameters[idx].getType();
                     if (paramType instanceof PsiArrayType) {
-                        final PsiType expressionType = expression.getType();
+                        PsiType expressionType = expression.getType();
                         if (expressionType != null) {
-                            final PsiType componentType = ((PsiArrayType) paramType).getComponentType();
+                            PsiType componentType = ((PsiArrayType) paramType).getComponentType();
                             if (expressionType.isAssignableFrom(componentType)) {
                                 return expression;
                             }
-                            final PsiClass psiClass = PsiUtil.resolveClassInType(componentType);
+                            PsiClass psiClass = PsiUtil.resolveClassInType(componentType);
                             if (ArrayUtil.find(psiMethod.getTypeParameters(), psiClass) != -1) {
                                 for (PsiClassType superType : psiClass.getSuperTypes()) {
                                     if (TypeConversionUtil.isAssignable(superType, expressionType)) {
@@ -123,15 +123,15 @@ public class SurroundWithArrayFix extends PsiElementBaseIntentionAction implemen
         if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) {
             return;
         }
-        final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
-        final PsiExpression expression = getExpression(element);
+        PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
+        PsiExpression expression = getExpression(element);
         assert expression != null;
-        final PsiExpression toReplace = elementFactory.createExpressionFromText(getArrayCreation(expression), element);
+        PsiExpression toReplace = elementFactory.createExpressionFromText(getArrayCreation(expression), element);
         JavaCodeStyleManager.getInstance(project).shortenClassReferences(expression.replace(toReplace));
     }
 
     private static String getArrayCreation(@Nonnull PsiExpression expression) {
-        final PsiType expressionType = expression.getType();
+        PsiType expressionType = expression.getType();
         assert expressionType != null;
         return "new " + expressionType.getCanonicalText() + "[]{" + expression.getText() + "}";
     }

@@ -68,7 +68,7 @@ public abstract class JavaDocInfoGeneratorTest extends CodeInsightTestCase {
   public void testEnumConstantOrdinal() throws Exception {
     PsiClass psiClass = getTestClass();
     PsiField field = psiClass.getFields() [0];
-    final File htmlPath = new File(JavaTestUtil.getJavaTestDataPath() + "/codeInsight/javadocIG/" + getTestName(true) + ".html");
+    File htmlPath = new File(JavaTestUtil.getJavaTestDataPath() + "/codeInsight/javadocIG/" + getTestName(true) + ".html");
     String htmlText = FileUtil.loadFile(htmlPath);
     String docInfo = new JavaDocumentationProvider().getQuickNavigateInfo(field, field);
     assertNotNull(docInfo);
@@ -92,8 +92,8 @@ public abstract class JavaDocInfoGeneratorTest extends CodeInsightTestCase {
     return ((PsiJavaFile)myFile).getClasses() [0];
   }
 
-  private void verifyJavaDoc(final PsiElement field) throws IOException {
-    final File htmlPath = new File(JavaTestUtil.getJavaTestDataPath() + "/codeInsight/javadocIG/" + getTestName(true) + ".html");
+  private void verifyJavaDoc(PsiElement field) throws IOException {
+    File htmlPath = new File(JavaTestUtil.getJavaTestDataPath() + "/codeInsight/javadocIG/" + getTestName(true) + ".html");
     String htmlText = FileUtil.loadFile(htmlPath);
     String docInfo = new JavaDocInfoGenerator(getProject(), field).generateDocInfo(null);
     assertNotNull(docInfo);
@@ -101,10 +101,10 @@ public abstract class JavaDocInfoGeneratorTest extends CodeInsightTestCase {
   }
 
   public void testPackageInfo() throws Exception {
-    final String path = JavaTestUtil.getJavaTestDataPath() + "/codeInsight/javadocIG/";
-    final String packageInfo = path + getTestName(true);
+    String path = JavaTestUtil.getJavaTestDataPath() + "/codeInsight/javadocIG/";
+    String packageInfo = path + getTestName(true);
     PsiTestUtil.createTestProjectStructure(myProject, myModule, path, myFilesToDelete);
-    final String info =
+    String info =
       new JavaDocInfoGenerator(getProject(), JavaPsiFacade.getInstance(getProject()).findPackage(getTestName(true))).generateDocInfo(null);
     String htmlText = FileUtil.loadFile(new File(packageInfo + File.separator + "packageInfo.html"));
     assertNotNull(info);

@@ -76,7 +76,7 @@ public abstract class SmartType17CompletionTest extends LightFixtureCompletionTe
   private void doTest() {
     configureByFile("/" + getTestName(false) + ".java");
     if (myItems != null && myItems.length == 1) {
-      final Lookup lookup = getLookup();
+      Lookup lookup = getLookup();
       if (lookup != null) {
         selectItem(lookup.getCurrentItem(), Lookup.NORMAL_SELECT_CHAR);
       }

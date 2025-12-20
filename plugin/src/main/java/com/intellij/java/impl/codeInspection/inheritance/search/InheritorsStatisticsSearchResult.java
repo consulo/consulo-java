@@ -13,7 +13,7 @@ public class InheritorsStatisticsSearchResult {
   private final PsiClass myClass;
   private final int myPercent;
 
-  InheritorsStatisticsSearchResult(final @Nonnull PsiClass aClass, final int percent) {
+  InheritorsStatisticsSearchResult(@Nonnull PsiClass aClass, int percent) {
     myClass = aClass;
     myPercent = percent;
   }

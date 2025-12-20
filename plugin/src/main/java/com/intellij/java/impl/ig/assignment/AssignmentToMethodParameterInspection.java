@@ -74,17 +74,17 @@ public class AssignmentToMethodParameterInspection extends BaseInspection {
             @Nonnull PsiAssignmentExpression expression
         ) {
             super.visitAssignmentExpression(expression);
-            final PsiExpression lhs = expression.getLExpression();
-            final PsiParameter parameter = getMethodParameter(lhs);
+            PsiExpression lhs = expression.getLExpression();
+            PsiParameter parameter = getMethodParameter(lhs);
             if (parameter == null) {
                 return;
             }
             if (ignoreTransformationOfOriginalParameter) {
-                final PsiExpression rhs = expression.getRExpression();
+                PsiExpression rhs = expression.getRExpression();
                 if (rhs != null && VariableAccessUtils.variableIsUsed(parameter, rhs)) {
                     return;
                 }
-                final IElementType tokenType =
+                IElementType tokenType =
                     expression.getOperationTokenType();
                 if (tokenType == JavaTokenType.PLUSEQ ||
                     tokenType == JavaTokenType.MINUSEQ ||
@@ -111,16 +111,16 @@ public class AssignmentToMethodParameterInspection extends BaseInspection {
                 return;
             }
             super.visitPrefixExpression(expression);
-            final IElementType tokenType = expression.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&
                 !tokenType.equals(JavaTokenType.MINUSMINUS)) {
                 return;
             }
-            final PsiExpression operand = expression.getOperand();
+            PsiExpression operand = expression.getOperand();
             if (operand == null) {
                 return;
             }
-            final PsiParameter parameter = getMethodParameter(operand);
+            PsiParameter parameter = getMethodParameter(operand);
             if (parameter == null) {
                 return;
             }
@@ -135,13 +135,13 @@ public class AssignmentToMethodParameterInspection extends BaseInspection {
                 return;
             }
             super.visitPostfixExpression(expression);
-            final IElementType tokenType = expression.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&
                 !tokenType.equals(JavaTokenType.MINUSMINUS)) {
                 return;
             }
-            final PsiExpression operand = expression.getOperand();
-            final PsiParameter parameter = getMethodParameter(operand);
+            PsiExpression operand = expression.getOperand();
+            PsiParameter parameter = getMethodParameter(operand);
             if (parameter == null) {
                 return;
             }
@@ -153,14 +153,14 @@ public class AssignmentToMethodParameterInspection extends BaseInspection {
             if (!(expression instanceof PsiReferenceExpression)) {
                 return null;
             }
-            final PsiReferenceExpression referenceExpression =
+            PsiReferenceExpression referenceExpression =
                 (PsiReferenceExpression) expression;
-            final PsiElement variable = referenceExpression.resolve();
+            PsiElement variable = referenceExpression.resolve();
             if (!(variable instanceof PsiParameter)) {
                 return null;
             }
-            final PsiParameter parameter = (PsiParameter) variable;
-            final PsiElement declarationScope = parameter.getDeclarationScope();
+            PsiParameter parameter = (PsiParameter) variable;
+            PsiElement declarationScope = parameter.getDeclarationScope();
             if (declarationScope instanceof PsiCatchSection) {
                 return null;
             }

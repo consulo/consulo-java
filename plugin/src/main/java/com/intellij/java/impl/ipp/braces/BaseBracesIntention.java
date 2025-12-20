@@ -29,7 +29,7 @@ import jakarta.annotation.Nullable;
 public abstract class BaseBracesIntention extends MutablyNamedIntention {
     @Override
     protected final LocalizeValue getTextForElement(PsiElement element) {
-        final PsiElement body = getSurroundingStatement(element);
+        PsiElement body = getSurroundingStatement(element);
         if (body == null) {
             return LocalizeValue.of();
         }
@@ -43,11 +43,11 @@ public abstract class BaseBracesIntention extends MutablyNamedIntention {
     @Nonnull
     private static String getKeyword(@Nonnull PsiElement parent, @Nonnull PsiElement element) {
         if (parent instanceof PsiIfStatement) {
-            final PsiIfStatement ifStatement = (PsiIfStatement) parent;
-            final PsiStatement elseBranch = ifStatement.getElseBranch();
+            PsiIfStatement ifStatement = (PsiIfStatement) parent;
+            PsiStatement elseBranch = ifStatement.getElseBranch();
             return element.equals(elseBranch) ? PsiKeyword.ELSE : PsiKeyword.IF;
         }
-        final PsiElement firstChild = parent.getFirstChild();
+        PsiElement firstChild = parent.getFirstChild();
         assert firstChild != null;
         return firstChild.getText();
     }
@@ -55,9 +55,9 @@ public abstract class BaseBracesIntention extends MutablyNamedIntention {
 
     @Nullable
     protected static PsiStatement getSurroundingStatement(@Nonnull PsiElement element) {
-        final PsiElement parent = element.getParent();
+        PsiElement parent = element.getParent();
         if (parent instanceof PsiIfStatement) {
-            final PsiIfStatement ifStatement = (PsiIfStatement) parent;
+            PsiIfStatement ifStatement = (PsiIfStatement) parent;
             if (isBetweenThen(ifStatement, element)) {
                 return ifStatement.getThenBranch();
             }
@@ -82,8 +82,8 @@ public abstract class BaseBracesIntention extends MutablyNamedIntention {
     }
 
     private static boolean isBetweenThen(@Nonnull PsiIfStatement ifStatement, @Nonnull PsiElement element) {
-        final PsiElement rParenth = ifStatement.getRParenth();
-        final PsiElement elseElement = ifStatement.getElseElement();
+        PsiElement rParenth = ifStatement.getRParenth();
+        PsiElement elseElement = ifStatement.getElseElement();
 
         if (rParenth == null) {
             return false;
@@ -93,23 +93,23 @@ public abstract class BaseBracesIntention extends MutablyNamedIntention {
             return true;
         }
 
-        final TextRange rParenthTextRangeTextRange = rParenth.getTextRange();
-        final TextRange elseElementTextRange = elseElement.getTextRange();
-        final TextRange elementTextRange = element.getTextRange();
+        TextRange rParenthTextRangeTextRange = rParenth.getTextRange();
+        TextRange elseElementTextRange = elseElement.getTextRange();
+        TextRange elementTextRange = element.getTextRange();
 
         return new TextRange(rParenthTextRangeTextRange.getEndOffset(), elseElementTextRange.getStartOffset()).contains(elementTextRange);
     }
 
     private static boolean isBetweenElse(@Nonnull PsiIfStatement ifStatement, @Nonnull PsiElement element) {
-        final PsiElement elseElement = ifStatement.getElseElement();
+        PsiElement elseElement = ifStatement.getElseElement();
 
         if (elseElement == null) {
             return false;
         }
 
-        final TextRange ifStatementTextRange = ifStatement.getTextRange();
-        final TextRange elseElementTextRange = elseElement.getTextRange();
-        final TextRange elementTextRange = element.getTextRange();
+        TextRange ifStatementTextRange = ifStatement.getTextRange();
+        TextRange elseElementTextRange = elseElement.getTextRange();
+        TextRange elementTextRange = element.getTextRange();
 
         return new TextRange(elseElementTextRange.getStartOffset(), ifStatementTextRange.getEndOffset()).contains(elementTextRange);
     }

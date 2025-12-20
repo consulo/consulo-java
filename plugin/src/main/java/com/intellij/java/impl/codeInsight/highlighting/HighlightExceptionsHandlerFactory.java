@@ -37,7 +37,7 @@ import java.util.Collection;
 @ExtensionImpl
 public class HighlightExceptionsHandlerFactory implements HighlightUsagesHandlerFactory {
   @Override
-  public HighlightUsagesHandlerBase createHighlightUsagesHandler(final Editor editor, final PsiFile file) {
+  public HighlightUsagesHandlerBase createHighlightUsagesHandler(Editor editor, PsiFile file) {
     int offset = TargetElementUtil.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
     PsiElement target = file.findElementAt(offset);
     if (target instanceof PsiKeyword) {
@@ -56,24 +56,24 @@ public class HighlightExceptionsHandlerFactory implements HighlightUsagesHandler
   }
 
   @Nullable
-  private static HighlightUsagesHandlerBase createHighlightTryHandler(final Editor editor,
-                                                                      final PsiFile file,
-                                                                      final PsiElement target,
-                                                                      final PsiElement parent) {
-    final PsiTryStatement tryStatement = (PsiTryStatement) parent;
+  private static HighlightUsagesHandlerBase createHighlightTryHandler(Editor editor,
+                                                                      PsiFile file,
+                                                                      PsiElement target,
+                                                                      PsiElement parent) {
+    PsiTryStatement tryStatement = (PsiTryStatement) parent;
     FeatureUsageTracker.getInstance().triggerFeatureUsed("codeassists.highlight.throws");
-    final PsiCodeBlock tryBlock = tryStatement.getTryBlock();
+    PsiCodeBlock tryBlock = tryStatement.getTryBlock();
     if (tryBlock == null) return null;
-    final Collection<PsiClassType> psiClassTypes = ExceptionUtil.collectUnhandledExceptions(tryBlock, tryBlock);
+    Collection<PsiClassType> psiClassTypes = ExceptionUtil.collectUnhandledExceptions(tryBlock, tryBlock);
     return new HighlightExceptionsHandler(editor, file, target, psiClassTypes.toArray(new PsiClassType[psiClassTypes.size()]), tryBlock, Condition.TRUE);
   }
 
   @Nullable
-  private static HighlightUsagesHandlerBase createHighlightCatchHandler(final Editor editor,
-                                                                        final PsiFile file,
-                                                                        final PsiElement target,
-                                                                        final PsiElement parent) {
-    final PsiCatchSection catchSection = (PsiCatchSection) parent;
+  private static HighlightUsagesHandlerBase createHighlightCatchHandler(Editor editor,
+                                                                        PsiFile file,
+                                                                        PsiElement target,
+                                                                        PsiElement parent) {
+    PsiCatchSection catchSection = (PsiCatchSection) parent;
     FeatureUsageTracker.getInstance().triggerFeatureUsed("codeassists.highlight.throws");
 
     PsiTryStatement tryStatement = catchSection.getTryStatement();
@@ -83,7 +83,7 @@ public class HighlightExceptionsHandlerFactory implements HighlightUsagesHandler
 
     final PsiParameter[] catchBlockParameters = tryStatement.getCatchBlockParameters();
 
-    final Collection<PsiClassType> allThrownExceptions = ExceptionUtil.collectUnhandledExceptions(tryStatement.getTryBlock(),
+    Collection<PsiClassType> allThrownExceptions = ExceptionUtil.collectUnhandledExceptions(tryStatement.getTryBlock(),
         tryStatement.getTryBlock());
     Condition<PsiType> filter = new Condition<PsiType>() {
       @Override
@@ -110,14 +110,14 @@ public class HighlightExceptionsHandlerFactory implements HighlightUsagesHandler
   }
 
   @Nullable
-  private static HighlightUsagesHandlerBase createThrowsHandler(final Editor editor, final PsiFile file, final PsiElement target) {
+  private static HighlightUsagesHandlerBase createThrowsHandler(Editor editor, PsiFile file, PsiElement target) {
     FeatureUsageTracker.getInstance().triggerFeatureUsed("codeassists.highlight.throws");
     PsiElement grand = target.getParent().getParent();
     if (!(grand instanceof PsiMethod)) return null;
     PsiMethod method = (PsiMethod) grand;
     if (method.getBody() == null) return null;
 
-    final Collection<PsiClassType> psiClassTypes = ExceptionUtil.collectUnhandledExceptions(method.getBody(), method.getBody());
+    Collection<PsiClassType> psiClassTypes = ExceptionUtil.collectUnhandledExceptions(method.getBody(), method.getBody());
 
     return new HighlightExceptionsHandler(editor, file, target, psiClassTypes.toArray(new PsiClassType[psiClassTypes.size()]), method.getBody(), Condition.TRUE);
   }

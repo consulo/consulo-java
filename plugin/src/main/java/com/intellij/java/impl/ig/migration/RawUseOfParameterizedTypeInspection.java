@@ -59,7 +59,7 @@ public class RawUseOfParameterizedTypeInspection extends BaseInspection {
     @Override
     @Nullable
     public JComponent createOptionsPanel() {
-        final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
+        MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
         optionsPanel.addCheckbox(
             InspectionGadgetsLocalize.rawUseOfParameterizedTypeIgnoreNewObjectsOption().get(),
             "ignoreObjectConstruction"
@@ -96,7 +96,7 @@ public class RawUseOfParameterizedTypeInspection extends BaseInspection {
             if (ignoreObjectConstruction) {
                 return;
             }
-            final PsiJavaCodeReferenceElement classReference = expression.getClassOrAnonymousClassReference();
+            PsiJavaCodeReferenceElement classReference = expression.getClassOrAnonymousClassReference();
             checkReferenceElement(classReference);
         }
 
@@ -105,12 +105,12 @@ public class RawUseOfParameterizedTypeInspection extends BaseInspection {
             if (!hasNeededLanguageLevel(typeElement)) {
                 return;
             }
-            final PsiType type = typeElement.getType();
+            PsiType type = typeElement.getType();
             if (type instanceof PsiArrayType) {
                 return;
             }
             super.visitTypeElement(typeElement);
-            final PsiElement parent = typeElement.getParent();
+            PsiElement parent = typeElement.getParent();
             if (parent instanceof PsiInstanceOfExpression || parent instanceof PsiClassObjectAccessExpression) {
                 return;
             }
@@ -120,16 +120,16 @@ public class RawUseOfParameterizedTypeInspection extends BaseInspection {
             if (PsiTreeUtil.getParentOfType(typeElement, PsiComment.class) != null) {
                 return;
             }
-            final PsiAnnotationMethod annotationMethod =
+            PsiAnnotationMethod annotationMethod =
                 PsiTreeUtil.getParentOfType(typeElement, PsiAnnotationMethod.class, true, PsiClass.class);
             if (ignoreUncompilable && annotationMethod != null) {
                 // type of class type parameter cannot be parameterized if annotation method has default value
-                final PsiAnnotationMemberValue defaultValue = annotationMethod.getDefaultValue();
+                PsiAnnotationMemberValue defaultValue = annotationMethod.getDefaultValue();
                 if (defaultValue != null && parent != annotationMethod) {
                     return;
                 }
             }
-            final PsiJavaCodeReferenceElement referenceElement = typeElement.getInnermostComponentReferenceElement();
+            PsiJavaCodeReferenceElement referenceElement = typeElement.getInnermostComponentReferenceElement();
             checkReferenceElement(referenceElement);
         }
 
@@ -139,12 +139,12 @@ public class RawUseOfParameterizedTypeInspection extends BaseInspection {
                 return;
             }
             super.visitReferenceElement(reference);
-            final PsiElement referenceParent = reference.getParent();
+            PsiElement referenceParent = reference.getParent();
             if (!(referenceParent instanceof PsiReferenceList)) {
                 return;
             }
-            final PsiReferenceList referenceList = (PsiReferenceList) referenceParent;
-            final PsiElement listParent = referenceList.getParent();
+            PsiReferenceList referenceList = (PsiReferenceList) referenceParent;
+            PsiElement listParent = referenceList.getParent();
             if (!(listParent instanceof PsiClass)) {
                 return;
             }
@@ -155,18 +155,18 @@ public class RawUseOfParameterizedTypeInspection extends BaseInspection {
             if (reference == null) {
                 return;
             }
-            final PsiType[] typeParameters = reference.getTypeParameters();
+            PsiType[] typeParameters = reference.getTypeParameters();
             if (typeParameters.length > 0) {
                 return;
             }
-            final PsiElement element = reference.resolve();
+            PsiElement element = reference.resolve();
             if (!(element instanceof PsiClass)) {
                 return;
             }
-            final PsiClass aClass = (PsiClass) element;
-            final PsiElement qualifier = reference.getQualifier();
+            PsiClass aClass = (PsiClass) element;
+            PsiElement qualifier = reference.getQualifier();
             if (qualifier instanceof PsiJavaCodeReferenceElement) {
-                final PsiJavaCodeReferenceElement qualifierReference = (PsiJavaCodeReferenceElement) qualifier;
+                PsiJavaCodeReferenceElement qualifierReference = (PsiJavaCodeReferenceElement) qualifier;
                 if (!aClass.hasModifierProperty(PsiModifier.STATIC) && !aClass.isInterface() && !aClass.isEnum()) {
                     checkReferenceElement(qualifierReference);
                 }

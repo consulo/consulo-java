@@ -37,13 +37,13 @@ public class PsiMethodWithOverridingPercentMember extends PsiMethodMember {
 
   private final int myOverridingPercent;
 
-  public PsiMethodWithOverridingPercentMember(final CandidateInfo info, final int overridingPercent) {
+  public PsiMethodWithOverridingPercentMember(CandidateInfo info, int overridingPercent) {
     super(info);
     myOverridingPercent = overridingPercent;
   }
 
   @Override
-  public void renderTreeNode(final ColoredTextContainer component, final JTree tree) {
+  public void renderTreeNode(ColoredTextContainer component, JTree tree) {
     component.append(myOverridingPercent + "% ", SimpleTextAttributes.GRAY_ATTRIBUTES);
     super.renderTreeNode(component, tree);
   }
@@ -77,21 +77,21 @@ public class PsiMethodWithOverridingPercentMember extends PsiMethodMember {
   };
 
   @Nonnull
-  public static PsiMethodWithOverridingPercentMember[] calculateOverridingPercents(@Nonnull final Collection<CandidateInfo> candidateInfos) {
-    final List<PsiMethodWithOverridingPercentMember> result = new ArrayList<PsiMethodWithOverridingPercentMember>(candidateInfos.size());
-    final Map<String, Collection<PsiClass>> classShortNames2Inheritors = new HashMap<String, Collection<PsiClass>>();
-    for (final CandidateInfo candidateInfo : candidateInfos) {
-      final PsiMethod method = (PsiMethod) candidateInfo.getElement();
+  public static PsiMethodWithOverridingPercentMember[] calculateOverridingPercents(@Nonnull Collection<CandidateInfo> candidateInfos) {
+    List<PsiMethodWithOverridingPercentMember> result = new ArrayList<PsiMethodWithOverridingPercentMember>(candidateInfos.size());
+    Map<String, Collection<PsiClass>> classShortNames2Inheritors = new HashMap<String, Collection<PsiClass>>();
+    for (CandidateInfo candidateInfo : candidateInfos) {
+      PsiMethod method = (PsiMethod) candidateInfo.getElement();
       if (!method.hasModifierProperty(PsiModifier.FINAL) &&
           !method.isConstructor() &&
           !method.isDeprecated() &&
           !EXCLUDED_JAVA_LANG_OBJECT_METHOD_NAMES.contains(method.getName())) {
-        final PsiClass containingClass = method.getContainingClass();
+        PsiClass containingClass = method.getContainingClass();
         if (containingClass == null) {
           continue;
         }
 
-        final String classShortName = containingClass.getName();
+        String classShortName = containingClass.getName();
 
         Collection<PsiClass> allInheritors = classShortNames2Inheritors.get(classShortName);
         if (allInheritors == null) {
@@ -99,9 +99,9 @@ public class PsiMethodWithOverridingPercentMember extends PsiMethodMember {
           classShortNames2Inheritors.put(classShortName, allInheritors);
         }
 
-        final int allInheritorsCount = allInheritors.size() - 1;
+        int allInheritorsCount = allInheritors.size() - 1;
         if (allInheritorsCount > 0) {
-          final int percent = searchForOverridingCount(method, allInheritors) * 100 / allInheritorsCount;
+          int percent = searchForOverridingCount(method, allInheritors) * 100 / allInheritorsCount;
           if (percent > 1) {
             result.add(new PsiMethodWithOverridingPercentMember(candidateInfo, percent));
           }
@@ -111,11 +111,11 @@ public class PsiMethodWithOverridingPercentMember extends PsiMethodMember {
     return result.toArray(new PsiMethodWithOverridingPercentMember[result.size()]);
   }
 
-  private static int searchForOverridingCount(final PsiMethod method, final Collection<PsiClass> containingClassInheritors) {
+  private static int searchForOverridingCount(PsiMethod method, Collection<PsiClass> containingClassInheritors) {
     int counter = 0;
-    for (final PsiClass inheritor : containingClassInheritors) {
+    for (PsiClass inheritor : containingClassInheritors) {
       if (inheritor instanceof PsiExtensibleClass) {
-        final List<PsiMethod> ownMethods = ((PsiExtensibleClass) inheritor).getOwnMethods();
+        List<PsiMethod> ownMethods = ((PsiExtensibleClass) inheritor).getOwnMethods();
         for (PsiMethod ownMethod : ownMethods) {
           if (maybeSuper(method, ownMethod)) {
             counter++;
@@ -128,17 +128,17 @@ public class PsiMethodWithOverridingPercentMember extends PsiMethodMember {
     return counter;
   }
 
-  private static boolean maybeSuper(@Nonnull final PsiMethod superMethod, @Nonnull final PsiMethod method) {
+  private static boolean maybeSuper(@Nonnull PsiMethod superMethod, @Nonnull PsiMethod method) {
     if (!superMethod.getName().equals(method.getName())) {
       return false;
     }
-    final PsiParameterList superMethodParameterList = superMethod.getParameterList();
-    final PsiParameterList methodParameterList = method.getParameterList();
+    PsiParameterList superMethodParameterList = superMethod.getParameterList();
+    PsiParameterList methodParameterList = method.getParameterList();
     if (superMethodParameterList.getParametersCount() != methodParameterList.getParametersCount()) {
       return false;
     }
-    final PsiParameter[] superMethodParameters = superMethodParameterList.getParameters();
-    final PsiParameter[] methodParameters = methodParameterList.getParameters();
+    PsiParameter[] superMethodParameters = superMethodParameterList.getParameters();
+    PsiParameter[] methodParameters = methodParameterList.getParameters();
     for (int i = 0; i < methodParameters.length; i++) {
       if (!StringUtil.equals(getTypeShortName(superMethodParameters[i].getType()), getTypeShortName(methodParameters[i].getType()))) {
         return false;
@@ -148,7 +148,7 @@ public class PsiMethodWithOverridingPercentMember extends PsiMethodMember {
   }
 
   @Nullable
-  private static String getTypeShortName(@Nonnull final PsiType type) {
+  private static String getTypeShortName(@Nonnull PsiType type) {
     if (type instanceof PsiPrimitiveType) {
       return ((PsiPrimitiveType) type).getBoxedTypeName();
     }

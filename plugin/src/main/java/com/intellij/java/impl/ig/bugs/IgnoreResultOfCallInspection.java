@@ -87,8 +87,8 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiClass containingClass = (PsiClass) infos[0];
-        final String className = containingClass.getName();
+        PsiClass containingClass = (PsiClass) infos[0];
+        String className = containingClass.getName();
         return InspectionGadgetsLocalize.resultOfMethodCallIgnoredProblemDescriptor(className).get();
     }
 
@@ -106,14 +106,14 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final JPanel panel = new JPanel(new BorderLayout());
-        final ListTable table = new ListTable(new ListWrappingTableModel(
+        JPanel panel = new JPanel(new BorderLayout());
+        ListTable table = new ListTable(new ListWrappingTableModel(
             Arrays.asList(classNames, methodNamePatterns),
             InspectionGadgetsLocalize.resultOfMethodCallIgnoredClassColumnTitle().get(),
             InspectionGadgetsLocalize.resultOfMethodCallIgnoredMethodColumnTitle().get()
         ));
-        final JPanel tablePanel = UiUtils.createAddRemovePanel(table);
-        final CheckBox checkBox = new CheckBox(
+        JPanel tablePanel = UiUtils.createAddRemovePanel(table);
+        CheckBox checkBox = new CheckBox(
             InspectionGadgetsLocalize.resultOfMethodCallIgnoredNonLibraryOption().get(),
             this,
             "m_reportAllNonLibraryCalls"
@@ -138,20 +138,20 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
         @Override
         public void visitExpressionStatement(@Nonnull PsiExpressionStatement statement) {
             super.visitExpressionStatement(statement);
-            final PsiExpression expression = statement.getExpression();
+            PsiExpression expression = statement.getExpression();
             if (!(expression instanceof PsiMethodCallExpression)) {
                 return;
             }
-            final PsiMethodCallExpression call = (PsiMethodCallExpression) expression;
-            final PsiMethod method = call.resolveMethod();
+            PsiMethodCallExpression call = (PsiMethodCallExpression) expression;
+            PsiMethod method = call.resolveMethod();
             if (method == null || method.isConstructor()) {
                 return;
             }
-            final PsiType returnType = method.getReturnType();
+            PsiType returnType = method.getReturnType();
             if (PsiType.VOID.equals(returnType)) {
                 return;
             }
-            final PsiClass aClass = method.getContainingClass();
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null) {
                 return;
             }
@@ -162,17 +162,17 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
                 registerMethodCallError(call, aClass);
                 return;
             }
-            final PsiReferenceExpression methodExpression = call.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = call.getMethodExpression();
+            String methodName = methodExpression.getReferenceName();
             if (methodName == null) {
                 return;
             }
             for (int i = 0; i < methodNamePatterns.size(); i++) {
-                final String methodNamePattern = methodNamePatterns.get(i);
+                String methodNamePattern = methodNamePatterns.get(i);
                 if (!methodNamesMatch(methodName, methodNamePattern)) {
                     continue;
                 }
-                final String className = classNames.get(i);
+                String className = classNames.get(i);
                 if (!InheritanceUtil.isInheritor(aClass, className)) {
                     continue;
                 }
@@ -205,7 +205,7 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
             if (pattern == null) {
                 return false;
             }
-            final Matcher matcher = pattern.matcher(methodName);
+            Matcher matcher = pattern.matcher(methodName);
             return matcher.matches();
         }
     }

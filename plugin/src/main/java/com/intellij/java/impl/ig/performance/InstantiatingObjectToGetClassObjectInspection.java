@@ -64,13 +64,13 @@ public class InstantiatingObjectToGetClassObjectInspection extends BaseInspectio
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiMethodCallExpression expression = (PsiMethodCallExpression)descriptor.getPsiElement();
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      final PsiExpression qualifier = methodExpression.getQualifierExpression();
+      PsiMethodCallExpression expression = (PsiMethodCallExpression)descriptor.getPsiElement();
+      PsiReferenceExpression methodExpression = expression.getMethodExpression();
+      PsiExpression qualifier = methodExpression.getQualifierExpression();
       if (qualifier == null) {
         return;
       }
-      final PsiType type = qualifier.getType();
+      PsiType type = qualifier.getType();
       if (type == null) {
         return;
       }
@@ -80,12 +80,12 @@ public class InstantiatingObjectToGetClassObjectInspection extends BaseInspectio
     private static StringBuilder getTypeText(PsiType type, StringBuilder text) {
       if (type instanceof PsiArrayType) {
         text.append("[]");
-        final PsiArrayType arrayType = (PsiArrayType)type;
+        PsiArrayType arrayType = (PsiArrayType)type;
         getTypeText(arrayType.getComponentType(), text);
       }
       else if (type instanceof PsiClassType) {
-        final String canonicalText = type.getCanonicalText();
-        final String typeText = StringUtils.stripAngleBrackets(canonicalText);
+        String canonicalText = type.getCanonicalText();
+        String typeText = StringUtils.stripAngleBrackets(canonicalText);
         text.insert(0, typeText);
       }
       else {
@@ -104,21 +104,21 @@ public class InstantiatingObjectToGetClassObjectInspection extends BaseInspectio
     @Override
     public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      @NonNls final String methodName = methodExpression.getReferenceName();
+      PsiReferenceExpression methodExpression = expression.getMethodExpression();
+      @NonNls String methodName = methodExpression.getReferenceName();
       if (!"getClass".equals(methodName)) {
         return;
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      final PsiExpression[] args = argumentList.getExpressions();
+      PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpression[] args = argumentList.getExpressions();
       if (args.length != 0) {
         return;
       }
-      final PsiExpression qualifier = methodExpression.getQualifierExpression();
+      PsiExpression qualifier = methodExpression.getQualifierExpression();
       if (!(qualifier instanceof PsiNewExpression)) {
         return;
       }
-      final PsiNewExpression newExpression = (PsiNewExpression)qualifier;
+      PsiNewExpression newExpression = (PsiNewExpression)qualifier;
       if (newExpression.getAnonymousClass() != null) {
         return;
       }

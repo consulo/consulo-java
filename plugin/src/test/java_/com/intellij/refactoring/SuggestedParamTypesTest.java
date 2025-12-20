@@ -90,8 +90,8 @@ public abstract class SuggestedParamTypesTest extends LightCodeInsightTestCase {
   private void doTest(String... types) throws Exception {
     configureByFile(BASE_PATH + getTestName(false) + ".java");
 
-    final Editor editor = getEditor();
-    final PsiFile file = getFile();
+    Editor editor = getEditor();
+    PsiFile file = getFile();
     final Project project = getProject();
 
     int startOffset = editor.getSelectionModel().getSelectionStart();
@@ -113,16 +113,16 @@ public abstract class SuggestedParamTypesTest extends LightCodeInsightTestCase {
 
     for (final VariableData data : processor.getInputVariables().getInputVariables()) {
       final PsiExpression[] occurrences = ParameterTablePanel.findVariableOccurrences(elements, data.variable);
-      final TypeSelectorManager manager = new TypeSelectorManagerImpl(project, data.type, occurrences, true) {
+      TypeSelectorManager manager = new TypeSelectorManagerImpl(project, data.type, occurrences, true) {
         @Override
         protected boolean isUsedAfter() {
           return processor.isOutputVariable(data.variable);
         }
       };
-      final JComponent component = manager.getTypeSelector().getComponent();
+      JComponent component = manager.getTypeSelector().getComponent();
       if (types.length > 1) {
         assertTrue("One type suggested", component instanceof JComboBox);
-        final DefaultComboBoxModel model = (DefaultComboBoxModel)((JComboBox)component).getModel();
+        DefaultComboBoxModel model = (DefaultComboBoxModel)((JComboBox)component).getModel();
         assertEquals(types.length, model.getSize());
         for (int i = 0, typesLength = types.length; i < typesLength; i++) {
           String type = types[i];

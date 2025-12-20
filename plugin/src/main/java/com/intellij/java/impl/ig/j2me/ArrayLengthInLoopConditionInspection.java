@@ -49,7 +49,7 @@ public class ArrayLengthInLoopConditionInspection extends BaseInspection {
         @Override
         public void visitForStatement(@Nonnull PsiForStatement statement) {
             super.visitForStatement(statement);
-            final PsiExpression condition = statement.getCondition();
+            PsiExpression condition = statement.getCondition();
             if (condition == null) {
                 return;
             }
@@ -59,7 +59,7 @@ public class ArrayLengthInLoopConditionInspection extends BaseInspection {
         @Override
         public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
             super.visitWhileStatement(statement);
-            final PsiExpression condition = statement.getCondition();
+            PsiExpression condition = statement.getCondition();
             if (condition == null) {
                 return;
             }
@@ -71,7 +71,7 @@ public class ArrayLengthInLoopConditionInspection extends BaseInspection {
             @Nonnull PsiDoWhileStatement statement
         ) {
             super.visitDoWhileStatement(statement);
-            final PsiExpression condition = statement.getCondition();
+            PsiExpression condition = statement.getCondition();
             if (condition == null) {
                 return;
             }
@@ -79,7 +79,7 @@ public class ArrayLengthInLoopConditionInspection extends BaseInspection {
         }
 
         private void checkForMethodCalls(PsiExpression condition) {
-            final PsiElementVisitor visitor =
+            PsiElementVisitor visitor =
                 new JavaRecursiveElementVisitor() {
 
                     @Override
@@ -87,20 +87,20 @@ public class ArrayLengthInLoopConditionInspection extends BaseInspection {
                         @Nonnull PsiReferenceExpression expression
                     ) {
                         super.visitReferenceExpression(expression);
-                        final String name = expression.getReferenceName();
+                        String name = expression.getReferenceName();
                         if (!HardcodedMethodConstants.LENGTH.equals(name)) {
                             return;
                         }
-                        final PsiExpression qualifier =
+                        PsiExpression qualifier =
                             expression.getQualifierExpression();
                         if (qualifier == null) {
                             return;
                         }
-                        final PsiType type = qualifier.getType();
+                        PsiType type = qualifier.getType();
                         if (!(type instanceof PsiArrayType)) {
                             return;
                         }
-                        final PsiElement lengthElement =
+                        PsiElement lengthElement =
                             expression.getReferenceNameElement();
                         if (lengthElement == null) {
                             return;

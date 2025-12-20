@@ -49,9 +49,9 @@ public abstract class AutocreatingMoveDestination implements MoveDestination {
   public abstract PsiDirectory getTargetDirectory(PsiFile source) throws IncorrectOperationException;
 
   @Nullable
-  protected String checkCanCreateInSourceRoot(final VirtualFile targetSourceRoot) {
-    final String targetQName = myPackage.getQualifiedName();
-    final String sourceRootPackage = myFileIndex.getPackageNameByDirectory(targetSourceRoot);
+  protected String checkCanCreateInSourceRoot(VirtualFile targetSourceRoot) {
+    String targetQName = myPackage.getQualifiedName();
+    String sourceRootPackage = myFileIndex.getPackageNameByDirectory(targetSourceRoot);
     if (!RefactoringUtil.canCreateInSourceRoot(sourceRootPackage, targetQName)) {
       return RefactoringLocalize.sourceFolder0HasPackagePrefix1(targetSourceRoot.getPresentableUrl(), sourceRootPackage, targetQName).get();
     }

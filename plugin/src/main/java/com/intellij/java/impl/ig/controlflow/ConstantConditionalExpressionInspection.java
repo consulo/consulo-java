@@ -45,16 +45,16 @@ public class ConstantConditionalExpressionInspection extends BaseInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiConditionalExpression expression = (PsiConditionalExpression) infos[0];
+        PsiConditionalExpression expression = (PsiConditionalExpression) infos[0];
         return InspectionGadgetsLocalize.constantConditionalExpressionProblemDescriptor(calculateReplacementExpression(expression)).get();
     }
 
     static String calculateReplacementExpression(
         PsiConditionalExpression exp
     ) {
-        final PsiExpression thenExpression = exp.getThenExpression();
-        final PsiExpression elseExpression = exp.getElseExpression();
-        final PsiExpression condition = exp.getCondition();
+        PsiExpression thenExpression = exp.getThenExpression();
+        PsiExpression elseExpression = exp.getElseExpression();
+        PsiExpression condition = exp.getCondition();
         assert thenExpression != null;
         assert elseExpression != null;
         if (BoolUtils.isTrue(condition)) {
@@ -80,8 +80,8 @@ public class ConstantConditionalExpressionInspection extends BaseInspection {
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
-            final PsiConditionalExpression expression = (PsiConditionalExpression) descriptor.getPsiElement();
-            final String newExpression = calculateReplacementExpression(expression);
+            PsiConditionalExpression expression = (PsiConditionalExpression) descriptor.getPsiElement();
+            String newExpression = calculateReplacementExpression(expression);
             replaceExpression(expression, newExpression);
         }
     }
@@ -95,12 +95,12 @@ public class ConstantConditionalExpressionInspection extends BaseInspection {
         @Override
         public void visitConditionalExpression(PsiConditionalExpression expression) {
             super.visitConditionalExpression(expression);
-            final PsiExpression condition = expression.getCondition();
-            final PsiExpression thenExpression = expression.getThenExpression();
+            PsiExpression condition = expression.getCondition();
+            PsiExpression thenExpression = expression.getThenExpression();
             if (thenExpression == null) {
                 return;
             }
-            final PsiExpression elseExpression = expression.getElseExpression();
+            PsiExpression elseExpression = expression.getElseExpression();
             if (elseExpression == null) {
                 return;
             }

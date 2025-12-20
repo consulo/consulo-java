@@ -28,38 +28,38 @@ class ConvertJUnit3TestCaseToJUnit4Predicate implements PsiElementPredicate {
 
   @Override
   public boolean satisfiedBy(PsiElement element) {
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!(parent instanceof PsiClass)) {
       return false;
     }
-    final PsiClass aClass = (PsiClass)parent;
-    final PsiElement leftBrace = aClass.getLBrace();
-    final int offsetInParent = element.getStartOffsetInParent();
+    PsiClass aClass = (PsiClass)parent;
+    PsiElement leftBrace = aClass.getLBrace();
+    int offsetInParent = element.getStartOffsetInParent();
     if (leftBrace == null || offsetInParent >= leftBrace.getStartOffsetInParent()) {
       return false;
     }
-    final PsiReferenceList extendsList = aClass.getExtendsList();
+    PsiReferenceList extendsList = aClass.getExtendsList();
     if (extendsList == null) {
       return false;
     }
-    final PsiJavaCodeReferenceElement[] referenceElements = extendsList.getReferenceElements();
+    PsiJavaCodeReferenceElement[] referenceElements = extendsList.getReferenceElements();
     if (referenceElements.length != 1) {
       return false;
     }
-    final PsiJavaCodeReferenceElement referenceElement = referenceElements[0];
-    final PsiElement target = referenceElement.resolve();
+    PsiJavaCodeReferenceElement referenceElement = referenceElements[0];
+    PsiElement target = referenceElement.resolve();
     if (!(target instanceof PsiClass)) {
       return false;
     }
-    final PsiClass targetClass = (PsiClass)target;
-    final String name = targetClass.getQualifiedName();
+    PsiClass targetClass = (PsiClass)target;
+    String name = targetClass.getQualifiedName();
     if (!"junit.framework.TestCase".equals(name)) {
       return false;
     }
-    final Project project = element.getProject();
-    final GlobalSearchScope scope = element.getResolveScope();
-    final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-    final PsiClass testAnnotation = psiFacade.findClass("org.junit.Test", scope);
+    Project project = element.getProject();
+    GlobalSearchScope scope = element.getResolveScope();
+    JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+    PsiClass testAnnotation = psiFacade.findClass("org.junit.Test", scope);
     return testAnnotation != null;
   }
 }

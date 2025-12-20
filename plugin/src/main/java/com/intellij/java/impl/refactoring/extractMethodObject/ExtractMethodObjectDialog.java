@@ -89,14 +89,14 @@ public class ExtractMethodObjectDialog extends DialogWrapper implements Abstract
     public ExtractMethodObjectDialog(
         Project project,
         PsiClass targetClass,
-        final InputVariables inputVariables,
+        InputVariables inputVariables,
         PsiType returnType,
         PsiTypeParameterList typeParameterList,
         PsiType[] exceptions,
         boolean isStatic,
         boolean canBeStatic,
-        final PsiElement[] elementsToExtract,
-        final boolean multipleExitPoints
+        PsiElement[] elementsToExtract,
+        boolean multipleExitPoints
     ) {
         super(project, true);
         myProject = project;
@@ -178,7 +178,7 @@ public class ExtractMethodObjectDialog extends DialogWrapper implements Abstract
     protected void doOKAction() {
         MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         if (myCreateInnerClassRb.isSelected()) {
-            final PsiClass innerClass = myTargetClass.findInnerClassByName(myInnerClassName.getText(), false);
+            PsiClass innerClass = myTargetClass.findInnerClassByName(myInnerClassName.getText(), false);
             if (innerClass != null) {
                 conflicts.putValue(
                     innerClass,
@@ -189,7 +189,7 @@ public class ExtractMethodObjectDialog extends DialogWrapper implements Abstract
             }
         }
         if (conflicts.size() > 0) {
-            final ConflictsDialog conflictsDialog = new ConflictsDialog(myProject, conflicts);
+            ConflictsDialog conflictsDialog = new ConflictsDialog(myProject, conflicts);
             if (!conflictsDialog.showAndGet()) {
                 if (conflictsDialog.isShowConflicts()) {
                     close(CANCEL_EXIT_CODE);
@@ -198,9 +198,9 @@ public class ExtractMethodObjectDialog extends DialogWrapper implements Abstract
             }
         }
 
-        final JCheckBox makeVarargsCb = myCreateInnerClassRb.isSelected() ? myCbMakeVarargs : myCbMakeVarargsAnonymous;
+        JCheckBox makeVarargsCb = myCreateInnerClassRb.isSelected() ? myCbMakeVarargs : myCbMakeVarargsAnonymous;
         if (makeVarargsCb != null && makeVarargsCb.isSelected()) {
-            final VariableData data = myInputVariables[myInputVariables.length - 1];
+            VariableData data = myInputVariables[myInputVariables.length - 1];
             if (data.type instanceof PsiArrayType) {
                 data.type = new PsiEllipsisType(((PsiArrayType) data.type).getComponentType());
             }
@@ -209,7 +209,7 @@ public class ExtractMethodObjectDialog extends DialogWrapper implements Abstract
     }
 
     private void updateVarargsEnabled() {
-        final boolean enabled = myInputVariables.length > 0 && myInputVariables[myInputVariables.length - 1].type instanceof PsiArrayType;
+        boolean enabled = myInputVariables.length > 0 && myInputVariables[myInputVariables.length - 1].type instanceof PsiArrayType;
         if (myCreateInnerClassRb.isSelected()) {
             myCbMakeVarargs.setEnabled(enabled);
         }
@@ -221,7 +221,7 @@ public class ExtractMethodObjectDialog extends DialogWrapper implements Abstract
     private void update() {
         myCbMakeStatic.setEnabled(myCreateInnerClassRb.isSelected() && myCanBeStatic && !myStaticFlag);
         updateSignature();
-        final PsiNameHelper helper = PsiNameHelper.getInstance(myProject);
+        PsiNameHelper helper = PsiNameHelper.getInstance(myProject);
         setOKActionEnabled((myCreateInnerClassRb.isSelected() && helper.isIdentifier(myInnerClassName.getText())) || (!myCreateInnerClassRb.isSelected() && helper.isIdentifier(
             myMethodName.getText()
         )));
@@ -248,8 +248,8 @@ public class ExtractMethodObjectDialog extends DialogWrapper implements Abstract
         mySignatureArea.setEditable(false);
         myCreateInnerClassRb.setSelected(true);
 
-        final ActionListener enableDisableListener = new ActionListener() {
-            public void actionPerformed(final ActionEvent e) {
+        ActionListener enableDisableListener = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
                 enable(myCreateInnerClassRb.isSelected());
             }
         };
@@ -274,8 +274,8 @@ public class ExtractMethodObjectDialog extends DialogWrapper implements Abstract
         });
         myParametersTableContainer.add(createParametersPanel(), BorderLayout.CENTER);
 
-        final ActionListener updateSugnatureListener = new ActionListener() {
-            public void actionPerformed(final ActionEvent e) {
+        ActionListener updateSugnatureListener = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
                 updateSignature();
                 ApplicationIdeFocusManager.getInstance()
                     .getInstanceForProject(myProject)
@@ -302,9 +302,9 @@ public class ExtractMethodObjectDialog extends DialogWrapper implements Abstract
         myCbMakeVarargsAnonymous.setSelected(myWasStatic);
         myCbMakeVarargsAnonymous.addActionListener(updateSugnatureListener);
 
-        final DocumentAdapter nameListener = new DocumentAdapter() {
+        DocumentAdapter nameListener = new DocumentAdapter() {
             @Override
-            public void documentChanged(final DocumentEvent e) {
+            public void documentChanged(DocumentEvent e) {
                 update();
             }
         };
@@ -316,7 +316,7 @@ public class ExtractMethodObjectDialog extends DialogWrapper implements Abstract
         myCreateInnerClassRb.addActionListener(updateSugnatureListener);
         myCreateAnonymousClassWrapperRb.addActionListener(updateSugnatureListener);
 
-        final Enumeration<AbstractButton> visibilities = myVisibilityGroup.getElements();
+        Enumeration<AbstractButton> visibilities = myVisibilityGroup.getElements();
         while (visibilities.hasMoreElements()) {
             visibilities.nextElement().addActionListener(updateSugnatureListener);
         }
@@ -366,9 +366,9 @@ public class ExtractMethodObjectDialog extends DialogWrapper implements Abstract
     }
 
     protected StringBuffer getSignature() {
-        final String INDENT = "    ";
+        String INDENT = "    ";
         @NonNls StringBuffer buffer = new StringBuffer();
-        final String visibilityString = VisibilityUtil.getVisibilityString(getVisibility());
+        String visibilityString = VisibilityUtil.getVisibilityString(getVisibility());
         if (myCreateInnerClassRb.isSelected()) {
             buffer.append(visibilityString);
             if (buffer.length() > 0) {
@@ -402,7 +402,7 @@ public class ExtractMethodObjectDialog extends DialogWrapper implements Abstract
             buffer.append(myMethodName.getText());
             buffer.append("(");
             buffer.append(StringUtil.join(myInputVariables, new Function<VariableData, String>() {
-                public String apply(final VariableData variableData) {
+                public String apply(VariableData variableData) {
                     return variableData.name;
                 }
             }, ", "));
@@ -412,10 +412,10 @@ public class ExtractMethodObjectDialog extends DialogWrapper implements Abstract
         return buffer;
     }
 
-    private void methodSignature(final String INDENT, final StringBuffer buffer) {
+    private void methodSignature(String INDENT, StringBuffer buffer) {
         buffer.append("(");
         int count = 0;
-        final String indent = "    ";
+        String indent = "    ";
         for (int i = 0; i < myInputVariables.length; i++) {
             VariableData data = myInputVariables[i];
             if (data.passAsParameter) {

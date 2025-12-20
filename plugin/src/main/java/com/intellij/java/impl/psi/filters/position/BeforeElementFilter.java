@@ -37,7 +37,7 @@ public class BeforeElementFilter extends PositionElementFilter {
   @Override
   public boolean isAcceptable(Object element, PsiElement scope) {
     if (!(element instanceof PsiElement)) return false;
-    final PsiElement ownerChild = getOwnerChild(scope, (PsiElement) element);
+    PsiElement ownerChild = getOwnerChild(scope, (PsiElement) element);
     if (ownerChild == null) return false;
     PsiElement currentChild = ownerChild.getNextSibling();
     while (currentChild != null) {

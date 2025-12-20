@@ -53,13 +53,13 @@ public class SynchronizedMethodInspection extends BaseInspection {
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final PsiMethod method = (PsiMethod)infos[0];
+    PsiMethod method = (PsiMethod)infos[0];
     return InspectionGadgetsLocalize.synchronizedMethodProblemDescriptor(method.getName()).get();
   }
 
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiMethod method = (PsiMethod)infos[0];
+    PsiMethod method = (PsiMethod)infos[0];
     if (method.getBody() == null) {
       return null;
     }
@@ -73,7 +73,7 @@ public class SynchronizedMethodInspection extends BaseInspection {
 
   @Override
   public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+    MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
     panel.addCheckbox(InspectionGadgetsLocalize.synchronizedMethodIncludeOption().get(), "m_includeNativeMethods");
     panel.addCheckbox(
       InspectionGadgetsLocalize.synchronizedMethodIgnoreSynchronizedSuperOption().get(),
@@ -93,31 +93,31 @@ public class SynchronizedMethodInspection extends BaseInspection {
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement nameElement = descriptor.getPsiElement();
-      final PsiModifierList modifierList = (PsiModifierList)nameElement.getParent();
+      PsiElement nameElement = descriptor.getPsiElement();
+      PsiModifierList modifierList = (PsiModifierList)nameElement.getParent();
       assert modifierList != null;
-      final PsiMethod method = (PsiMethod)modifierList.getParent();
+      PsiMethod method = (PsiMethod)modifierList.getParent();
       modifierList.setModifierProperty(PsiModifier.SYNCHRONIZED, false);
       assert method != null;
-      final PsiCodeBlock body = method.getBody();
+      PsiCodeBlock body = method.getBody();
       if (body == null) {
         return;
       }
-      final String text = body.getText();
-      @NonNls final String replacementText;
+      String text = body.getText();
+      @NonNls String replacementText;
       if (method.hasModifierProperty(PsiModifier.STATIC)) {
-        final PsiClass containingClass = method.getContainingClass();
+        PsiClass containingClass = method.getContainingClass();
         assert containingClass != null;
-        final String className = containingClass.getName();
+        String className = containingClass.getName();
         replacementText = "{ synchronized(" + className + ".class){" + text.substring(1) + '}';
       }
       else {
         replacementText = "{ synchronized(this){" + text.substring(1) + '}';
       }
-      final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
-      final PsiCodeBlock block = elementFactory.createCodeBlockFromText(replacementText, null);
+      PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
+      PsiCodeBlock block = elementFactory.createCodeBlockFromText(replacementText, null);
       body.replace(block);
-      final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+      CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
       codeStyleManager.reformat(method);
     }
   }
@@ -133,8 +133,8 @@ public class SynchronizedMethodInspection extends BaseInspection {
         return;
       }
       if (ignoreSynchronizedSuperMethods) {
-        final PsiMethod[] superMethods = method.findSuperMethods();
-        for (final PsiMethod superMethod : superMethods) {
+        PsiMethod[] superMethods = method.findSuperMethods();
+        for (PsiMethod superMethod : superMethods) {
           if (superMethod.hasModifierProperty(PsiModifier.SYNCHRONIZED)) {
             return;
           }

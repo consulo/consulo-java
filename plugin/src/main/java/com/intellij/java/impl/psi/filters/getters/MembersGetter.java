@@ -51,7 +51,7 @@ public abstract class MembersGetter {
   private final List<PsiMethod> myPlaceMethods = new ArrayList<>();
   protected final PsiElement myPlace;
 
-  protected MembersGetter(StaticMemberProcessor processor, @Nonnull final PsiElement place) {
+  protected MembersGetter(StaticMemberProcessor processor, @Nonnull PsiElement place) {
     myPlace = place;
     processor.processMembersOfRegisteredClasses(PrefixMatcher.ALWAYS_TRUE, (member, psiClass) -> myImportedStatically.add(member));
 
@@ -84,17 +84,17 @@ public abstract class MembersGetter {
     return true;
   }
 
-  public void processMembers(final Consumer<LookupElement> results, @Nullable final PsiClass where, final boolean acceptMethods, final boolean searchInheritors) {
+  public void processMembers(Consumer<LookupElement> results, @Nullable PsiClass where, boolean acceptMethods, boolean searchInheritors) {
     if (where == null || isPrimitiveClass(where)) {
       return;
     }
 
-    final boolean searchFactoryMethods = searchInheritors && !CommonClassNames.JAVA_LANG_OBJECT.equals(where.getQualifiedName()) && !isPrimitiveClass(where);
+    boolean searchFactoryMethods = searchInheritors && !CommonClassNames.JAVA_LANG_OBJECT.equals(where.getQualifiedName()) && !isPrimitiveClass(where);
 
-    final Project project = myPlace.getProject();
-    final GlobalSearchScope scope = myPlace.getResolveScope();
+    Project project = myPlace.getProject();
+    GlobalSearchScope scope = myPlace.getResolveScope();
 
-    final PsiClassType baseType = JavaPsiFacade.getElementFactory(project).createType(where);
+    PsiClassType baseType = JavaPsiFacade.getElementFactory(project).createType(where);
     Consumer<PsiType> consumer = psiType ->
     {
       PsiClass psiClass = PsiUtil.resolveClassInType(psiType);
@@ -103,7 +103,7 @@ public abstract class MembersGetter {
       }
       psiClass = CompletionUtilCore.getOriginalOrSelf(psiClass);
       if (mayProcessMembers(psiClass)) {
-        final FilterScopeProcessor<PsiElement> declProcessor = new FilterScopeProcessor<>(TrueFilter.INSTANCE);
+        FilterScopeProcessor<PsiElement> declProcessor = new FilterScopeProcessor<>(TrueFilter.INSTANCE);
         psiClass.processDeclarations(declProcessor, ResolveState.initial(), null, myPlace);
         doProcessMembers(acceptMethods, results, psiType == baseType, declProcessor.getResults());
 
@@ -129,9 +129,9 @@ public abstract class MembersGetter {
   }
 
   private void doProcessMembers(boolean acceptMethods, Consumer<LookupElement> results, boolean isExpectedTypeMember, Collection<? extends PsiElement> declarations) {
-    for (final PsiElement result : declarations) {
+    for (PsiElement result : declarations) {
       if (result instanceof PsiMember && !(result instanceof PsiClass)) {
-        final PsiMember member = (PsiMember) result;
+        PsiMember member = (PsiMember) result;
         if (!member.hasModifierProperty(PsiModifier.STATIC)) {
           continue;
         }
@@ -149,7 +149,7 @@ public abstract class MembersGetter {
           continue;
         }
 
-        final LookupElement item = result instanceof PsiMethod ? createMethodElement((PsiMethod) result) : createFieldElement((PsiField) result);
+        LookupElement item = result instanceof PsiMethod ? createMethodElement((PsiMethod) result) : createFieldElement((PsiField) result);
         if (item != null) {
           item.putUserData(EXPECTED_TYPE_MEMBER, isExpectedTypeMember);
           results.accept(AutoCompletionPolicy.NEVER_AUTOCOMPLETE.applyPolicy(item));

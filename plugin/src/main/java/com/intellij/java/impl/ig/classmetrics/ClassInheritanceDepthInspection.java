@@ -55,7 +55,7 @@ public class ClassInheritanceDepthInspection extends ClassMetricInspection {
 
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final Integer count = (Integer) infos[0];
+        Integer count = (Integer) infos[0];
         return InspectionGadgetsLocalize.classTooDeepProblemDescriptor(count).get();
     }
 
@@ -74,7 +74,7 @@ public class ClassInheritanceDepthInspection extends ClassMetricInspection {
             if (aClass instanceof PsiTypeParameter) {
                 return;
             }
-            final int inheritanceDepth =
+            int inheritanceDepth =
                 getInheritanceDepth(aClass, new HashSet<PsiClass>());
             if (inheritanceDepth <= getLimit()) {
                 return;
@@ -87,7 +87,7 @@ public class ClassInheritanceDepthInspection extends ClassMetricInspection {
                 return 0;
             }
             visited.add(aClass);
-            final PsiClass superClass = aClass.getSuperClass();
+            PsiClass superClass = aClass.getSuperClass();
             if (superClass == null) {
                 return 0;
             }

@@ -58,19 +58,19 @@ public class BigDecimalEqualsInspection extends BaseInspection {
 
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiIdentifier name = (PsiIdentifier)descriptor.getPsiElement();
-      final PsiReferenceExpression expression = (PsiReferenceExpression)name.getParent();
+      PsiIdentifier name = (PsiIdentifier)descriptor.getPsiElement();
+      PsiReferenceExpression expression = (PsiReferenceExpression)name.getParent();
       assert expression != null;
-      final PsiMethodCallExpression call = (PsiMethodCallExpression)expression.getParent();
-      final PsiExpression qualifier = expression.getQualifierExpression();
+      PsiMethodCallExpression call = (PsiMethodCallExpression)expression.getParent();
+      PsiExpression qualifier = expression.getQualifierExpression();
       if (qualifier == null) {
         return;
       }
-      final String qualifierText = qualifier.getText();
+      String qualifierText = qualifier.getText();
       assert call != null;
-      final PsiExpressionList argumentList = call.getArgumentList();
-      final PsiExpression[] args = argumentList.getExpressions();
-      final String argText = args[0].getText();
+      PsiExpressionList argumentList = call.getArgumentList();
+      PsiExpression[] args = argumentList.getExpressions();
+      String argText = args[0].getText();
       replaceExpression(call, qualifierText + ".compareTo(" + argText + ")==0");
     }
   }
@@ -88,21 +88,21 @@ public class BigDecimalEqualsInspection extends BaseInspection {
       if (!MethodCallUtils.isEqualsCall(expression)) {
         return;
       }
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
+      PsiReferenceExpression methodExpression = expression.getMethodExpression();
+      PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpression[] arguments = argumentList.getExpressions();
       if (arguments.length == 0) {
         return;
       }
-      final PsiExpression arg = arguments[0];
+      PsiExpression arg = arguments[0];
       if (!ExpressionUtils.hasType(arg, "java.math.BigDecimal")) {
         return;
       }
-      final PsiExpression qualifier = methodExpression.getQualifierExpression();
+      PsiExpression qualifier = methodExpression.getQualifierExpression();
       if (!ExpressionUtils.hasType(qualifier, "java.math.BigDecimal")) {
         return;
       }
-      final PsiElement context = expression.getParent();
+      PsiElement context = expression.getParent();
       if (context instanceof PsiExpressionStatement) {
         //cheesy, but necessary, because otherwise the quickfix will
         // produce uncompilable code (out of merely incorrect code).

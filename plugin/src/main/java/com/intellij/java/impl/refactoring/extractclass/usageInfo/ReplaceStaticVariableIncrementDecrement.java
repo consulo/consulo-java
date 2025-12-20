@@ -30,7 +30,7 @@ public class ReplaceStaticVariableIncrementDecrement extends FixableUsageInfo {
   public ReplaceStaticVariableIncrementDecrement(PsiExpression reference, String originalClassName) {
     super(reference);
     this.originalClassName = originalClassName;
-    final PsiPrefixExpression prefixExpr = PsiTreeUtil.getParentOfType(reference, PsiPrefixExpression.class);
+    PsiPrefixExpression prefixExpr = PsiTreeUtil.getParentOfType(reference, PsiPrefixExpression.class);
     if (prefixExpr != null) {
       this.reference = prefixExpr;
     }

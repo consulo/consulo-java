@@ -36,7 +36,7 @@ import jakarta.annotation.Nullable;
 public class ThrowsUsageTargetProvider implements UsageTargetProvider {
   @Override
   @Nullable
-  public UsageTarget[] getTargets(Editor editor, final PsiFile file) {
+  public UsageTarget[] getTargets(Editor editor, PsiFile file) {
     if (editor == null || file == null) return null;
 
     PsiElement element = file.findElementAt(TargetElementUtil.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset()));
@@ -46,7 +46,7 @@ public class ThrowsUsageTargetProvider implements UsageTargetProvider {
       return new UsageTarget[]{new PsiElement2UsageTargetAdapter(element)};
     }
 
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (parent instanceof PsiThrowStatement) {
       return new UsageTarget[]{new PsiElement2UsageTargetAdapter(parent)};
     }

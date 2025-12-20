@@ -71,15 +71,15 @@ public class MoveClassToModuleFix implements SyntheticIntentionAction {
         myReferenceName = referenceName;
         myCurrentModule = currentModule;
         mySourceRoot = root;
-        final Project project = psiElement.getProject();
-        final PsiClass[] classes = PsiShortNamesCache.getInstance(project).getClassesByName(referenceName, GlobalSearchScope.allScope(project));
-        final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-        final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
-        for (final PsiClass aClass : classes) {
+        Project project = psiElement.getProject();
+        PsiClass[] classes = PsiShortNamesCache.getInstance(project).getClassesByName(referenceName, GlobalSearchScope.allScope(project));
+        JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
+        ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
+        for (PsiClass aClass : classes) {
             if (!facade.getResolveHelper().isAccessible(aClass, psiElement, aClass)) {
                 continue;
             }
-            final PsiFile psiFile = aClass.getContainingFile();
+            PsiFile psiFile = aClass.getContainingFile();
             if (!(psiFile instanceof PsiJavaFile)) {
                 continue;
             }
@@ -90,7 +90,7 @@ public class MoveClassToModuleFix implements SyntheticIntentionAction {
             if (virtualFile == null) {
                 continue;
             }
-            final Module classModule = fileIndex.getModuleForFile(virtualFile);
+            Module classModule = fileIndex.getModuleForFile(virtualFile);
             if (classModule != null && classModule != currentModule && !ModuleRootManager.getInstance(currentModule).isDependsOn(classModule)) {
                 myModules.put(aClass, classModule);
             }
@@ -101,7 +101,7 @@ public class MoveClassToModuleFix implements SyntheticIntentionAction {
     @Nonnull
     public LocalizeValue getText() {
         if (myModules.size() == 1) {
-            final PsiClass aClass = myModules.keySet().iterator().next();
+            PsiClass aClass = myModules.keySet().iterator().next();
             return LocalizeValue.localizeTODO("Move '" + aClass.getQualifiedName() + "' from module '" + myModules.get(aClass).getName() +
                 "' to '" + myCurrentModule.getName() + "'");
         }
@@ -109,7 +109,7 @@ public class MoveClassToModuleFix implements SyntheticIntentionAction {
     }
 
     @Override
-    public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
+    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
         return !myModules.isEmpty();
     }
 
@@ -142,7 +142,7 @@ public class MoveClassToModuleFix implements SyntheticIntentionAction {
                 .setItemChoosenCallback(new Runnable() {
                     @Override
                     public void run() {
-                        final Object value = list.getSelectedValue();
+                        Object value = list.getSelectedValue();
                         if (value instanceof PsiClass) {
                             moveClass(project, editor, file, (PsiClass) value);
                         }
@@ -157,7 +157,7 @@ public class MoveClassToModuleFix implements SyntheticIntentionAction {
         RefactoringActionHandler moveHandler = RefactoringActionHandlerFactory.getInstance().createMoveHandler();
         DataManager dataManager = DataManager.getInstance();
         DataContext dataContext = dataManager.getDataContext();
-        final String fqName = aClass.getQualifiedName();
+        String fqName = aClass.getQualifiedName();
         LOG.assertTrue(fqName != null);
         PsiDirectory directory = PackageUtil
             .findOrCreateDirectoryForPackage(myCurrentModule, StringUtil.getPackageName(fqName), mySourceRoot, true);
@@ -167,7 +167,7 @@ public class MoveClassToModuleFix implements SyntheticIntentionAction {
         PsiReference reference = file.findReferenceAt(editor.getCaretModel().getOffset());
         PsiClass newClass = JavaPsiFacade.getInstance(project).findClass(fqName, GlobalSearchScope.moduleScope(myCurrentModule));
         if (reference != null && newClass != null) {
-            final QuestionAction action = new AddImportAction(project, reference, editor, newClass);
+            QuestionAction action = new AddImportAction(project, reference, editor, newClass);
             action.execute();
         }
     }
@@ -177,11 +177,11 @@ public class MoveClassToModuleFix implements SyntheticIntentionAction {
         return false;
     }
 
-    public static void registerFixes(Consumer<IntentionAction> consumer, final PsiJavaCodeReferenceElement reference) {
-        final PsiElement psiElement = reference.getElement();
-        @NonNls final String referenceName = reference.getRangeInElement().substring(psiElement.getText());
+    public static void registerFixes(Consumer<IntentionAction> consumer, PsiJavaCodeReferenceElement reference) {
+        PsiElement psiElement = reference.getElement();
+        @NonNls String referenceName = reference.getRangeInElement().substring(psiElement.getText());
         Project project = psiElement.getProject();
-        final PsiFile containingFile = psiElement.getContainingFile();
+        PsiFile containingFile = psiElement.getContainingFile();
         if (containingFile == null) {
             return;
         }
@@ -195,8 +195,8 @@ public class MoveClassToModuleFix implements SyntheticIntentionAction {
             return;
         }
 
-        final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
-        final Module currentModule = fileIndex.getModuleForFile(classVFile);
+        ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
+        Module currentModule = fileIndex.getModuleForFile(classVFile);
         if (currentModule == null) {
             return;
         }
@@ -204,7 +204,7 @@ public class MoveClassToModuleFix implements SyntheticIntentionAction {
         if (sourceRoots.length == 0) {
             return;
         }
-        final PsiDirectory sourceDirectory = PsiManager.getInstance(project).findDirectory(sourceRoots[0]);
+        PsiDirectory sourceDirectory = PsiManager.getInstance(project).findDirectory(sourceRoots[0]);
         if (sourceDirectory == null) {
             return;
         }
@@ -213,7 +213,7 @@ public class MoveClassToModuleFix implements SyntheticIntentionAction {
         if (vsourceRoot == null) {
             return;
         }
-        final PsiDirectory sourceRoot = PsiManager.getInstance(project).findDirectory(vsourceRoot);
+        PsiDirectory sourceRoot = PsiManager.getInstance(project).findDirectory(vsourceRoot);
         if (sourceRoot == null) {
             return;
         }

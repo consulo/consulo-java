@@ -67,25 +67,25 @@ public class MethodOverridesStaticMethodInspection extends BaseInspection {
 
     @Override
     public void visitMethod(@Nonnull PsiMethod method) {
-      final PsiClass aClass = method.getContainingClass();
+      PsiClass aClass = method.getContainingClass();
       if (aClass == null) {
         return;
       }
       if (method.getNameIdentifier() == null) {
         return;
       }
-      final String methodName = method.getName();
-      final MethodSignature signature = method.getSignature(PsiSubstitutor.EMPTY);
+      String methodName = method.getName();
+      MethodSignature signature = method.getSignature(PsiSubstitutor.EMPTY);
       PsiClass ancestorClass = aClass.getSuperClass();
-      final Set<PsiClass> visitedClasses = new HashSet<PsiClass>();
+      Set<PsiClass> visitedClasses = new HashSet<PsiClass>();
       while (ancestorClass != null) {
         if (!visitedClasses.add(ancestorClass)) {
           return;
         }
-        final PsiMethod[] methods =
+        PsiMethod[] methods =
           ancestorClass.findMethodsByName(methodName, false);
-        for (final PsiMethod testMethod : methods) {
-          final MethodSignature testSignature = testMethod.getSignature(PsiSubstitutor.EMPTY);
+        for (PsiMethod testMethod : methods) {
+          MethodSignature testSignature = testMethod.getSignature(PsiSubstitutor.EMPTY);
           if (!signature.equals(testSignature)) {
             continue;
           }

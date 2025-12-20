@@ -56,23 +56,23 @@ public class UnqualifiedMethodAccessInspection extends BaseInspection {
     @Override
     public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
       super.visitReferenceExpression(expression);
-      final PsiExpression qualifierExpression = expression.getQualifierExpression();
+      PsiExpression qualifierExpression = expression.getQualifierExpression();
       if (qualifierExpression != null) {
         return;
       }
-      final PsiReferenceParameterList parameterList = expression.getParameterList();
+      PsiReferenceParameterList parameterList = expression.getParameterList();
       if (parameterList == null) {
         return;
       }
-      final PsiElement element = expression.resolve();
+      PsiElement element = expression.resolve();
       if (!(element instanceof PsiMethod)) {
         return;
       }
-      final PsiMethod method = (PsiMethod)element;
+      PsiMethod method = (PsiMethod)element;
       if (method.isConstructor() || method.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }
-      final PsiClass containingClass = method.getContainingClass();
+      PsiClass containingClass = method.getContainingClass();
       if (containingClass instanceof PsiAnonymousClass) {
         return;
       }

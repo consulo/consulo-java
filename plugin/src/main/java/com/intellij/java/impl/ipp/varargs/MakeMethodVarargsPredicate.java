@@ -30,20 +30,20 @@ class MakeMethodVarargsPredicate implements PsiElementPredicate {
     if (!PsiUtil.isLanguageLevel5OrHigher(element)) {
       return false;
     }
-    final PsiParameterList parameterList = (PsiParameterList)element;
+    PsiParameterList parameterList = (PsiParameterList)element;
     if (!(element.getParent() instanceof PsiMethod)) {
       return false;
     }
     if (parameterList.getParametersCount() == 0) {
       return false;
     }
-    final PsiParameter[] parameters = parameterList.getParameters();
-    final PsiParameter lastParameter =
+    PsiParameter[] parameters = parameterList.getParameters();
+    PsiParameter lastParameter =
       parameters[parameters.length - 1];
     if (lastParameter.isVarArgs()) {
       return false;
     }
-    final PsiType type = lastParameter.getType();
+    PsiType type = lastParameter.getType();
     return type instanceof PsiArrayType;
   }
 }

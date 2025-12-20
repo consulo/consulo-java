@@ -52,9 +52,9 @@ public class NonSerializableWithSerializationMethodsInspection extends BaseInspe
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final boolean hasReadObject = (Boolean) infos[0];
-        final boolean hasWriteObject = (Boolean) infos[1];
-        final PsiClass aClass = (PsiClass) infos[2];
+        boolean hasReadObject = (Boolean) infos[0];
+        boolean hasWriteObject = (Boolean) infos[1];
+        PsiClass aClass = (PsiClass) infos[2];
         if (aClass instanceof PsiAnonymousClass) {
             if (hasReadObject && hasWriteObject) {
                 return InspectionGadgetsLocalize.nonSerializableAnonymousWithReadwriteobjectProblemDescriptorBoth().get();
@@ -91,8 +91,8 @@ public class NonSerializableWithSerializationMethodsInspection extends BaseInspe
             if (aClass.isInterface() || aClass.isAnnotationType()) {
                 return;
             }
-            final boolean hasReadObject = SerializationUtils.hasReadObject(aClass);
-            final boolean hasWriteObject = SerializationUtils.hasWriteObject(aClass);
+            boolean hasReadObject = SerializationUtils.hasReadObject(aClass);
+            boolean hasWriteObject = SerializationUtils.hasWriteObject(aClass);
             if (!hasWriteObject && !hasReadObject) {
                 return;
             }

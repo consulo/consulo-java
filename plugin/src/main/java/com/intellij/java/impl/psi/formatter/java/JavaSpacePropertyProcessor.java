@@ -275,7 +275,7 @@ public final class JavaSpacePropertyProcessor extends JavaElementVisitor {
 
   private void createSpacingForEnumBraces(boolean isLbrace) {
     ASTNode node = myParent.getNode().findChildByType(JavaTokenType.LBRACE);
-    final int startOffset;
+    int startOffset;
     if (node == null) {
       startOffset = myParent.getTextOffset();
     }

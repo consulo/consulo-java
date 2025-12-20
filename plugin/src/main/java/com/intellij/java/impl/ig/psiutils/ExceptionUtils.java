@@ -42,7 +42,7 @@ public class ExceptionUtils {
 
   @Nonnull
   public static Set<PsiClassType> calculateExceptionsThrown(@Nonnull PsiElement element) {
-    final ExceptionsThrownVisitor visitor = new ExceptionsThrownVisitor();
+    ExceptionsThrownVisitor visitor = new ExceptionsThrownVisitor();
     element.accept(visitor);
     return visitor.getExceptionsThrown();
   }
@@ -51,8 +51,8 @@ public class ExceptionUtils {
     if (!(exceptionType instanceof PsiClassType)) {
       return false;
     }
-    final PsiClassType classType = (PsiClassType) exceptionType;
-    final String className = classType.getCanonicalText();
+    PsiClassType classType = (PsiClassType) exceptionType;
+    String className = classType.getCanonicalText();
     return s_genericExceptionTypes.contains(className);
   }
 
@@ -80,16 +80,16 @@ public class ExceptionUtils {
     } else if (statement instanceof PsiDoWhileStatement) {
       return doWhileThrowsException((PsiDoWhileStatement) statement);
     } else if (statement instanceof PsiSynchronizedStatement) {
-      final PsiSynchronizedStatement synchronizedStatement = (PsiSynchronizedStatement) statement;
-      final PsiCodeBlock body = synchronizedStatement.getBody();
+      PsiSynchronizedStatement synchronizedStatement = (PsiSynchronizedStatement) statement;
+      PsiCodeBlock body = synchronizedStatement.getBody();
       return blockThrowsException(body);
     } else if (statement instanceof PsiBlockStatement) {
-      final PsiBlockStatement blockStatement = (PsiBlockStatement) statement;
-      final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
+      PsiBlockStatement blockStatement = (PsiBlockStatement) statement;
+      PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
       return blockThrowsException(codeBlock);
     } else if (statement instanceof PsiLabeledStatement) {
-      final PsiLabeledStatement labeledStatement = (PsiLabeledStatement) statement;
-      final PsiStatement statementLabeled = labeledStatement.getStatement();
+      PsiLabeledStatement labeledStatement = (PsiLabeledStatement) statement;
+      PsiStatement statementLabeled = labeledStatement.getStatement();
       return statementThrowsException(statementLabeled);
     } else if (statement instanceof PsiIfStatement) {
       return ifStatementThrowsException((PsiIfStatement) statement);
@@ -107,7 +107,7 @@ public class ExceptionUtils {
     if (block == null) {
       return false;
     }
-    final PsiStatement[] statements = block.getStatements();
+    PsiStatement[] statements = block.getStatements();
     for (PsiStatement statement : statements) {
       if (statementThrowsException(statement)) {
         return true;
@@ -117,14 +117,14 @@ public class ExceptionUtils {
   }
 
   private static boolean tryStatementThrowsException(PsiTryStatement tryStatement) {
-    final PsiCodeBlock[] catchBlocks = tryStatement.getCatchBlocks();
+    PsiCodeBlock[] catchBlocks = tryStatement.getCatchBlocks();
     if (catchBlocks.length == 0) {
-      final PsiCodeBlock tryBlock = tryStatement.getTryBlock();
+      PsiCodeBlock tryBlock = tryStatement.getTryBlock();
       if (blockThrowsException(tryBlock)) {
         return true;
       }
     }
-    final PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
+    PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
     return blockThrowsException(finallyBlock);
   }
 
@@ -137,9 +137,9 @@ public class ExceptionUtils {
   }
 
   private static boolean whileStatementThrowsException(PsiWhileStatement whileStatement) {
-    final PsiExpression condition = whileStatement.getCondition();
+    PsiExpression condition = whileStatement.getCondition();
     if (BoolUtils.isTrue(condition)) {
-      final PsiStatement body = whileStatement.getBody();
+      PsiStatement body = whileStatement.getBody();
       if (statementThrowsException(body)) {
         return true;
       }
@@ -148,17 +148,17 @@ public class ExceptionUtils {
   }
 
   private static boolean forStatementThrowsException(PsiForStatement forStatement) {
-    final PsiStatement initialization = forStatement.getInitialization();
+    PsiStatement initialization = forStatement.getInitialization();
     if (statementThrowsException(initialization)) {
       return true;
     }
-    final PsiExpression test = forStatement.getCondition();
+    PsiExpression test = forStatement.getCondition();
     if (BoolUtils.isTrue(test)) {
-      final PsiStatement body = forStatement.getBody();
+      PsiStatement body = forStatement.getBody();
       if (statementThrowsException(body)) {
         return true;
       }
-      final PsiStatement update = forStatement.getUpdate();
+      PsiStatement update = forStatement.getUpdate();
       if (statementThrowsException(update)) {
         return true;
       }
@@ -173,25 +173,25 @@ public class ExceptionUtils {
     @Override
     public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       collectExceptionsThrown(method, m_exceptionsThrown);
     }
 
     @Override
     public void visitNewExpression(@Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       collectExceptionsThrown(method, m_exceptionsThrown);
     }
 
     @Override
     public void visitThrowStatement(PsiThrowStatement statement) {
       super.visitThrowStatement(statement);
-      final PsiExpression exception = statement.getException();
+      PsiExpression exception = statement.getException();
       if (exception == null) {
         return;
       }
-      final PsiType type = exception.getType();
+      PsiType type = exception.getType();
       if (!(type instanceof PsiClassType)) {
         return;
       }
@@ -200,12 +200,12 @@ public class ExceptionUtils {
 
     @Override
     public void visitTryStatement(@Nonnull PsiTryStatement statement) {
-      final Set<PsiType> exceptionsHandled = getExceptionTypesHandled(statement);
-      final PsiResourceList resourceList = statement.getResourceList();
+      Set<PsiType> exceptionsHandled = getExceptionTypesHandled(statement);
+      PsiResourceList resourceList = statement.getResourceList();
       if (resourceList != null) {
-        final List<PsiResourceVariable> resourceVariables = resourceList.getResourceVariables();
+        List<PsiResourceVariable> resourceVariables = resourceList.getResourceVariables();
         for (PsiResourceVariable resourceVariable : resourceVariables) {
-          final Set<PsiClassType> resourceExceptions = calculateExceptionsThrown(resourceVariable);
+          Set<PsiClassType> resourceExceptions = calculateExceptionsThrown(resourceVariable);
           collectExceptionsThrown(PsiUtil.getResourceCloserMethod(resourceVariable), resourceExceptions);
           for (PsiClassType resourceException : resourceExceptions) {
             if (!isExceptionHandled(exceptionsHandled, resourceException)) {
@@ -214,24 +214,24 @@ public class ExceptionUtils {
           }
         }
       }
-      final PsiCodeBlock tryBlock = statement.getTryBlock();
+      PsiCodeBlock tryBlock = statement.getTryBlock();
       if (tryBlock != null) {
-        final Set<PsiClassType> tryExceptions = calculateExceptionsThrown(tryBlock);
+        Set<PsiClassType> tryExceptions = calculateExceptionsThrown(tryBlock);
         for (PsiClassType tryException : tryExceptions) {
           if (!isExceptionHandled(exceptionsHandled, tryException)) {
             m_exceptionsThrown.add(tryException);
           }
         }
       }
-      final PsiCodeBlock finallyBlock = statement.getFinallyBlock();
+      PsiCodeBlock finallyBlock = statement.getFinallyBlock();
       if (finallyBlock != null) {
-        final Set<PsiClassType> finallyExceptions = calculateExceptionsThrown(finallyBlock);
+        Set<PsiClassType> finallyExceptions = calculateExceptionsThrown(finallyBlock);
         m_exceptionsThrown.addAll(finallyExceptions);
       }
 
-      final PsiCodeBlock[] catchBlocks = statement.getCatchBlocks();
+      PsiCodeBlock[] catchBlocks = statement.getCatchBlocks();
       for (PsiCodeBlock catchBlock : catchBlocks) {
-        final Set<PsiClassType> catchExceptions = calculateExceptionsThrown(catchBlock);
+        Set<PsiClassType> catchExceptions = calculateExceptionsThrown(catchBlock);
         m_exceptionsThrown.addAll(catchExceptions);
       }
     }
@@ -240,10 +240,10 @@ public class ExceptionUtils {
       if (method == null) {
         return;
       }
-      final PsiElementFactory factory = JavaPsiFacade.getElementFactory(method.getProject());
-      final PsiJavaCodeReferenceElement[] referenceElements = method.getThrowsList().getReferenceElements();
+      PsiElementFactory factory = JavaPsiFacade.getElementFactory(method.getProject());
+      PsiJavaCodeReferenceElement[] referenceElements = method.getThrowsList().getReferenceElements();
       for (PsiJavaCodeReferenceElement referenceElement : referenceElements) {
-        final PsiClass exceptionClass = (PsiClass) referenceElement.resolve();
+        PsiClass exceptionClass = (PsiClass) referenceElement.resolve();
         if (exceptionClass != null) {
           out.add(factory.createType(exceptionClass));
         }
@@ -260,10 +260,10 @@ public class ExceptionUtils {
     }
 
     private static Set<PsiType> getExceptionTypesHandled(@Nonnull PsiTryStatement statement) {
-      final Set<PsiType> out = new HashSet<PsiType>(5);
-      final PsiParameter[] parameters = statement.getCatchBlockParameters();
+      Set<PsiType> out = new HashSet<PsiType>(5);
+      PsiParameter[] parameters = statement.getCatchBlockParameters();
       for (PsiParameter parameter : parameters) {
-        final PsiType type = parameter.getType();
+        PsiType type = parameter.getType();
         out.add(type);
       }
       return out;

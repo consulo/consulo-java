@@ -53,17 +53,17 @@ public class MemberInfoStorage extends AbstractMemberInfoStorage<PsiMember, PsiC
 
   @Override
   protected void buildSubClassesMap(PsiClass aClass) {
-    final PsiReferenceList extendsList = aClass.getExtendsList();
+    PsiReferenceList extendsList = aClass.getExtendsList();
     if (extendsList != null) {
       buildSubClassesMapForList(extendsList.getReferencedTypes(), aClass);
     }
-    final PsiReferenceList implementsList = aClass.getImplementsList();
+    PsiReferenceList implementsList = aClass.getImplementsList();
     if (implementsList != null) {
       buildSubClassesMapForList(implementsList.getReferencedTypes(), aClass);
     }
   }
 
-  private void buildSubClassesMapForList(final PsiClassType[] classesList, PsiClass aClass) {
+  private void buildSubClassesMapForList(PsiClassType[] classesList, PsiClass aClass) {
     for (int i = 0; i < classesList.length; i++) {
       PsiClassType element = classesList[i];
       PsiClass resolved = element.resolve();

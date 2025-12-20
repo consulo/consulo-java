@@ -56,7 +56,7 @@ public class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool 
     }
 
     @Override
-    public RefGraphAnnotator getAnnotator(@Nonnull final RefManager refManager, @Nonnull Object state) {
+    public RefGraphAnnotator getAnnotator(@Nonnull RefManager refManager, @Nonnull Object state) {
         return new UnnecessaryModuleDependencyAnnotator(refManager);
     }
 
@@ -65,18 +65,18 @@ public class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool 
         @Nonnull RefEntity refEntity,
         @Nonnull AnalysisScope scope,
         @Nonnull InspectionManager manager,
-        @Nonnull final GlobalInspectionContext globalContext,
+        @Nonnull GlobalInspectionContext globalContext,
         @Nonnull Object state
     ) {
         if (refEntity instanceof RefModule) {
-            final RefModule refModule = (RefModule) refEntity;
-            final Module module = refModule.getModule();
-            final Module[] declaredDependencies = ModuleRootManager.getInstance(module).getDependencies();
+            RefModule refModule = (RefModule) refEntity;
+            Module module = refModule.getModule();
+            Module[] declaredDependencies = ModuleRootManager.getInstance(module).getDependencies();
             List<CommonProblemDescriptor> descriptors = new ArrayList<>();
-            final Set<Module> modules = refModule.getUserData(UnnecessaryModuleDependencyAnnotator.DEPENDENCIES);
-            for (final Module dependency : declaredDependencies) {
+            Set<Module> modules = refModule.getUserData(UnnecessaryModuleDependencyAnnotator.DEPENDENCIES);
+            for (Module dependency : declaredDependencies) {
                 if (modules == null || !modules.contains(dependency)) {
-                    final CommonProblemDescriptor problemDescriptor;
+                    CommonProblemDescriptor problemDescriptor;
                     if (scope.containsModule(dependency)) { //external references are rejected -> annotator doesn't provide any information on them -> false positives
                         problemDescriptor = manager.createProblemDescriptor(
                             InspectionLocalize.unnecessaryModuleDependencyProblemDescriptor(module.getName(), dependency.getName()).get(),
@@ -136,10 +136,10 @@ public class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool 
         @Override
         @RequiredWriteAction
         public void applyFix(@Nonnull Project project, @Nonnull CommonProblemDescriptor descriptor) {
-            final ModifiableRootModel model = ModuleRootManager.getInstance(myModule).getModifiableModel();
+            ModifiableRootModel model = ModuleRootManager.getInstance(myModule).getModifiableModel();
             for (OrderEntry entry : model.getOrderEntries()) {
                 if (entry instanceof ModuleOrderEntry) {
-                    final Module mDependency = ((ModuleOrderEntry) entry).getModule();
+                    Module mDependency = ((ModuleOrderEntry) entry).getModule();
                     if (Comparing.equal(mDependency, myDependency)) {
                         model.removeOrderEntry(entry);
                         break;

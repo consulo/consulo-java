@@ -74,7 +74,7 @@ public class ParameterOfConcreteClassInspection extends BaseInspection {
             if (parameter.getDeclarationScope() instanceof PsiCatchSection) {
                 return;
             }
-            final PsiTypeElement typeElement = parameter.getTypeElement();
+            PsiTypeElement typeElement = parameter.getTypeElement();
             if (typeElement == null) {
                 return;
             }
@@ -84,7 +84,7 @@ public class ParameterOfConcreteClassInspection extends BaseInspection {
             )) {
                 return;
             }
-            final String variableName = parameter.getName();
+            String variableName = parameter.getName();
             registerError(typeElement, variableName);
         }
     }

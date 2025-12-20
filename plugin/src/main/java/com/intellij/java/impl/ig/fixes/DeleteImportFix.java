@@ -32,7 +32,7 @@ public class DeleteImportFix extends InspectionGadgetsFix {
 
   public void doFix(Project project, ProblemDescriptor descriptor)
     throws IncorrectOperationException {
-    final PsiElement importStatement = descriptor.getPsiElement();
+    PsiElement importStatement = descriptor.getPsiElement();
     deleteElement(importStatement);
   }
 }

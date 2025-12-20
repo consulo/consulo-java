@@ -39,7 +39,7 @@ public class SuperTypesGrouper implements Grouper {
   public static final String ID = "SHOW_INTERFACES";
 
   @Nonnull
-  public Collection<Group> group(final Object parent, Collection<TreeElement> children) {
+  public Collection<Group> group(Object parent, Collection<TreeElement> children) {
     if (isParentGrouped((AbstractTreeNode) parent)) return Collections.emptyList();
     Map<Group, SuperTypeGroup> groups = new HashMap<>();
 
@@ -48,7 +48,7 @@ public class SuperTypesGrouper implements Grouper {
         PsiMethod method = element.getMethod();
         if (element.isInherited()) {
           PsiClass groupClass = method.getContainingClass();
-          final SuperTypeGroup group = getOrCreateGroup(groupClass, SuperTypeGroup.OwnershipType.INHERITS, groups);
+          SuperTypeGroup group = getOrCreateGroup(groupClass, SuperTypeGroup.OwnershipType.INHERITS, groups);
           group.addMethod(child);
         } else {
           PsiMethod[] superMethods = method.findSuperMethods();
@@ -68,7 +68,7 @@ public class SuperTypesGrouper implements Grouper {
             method.putUserData(SUPER_METHOD_KEY, new WeakReference<>(superMethod));
             PsiClass groupClass = superMethod.getContainingClass();
             boolean overrides = methodOverridesSuper(method, superMethod);
-            final SuperTypeGroup.OwnershipType ownershipType =
+            SuperTypeGroup.OwnershipType ownershipType =
                 overrides ? SuperTypeGroup.OwnershipType.OVERRIDES : SuperTypeGroup.OwnershipType.IMPLEMENTS;
             SuperTypeGroup group = getOrCreateGroup(groupClass, ownershipType, groups);
             group.addMethod(child);
@@ -79,7 +79,7 @@ public class SuperTypesGrouper implements Grouper {
     return groups.keySet();
   }
 
-  private static SuperTypeGroup getOrCreateGroup(final PsiClass groupClass, final SuperTypeGroup.OwnershipType ownershipType, final Map<Group, SuperTypeGroup> groups) {
+  private static SuperTypeGroup getOrCreateGroup(PsiClass groupClass, SuperTypeGroup.OwnershipType ownershipType, Map<Group, SuperTypeGroup> groups) {
     SuperTypeGroup superTypeGroup =
         new SuperTypeGroup(groupClass, ownershipType);
     SuperTypeGroup existing = groups.get(superTypeGroup);

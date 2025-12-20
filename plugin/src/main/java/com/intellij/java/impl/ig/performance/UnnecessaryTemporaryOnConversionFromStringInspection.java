@@ -65,31 +65,31 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection extends BaseIn
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final String replacementString = calculateReplacementExpression((PsiMethodCallExpression) infos[0]);
+        String replacementString = calculateReplacementExpression((PsiMethodCallExpression) infos[0]);
         return InspectionGadgetsLocalize.unnecessaryTemporaryOnConversionFromStringProblemDescriptor(replacementString).get();
     }
 
     @Nullable
     @NonNls
     static String calculateReplacementExpression(PsiMethodCallExpression expression) {
-        final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-        final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
+        PsiReferenceExpression methodExpression = expression.getMethodExpression();
+        PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
         if (!(qualifierExpression instanceof PsiNewExpression)) {
             return null;
         }
-        final PsiNewExpression qualifier = (PsiNewExpression) qualifierExpression;
-        final PsiExpressionList argumentList = qualifier.getArgumentList();
+        PsiNewExpression qualifier = (PsiNewExpression) qualifierExpression;
+        PsiExpressionList argumentList = qualifier.getArgumentList();
         if (argumentList == null) {
             return null;
         }
-        final PsiExpression arg = argumentList.getExpressions()[0];
-        final PsiType type = qualifier.getType();
+        PsiExpression arg = argumentList.getExpressions()[0];
+        PsiType type = qualifier.getType();
         if (type == null) {
             return null;
         }
-        final String qualifierType = type.getPresentableText();
-        final String canonicalType = type.getCanonicalText();
-        final String conversionName = s_conversionMap.get(canonicalType);
+        String qualifierType = type.getPresentableText();
+        String canonicalType = type.getCanonicalText();
+        String conversionName = s_conversionMap.get(canonicalType);
         if (TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_BOOLEAN, type)) {
             if (!PsiUtil.isLanguageLevel5OrHigher(expression)) {
                 return qualifierType + '.' + conversionName + '(' + arg.getText() + ").booleanValue()";
@@ -106,11 +106,11 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection extends BaseIn
     @Override
     @Nullable
     public InspectionGadgetsFix buildFix(Object... infos) {
-        final String replacementExpression = calculateReplacementExpression((PsiMethodCallExpression) infos[0]);
+        String replacementExpression = calculateReplacementExpression((PsiMethodCallExpression) infos[0]);
         if (replacementExpression == null) {
             return null;
         }
-        final LocalizeValue name = InspectionGadgetsLocalize.unnecessaryTemporaryOnConversionFromStringFixName(replacementExpression);
+        LocalizeValue name = InspectionGadgetsLocalize.unnecessaryTemporaryOnConversionFromStringFixName(replacementExpression);
         return new UnnecessaryTemporaryObjectFix(name);
     }
 
@@ -129,8 +129,8 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection extends BaseIn
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiMethodCallExpression expression = (PsiMethodCallExpression) descriptor.getPsiElement();
-            final String newExpression = calculateReplacementExpression(expression);
+            PsiMethodCallExpression expression = (PsiMethodCallExpression) descriptor.getPsiElement();
+            String newExpression = calculateReplacementExpression(expression);
             if (newExpression == null) {
                 return;
             }
@@ -162,38 +162,38 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection extends BaseIn
         @Override
         public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final String methodName = methodExpression.getReferenceName();
-            final Map<String, String> basicTypeMap = s_basicTypeMap;
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            String methodName = methodExpression.getReferenceName();
+            Map<String, String> basicTypeMap = s_basicTypeMap;
             if (!basicTypeMap.containsValue(methodName)) {
                 return;
             }
-            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
             if (!(qualifier instanceof PsiNewExpression)) {
                 return;
             }
-            final PsiNewExpression newExpression = (PsiNewExpression) qualifier;
-            final PsiExpressionList argumentList = newExpression.getArgumentList();
+            PsiNewExpression newExpression = (PsiNewExpression) qualifier;
+            PsiExpressionList argumentList = newExpression.getArgumentList();
             if (argumentList == null) {
                 return;
             }
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length != 1) {
                 return;
             }
-            final PsiType argumentType = arguments[0].getType();
+            PsiType argumentType = arguments[0].getType();
             if (!TypeUtils.isJavaLangString(argumentType)) {
                 return;
             }
-            final PsiType type = qualifier.getType();
+            PsiType type = qualifier.getType();
             if (type == null) {
                 return;
             }
-            final String typeText = type.getCanonicalText();
+            String typeText = type.getCanonicalText();
             if (!basicTypeMap.containsKey(typeText)) {
                 return;
             }
-            final String mappingMethod = basicTypeMap.get(typeText);
+            String mappingMethod = basicTypeMap.get(typeText);
             if (!mappingMethod.equals(methodName)) {
                 return;
             }

@@ -49,7 +49,7 @@ public class AdjustPackageNameFix implements LocalQuickFix {
   }
 
   @Override
-  public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
+  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
     if (element == null) return;
     PsiFile myFile = element.getContainingFile();
@@ -70,7 +70,7 @@ public class AdjustPackageNameFix implements LocalQuickFix {
         }
       }
       else {
-        final PsiPackageStatement packageStatement = factory.createPackageStatement(myTargetPackage.getQualifiedName());
+        PsiPackageStatement packageStatement = factory.createPackageStatement(myTargetPackage.getQualifiedName());
         if (myStatement != null) {
           myStatement.getPackageReference().replace(packageStatement.getPackageReference());
         }

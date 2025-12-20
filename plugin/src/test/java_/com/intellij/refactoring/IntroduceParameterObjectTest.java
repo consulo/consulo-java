@@ -44,7 +44,7 @@ public abstract class IntroduceParameterObjectTest extends MultiFileTestCase{
     doTest(false, false);
   }
 
-  private void doTest(final boolean delegate, final boolean createInner) throws Exception {
+  private void doTest(boolean delegate, boolean createInner) throws Exception {
     doTest(delegate, createInner, new Function<PsiMethod, VariableData[]>() {
       @Override
       public VariableData[] fun(PsiMethod psiMethod) {
@@ -58,13 +58,13 @@ public abstract class IntroduceParameterObjectTest extends MultiFileTestCase{
                       final Function<PsiMethod, VariableData[]> function) throws Exception {
     doTest(new PerformAction() {
       @Override
-      public void performAction(final VirtualFile rootDir, final VirtualFile rootAfter) throws Exception {
+      public void performAction(VirtualFile rootDir, VirtualFile rootAfter) throws Exception {
         PsiClass aClass = myJavaFacade.findClass("Test", GlobalSearchScope.projectScope(getProject()));
 
         assertNotNull("Class Test not found", aClass);
 
-        final PsiMethod method = aClass.findMethodsByName("foo", false)[0];
-        final VariableData[] datas = function.fun(method);
+        PsiMethod method = aClass.findMethodsByName("foo", false)[0];
+        VariableData[] datas = function.fun(method);
 
         IntroduceParameterObjectProcessor processor = new IntroduceParameterObjectProcessor("Param", "", null, method, datas, delegate, false,
                                                                                             createInner, null, false);
@@ -73,10 +73,10 @@ public abstract class IntroduceParameterObjectTest extends MultiFileTestCase{
     });
   }
 
-  private static VariableData[] generateParams(final PsiMethod method) {
-    final PsiParameter[] parameters = method.getParameterList().getParameters();
+  private static VariableData[] generateParams(PsiMethod method) {
+    PsiParameter[] parameters = method.getParameterList().getParameters();
 
-    final VariableData[] datas = new VariableData[parameters.length];
+    VariableData[] datas = new VariableData[parameters.length];
     for (int i = 0; i < parameters.length; i++) {
       PsiParameter parameter = parameters[i];
       datas[i] = new VariableData(parameter);
@@ -134,9 +134,9 @@ public abstract class IntroduceParameterObjectTest extends MultiFileTestCase{
     doTest(false, false, new Function<PsiMethod, VariableData[]>() {
       @Override
       public VariableData[] fun(PsiMethod method) {
-        final PsiParameter[] parameters = method.getParameterList().getParameters();
+        PsiParameter[] parameters = method.getParameterList().getParameters();
 
-        final VariableData[] datas = new VariableData[parameters.length - 1];
+        VariableData[] datas = new VariableData[parameters.length - 1];
         for (int i = 0; i < parameters.length - 1; i++) {
           PsiParameter parameter = parameters[i];
           datas[i] = new VariableData(parameter);
@@ -152,9 +152,9 @@ public abstract class IntroduceParameterObjectTest extends MultiFileTestCase{
     doTest(false, true, new Function<PsiMethod, VariableData[]>() {
       @Override
       public VariableData[] fun(PsiMethod psiMethod) {
-        final PsiParameter parameter = psiMethod.getParameterList().getParameters()[0];
-        final PsiClass collectionClass = getJavaFacade().findClass(CommonClassNames.JAVA_UTIL_COLLECTION);
-        final VariableData variableData =
+        PsiParameter parameter = psiMethod.getParameterList().getParameters()[0];
+        PsiClass collectionClass = getJavaFacade().findClass(CommonClassNames.JAVA_UTIL_COLLECTION);
+        VariableData variableData =
           new VariableData(parameter, JavaPsiFacade.getElementFactory(getProject()).createType(collectionClass));
         variableData.name = parameter.getName();
         variableData.passAsParameter = true;
@@ -171,7 +171,7 @@ public abstract class IntroduceParameterObjectTest extends MultiFileTestCase{
     doTest(true, false);
   }
 
-  private void doTestExistingClass(final String existingClassName, final String existingClassPackage, final boolean generateAccessors) throws Exception {
+  private void doTestExistingClass(String existingClassName, String existingClassPackage, boolean generateAccessors) throws Exception {
     doTestExistingClass(existingClassName, existingClassPackage, generateAccessors, null);
   }
 
@@ -179,14 +179,14 @@ public abstract class IntroduceParameterObjectTest extends MultiFileTestCase{
                                    final String newVisibility) throws Exception {
     doTest(new PerformAction() {
       @Override
-      public void performAction(final VirtualFile rootDir, final VirtualFile rootAfter) throws Exception {
+      public void performAction(VirtualFile rootDir, VirtualFile rootAfter) throws Exception {
         PsiClass aClass = myJavaFacade.findClass("Test", GlobalSearchScope.projectScope(getProject()));
         if (aClass == null) {
           aClass = myJavaFacade.findClass("p2.Test", GlobalSearchScope.projectScope(getProject()));
         }
         assertNotNull("Class Test not found", aClass);
 
-        final PsiMethod method = aClass.findMethodsByName("foo", false)[0];
+        PsiMethod method = aClass.findMethodsByName("foo", false)[0];
         IntroduceParameterObjectProcessor processor = new IntroduceParameterObjectProcessor(existingClassName, existingClassPackage, null, method,
                                                                                             generateParams(method), false, true,
                                                                                             false, newVisibility, generateAccessors);

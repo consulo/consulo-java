@@ -46,7 +46,7 @@ public class JavaIndentHelper implements IndentHelperExtension {
     @Override
     public int getIndentInner(
         @Nonnull PsiFile file,
-        @Nonnull final ASTNode element,
+        @Nonnull ASTNode element,
         boolean includeNonSpace,
         int recursionLevel) {
         if (recursionLevel > TOO_BIG_WALK_THRESHOLD) {

@@ -42,8 +42,8 @@ public abstract class JavaParametersTest extends ModuleRootManagerTestCase
 	{
 		addSourceRoot(myModule, false);
 		addSourceRoot(myModule, true);
-		final VirtualFile output = setModuleOutput(myModule, false);
-		final VirtualFile testOutput = setModuleOutput(myModule, true);
+		VirtualFile output = setModuleOutput(myModule, false);
+		VirtualFile testOutput = setModuleOutput(myModule, true);
 
 		assertClasspath(myModule, OwnJavaParameters.CLASSES_ONLY, output);
 		assertClasspath(myModule, OwnJavaParameters.CLASSES_AND_TESTS, testOutput, output);
@@ -69,9 +69,9 @@ public abstract class JavaParametersTest extends ModuleRootManagerTestCase
 
 	public void testModuleDependency() throws Exception
 	{
-		final Module dep = createModule("dep");
-		final VirtualFile depOutput = setModuleOutput(dep, false);
-		final VirtualFile depTestOutput = setModuleOutput(dep, true);
+		Module dep = createModule("dep");
+		VirtualFile depOutput = setModuleOutput(dep, false);
+		VirtualFile depTestOutput = setModuleOutput(dep, true);
 		ModuleRootModificationUtil.addDependency(dep, createJDomLibrary());
 		ModuleRootModificationUtil.addDependency(myModule, dep, DependencyScope.COMPILE, false);
 
@@ -81,7 +81,7 @@ public abstract class JavaParametersTest extends ModuleRootManagerTestCase
 
 	public void testModuleDependencyScope() throws Exception
 	{
-		final Module dep = createModule("dep");
+		Module dep = createModule("dep");
 		ModuleRootModificationUtil.addDependency(dep, createJDomLibrary());
 		ModuleRootModificationUtil.addDependency(myModule, dep, DependencyScope.TEST, true);
 
@@ -91,16 +91,16 @@ public abstract class JavaParametersTest extends ModuleRootManagerTestCase
 		assertClasspath(myProject, OwnJavaParameters.CLASSES_ONLY, getJDomJar());
 	}
 
-	private static void assertClasspath(final Module module, final int type, VirtualFile... roots) throws CantRunException
+	private static void assertClasspath(Module module, int type, VirtualFile... roots) throws CantRunException
 	{
-		final OwnJavaParameters OwnJavaParameters = new OwnJavaParameters();
+		OwnJavaParameters OwnJavaParameters = new OwnJavaParameters();
 		OwnJavaParameters.configureByModule(module, type);
 		assertRoots(OwnJavaParameters.getClassPath(), roots);
 	}
 
-	private void assertClasspath(final Project project, final int type, VirtualFile... roots) throws CantRunException
+	private void assertClasspath(Project project, int type, VirtualFile... roots) throws CantRunException
 	{
-		final OwnJavaParameters OwnJavaParameters = new OwnJavaParameters();
+		OwnJavaParameters OwnJavaParameters = new OwnJavaParameters();
 		OwnJavaParameters.configureByProject(project, type, getTestProjectJdk());
 		assertRoots(OwnJavaParameters.getClassPath(), roots);
 	}

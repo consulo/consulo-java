@@ -38,20 +38,20 @@ public class ReplaceParameterAssignmentWithCall extends FixableUsageInfo {
   }
 
   public void fixUsage() throws IncorrectOperationException {
-    final PsiAssignmentExpression assignment = PsiTreeUtil.getParentOfType(expression, PsiAssignmentExpression.class);
+    PsiAssignmentExpression assignment = PsiTreeUtil.getParentOfType(expression, PsiAssignmentExpression.class);
     assert assignment != null;
-    final PsiExpression rhs = assignment.getRExpression();
+    PsiExpression rhs = assignment.getRExpression();
     if (rhs == null) {
       return;
     }
-    final String rhsText = rhs.getText();
-    final String operator = assignment.getOperationSign().getText();
-    final String newExpression;
+    String rhsText = rhs.getText();
+    String operator = assignment.getOperationSign().getText();
+    String newExpression;
     if ("=".equals(operator)) {
       newExpression = newParameterName + '.' + setterName + '(' + rhsText + ')';
     }
     else {
-      final String strippedOperator = operator.substring(0, operator.length() - 1);
+      String strippedOperator = operator.substring(0, operator.length() - 1);
       newExpression =
         newParameterName + '.' + setterName + '(' + newParameterName + '.' + getterName + "()" + strippedOperator + rhsText + ')';
     }

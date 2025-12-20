@@ -57,7 +57,7 @@ public class ImportsFormatter extends XmlRecursiveElementVisitor {
     }
   }
 
-  private static boolean isPageDirectiveTag(final XmlTag tag) {
+  private static boolean isPageDirectiveTag(XmlTag tag) {
     return PAGE_DIRECTIVE.equals(tag.getName());
   }
 
@@ -69,10 +69,10 @@ public class ImportsFormatter extends XmlRecursiveElementVisitor {
   @Override
   public void visitXmlAttribute(XmlAttribute attribute) {
     if (isPageDirectiveTag(attribute.getParent())) {
-      final XmlAttributeValue valueElement = attribute.getValueElement();
+      XmlAttributeValue valueElement = attribute.getValueElement();
       if (valueElement != null && checkRangeContainsElement(attribute) && isImportAttribute(attribute) && PostFormatProcessorHelper
           .isMultiline(valueElement)) {
-        final int oldLength = attribute.getTextLength();
+        int oldLength = attribute.getTextLength();
         ASTNode valueToken = findValueToken(valueElement.getNode());
         if (valueToken != null) {
           String newAttributeValue = formatImports(valueToken.getStartOffset(), attribute.getValue());
@@ -88,10 +88,10 @@ public class ImportsFormatter extends XmlRecursiveElementVisitor {
     }
   }
 
-  private String formatImports(final int startOffset, final String value) {
-    final StringBuilder result = new StringBuilder();
+  private String formatImports(int startOffset, String value) {
+    StringBuilder result = new StringBuilder();
     String offset = calcOffset(startOffset);
-    final String[] imports = value.split(",");
+    String[] imports = value.split(",");
     if (imports.length >= 1) {
       result.append(imports[0]);
       for (int i = 1; i < imports.length; i++) {
@@ -105,12 +105,12 @@ public class ImportsFormatter extends XmlRecursiveElementVisitor {
     return result.toString();
   }
 
-  private String calcOffset(final int startOffset) {
-    final StringBuffer result = new StringBuffer();
+  private String calcOffset(int startOffset) {
+    StringBuffer result = new StringBuffer();
 
-    final int lineStartOffset = myDocumentModel.getLineStartOffset(myDocumentModel.getLineNumber(startOffset));
-    final int emptyLineEnd = CharArrayUtil.shiftForward(myDocumentModel.getDocument().getCharsSequence(), lineStartOffset, " \t");
-    final CharSequence spaces = myDocumentModel.getText(new TextRange(lineStartOffset, emptyLineEnd));
+    int lineStartOffset = myDocumentModel.getLineStartOffset(myDocumentModel.getLineNumber(startOffset));
+    int emptyLineEnd = CharArrayUtil.shiftForward(myDocumentModel.getDocument().getCharsSequence(), lineStartOffset, " \t");
+    CharSequence spaces = myDocumentModel.getText(new TextRange(lineStartOffset, emptyLineEnd));
 
     if (spaces != null) {
       result.append(spaces.toString());
@@ -121,7 +121,7 @@ public class ImportsFormatter extends XmlRecursiveElementVisitor {
     return result.toString();
   }
 
-  private void appendSpaces(final StringBuffer result, final int count) {
+  private void appendSpaces(StringBuffer result, int count) {
     if (myIndentOptions.USE_TAB_CHARACTER && !myIndentOptions.SMART_TABS) {
       int tabsCount = count / myIndentOptions.TAB_SIZE;
       int spaceCount = count - tabsCount * myIndentOptions.TAB_SIZE;
@@ -132,7 +132,7 @@ public class ImportsFormatter extends XmlRecursiveElementVisitor {
     }
   }
 
-  private static ASTNode findValueToken(final ASTNode node) {
+  private static ASTNode findValueToken(ASTNode node) {
     ASTNode child = node.getFirstChildNode();
     while (child != null) {
       if (child.getElementType() == XmlElementType.XML_ATTRIBUTE_VALUE_TOKEN) return child;
@@ -141,19 +141,19 @@ public class ImportsFormatter extends XmlRecursiveElementVisitor {
     return null;
   }
 
-  private static boolean isImportAttribute(final XmlAttribute attribute) {
+  private static boolean isImportAttribute(XmlAttribute attribute) {
     return IMPORT_ATT.equals(attribute.getName());
   }
 
-  protected void updateResultRange(final int oldTextLength, final int newTextLength) {
+  protected void updateResultRange(int oldTextLength, int newTextLength) {
     myPostProcessor.updateResultRange(oldTextLength, newTextLength);
   }
 
-  protected boolean checkElementContainsRange(final PsiElement element) {
+  protected boolean checkElementContainsRange(PsiElement element) {
     return myPostProcessor.isElementPartlyInRange(element);
   }
 
-  protected boolean checkRangeContainsElement(final PsiElement element) {
+  protected boolean checkRangeContainsElement(PsiElement element) {
     return myPostProcessor.isElementFullyInRange(element);
   }
 
@@ -163,7 +163,7 @@ public class ImportsFormatter extends XmlRecursiveElementVisitor {
     return formatted;
   }
 
-  public TextRange processText(final PsiFile source, final TextRange rangeToReformat) {
+  public TextRange processText(PsiFile source, TextRange rangeToReformat) {
     myPostProcessor.setResultTextRange(rangeToReformat);
     source.accept(this);
     return myPostProcessor.getResultTextRange();

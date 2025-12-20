@@ -48,7 +48,7 @@ public class XmlSurroundWithRangeAdjuster implements SurroundWithRangeAdjuster {
   }
 
   @Override
-  public TextRange adjustSurroundWithRange(final PsiFile file, final TextRange selectedRange) {
+  public TextRange adjustSurroundWithRange(PsiFile file, TextRange selectedRange) {
     int startOffset = selectedRange.getStartOffset();
     int endOffset = selectedRange.getEndOffset();
     PsiElement element1 = file.findElementAt(startOffset);

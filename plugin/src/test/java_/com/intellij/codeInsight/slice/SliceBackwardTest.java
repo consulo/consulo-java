@@ -65,7 +65,7 @@ public abstract class SliceBackwardTest extends DaemonAnalyzerTestCase {
     checkUsages(usage, true, myFlownOffsets);
   }
 
-  static void checkUsages(final SliceUsage usage, final boolean dataFlowToThis, final IntObjectMap<IntList> flownOffsets) {
+  static void checkUsages(final SliceUsage usage, boolean dataFlowToThis, IntObjectMap<IntList> flownOffsets) {
     final List<SliceUsage> children = new ArrayList<SliceUsage>();
     boolean b = ProgressManager.getInstance().runProcessWithProgressSynchronously(new Runnable() {
       @Override
@@ -106,11 +106,11 @@ public abstract class SliceBackwardTest extends DaemonAnalyzerTestCase {
   }
 
   static void calcRealOffsets(PsiElement startElement, Map<String, RangeMarker> sliceUsageName2Offset,
-                               final IntObjectMap<IntList> flownOffsets) {
+                               IntObjectMap<IntList> flownOffsets) {
     fill(sliceUsageName2Offset, "", startElement.getTextOffset(), flownOffsets);
   }
 
-  static Map<String, RangeMarker> extractSliceOffsetsFromDocument(final Document document) {
+  static Map<String, RangeMarker> extractSliceOffsetsFromDocument(Document document) {
     Map<String, RangeMarker> sliceUsageName2Offset = new HashMap<String, RangeMarker>();
 
     extract(document, sliceUsageName2Offset, "");
@@ -120,7 +120,7 @@ public abstract class SliceBackwardTest extends DaemonAnalyzerTestCase {
   }
 
   private static void fill(Map<String, RangeMarker> sliceUsageName2Offset, String name, int offset,
-                    final IntObjectMap<IntList> flownOffsets) {
+                    IntObjectMap<IntList> flownOffsets) {
     for (int i=1;i<9;i++) {
       String newName = name + i;
       RangeMarker marker = sliceUsageName2Offset.get(newName);

@@ -660,7 +660,7 @@ public abstract class SrcRepositoryUseTest extends PsiTestCase{
     String text = aClass.getText();
 
     BlockSupport blockSupport = ServiceManager.getService(myProject, BlockSupport.class);
-    final PsiFile psiFile = aClass.getContainingFile();
+    PsiFile psiFile = aClass.getContainingFile();
     blockSupport.reparseRange(psiFile, classRange.getStartOffset(), classRange.getEndOffset(), "");
     LOG.assertTrue(!aClass.isValid());
     blockSupport.reparseRange(psiFile, classRange.getStartOffset(), classRange.getStartOffset(), text);
@@ -698,23 +698,23 @@ public abstract class SrcRepositoryUseTest extends PsiTestCase{
   }
 
   public void testReplaceRootWithSubRoot1() throws Exception {
-    final PsiClass aClass = myJavaFacade.findClass("pack.MyInterface1", GlobalSearchScope.allScope(myProject));
-    final PsiFile psiFile = aClass.getContainingFile();
+    PsiClass aClass = myJavaFacade.findClass("pack.MyInterface1", GlobalSearchScope.allScope(myProject));
+    PsiFile psiFile = aClass.getContainingFile();
     ((PsiJavaFile) psiFile).getClasses();
     psiFile.getText();
     assertNotNull(aClass);
 
-    final VirtualFile newSourceRoot = psiFile.getVirtualFile().getParent();
+    VirtualFile newSourceRoot = psiFile.getVirtualFile().getParent();
     replaceSourceRoot(newSourceRoot);
 
     assertEquals("MyInterface1", aClass.getName());
   }
 
   public void testReplaceRootWithSubRoot2() throws Exception {
-    final PsiClass aClass = myJavaFacade.findClass("pack.MyInterface1", GlobalSearchScope.allScope(myProject));
+    PsiClass aClass = myJavaFacade.findClass("pack.MyInterface1", GlobalSearchScope.allScope(myProject));
     assertNotNull(aClass);
 
-    final VirtualFile newSourceRoot = aClass.getContainingFile().getVirtualFile().getParent();
+    VirtualFile newSourceRoot = aClass.getContainingFile().getVirtualFile().getParent();
     replaceSourceRoot(newSourceRoot);
 
     assertEquals("MyInterface1", aClass.getName());
@@ -725,15 +725,15 @@ public abstract class SrcRepositoryUseTest extends PsiTestCase{
         new Runnable() {
           @Override
           public void run() {
-            final ModifiableRootModel rootModel = ModuleRootManager.getInstance(myModule).getModifiableModel();
-            final ContentEntry[] content = rootModel.getContentEntries();
+            ModifiableRootModel rootModel = ModuleRootManager.getInstance(myModule).getModifiableModel();
+            ContentEntry[] content = rootModel.getContentEntries();
             boolean contentToChangeFound = false;
             for (ContentEntry contentEntry : content) {
-              final ContentFolder[] sourceFolders = contentEntry.getFolders(ContentFolderScopes.of(ProductionContentFolderTypeProvider.getInstance()));
+              ContentFolder[] sourceFolders = contentEntry.getFolders(ContentFolderScopes.of(ProductionContentFolderTypeProvider.getInstance()));
               for (ContentFolder sourceFolder : sourceFolders) {
                 contentEntry.removeFolder(sourceFolder);
               }
-              final VirtualFile contentRoot = contentEntry.getFile();
+              VirtualFile contentRoot = contentEntry.getFile();
               if (contentRoot != null && VfsUtilCore.isAncestor(contentRoot, newSourceRoot, false)) {
                 contentEntry.addFolder(newSourceRoot, ProductionContentFolderTypeProvider.getInstance());
                 contentToChangeFound = true;
@@ -793,13 +793,13 @@ public abstract class SrcRepositoryUseTest extends PsiTestCase{
   }
 
   public void testCopyableUserDataChild() throws Exception {
-    final PsiClass aClass = myJavaFacade.findClass("pack.MyInterface1", GlobalSearchScope.allScope(myProject));
+    PsiClass aClass = myJavaFacade.findClass("pack.MyInterface1", GlobalSearchScope.allScope(myProject));
     assertNotNull(aClass);
-    final PsiFile containingFile = aClass.getContainingFile();
-    final CompositeElement element = ((PsiFileImpl)containingFile).calcTreeElement();
+    PsiFile containingFile = aClass.getContainingFile();
+    CompositeElement element = ((PsiFileImpl)containingFile).calcTreeElement();
     aClass.putCopyableUserData(TEST_KEY, "TEST");
-    final PsiJavaFile fileCopy = (PsiJavaFile)containingFile.copy();
-    final PsiClass[] classesCopy = fileCopy.getClasses();
+    PsiJavaFile fileCopy = (PsiJavaFile)containingFile.copy();
+    PsiClass[] classesCopy = fileCopy.getClasses();
     assertEquals(1, classesCopy.length);
     assertNotNull(element);
     assertEquals("TEST", classesCopy[0].getCopyableUserData(TEST_KEY));

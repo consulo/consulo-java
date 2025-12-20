@@ -24,11 +24,11 @@ public abstract class WrapReturnValueTest extends MultiFileTestCase{
     return "/refactoring/wrapReturnValue/";
   }
 
-  private void doTest(final boolean existing) throws Exception {
+  private void doTest(boolean existing) throws Exception {
     doTest(existing, null);
   }
 
-  private void doTest(final boolean existing, @NonNls String exceptionMessage) throws Exception {
+  private void doTest(boolean existing, @NonNls String exceptionMessage) throws Exception {
     doTest(existing, exceptionMessage, false);
   }
 
@@ -36,21 +36,21 @@ public abstract class WrapReturnValueTest extends MultiFileTestCase{
     try {
       doTest(new PerformAction() {
         @Override
-        public void performAction(final VirtualFile rootDir, final VirtualFile rootAfter) throws Exception {
+        public void performAction(VirtualFile rootDir, VirtualFile rootAfter) throws Exception {
           PsiClass aClass = myJavaFacade.findClass("Test", GlobalSearchScope.projectScope(getProject()));
 
           assertNotNull("Class Test not found", aClass);
 
-          final PsiMethod method = aClass.findMethodsByName("foo", false)[0];
+          PsiMethod method = aClass.findMethodsByName("foo", false)[0];
 
 
 
-          @NonNls final String wrapperClassName = "Wrapper";
+          @NonNls String wrapperClassName = "Wrapper";
 
-          final PsiClass wrapperClass = myJavaFacade.findClass(wrapperClassName, GlobalSearchScope.projectScope(getProject()));
+          PsiClass wrapperClass = myJavaFacade.findClass(wrapperClassName, GlobalSearchScope.projectScope(getProject()));
 
           assertTrue(!existing || wrapperClass != null);
-          final PsiField delegateField = existing ? wrapperClass.findFieldByName("myField", false) : null;
+          PsiField delegateField = existing ? wrapperClass.findFieldByName("myField", false) : null;
           WrapReturnValueProcessor processor = new WrapReturnValueProcessor(wrapperClassName, "",
                                                                             null, method, existing, createInnerClass,
                                                                             delegateField);

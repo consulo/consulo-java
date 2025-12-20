@@ -33,11 +33,11 @@ public abstract class ProximityTest extends JavaCodeInsightFixtureTestCase {
         }
       }.execute();
 
-      final VirtualFile file1 = root1.createFile("buy.txt", "");
-      final VirtualFile file2 = root2.createFile("buy.txt", "");
-      final VirtualFile ctx = root2.createFile("ctx.txt", "");
+      VirtualFile file1 = root1.createFile("buy.txt", "");
+      VirtualFile file2 = root2.createFile("buy.txt", "");
+      VirtualFile ctx = root2.createFile("ctx.txt", "");
 
-      final PsiProximityComparator comparator = new PsiProximityComparator(getPsiManager().findFile(ctx));
+      PsiProximityComparator comparator = new PsiProximityComparator(getPsiManager().findFile(ctx));
       assertTrue(comparator.compare(getPsiManager().findFile(file1), getPsiManager().findFile(file2)) > 0);
       assertTrue(comparator.compare(getPsiManager().findFile(file2), getPsiManager().findFile(file1)) < 0);
     }

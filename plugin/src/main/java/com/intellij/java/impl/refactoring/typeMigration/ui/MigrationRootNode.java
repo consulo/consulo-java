@@ -38,7 +38,7 @@ public class MigrationRootNode extends AbstractTreeNode<TypeMigrationLabeler> im
   private final PsiElement[] myRoots;
   private final boolean myPreviewUsages;
 
-  protected MigrationRootNode(Project project, TypeMigrationLabeler labeler, final PsiElement[] roots, final boolean previewUsages) {
+  protected MigrationRootNode(Project project, TypeMigrationLabeler labeler, PsiElement[] roots, boolean previewUsages) {
     super(project, labeler);
     myLabeler = labeler;
     myRoots = roots;
@@ -64,15 +64,15 @@ public class MigrationRootNode extends AbstractTreeNode<TypeMigrationLabeler> im
   }
 
   private void addRoot(TypeMigrationUsageInfo info, PsiType migrationType) {
-    final HashSet<TypeMigrationUsageInfo> parents = new HashSet<>();
+    HashSet<TypeMigrationUsageInfo> parents = new HashSet<>();
     parents.add(info);
-    final MigrationNode migrationNode = new MigrationNode(getProject(), info, migrationType, myLabeler, parents, new HashMap<>());
+    MigrationNode migrationNode = new MigrationNode(getProject(), info, migrationType, myLabeler, parents, new HashMap<>());
 
     myCachedChildren.add(migrationNode);
   }
 
   @Override
-  protected void update(final PresentationData presentation) {
+  protected void update(PresentationData presentation) {
 
   }
 

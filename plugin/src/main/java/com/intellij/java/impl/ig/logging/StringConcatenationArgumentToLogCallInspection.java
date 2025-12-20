@@ -91,18 +91,18 @@ public class StringConcatenationArgumentToLogCallInspection extends BaseInspecti
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement grandParent = element.getParent().getParent();
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement grandParent = element.getParent().getParent();
             if (!(grandParent instanceof PsiMethodCallExpression)) {
                 return;
             }
-            final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) grandParent;
-            final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) grandParent;
+            PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length == 0) {
                 return;
             }
-            @NonNls final StringBuilder newMethodCall = new StringBuilder(methodCallExpression.getMethodExpression().getText());
+            @NonNls StringBuilder newMethodCall = new StringBuilder(methodCallExpression.getMethodExpression().getText());
             newMethodCall.append('(');
             PsiExpression argument = arguments[0];
             int usedArguments;
@@ -120,17 +120,17 @@ public class StringConcatenationArgumentToLogCallInspection extends BaseInspecti
             else {
                 usedArguments = 1;
             }
-            final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) argument;
-            final PsiMethod method = methodCallExpression.resolveMethod();
+            PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) argument;
+            PsiMethod method = methodCallExpression.resolveMethod();
             if (method == null) {
                 return;
             }
-            final String methodName = method.getName();
-            final PsiClass containingClass = method.getContainingClass();
+            String methodName = method.getName();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return;
             }
-            final PsiMethod[] methods = containingClass.findMethodsByName(methodName, false);
+            PsiMethod[] methods = containingClass.findMethodsByName(methodName, false);
             boolean varArgs = false;
             for (PsiMethod otherMethod : methods) {
                 if (otherMethod.isVarArgs()) {
@@ -138,15 +138,15 @@ public class StringConcatenationArgumentToLogCallInspection extends BaseInspecti
                     break;
                 }
             }
-            final List<PsiExpression> newArguments = new ArrayList();
-            final PsiExpression[] operands = polyadicExpression.getOperands();
+            List<PsiExpression> newArguments = new ArrayList();
+            PsiExpression[] operands = polyadicExpression.getOperands();
             boolean addPlus = false;
             boolean inStringLiteral = false;
             for (PsiExpression operand : operands) {
                 if (ExpressionUtils.isEvaluatedAtCompileTime(operand)) {
                     if (ExpressionUtils.hasStringType(operand) && operand instanceof PsiLiteralExpression) {
-                        final String text = operand.getText();
-                        final int count = StringUtil.getOccurrenceCount(text, "{}");
+                        String text = operand.getText();
+                        int count = StringUtil.getOccurrenceCount(text, "{}");
                         for (int i = 0; i < count && usedArguments + i < arguments.length; i++) {
                             newArguments.add(ParenthesesUtils.stripParentheses((PsiExpression) arguments[i + usedArguments].copy()));
                         }
@@ -222,8 +222,8 @@ public class StringConcatenationArgumentToLogCallInspection extends BaseInspecti
             if (!(expression instanceof PsiPolyadicExpression)) {
                 return false;
             }
-            final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
-            final PsiExpression[] operands = polyadicExpression.getOperands();
+            PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
+            PsiExpression[] operands = polyadicExpression.getOperands();
             for (PsiExpression operand : operands) {
                 if (!ExpressionUtils.isEvaluatedAtCompileTime(operand)) {
                     return true;
@@ -243,21 +243,21 @@ public class StringConcatenationArgumentToLogCallInspection extends BaseInspecti
         @Override
         public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final String referenceName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            String referenceName = methodExpression.getReferenceName();
             if (!logNames.contains(referenceName)) {
                 return;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null || !"org.slf4j.Logger".equals(containingClass.getQualifiedName())) {
                 return;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length == 0) {
                 return;
             }
@@ -279,18 +279,18 @@ public class StringConcatenationArgumentToLogCallInspection extends BaseInspecti
 
         private static boolean containsNonConstantConcatenation(@Nullable PsiExpression expression) {
             if (expression instanceof PsiParenthesizedExpression) {
-                final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) expression;
+                PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) expression;
                 return containsNonConstantConcatenation(parenthesizedExpression.getExpression());
             }
             else if (expression instanceof PsiPolyadicExpression) {
-                final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
+                PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
                 if (!ExpressionUtils.hasStringType(polyadicExpression)) {
                     return false;
                 }
                 if (!JavaTokenType.PLUS.equals(polyadicExpression.getOperationTokenType())) {
                     return false;
                 }
-                final PsiExpression[] operands = polyadicExpression.getOperands();
+                PsiExpression[] operands = polyadicExpression.getOperands();
                 for (PsiExpression operand : operands) {
                     if (!ExpressionUtils.isEvaluatedAtCompileTime(operand)) {
                         return true;

@@ -30,7 +30,7 @@ import jakarta.annotation.Nullable;
 @ExtensionImpl
 public class SaveJavaAsTemplateHandler implements SaveFileAsTemplateHandler {
   @Nullable
-  public String getTemplateText(final PsiFile psiFile, String fileText, String nameWithoutExtension) {
+  public String getTemplateText(PsiFile psiFile, String fileText, String nameWithoutExtension) {
     if(psiFile instanceof PsiJavaFile){
       PsiJavaFile javaFile = (PsiJavaFile)psiFile;
       String packageName = javaFile.getPackageName();

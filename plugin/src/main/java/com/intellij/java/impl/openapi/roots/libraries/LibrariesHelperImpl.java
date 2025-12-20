@@ -53,12 +53,12 @@ public class LibrariesHelperImpl extends LibrariesHelper {
 
   @Override
   public boolean isClassAvailableInLibrary(Library library, String fqn) {
-    final String[] urls = library.getUrls(BinariesOrderRootType.getInstance());
+    String[] urls = library.getUrls(BinariesOrderRootType.getInstance());
     return isClassAvailable(urls, fqn);
   }
 
   @Override
-  public boolean isClassAvailable(final String[] urls, String fqn) {
+  public boolean isClassAvailable(String[] urls, String fqn) {
     for (String url : urls) {
       VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(url);
       if (file == null) {
@@ -82,7 +82,7 @@ public class LibrariesHelperImpl extends LibrariesHelper {
     return false;
   }
 
-  private static boolean findInFile(VirtualFile root, final String fqn) {
+  private static boolean findInFile(VirtualFile root, String fqn) {
     String filePath = fqn.replace(".", "/") + "." + JavaClassFileType.INSTANCE.getDefaultExtension();
 
     return root.findFileByRelativePath(filePath) != null;

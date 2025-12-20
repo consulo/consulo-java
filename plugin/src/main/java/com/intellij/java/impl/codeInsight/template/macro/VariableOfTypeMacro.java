@@ -63,16 +63,16 @@ public class VariableOfTypeMacro extends Macro {
 
   @Override
   public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
-    final PsiElement[] vars = getVariables(params, context);
+    PsiElement[] vars = getVariables(params, context);
     if (vars == null || vars.length == 0) return null;
     return new JavaPsiElementResult(vars[0]);
   }
 
   @Override
-  public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, final ExpressionContext context) {
-    final PsiElement[] vars = getVariables(params, context);
+  public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, ExpressionContext context) {
+    PsiElement[] vars = getVariables(params, context);
     if (vars == null || vars.length < 2) return null;
-    final Set<LookupElement> set = new LinkedHashSet<>();
+    Set<LookupElement> set = new LinkedHashSet<>();
     for (PsiElement var : vars) {
       JavaEditorTemplateUtilImpl.addElementLookupItem(set, var);
     }
@@ -80,15 +80,15 @@ public class VariableOfTypeMacro extends Macro {
   }
 
   @Nullable
-  protected PsiElement[] getVariables(Expression[] params, final ExpressionContext context) {
+  protected PsiElement[] getVariables(Expression[] params, ExpressionContext context) {
     if (params.length != 1) return null;
-    final Result result = params[0].calculateResult(context);
+    Result result = params[0].calculateResult(context);
     if (result == null) return null;
 
     Project project = context.getProject();
-    final int offset = context.getStartOffset();
+    int offset = context.getStartOffset();
 
-    final ArrayList<PsiElement> array = new ArrayList<PsiElement>();
+    ArrayList<PsiElement> array = new ArrayList<PsiElement>();
     PsiType type = MacroUtil.resultToPsiType(result, context);
     PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
     PsiElement place = file.findElementAt(offset);
@@ -102,7 +102,7 @@ public class VariableOfTypeMacro extends Macro {
         if (!manager.areElementsEquivalent(varClass, placeClass)) continue;
       }
       else if (var instanceof PsiLocalVariable) {
-        final TextRange range = var.getNameIdentifier().getTextRange();
+        TextRange range = var.getNameIdentifier().getTextRange();
         if (range != null && range.contains(offset)) {
           continue;
         }

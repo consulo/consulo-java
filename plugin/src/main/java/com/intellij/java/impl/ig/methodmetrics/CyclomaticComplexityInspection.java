@@ -43,7 +43,7 @@ public abstract class CyclomaticComplexityInspection extends MethodMetricInspect
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final Integer complexity = (Integer)infos[0];
+    Integer complexity = (Integer)infos[0];
     return InspectionGadgetsLocalize.cyclomaticComplexityProblemDescriptor(complexity).get();
   }
 
@@ -59,10 +59,10 @@ public abstract class CyclomaticComplexityInspection extends MethodMetricInspect
       if (method.getNameIdentifier() == null) {
         return;
       }
-      final CyclomaticComplexityVisitor visitor =
+      CyclomaticComplexityVisitor visitor =
         new CyclomaticComplexityVisitor();
       method.accept(visitor);
-      final int complexity = visitor.getComplexity();
+      int complexity = visitor.getComplexity();
       if (complexity <= getLimit()) {
         return;
       }

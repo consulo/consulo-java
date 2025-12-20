@@ -57,7 +57,7 @@ public class ResolverTree {
 
   private HashSet<Constraint> myConstraints;
 
-  public ResolverTree(final ReductionSystem system) {
+  public ResolverTree(ReductionSystem system) {
     myBindingFactory = new BindingFactory(system);
     mySolutions = new SolutionHolder();
     myCurrentBinding = myBindingFactory.create();
@@ -69,7 +69,7 @@ public class ResolverTree {
     reduceCyclicVariables();
   }
 
-  private ResolverTree(final ResolverTree parent, final HashSet<Constraint> constraints, final Binding binding) {
+  private ResolverTree(ResolverTree parent, HashSet<Constraint> constraints, Binding binding) {
     myBindingFactory = parent.myBindingFactory;
     myCurrentBinding = binding;
     mySolutions = parent.mySolutions;
@@ -82,28 +82,28 @@ public class ResolverTree {
   private static class PsiTypeVarCollector extends PsiExtendedTypeVisitor {
     final HashSet<PsiTypeVariable> mySet = new HashSet<PsiTypeVariable>();
 
-    public Object visitTypeVariable(final PsiTypeVariable var) {
+    public Object visitTypeVariable(PsiTypeVariable var) {
       mySet.add(var);
 
       return null;
     }
 
-    public HashSet<PsiTypeVariable> getSet(final PsiType type) {
+    public HashSet<PsiTypeVariable> getSet(PsiType type) {
       type.accept(this);
       return mySet;
     }
   }
 
-  private boolean isBoundElseWhere(final PsiTypeVariable var) {
+  private boolean isBoundElseWhere(PsiTypeVariable var) {
     return myBindingDegree.getInt(var) != 1;
   }
 
-  private boolean canBePruned(final Binding b) {
+  private boolean canBePruned(Binding b) {
     if (mySettings.exhaustive()) {
       return false;
     }
-    for (final PsiTypeVariable var : b.getBoundVariables()) {
-      final PsiType type = b.apply(var);
+    for (PsiTypeVariable var : b.getBoundVariables()) {
+      PsiType type = b.apply(var);
 
       if (!(type instanceof PsiTypeVariable) && isBoundElseWhere(var)) {
         return false;
@@ -114,10 +114,10 @@ public class ResolverTree {
   }
 
   private ObjectIntMap<PsiTypeVariable> calculateDegree() {
-    final ObjectIntMap<PsiTypeVariable> result = ObjectMaps.newObjectIntHashMap();
+    ObjectIntMap<PsiTypeVariable> result = ObjectMaps.newObjectIntHashMap();
 
-    for (final Constraint constr : myConstraints) {
-      final PsiTypeVarCollector collector = new PsiTypeVarCollector();
+    for (Constraint constr : myConstraints) {
+      PsiTypeVarCollector collector = new PsiTypeVarCollector();
 
       setDegree(collector.getSet(constr.getRight()), result);
     }
@@ -125,8 +125,8 @@ public class ResolverTree {
     return result;
   }
 
-  private void setDegree(final HashSet<PsiTypeVariable> set, ObjectIntMap<PsiTypeVariable> result) {
-    for (final PsiTypeVariable var : set) {
+  private void setDegree(HashSet<PsiTypeVariable> set, ObjectIntMap<PsiTypeVariable> result) {
+    for (PsiTypeVariable var : set) {
       if (result.containsKey(var)) {
         int value = result.getInt(var);
         result.putInt(var, value + 1);
@@ -134,67 +134,67 @@ public class ResolverTree {
     }
   }
 
-  private HashSet<Constraint> apply(final Binding b) {
-    final HashSet<Constraint> result = new HashSet<Constraint>();
+  private HashSet<Constraint> apply(Binding b) {
+    HashSet<Constraint> result = new HashSet<Constraint>();
 
-    for (final Constraint constr : myConstraints) {
+    for (Constraint constr : myConstraints) {
       result.add(constr.apply(b));
     }
 
     return result;
   }
 
-  private HashSet<Constraint> apply(final Binding b, final HashSet<Constraint> additional) {
-    final HashSet<Constraint> result = new HashSet<Constraint>();
+  private HashSet<Constraint> apply(Binding b, HashSet<Constraint> additional) {
+    HashSet<Constraint> result = new HashSet<Constraint>();
 
-    for (final Constraint constr : myConstraints) {
+    for (Constraint constr : myConstraints) {
       result.add(constr.apply(b));
     }
 
-    for (final Constraint constr : additional) {
+    for (Constraint constr : additional) {
       result.add(constr.apply(b));
     }
 
     return result;
   }
 
-  private ResolverTree applyRule(final Binding b) {
-    final Binding newBinding = b != null ? myCurrentBinding.compose(b) : null;
+  private ResolverTree applyRule(Binding b) {
+    Binding newBinding = b != null ? myCurrentBinding.compose(b) : null;
 
     return newBinding == null ? null : new ResolverTree(this, apply(b), newBinding);
   }
 
-  private ResolverTree applyRule(final Binding b, final HashSet<Constraint> additional) {
-    final Binding newBinding = b != null ? myCurrentBinding.compose(b) : null;
+  private ResolverTree applyRule(Binding b, HashSet<Constraint> additional) {
+    Binding newBinding = b != null ? myCurrentBinding.compose(b) : null;
 
     return newBinding == null ? null : new ResolverTree(this, apply(b, additional), newBinding);
   }
 
   private void reduceCyclicVariables() {
     final HashSet<PsiTypeVariable> nodes = new HashSet<PsiTypeVariable>();
-    final HashSet<Constraint> candidates = new HashSet<Constraint>();
+    HashSet<Constraint> candidates = new HashSet<Constraint>();
 
     final HashMap<PsiTypeVariable, HashSet<PsiTypeVariable>> ins = new HashMap<PsiTypeVariable, HashSet<PsiTypeVariable>>();
     final HashMap<PsiTypeVariable, HashSet<PsiTypeVariable>> outs = new HashMap<PsiTypeVariable, HashSet<PsiTypeVariable>>();
 
-    for (final Constraint constraint : myConstraints) {
-      final PsiType left = constraint.getLeft();
-      final PsiType right = constraint.getRight();
+    for (Constraint constraint : myConstraints) {
+      PsiType left = constraint.getLeft();
+      PsiType right = constraint.getRight();
 
       if (left instanceof PsiTypeVariable && right instanceof PsiTypeVariable) {
-        final PsiTypeVariable leftVar = (PsiTypeVariable) left;
-        final PsiTypeVariable rightVar = (PsiTypeVariable) right;
+        PsiTypeVariable leftVar = (PsiTypeVariable) left;
+        PsiTypeVariable rightVar = (PsiTypeVariable) right;
 
         candidates.add(constraint);
 
         nodes.add(leftVar);
         nodes.add(rightVar);
 
-        final HashSet<PsiTypeVariable> in = ins.get(leftVar);
-        final HashSet<PsiTypeVariable> out = outs.get(rightVar);
+        HashSet<PsiTypeVariable> in = ins.get(leftVar);
+        HashSet<PsiTypeVariable> out = outs.get(rightVar);
 
         if (in == null) {
-          final HashSet<PsiTypeVariable> newIn = new HashSet<PsiTypeVariable>();
+          HashSet<PsiTypeVariable> newIn = new HashSet<PsiTypeVariable>();
 
           newIn.add(rightVar);
 
@@ -204,7 +204,7 @@ public class ResolverTree {
         }
 
         if (out == null) {
-          final HashSet<PsiTypeVariable> newOut = new HashSet<PsiTypeVariable>();
+          HashSet<PsiTypeVariable> newOut = new HashSet<PsiTypeVariable>();
 
           newOut.add(leftVar);
 
@@ -220,8 +220,8 @@ public class ResolverTree {
         return nodes;
       }
 
-      public Iterator<PsiTypeVariable> getIn(final PsiTypeVariable n) {
-        final HashSet<PsiTypeVariable> in = ins.get(n);
+      public Iterator<PsiTypeVariable> getIn(PsiTypeVariable n) {
+        HashSet<PsiTypeVariable> in = ins.get(n);
 
         if (in == null) {
           return new HashSet<PsiTypeVariable>().iterator();
@@ -230,8 +230,8 @@ public class ResolverTree {
         return in.iterator();
       }
 
-      public Iterator<PsiTypeVariable> getOut(final PsiTypeVariable n) {
-        final HashSet<PsiTypeVariable> out = outs.get(n);
+      public Iterator<PsiTypeVariable> getOut(PsiTypeVariable n) {
+        HashSet<PsiTypeVariable> out = outs.get(n);
 
         if (out == null) {
           return new HashSet<PsiTypeVariable>().iterator();
@@ -242,7 +242,7 @@ public class ResolverTree {
 
     });
 
-    final IntList sccs = dfstBuilder.getSCCs();
+    IntList sccs = dfstBuilder.getSCCs();
     final HashMap<PsiTypeVariable, Integer> index = new HashMap<PsiTypeVariable, Integer>();
 
     sccs.forEach(new IntConsumer() {
@@ -256,7 +256,7 @@ public class ResolverTree {
       }
     });
 
-    for (final Constraint constraint : candidates) {
+    for (Constraint constraint : candidates) {
       if (index.get(constraint.getLeft()).equals(index.get(constraint.getRight()))) {
         myConstraints.remove(constraint);
       }
@@ -264,8 +264,8 @@ public class ResolverTree {
 
     Binding binding = myBindingFactory.create();
 
-    for (final PsiTypeVariable fromVar : index.keySet()) {
-      final PsiTypeVariable toVar = dfstBuilder.getNodeByNNumber(index.get(fromVar).intValue());
+    for (PsiTypeVariable fromVar : index.keySet()) {
+      PsiTypeVariable toVar = dfstBuilder.getNodeByNNumber(index.get(fromVar).intValue());
 
       if (!fromVar.equals(toVar)) {
         binding = binding.compose(myBindingFactory.create(fromVar, toVar));
@@ -282,12 +282,12 @@ public class ResolverTree {
     }
   }
 
-  private void reduceTypeType(final Constraint constr) {
-    final PsiType left = constr.getLeft();
-    final PsiType right = constr.getRight();
-    final HashSet<Constraint> addendumRise = new HashSet<Constraint>();
-    final HashSet<Constraint> addendumSink = new HashSet<Constraint>();
-    final HashSet<Constraint> addendumWcrd = new HashSet<Constraint>();
+  private void reduceTypeType(Constraint constr) {
+    PsiType left = constr.getLeft();
+    PsiType right = constr.getRight();
+    HashSet<Constraint> addendumRise = new HashSet<Constraint>();
+    HashSet<Constraint> addendumSink = new HashSet<Constraint>();
+    HashSet<Constraint> addendumWcrd = new HashSet<Constraint>();
 
     int numSons = 0;
     Binding riseBinding = myBindingFactory.rise(left, right, addendumRise);
@@ -305,11 +305,11 @@ public class ResolverTree {
     Binding omitBinding = null;
 
     if (mySettings.exhaustive()) {
-      final PsiClassType.ClassResolveResult rightResult = Util.resolveType(right);
-      final PsiClassType.ClassResolveResult leftResult = Util.resolveType(left);
+      PsiClassType.ClassResolveResult rightResult = Util.resolveType(right);
+      PsiClassType.ClassResolveResult leftResult = Util.resolveType(left);
 
-      final PsiClass rightClass = rightResult.getElement();
-      final PsiClass leftClass = leftResult.getElement();
+      PsiClass rightClass = rightResult.getElement();
+      PsiClass leftClass = leftResult.getElement();
 
       if (rightClass != null && leftClass != null && rightClass.getManager().areElementsEquivalent(rightClass, leftClass)) {
         if (PsiUtil.typeParametersIterator(rightClass).hasNext()) {
@@ -363,25 +363,25 @@ public class ResolverTree {
     }
   }
 
-  private void fillTypeRange(final PsiType lowerBound,
-                             final PsiType upperBound,
-                             final HashSet<PsiType> holder) {
+  private void fillTypeRange(PsiType lowerBound,
+                             PsiType upperBound,
+                             HashSet<PsiType> holder) {
     if (lowerBound instanceof PsiClassType && upperBound instanceof PsiClassType) {
-      final PsiClassType.ClassResolveResult resultLower = ((PsiClassType) lowerBound).resolveGenerics();
-      final PsiClassType.ClassResolveResult resultUpper = ((PsiClassType) upperBound).resolveGenerics();
+      PsiClassType.ClassResolveResult resultLower = ((PsiClassType) lowerBound).resolveGenerics();
+      PsiClassType.ClassResolveResult resultUpper = ((PsiClassType) upperBound).resolveGenerics();
 
-      final PsiClass lowerClass = resultLower.getElement();
-      final PsiClass upperClass = resultUpper.getElement();
+      PsiClass lowerClass = resultLower.getElement();
+      PsiClass upperClass = resultUpper.getElement();
 
       if (lowerClass != null && upperClass != null && !lowerClass.equals(upperClass)) {
-        final PsiSubstitutor upperSubst = resultUpper.getSubstitutor();
-        final PsiClass[] parents = upperClass.getSupers();
-        final PsiElementFactory factory = JavaPsiFacade.getInstance(myProject).getElementFactory();
+        PsiSubstitutor upperSubst = resultUpper.getSubstitutor();
+        PsiClass[] parents = upperClass.getSupers();
+        PsiElementFactory factory = JavaPsiFacade.getInstance(myProject).getElementFactory();
 
-        for (final PsiClass parent : parents) {
-          final PsiSubstitutor superSubstitutor = TypeConversionUtil.getClassSubstitutor(parent, upperClass, upperSubst);
+        for (PsiClass parent : parents) {
+          PsiSubstitutor superSubstitutor = TypeConversionUtil.getClassSubstitutor(parent, upperClass, upperSubst);
           if (superSubstitutor != null) {
-            final PsiClassType type = factory.createType(parent, superSubstitutor);
+            PsiClassType type = factory.createType(parent, superSubstitutor);
             holder.add(type);
             fillTypeRange(lowerBound, type, holder);
           }
@@ -392,8 +392,8 @@ public class ResolverTree {
     }
   }
 
-  private PsiType[] getTypeRange(final PsiType lowerBound, final PsiType upperBound) {
-    final HashSet<PsiType> range = new HashSet<PsiType>();
+  private PsiType[] getTypeRange(PsiType lowerBound, PsiType upperBound) {
+    HashSet<PsiType> range = new HashSet<PsiType>();
 
     range.add(lowerBound);
     range.add(upperBound);
@@ -403,13 +403,13 @@ public class ResolverTree {
     return range.toArray(new PsiType[]{});
   }
 
-  private void reduceInterval(final Constraint left, final Constraint right) {
-    final PsiType leftType = left.getLeft();
-    final PsiType rightType = right.getRight();
-    final PsiTypeVariable var = (PsiTypeVariable) left.getRight();
+  private void reduceInterval(Constraint left, Constraint right) {
+    PsiType leftType = left.getLeft();
+    PsiType rightType = right.getRight();
+    PsiTypeVariable var = (PsiTypeVariable) left.getRight();
 
     if (leftType.equals(rightType)) {
-      final Binding binding = myBindingFactory.create(var, leftType);
+      Binding binding = myBindingFactory.create(var, leftType);
 
       myConstraints.remove(left);
       myConstraints.remove(right);
@@ -450,13 +450,13 @@ public class ResolverTree {
     mySons = new ResolverTree[riseRange.length + sinkRange.length];
 
     for (int i = 0; i < riseRange.length; i++) {
-      final PsiType type = riseRange[i];
+      PsiType type = riseRange[i];
 
       mySons[i] = applyRule(riseBinding.compose(myBindingFactory.create(var, type)));
     }
 
     for (int i = 0; i < sinkRange.length; i++) {
-      final PsiType type = sinkRange[i];
+      PsiType type = sinkRange[i];
 
       mySons[i + riseRange.length] = applyRule(sinkBinding.compose(myBindingFactory.create(var, type)));
     }
@@ -471,22 +471,22 @@ public class ResolverTree {
       reduceCyclicVariables();
     }
 
-    final HashMap<PsiTypeVariable, Constraint> myTypeVarConstraints = new HashMap<PsiTypeVariable, Constraint>();
-    final HashMap<PsiTypeVariable, Constraint> myVarTypeConstraints = new HashMap<PsiTypeVariable, Constraint>();
+    HashMap<PsiTypeVariable, Constraint> myTypeVarConstraints = new HashMap<PsiTypeVariable, Constraint>();
+    HashMap<PsiTypeVariable, Constraint> myVarTypeConstraints = new HashMap<PsiTypeVariable, Constraint>();
 
-    for (final Constraint constr : myConstraints) {
-      final PsiType left = constr.getLeft();
-      final PsiType right = constr.getRight();
+    for (Constraint constr : myConstraints) {
+      PsiType left = constr.getLeft();
+      PsiType right = constr.getRight();
 
       switch ((left instanceof PsiTypeVariable ? 0 : 1) + (right instanceof PsiTypeVariable ? 0 : 2)) {
         case 0:
           continue;
 
         case 1: {
-          final Constraint c = myTypeVarConstraints.get(right);
+          Constraint c = myTypeVarConstraints.get(right);
 
           if (c == null) {
-            final Constraint d = myVarTypeConstraints.get(right);
+            Constraint d = myVarTypeConstraints.get(right);
 
             if (d != null) {
               reduceInterval(constr, d);
@@ -502,10 +502,10 @@ public class ResolverTree {
         break;
 
         case 2: {
-          final Constraint c = myVarTypeConstraints.get(left);
+          Constraint c = myVarTypeConstraints.get(left);
 
           if (c == null) {
-            final Constraint d = myTypeVarConstraints.get(left);
+            Constraint d = myTypeVarConstraints.get(left);
 
             if (d != null) {
               reduceInterval(d, constr);
@@ -528,12 +528,12 @@ public class ResolverTree {
 
     //T1 < a < b ... < T2
     {
-      for (final Constraint constr : myConstraints) {
-        final PsiType left = constr.getLeft();
-        final PsiType right = constr.getRight();
+      for (Constraint constr : myConstraints) {
+        PsiType left = constr.getLeft();
+        PsiType right = constr.getRight();
 
         if (!(left instanceof PsiTypeVariable) && right instanceof PsiTypeVariable) {
-          final HashSet<PsiTypeVariable> bound = new PsiTypeVarCollector().getSet(left);
+          HashSet<PsiTypeVariable> bound = new PsiTypeVarCollector().getSet(left);
 
           if (bound.contains(right)) {
             myConstraints.remove(constr);
@@ -542,9 +542,9 @@ public class ResolverTree {
             return;
           }
 
-          final PsiManager manager = PsiManager.getInstance(myProject);
-          final PsiType leftType = left instanceof PsiWildcardType ? ((PsiWildcardType) left).getBound() : left;
-          final PsiType[] types = getTypeRange(PsiType.getJavaLangObject(manager, GlobalSearchScope.allScope(myProject)), leftType);
+          PsiManager manager = PsiManager.getInstance(myProject);
+          PsiType leftType = left instanceof PsiWildcardType ? ((PsiWildcardType) left).getBound() : left;
+          PsiType[] types = getTypeRange(PsiType.getJavaLangObject(manager, GlobalSearchScope.allScope(myProject)), leftType);
 
           mySons = new ResolverTree[types.length];
 
@@ -553,7 +553,7 @@ public class ResolverTree {
           }
 
           for (int i = 0; i < types.length; i++) {
-            final PsiType type = types[i];
+            PsiType type = types[i];
             mySons[i] = applyRule(myBindingFactory.create(((PsiTypeVariable) right), type));
           }
 
@@ -564,14 +564,14 @@ public class ResolverTree {
 
     //T1 < a < b < ...
     {
-      final HashSet<PsiTypeVariable> haveLeftBound = new HashSet<PsiTypeVariable>();
+      HashSet<PsiTypeVariable> haveLeftBound = new HashSet<PsiTypeVariable>();
 
       Constraint target = null;
-      final HashSet<PsiTypeVariable> boundVariables = new HashSet<PsiTypeVariable>();
+      HashSet<PsiTypeVariable> boundVariables = new HashSet<PsiTypeVariable>();
 
-      for (final Constraint constr : myConstraints) {
-        final PsiType leftType = constr.getLeft();
-        final PsiType rightType = constr.getRight();
+      for (Constraint constr : myConstraints) {
+        PsiType leftType = constr.getLeft();
+        PsiType rightType = constr.getRight();
 
         if (leftType instanceof PsiTypeVariable) {
           boundVariables.add((PsiTypeVariable) leftType);
@@ -587,9 +587,9 @@ public class ResolverTree {
 
       if (target == null) {
         if (mySettings.exhaustive()) {
-          for (final Constraint constr : myConstraints) {
-            final PsiType left = constr.getLeft();
-            final PsiType right = constr.getRight();
+          for (Constraint constr : myConstraints) {
+            PsiType left = constr.getLeft();
+            PsiType right = constr.getRight();
 
             PsiType[] range = null;
             PsiTypeVariable var = null;
@@ -619,7 +619,7 @@ public class ResolverTree {
 
         Binding binding = myBindingFactory.create();
 
-        for (final PsiTypeVariable var : myBindingFactory.getBoundVariables()) {
+        for (PsiTypeVariable var : myBindingFactory.getBoundVariables()) {
           if (!myCurrentBinding.binds(var) && !boundVariables.contains(var)) {
             binding = binding.compose(myBindingFactory.create(var, Bottom.BOTTOM));
           }
@@ -631,10 +631,10 @@ public class ResolverTree {
 
         mySons = new ResolverTree[]{applyRule(binding)};
       } else {
-        final PsiType type = target.getRight();
-        final PsiTypeVariable var = (PsiTypeVariable) target.getLeft();
+        PsiType type = target.getRight();
+        PsiTypeVariable var = (PsiTypeVariable) target.getLeft();
 
-        final Binding binding =
+        Binding binding =
             (haveLeftBound.contains(var) || type instanceof PsiWildcardType) || !mySettings.cookToWildcards()
                 ? myBindingFactory.create(var, type)
                 : myBindingFactory.create(var, PsiWildcardType.createExtends(PsiManager.getInstance(myProject), type));
@@ -649,7 +649,7 @@ public class ResolverTree {
   private void logSolution() {
     LOG.debug("Reduced system:");
 
-    for (final Constraint constr : myConstraints) {
+    for (Constraint constr : myConstraints) {
       LOG.debug(constr.toString());
     }
 
@@ -669,53 +669,53 @@ public class ResolverTree {
     PsiTypeVariable getVar(Constraint c);
   }
 
-  private void reduceTypeVar(final Constraint x, final Constraint y) {
+  private void reduceTypeVar(Constraint x, Constraint y) {
     reduceSideVar(x, y, new Reducer() {
-      public LinkedList<Pair<PsiType, Binding>> unify(final PsiType x, final PsiType y) {
+      public LinkedList<Pair<PsiType, Binding>> unify(PsiType x, PsiType y) {
         return myBindingFactory.intersect(x, y);
       }
 
-      public Constraint create(final PsiTypeVariable var, final PsiType type) {
+      public Constraint create(PsiTypeVariable var, PsiType type) {
         return new Subtype(type, var);
       }
 
-      public PsiType getType(final Constraint c) {
+      public PsiType getType(Constraint c) {
         return c.getLeft();
       }
 
-      public PsiTypeVariable getVar(final Constraint c) {
+      public PsiTypeVariable getVar(Constraint c) {
         return (PsiTypeVariable) c.getRight();
       }
     });
   }
 
-  private void reduceVarType(final Constraint x, final Constraint y) {
+  private void reduceVarType(Constraint x, Constraint y) {
     reduceSideVar(x, y, new Reducer() {
-      public LinkedList<Pair<PsiType, Binding>> unify(final PsiType x, final PsiType y) {
+      public LinkedList<Pair<PsiType, Binding>> unify(PsiType x, PsiType y) {
         return myBindingFactory.union(x, y);
       }
 
-      public Constraint create(final PsiTypeVariable var, final PsiType type) {
+      public Constraint create(PsiTypeVariable var, PsiType type) {
         return new Subtype(var, type);
       }
 
-      public PsiType getType(final Constraint c) {
+      public PsiType getType(Constraint c) {
         return c.getRight();
       }
 
-      public PsiTypeVariable getVar(final Constraint c) {
+      public PsiTypeVariable getVar(Constraint c) {
         return (PsiTypeVariable) c.getLeft();
       }
     });
   }
 
-  private void reduceSideVar(final Constraint x, final Constraint y, final Reducer reducer) {
-    final PsiTypeVariable var = reducer.getVar(x);
+  private void reduceSideVar(Constraint x, Constraint y, Reducer reducer) {
+    PsiTypeVariable var = reducer.getVar(x);
 
-    final PsiType xType = reducer.getType(x);
-    final PsiType yType = reducer.getType(y);
+    PsiType xType = reducer.getType(x);
+    PsiType yType = reducer.getType(y);
 
-    final LinkedList<Pair<PsiType, Binding>> union = reducer.unify(xType, yType);
+    LinkedList<Pair<PsiType, Binding>> union = reducer.unify(xType, yType);
 
     if (union.size() == 0) {
       return;
@@ -729,7 +729,7 @@ public class ResolverTree {
 
     Constraint prev = null;
 
-    for (final Pair<PsiType, Binding> pair : union) {
+    for (Pair<PsiType, Binding> pair : union) {
       if (prev != null) {
         myConstraints.remove(prev);
       }

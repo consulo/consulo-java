@@ -57,18 +57,18 @@ public class DescendantClassesEnumMacro extends Macro {
 
   @Override
   public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
-    final List<PsiClass> classes = findDescendants(context, params);
+    List<PsiClass> classes = findDescendants(context, params);
     if (classes == null || classes.size() == 0) return null;
     Result[] results = calculateResults(classes);
 
     return results[0];
   }
 
-  private static Result[] calculateResults(final List<PsiClass> classes) {
+  private static Result[] calculateResults(List<PsiClass> classes) {
     Result[] results = new Result[classes.size()];
     int i = 0;
 
-    for (final PsiClass aClass : classes) {
+    for (PsiClass aClass : classes) {
       results[i++] = new JavaPsiElementResult(aClass);
     }
     return results;
@@ -82,15 +82,15 @@ public class DescendantClassesEnumMacro extends Macro {
     Result result = params[0].calculateResult(context);
     if (result == null) return null;
     
-    final String paramResult = result.toString();
+    String paramResult = result.toString();
     if (paramResult == null) return null;
 
-    final boolean isAllowAbstract = isAllowAbstract(context, params);
-    final PsiClass myBaseClass =
+    boolean isAllowAbstract = isAllowAbstract(context, params);
+    PsiClass myBaseClass =
       JavaPsiFacade.getInstance(instance.getProject()).findClass(paramResult, GlobalSearchScope.allScope(context.getProject()));
 
     if (myBaseClass != null) {
-      final List<PsiClass> classes = new ArrayList<>();
+      List<PsiClass> classes = new ArrayList<>();
 
       ClassInheritorsSearch.search(myBaseClass, true)
         .forEach(new PsiElementProcessorAdapter<>((PsiElementProcessor<PsiClass>)element -> {
@@ -108,7 +108,7 @@ public class DescendantClassesEnumMacro extends Macro {
 
   @Override
   public Result calculateQuickResult(@Nonnull Expression[] params, ExpressionContext context) {
-    final List<PsiClass> classes = findDescendants(context, params);
+    List<PsiClass> classes = findDescendants(context, params);
     if (classes == null || classes.size() == 0) return null;
     Result[] results = calculateResults(classes);
 
@@ -117,14 +117,14 @@ public class DescendantClassesEnumMacro extends Macro {
 
   @Override
   public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, ExpressionContext context) {
-    final List<PsiClass> classes = findDescendants(context, params);
+    List<PsiClass> classes = findDescendants(context, params);
     if (classes == null || classes.size() == 0) return null;
 
     Set<LookupElement> set = new LinkedHashSet<>();
     boolean isShortName = params.length > 1 && !Boolean.valueOf(params[1].calculateResult(context).toString());
 
     for (PsiClass object : classes) {
-      final String name = isShortName ? object.getName() : object.getQualifiedName();
+      String name = isShortName ? object.getName() : object.getQualifiedName();
       if (name != null && name.length() > 0) {
         set.add(LookupElementBuilder.create(name));
       }
@@ -133,13 +133,13 @@ public class DescendantClassesEnumMacro extends Macro {
     return set.toArray(new LookupElement[set.size()]);
   }
 
-  private static boolean isAbstractOrInterface(final PsiClass psiClass) {
-    final PsiModifierList modifierList = psiClass.getModifierList();
+  private static boolean isAbstractOrInterface(PsiClass psiClass) {
+    PsiModifierList modifierList = psiClass.getModifierList();
 
     return psiClass.isInterface() || (modifierList != null && modifierList.hasModifierProperty(PsiModifier.ABSTRACT));
   }
 
-  private static boolean isAllowAbstract(final ExpressionContext context, final Expression[] params) {
+  private static boolean isAllowAbstract(ExpressionContext context, Expression[] params) {
       return params.length > 2 ? Boolean.valueOf(params[2].calculateResult(context).toString()) : true;
   }
 

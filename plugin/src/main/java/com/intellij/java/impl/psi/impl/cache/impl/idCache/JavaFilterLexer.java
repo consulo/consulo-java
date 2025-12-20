@@ -34,7 +34,7 @@ public class JavaFilterLexer extends BaseFilterLexer
 			JavaTokenType.RBRACE, JavaTokenType.LBRACKET, JavaTokenType.RBRACKET, JavaTokenType.SEMICOLON, JavaTokenType.COMMA, JavaTokenType.DOT, JavaTokenType.ELLIPSIS, JavaTokenType.AT),
 			ElementType.OPERATION_BIT_SET);
 
-	public JavaFilterLexer(final Lexer originalLexer, final OccurrenceConsumer table)
+	public JavaFilterLexer(Lexer originalLexer, OccurrenceConsumer table)
 	{
 		super(originalLexer, table);
 	}
@@ -42,7 +42,7 @@ public class JavaFilterLexer extends BaseFilterLexer
 	@Override
 	public void advance()
 	{
-		final IElementType tokenType = myDelegate.getTokenType();
+		IElementType tokenType = myDelegate.getTokenType();
 
 		if(tokenType == JavaTokenType.IDENTIFIER || tokenType == JavaTokenType.LONG_LITERAL || tokenType == JavaTokenType.INTEGER_LITERAL || tokenType == JavaTokenType.CHARACTER_LITERAL || tokenType
 				== JavaTokenType.ARROW || tokenType == JavaTokenType.DOUBLE_COLON)

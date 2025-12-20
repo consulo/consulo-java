@@ -53,7 +53,7 @@ public class ParameterNamingConventionInspection extends ConventionInspection {
 
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final String parametername = (String)infos[0];
+    String parametername = (String)infos[0];
     if (parametername.length() < getMinLength()) {
       return InspectionGadgetsLocalize.parameterNamingConventionProblemDescriptorShort().get();
     }
@@ -85,12 +85,12 @@ public class ParameterNamingConventionInspection extends ConventionInspection {
 
     @Override
     public void visitParameter(@Nonnull PsiParameter variable) {
-      final PsiElement scope = variable.getDeclarationScope();
+      PsiElement scope = variable.getDeclarationScope();
       if (scope instanceof PsiCatchSection ||
           scope instanceof PsiForeachStatement) {
         return;
       }
-      final String name = variable.getName();
+      String name = variable.getName();
       if (name == null || isValid(name)) {
         return;
       }

@@ -46,14 +46,14 @@ public class InnerClassReferenceVisitor extends JavaRecursiveElementVisitor {
       return true;
     }
     PsiClass classScope = aClass;
-    final PsiClass outerClass =
+    PsiClass outerClass =
       ClassUtils.getContainingClass(innerClass);
     while (classScope != null) {
       if (InheritanceUtil.isInheritorOrSelf(outerClass, classScope,
                                             true)) {
         return false;
       }
-      final PsiElement scope = classScope.getScope();
+      PsiElement scope = classScope.getScope();
       if (scope instanceof PsiClass) {
         classScope = (PsiClass)scope;
       }
@@ -71,7 +71,7 @@ public class InnerClassReferenceVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     super.visitThisExpression(expression);
-    final PsiJavaCodeReferenceElement qualifier = expression.getQualifier();
+    PsiJavaCodeReferenceElement qualifier = expression.getQualifier();
     if (isContainingClassQualifier(qualifier)) {
       referencesStaticallyAccessible = false;
     }
@@ -84,7 +84,7 @@ public class InnerClassReferenceVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     super.visitSuperExpression(expression);
-    final PsiJavaCodeReferenceElement qualifier = expression.getQualifier();
+    PsiJavaCodeReferenceElement qualifier = expression.getQualifier();
     if (isContainingClassQualifier(qualifier)) {
       referencesStaticallyAccessible = false;
     }
@@ -95,11 +95,11 @@ public class InnerClassReferenceVisitor extends JavaRecursiveElementVisitor {
     if (qualifier == null) {
       return false;
     }
-    final PsiElement element = qualifier.resolve();
+    PsiElement element = qualifier.resolve();
     if (!(element instanceof PsiClass)) {
       return false;
     }
-    final PsiClass aClass = (PsiClass)element;
+    PsiClass aClass = (PsiClass)element;
     return !aClass.equals(innerClass);
   }
 
@@ -109,18 +109,18 @@ public class InnerClassReferenceVisitor extends JavaRecursiveElementVisitor {
     if (!referencesStaticallyAccessible) {
       return;
     }
-    final PsiElement parent = reference.getParent();
+    PsiElement parent = reference.getParent();
     if (parent instanceof PsiThisExpression ||
         parent instanceof PsiSuperExpression) {
       return;
     }
     super.visitReferenceElement(reference);
-    final PsiElement element = reference.resolve();
+    PsiElement element = reference.resolve();
     if (!(element instanceof PsiClass)) {
       return;
     }
-    final PsiClass aClass = (PsiClass)element;
-    final PsiElement scope = aClass.getScope();
+    PsiClass aClass = (PsiClass)element;
+    PsiElement scope = aClass.getScope();
     if (!(scope instanceof PsiClass)) {
       return;
     }
@@ -135,36 +135,36 @@ public class InnerClassReferenceVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     super.visitReferenceExpression(expression);
-    final PsiExpression qualifier =
+    PsiExpression qualifier =
       expression.getQualifierExpression();
     if (qualifier instanceof PsiSuperExpression) {
       return;
     }
     if (qualifier instanceof PsiReferenceExpression) {
-      final PsiReferenceExpression referenceExpression =
+      PsiReferenceExpression referenceExpression =
         (PsiReferenceExpression)qualifier;
-      final PsiElement resolvedExpression = referenceExpression.resolve();
+      PsiElement resolvedExpression = referenceExpression.resolve();
       if (!(resolvedExpression instanceof PsiField) &&
           !(resolvedExpression instanceof PsiMethod)) {
         return;
       }
     }
-    final PsiElement element = expression.resolve();
+    PsiElement element = expression.resolve();
     if (element instanceof PsiMethod || element instanceof PsiField) {
-      final PsiMember member = (PsiMember)element;
+      PsiMember member = (PsiMember)element;
       if (member.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }
-      final PsiClass containingClass = member.getContainingClass();
+      PsiClass containingClass = member.getContainingClass();
       referencesStaticallyAccessible &=
         isClassStaticallyAccessible(containingClass);
     }
     if (element instanceof PsiLocalVariable ||
         element instanceof PsiParameter) {
-      final PsiElement containingMethod =
+      PsiElement containingMethod =
         PsiTreeUtil.getParentOfType(expression,
                                     PsiMethod.class);
-      final PsiElement referencedMethod =
+      PsiElement referencedMethod =
         PsiTreeUtil.getParentOfType(element, PsiMethod.class);
       if (containingMethod != null && referencedMethod != null &&
           !containingMethod.equals(referencedMethod)) {

@@ -70,7 +70,7 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
         myWordToGroupMap.clear();
     }
 
-    private void addNameGroup(@NonNls final String group) {
+    private void addNameGroup(@NonNls String group) {
         myNameGroups.add(group);
         List<String> words = StringUtil.split(group, ",");
         for (String word : words) {
@@ -140,7 +140,7 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
     private class MyVisitor extends JavaElementVisitor {
         private final ProblemsHolder myProblemsHolder;
 
-        public MyVisitor(final ProblemsHolder problemsHolder) {
+        public MyVisitor(ProblemsHolder problemsHolder) {
             myProblemsHolder = problemsHolder;
         }
 
@@ -166,11 +166,11 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
 
         @Override
         public void visitCallExpression(PsiCallExpression expression) {
-            final PsiMethod psiMethod = expression.resolveMethod();
-            final PsiExpressionList argList = expression.getArgumentList();
+            PsiMethod psiMethod = expression.resolveMethod();
+            PsiExpressionList argList = expression.getArgumentList();
             if (psiMethod != null && argList != null) {
-                final PsiExpression[] args = argList.getExpressions();
-                final PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
+                PsiExpression[] args = argList.getExpressions();
+                PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
                 for (int i = 0; i < parameters.length; i++) {
                     if (i >= args.length) {
                         break;
@@ -178,7 +178,7 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
                     if (args[i] instanceof PsiReferenceExpression referenceExpression) {
                         // PsiParameter.getName() can be expensive for compiled class files, so check reference name before
                         // fetching parameter name
-                        final String refName = referenceExpression.getReferenceName();
+                        String refName = referenceExpression.getReferenceName();
                         if (findNameGroup(refName) != null) {
                             checkCombination(args[i], parameters[i].getName(), refName, "suspicious.name.parameter");
                         }
@@ -188,20 +188,20 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
         }
 
         @Override
-        public void visitReturnStatement(final PsiReturnStatement statement) {
-            final PsiExpression returnValue = statement.getReturnValue();
+        public void visitReturnStatement(PsiReturnStatement statement) {
+            PsiExpression returnValue = statement.getReturnValue();
             PsiMethod containingMethod = PsiTreeUtil.getParentOfType(returnValue, PsiMethod.class);
             if (returnValue instanceof PsiReferenceExpression referenceExpression && containingMethod != null) {
-                final String refName = referenceExpression.getReferenceName();
+                String refName = referenceExpression.getReferenceName();
                 checkCombination(returnValue, containingMethod.getName(), refName, "suspicious.name.return");
             }
         }
 
         private void checkCombination(
-            final PsiElement location,
-            @Nullable final String name,
-            @Nullable final String referenceName,
-            final String key
+            PsiElement location,
+            @Nullable String name,
+            @Nullable String referenceName,
+            String key
         ) {
             String nameGroup1 = findNameGroup(name);
             String nameGroup2 = findNameGroup(referenceName);
@@ -211,7 +211,7 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
         }
 
         @Nullable
-        private String findNameGroup(@Nullable final String name) {
+        private String findNameGroup(@Nullable String name) {
             if (name == null) {
                 return null;
             }

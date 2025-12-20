@@ -64,21 +64,21 @@ public class NegatedEqualityExpressionInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = element.getParent();
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement parent = element.getParent();
             if (!(parent instanceof PsiPrefixExpression)) {
                 return;
             }
-            final PsiPrefixExpression prefixExpression = (PsiPrefixExpression) parent;
+            PsiPrefixExpression prefixExpression = (PsiPrefixExpression) parent;
             if (!JavaTokenType.EXCL.equals(prefixExpression.getOperationTokenType())) {
                 return;
             }
-            final PsiExpression operand = ParenthesesUtils.stripParentheses(prefixExpression.getOperand());
+            PsiExpression operand = ParenthesesUtils.stripParentheses(prefixExpression.getOperand());
             if (!(operand instanceof PsiBinaryExpression)) {
                 return;
             }
-            final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) operand;
-            final IElementType tokenType = binaryExpression.getOperationTokenType();
+            PsiBinaryExpression binaryExpression = (PsiBinaryExpression) operand;
+            IElementType tokenType = binaryExpression.getOperationTokenType();
             StringBuilder text = new StringBuilder(binaryExpression.getLOperand().getText());
             if (JavaTokenType.EQEQ.equals(tokenType)) {
                 text.append("!=");
@@ -89,7 +89,7 @@ public class NegatedEqualityExpressionInspection extends BaseInspection {
             else {
                 return;
             }
-            final PsiExpression rhs = binaryExpression.getROperand();
+            PsiExpression rhs = binaryExpression.getROperand();
             if (rhs != null) {
                 text.append(rhs.getText());
             }
@@ -110,12 +110,12 @@ public class NegatedEqualityExpressionInspection extends BaseInspection {
             if (!JavaTokenType.EXCL.equals(expression.getOperationTokenType())) {
                 return;
             }
-            final PsiExpression operand = ParenthesesUtils.stripParentheses(expression.getOperand());
+            PsiExpression operand = ParenthesesUtils.stripParentheses(expression.getOperand());
             if (!(operand instanceof PsiBinaryExpression)) {
                 return;
             }
-            final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) operand;
-            final IElementType tokenType = binaryExpression.getOperationTokenType();
+            PsiBinaryExpression binaryExpression = (PsiBinaryExpression) operand;
+            IElementType tokenType = binaryExpression.getOperationTokenType();
             if (JavaTokenType.EQEQ.equals(tokenType)) {
                 registerError(expression.getOperationSign(), "==");
             }

@@ -34,14 +34,14 @@ public class JavaAnonymousClassesNodeProvider implements FileStructureNodeProvid
     @Override
     public Collection<JavaAnonymousClassTreeElement> provideNodes(@Nonnull TreeElement node) {
         if (node instanceof PsiMethodTreeElement || node instanceof PsiFieldTreeElement || node instanceof ClassInitializerTreeElement) {
-            final PsiElement el = ((PsiTreeElementBase) node).getElement();
+            PsiElement el = ((PsiTreeElementBase) node).getElement();
             if (el != null) {
                 Application application = el.getApplication();
 
                 ExtensionPoint<AnonymousElementProvider> point = application.getExtensionPoint(AnonymousElementProvider.class);
 
                 PsiElement[] anonymElements = point.computeSafeIfAny(provider -> {
-                    final PsiElement[] elements = provider.getAnonymousElements(el);
+                    PsiElement[] elements = provider.getAnonymousElements(el);
                     return elements.length > 0 ? elements : null;
                 });
 

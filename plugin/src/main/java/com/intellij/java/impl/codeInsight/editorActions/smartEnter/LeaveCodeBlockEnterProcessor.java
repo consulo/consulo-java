@@ -46,7 +46,7 @@ public class LeaveCodeBlockEnterProcessor implements EnterProcessor
 			return false;
 		}
 
-		final ASTNode node = psiElement.getNode();
+		ASTNode node = psiElement.getNode();
 		if(node != null && CONTROL_FLOW_ELEMENT_TYPES.contains(node.getElementType()))
 		{
 			return false;
@@ -58,19 +58,19 @@ public class LeaveCodeBlockEnterProcessor implements EnterProcessor
 			return false;
 		}
 
-		final int offset = parent.getTextRange().getEndOffset();
+		int offset = parent.getTextRange().getEndOffset();
 
 		// Check if there is empty line after the code block. Just move caret there in the case of the positive answer.
-		final CharSequence text = editor.getDocument().getCharsSequence();
+		CharSequence text = editor.getDocument().getCharsSequence();
 		if(offset < text.length() - 1)
 		{
-			final int i = CharArrayUtil.shiftForward(text, offset + 1, " \t");
+			int i = CharArrayUtil.shiftForward(text, offset + 1, " \t");
 			if(i < text.length() && text.charAt(i) == '\n')
 			{
 				editor.getCaretModel().moveToOffset(offset + 1);
 				EditorActionManager actionManager = EditorActionManager.getInstance();
 				EditorActionHandler actionHandler = actionManager.getActionHandler(IdeActions.ACTION_EDITOR_MOVE_LINE_END);
-				final DataContext dataContext = DataManager.getInstance().getDataContext(editor.getComponent());
+				DataContext dataContext = DataManager.getInstance().getDataContext(editor.getComponent());
 				if(dataContext != null)
 				{
 					actionHandler.execute(editor, dataContext);

@@ -62,10 +62,10 @@ public class FinalizeNotProtectedInspection extends BaseInspection {
 
         public void doFix(Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
-            final PsiElement methodName = descriptor.getPsiElement();
-            final PsiMethod method = (PsiMethod) methodName.getParent();
+            PsiElement methodName = descriptor.getPsiElement();
+            PsiMethod method = (PsiMethod) methodName.getParent();
             assert method != null;
-            final PsiModifierList modifiers = method.getModifierList();
+            PsiModifierList modifiers = method.getModifierList();
             modifiers.setModifierProperty(PsiModifier.PUBLIC, false);
             modifiers.setModifierProperty(PsiModifier.PRIVATE, false);
             modifiers.setModifierProperty(PsiModifier.PROTECTED, true);
@@ -78,11 +78,11 @@ public class FinalizeNotProtectedInspection extends BaseInspection {
         @Override
         public void visitMethod(@Nonnull PsiMethod method) {
             //note: no call to super;
-            final String methodName = method.getName();
+            String methodName = method.getName();
             if (!HardcodedMethodConstants.FINALIZE.equals(methodName)) {
                 return;
             }
-            final PsiParameterList parameterList = method.getParameterList();
+            PsiParameterList parameterList = method.getParameterList();
             if (parameterList.getParametersCount() != 0) {
                 return;
             }

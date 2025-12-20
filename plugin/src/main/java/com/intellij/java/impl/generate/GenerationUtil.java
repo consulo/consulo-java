@@ -224,7 +224,7 @@ public class GenerationUtil
 
 			// field information
 			logger.debug("Velocity Context - adding fields");
-			final List<FieldElement> fieldElements = ElementUtils.getOnlyAsFieldElements(selectedMembers, selectedNotNullMembers, useAccessors);
+			List<FieldElement> fieldElements = ElementUtils.getOnlyAsFieldElements(selectedMembers, selectedNotNullMembers, useAccessors);
 			vc.put("fields", fieldElements);
 			if (fieldElements.size() == 1)
 			{
@@ -265,7 +265,7 @@ public class GenerationUtil
 			if (member != null)
 			{
 				vc.put("java_version", PsiAdapter.getJavaVersion(member));
-				final Project project = member.getProject();
+				Project project = member.getProject();
 				vc.put("settings", CodeStyleSettingsManager.getSettings(project));
 				vc.put("project", project);
 			}

@@ -51,7 +51,7 @@ public class UnnecessarilyQualifiedInnerClassAccessInspection extends BaseInspec
     @Override
     @RequiredReadAction
     protected String buildErrorString(Object... infos) {
-        final PsiClass aClass = (PsiClass) infos[0];
+        PsiClass aClass = (PsiClass) infos[0];
         return InspectionGadgetsLocalize.unnecessarilyQualifiedInnerClassAccessProblemDescriptor(aClass.getName()).get();
     }
 
@@ -74,17 +74,17 @@ public class UnnecessarilyQualifiedInnerClassAccessInspection extends BaseInspec
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = element.getParent();
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement parent = element.getParent();
             if (!(parent instanceof PsiJavaCodeReferenceElement)) {
                 return;
             }
-            final PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement) parent;
-            final PsiElement target = referenceElement.resolve();
+            PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement) parent;
+            PsiElement target = referenceElement.resolve();
             if (!(target instanceof PsiClass)) {
                 return;
             }
-            final PsiClass aClass = (PsiClass) target;
+            PsiClass aClass = (PsiClass) target;
             ImportUtils.addImportIfNeeded(aClass, element);
             element.delete();
         }
@@ -99,23 +99,23 @@ public class UnnecessarilyQualifiedInnerClassAccessInspection extends BaseInspec
         @Override
         public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
             super.visitReferenceElement(reference);
-            final PsiElement qualifier = reference.getQualifier();
+            PsiElement qualifier = reference.getQualifier();
             if (!(qualifier instanceof PsiJavaCodeReferenceElement)) {
                 return;
             }
             if (isInImportOrPackage(reference)) {
                 return;
             }
-            final PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement) qualifier;
-            final PsiReferenceParameterList parameterList = referenceElement.getParameterList();
+            PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement) qualifier;
+            PsiReferenceParameterList parameterList = referenceElement.getParameterList();
             if (parameterList != null && parameterList.getTypeParameterElements().length > 0) {
                 return;
             }
-            final PsiElement qualifierTarget = referenceElement.resolve();
+            PsiElement qualifierTarget = referenceElement.resolve();
             if (!(qualifierTarget instanceof PsiClass)) {
                 return;
             }
-            final PsiClass referenceClass = PsiTreeUtil.getParentOfType(reference, PsiClass.class);
+            PsiClass referenceClass = PsiTreeUtil.getParentOfType(reference, PsiClass.class);
             if (referenceClass == null) {
                 return;
             }
@@ -127,19 +127,19 @@ public class UnnecessarilyQualifiedInnerClassAccessInspection extends BaseInspec
                     return;
                 }
             }
-            final PsiElement target = reference.resolve();
+            PsiElement target = reference.resolve();
             if (!(target instanceof PsiClass)) {
                 return;
             }
-            final PsiClass aClass = (PsiClass) target;
-            final PsiClass containingClass = aClass.getContainingClass();
+            PsiClass aClass = (PsiClass) target;
+            PsiClass containingClass = aClass.getContainingClass();
             if (containingClass == null) {
                 return;
             }
             if (!containingClass.equals(qualifierTarget)) {
                 return;
             }
-            final String shortName = aClass.getName();
+            String shortName = aClass.getName();
             if (!isReferenceToTarget(shortName, aClass, reference)) {
                 return;
             }
@@ -152,10 +152,10 @@ public class UnnecessarilyQualifiedInnerClassAccessInspection extends BaseInspec
         }
 
         private boolean isReferenceToTarget(String referenceText, PsiClass target, PsiElement context) {
-            final PsiManager manager = target.getManager();
-            final JavaPsiFacade facade = JavaPsiFacade.getInstance(manager.getProject());
-            final PsiResolveHelper resolveHelper = facade.getResolveHelper();
-            final PsiClass referencedClass = resolveHelper.resolveReferencedClass(referenceText, context);
+            PsiManager manager = target.getManager();
+            JavaPsiFacade facade = JavaPsiFacade.getInstance(manager.getProject());
+            PsiResolveHelper resolveHelper = facade.getResolveHelper();
+            PsiClass referencedClass = resolveHelper.resolveReferencedClass(referenceText, context);
             return manager.areElementsEquivalent(target, referencedClass);
         }
 

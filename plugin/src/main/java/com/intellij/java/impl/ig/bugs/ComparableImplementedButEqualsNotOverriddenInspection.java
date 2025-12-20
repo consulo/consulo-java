@@ -56,22 +56,22 @@ public class ComparableImplementedButEqualsNotOverriddenInspection extends BaseI
         @Override
         public void visitClass(PsiClass aClass) {
             super.visitClass(aClass);
-            final PsiMethod[] methods = aClass.findMethodsByName(
+            PsiMethod[] methods = aClass.findMethodsByName(
                 HardcodedMethodConstants.COMPARE_TO, false);
             if (methods.length == 0) {
                 return;
             }
-            final Project project = aClass.getProject();
-            final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-            final GlobalSearchScope scope = aClass.getResolveScope();
-            final PsiClass comparableClass = psiFacade.findClass(CommonClassNames.JAVA_LANG_COMPARABLE, scope);
+            Project project = aClass.getProject();
+            JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+            GlobalSearchScope scope = aClass.getResolveScope();
+            PsiClass comparableClass = psiFacade.findClass(CommonClassNames.JAVA_LANG_COMPARABLE, scope);
             if (comparableClass == null) {
                 return;
             }
             if (!aClass.isInheritor(comparableClass, true)) {
                 return;
             }
-            final PsiMethod compareToMethod = comparableClass.getMethods()[0];
+            PsiMethod compareToMethod = comparableClass.getMethods()[0];
             boolean foundCompareTo = false;
             for (PsiMethod method : methods) {
                 if (MethodSignatureUtil.isSuperMethod(compareToMethod, method)) {
@@ -82,7 +82,7 @@ public class ComparableImplementedButEqualsNotOverriddenInspection extends BaseI
             if (!foundCompareTo) {
                 return;
             }
-            final PsiMethod[] equalsMethods = aClass.findMethodsByName(
+            PsiMethod[] equalsMethods = aClass.findMethodsByName(
                 HardcodedMethodConstants.EQUALS, false);
             for (PsiMethod equalsMethod : equalsMethods) {
                 if (MethodUtils.isEquals(equalsMethod)) {

@@ -28,8 +28,8 @@ class ConjunctionPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiPolyadicExpression)) {
       return false;
     }
-    final PsiPolyadicExpression expression = (PsiPolyadicExpression)element;
-    final IElementType tokenType = expression.getOperationTokenType();
+    PsiPolyadicExpression expression = (PsiPolyadicExpression)element;
+    IElementType tokenType = expression.getOperationTokenType();
     if (!tokenType.equals(JavaTokenType.ANDAND) &&
         !tokenType.equals(JavaTokenType.OROR)) {
       return false;

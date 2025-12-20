@@ -43,7 +43,7 @@ public class PublicConstructorInNonPublicClassInspection extends BaseInspection 
 
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiMethod method = (PsiMethod) infos[0];
+        PsiMethod method = (PsiMethod) infos[0];
         return InspectionGadgetsLocalize.publicConstructorInNonPublicClassProblemDescriptor(method.getName()).get();
     }
 
@@ -53,9 +53,9 @@ public class PublicConstructorInNonPublicClassInspection extends BaseInspection 
 
     @Nonnull
     public InspectionGadgetsFix[] buildFixes(Object... infos) {
-        final List<InspectionGadgetsFix> fixes = new ArrayList<>();
-        final PsiMethod constructor = (PsiMethod) infos[0];
-        final PsiClass aClass = constructor.getContainingClass();
+        List<InspectionGadgetsFix> fixes = new ArrayList<>();
+        PsiMethod constructor = (PsiMethod) infos[0];
+        PsiClass aClass = constructor.getContainingClass();
         if (aClass != null && aClass.hasModifierProperty(PsiModifier.PRIVATE)) {
             fixes.add(new SetConstructorModifierFix(PsiModifier.PRIVATE));
         }
@@ -78,8 +78,8 @@ public class PublicConstructorInNonPublicClassInspection extends BaseInspection 
         }
 
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiModifierList modifierList = (PsiModifierList) element.getParent();
+            PsiElement element = descriptor.getPsiElement();
+            PsiModifierList modifierList = (PsiModifierList) element.getParent();
             modifierList.setModifierProperty(PsiModifier.PUBLIC, false);
             modifierList.setModifierProperty(modifier, true);
         }
@@ -96,7 +96,7 @@ public class PublicConstructorInNonPublicClassInspection extends BaseInspection 
             if (!method.hasModifierProperty(PsiModifier.PUBLIC)) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return;
             }
@@ -105,7 +105,7 @@ public class PublicConstructorInNonPublicClassInspection extends BaseInspection 
                 return;
             }
             if (SerializationUtils.isExternalizable(containingClass)) {
-                final PsiParameterList parameterList = method.getParameterList();
+                PsiParameterList parameterList = method.getParameterList();
                 if (parameterList.getParametersCount() == 0) {
                     return;
                 }

@@ -324,7 +324,7 @@ public abstract class GenericsHighlightingTest extends LightDaemonAnalyzerTestCa
     PsiClass collectionsClass = getJavaFacade().findClass(CommonClassNames.JAVA_UTIL_COLLECTIONS, GlobalSearchScope.moduleWithLibrariesScope(getModule()));
     assertNotNull(collectionsClass);
     collectionsClass = (PsiClass)collectionsClass.getNavigationElement();
-    final String text = collectionsClass.getContainingFile().getText();
+    String text = collectionsClass.getContainingFile().getText();
     configureFromFileText("Collections.java", text.replaceAll("\r", "\n"));
     doTestConfiguredFile(false, false, null);
   }

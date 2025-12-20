@@ -46,30 +46,30 @@ public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
   @Override
   @RequiredReadAction
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
-    final PsiIfStatement ifStatement = PsiTreeUtil.getParentOfType(element, PsiIfStatement.class);
+    PsiIfStatement ifStatement = PsiTreeUtil.getParentOfType(element, PsiIfStatement.class);
     if (ifStatement == null || ifStatement.getCondition() == null) {
       return false;
     }
 
-    final PsiExpression condition = ifStatement.getCondition();
+    PsiExpression condition = ifStatement.getCondition();
 
     if (condition == null || !(condition instanceof PsiPolyadicExpression)) {
       return false;
     }
 
-    final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)condition;
-    final PsiType expressionType = polyadicExpression.getType();
+    PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)condition;
+    PsiType expressionType = polyadicExpression.getType();
     if (expressionType == null || !PsiType.BOOLEAN.isAssignableFrom(expressionType)) {
       return false;
     }
 
-    final IElementType operation = polyadicExpression.getOperationTokenType();
+    IElementType operation = polyadicExpression.getOperationTokenType();
 
     if (operation != JavaTokenType.OROR && operation != JavaTokenType.ANDAND) {
       return false;
     }
 
-    final PsiExpression operand = findOperand(element, polyadicExpression);
+    PsiExpression operand = findOperand(element, polyadicExpression);
 
     if (operand == null) {
       return false;
@@ -81,15 +81,15 @@ public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
   @Override
   @RequiredReadAction
   public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
-    final PsiIfStatement ifStatement = PsiTreeUtil.getParentOfType(element, PsiIfStatement.class);
+    PsiIfStatement ifStatement = PsiTreeUtil.getParentOfType(element, PsiIfStatement.class);
     if (ifStatement == null) {
       return;
     }
 
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
-    final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+    PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
+    CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
 
-    final PsiStatement newIfStatement = create(factory, ifStatement, element);
+    PsiStatement newIfStatement = create(factory, ifStatement, element);
     if (newIfStatement == null) {
       return;
     }
@@ -100,15 +100,15 @@ public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
   @Nullable
   @RequiredReadAction
   private static PsiStatement create(@Nonnull PsiElementFactory factory, @Nonnull PsiIfStatement ifStatement, @Nonnull PsiElement element) {
-    final PsiExpression condition = ifStatement.getCondition();
+    PsiExpression condition = ifStatement.getCondition();
 
     if (condition == null || !(condition instanceof PsiPolyadicExpression)) {
       return null;
     }
 
-    final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)condition;
+    PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)condition;
 
-    final PsiExpression operand = findOperand(element, polyadicExpression);
+    PsiExpression operand = findOperand(element, polyadicExpression);
 
     if (operand == null) {
       return null;
@@ -130,10 +130,10 @@ public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
     @Nonnull PsiPolyadicExpression expression,
     @Nonnull PsiExpression operand
   ) {
-    final StringBuilder sb = new StringBuilder();
+    StringBuilder sb = new StringBuilder();
     for (PsiExpression e : expression.getOperands()) {
       if (e == operand) continue;
-      final PsiJavaToken token = expression.getTokenBeforeOperand(e);
+      PsiJavaToken token = expression.getTokenBeforeOperand(e);
       if (token != null && sb.length() != 0) {
         sb.append(token.getText()).append(" ");
       }
@@ -220,7 +220,7 @@ public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
 
   @Nonnull
   private static String createIfString(@Nonnull String condition, @Nonnull String thenBranch, @Nullable String elseBranch) {
-    final String elsePart = elseBranch != null ? " else " + elseBranch : "";
+    String elsePart = elseBranch != null ? " else " + elseBranch : "";
     return "if (" + condition + ")\n" + thenBranch + elsePart;
   }
 
@@ -244,10 +244,10 @@ public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
   @Nullable
   @RequiredReadAction
   private static PsiExpression findOperand(@Nonnull PsiElement e, @Nonnull PsiPolyadicExpression expression) {
-    final TextRange elementTextRange = e.getTextRange();
+    TextRange elementTextRange = e.getTextRange();
 
     for (PsiExpression operand : expression.getOperands()) {
-      final TextRange operandTextRange = operand.getTextRange();
+      TextRange operandTextRange = operand.getTextRange();
       if (operandTextRange != null && operandTextRange.contains(elementTextRange)) {
         return operand;
       }

@@ -40,12 +40,12 @@ public class KindSorter implements Sorter
 	private final Comparator COMPARATOR = new Comparator()
 	{
 		@Override
-		public int compare(final Object o1, final Object o2)
+		public int compare(Object o1, Object o2)
 		{
 			return getWeight(o1) - getWeight(o2);
 		}
 
-		private int getWeight(final Object value)
+		private int getWeight(Object value)
 		{
 			if(value instanceof JavaAnonymousClassTreeElement)
 			{
@@ -65,8 +65,8 @@ public class KindSorter implements Sorter
 			}
 			if(value instanceof PsiMethodTreeElement)
 			{
-				final PsiMethodTreeElement methodTreeElement = (PsiMethodTreeElement) value;
-				final PsiMethod method = methodTreeElement.getMethod();
+				PsiMethodTreeElement methodTreeElement = (PsiMethodTreeElement) value;
+				PsiMethod method = methodTreeElement.getMethod();
 
 				return method != null && method.isConstructor() ? 30 : 35;
 			}

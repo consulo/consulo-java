@@ -46,11 +46,11 @@ public class TextLabelInSwitchStatementInspection extends BaseInspection {
             @Nonnull PsiSwitchStatement statement
         ) {
             super.visitSwitchStatement(statement);
-            final PsiCodeBlock body = statement.getBody();
+            PsiCodeBlock body = statement.getBody();
             if (body == null) {
                 return;
             }
-            final PsiStatement[] statements = body.getStatements();
+            PsiStatement[] statements = body.getStatements();
             for (PsiStatement statement1 : statements) {
                 checkForLabel(statement1);
             }
@@ -60,8 +60,8 @@ public class TextLabelInSwitchStatementInspection extends BaseInspection {
             if (!(statement instanceof PsiLabeledStatement)) {
                 return;
             }
-            final PsiLabeledStatement labeledStatement = (PsiLabeledStatement) statement;
-            final PsiIdentifier label = labeledStatement.getLabelIdentifier();
+            PsiLabeledStatement labeledStatement = (PsiLabeledStatement) statement;
+            PsiIdentifier label = labeledStatement.getLabelIdentifier();
             registerError(label);
         }
     }

@@ -67,26 +67,26 @@ public class LoopConditionNotUpdatedInsideLoopInspection extends BaseInspection 
         @Override
         public void visitWhileStatement(PsiWhileStatement statement) {
             super.visitWhileStatement(statement);
-            final PsiExpression condition = statement.getCondition();
+            PsiExpression condition = statement.getCondition();
             check(condition, statement);
         }
 
         @Override
         public void visitDoWhileStatement(PsiDoWhileStatement statement) {
             super.visitDoWhileStatement(statement);
-            final PsiExpression condition = statement.getCondition();
+            PsiExpression condition = statement.getCondition();
             check(condition, statement);
         }
 
         @Override
         public void visitForStatement(PsiForStatement statement) {
             super.visitForStatement(statement);
-            final PsiExpression condition = statement.getCondition();
+            PsiExpression condition = statement.getCondition();
             check(condition, statement);
         }
 
         private void check(PsiExpression condition, PsiStatement statement) {
-            final List<PsiExpression> notUpdated =
+            List<PsiExpression> notUpdated =
                 new SmartList<PsiExpression>();
             if (checkCondition(condition, statement, notUpdated)) {
                 if (notUpdated.isEmpty()) {
@@ -120,14 +120,14 @@ public class LoopConditionNotUpdatedInsideLoopInspection extends BaseInspection 
                 return true;
             }
             if (condition instanceof PsiInstanceOfExpression) {
-                final PsiInstanceOfExpression instanceOfExpression =
+                PsiInstanceOfExpression instanceOfExpression =
                     (PsiInstanceOfExpression) condition;
-                final PsiExpression operand = instanceOfExpression.getOperand();
+                PsiExpression operand = instanceOfExpression.getOperand();
                 return checkCondition(operand, context, notUpdated);
             }
             else if (condition instanceof PsiParenthesizedExpression) {
                 // catch stuff like "while ((x)) { ... }"
-                final PsiExpression expression =
+                PsiExpression expression =
                     ((PsiParenthesizedExpression) condition).getExpression();
                 return checkCondition(expression, context, notUpdated);
             }
@@ -135,10 +135,10 @@ public class LoopConditionNotUpdatedInsideLoopInspection extends BaseInspection 
                 // while (value != x) { ... }
                 // while (value != (x + y)) { ... }
                 // while (b1 && b2) { ... }
-                final PsiBinaryExpression binaryExpression =
+                PsiBinaryExpression binaryExpression =
                     (PsiBinaryExpression) condition;
-                final PsiExpression lhs = binaryExpression.getLOperand();
-                final PsiExpression rhs = binaryExpression.getROperand();
+                PsiExpression lhs = binaryExpression.getLOperand();
+                PsiExpression rhs = binaryExpression.getROperand();
                 if (rhs == null) {
                     return false;
                 }
@@ -147,18 +147,18 @@ public class LoopConditionNotUpdatedInsideLoopInspection extends BaseInspection 
                 }
             }
             else if (condition instanceof PsiReferenceExpression) {
-                final PsiReferenceExpression referenceExpression =
+                PsiReferenceExpression referenceExpression =
                     (PsiReferenceExpression) condition;
-                final PsiElement element = referenceExpression.resolve();
+                PsiElement element = referenceExpression.resolve();
                 if (element instanceof PsiField) {
-                    final PsiField field = (PsiField) element;
-                    final PsiType type = field.getType();
+                    PsiField field = (PsiField) element;
+                    PsiType type = field.getType();
                     if (field.hasModifierProperty(PsiModifier.FINAL) &&
                         type.getArrayDimensions() == 0) {
                         if (field.hasModifierProperty(PsiModifier.STATIC)) {
                             return true;
                         }
-                        final PsiExpression qualifier =
+                        PsiExpression qualifier =
                             referenceExpression.getQualifierExpression();
                         if (qualifier == null) {
                             return true;
@@ -171,7 +171,7 @@ public class LoopConditionNotUpdatedInsideLoopInspection extends BaseInspection 
                     }
                 }
                 else if (element instanceof PsiVariable) {
-                    final PsiVariable variable = (PsiVariable) element;
+                    PsiVariable variable = (PsiVariable) element;
                     if (variable.hasModifierProperty(PsiModifier.FINAL)) {
                         // final variables cannot be updated, don't bother to
                         // flag them
@@ -190,13 +190,13 @@ public class LoopConditionNotUpdatedInsideLoopInspection extends BaseInspection 
                 }
             }
             else if (condition instanceof PsiPrefixExpression) {
-                final PsiPrefixExpression prefixExpression =
+                PsiPrefixExpression prefixExpression =
                     (PsiPrefixExpression) condition;
-                final IElementType tokenType = prefixExpression.getOperationTokenType();
+                IElementType tokenType = prefixExpression.getOperationTokenType();
                 if (JavaTokenType.EXCL.equals(tokenType) ||
                     JavaTokenType.PLUS.equals(tokenType) ||
                     JavaTokenType.MINUS.equals(tokenType)) {
-                    final PsiExpression operand = prefixExpression.getOperand();
+                    PsiExpression operand = prefixExpression.getOperand();
                     return checkCondition(operand, context, notUpdated);
                 }
             }
@@ -208,9 +208,9 @@ public class LoopConditionNotUpdatedInsideLoopInspection extends BaseInspection 
                 //   while (local_ints[0] > 0) { other_ints[0]--; }
                 //
                 // Keep this check?
-                final PsiArrayAccessExpression accessExpression =
+                PsiArrayAccessExpression accessExpression =
                     (PsiArrayAccessExpression) condition;
-                final PsiExpression indexExpression =
+                PsiExpression indexExpression =
                     accessExpression.getIndexExpression();
                 return checkCondition(indexExpression, context, notUpdated)
                     && checkCondition(accessExpression.getArrayExpression(),
@@ -218,11 +218,11 @@ public class LoopConditionNotUpdatedInsideLoopInspection extends BaseInspection 
                 );
             }
             else if (condition instanceof PsiConditionalExpression) {
-                final PsiConditionalExpression conditionalExpression =
+                PsiConditionalExpression conditionalExpression =
                     (PsiConditionalExpression) condition;
-                final PsiExpression thenExpression =
+                PsiExpression thenExpression =
                     conditionalExpression.getThenExpression();
-                final PsiExpression elseExpression =
+                PsiExpression elseExpression =
                     conditionalExpression.getElseExpression();
                 if (thenExpression == null || elseExpression == null) {
                     return false;
@@ -238,23 +238,23 @@ public class LoopConditionNotUpdatedInsideLoopInspection extends BaseInspection 
             }
             else if (condition instanceof PsiMethodCallExpression &&
                 !ignoreIterators) {
-                final PsiMethodCallExpression methodCallExpression =
+                PsiMethodCallExpression methodCallExpression =
                     (PsiMethodCallExpression) condition;
                 if (!IteratorUtils.isCallToHasNext(methodCallExpression)) {
                     return false;
                 }
-                final PsiReferenceExpression methodExpression =
+                PsiReferenceExpression methodExpression =
                     methodCallExpression.getMethodExpression();
-                final PsiExpression qualifierExpression =
+                PsiExpression qualifierExpression =
                     methodExpression.getQualifierExpression();
                 if (qualifierExpression instanceof PsiReferenceExpression) {
-                    final PsiReferenceExpression referenceExpression =
+                    PsiReferenceExpression referenceExpression =
                         (PsiReferenceExpression) qualifierExpression;
-                    final PsiElement element = referenceExpression.resolve();
+                    PsiElement element = referenceExpression.resolve();
                     if (!(element instanceof PsiVariable)) {
                         return false;
                     }
-                    final PsiVariable variable = (PsiVariable) element;
+                    PsiVariable variable = (PsiVariable) element;
                     if (!IteratorUtils.containsCallToScannerNext(context,
                         variable, true
                     )) {

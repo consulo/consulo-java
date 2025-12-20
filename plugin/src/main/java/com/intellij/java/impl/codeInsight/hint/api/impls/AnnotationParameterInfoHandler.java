@@ -45,7 +45,7 @@ public class AnnotationParameterInfoHandler implements ParameterInfoHandler<PsiA
   }
 
   @Override
-  public Object[] getParametersForDocumentation(final PsiAnnotationMethod p, final ParameterInfoContext context) {
+  public Object[] getParametersForDocumentation(PsiAnnotationMethod p, ParameterInfoContext context) {
     return new Object[]{p};
   }
 
@@ -55,25 +55,25 @@ public class AnnotationParameterInfoHandler implements ParameterInfoHandler<PsiA
   }
 
   @Override
-  public PsiAnnotationParameterList findElementForParameterInfo(final CreateParameterInfoContext context) {
-    final PsiAnnotation annotation = ParameterInfoUtils.findParentOfType(context.getFile(), context.getOffset(), PsiAnnotation.class);
+  public PsiAnnotationParameterList findElementForParameterInfo(CreateParameterInfoContext context) {
+    PsiAnnotation annotation = ParameterInfoUtils.findParentOfType(context.getFile(), context.getOffset(), PsiAnnotation.class);
 
     if (annotation != null) {
-      final PsiJavaCodeReferenceElement nameReference = annotation.getNameReferenceElement();
+      PsiJavaCodeReferenceElement nameReference = annotation.getNameReferenceElement();
 
       if (nameReference != null) {
-        final PsiElement resolved = nameReference.resolve();
+        PsiElement resolved = nameReference.resolve();
 
         if (resolved instanceof PsiClass) {
-          final PsiClass aClass = (PsiClass) resolved;
+          PsiClass aClass = (PsiClass) resolved;
 
           if (aClass.isAnnotationType()) {
-            final PsiMethod[] methods = aClass.getMethods();
+            PsiMethod[] methods = aClass.getMethods();
 
             if (methods.length != 0) {
               context.setItemsToShow(methods);
 
-              final PsiAnnotationMethod annotationMethod = findAnnotationMethod(context.getFile(), context.getOffset());
+              PsiAnnotationMethod annotationMethod = findAnnotationMethod(context.getFile(), context.getOffset());
               if (annotationMethod != null) context.setHighlightedElement(annotationMethod);
 
               return annotation.getParameterList();
@@ -87,21 +87,21 @@ public class AnnotationParameterInfoHandler implements ParameterInfoHandler<PsiA
   }
 
   @Override
-  public void showParameterInfo(@Nonnull final PsiAnnotationParameterList element, final CreateParameterInfoContext context) {
+  public void showParameterInfo(@Nonnull PsiAnnotationParameterList element, CreateParameterInfoContext context) {
     context.showHint(element, element.getTextRange().getStartOffset() + 1, this);
   }
 
   @Override
-  public PsiAnnotationParameterList findElementForUpdatingParameterInfo(final UpdateParameterInfoContext context) {
-    final PsiAnnotation annotation = ParameterInfoUtils.findParentOfType(context.getFile(), context.getOffset(), PsiAnnotation.class);
+  public PsiAnnotationParameterList findElementForUpdatingParameterInfo(UpdateParameterInfoContext context) {
+    PsiAnnotation annotation = ParameterInfoUtils.findParentOfType(context.getFile(), context.getOffset(), PsiAnnotation.class);
     return annotation != null ? annotation.getParameterList() : null;
   }
 
   @Override
-  public void updateParameterInfo(@Nonnull final PsiAnnotationParameterList o, final UpdateParameterInfoContext context) {
+  public void updateParameterInfo(@Nonnull PsiAnnotationParameterList o, UpdateParameterInfoContext context) {
     CharSequence chars = context.getEditor().getDocument().getCharsSequence();
     int offset1 = CharArrayUtil.shiftForward(chars, context.getEditor().getCaretModel().getOffset(), " \t");
-    final char c = chars.charAt(offset1);
+    char c = chars.charAt(offset1);
     if (c == ',' || c == ')') {
       offset1 = CharArrayUtil.shiftBackward(chars, offset1 - 1, " \t");
     }
@@ -119,7 +119,7 @@ public class AnnotationParameterInfoHandler implements ParameterInfoHandler<PsiA
   }
 
   @Override
-  public void updateUI(final PsiAnnotationMethod p, final ParameterInfoUIContext context) {
+  public void updateUI(PsiAnnotationMethod p, ParameterInfoUIContext context) {
     @NonNls StringBuffer buffer = new StringBuffer();
     int highlightStartOffset;
     int highlightEndOffset;
@@ -142,8 +142,8 @@ public class AnnotationParameterInfoHandler implements ParameterInfoHandler<PsiA
   private static PsiAnnotationMethod findAnnotationMethod(PsiFile file, int offset) {
     PsiNameValuePair pair = ParameterInfoUtils.findParentOfType(file, offset, PsiNameValuePair.class);
     if (pair == null) return null;
-    final PsiReference reference = pair.getReference();
-    final PsiElement resolved = reference != null ? reference.resolve() : null;
+    PsiReference reference = pair.getReference();
+    PsiElement resolved = reference != null ? reference.resolve() : null;
     return PsiUtil.isAnnotationMethod(resolved) ? (PsiAnnotationMethod) resolved : null;
   }
 

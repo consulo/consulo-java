@@ -36,8 +36,8 @@ public class StringBufferFieldInspection extends BaseInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiType type = (PsiType) infos[0];
-        final String typeName = type.getPresentableText();
+        PsiType type = (PsiType) infos[0];
+        String typeName = type.getPresentableText();
         return InspectionGadgetsLocalize.stringbufferFieldProblemDescriptor(typeName).get();
     }
 
@@ -50,7 +50,7 @@ public class StringBufferFieldInspection extends BaseInspection {
         @Override
         public void visitField(@Nonnull PsiField field) {
             super.visitField(field);
-            final PsiType type = field.getType();
+            PsiType type = field.getType();
             if (!type.equalsToText(CommonClassNames.JAVA_LANG_STRING_BUFFER) &&
                 !type.equalsToText(CommonClassNames.JAVA_LANG_STRING_BUILDER)) {
                 return;

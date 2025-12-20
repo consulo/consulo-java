@@ -66,11 +66,11 @@ public abstract class ExternalJavadocPresentationTest extends LightCodeInsightTe
 
 	private void doTest(@NonNls String url, @NonNls String pageText, @NonNls String expected) throws Exception
 	{
-		final String basePath = getTestDataPath() + TEST_ROOT;
-		final VirtualFile pageTextFile = LocalFileSystem.getInstance().findFileByPath(basePath + pageText);
+		String basePath = getTestDataPath() + TEST_ROOT;
+		VirtualFile pageTextFile = LocalFileSystem.getInstance().findFileByPath(basePath + pageText);
 		assertNotNull(pageTextFile);
 
-		final VirtualFile expectedTextFile = LocalFileSystem.getInstance().findFileByPath(basePath + expected);
+		VirtualFile expectedTextFile = LocalFileSystem.getInstance().findFileByPath(basePath + expected);
 		assertNotNull(expectedTextFile);
 
 		class JavadocExternalTestFilter extends JavaDocExternalFilter
@@ -88,7 +88,7 @@ public abstract class ExternalJavadocPresentationTest extends LightCodeInsightTe
 			}
 		}
 		JavadocExternalTestFilter filter = new JavadocExternalTestFilter(getProject());
-		final StringBuilder extractedData = new StringBuilder();
+		StringBuilder extractedData = new StringBuilder();
 		filter.doBuildFromStream(url, new StringReader(LoadTextUtil.loadText(pageTextFile).toString()), extractedData, false, false);
 		assertEquals(LoadTextUtil.loadText(expectedTextFile).toString(), extractedData.toString());
 	}

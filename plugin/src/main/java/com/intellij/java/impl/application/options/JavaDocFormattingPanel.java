@@ -150,7 +150,7 @@ public class JavaDocFormattingPanel extends OptionTreeWithPreviewPanel {
     }
 
     @Override
-    protected void resetImpl(final CodeStyleSettings settings) {
+    protected void resetImpl(CodeStyleSettings settings) {
         super.resetImpl(settings);
         myEnableCheckBox.setSelected(settings.getCustomSettings(JavaCodeStyleSettings.class).ENABLE_JAVADOC_FORMATTING);
         update();

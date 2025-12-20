@@ -47,7 +47,7 @@ public class LabeledStatementInspection extends BaseInspection {
         @Override
         public void visitLabeledStatement(PsiLabeledStatement statement) {
             super.visitLabeledStatement(statement);
-            final PsiIdentifier labelIdentifier =
+            PsiIdentifier labelIdentifier =
                 statement.getLabelIdentifier();
             registerError(labelIdentifier);
         }

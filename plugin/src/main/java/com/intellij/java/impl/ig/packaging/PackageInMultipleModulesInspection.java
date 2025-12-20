@@ -52,23 +52,23 @@ public abstract class PackageInMultipleModulesInspection extends BaseGlobalInspe
         if (!(refEntity instanceof RefPackage)) {
             return null;
         }
-        final List<RefEntity> children = refEntity.getChildren();
+        List<RefEntity> children = refEntity.getChildren();
         if (children == null) {
             return null;
         }
-        final Set<RefModule> modules = new HashSet<RefModule>();
+        Set<RefModule> modules = new HashSet<RefModule>();
         for (RefEntity child : children) {
             if (!(child instanceof RefClass)) {
                 continue;
             }
-            final RefClass refClass = (RefClass) child;
-            final RefModule module = refClass.getModule();
+            RefClass refClass = (RefClass) child;
+            RefModule module = refClass.getModule();
             modules.add(module);
         }
         if (modules.size() <= 1) {
             return null;
         }
-        final String errorString = InspectionGadgetsLocalize.packageInMultipleModulesProblemDescriptor(refEntity.getQualifiedName()).get();
+        String errorString = InspectionGadgetsLocalize.packageInMultipleModulesProblemDescriptor(refEntity.getQualifiedName()).get();
 
         return new CommonProblemDescriptor[]{
             inspectionManager.createProblemDescriptor(errorString)

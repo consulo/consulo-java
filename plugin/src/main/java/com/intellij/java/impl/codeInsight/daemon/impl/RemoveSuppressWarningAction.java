@@ -48,13 +48,13 @@ public class RemoveSuppressWarningAction implements LocalQuickFix {
     private final String myID;
     private final String myProblemLine;
 
-    public RemoveSuppressWarningAction(final String ID, final String problemLine) {
+    public RemoveSuppressWarningAction(String ID, String problemLine) {
         myID = ID;
         myProblemLine = problemLine;
     }
 
     public RemoveSuppressWarningAction(String id) {
-        final int idx = id.indexOf(";");
+        int idx = id.indexOf(";");
         if (idx > -1) {
             myID = id.substring(0, idx);
             myProblemLine = id.substring(idx);
@@ -73,10 +73,10 @@ public class RemoveSuppressWarningAction implements LocalQuickFix {
                 if (!FileModificationService.getInstance().prepareFileForWrite(element.getContainingFile())) {
                     return;
                 }
-                final PsiIdentifier identifier = (PsiIdentifier) element;
-                final PsiDocCommentOwner commentOwner = PsiTreeUtil.getParentOfType(identifier, PsiDocCommentOwner.class);
+                PsiIdentifier identifier = (PsiIdentifier) element;
+                PsiDocCommentOwner commentOwner = PsiTreeUtil.getParentOfType(identifier, PsiDocCommentOwner.class);
                 if (commentOwner != null) {
-                    final PsiElement psiElement = BatchSuppressManager.getInstance().getElementMemberSuppressedIn(commentOwner, myID);
+                    PsiElement psiElement = BatchSuppressManager.getInstance().getElementMemberSuppressedIn(commentOwner, myID);
                     if (psiElement instanceof PsiAnnotation) {
                         removeFromAnnotation((PsiAnnotation) psiElement);
                     }
@@ -87,7 +87,7 @@ public class RemoveSuppressWarningAction implements LocalQuickFix {
                         final Set<PsiComment> comments = new HashSet<PsiComment>();
                         commentOwner.accept(new PsiRecursiveElementWalkingVisitor() {
                             @Override
-                            public void visitComment(final PsiComment comment) {
+                            public void visitComment(PsiComment comment) {
                                 super.visitComment(comment);
                                 if (comment.getText().contains(myID)) {
                                     comments.add(comment);
@@ -117,9 +117,9 @@ public class RemoveSuppressWarningAction implements LocalQuickFix {
         return JavaQuickFixLocalize.removeSuppressionActionName(myID);
     }
 
-    private void removeFromComment(final PsiComment comment, final boolean checkLine) throws IncorrectOperationException {
+    private void removeFromComment(PsiComment comment, boolean checkLine) throws IncorrectOperationException {
         if (checkLine) {
-            final PsiStatement statement = PsiTreeUtil.getNextSiblingOfType(comment, PsiStatement.class);
+            PsiStatement statement = PsiTreeUtil.getNextSiblingOfType(comment, PsiStatement.class);
             if (statement != null && !Comparing.strEqual(statement.getText(), myProblemLine)) {
                 return;
             }
@@ -154,7 +154,7 @@ public class RemoveSuppressWarningAction implements LocalQuickFix {
     }
 
     @Nullable
-    private String removeFromElementText(final PsiElement... elements) {
+    private String removeFromElementText(PsiElement... elements) {
         String text = "";
         for (PsiElement element : elements) {
             text += StringUtil.trimStart(element.getText(), "//").trim();
@@ -170,7 +170,7 @@ public class RemoveSuppressWarningAction implements LocalQuickFix {
         return StringUtil.join(ids, ",");
     }
 
-    private void removeFromAnnotation(final PsiAnnotation annotation) throws IncorrectOperationException {
+    private void removeFromAnnotation(PsiAnnotation annotation) throws IncorrectOperationException {
         PsiNameValuePair[] attributes = annotation.getParameterList().getAttributes();
         for (PsiNameValuePair attribute : attributes) {
             PsiAnnotationMemberValue value = attribute.getValue();
@@ -189,9 +189,9 @@ public class RemoveSuppressWarningAction implements LocalQuickFix {
     }
 
     private boolean removeFromValue(
-        final PsiAnnotationMemberValue parent,
-        final PsiAnnotationMemberValue value,
-        final boolean removeParent
+        PsiAnnotationMemberValue parent,
+        PsiAnnotationMemberValue value,
+        boolean removeParent
     ) throws IncorrectOperationException {
         String text = value.getText();
         text = StringUtil.trimStart(text, "\"");

@@ -46,12 +46,12 @@ public class MigrationNode extends AbstractTreeNode<TypeMigrationUsageInfo> impl
 	private final HashMap<TypeMigrationUsageInfo, Set<MigrationNode>> myProcessed;
 	private final HashSet<TypeMigrationUsageInfo> myParents;
 
-	public MigrationNode(final Project project,
-			final TypeMigrationUsageInfo info,
-			final PsiType migrationType,
-			final TypeMigrationLabeler labeler,
-			final HashSet<TypeMigrationUsageInfo> parents,
-			final HashMap<TypeMigrationUsageInfo, Set<MigrationNode>> processed)
+	public MigrationNode(Project project,
+                         TypeMigrationUsageInfo info,
+                         PsiType migrationType,
+                         TypeMigrationLabeler labeler,
+                         HashSet<TypeMigrationUsageInfo> parents,
+                         HashMap<TypeMigrationUsageInfo, Set<MigrationNode>> processed)
 	{
 		super(project, info);
 		myLabeler = labeler;
@@ -68,7 +68,7 @@ public class MigrationNode extends AbstractTreeNode<TypeMigrationUsageInfo> impl
 		}
 		else
 		{
-			final MigrationNode duplicate = alreadyAdded.iterator().next();
+			MigrationNode duplicate = alreadyAdded.iterator().next();
 			myInfo = duplicate.getInfo();
 			myDuplicatedNode = duplicate;
 		}
@@ -88,7 +88,7 @@ public class MigrationNode extends AbstractTreeNode<TypeMigrationUsageInfo> impl
 		{
 			myCachedChildren = new ArrayList<>();
 
-			final PsiElement element = myInfo.getElement();
+			PsiElement element = myInfo.getElement();
 			if(element != null)
 			{
 				try
@@ -100,22 +100,22 @@ public class MigrationNode extends AbstractTreeNode<TypeMigrationUsageInfo> impl
 					//skip warning
 				}
 
-				final HashSet<Pair<TypeMigrationUsageInfo, PsiType>> roots = myLabeler.getRootsTree().get(myInfo);
+				HashSet<Pair<TypeMigrationUsageInfo, PsiType>> roots = myLabeler.getRootsTree().get(myInfo);
 				if(roots != null)
 				{
 					for(Pair<TypeMigrationUsageInfo, PsiType> root : roots)
 					{
 
-						final TypeMigrationUsageInfo info = root.getFirst();
+						TypeMigrationUsageInfo info = root.getFirst();
 
 						if(myParents.contains(info))
 						{
 							continue;
 						}
-						final HashSet<TypeMigrationUsageInfo> parents = new HashSet<>(myParents);
+						HashSet<TypeMigrationUsageInfo> parents = new HashSet<>(myParents);
 						parents.add(info);
 
-						final MigrationNode migrationNode = new MigrationNode(getProject(), info, root.getSecond(), myLabeler, parents, myProcessed);
+						MigrationNode migrationNode = new MigrationNode(getProject(), info, root.getSecond(), myLabeler, parents, myProcessed);
 
 						if(myInfo.isExcluded())
 						{
@@ -136,7 +136,7 @@ public class MigrationNode extends AbstractTreeNode<TypeMigrationUsageInfo> impl
 	}
 
 	@Override
-	protected void update(final PresentationData presentation)
+	protected void update(PresentationData presentation)
 	{
 	}
 

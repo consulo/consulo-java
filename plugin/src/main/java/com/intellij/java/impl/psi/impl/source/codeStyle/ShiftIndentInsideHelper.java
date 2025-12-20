@@ -65,7 +65,7 @@ public class ShiftIndentInsideHelper {
 
   public ASTNode shiftIndentInside(ASTNode element, int indentShift) {
     if (indentShift == 0) return element;
-    final CharTable charTableByTree = SharedImplUtil.findCharTableByTree(element);
+    CharTable charTableByTree = SharedImplUtil.findCharTableByTree(element);
     String text = element.getText();
     for (int offset = 0; offset < text.length(); offset++) {
       char c = text.charAt(offset);
@@ -149,7 +149,7 @@ public class ShiftIndentInsideHelper {
     return element;
   }
 
-  public static boolean mayShiftIndentInside(final ASTNode leaf) {
+  public static boolean mayShiftIndentInside(ASTNode leaf) {
     return (isComment(leaf) && !checkJspTexts(leaf))
         || leaf.getElementType() == TokenType.WHITE_SPACE
         || leaf.getElementType() == XmlTokenType.XML_DATA_CHARACTERS
@@ -158,7 +158,7 @@ public class ShiftIndentInsideHelper {
         || leaf.getElementType() == XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN;
   }
 
-  private static boolean checkJspTexts(final ASTNode leaf) {
+  private static boolean checkJspTexts(ASTNode leaf) {
     ASTNode child = leaf.getFirstChildNode();
     while (child != null) {
       if (child instanceof OuterLanguageElement) return true;
@@ -167,12 +167,12 @@ public class ShiftIndentInsideHelper {
     return false;
   }
 
-  private static boolean isComment(final ASTNode node) {
-    final PsiElement psiElement = SourceTreeToPsiMap.treeElementToPsi(node);
+  private static boolean isComment(ASTNode node) {
+    PsiElement psiElement = SourceTreeToPsiMap.treeElementToPsi(node);
     if (psiElement instanceof PsiComment) return true;
-    final ParserDefinition parserDefinition = ParserDefinition.forLanguage(psiElement.getLanguage());
+    ParserDefinition parserDefinition = ParserDefinition.forLanguage(psiElement.getLanguage());
     if (parserDefinition == null) return false;
-    final TokenSet commentTokens = parserDefinition.getCommentTokens(psiElement.getLanguageVersion());
+    TokenSet commentTokens = parserDefinition.getCommentTokens(psiElement.getLanguageVersion());
     return commentTokens.contains(node.getElementType());
   }
 

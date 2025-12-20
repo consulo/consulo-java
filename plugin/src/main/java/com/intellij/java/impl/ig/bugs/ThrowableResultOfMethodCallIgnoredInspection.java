@@ -75,31 +75,31 @@ public class ThrowableResultOfMethodCallIgnoredInspection
       if (!TypeUtils.expressionHasTypeOrSubtype(expression, CommonClassNames.JAVA_LANG_THROWABLE)) {
         return;
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return;
       }
       if (!method.hasModifierProperty(PsiModifier.STATIC)) {
-        final PsiClass containingClass = method.getContainingClass();
+        PsiClass containingClass = method.getContainingClass();
         if (InheritanceUtil.isInheritor(containingClass, CommonClassNames.JAVA_LANG_THROWABLE)) {
           return;
         }
       }
-      final PsiLocalVariable variable;
+      PsiLocalVariable variable;
       if (parent instanceof PsiAssignmentExpression) {
-        final PsiAssignmentExpression assignmentExpression =
+        PsiAssignmentExpression assignmentExpression =
           (PsiAssignmentExpression)parent;
-        final PsiExpression rhs = assignmentExpression.getRExpression();
+        PsiExpression rhs = assignmentExpression.getRExpression();
         if (!PsiTreeUtil.isAncestor(rhs, expression, false)) {
           return;
         }
-        final PsiExpression lhs = assignmentExpression.getLExpression();
+        PsiExpression lhs = assignmentExpression.getLExpression();
         if (!(lhs instanceof PsiReferenceExpression)) {
           return;
         }
-        final PsiReferenceExpression referenceExpression =
+        PsiReferenceExpression referenceExpression =
           (PsiReferenceExpression)lhs;
-        final PsiElement target = referenceExpression.resolve();
+        PsiElement target = referenceExpression.resolve();
         if (!(target instanceof PsiLocalVariable)) {
           return;
         }
@@ -115,11 +115,11 @@ public class ThrowableResultOfMethodCallIgnoredInspection
         variable = null;
       }
       if (variable != null) {
-        final Query<PsiReference> query =
+        Query<PsiReference> query =
           ReferencesSearch.search(variable,
                                   variable.getUseScope());
         for (PsiReference reference : query) {
-          final PsiElement usage = reference.getElement();
+          PsiElement usage = reference.getElement();
           PsiElement usageParent = usage.getParent();
           while (usageParent instanceof PsiParenthesizedExpression) {
             usageParent = usageParent.getParent();

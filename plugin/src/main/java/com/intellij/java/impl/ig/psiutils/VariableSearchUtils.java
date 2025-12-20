@@ -32,10 +32,10 @@ public class VariableSearchUtils {
     @Nonnull String variableName, @Nonnull PsiVariable target,
     @Nonnull PsiElement context) {
 
-    final Project project = context.getProject();
-    final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-    final PsiResolveHelper resolveHelper = psiFacade.getResolveHelper();
-    final PsiVariable variable =
+    Project project = context.getProject();
+    JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+    PsiResolveHelper resolveHelper = psiFacade.getResolveHelper();
+    PsiVariable variable =
       resolveHelper.resolveAccessibleReferencedVariable(
         variableName, context);
     return target.equals(variable);
@@ -43,36 +43,36 @@ public class VariableSearchUtils {
 
   public static boolean containsConflictingDeclarations(
       PsiCodeBlock block, PsiCodeBlock parentBlock) {
-    final List<PsiCodeBlock> followingBlocks = new ArrayList();
+    List<PsiCodeBlock> followingBlocks = new ArrayList();
     collectFollowingBlocks(block.getParent().getNextSibling(),
                            followingBlocks);
-    final PsiStatement[] statements = block.getStatements();
-    final Project project = block.getProject();
-    final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-    final PsiResolveHelper resolveHelper = facade.getResolveHelper();
-    for (final PsiStatement statement : statements) {
+    PsiStatement[] statements = block.getStatements();
+    Project project = block.getProject();
+    JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
+    PsiResolveHelper resolveHelper = facade.getResolveHelper();
+    for (PsiStatement statement : statements) {
       if (!(statement instanceof PsiDeclarationStatement)) {
         continue;
       }
-      final PsiDeclarationStatement declaration =
+      PsiDeclarationStatement declaration =
         (PsiDeclarationStatement)statement;
-      final PsiElement[] variables =
+      PsiElement[] variables =
         declaration.getDeclaredElements();
       for (PsiElement variable : variables) {
         if (!(variable instanceof PsiLocalVariable)) {
           continue;
         }
-        final PsiLocalVariable localVariable =
+        PsiLocalVariable localVariable =
           (PsiLocalVariable)variable;
-        final String variableName = localVariable.getName();
-        final PsiVariable target =
+        String variableName = localVariable.getName();
+        PsiVariable target =
           resolveHelper.resolveAccessibleReferencedVariable(
             variableName, parentBlock);
         if (target != null) {
           return true;
         }
         for (PsiCodeBlock codeBlock : followingBlocks) {
-          final PsiVariable target1 =
+          PsiVariable target1 =
             resolveHelper.resolveAccessibleReferencedVariable(
               variableName, codeBlock);
           if (target1 != null) {

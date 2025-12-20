@@ -68,7 +68,7 @@ public abstract class InlineConstantFieldTest extends LightRefactoringTestCase
 	private void performAction()
 	{
 		PsiElement element = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED, TargetElementUtilEx.REFERENCED_ELEMENT_ACCEPTED));
-		final PsiReference ref = myFile.findReferenceAt(myEditor.getCaretModel().getOffset());
+		PsiReference ref = myFile.findReferenceAt(myEditor.getCaretModel().getOffset());
 		PsiReferenceExpression refExpr = ref instanceof PsiReferenceExpression ? (PsiReferenceExpression) ref : null;
 		assertTrue(element instanceof PsiField);
 		PsiField field = (PsiField) element.getNavigationElement();

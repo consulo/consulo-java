@@ -134,15 +134,15 @@ public abstract class ChangeClassSignatureTest extends LightRefactoringTestCase 
   }
 
   private void doTest(GenParams gen) throws Exception {
-    @NonNls final String filePathBefore = getTestName(false) + ".java";
-    @NonNls final String filePathAfter = getTestName(false) + ".java.after";
+    @NonNls String filePathBefore = getTestName(false) + ".java";
+    @NonNls String filePathAfter = getTestName(false) + ".java.after";
     doTest(gen, filePathBefore, filePathAfter);
   }
 
   private void doTest(GenParams gen, @NonNls String filePathBefore, @NonNls String filePathAfter) throws Exception {
-    final String filePath = DATA_PATH + filePathBefore;
+    String filePath = DATA_PATH + filePathBefore;
     configureByFile(filePath);
-    final PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
+    PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue("<caret> is not on class name", targetElement instanceof PsiClass);
     PsiClass aClass = (PsiClass)targetElement;
     new ChangeClassSignatureProcessor(getProject(), aClass, gen.gen(aClass)).run();

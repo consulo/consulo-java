@@ -77,7 +77,7 @@ public class ClassWithMultipleLoggersInspection extends BaseInspection {
 
   @Override
   public JComponent createOptionsPanel() {
-    final ListTable table = new ListTable(new ListWrappingTableModel(loggerNames, InspectionGadgetsLocalize.loggerClassName().get()));
+    ListTable table = new ListTable(new ListWrappingTableModel(loggerNames, InspectionGadgetsLocalize.loggerClassName().get()));
     return UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsLocalize.chooseLoggerClass().get());
   }
 
@@ -103,7 +103,7 @@ public class ClassWithMultipleLoggersInspection extends BaseInspection {
         return;
       }
       int numLoggers = 0;
-      final PsiField[] fields = aClass.getFields();
+      PsiField[] fields = aClass.getFields();
       for (PsiField field : fields) {
         if (isLogger(field)) {
           numLoggers++;
@@ -116,8 +116,8 @@ public class ClassWithMultipleLoggersInspection extends BaseInspection {
     }
 
     private boolean isLogger(PsiVariable variable) {
-      final PsiType type = variable.getType();
-      final String text = type.getCanonicalText();
+      PsiType type = variable.getType();
+      String text = type.getCanonicalText();
       return loggerNames.contains(text);
     }
   }

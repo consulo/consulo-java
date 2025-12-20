@@ -55,11 +55,11 @@ public class UnqualifiedFieldAccessInspection extends BaseInspection {
         @Override
         public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
             super.visitReferenceExpression(expression);
-            final PsiExpression qualifierExpression = expression.getQualifierExpression();
+            PsiExpression qualifierExpression = expression.getQualifierExpression();
             if (qualifierExpression != null) {
                 return;
             }
-            final PsiReferenceParameterList parameterList = expression.getParameterList();
+            PsiReferenceParameterList parameterList = expression.getParameterList();
             if (parameterList == null) {
                 return;
             }
@@ -68,15 +68,15 @@ public class UnqualifiedFieldAccessInspection extends BaseInspection {
                 // definitely not references to fields.
                 return;
             }
-            final PsiElement element = expression.resolve();
+            PsiElement element = expression.resolve();
             if (!(element instanceof PsiField)) {
                 return;
             }
-            final PsiField field = (PsiField) element;
+            PsiField field = (PsiField) element;
             if (field.hasModifierProperty(PsiModifier.STATIC)) {
                 return;
             }
-            final PsiClass containingClass = field.getContainingClass();
+            PsiClass containingClass = field.getContainingClass();
             if (containingClass instanceof PsiAnonymousClass) {
                 return;
             }

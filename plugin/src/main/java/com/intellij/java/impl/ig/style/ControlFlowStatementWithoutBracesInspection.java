@@ -58,26 +58,26 @@ public class ControlFlowStatementWithoutBracesInspection extends BaseInspection 
 
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiElement parent = element.getParent();
+      PsiElement element = descriptor.getPsiElement();
+      PsiElement parent = element.getParent();
       if (!(parent instanceof PsiStatement)) {
         return;
       }
-      final PsiStatement statement = (PsiStatement)parent;
-      @NonNls final String elementText = element.getText();
-      final PsiStatement statementWithoutBraces;
+      PsiStatement statement = (PsiStatement)parent;
+      @NonNls String elementText = element.getText();
+      PsiStatement statementWithoutBraces;
       if (statement instanceof PsiLoopStatement) {
-        final PsiLoopStatement loopStatement = (PsiLoopStatement)statement;
+        PsiLoopStatement loopStatement = (PsiLoopStatement)statement;
         statementWithoutBraces = loopStatement.getBody();
       }
       else if (statement instanceof PsiIfStatement) {
-        final PsiIfStatement ifStatement = (PsiIfStatement)statement;
+        PsiIfStatement ifStatement = (PsiIfStatement)statement;
         if ("if".equals(elementText)) {
           statementWithoutBraces = ifStatement.getThenBranch();
           if (statementWithoutBraces == null) {
             return;
           }
-          final PsiElement nextSibling = statementWithoutBraces.getNextSibling();
+          PsiElement nextSibling = statementWithoutBraces.getNextSibling();
           if (nextSibling instanceof PsiWhiteSpace) {
             // to avoid "else" on new line
             nextSibling.delete();
@@ -93,7 +93,7 @@ public class ControlFlowStatementWithoutBracesInspection extends BaseInspection 
       if (statementWithoutBraces == null) {
         return;
       }
-      final String newStatementText = "{\n" + statementWithoutBraces.getText() + "\n}";
+      String newStatementText = "{\n" + statementWithoutBraces.getText() + "\n}";
       replaceStatement(statementWithoutBraces, newStatementText);
     }
   }
@@ -109,7 +109,7 @@ public class ControlFlowStatementWithoutBracesInspection extends BaseInspection 
     @Override
     public void visitDoWhileStatement(PsiDoWhileStatement statement) {
       super.visitDoWhileStatement(statement);
-      final PsiStatement body = statement.getBody();
+      PsiStatement body = statement.getBody();
       if (body == null || body instanceof PsiBlockStatement) {
         return;
       }
@@ -119,7 +119,7 @@ public class ControlFlowStatementWithoutBracesInspection extends BaseInspection 
     @Override
     public void visitForeachStatement(PsiForeachStatement statement) {
       super.visitForeachStatement(statement);
-      final PsiStatement body = statement.getBody();
+      PsiStatement body = statement.getBody();
       if (body == null || body instanceof PsiBlockStatement) {
         return;
       }
@@ -129,7 +129,7 @@ public class ControlFlowStatementWithoutBracesInspection extends BaseInspection 
     @Override
     public void visitForStatement(PsiForStatement statement) {
       super.visitForStatement(statement);
-      final PsiStatement body = statement.getBody();
+      PsiStatement body = statement.getBody();
       if (body == null || body instanceof PsiBlockStatement) {
         return;
       }
@@ -139,20 +139,20 @@ public class ControlFlowStatementWithoutBracesInspection extends BaseInspection 
     @Override
     public void visitIfStatement(PsiIfStatement statement) {
       super.visitIfStatement(statement);
-      final PsiStatement thenBranch = statement.getThenBranch();
+      PsiStatement thenBranch = statement.getThenBranch();
       if (thenBranch == null) {
         return;
       }
       if (!(thenBranch instanceof PsiBlockStatement)) {
         registerStatementError(statement);
       }
-      final PsiStatement elseBranch = statement.getElseBranch();
+      PsiStatement elseBranch = statement.getElseBranch();
       if (elseBranch == null) {
         return;
       }
       if (!(elseBranch instanceof PsiBlockStatement) &&
           !(elseBranch instanceof PsiIfStatement)) {
-        final PsiKeyword elseKeyword = statement.getElseElement();
+        PsiKeyword elseKeyword = statement.getElseElement();
         if (elseKeyword == null) {
           return;
         }
@@ -163,7 +163,7 @@ public class ControlFlowStatementWithoutBracesInspection extends BaseInspection 
     @Override
     public void visitWhileStatement(PsiWhileStatement statement) {
       super.visitWhileStatement(statement);
-      final PsiStatement body = statement.getBody();
+      PsiStatement body = statement.getBody();
       if (body == null || body instanceof PsiBlockStatement) {
         return;
       }

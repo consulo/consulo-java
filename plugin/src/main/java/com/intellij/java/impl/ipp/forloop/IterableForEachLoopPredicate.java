@@ -28,21 +28,21 @@ class IterableForEachLoopPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiJavaToken)) {
       return false;
     }
-    final PsiJavaToken token = (PsiJavaToken)element;
-    final IElementType tokenType = token.getTokenType();
+    PsiJavaToken token = (PsiJavaToken)element;
+    IElementType tokenType = token.getTokenType();
     if (!JavaTokenType.FOR_KEYWORD.equals(tokenType)) {
       return false;
     }
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!(parent instanceof PsiForeachStatement)) {
       return false;
     }
-    final PsiForeachStatement foreachStatement = (PsiForeachStatement)parent;
-    final PsiExpression iteratedValue = foreachStatement.getIteratedValue();
+    PsiForeachStatement foreachStatement = (PsiForeachStatement)parent;
+    PsiExpression iteratedValue = foreachStatement.getIteratedValue();
     if (iteratedValue == null) {
       return false;
     }
-    final PsiType type = iteratedValue.getType();
+    PsiType type = iteratedValue.getType();
     if (!InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_LANG_ITERABLE)) {
       return false;
     }

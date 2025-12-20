@@ -24,9 +24,9 @@ public class ConditionalUtils {
 
   public static PsiStatement stripBraces(PsiStatement branch) {
     if (branch instanceof PsiBlockStatement) {
-      final PsiBlockStatement block = (PsiBlockStatement)branch;
-      final PsiCodeBlock codeBlock = block.getCodeBlock();
-      final PsiStatement[] statements = codeBlock.getStatements();
+      PsiBlockStatement block = (PsiBlockStatement)branch;
+      PsiCodeBlock codeBlock = block.getCodeBlock();
+      PsiStatement[] statements = codeBlock.getStatements();
       if (statements.length == 1) {
         return statements[0];
       }
@@ -47,16 +47,16 @@ public class ConditionalUtils {
     if (!(statement instanceof PsiReturnStatement)) {
       return false;
     }
-    final PsiReturnStatement returnStatement =
+    PsiReturnStatement returnStatement =
       (PsiReturnStatement)statement;
     if (returnStatement.getReturnValue() == null) {
       return false;
     }
-    final PsiExpression returnValue = returnStatement.getReturnValue();
+    PsiExpression returnValue = returnStatement.getReturnValue();
     if (returnValue == null) {
       return false;
     }
-    final String returnValueText = returnValue.getText();
+    String returnValueText = returnValue.getText();
     return value.equals(returnValueText);
   }
 
@@ -68,19 +68,19 @@ public class ConditionalUtils {
     if (!(statement instanceof PsiExpressionStatement)) {
       return false;
     }
-    final PsiExpressionStatement expressionStatement =
+    PsiExpressionStatement expressionStatement =
       (PsiExpressionStatement)statement;
-    final PsiExpression expression = expressionStatement.getExpression();
+    PsiExpression expression = expressionStatement.getExpression();
     if (!(expression instanceof PsiAssignmentExpression)) {
       return false;
     }
-    final PsiAssignmentExpression assignment =
+    PsiAssignmentExpression assignment =
       (PsiAssignmentExpression)expression;
-    final PsiExpression rhs = assignment.getRExpression();
+    PsiExpression rhs = assignment.getRExpression();
     if (rhs == null) {
       return false;
     }
-    final String rhsText = rhs.getText();
+    String rhsText = rhs.getText();
     return value.equals(rhsText);
   }
 }

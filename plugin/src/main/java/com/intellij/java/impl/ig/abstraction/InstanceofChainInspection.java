@@ -70,10 +70,10 @@ public class InstanceofChainInspection extends BaseInspection {
     public void visitIfStatement(
       @Nonnull PsiIfStatement statement) {
       super.visitIfStatement(statement);
-      final PsiElement parent = statement.getParent();
+      PsiElement parent = statement.getParent();
       if (parent instanceof PsiIfStatement) {
-        final PsiIfStatement parentStatement = (PsiIfStatement)parent;
-        final PsiStatement elseBranch = parentStatement.getElseBranch();
+        PsiIfStatement parentStatement = (PsiIfStatement)parent;
+        PsiStatement elseBranch = parentStatement.getElseBranch();
         if (statement.equals(elseBranch)) {
           return;
         }
@@ -81,12 +81,12 @@ public class InstanceofChainInspection extends BaseInspection {
       int numChecks = 0;
       PsiIfStatement branch = statement;
       while (branch != null) {
-        final PsiExpression condition = branch.getCondition();
+        PsiExpression condition = branch.getCondition();
         if (!isInstanceofCheck(condition)) {
           return;
         }
         numChecks++;
-        final PsiStatement elseBranch = branch.getElseBranch();
+        PsiStatement elseBranch = branch.getElseBranch();
         if (elseBranch instanceof PsiIfStatement) {
           branch = (PsiIfStatement)elseBranch;
         }
@@ -107,7 +107,7 @@ public class InstanceofChainInspection extends BaseInspection {
         }
         else if (condition instanceof PsiInstanceOfExpression) {
           if (ignoreInstanceofOnLibraryClasses) {
-            final PsiInstanceOfExpression instanceOfExpression =
+            PsiInstanceOfExpression instanceOfExpression =
               (PsiInstanceOfExpression)condition;
             if (isInstanceofOnLibraryClass(instanceOfExpression)) {
               return false;
@@ -116,9 +116,9 @@ public class InstanceofChainInspection extends BaseInspection {
           return true;
         }
         else if (condition instanceof PsiPolyadicExpression) {
-          final PsiPolyadicExpression polyadicExpression =
+          PsiPolyadicExpression polyadicExpression =
             (PsiPolyadicExpression)condition;
-          final PsiExpression[] operands =
+          PsiExpression[] operands =
             polyadicExpression.getOperands();
           for (PsiExpression operand : operands) {
             if (!isInstanceofCheck(operand)) {
@@ -128,19 +128,19 @@ public class InstanceofChainInspection extends BaseInspection {
           return true;
         }
         else if (condition instanceof PsiParenthesizedExpression) {
-          final PsiParenthesizedExpression parenthesizedExpression =
+          PsiParenthesizedExpression parenthesizedExpression =
             (PsiParenthesizedExpression)condition;
           condition = parenthesizedExpression.getExpression();
           continue;
         }
         else if (condition instanceof PsiPrefixExpression) {
-          final PsiPrefixExpression prefixExpression =
+          PsiPrefixExpression prefixExpression =
             (PsiPrefixExpression)condition;
           condition = prefixExpression.getOperand();
           continue;
         }
         else if (condition instanceof PsiPostfixExpression) {
-          final PsiPostfixExpression postfixExpression =
+          PsiPostfixExpression postfixExpression =
             (PsiPostfixExpression)condition;
           condition = postfixExpression.getOperand();
           continue;
@@ -151,17 +151,17 @@ public class InstanceofChainInspection extends BaseInspection {
 
     private boolean isInstanceofOnLibraryClass(
       PsiInstanceOfExpression instanceOfExpression) {
-      final PsiTypeElement checkType =
+      PsiTypeElement checkType =
         instanceOfExpression.getCheckType();
       if (checkType == null) {
         return false;
       }
-      final PsiType type = checkType.getType();
+      PsiType type = checkType.getType();
       if (!(type instanceof PsiClassType)) {
         return false;
       }
-      final PsiClassType classType = (PsiClassType)type;
-      final PsiClass aClass = classType.resolve();
+      PsiClassType classType = (PsiClassType)type;
+      PsiClass aClass = classType.resolve();
       return LibraryUtil.classIsInLibrary(aClass);
     }
   }

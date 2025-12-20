@@ -55,11 +55,11 @@ public class ObjectAllocationInLoopInspection extends BaseInspection {
             if (ControlFlowUtils.isInExitStatement(expression)) {
                 return;
             }
-            final PsiStatement newExpressionStatement = PsiTreeUtil.getParentOfType(expression, PsiStatement.class);
+            PsiStatement newExpressionStatement = PsiTreeUtil.getParentOfType(expression, PsiStatement.class);
             if (newExpressionStatement == null) {
                 return;
             }
-            final PsiStatement parentStatement = PsiTreeUtil.getParentOfType(newExpressionStatement, PsiStatement.class);
+            PsiStatement parentStatement = PsiTreeUtil.getParentOfType(newExpressionStatement, PsiStatement.class);
             if (!ControlFlowUtils.statementMayCompleteNormally(parentStatement)) {
                 return;
             }
@@ -70,30 +70,30 @@ public class ObjectAllocationInLoopInspection extends BaseInspection {
         }
 
         private static boolean isAllocatedOnlyOnce(PsiNewExpression expression) {
-            final PsiElement parent = expression.getParent();
+            PsiElement parent = expression.getParent();
             if (!(parent instanceof PsiAssignmentExpression)) {
                 return false;
             }
-            final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) parent;
-            final PsiExpression lExpression = assignmentExpression.getLExpression();
+            PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) parent;
+            PsiExpression lExpression = assignmentExpression.getLExpression();
             if (!(lExpression instanceof PsiReferenceExpression)) {
                 return false;
             }
-            final PsiIfStatement ifStatement = PsiTreeUtil.getParentOfType(assignmentExpression, PsiIfStatement.class);
+            PsiIfStatement ifStatement = PsiTreeUtil.getParentOfType(assignmentExpression, PsiIfStatement.class);
             if (ifStatement == null) {
                 return false;
             }
-            final PsiExpression condition = ifStatement.getCondition();
+            PsiExpression condition = ifStatement.getCondition();
             if (!(condition instanceof PsiBinaryExpression)) {
                 return false;
             }
-            final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) condition;
+            PsiBinaryExpression binaryExpression = (PsiBinaryExpression) condition;
             if (binaryExpression.getOperationTokenType() != JavaTokenType.EQEQ) {
                 return false;
             }
-            final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) lExpression;
-            final PsiExpression lhs = binaryExpression.getLOperand();
-            final PsiExpression rhs = binaryExpression.getROperand();
+            PsiReferenceExpression referenceExpression = (PsiReferenceExpression) lExpression;
+            PsiExpression lhs = binaryExpression.getLOperand();
+            PsiExpression rhs = binaryExpression.getROperand();
             if (lhs instanceof PsiLiteralExpression) {
                 if (!"null".equals(lhs.getText())) {
                     return false;

@@ -48,30 +48,30 @@ public class ReplaceEqualsWithEqualityIntention extends Intention {
     @Override
     public void processIntention(PsiElement element)
         throws IncorrectOperationException {
-        final PsiMethodCallExpression call =
+        PsiMethodCallExpression call =
             (PsiMethodCallExpression) element;
         if (call == null) {
             return;
         }
-        final PsiReferenceExpression methodExpression =
+        PsiReferenceExpression methodExpression =
             call.getMethodExpression();
-        final PsiExpression target = methodExpression.getQualifierExpression();
+        PsiExpression target = methodExpression.getQualifierExpression();
         if (target == null) {
             return;
         }
-        final PsiExpressionList argumentList = call.getArgumentList();
-        final PsiExpression arg = argumentList.getExpressions()[0];
-        final PsiExpression strippedTarget =
+        PsiExpressionList argumentList = call.getArgumentList();
+        PsiExpression arg = argumentList.getExpressions()[0];
+        PsiExpression strippedTarget =
             ParenthesesUtils.stripParentheses(target);
         if (strippedTarget == null) {
             return;
         }
-        final PsiExpression strippedArg =
+        PsiExpression strippedArg =
             ParenthesesUtils.stripParentheses(arg);
         if (strippedArg == null) {
             return;
         }
-        final String strippedArgText;
+        String strippedArgText;
         if (ParenthesesUtils.getPrecedence(strippedArg) >
             ParenthesesUtils.EQUALITY_PRECEDENCE) {
             strippedArgText = '(' + strippedArg.getText() + ')';
@@ -79,7 +79,7 @@ public class ReplaceEqualsWithEqualityIntention extends Intention {
         else {
             strippedArgText = strippedArg.getText();
         }
-        final String strippedTargetText;
+        String strippedTargetText;
         if (ParenthesesUtils.getPrecedence(strippedTarget) >
             ParenthesesUtils.EQUALITY_PRECEDENCE) {
             strippedTargetText = '(' + strippedTarget.getText() + ')';

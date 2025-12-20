@@ -54,20 +54,20 @@ public class SingleClassImportInspection extends BaseInspection {
      /* if (JspPsiUtil.isInJspFile(aClass.getContainingFile())) {
         return;
       }     */
-            final PsiJavaFile file = (PsiJavaFile) aClass.getParent();
+            PsiJavaFile file = (PsiJavaFile) aClass.getParent();
             if (file == null) {
                 return;
             }
             if (!file.getClasses()[0].equals(aClass)) {
                 return;
             }
-            final PsiImportList importList = file.getImportList();
+            PsiImportList importList = file.getImportList();
             if (importList == null) {
                 return;
             }
-            final PsiImportStatement[] importStatements =
+            PsiImportStatement[] importStatements =
                 importList.getImportStatements();
-            for (final PsiImportStatement importStatement : importStatements) {
+            for (PsiImportStatement importStatement : importStatements) {
                 if (!importStatement.isOnDemand()) {
                     registerError(importStatement);
                 }

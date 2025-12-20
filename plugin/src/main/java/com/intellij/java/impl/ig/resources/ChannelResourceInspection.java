@@ -50,10 +50,10 @@ public class ChannelResourceInspection extends ResourceInspection {
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final PsiExpression expression = (PsiExpression)infos[0];
-    final PsiType type = expression.getType();
+    PsiExpression expression = (PsiExpression)infos[0];
+    PsiType type = expression.getType();
     assert type != null;
-    final String text = type.getPresentableText();
+    String text = type.getPresentableText();
     return InspectionGadgetsLocalize.channelOpenedNotClosedProblemDescriptor(text).get();
   }
 
@@ -77,12 +77,12 @@ public class ChannelResourceInspection extends ResourceInspection {
       if (!isChannelFactoryMethod(expression)) {
         return;
       }
-      final PsiElement parent = getExpressionParent(expression);
+      PsiElement parent = getExpressionParent(expression);
       if (parent instanceof PsiReturnStatement ||
           parent instanceof PsiResourceVariable) {
         return;
       }
-      final PsiVariable boundVariable = getVariable(parent);
+      PsiVariable boundVariable = getVariable(parent);
       if (isSafelyClosed(boundVariable, expression, insideTryAllowed)) {
         return;
       }
@@ -97,20 +97,20 @@ public class ChannelResourceInspection extends ResourceInspection {
 
     private boolean isChannelFactoryClosedInFinally(
       PsiMethodCallExpression expression) {
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      final PsiExpression qualifier =
+      PsiExpression qualifier =
         methodExpression.getQualifierExpression();
       if (!(qualifier instanceof PsiReferenceExpression)) {
         return false;
       }
-      final PsiReferenceExpression referenceExpression =
+      PsiReferenceExpression referenceExpression =
         (PsiReferenceExpression)qualifier;
-      final PsiElement target = referenceExpression.resolve();
+      PsiElement target = referenceExpression.resolve();
       if (!(target instanceof PsiVariable)) {
         return false;
       }
-      final PsiVariable variable = (PsiVariable)target;
+      PsiVariable variable = (PsiVariable)target;
       PsiTryStatement tryStatement =
         PsiTreeUtil.getParentOfType(expression,
                                     PsiTryStatement.class, true, PsiMember.class);
@@ -130,13 +130,13 @@ public class ChannelResourceInspection extends ResourceInspection {
 
     private boolean isChannelFactoryMethod(
       PsiMethodCallExpression expression) {
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
+      String methodName = methodExpression.getReferenceName();
       if (!HardcodedMethodConstants.GET_CHANNEL.equals(methodName)) {
         return false;
       }
-      final PsiExpression qualifier =
+      PsiExpression qualifier =
         methodExpression.getQualifierExpression();
       if (qualifier == null) {
         return false;

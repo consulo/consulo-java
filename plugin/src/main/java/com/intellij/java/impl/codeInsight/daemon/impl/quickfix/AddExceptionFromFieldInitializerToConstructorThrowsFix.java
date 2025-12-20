@@ -54,42 +54,42 @@ public class AddExceptionFromFieldInitializerToConstructorThrowsFix extends Base
     if (!myWrongElement.isValid()) {
       return false;
     }
-    final NavigatablePsiElement maybeField =
+    NavigatablePsiElement maybeField =
       PsiTreeUtil.getParentOfType(myWrongElement, PsiMethod.class, PsiFunctionalExpression.class, PsiField.class);
     if (!(maybeField instanceof PsiField)) {
       return false;
     }
-    final PsiField field = (PsiField)maybeField;
+    PsiField field = (PsiField)maybeField;
     if (field.hasModifierProperty(PsiModifier.STATIC)) {
       return false;
     }
-    final PsiClass containingClass = field.getContainingClass();
+    PsiClass containingClass = field.getContainingClass();
     if ((containingClass == null ||
       containingClass instanceof PsiAnonymousClass ||
       containingClass.isInterface() ||
       !containingClass.isWritable())) {
       return false;
     }
-    final List<PsiClassType> exceptions = ExceptionUtil.getUnhandledExceptions(field);
+    List<PsiClassType> exceptions = ExceptionUtil.getUnhandledExceptions(field);
     if (exceptions.isEmpty()) {
       return false;
     }
-    final PsiMethod[] existedConstructors = containingClass.getConstructors();
+    PsiMethod[] existedConstructors = containingClass.getConstructors();
     setText(JavaQuickFixLocalize.addExceptionFromFieldInitializerToConstructorThrowsText(existedConstructors.length));
     return true;
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(@Nonnull final Project project, Editor editor, final PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
       return;
     }
     PsiDocumentManager.getInstance(project).commitAllDocuments();
 
-    final NavigatablePsiElement field =
+    NavigatablePsiElement field =
       PsiTreeUtil.getParentOfType(myWrongElement, PsiMethod.class, PsiFunctionalExpression.class, PsiField.class);
     if (field instanceof PsiField) {
-      final PsiClass aClass = ((PsiField)field).getContainingClass();
+      PsiClass aClass = ((PsiField)field).getContainingClass();
       if (aClass != null) {
         PsiMethod[] constructors = aClass.getConstructors();
         if (constructors.length == 0) {

@@ -49,7 +49,7 @@ public class JavaSmartKeysSettings implements PersistentStateComponent<Element> 
   }
 
   @Override
-  public void loadState(final Element state) {
+  public void loadState(Element state) {
     try {
       XmlSerializer.deserializeInto(this, state);
     }
@@ -65,7 +65,7 @@ public class JavaSmartKeysSettings implements PersistentStateComponent<Element> 
     return element;
   }
 
-  public void writeExternal(final Element element) {
+  public void writeExternal(Element element) {
     try {
       XmlSerializer.serializeInto(this, element, new SkipDefaultValuesSerializationFilters());
     }

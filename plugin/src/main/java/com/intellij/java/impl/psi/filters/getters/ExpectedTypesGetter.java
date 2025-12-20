@@ -35,7 +35,7 @@ import java.util.Set;
 public class ExpectedTypesGetter
 {
 
-	public static PsiType[] getExpectedTypes(final PsiElement context, boolean defaultTypes)
+	public static PsiType[] getExpectedTypes(PsiElement context, boolean defaultTypes)
 	{
 		PsiExpression expression = PsiTreeUtil.getContextOfType(context, PsiExpression.class, true);
 		if(expression == null)
@@ -51,8 +51,8 @@ public class ExpectedTypesGetter
 		Set<PsiType> result = new HashSet<>(infos.length);
 		for(ExpectedTypeInfo info : infos)
 		{
-			final PsiType type = info.getType();
-			final PsiType defaultType = info.getDefaultType();
+			PsiType type = info.getType();
+			PsiType defaultType = info.getDefaultType();
 			if(!defaultTypes && !defaultType.equals(type))
 			{
 				result.add(type);

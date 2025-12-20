@@ -29,12 +29,12 @@ class ForLoopPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiJavaToken)) {
       return false;
     }
-    final PsiJavaToken token = (PsiJavaToken)element;
-    final IElementType tokenType = token.getTokenType();
+    PsiJavaToken token = (PsiJavaToken)element;
+    IElementType tokenType = token.getTokenType();
     if (!JavaTokenType.FOR_KEYWORD.equals(tokenType)) {
       return false;
     }
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     return parent instanceof PsiForStatement &&
            !ErrorUtil.containsError(parent);
   }

@@ -77,7 +77,7 @@ public class StaticVariableUninitializedUseInspection extends BaseInspection {
             if (field.getInitializer() != null) {
                 return;
             }
-            final PsiClass containingClass = field.getContainingClass();
+            PsiClass containingClass = field.getContainingClass();
             if (containingClass == null) {
                 return;
             }
@@ -85,23 +85,23 @@ public class StaticVariableUninitializedUseInspection extends BaseInspection {
                 return;
             }
             if (m_ignorePrimitives) {
-                final PsiType type = field.getType();
+                PsiType type = field.getType();
                 if (ClassUtils.isPrimitive(type)) {
                     return;
                 }
             }
-            final PsiClassInitializer[] initializers =
+            PsiClassInitializer[] initializers =
                 containingClass.getInitializers();
             // Do the static initializers come in actual order in file?
             // (They need to.)
-            final UninitializedReadCollector uninitializedReadCollector =
+            UninitializedReadCollector uninitializedReadCollector =
                 new UninitializedReadCollector();
             boolean assigned = false;
-            for (final PsiClassInitializer initializer : initializers) {
+            for (PsiClassInitializer initializer : initializers) {
                 if (!initializer.hasModifierProperty(PsiModifier.STATIC)) {
                     continue;
                 }
-                final PsiCodeBlock body = initializer.getBody();
+                PsiCodeBlock body = initializer.getBody();
                 if (uninitializedReadCollector.blockAssignsVariable(
                     body, field)) {
                     assigned = true;
@@ -109,22 +109,22 @@ public class StaticVariableUninitializedUseInspection extends BaseInspection {
                 }
             }
             if (assigned) {
-                final PsiExpression[] badReads =
+                PsiExpression[] badReads =
                     uninitializedReadCollector.getUninitializedReads();
                 for (PsiExpression badRead : badReads) {
                     registerError(badRead);
                 }
                 return;
             }
-            final PsiMethod[] methods = containingClass.getMethods();
+            PsiMethod[] methods = containingClass.getMethods();
             for (PsiMethod method : methods) {
                 if (!method.hasModifierProperty(PsiModifier.STATIC)) {
                     continue;
                 }
-                final PsiCodeBlock body = method.getBody();
+                PsiCodeBlock body = method.getBody();
                 uninitializedReadCollector.blockAssignsVariable(body, field);
             }
-            final PsiExpression[] moreBadReads =
+            PsiExpression[] moreBadReads =
                 uninitializedReadCollector.getUninitializedReads();
             for (PsiExpression badRead : moreBadReads) {
                 registerError(badRead);

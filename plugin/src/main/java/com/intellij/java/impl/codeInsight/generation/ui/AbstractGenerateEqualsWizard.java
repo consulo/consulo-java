@@ -115,7 +115,7 @@ public abstract class AbstractGenerateEqualsWizard<C extends PsiElement, M exten
 
 	protected void addTableListeners()
 	{
-		final MyTableModelListener listener = new MyTableModelListener();
+		MyTableModelListener listener = new MyTableModelListener();
 		if (myEqualsPanel != null)
 		{
 			myEqualsPanel.getTable().getModel().addTableModelListener(listener);
@@ -197,7 +197,7 @@ public abstract class AbstractGenerateEqualsWizard<C extends PsiElement, M exten
 	@Override
 	public JComponent getPreferredFocusedComponent()
 	{
-		final Component stepComponent = getCurrentStepComponent();
+		Component stepComponent = getCurrentStepComponent();
 		return stepComponent instanceof AbstractMemberSelectionPanel memberSelectionPanel ? memberSelectionPanel.getTable() : null;
 	}
 

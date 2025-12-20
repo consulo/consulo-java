@@ -56,7 +56,7 @@ public class SimpleJavaBlock extends AbstractJavaBlock {
       myCurrentOffset = myCurrentChild != null ? myCurrentChild.getTextRange().getStartOffset() : 0;
     }
 
-    final List<Block> result = new ArrayList<>();
+    List<Block> result = new ArrayList<>();
 
     myCurrentIndent = null;
     processHeadCommentsAndWhiteSpaces(result);
@@ -82,7 +82,7 @@ public class SimpleJavaBlock extends AbstractJavaBlock {
   private void processRemainingChildren(List<Block> result, Wrap childWrap) {
     while (myCurrentChild != null) {
       if (isNotEmptyNode(myCurrentChild)) {
-        final ASTNode astNode = myCurrentChild;
+        ASTNode astNode = myCurrentChild;
         AlignmentStrategy alignmentStrategyToUse = AlignmentStrategy.wrap(chooseAlignment(myReservedAlignment, myReservedAlignment2, myCurrentChild));
 
         if (myNode.getElementType() == JavaElementType.FIELD
@@ -141,9 +141,9 @@ public class SimpleJavaBlock extends AbstractJavaBlock {
 
   @Override
   @Nonnull
-  public ChildAttributes getChildAttributes(final int newChildIndex) {
+  public ChildAttributes getChildAttributes(int newChildIndex) {
     if (myNode.getElementType() == JavaElementType.CONDITIONAL_EXPRESSION && mySettings.ALIGN_MULTILINE_TERNARY_OPERATION) {
-      final Alignment usedAlignment = getUsedAlignment(newChildIndex);
+      Alignment usedAlignment = getUsedAlignment(newChildIndex);
       if (usedAlignment != null) {
         return new ChildAttributes(null, usedAlignment);
       } else {
@@ -157,16 +157,16 @@ public class SimpleJavaBlock extends AbstractJavaBlock {
   }
 
   @Override
-  public Wrap getReservedWrap(final IElementType elementType) {
+  public Wrap getReservedWrap(IElementType elementType) {
     return myReservedWrap.get(elementType);
   }
 
   @Override
-  public void setReservedWrap(final Wrap reservedWrap, final IElementType operationType) {
+  public void setReservedWrap(Wrap reservedWrap, IElementType operationType) {
     myReservedWrap.put(operationType, reservedWrap);
   }
 
-  public void setStartOffset(final int startOffset) {
+  public void setStartOffset(int startOffset) {
     myStartOffset = startOffset;
   }
 }

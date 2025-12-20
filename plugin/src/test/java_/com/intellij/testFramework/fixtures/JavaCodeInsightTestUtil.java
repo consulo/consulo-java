@@ -47,16 +47,16 @@ public class JavaCodeInsightTestUtil
 	{
 	}
 
-	public static void doInlineLocalTest(@Nonnull final CodeInsightTestFixture fixture, @Nonnull final String before, @Nonnull final String after)
+	public static void doInlineLocalTest(@Nonnull final CodeInsightTestFixture fixture, @Nonnull String before, @Nonnull String after)
 	{
 		fixture.configureByFile(before);
 		new WriteCommandAction(fixture.getProject())
 		{
 			@Override
-			protected void run(final Result result) throws Throwable
+			protected void run(Result result) throws Throwable
 			{
-				final Editor editor = fixture.getEditor();
-				final PsiElement element = TargetElementUtil.findTargetElement(editor, TARGET_FOR_INLINE_FLAGS);
+				Editor editor = fixture.getEditor();
+				PsiElement element = TargetElementUtil.findTargetElement(editor, TARGET_FOR_INLINE_FLAGS);
 				assert element instanceof PsiLocalVariable : element;
 				InlineLocalHandler.invoke(fixture.getProject(), editor, (PsiLocalVariable) element, null);
 			}
@@ -64,16 +64,16 @@ public class JavaCodeInsightTestUtil
 		fixture.checkResultByFile(after, false);
 	}
 
-	public static void doInlineParameterTest(@Nonnull final CodeInsightTestFixture fixture, @Nonnull final String before, @Nonnull final String after)
+	public static void doInlineParameterTest(@Nonnull final CodeInsightTestFixture fixture, @Nonnull String before, @Nonnull String after)
 	{
 		fixture.configureByFile(before);
 		new WriteCommandAction(fixture.getProject())
 		{
 			@Override
-			protected void run(final Result result) throws Throwable
+			protected void run(Result result) throws Throwable
 			{
-				final Editor editor = fixture.getEditor();
-				final PsiElement element = TargetElementUtil.findTargetElement(editor, TARGET_FOR_INLINE_FLAGS);
+				Editor editor = fixture.getEditor();
+				PsiElement element = TargetElementUtil.findTargetElement(editor, TARGET_FOR_INLINE_FLAGS);
 				assert element instanceof PsiParameter : element;
 				new InlineParameterHandler().inlineElement(getProject(), editor, element);
 			}
@@ -81,22 +81,22 @@ public class JavaCodeInsightTestUtil
 		fixture.checkResultByFile(after, false);
 	}
 
-	public static void doInlineMethodTest(@Nonnull final CodeInsightTestFixture fixture, @Nonnull final String before, @Nonnull final String after)
+	public static void doInlineMethodTest(@Nonnull final CodeInsightTestFixture fixture, @Nonnull String before, @Nonnull String after)
 	{
 		fixture.configureByFile(before);
 		new WriteCommandAction(fixture.getProject())
 		{
 			@Override
-			protected void run(final Result result) throws Throwable
+			protected void run(Result result) throws Throwable
 			{
-				final Editor editor = fixture.getEditor();
-				final PsiElement element = TargetElementUtil.findTargetElement(editor, TARGET_FOR_INLINE_FLAGS);
+				Editor editor = fixture.getEditor();
+				PsiElement element = TargetElementUtil.findTargetElement(editor, TARGET_FOR_INLINE_FLAGS);
 				assert element instanceof PsiMethod : element;
 
-				final PsiReference ref = fixture.getFile().findReferenceAt(editor.getCaretModel().getOffset());
-				final PsiReferenceExpression refExpr = ref instanceof PsiReferenceExpression ? (PsiReferenceExpression) ref : null;
+				PsiReference ref = fixture.getFile().findReferenceAt(editor.getCaretModel().getOffset());
+				PsiReferenceExpression refExpr = ref instanceof PsiReferenceExpression ? (PsiReferenceExpression) ref : null;
 
-				final PsiMethod method = (PsiMethod) element;
+				PsiMethod method = (PsiMethod) element;
 				assert !(InlineMethodProcessor.checkBadReturns(method) && !InlineUtil.allUsagesAreTailCalls(method)) : "Bad returns found";
 				new InlineMethodProcessor(getProject(), method, refExpr, editor, false).run();
 			}
@@ -104,20 +104,20 @@ public class JavaCodeInsightTestUtil
 		fixture.checkResultByFile(after, false);
 	}
 
-	public static void doInlineConstantTest(@Nonnull final CodeInsightTestFixture fixture, @Nonnull final String before, @Nonnull final String after)
+	public static void doInlineConstantTest(@Nonnull final CodeInsightTestFixture fixture, @Nonnull String before, @Nonnull String after)
 	{
 		fixture.configureByFile(before);
 		new WriteCommandAction(fixture.getProject())
 		{
 			@Override
-			protected void run(final Result result) throws Throwable
+			protected void run(Result result) throws Throwable
 			{
-				final Editor editor = fixture.getEditor();
-				final PsiElement element = TargetElementUtil.findTargetElement(editor, TARGET_FOR_INLINE_FLAGS);
+				Editor editor = fixture.getEditor();
+				PsiElement element = TargetElementUtil.findTargetElement(editor, TARGET_FOR_INLINE_FLAGS);
 				assert element instanceof PsiField : element;
 
-				final PsiReference ref = fixture.getFile().findReferenceAt(editor.getCaretModel().getOffset());
-				final PsiReferenceExpression refExpr = ref instanceof PsiReferenceExpression ? (PsiReferenceExpression) ref : null;
+				PsiReference ref = fixture.getFile().findReferenceAt(editor.getCaretModel().getOffset());
+				PsiReferenceExpression refExpr = ref instanceof PsiReferenceExpression ? (PsiReferenceExpression) ref : null;
 
 				new InlineConstantFieldProcessor((PsiField) element, getProject(), refExpr, false).run();
 			}

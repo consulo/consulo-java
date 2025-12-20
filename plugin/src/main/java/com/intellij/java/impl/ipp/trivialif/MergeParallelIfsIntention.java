@@ -48,12 +48,12 @@ public class MergeParallelIfsIntention extends Intention {
     @Override
     public void processIntention(PsiElement element)
         throws IncorrectOperationException {
-        final PsiJavaToken token = (PsiJavaToken) element;
-        final PsiIfStatement firstStatement = (PsiIfStatement) token.getParent();
-        final PsiIfStatement secondStatement =
+        PsiJavaToken token = (PsiJavaToken) element;
+        PsiIfStatement firstStatement = (PsiIfStatement) token.getParent();
+        PsiIfStatement secondStatement =
             (PsiIfStatement) PsiTreeUtil.skipSiblingsForward(firstStatement,
                 PsiWhiteSpace.class);
-        final String statement =
+        String statement =
             mergeIfStatements(firstStatement, secondStatement);
         assert firstStatement != null;
         replaceStatement(statement, firstStatement);
@@ -63,21 +63,21 @@ public class MergeParallelIfsIntention extends Intention {
 
     private static String mergeIfStatements(PsiIfStatement firstStatement,
                                             PsiIfStatement secondStatement) {
-        final PsiExpression condition = firstStatement.getCondition();
-        final String conditionText;
+        PsiExpression condition = firstStatement.getCondition();
+        String conditionText;
         if (condition == null) {
             conditionText = "";
         }
         else {
             conditionText = condition.getText();
         }
-        final PsiStatement firstThenBranch = firstStatement.getThenBranch();
-        final PsiStatement secondThenBranch = secondStatement.getThenBranch();
+        PsiStatement firstThenBranch = firstStatement.getThenBranch();
+        PsiStatement secondThenBranch = secondStatement.getThenBranch();
         @NonNls String statement = "if(" + conditionText + ')' +
             printStatementsInSequence(firstThenBranch,
                 secondThenBranch);
-        final PsiStatement firstElseBranch = firstStatement.getElseBranch();
-        final PsiStatement secondElseBranch = secondStatement.getElseBranch();
+        PsiStatement firstElseBranch = firstStatement.getElseBranch();
+        PsiStatement secondElseBranch = secondStatement.getElseBranch();
         if (firstElseBranch != null || secondElseBranch != null) {
             if (firstElseBranch instanceof PsiIfStatement
                 && secondElseBranch instanceof PsiIfStatement
@@ -105,7 +105,7 @@ public class MergeParallelIfsIntention extends Intention {
         if (statement2 == null) {
             return ' ' + statement1.getText();
         }
-        final StringBuilder out = new StringBuilder();
+        StringBuilder out = new StringBuilder();
         out.append('{');
         printStatementStripped(statement1, out);
         printStatementStripped(statement2, out);
@@ -116,9 +116,9 @@ public class MergeParallelIfsIntention extends Intention {
     private static void printStatementStripped(PsiStatement statement,
                                                StringBuilder out) {
         if (statement instanceof PsiBlockStatement) {
-            final PsiCodeBlock block =
+            PsiCodeBlock block =
                 ((PsiBlockStatement) statement).getCodeBlock();
-            final PsiElement[] children = block.getChildren();
+            PsiElement[] children = block.getChildren();
             for (int i = 1; i < children.length - 1; i++) {
                 out.append(children[i].getText());
             }

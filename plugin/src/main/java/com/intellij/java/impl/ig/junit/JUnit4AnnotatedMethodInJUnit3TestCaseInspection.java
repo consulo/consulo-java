@@ -62,32 +62,32 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
     @Nonnull
     @Override
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
-        final List<InspectionGadgetsFix> fixes = new ArrayList(3);
-        final PsiMethod method = (PsiMethod) infos[1];
+        List<InspectionGadgetsFix> fixes = new ArrayList(3);
+        PsiMethod method = (PsiMethod) infos[1];
         if (AnnotationUtil.isAnnotated(method, IGNORE, false)) {
             fixes.add(new RemoveIgnoreAndRename(method));
         }
         if (TestUtils.isJUnit4TestMethod(method)) {
             fixes.add(new RemoveTestAnnotationFix());
         }
-        final PsiClass aClass = (PsiClass) infos[0];
-        final String className = aClass.getName();
+        PsiClass aClass = (PsiClass) infos[0];
+        String className = aClass.getName();
         fixes.add(new ConvertToJUnit4Fix(className));
         return fixes.toArray(new InspectionGadgetsFix[fixes.size()]);
     }
 
-    private static void deleteAnnotation(ProblemDescriptor descriptor, final String qualifiedName) {
-        final PsiElement element = descriptor.getPsiElement();
-        final PsiElement parent = element.getParent();
+    private static void deleteAnnotation(ProblemDescriptor descriptor, String qualifiedName) {
+        PsiElement element = descriptor.getPsiElement();
+        PsiElement parent = element.getParent();
         if (!(parent instanceof PsiModifierListOwner)) {
             return;
         }
-        final PsiModifierListOwner method = (PsiModifierListOwner) parent;
-        final PsiModifierList modifierList = method.getModifierList();
+        PsiModifierListOwner method = (PsiModifierListOwner) parent;
+        PsiModifierList modifierList = method.getModifierList();
         if (modifierList == null) {
             return;
         }
-        final PsiAnnotation annotation = modifierList.findAnnotation(qualifiedName);
+        PsiAnnotation annotation = modifierList.findAnnotation(qualifiedName);
         if (annotation == null) {
             return;
         }
@@ -128,31 +128,31 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = element.getParent();
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement parent = element.getParent();
             if (!(parent instanceof PsiMember)) {
                 return;
             }
-            final PsiMember member = (PsiMember) parent;
-            final PsiClass containingClass = member.getContainingClass();
+            PsiMember member = (PsiMember) parent;
+            PsiClass containingClass = member.getContainingClass();
             if (containingClass == null) {
                 return;
             }
-            final PsiReferenceList extendsList = containingClass.getExtendsList();
+            PsiReferenceList extendsList = containingClass.getExtendsList();
             if (extendsList == null) {
                 return;
             }
-            final PsiMethod[] methods = containingClass.getMethods();
+            PsiMethod[] methods = containingClass.getMethods();
             for (PsiMethod method : methods) {
-                @NonNls final String name = method.getName();
+                @NonNls String name = method.getName();
                 if (method.hasModifierProperty(PsiModifier.STATIC)) {
                     continue;
                 }
-                final PsiType returnType = method.getReturnType();
+                PsiType returnType = method.getReturnType();
                 if (!PsiType.VOID.equals(returnType)) {
                     continue;
                 }
-                final PsiModifierList modifierList = method.getModifierList();
+                PsiModifierList modifierList = method.getModifierList();
                 if (name.startsWith("test")) {
                     addAnnotationIfNotPresent(modifierList, "org.junit.Test");
                 }
@@ -166,7 +166,7 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
                 }
                 method.accept(new MethodCallModifier());
             }
-            final PsiJavaCodeReferenceElement[] referenceElements = extendsList.getReferenceElements();
+            PsiJavaCodeReferenceElement[] referenceElements = extendsList.getReferenceElements();
             for (PsiJavaCodeReferenceElement referenceElement : referenceElements) {
                 referenceElement.delete();
             }
@@ -176,21 +176,21 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
             if (modifierList.findAnnotation(qualifiedAnnotationName) != null) {
                 return;
             }
-            final PsiAnnotation annotation = modifierList.addAnnotation(qualifiedAnnotationName);
-            final Project project = modifierList.getProject();
-            final JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
+            PsiAnnotation annotation = modifierList.addAnnotation(qualifiedAnnotationName);
+            Project project = modifierList.getProject();
+            JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
             codeStyleManager.shortenClassReferences(annotation);
         }
 
         private static void transformSetUpOrTearDownMethod(PsiMethod method) {
-            final PsiModifierList modifierList = method.getModifierList();
+            PsiModifierList modifierList = method.getModifierList();
             if (modifierList.hasModifierProperty(PsiModifier.PROTECTED)) {
                 modifierList.setModifierProperty(PsiModifier.PROTECTED, false);
             }
             if (!modifierList.hasModifierProperty(PsiModifier.PUBLIC)) {
                 modifierList.setModifierProperty(PsiModifier.PUBLIC, true);
             }
-            final PsiAnnotation overrideAnnotation = modifierList.findAnnotation(CommonClassNames.JAVA_LANG_OVERRIDE);
+            PsiAnnotation overrideAnnotation = modifierList.findAnnotation(CommonClassNames.JAVA_LANG_OVERRIDE);
             if (overrideAnnotation != null) {
                 overrideAnnotation.delete();
             }
@@ -209,12 +209,12 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
             @Override
             public void visitMethodCallExpression(PsiMethodCallExpression expression) {
                 super.visitMethodCallExpression(expression);
-                final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-                final String methodName = methodExpression.getReferenceName();
+                PsiReferenceExpression methodExpression = expression.getMethodExpression();
+                String methodName = methodExpression.getReferenceName();
                 if (!myLifeCycleMethodName.equals(methodName)) {
                     return;
                 }
-                final PsiExpression target = methodExpression.getQualifierExpression();
+                PsiExpression target = methodExpression.getQualifierExpression();
                 if (!(target instanceof PsiSuperExpression)) {
                     return;
                 }
@@ -227,28 +227,28 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
             @Override
             public void visitMethodCallExpression(PsiMethodCallExpression expression) {
                 super.visitMethodCallExpression(expression);
-                final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+                PsiReferenceExpression methodExpression = expression.getMethodExpression();
                 if (methodExpression.getQualifierExpression() != null) {
                     return;
                 }
-                final PsiMethod method = expression.resolveMethod();
+                PsiMethod method = expression.resolveMethod();
                 if (method == null) {
                     return;
                 }
-                final PsiClass aClass = method.getContainingClass();
+                PsiClass aClass = method.getContainingClass();
                 if (aClass == null) {
                     return;
                 }
-                final String name = aClass.getQualifiedName();
+                String name = aClass.getQualifiedName();
                 if (!"junit.framework.Assert".equals(name)) {
                     return;
                 }
-                @NonNls final String newExpressionText = "org.junit.Assert." + expression.getText();
-                final Project project = expression.getProject();
-                final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-                final PsiExpression newExpression = factory.createExpressionFromText(newExpressionText, expression);
-                final JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
-                final PsiElement replacedExpression = expression.replace(newExpression);
+                @NonNls String newExpressionText = "org.junit.Assert." + expression.getText();
+                Project project = expression.getProject();
+                PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+                PsiExpression newExpression = factory.createExpressionFromText(newExpressionText, expression);
+                JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
+                PsiElement replacedExpression = expression.replace(newExpression);
                 codeStyleManager.shortenClassReferences(replacedExpression);
             }
         }
@@ -278,7 +278,7 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
         @Override
         public void visitMethod(PsiMethod method) {
             super.visitMethod(method);
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return;
             }

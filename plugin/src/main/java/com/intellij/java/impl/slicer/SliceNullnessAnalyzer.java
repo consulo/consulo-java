@@ -38,14 +38,14 @@ import java.util.*;
  * User: cdr
  */
 public class SliceNullnessAnalyzer {
-    private static void groupByNullness(NullAnalysisResult result, SliceRootNode oldRoot, final Map<SliceNode, NullAnalysisResult> map) {
+    private static void groupByNullness(NullAnalysisResult result, SliceRootNode oldRoot, Map<SliceNode, NullAnalysisResult> map) {
         SliceRootNode root = createNewTree(result, oldRoot, map);
 
         SliceUsage rootUsage = oldRoot.myCachedChildren.get(0).getValue();
         SliceManager.getInstance(root.getProject()).createToolWindow(true, root, true, SliceManager.getElementDescription(null, rootUsage.getElement(), " Grouped by Nullness"));
     }
 
-    public static SliceRootNode createNewTree(NullAnalysisResult result, SliceRootNode oldRoot, final Map<SliceNode, NullAnalysisResult> map) {
+    public static SliceRootNode createNewTree(NullAnalysisResult result, SliceRootNode oldRoot, Map<SliceNode, NullAnalysisResult> map) {
         SliceRootNode root = oldRoot.copy();
         assert oldRoot.myCachedChildren.size() == 1;
         SliceNode oldRootStart = oldRoot.myCachedChildren.get(0);
@@ -61,9 +61,9 @@ public class SliceNullnessAnalyzer {
     }
 
     private static void createValueRootNode(NullAnalysisResult result, SliceRootNode oldRoot,
-                                            final Map<SliceNode, NullAnalysisResult> map,
+                                            Map<SliceNode, NullAnalysisResult> map,
                                             SliceRootNode root,
-                                            SliceNode oldRootStart, String nodeName, final int group) {
+                                            SliceNode oldRootStart, String nodeName, int group) {
         Collection<PsiElement> groupedByValue = result.groupedByValue[group];
         if (groupedByValue.isEmpty()) {
             return;
@@ -72,7 +72,7 @@ public class SliceNullnessAnalyzer {
         root.myCachedChildren.add(valueRoot);
 
         Set<PsiElement> uniqueValues = Sets.newHashSet(groupedByValue, SliceLeafAnalyzer.LEAF_ELEMENT_EQUALITY);
-        for (final PsiElement expression : uniqueValues) {
+        for (PsiElement expression : uniqueValues) {
             SliceNode newRoot = SliceLeafAnalyzer.filterTree(oldRootStart, oldNode -> {
                 if (oldNode.getDuplicate() != null) {
                     return null;
@@ -106,7 +106,7 @@ public class SliceNullnessAnalyzer {
 
         ProgressManager.getInstance().run(new Task.Backgroundable(root.getProject(), "Expanding all nodes... (may very well take the whole day)", true) {
             @Override
-            public void run(@Nonnull final ProgressIndicator indicator) {
+            public void run(@Nonnull ProgressIndicator indicator) {
                 NullAnalysisResult l = calcNullableLeaves(root, treeStructure, map);
                 leafExpressions.set(l);
             }
@@ -146,12 +146,12 @@ public class SliceNullnessAnalyzer {
     }
 
     @Nonnull
-    public static NullAnalysisResult calcNullableLeaves(@Nonnull final SliceNode root, @Nonnull AbstractTreeStructure treeStructure,
+    public static NullAnalysisResult calcNullableLeaves(@Nonnull SliceNode root, @Nonnull AbstractTreeStructure treeStructure,
                                                         final Map<SliceNode, NullAnalysisResult> map) {
         final SliceLeafAnalyzer.SliceNodeGuide guide = new SliceLeafAnalyzer.SliceNodeGuide(treeStructure);
         WalkingState<SliceNode> walkingState = new WalkingState<>(guide) {
             @Override
-            public void visit(final @Nonnull SliceNode element) {
+            public void visit(@Nonnull SliceNode element) {
                 element.calculateDupNode();
                 node(element, map).clear();
                 SliceNode duplicate = element.getDuplicate();
@@ -159,7 +159,7 @@ public class SliceNullnessAnalyzer {
                     node(element, map).add(node(duplicate, map));
                 }
                 else {
-                    final PsiElement value = ReadAction.compute(() -> element.getValue().getElement());
+                    PsiElement value = ReadAction.compute(() -> element.getValue().getElement());
                     Nullability nullability = ReadAction.compute(() -> checkNullability(value));
                     if (nullability == Nullability.NULLABLE) {
                         group(element, map, NullAnalysisResult.NULLS).add(value);

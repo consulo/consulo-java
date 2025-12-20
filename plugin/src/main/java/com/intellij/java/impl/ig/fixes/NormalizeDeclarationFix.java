@@ -35,8 +35,8 @@ public class NormalizeDeclarationFix extends InspectionGadgetsFix {
   @Override
   public void doFix(Project project, ProblemDescriptor descriptor)
     throws IncorrectOperationException {
-    final PsiElement variableNameElement = descriptor.getPsiElement();
-    final PsiVariable parent = (PsiVariable)variableNameElement.getParent();
+    PsiElement variableNameElement = descriptor.getPsiElement();
+    PsiVariable parent = (PsiVariable)variableNameElement.getParent();
     if (parent == null) {
       return;
     }
@@ -44,13 +44,13 @@ public class NormalizeDeclarationFix extends InspectionGadgetsFix {
       parent.normalizeDeclaration();
       return;
     }
-    final PsiElement grandParent = parent.getParent();
+    PsiElement grandParent = parent.getParent();
     if (!(grandParent instanceof PsiDeclarationStatement)) {
       return;
     }
-    final PsiElement greatGrandParent = grandParent.getParent();
+    PsiElement greatGrandParent = grandParent.getParent();
     if (greatGrandParent instanceof PsiForStatement) {
-      final PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement)grandParent;
+      PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement)grandParent;
       splitMultipleDeclarationInForStatementInitialization(declarationStatement);
       return;
     }
@@ -59,15 +59,15 @@ public class NormalizeDeclarationFix extends InspectionGadgetsFix {
 
   private static void splitMultipleDeclarationInForStatementInitialization(
     PsiDeclarationStatement declarationStatement) {
-    final PsiElement forStatement = declarationStatement.getParent();
-    final PsiElement[] declaredElements =
+    PsiElement forStatement = declarationStatement.getParent();
+    PsiElement[] declaredElements =
       declarationStatement.getDeclaredElements();
-    final Project project = forStatement.getProject();
-    final PsiElementFactory factory =
+    Project project = forStatement.getProject();
+    PsiElementFactory factory =
       JavaPsiFacade.getElementFactory(project);
-    final PsiElement greatGreatGrandParent = forStatement.getParent();
-    final PsiBlockStatement blockStatement;
-    final PsiCodeBlock codeBlock;
+    PsiElement greatGreatGrandParent = forStatement.getParent();
+    PsiBlockStatement blockStatement;
+    PsiCodeBlock codeBlock;
     if (!(greatGreatGrandParent instanceof PsiCodeBlock)) {
       blockStatement = (PsiBlockStatement)
         factory.createStatementFromText("{}", forStatement);
@@ -78,24 +78,24 @@ public class NormalizeDeclarationFix extends InspectionGadgetsFix {
       codeBlock = null;
     }
     for (int i = 1; i < declaredElements.length; i++) {
-      final PsiElement declaredElement = declaredElements[i];
+      PsiElement declaredElement = declaredElements[i];
       if (!(declaredElement instanceof PsiVariable)) {
         continue;
       }
-      final PsiVariable variable = (PsiVariable)declaredElement;
-      final PsiType type = variable.getType();
-      final String typeText = type.getCanonicalText();
-      final StringBuilder newStatementText =
+      PsiVariable variable = (PsiVariable)declaredElement;
+      PsiType type = variable.getType();
+      String typeText = type.getCanonicalText();
+      StringBuilder newStatementText =
         new StringBuilder(typeText);
       newStatementText.append(' ');
       newStatementText.append(variable.getName());
-      final PsiExpression initializer = variable.getInitializer();
+      PsiExpression initializer = variable.getInitializer();
       if (initializer != null) {
         newStatementText.append('=');
         newStatementText.append(initializer.getText());
       }
       newStatementText.append(';');
-      final PsiStatement newStatement =
+      PsiStatement newStatement =
         factory.createStatementFromText(
           newStatementText.toString(), forStatement);
       if (codeBlock == null) {
@@ -106,7 +106,7 @@ public class NormalizeDeclarationFix extends InspectionGadgetsFix {
       }
     }
     for (int i = 1; i < declaredElements.length; i++) {
-      final PsiElement declaredElement = declaredElements[i];
+      PsiElement declaredElement = declaredElements[i];
       if (!(declaredElement instanceof PsiVariable)) {
         continue;
       }

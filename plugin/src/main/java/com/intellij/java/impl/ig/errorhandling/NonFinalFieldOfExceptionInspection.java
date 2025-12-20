@@ -47,7 +47,7 @@ public class NonFinalFieldOfExceptionInspection extends BaseInspection {
     @Override
     @Nullable
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiField field = (PsiField) infos[0];
+        PsiField field = (PsiField) infos[0];
         return MakeFieldFinalFix.buildFix(field);
     }
 
@@ -65,7 +65,7 @@ public class NonFinalFieldOfExceptionInspection extends BaseInspection {
             if (field.hasModifierProperty(PsiModifier.FINAL)) {
                 return;
             }
-            final PsiClass containingClass = field.getContainingClass();
+            PsiClass containingClass = field.getContainingClass();
             if (containingClass == null) {
                 return;
             }

@@ -40,9 +40,9 @@ public class AddArrayCreationExpressionIntention extends MutablyNamedIntention {
     @Nonnull
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
-        final PsiArrayInitializerExpression arrayInitializerExpression =
+        PsiArrayInitializerExpression arrayInitializerExpression =
             (PsiArrayInitializerExpression) element;
-        final PsiType type = arrayInitializerExpression.getType();
+        PsiType type = arrayInitializerExpression.getType();
         assert type != null;
         return IntentionPowerPackLocalize.addArrayCreationExpressionIntentionName(type.getPresentableText());
     }
@@ -56,14 +56,14 @@ public class AddArrayCreationExpressionIntention extends MutablyNamedIntention {
     @Override
     protected void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiArrayInitializerExpression arrayInitializerExpression =
+        PsiArrayInitializerExpression arrayInitializerExpression =
             (PsiArrayInitializerExpression) element;
-        final PsiType type = arrayInitializerExpression.getType();
+        PsiType type = arrayInitializerExpression.getType();
         if (type == null) {
             return;
         }
-        final String typeText = type.getCanonicalText();
-        final String newExpressionText =
+        String typeText = type.getCanonicalText();
+        String newExpressionText =
             "new " + typeText + arrayInitializerExpression.getText();
         replaceExpression(newExpressionText, arrayInitializerExpression);
     }

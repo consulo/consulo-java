@@ -43,7 +43,7 @@ public class JavaNavBarExtension extends StructureAwareNavBarModelExtension {
 
   @Override
   @RequiredReadAction
-  public String getPresentableText(final Object object, boolean forPopup) {
+  public String getPresentableText(Object object, boolean forPopup) {
     if (object instanceof PsiMember) {
       if (forPopup && object instanceof PsiMethod) {
         return PsiFormatUtil.formatMethod((PsiMethod) object,
@@ -53,7 +53,7 @@ public class JavaNavBarExtension extends StructureAwareNavBarModelExtension {
       }
       return ElementDescriptionUtil.getElementDescription((PsiElement) object, UsageViewShortNameLocation.INSTANCE);
     } else if (object instanceof PsiJavaPackage) {
-      final String name = ((PsiJavaPackage) object).getName();
+      String name = ((PsiJavaPackage) object).getName();
       return name != null ? name : JavaBundle.message("dependencies.tree.node.default.package.abbreviation");
     } else if (object instanceof PsiDirectory && JrtFileSystem.isRoot(((PsiDirectory) object).getVirtualFile())) {
       return JavaBundle.message("jrt.node.short");
@@ -65,9 +65,9 @@ public class JavaNavBarExtension extends StructureAwareNavBarModelExtension {
 
   @RequiredReadAction
   @Override
-  public PsiElement getParent(@Nonnull final PsiElement psiElement) {
+  public PsiElement getParent(@Nonnull PsiElement psiElement) {
     if (psiElement instanceof PsiPackage) {
-      final PsiPackage parentPackage = ((PsiPackage) psiElement).getParentPackage();
+      PsiPackage parentPackage = ((PsiPackage) psiElement).getParentPackage();
       if (parentPackage != null && parentPackage.getQualifiedName().length() > 0) {
         return parentPackage;
       }
@@ -77,16 +77,16 @@ public class JavaNavBarExtension extends StructureAwareNavBarModelExtension {
 
   @Nullable
   @Override
-  public PsiElement adjustElement(@Nonnull final PsiElement psiElement) {
-    final ProjectFileIndex index = ProjectRootManager.getInstance(psiElement.getProject()).getFileIndex();
-    final PsiFile containingFile = psiElement.getContainingFile();
+  public PsiElement adjustElement(@Nonnull PsiElement psiElement) {
+    ProjectFileIndex index = ProjectRootManager.getInstance(psiElement.getProject()).getFileIndex();
+    PsiFile containingFile = psiElement.getContainingFile();
     if (containingFile != null) {
-      final VirtualFile file = containingFile.getVirtualFile();
+      VirtualFile file = containingFile.getVirtualFile();
       if (file != null && (index.isInSourceContent(file) || index.isInLibraryClasses(file) || index.isInLibrary(file))) {
         if (psiElement instanceof PsiJavaFile) {
-          final PsiJavaFile psiJavaFile = (PsiJavaFile) psiElement;
+          PsiJavaFile psiJavaFile = (PsiJavaFile) psiElement;
           if (psiJavaFile.getViewProvider().getBaseLanguage() == JavaLanguage.INSTANCE) {
-            final PsiClass[] psiClasses = psiJavaFile.getClasses();
+            PsiClass[] psiClasses = psiJavaFile.getClasses();
             if (psiClasses.length == 1) {
               return psiClasses[0];
             }

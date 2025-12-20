@@ -55,7 +55,7 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
 
   private static final MemberInfo.Filter<PsiMember> MEMBER_INFO_FILTER = element -> {
     if (element instanceof PsiMethod) {
-      final PsiMethod method = (PsiMethod)element;
+      PsiMethod method = (PsiMethod)element;
       return !method.hasModifierProperty(PsiModifier.STATIC) && !method.hasModifierProperty(PsiModifier.PRIVATE);
     }
     else if (element instanceof PsiClass && ((PsiClass)element).isInterface()) {
@@ -87,7 +87,7 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
   public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     if (elements.length != 1) return;
 
-    final PsiClass aClass = (PsiClass)elements[0];
+    PsiClass aClass = (PsiClass)elements[0];
 
     Editor editor = dataContext.getData(Editor.KEY);
     if (aClass.isInterface()) {
@@ -104,8 +104,8 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
 
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, aClass)) return;
 
-    final PsiClass[] bases = aClass.getSupers();
-    @NonNls final String javaLangObject = CommonClassNames.JAVA_LANG_OBJECT;
+    PsiClass[] bases = aClass.getSupers();
+    @NonNls String javaLangObject = CommonClassNames.JAVA_LANG_OBJECT;
     if (bases.length == 0 || bases.length == 1 && javaLangObject.equals(bases[0].getQualifiedName())) {
       LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
         RefactoringLocalize.classDoesNotHaveBaseClassesOrInterfaces(aClass.getQualifiedName())
@@ -114,7 +114,7 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
       return;
     }
 
-    final HashMap<PsiClass, Collection<MemberInfo>> basesToMemberInfos = new HashMap<>();
+    HashMap<PsiClass, Collection<MemberInfo>> basesToMemberInfos = new HashMap<>();
 
     for (PsiClass base : bases) {
       basesToMemberInfos.put(base, createBaseClassMemberInfos(base));
@@ -124,14 +124,14 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
   }
 
   private static List<MemberInfo> createBaseClassMemberInfos(PsiClass baseClass) {
-    final PsiClass deepestBase = RefactoringHierarchyUtil.getDeepestNonObjectBase(baseClass);
+    PsiClass deepestBase = RefactoringHierarchyUtil.getDeepestNonObjectBase(baseClass);
     LOG.assertTrue(deepestBase != null);
 
-    final MemberInfoStorage memberInfoStorage = new MemberInfoStorage(baseClass, MEMBER_INFO_FILTER);
+    MemberInfoStorage memberInfoStorage = new MemberInfoStorage(baseClass, MEMBER_INFO_FILTER);
 
     ArrayList<MemberInfo> memberInfoList = new ArrayList<>(memberInfoStorage.getClassMemberInfos(deepestBase));
     List<MemberInfo> memberInfos = memberInfoStorage.getIntermediateMemberInfosList(deepestBase);
-    for (final MemberInfo memberInfo : memberInfos) {
+    for (MemberInfo memberInfo : memberInfos) {
       memberInfoList.add(memberInfo);
     }
 

@@ -35,13 +35,13 @@ public class ExtractMethodFix extends InspectionGadgetsFix {
     return InspectionGadgetsLocalize.extractMethodQuickfix();
   }
 
-  public void doFix(final Project project, ProblemDescriptor descriptor) {
-    final PsiExpression expression = (PsiExpression)descriptor.getPsiElement();
-    final JavaRefactoringActionHandlerFactory factory = JavaRefactoringActionHandlerFactory.getInstance();
-    final RefactoringActionHandler extractHandler = factory.createExtractMethodHandler();
-    final DataManager dataManager = DataManager.getInstance();
-    final DataContext dataContext = dataManager.getDataContext();
-    final Runnable runnable = () -> extractHandler.invoke(project, new PsiElement[]{expression}, dataContext);
+  public void doFix(Project project, ProblemDescriptor descriptor) {
+    PsiExpression expression = (PsiExpression)descriptor.getPsiElement();
+    JavaRefactoringActionHandlerFactory factory = JavaRefactoringActionHandlerFactory.getInstance();
+    RefactoringActionHandler extractHandler = factory.createExtractMethodHandler();
+    DataManager dataManager = DataManager.getInstance();
+    DataContext dataContext = dataManager.getDataContext();
+    Runnable runnable = () -> extractHandler.invoke(project, new PsiElement[]{expression}, dataContext);
     if (ApplicationManager.getApplication().isUnitTestMode()) {
       runnable.run();
     }

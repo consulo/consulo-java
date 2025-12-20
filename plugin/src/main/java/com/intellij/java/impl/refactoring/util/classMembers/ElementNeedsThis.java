@@ -62,9 +62,9 @@ public class ElementNeedsThis extends ClassThisReferencesVisitor {
   @Override
   public void visitReferenceExpression(PsiReferenceExpression expression) {
     super.visitReferenceExpression(expression);
-    final PsiClass aClass = PsiUtil.resolveClassInType(expression.getType());
+    PsiClass aClass = PsiUtil.resolveClassInType(expression.getType());
     if (aClass instanceof PsiTypeParameter) {
-      final PsiTypeParameterListOwner owner = ((PsiTypeParameter)aClass).getOwner();
+      PsiTypeParameterListOwner owner = ((PsiTypeParameter)aClass).getOwner();
       if (owner instanceof PsiClass && myClassSuperClasses.contains(owner)) {
         myResult = true;
       }

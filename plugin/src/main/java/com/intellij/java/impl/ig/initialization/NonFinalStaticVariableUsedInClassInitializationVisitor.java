@@ -30,11 +30,11 @@ class NonFinalStaticVariableUsedInClassInitializationVisitor extends BaseInspect
     if (!isInClassInitialization(expression)) {
       return;
     }
-    final PsiElement referent = expression.resolve();
+    PsiElement referent = expression.resolve();
     if (!(referent instanceof PsiField)) {
       return;
     }
-    final PsiField field = (PsiField)referent;
+    PsiField field = (PsiField)referent;
     if (!field.hasModifierProperty(PsiModifier.STATIC)) {
       return;
     }
@@ -46,15 +46,15 @@ class NonFinalStaticVariableUsedInClassInitializationVisitor extends BaseInspect
 
   private static boolean isInClassInitialization(
     PsiExpression expression) {
-    final PsiClass expressionClass =
+    PsiClass expressionClass =
       ClassUtils.getContainingClass(expression);
-    final PsiMember member =
+    PsiMember member =
       PsiTreeUtil.getParentOfType(expression,
                                   PsiClassInitializer.class, PsiField.class);
     if (member == null) {
       return false;
     }
-    final PsiClass memberClass = member.getContainingClass();
+    PsiClass memberClass = member.getContainingClass();
     if (!memberClass.equals(expressionClass)) {
       return false;
     }

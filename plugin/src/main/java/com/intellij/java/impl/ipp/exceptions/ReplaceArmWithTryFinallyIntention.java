@@ -46,45 +46,45 @@ public class ReplaceArmWithTryFinallyIntention extends Intention {
     @Override
     protected void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiJavaToken token = (PsiJavaToken) element;
-        final PsiTryStatement tryStatement =
+        PsiJavaToken token = (PsiJavaToken) element;
+        PsiTryStatement tryStatement =
             (PsiTryStatement) token.getParent();
         if (tryStatement == null) {
             return;
         }
-        final boolean replaceAll = tryStatement.getCatchBlocks().length == 0;
-        final PsiResourceList resourceList = tryStatement.getResourceList();
+        boolean replaceAll = tryStatement.getCatchBlocks().length == 0;
+        PsiResourceList resourceList = tryStatement.getResourceList();
         if (resourceList == null) {
             return;
         }
-        final List<PsiResourceVariable> resourceVariables =
+        List<PsiResourceVariable> resourceVariables =
             resourceList.getResourceVariables();
-        final StringBuilder newTryStatement = new StringBuilder("{");
+        StringBuilder newTryStatement = new StringBuilder("{");
         for (PsiResourceVariable resourceVariable : resourceVariables) {
             newTryStatement.append(resourceVariable.getText());
             newTryStatement.append(";\ntry {");
         }
-        final PsiCodeBlock tryBlock = tryStatement.getTryBlock();
+        PsiCodeBlock tryBlock = tryStatement.getTryBlock();
         if (tryBlock == null) {
             return;
         }
-        final PsiElement[] children = tryBlock.getChildren();
+        PsiElement[] children = tryBlock.getChildren();
         for (int i = 1; i < children.length - 1; i++) {
-            final PsiElement child = children[i];
+            PsiElement child = children[i];
             newTryStatement.append(child.getText());
         }
-        final int resourceVariablesSize = resourceVariables.size();
+        int resourceVariablesSize = resourceVariables.size();
         for (int i = resourceVariablesSize - 1; i >= 0; i--) {
-            final PsiResourceVariable resourceVariable =
+            PsiResourceVariable resourceVariable =
                 resourceVariables.get(i);
             newTryStatement.append("} finally {\n");
             newTryStatement.append(resourceVariable.getName());
             newTryStatement.append(".close();\n}");
         }
         newTryStatement.append('}');
-        final PsiElementFactory factory =
+        PsiElementFactory factory =
             JavaPsiFacade.getElementFactory(element.getProject());
-        final PsiCodeBlock newCodeBlock =
+        PsiCodeBlock newCodeBlock =
             factory.createCodeBlockFromText(
                 newTryStatement.toString(), element);
         if (replaceAll) {

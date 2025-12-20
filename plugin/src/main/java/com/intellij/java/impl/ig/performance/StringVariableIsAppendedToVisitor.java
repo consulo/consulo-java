@@ -42,24 +42,24 @@ class StringVariableIsAppendedToVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     super.visitAssignmentExpression(assignment);
-    final PsiExpression lhs = assignment.getLExpression();
-    final PsiExpression rhs = assignment.getRExpression();
+    PsiExpression lhs = assignment.getLExpression();
+    PsiExpression rhs = assignment.getRExpression();
     if (rhs == null) {
       return;
     }
     if (!(lhs instanceof PsiReferenceExpression)) {
       return;
     }
-    final PsiReferenceExpression reference = (PsiReferenceExpression)lhs;
-    final PsiExpression qualifier = reference.getQualifierExpression();
+    PsiReferenceExpression reference = (PsiReferenceExpression)lhs;
+    PsiExpression qualifier = reference.getQualifierExpression();
     if (qualifier != null) {
       return;
     }
-    final PsiElement referent = reference.resolve();
+    PsiElement referent = reference.resolve();
     if (!variable.equals(referent)) {
       return;
     }
-    final IElementType tokenType = assignment.getOperationTokenType();
+    IElementType tokenType = assignment.getOperationTokenType();
     if (tokenType.equals(JavaTokenType.PLUSEQ)) {
       if (onlyWarnOnLoop && !ControlFlowUtils.isInLoop(assignment)) {
         return;
@@ -79,19 +79,19 @@ class StringVariableIsAppendedToVisitor extends JavaRecursiveElementVisitor {
       return false;
     }
     if (expression instanceof PsiReferenceExpression) {
-      final PsiElement referent = ((PsiReference)expression).resolve();
+      PsiElement referent = ((PsiReference)expression).resolve();
       return variable.equals(referent);
     }
     if (expression instanceof PsiParenthesizedExpression) {
-      final PsiExpression body =
+      PsiExpression body =
         ((PsiParenthesizedExpression)expression).getExpression();
       return isConcatenation(body);
     }
     if (expression instanceof PsiBinaryExpression) {
-      final PsiBinaryExpression binaryExpression =
+      PsiBinaryExpression binaryExpression =
         (PsiBinaryExpression)expression;
-      final PsiExpression lhs = binaryExpression.getLOperand();
-      final PsiExpression rhs = binaryExpression.getROperand();
+      PsiExpression lhs = binaryExpression.getLOperand();
+      PsiExpression rhs = binaryExpression.getROperand();
       return isConcatenation(lhs) || isConcatenation(rhs);
     }
     return false;

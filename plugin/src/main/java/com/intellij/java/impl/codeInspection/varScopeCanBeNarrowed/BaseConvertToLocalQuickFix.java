@@ -64,14 +64,14 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
   @Override
   @RequiredUIAccess
   public final void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
-    final V variable = getVariable(descriptor);
-    final PsiFile myFile = variable.getContainingFile();
+    V variable = getVariable(descriptor);
+    PsiFile myFile = variable.getContainingFile();
     if (variable == null || !variable.isValid()) {
       return; //weird. should not get here when field becomes invalid
     }
 
     try {
-      final PsiElement newDeclaration = moveDeclaration(project, variable);
+      PsiElement newDeclaration = moveDeclaration(project, variable);
       if (newDeclaration == null) return;
 
       positionCaretToDeclaration(project, myFile, newDeclaration);
@@ -84,9 +84,9 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
   protected abstract V getVariable(@Nonnull ProblemDescriptor descriptor);
 
   protected static void positionCaretToDeclaration(@Nonnull Project project, @Nonnull PsiFile psiFile, @Nonnull PsiElement declaration) {
-    final Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+    Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
     if (editor != null && (IJSwingUtilities.hasFocus(editor.getComponent()) || Application.get().isUnitTestMode())) {
-      final PsiFile openedFile = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
+      PsiFile openedFile = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
       if (openedFile == psiFile) {
         editor.getCaretModel().moveToOffset(declaration.getTextOffset());
         editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
@@ -100,22 +100,22 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
   @RequiredUIAccess
   @Nullable
   private PsiElement moveDeclaration(@Nonnull Project project, @Nonnull V variable) {
-    final Collection<PsiReference> references = ReferencesSearch.search(variable).findAll();
+    Collection<PsiReference> references = ReferencesSearch.search(variable).findAll();
     if (references.isEmpty()) return null;
 
-    final PsiCodeBlock anchorBlock = findAnchorBlock(references);
+    PsiCodeBlock anchorBlock = findAnchorBlock(references);
     if (anchorBlock == null)
       return null; //was assert, but need to fix the case when obsolete inspection highlighting is left
     if (!CodeInsightUtil.preparePsiElementsForWrite(anchorBlock)) return null;
 
-    final PsiElement firstElement = getLowestOffsetElement(references);
-    final String localName = suggestLocalName(project, variable, anchorBlock);
+    PsiElement firstElement = getLowestOffsetElement(references);
+    String localName = suggestLocalName(project, variable, anchorBlock);
 
-    final PsiElement anchor = getAnchorElement(anchorBlock, firstElement);
+    PsiElement anchor = getAnchorElement(anchorBlock, firstElement);
 
-    final PsiAssignmentExpression anchorAssignmentExpression = searchAssignmentExpression(anchor);
+    PsiAssignmentExpression anchorAssignmentExpression = searchAssignmentExpression(anchor);
     if (anchorAssignmentExpression != null && isVariableAssignment(anchorAssignmentExpression, variable)) {
-      final Set<PsiReference> refsSet = new HashSet<>(references);
+      Set<PsiReference> refsSet = new HashSet<>(references);
       refsSet.remove(anchorAssignmentExpression.getLExpression());
       return applyChanges(
           project,
@@ -144,18 +144,18 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
 
   @RequiredUIAccess
   protected PsiElement applyChanges(
-    final @Nonnull Project project,
-    final @Nonnull String localName,
-    final @Nullable PsiExpression initializer,
-    final @Nonnull V variable,
-    final @Nonnull Collection<PsiReference> references,
-    final @Nonnull Function<PsiDeclarationStatement, PsiElement> action
+    @Nonnull Project project,
+    @Nonnull String localName,
+    @Nullable PsiExpression initializer,
+    @Nonnull V variable,
+    @Nonnull Collection<PsiReference> references,
+    @Nonnull Function<PsiDeclarationStatement, PsiElement> action
   ) {
-    final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
+    PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
 
     return project.getApplication().runWriteAction(
       (Supplier<PsiElement>)() -> {
-        final PsiElement newDeclaration = moveDeclaration(elementFactory, localName, variable, initializer, action, references);
+        PsiElement newDeclaration = moveDeclaration(elementFactory, localName, variable, initializer, action, references);
         beforeDelete(project, variable, newDeclaration);
         variable.normalizeDeclaration();
         variable.delete();
@@ -172,9 +172,9 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
     Function<PsiDeclarationStatement, PsiElement> action,
     Collection<PsiReference> references
   ) {
-    final PsiDeclarationStatement declaration =
+    PsiDeclarationStatement declaration =
       elementFactory.createVariableDeclarationStatement(localName, variable.getType(), initializer);
-    final PsiElement newDeclaration = action.apply(declaration);
+    PsiElement newDeclaration = action.apply(declaration);
     retargetReferences(elementFactory, localName, references);
     return newDeclaration;
   }
@@ -196,7 +196,7 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
 
   private static boolean mayBeFinal(PsiElement firstElement, @Nonnull Collection<PsiReference> references) {
     for (PsiReference reference : references) {
-      final PsiElement element = reference.getElement();
+      PsiElement element = reference.getElement();
       if (element == firstElement) continue;
       if (element instanceof PsiExpression expression && PsiUtil.isAccessedForWriting(expression)) return false;
     }
@@ -205,7 +205,7 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
 
   private static void retargetReferences(PsiElementFactory elementFactory, String localName, Collection<PsiReference> refs)
     throws IncorrectOperationException {
-    final PsiReferenceExpression refExpr = (PsiReferenceExpression) elementFactory.createExpressionFromText(localName, null);
+    PsiReferenceExpression refExpr = (PsiReferenceExpression) elementFactory.createExpressionFromText(localName, null);
     for (PsiReference ref : refs) {
       if (ref instanceof PsiReferenceExpression referenceExpression) {
         referenceExpression.replace(refExpr);
@@ -227,7 +227,7 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
   private static PsiElement getLowestOffsetElement(@Nonnull Collection<PsiReference> refs) {
     PsiElement firstElement = null;
     for (PsiReference reference : refs) {
-      final PsiElement element = reference.getElement();
+      PsiElement element = reference.getElement();
       if (firstElement == null || firstElement.getTextRange().getStartOffset() > element.getTextRange().getStartOffset()) {
         firstElement = element;
       }
@@ -236,15 +236,15 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
   }
 
   @RequiredReadAction
-  private static PsiCodeBlock findAnchorBlock(final Collection<PsiReference> refs) {
+  private static PsiCodeBlock findAnchorBlock(Collection<PsiReference> refs) {
     PsiCodeBlock result = null;
     for (PsiReference psiReference : refs) {
-      final PsiElement element = psiReference.getElement();
+      PsiElement element = psiReference.getElement();
       PsiCodeBlock block = PsiTreeUtil.getParentOfType(element, PsiCodeBlock.class);
       if (result == null || block == null) {
         result = block;
       } else {
-        final PsiElement commonParent = PsiTreeUtil.findCommonParent(result, block);
+        PsiElement commonParent = PsiTreeUtil.findCommonParent(result, block);
         result = PsiTreeUtil.getParentOfType(commonParent, PsiCodeBlock.class, false);
       }
     }

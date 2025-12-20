@@ -65,7 +65,7 @@ public class SuppressWarningsFoldingBuilder extends FoldingBuilderEx {
 
   @Override
   public String getPlaceholderText(@Nonnull ASTNode node) {
-    final PsiElement element = node.getPsi();
+    PsiElement element = node.getPsi();
     if (element instanceof PsiAnnotation) {
       return "/" + StringUtil.join(((PsiAnnotation)element).getParameterList().getAttributes(), new Function<PsiNameValuePair, String>() {
         @Override
@@ -79,7 +79,7 @@ public class SuppressWarningsFoldingBuilder extends FoldingBuilderEx {
 
   private static String getMemberValueText(PsiAnnotationMemberValue memberValue) {
     if (memberValue instanceof PsiArrayInitializerMemberValue) {
-      final PsiAnnotationMemberValue[] initializers = ((PsiArrayInitializerMemberValue)memberValue).getInitializers();
+      PsiAnnotationMemberValue[] initializers = ((PsiArrayInitializerMemberValue)memberValue).getInitializers();
       return StringUtil.join(initializers, new Function<PsiAnnotationMemberValue, String>() {
         @Override
         public String apply(PsiAnnotationMemberValue psiAnnotationMemberValue) {
@@ -88,7 +88,7 @@ public class SuppressWarningsFoldingBuilder extends FoldingBuilderEx {
       }, ", ");
     }
     if (memberValue instanceof PsiLiteral) {
-      final Object o = ((PsiLiteral)memberValue).getValue();
+      Object o = ((PsiLiteral)memberValue).getValue();
       if (o != null) {
         return o.toString();
       }

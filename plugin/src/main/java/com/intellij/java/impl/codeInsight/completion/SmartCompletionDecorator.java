@@ -68,18 +68,18 @@ public class SmartCompletionDecorator extends TailTypeDecorator<LookupElement> {
       return TailType.NONE;
     }
 
-    final PsiExpression enclosing = PsiTreeUtil.getContextOfType(myPosition, PsiExpression.class, true);
+    PsiExpression enclosing = PsiTreeUtil.getContextOfType(myPosition, PsiExpression.class, true);
 
     if (enclosing != null) {
-      final PsiType type = JavaCompletionUtil.getLookupElementType(delegate);
-      final TailType itemType = item != null ? item.getTailType() : TailType.NONE;
+      PsiType type = JavaCompletionUtil.getLookupElementType(delegate);
+      TailType itemType = item != null ? item.getTailType() : TailType.NONE;
       if (type != null && type.isValid()) {
         Set<TailType> voidTyped = new HashSet<TailType>();
         Set<TailType> sameTyped = new HashSet<TailType>();
         Set<TailType> assignableTyped = new HashSet<TailType>();
         for (ExpectedTypeInfo info : myExpectedTypeInfos) {
-          final PsiType infoType = info.getType();
-          final PsiType originalInfoType = JavaCompletionUtil.originalize(infoType);
+          PsiType infoType = info.getType();
+          PsiType originalInfoType = JavaCompletionUtil.originalize(infoType);
           if (PsiType.VOID.equals(infoType)) {
             voidTyped.add(info.getTailType());
           } else if (infoType.equals(type) || originalInfoType.equals(type)) {
@@ -140,33 +140,33 @@ public class SmartCompletionDecorator extends TailTypeDecorator<LookupElement> {
     }
   }
 
-  public static boolean hasUnboundTypeParams(final PsiMethod method, PsiType expectedType) {
-    final PsiTypeParameter[] typeParameters = method.getTypeParameters();
+  public static boolean hasUnboundTypeParams(PsiMethod method, PsiType expectedType) {
+    PsiTypeParameter[] typeParameters = method.getTypeParameters();
     if (typeParameters.length == 0) {
       return false;
     }
 
     final Set<PsiTypeParameter> set = new HashSet<PsiTypeParameter>(Arrays.asList(typeParameters));
-    final PsiTypeVisitor<Boolean> typeParamSearcher = new PsiTypeVisitor<Boolean>() {
+    PsiTypeVisitor<Boolean> typeParamSearcher = new PsiTypeVisitor<Boolean>() {
       @Override
-      public Boolean visitType(final PsiType type) {
+      public Boolean visitType(PsiType type) {
         return true;
       }
 
       @Override
-      public Boolean visitArrayType(final PsiArrayType arrayType) {
+      public Boolean visitArrayType(PsiArrayType arrayType) {
         return arrayType.getComponentType().accept(this);
       }
 
       @Override
-      public Boolean visitClassType(final PsiClassType classType) {
-        final PsiClass aClass = classType.resolve();
+      public Boolean visitClassType(PsiClassType classType) {
+        PsiClass aClass = classType.resolve();
         if (aClass instanceof PsiTypeParameter && set.contains(aClass)) {
           return false;
         }
 
-        final PsiType[] types = classType.getParameters();
-        for (final PsiType psiType : types) {
+        PsiType[] types = classType.getParameters();
+        for (PsiType psiType : types) {
           if (!psiType.accept(this).booleanValue()) {
             return false;
           }
@@ -175,13 +175,13 @@ public class SmartCompletionDecorator extends TailTypeDecorator<LookupElement> {
       }
 
       @Override
-      public Boolean visitWildcardType(final PsiWildcardType wildcardType) {
-        final PsiType bound = wildcardType.getBound();
+      public Boolean visitWildcardType(PsiWildcardType wildcardType) {
+        PsiType bound = wildcardType.getBound();
         return bound == null || bound.accept(this).booleanValue();
       }
     };
 
-    for (final PsiParameter parameter : method.getParameterList().getParameters()) {
+    for (PsiParameter parameter : method.getParameterList().getParameters()) {
       if (!parameter.getType().accept(typeParamSearcher).booleanValue()) {
         return false;
       }
@@ -197,7 +197,7 @@ public class SmartCompletionDecorator extends TailTypeDecorator<LookupElement> {
     return false;
   }
 
-  public static PsiSubstitutor calculateMethodReturnTypeSubstitutor(@Nonnull PsiMethod method, @Nonnull final PsiType expected) {
+  public static PsiSubstitutor calculateMethodReturnTypeSubstitutor(@Nonnull PsiMethod method, @Nonnull PsiType expected) {
     PsiType returnType = method.getReturnType();
     if (returnType == null) {
       return PsiSubstitutor.EMPTY;

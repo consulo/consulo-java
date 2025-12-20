@@ -40,11 +40,11 @@ public class ExpressionLookupItem extends LookupElement implements TypedLookupIt
   private final String myLookupString;
   private final Set<String> myAllLookupStrings;
 
-  public ExpressionLookupItem(final PsiExpression expression) {
+  public ExpressionLookupItem(PsiExpression expression) {
     this(expression, getExpressionIcon(expression), expression.getText(), expression.getText());
   }
 
-  public ExpressionLookupItem(final PsiExpression expression, @Nullable Image icon, String presentableText, String... lookupStrings) {
+  public ExpressionLookupItem(PsiExpression expression, @Nullable Image icon, String presentableText, String... lookupStrings) {
     myExpression = expression;
     myPresentableText = presentableText;
     myIcon = icon;
@@ -55,7 +55,7 @@ public class ExpressionLookupItem extends LookupElement implements TypedLookupIt
   @Nullable
   private static Image getExpressionIcon(@Nonnull PsiExpression expression) {
     if (expression instanceof PsiReferenceExpression) {
-      final PsiElement element = ((PsiReferenceExpression) expression).resolve();
+      PsiElement element = ((PsiReferenceExpression) expression).resolve();
       if (element != null) {
         return IconDescriptorUpdaters.getIcon(element, 0);
       }
@@ -86,7 +86,7 @@ public class ExpressionLookupItem extends LookupElement implements TypedLookupIt
   }
 
   @Override
-  public boolean equals(final Object o) {
+  public boolean equals(Object o) {
     return o instanceof ExpressionLookupItem && myLookupString.equals(((ExpressionLookupItem) o).myLookupString);
   }
 

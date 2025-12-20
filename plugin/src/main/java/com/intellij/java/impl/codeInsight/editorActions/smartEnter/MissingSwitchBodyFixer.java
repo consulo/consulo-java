@@ -35,15 +35,15 @@ public class MissingSwitchBodyFixer implements Fixer
 		}
 		PsiSwitchStatement switchStatement = (PsiSwitchStatement) psiElement;
 
-		final Document doc = editor.getDocument();
+		Document doc = editor.getDocument();
 
-		final PsiCodeBlock body = switchStatement.getBody();
+		PsiCodeBlock body = switchStatement.getBody();
 		if(body != null)
 		{
 			return;
 		}
 
-		final PsiJavaToken rParenth = switchStatement.getRParenth();
+		PsiJavaToken rParenth = switchStatement.getRParenth();
 		assert rParenth != null;
 
 		doc.insertString(rParenth.getTextRange().getEndOffset(), "{}");

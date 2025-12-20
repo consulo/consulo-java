@@ -68,19 +68,19 @@ public class OrredNotEqualExpressionInspection extends BaseInspection {
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
+            PsiElement element = descriptor.getPsiElement();
             if (!(element instanceof PsiBinaryExpression)) {
                 return;
             }
-            final PsiBinaryExpression binaryExpression =
+            PsiBinaryExpression binaryExpression =
                 (PsiBinaryExpression) element;
-            final PsiExpression lhs = binaryExpression.getLOperand();
-            final String lhsText = lhs.getText();
-            final PsiExpression rhs = binaryExpression.getROperand();
+            PsiExpression lhs = binaryExpression.getLOperand();
+            String lhsText = lhs.getText();
+            PsiExpression rhs = binaryExpression.getROperand();
             if (rhs == null) {
                 return;
             }
-            final String rhsText = rhs.getText();
+            String rhsText = rhs.getText();
             replaceExpression(binaryExpression, lhsText + "&&" + rhsText);
         }
     }
@@ -95,37 +95,37 @@ public class OrredNotEqualExpressionInspection extends BaseInspection {
 
         @Override
         public void visitBinaryExpression(PsiBinaryExpression expression) {
-            final IElementType tokenType = expression.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (JavaTokenType.OROR != tokenType) {
                 return;
             }
-            final PsiExpression lhs = expression.getLOperand();
-            final PsiExpression rhs = expression.getROperand();
-            final Pair<PsiReferenceExpression, PsiExpression> pair1 =
+            PsiExpression lhs = expression.getLOperand();
+            PsiExpression rhs = expression.getROperand();
+            Pair<PsiReferenceExpression, PsiExpression> pair1 =
                 getReferenceExpressionPair(lhs);
-            final Pair<PsiReferenceExpression, PsiExpression> pair2 =
+            Pair<PsiReferenceExpression, PsiExpression> pair2 =
                 getReferenceExpressionPair(rhs);
             if (pair1 == null || pair2 == null) {
                 return;
             }
-            final PsiExpression expression1 = pair1.getSecond();
-            final PsiExpression expression2 = pair2.getSecond();
+            PsiExpression expression1 = pair1.getSecond();
+            PsiExpression expression2 = pair2.getSecond();
             if (expression1 == null || expression2 == null) {
                 return;
             }
-            final Project project = expression1.getProject();
-            final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-            final PsiConstantEvaluationHelper constantEvaluationHelper =
+            Project project = expression1.getProject();
+            JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+            PsiConstantEvaluationHelper constantEvaluationHelper =
                 psiFacade.getConstantEvaluationHelper();
-            final Object constant1 =
+            Object constant1 =
                 constantEvaluationHelper.computeConstantExpression(expression1);
-            final Object constant2 =
+            Object constant2 =
                 constantEvaluationHelper.computeConstantExpression(expression2);
             if (constant1 == null || constant2 == null || constant1 == constant2) {
                 return;
             }
-            final PsiReferenceExpression referenceExpression1 = pair1.getFirst();
-            final PsiReferenceExpression referenceExpression2 = pair2.getFirst();
+            PsiReferenceExpression referenceExpression1 = pair1.getFirst();
+            PsiReferenceExpression referenceExpression2 = pair2.getFirst();
             if (referenceExpression1.resolve() == referenceExpression2.resolve()) {
                 registerError(expression);
             }
@@ -137,22 +137,22 @@ public class OrredNotEqualExpressionInspection extends BaseInspection {
             if (!(expression instanceof PsiBinaryExpression)) {
                 return null;
             }
-            final PsiBinaryExpression binaryExpression =
+            PsiBinaryExpression binaryExpression =
                 (PsiBinaryExpression) expression;
-            final IElementType tokenType =
+            IElementType tokenType =
                 binaryExpression.getOperationTokenType();
             if (JavaTokenType.NE != tokenType) {
                 return null;
             }
-            final PsiExpression lhs = binaryExpression.getLOperand();
-            final PsiExpression rhs = binaryExpression.getROperand();
+            PsiExpression lhs = binaryExpression.getLOperand();
+            PsiExpression rhs = binaryExpression.getROperand();
             if (lhs instanceof PsiReferenceExpression) {
-                final PsiReferenceExpression lref =
+                PsiReferenceExpression lref =
                     (PsiReferenceExpression) lhs;
                 return new Pair(lref, rhs);
             }
             else if (rhs instanceof PsiReferenceExpression) {
-                final PsiReferenceExpression rref =
+                PsiReferenceExpression rref =
                     (PsiReferenceExpression) rhs;
                 return new Pair(rref, lhs);
             }

@@ -62,12 +62,12 @@ public class PublicMethodNotExposedInInterfaceInspection extends BaseInspection 
 
     @Override
     public JComponent createOptionsPanel() {
-        final JPanel panel = new JPanel(new GridBagLayout());
-        final JPanel annotationsListControl = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
+        JPanel panel = new JPanel(new GridBagLayout());
+        JPanel annotationsListControl = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
             ignorableAnnotations,
             InspectionGadgetsLocalize.ignoreIfAnnotatedBy().get()
         );
-        final GridBagConstraints constraints = new GridBagConstraints();
+        GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.weighty = 1.0;
@@ -75,7 +75,7 @@ public class PublicMethodNotExposedInInterfaceInspection extends BaseInspection 
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
         panel.add(annotationsListControl, constraints);
-        final CheckBox checkBox = new CheckBox(
+        CheckBox checkBox = new CheckBox(
             InspectionGadgetsLocalize.publicMethodNotInInterfaceOption().get(),
             this,
             "onlyWarnIfContainingClassImplementsAnInterface"
@@ -111,7 +111,7 @@ public class PublicMethodNotExposedInInterfaceInspection extends BaseInspection 
             if (method.hasModifierProperty(PsiModifier.STATIC)) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return;
             }
@@ -126,7 +126,7 @@ public class PublicMethodNotExposedInInterfaceInspection extends BaseInspection 
                 return;
             }
             if (onlyWarnIfContainingClassImplementsAnInterface) {
-                final PsiClass[] superClasses = containingClass.getSupers();
+                PsiClass[] superClasses = containingClass.getSupers();
                 boolean implementsInterface = false;
                 for (PsiClass superClass : superClasses) {
                     if (superClass.isInterface() &&
@@ -149,16 +149,16 @@ public class PublicMethodNotExposedInInterfaceInspection extends BaseInspection 
         }
 
         private boolean exposedInInterface(PsiMethod method) {
-            final PsiMethod[] superMethods = method.findSuperMethods();
-            for (final PsiMethod superMethod : superMethods) {
-                final PsiClass superClass = superMethod.getContainingClass();
+            PsiMethod[] superMethods = method.findSuperMethods();
+            for (PsiMethod superMethod : superMethods) {
+                PsiClass superClass = superMethod.getContainingClass();
                 if (superClass == null) {
                     continue;
                 }
                 if (superClass.isInterface()) {
                     return true;
                 }
-                final String superclassName = superClass.getQualifiedName();
+                String superclassName = superClass.getQualifiedName();
                 if (CommonClassNames.JAVA_LANG_OBJECT.equals(superclassName)) {
                     return true;
                 }

@@ -53,8 +53,8 @@ public class ClassGroupingRule implements UsageGroupingRule {
     if (!(usage instanceof PsiElementUsage)) {
       return null;
     }
-    final PsiElement psiElement = ((PsiElementUsage) usage).getElement();
-    final PsiFile containingFile = psiElement.getContainingFile();
+    PsiElement psiElement = ((PsiElementUsage) usage).getElement();
+    PsiFile containingFile = psiElement.getContainingFile();
     PsiFile topLevelFile = InjectedLanguageManager.getInstance(containingFile.getProject()).getTopLevelFile(containingFile);
 
     if (!(topLevelFile instanceof PsiJavaFile) /*|| topLevelFile instanceof JspFile*/) {
@@ -72,9 +72,9 @@ public class ClassGroupingRule implements UsageGroupingRule {
       // check whether the element is in the import list
       PsiImportList importList = PsiTreeUtil.getParentOfType(psiElement, PsiImportList.class, true);
       if (importList != null) {
-        final String fileName = getFileNameWithoutExtension(topLevelFile);
-        final PsiClass[] classes = ((PsiJavaFile) topLevelFile).getClasses();
-        for (final PsiClass aClass : classes) {
+        String fileName = getFileNameWithoutExtension(topLevelFile);
+        PsiClass[] classes = ((PsiJavaFile) topLevelFile).getClasses();
+        for (PsiClass aClass : classes) {
           if (fileName.equals(aClass.getName())) {
             containingClass = aClass;
             break;
@@ -92,7 +92,7 @@ public class ClassGroupingRule implements UsageGroupingRule {
       return new ClassUsageGroup((PsiClass) containingClass);
     }
 
-    final VirtualFile virtualFile = topLevelFile.getVirtualFile();
+    VirtualFile virtualFile = topLevelFile.getVirtualFile();
     if (virtualFile != null) {
       return new FileGroupingRule.FileUsageGroup(topLevelFile.getProject(), virtualFile);
     }
@@ -100,9 +100,9 @@ public class ClassGroupingRule implements UsageGroupingRule {
   }
 
   @RequiredReadAction
-  private static String getFileNameWithoutExtension(final PsiFile file) {
-    final String name = file.getName();
-    final int index = name.lastIndexOf('.');
+  private static String getFileNameWithoutExtension(PsiFile file) {
+    String name = file.getName();
+    int index = name.lastIndexOf('.');
     return index < 0 ? name : name.substring(0, index);
   }
 
@@ -199,7 +199,7 @@ public class ClassGroupingRule implements UsageGroupingRule {
 
     @Override
     @RequiredReadAction
-    public void calcData(final Key<?> key, final DataSink sink) {
+    public void calcData(Key<?> key, DataSink sink) {
       if (!isValid()) return;
       if (PsiElement.KEY == key) {
         sink.put(PsiElement.KEY, getPsiClass());

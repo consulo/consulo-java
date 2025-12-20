@@ -55,7 +55,7 @@ public class PackageVisibleInnerClassInspection extends BaseInspection {
     @Override
     @Nullable
     public JComponent createOptionsPanel() {
-        final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+        MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
         panel.addCheckbox(InspectionGadgetsLocalize.packageVisibleInnerClassIgnoreEnumOption().get(), "ignoreEnums");
         panel.addCheckbox(InspectionGadgetsLocalize.packageVisibleInnerClassIgnoreInterfaceOption().get(), "ignoreInterfaces");
         return panel;
@@ -94,7 +94,7 @@ public class PackageVisibleInnerClassInspection extends BaseInspection {
             if (ignoreInterfaces && aClass.isInterface()) {
                 return;
             }
-            final PsiElement parent = aClass.getParent();
+            PsiElement parent = aClass.getParent();
             // parent must be class to not warn on
             // the type parameters of classes, anonymous classes and
             // enum constants for example.

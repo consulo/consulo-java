@@ -41,7 +41,7 @@ import jakarta.annotation.Nullable;
 public class ReuseVariableDeclarationFix implements SyntheticIntentionAction {
   private final PsiLocalVariable myVariable;
 
-  public ReuseVariableDeclarationFix(final PsiLocalVariable variable) {
+  public ReuseVariableDeclarationFix(PsiLocalVariable variable) {
     this.myVariable = variable;
   }
 
@@ -52,32 +52,32 @@ public class ReuseVariableDeclarationFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (myVariable == null || !myVariable.isValid()) {
       return false;
     }
-    final PsiVariable previousVariable = findPreviousVariable();
+    PsiVariable previousVariable = findPreviousVariable();
     return previousVariable != null &&
            Comparing.equal(previousVariable.getType(), myVariable.getType()) &&
            myVariable.getManager().isInProject(myVariable);
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
-    final PsiVariable refVariable = findPreviousVariable();
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    PsiVariable refVariable = findPreviousVariable();
     if (refVariable == null) return;
 
     if (!CodeInsightUtil.preparePsiElementsForWrite(myVariable, refVariable)) return;
 
-    final PsiExpression initializer = myVariable.getInitializer();
+    PsiExpression initializer = myVariable.getInitializer();
     if (initializer == null) {
       myVariable.delete();
       return;
     }
 
     PsiUtil.setModifierProperty(refVariable, PsiModifier.FINAL, false);
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(myVariable.getProject()).getElementFactory();
-    final PsiElement statement = factory.createStatementFromText(myVariable.getName() + " = " + initializer.getText() + ";", null);
+    PsiElementFactory factory = JavaPsiFacade.getInstance(myVariable.getProject()).getElementFactory();
+    PsiElement statement = factory.createStatementFromText(myVariable.getName() + " = " + initializer.getText() + ";", null);
     myVariable.getParent().replace(statement);
   }
 
@@ -95,7 +95,7 @@ public class ReuseVariableDeclarationFix implements SyntheticIntentionAction {
       return null;
     }
 
-    final VariablesNotProcessor processor = new VariablesNotProcessor(myVariable, false);
+    VariablesNotProcessor processor = new VariablesNotProcessor(myVariable, false);
     PsiScopesUtil.treeWalkUp(processor, nameIdentifier, scope);
     return processor.size() > 0 ? processor.getResult(0) : null;
   }

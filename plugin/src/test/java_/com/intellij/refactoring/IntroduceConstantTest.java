@@ -65,7 +65,7 @@ public abstract class IntroduceConstantTest extends LightCodeInsightTestCase {
     checkResultByFile(BASE_PATH + getTestName(false) + "_after.java");
   }
 
-  private static void convertLocal(final boolean makeEnumConstant) {
+  private static void convertLocal(boolean makeEnumConstant) {
     PsiLocalVariable local = PsiTreeUtil.getParentOfType(getFile().findElementAt(getEditor().getCaretModel().getOffset()), PsiLocalVariable.class);
     new MockLocalToFieldHandler(getProject(), true, makeEnumConstant).convertLocalToField(local, getEditor());
   }
@@ -78,9 +78,9 @@ public abstract class IntroduceConstantTest extends LightCodeInsightTestCase {
 
   public void testPartialStringLiteralQualified() throws Exception {
     configureByFile(BASE_PATH + getTestName(false) + ".java");
-    final PsiClass psiClass = ((PsiJavaFile)getFile()).getClasses()[0];
+    PsiClass psiClass = ((PsiJavaFile)getFile()).getClasses()[0];
     Assert.assertNotNull(psiClass);
-    final PsiClass targetClass = psiClass.findInnerClassByName("D", false);
+    PsiClass targetClass = psiClass.findInnerClassByName("D", false);
     Assert.assertNotNull(targetClass);
     new MockIntroduceConstantHandler(targetClass).invoke(getProject(), getEditor(), getFile(), null);
     checkResultByFile(BASE_PATH + getTestName(false) + "_after.java");
@@ -113,7 +113,7 @@ public abstract class IntroduceConstantTest extends LightCodeInsightTestCase {
 
   public void testEscalateVisibility() throws Exception {
     configureByFile(BASE_PATH + getTestName(false) + ".java");
-    final PsiClass[] classes = ((PsiJavaFile)getFile()).getClasses();
+    PsiClass[] classes = ((PsiJavaFile)getFile()).getClasses();
     Assert.assertTrue(classes.length == 2);
     final PsiClass targetClass = classes[1];
     Assert.assertNotNull(targetClass);
@@ -146,9 +146,9 @@ public abstract class IntroduceConstantTest extends LightCodeInsightTestCase {
                                                PsiExpression[] occurrences,
                                                PsiElement anchorElement,
                                                PsiElement anchorElementIfAll) {
-        final TypeSelectorManagerImpl selectorManager =
+        TypeSelectorManagerImpl selectorManager =
           new TypeSelectorManagerImpl(project, type, PsiTreeUtil.getParentOfType(anchorElement, PsiMethod.class), expr, occurrences);
-        final PsiType psiType = selectorManager.getDefaultType();
+        PsiType psiType = selectorManager.getDefaultType();
         Assert.assertEquals(psiType.getCanonicalText(), expectedType);
         return new Settings("xxx", expr, occurrences, true, true, true,
                             InitializationPlace.IN_FIELD_DECLARATION, getVisibility(), null, psiType, false,

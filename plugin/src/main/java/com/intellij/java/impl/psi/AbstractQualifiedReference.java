@@ -50,12 +50,12 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
   private static final ResolveCache.PolyVariantResolver<AbstractQualifiedReference> MY_RESOLVER = new ResolveCache.PolyVariantResolver<AbstractQualifiedReference>() {
     @Nonnull
     @Override
-    public ResolveResult[] resolve(@Nonnull final AbstractQualifiedReference expression, final boolean incompleteCode) {
+    public ResolveResult[] resolve(@Nonnull AbstractQualifiedReference expression, boolean incompleteCode) {
       return expression.resolveInner();
     }
   };
 
-  protected AbstractQualifiedReference(@Nonnull final ASTNode node) {
+  protected AbstractQualifiedReference(@Nonnull ASTNode node) {
     super(node);
   }
 
@@ -73,7 +73,7 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
 
   @Override
   @Nonnull
-  public final ResolveResult[] multiResolve(final boolean incompleteCode) {
+  public final ResolveResult[] multiResolve(boolean incompleteCode) {
     PsiFile file = getContainingFile();
     return ResolveCache.getInstance(file.getProject()).resolveWithCaching(this, MY_RESOLVER, true, false, file);
   }
@@ -81,21 +81,21 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
   @Override
   @Nullable
   public final PsiElement resolve() {
-    final ResolveResult[] results = multiResolve(false);
+    ResolveResult[] results = multiResolve(false);
     return results.length == 1 ? results[0].getElement() : null;
   }
 
   protected boolean processVariantsInner(PsiScopeProcessor processor) {
-    final T qualifier = getQualifier();
+    T qualifier = getQualifier();
     if (qualifier == null) {
       return processUnqualifiedVariants(processor);
     }
 
-    final PsiElement psiElement = qualifier.resolve();
+    PsiElement psiElement = qualifier.resolve();
     return psiElement == null || psiElement.processDeclarations(processor, ResolveState.initial(), null, this);
   }
 
-  protected boolean processUnqualifiedVariants(final PsiScopeProcessor processor) {
+  protected boolean processUnqualifiedVariants(PsiScopeProcessor processor) {
     return PsiScopesUtil.treeWalkUp(processor, this, null);
   }
 
@@ -114,12 +114,12 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
   }
 
   @Override
-  public PsiElement handleElementRename(final String newElementName) throws IncorrectOperationException {
+  public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
     CheckUtil.checkWritable(this);
-    final PsiElement firstChildNode = ObjectUtil.assertNotNull(getFirstChild());
-    final PsiElement firstInIdentifier = getClass().isInstance(firstChildNode) ? ObjectUtil.assertNotNull(firstChildNode.getNextSibling()).getNextSibling() : firstChildNode;
+    PsiElement firstChildNode = ObjectUtil.assertNotNull(getFirstChild());
+    PsiElement firstInIdentifier = getClass().isInstance(firstChildNode) ? ObjectUtil.assertNotNull(firstChildNode.getNextSibling()).getNextSibling() : firstChildNode;
     getNode().removeRange(firstInIdentifier.getNode(), null);
-    final PsiElement referenceName = ObjectUtil.assertNotNull(parseReference(newElementName).getReferenceNameElement());
+    PsiElement referenceName = ObjectUtil.assertNotNull(parseReference(newElementName).getReferenceNameElement());
     getNode().addChild(referenceName.getNode());
     return this;
   }
@@ -130,12 +130,12 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
     if (isReferenceTo(element)) return this;
 
     if (element instanceof PsiMethod) {
-      final PsiMethod method = (PsiMethod) element;
-      final String methodName = method.getName();
+      PsiMethod method = (PsiMethod) element;
+      String methodName = method.getName();
       if (isDirectlyVisible(method)) return replaceReference(methodName);
 
-      final AbstractQualifiedReference result = replaceReference(method.getContainingClass().getQualifiedName() + "." + methodName);
-      final AbstractQualifiedReference qualifier = result.getQualifier();
+      AbstractQualifiedReference result = replaceReference(method.getContainingClass().getQualifiedName() + "." + methodName);
+      AbstractQualifiedReference qualifier = result.getQualifier();
       assert qualifier != null;
       qualifier.shortenReferences();
       return result;
@@ -147,9 +147,9 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
       return replaceReference(((PsiPackage) element).getQualifiedName());
     }
     if (element instanceof PsiMetaOwner) {
-      final PsiMetaData metaData = ((PsiMetaOwner) element).getMetaData();
+      PsiMetaData metaData = ((PsiMetaOwner) element).getMetaData();
       if (metaData != null) {
-        final String name = metaData.getName(this);
+        String name = metaData.getName(this);
         if (name != null) {
           return replaceReference(name);
         }
@@ -159,9 +159,9 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
   }
 
   private boolean isDirectlyVisible(final PsiMethod method) {
-    final AbstractQualifiedReferenceResolvingProcessor processor = new AbstractQualifiedReferenceResolvingProcessor() {
+    AbstractQualifiedReferenceResolvingProcessor processor = new AbstractQualifiedReferenceResolvingProcessor() {
       @Override
-      protected void process(final PsiElement element) {
+      protected void process(PsiElement element) {
         if (getManager().areElementsEquivalent(element, method) && isAccessible(element)) {
           setFound();
         }
@@ -171,8 +171,8 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
     return processor.isFound();
   }
 
-  protected final AbstractQualifiedReference replaceReference(final String newText) {
-    final ASTNode newNode = parseReference(newText).getNode();
+  protected final AbstractQualifiedReference replaceReference(String newText) {
+    ASTNode newNode = parseReference(newText).getNode();
     getNode().getTreeParent().replaceChild(getNode(), newNode);
     return (AbstractQualifiedReference) newNode.getPsi();
   }
@@ -180,9 +180,9 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
   @Nonnull
   protected abstract T parseReference(String newText);
 
-  protected boolean isAccessible(final PsiElement element) {
+  protected boolean isAccessible(PsiElement element) {
     if (element instanceof PsiMember) {
-      final PsiMember member = (PsiMember) element;
+      PsiMember member = (PsiMember) element;
       return JavaResolveUtil.isAccessible(member, member.getContainingClass(), member.getModifierList(), this, null, null);
     }
     return true;
@@ -190,9 +190,9 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
 
   @Nonnull
   protected AbstractQualifiedReference shortenReferences() {
-    final PsiElement refElement = resolve();
+    PsiElement refElement = resolve();
     if (refElement instanceof PsiClass) {
-      final PsiQualifiedReference reference = JavaReferenceAdjuster.getClassReferenceToShorten((PsiClass) refElement, false, this);
+      PsiQualifiedReference reference = JavaReferenceAdjuster.getClassReferenceToShorten((PsiClass) refElement, false, this);
       if (reference instanceof AbstractQualifiedReference) {
         ((AbstractQualifiedReference) reference).dequalify();
       }
@@ -201,12 +201,12 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
   }
 
   private void dequalify() {
-    final AbstractQualifiedReference qualifier = getQualifier();
+    AbstractQualifiedReference qualifier = getQualifier();
     if (qualifier != null) {
       getNode().removeChild(qualifier.getNode());
-      final PsiElement separator = getSeparator();
+      PsiElement separator = getSeparator();
       if (separator != null) {
-        final ASTNode separatorNode = separator.getNode();
+        ASTNode separatorNode = separator.getNode();
         if (separatorNode != null) {
           getNode().removeChild(separatorNode);
         }
@@ -215,9 +215,9 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
   }
 
   @Override
-  public boolean isReferenceTo(final PsiElement element) {
-    final PsiManager manager = getManager();
-    for (final ResolveResult result : multiResolve(false)) {
+  public boolean isReferenceTo(PsiElement element) {
+    PsiManager manager = getManager();
+    for (ResolveResult result : multiResolve(false)) {
       if (manager.areElementsEquivalent(result.getElement(), element)) return true;
     }
     return false;
@@ -231,8 +231,8 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
 
   @Override
   public TextRange getRangeInElement() {
-    final PsiElement element = getSeparator();
-    final int length = getTextLength();
+    PsiElement element = getSeparator();
+    int length = getTextLength();
     return element == null ? TextRange.from(0, length) : new TextRange(element.getStartOffsetInParent() + element.getTextLength(), length);
   }
 
@@ -240,7 +240,7 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
   @Nullable
   @NonNls
   public String getReferenceName() {
-    final PsiElement element = getReferenceNameElement();
+    PsiElement element = getReferenceNameElement();
     return element == null ? null : element.getText().trim();
   }
 
@@ -254,7 +254,7 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
     private final Set<ResolveResult> myResults = new LinkedHashSet<ResolveResult>();
 
     @Override
-    public boolean execute(@Nonnull final PsiElement element, final ResolveState state) {
+    public boolean execute(@Nonnull PsiElement element, ResolveState state) {
       if (isFound()) return false;
       process(element);
       return true;
@@ -269,7 +269,7 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
     }
 
     @Override
-    public void handleEvent(final Event event, final Object associated) {
+    public void handleEvent(Event event, Object associated) {
       if ((event == JavaScopeProcessorEvent.SET_CURRENT_FILE_CONTEXT || event == Event.SET_DECLARATION_HOLDER) && !myResults.isEmpty()) {
         setFound();
       }

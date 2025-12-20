@@ -84,12 +84,12 @@ public class JavadocNavigationDelegate implements EditorNavigationDelegate {
       return Result.CONTINUE;
     }
 
-    final Project project = dataContext.getData(Project.KEY);
+    Project project = dataContext.getData(Project.KEY);
     if (project == null) {
       return Result.CONTINUE;
     }
 
-    final Document document = editor.getDocument();
+    Document document = editor.getDocument();
     PsiFile psiFile = dataContext.getData(PsiFile.KEY);
     if (psiFile == null) {
       psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
@@ -102,27 +102,27 @@ public class JavadocNavigationDelegate implements EditorNavigationDelegate {
   }
 
   public static Result navigateToLineEnd(@Nonnull Editor editor, @Nonnull PsiFile psiFile) {
-    final Document document = editor.getDocument();
-    final CaretModel caretModel = editor.getCaretModel();
-    final int offset = caretModel.getOffset();
+    Document document = editor.getDocument();
+    CaretModel caretModel = editor.getCaretModel();
+    int offset = caretModel.getOffset();
 
-    final CharSequence text = document.getCharsSequence();
+    CharSequence text = document.getCharsSequence();
     int line = caretModel.getLogicalPosition().line;
-    final int endLineOffset = document.getLineEndOffset(line);
-    final LogicalPosition endLineLogicalPosition = editor.offsetToLogicalPosition(endLineOffset);
+    int endLineOffset = document.getLineEndOffset(line);
+    LogicalPosition endLineLogicalPosition = editor.offsetToLogicalPosition(endLineOffset);
 
     // Stop processing if there are non-white space symbols after the current caret position.
-    final int lastNonWsSymbolOffset = CharArrayUtil.shiftBackward(text, endLineOffset, " \t");
+    int lastNonWsSymbolOffset = CharArrayUtil.shiftBackward(text, endLineOffset, " \t");
     if (lastNonWsSymbolOffset > offset || caretModel.getLogicalPosition().column > endLineLogicalPosition.column) {
       return Result.CONTINUE;
     }
 
-    final Pair<JavadocHelper.JavadocParameterInfo, List<JavadocHelper.JavadocParameterInfo>> pair = ourHelper.parse(psiFile, editor, offset);
+    Pair<JavadocHelper.JavadocParameterInfo, List<JavadocHelper.JavadocParameterInfo>> pair = ourHelper.parse(psiFile, editor, offset);
     if (pair.first == null || pair.first.parameterDescriptionStartPosition != null) {
       return Result.CONTINUE;
     }
 
-    final LogicalPosition position = ourHelper.calculateDescriptionStartPosition(psiFile, pair.second, pair.first);
+    LogicalPosition position = ourHelper.calculateDescriptionStartPosition(psiFile, pair.second, pair.first);
     ourHelper.navigate(position, editor, psiFile.getProject());
     return Result.STOP;
   }

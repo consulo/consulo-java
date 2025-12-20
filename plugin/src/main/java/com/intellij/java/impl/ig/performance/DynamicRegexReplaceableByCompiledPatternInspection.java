@@ -82,38 +82,38 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor)
         throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiClass aClass = ClassUtils.getContainingStaticClass(element);
+      PsiElement element = descriptor.getPsiElement();
+      PsiClass aClass = ClassUtils.getContainingStaticClass(element);
       if (aClass == null) {
         return;
       }
-      final PsiElement parent = element.getParent();
+      PsiElement parent = element.getParent();
       if (!(parent instanceof PsiReferenceExpression)) {
         return;
       }
-      final PsiReferenceExpression methodExpression = (PsiReferenceExpression) parent;
-      final PsiElement grandParent = methodExpression.getParent();
+      PsiReferenceExpression methodExpression = (PsiReferenceExpression) parent;
+      PsiElement grandParent = methodExpression.getParent();
       if (!(grandParent instanceof PsiMethodCallExpression)) {
         return;
       }
-      final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) grandParent;
-      final PsiExpressionList list = methodCallExpression.getArgumentList();
-      final PsiExpression[] expressions = list.getExpressions();
-      @NonNls final StringBuilder fieldText =
+      PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) grandParent;
+      PsiExpressionList list = methodCallExpression.getArgumentList();
+      PsiExpression[] expressions = list.getExpressions();
+      @NonNls StringBuilder fieldText =
           new StringBuilder("private static final java.util.regex.Pattern PATTERN = java.util.regex.Pattern.compile(");
-      final int expressionsLength = expressions.length;
+      int expressionsLength = expressions.length;
       if (expressionsLength > 0) {
         fieldText.append(expressions[0].getText());
       }
       fieldText.append(");");
-      final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-      final PsiField newField = factory.createFieldFromText(fieldText.toString(), element);
-      final PsiElement field = aClass.add(newField);
+      PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+      PsiField newField = factory.createFieldFromText(fieldText.toString(), element);
+      PsiElement field = aClass.add(newField);
 
-      @NonNls final StringBuilder expressionText = new StringBuilder("PATTERN.");
-      @NonNls final String methodName = methodExpression.getReferenceName();
-      final PsiExpression qualifier = methodExpression.getQualifierExpression();
-      @NonNls final String qualifierText;
+      @NonNls StringBuilder expressionText = new StringBuilder("PATTERN.");
+      @NonNls String methodName = methodExpression.getReferenceName();
+      PsiExpression qualifier = methodExpression.getQualifierExpression();
+      @NonNls String qualifierText;
       if (qualifier == null) {
         qualifierText = "this";
       } else {
@@ -144,18 +144,18 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
         expressionText.append(')');
       }
 
-      final PsiExpression newExpression = factory.createExpressionFromText(expressionText.toString(), element);
+      PsiExpression newExpression = factory.createExpressionFromText(expressionText.toString(), element);
       PsiMethodCallExpression newMethodCallExpression = (PsiMethodCallExpression) methodCallExpression.replace(newExpression);
       newMethodCallExpression = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(newMethodCallExpression);
-      final PsiReferenceExpression reference = getReference(newMethodCallExpression);
+      PsiReferenceExpression reference = getReference(newMethodCallExpression);
       HighlightUtils.showRenameTemplate(aClass, (PsiNameIdentifierOwner) field, reference);
     }
 
     private static PsiReferenceExpression getReference(PsiMethodCallExpression newMethodCallExpression) {
-      final PsiReferenceExpression methodExpression = newMethodCallExpression.getMethodExpression();
-      final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
+      PsiReferenceExpression methodExpression = newMethodCallExpression.getMethodExpression();
+      PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
       if (qualifierExpression instanceof PsiMethodCallExpression) {
-        final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) qualifierExpression;
+        PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) qualifierExpression;
         return getReference(methodCallExpression);
       }
       if (!(qualifierExpression instanceof PsiReferenceExpression)) {
@@ -183,27 +183,27 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
 
 
     private static boolean isCallToRegexMethod(PsiMethodCallExpression expression) {
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      final String name = methodExpression.getReferenceName();
+      PsiReferenceExpression methodExpression = expression.getMethodExpression();
+      String name = methodExpression.getReferenceName();
       if (!regexMethodNames.contains(name)) {
         return false;
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
+      PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpression[] arguments = argumentList.getExpressions();
       for (PsiExpression argument : arguments) {
         if (!PsiUtil.isConstantExpression(argument)) {
           return false;
         }
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return false;
       }
-      final PsiClass containingClass = method.getContainingClass();
+      PsiClass containingClass = method.getContainingClass();
       if (containingClass == null) {
         return false;
       }
-      final String className = containingClass.getQualifiedName();
+      String className = containingClass.getQualifiedName();
       return CommonClassNames.JAVA_LANG_STRING.equals(className);
     }
   }

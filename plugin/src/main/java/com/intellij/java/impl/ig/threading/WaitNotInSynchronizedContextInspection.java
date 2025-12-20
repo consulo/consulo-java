@@ -47,9 +47,9 @@ public class WaitNotInSynchronizedContextInspection
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
-    final String text;
+    String text;
     if (infos.length > 0) {
-      final PsiElement element = (PsiElement)infos[0];
+      PsiElement element = (PsiElement)infos[0];
       text = element.getText();
     }
     else {
@@ -70,26 +70,26 @@ public class WaitNotInSynchronizedContextInspection
     public void visitMethodCallExpression(
       @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      @NonNls final String methodName =
+      @NonNls String methodName =
         methodExpression.getReferenceName();
       if (!HardcodedMethodConstants.WAIT.equals(methodName)) {
         return;
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return;
       }
-      final PsiClass aClass = method.getContainingClass();
+      PsiClass aClass = method.getContainingClass();
       if (aClass == null) {
         return;
       }
-      final String qualifiedName = aClass.getQualifiedName();
+      String qualifiedName = aClass.getQualifiedName();
       if (!CommonClassNames.JAVA_LANG_OBJECT.equals(qualifiedName)) {
         return;
       }
-      final PsiExpression qualifier =
+      PsiExpression qualifier =
         methodExpression.getQualifierExpression();
       if (qualifier == null ||
           qualifier instanceof PsiThisExpression ||
@@ -100,9 +100,9 @@ public class WaitNotInSynchronizedContextInspection
         registerError(expression);
       }
       else if (qualifier instanceof PsiReferenceExpression) {
-        final PsiReferenceExpression referenceExpression =
+        PsiReferenceExpression referenceExpression =
           (PsiReferenceExpression)qualifier;
-        final PsiElement target = referenceExpression.resolve();
+        PsiElement target = referenceExpression.resolve();
         if (isSynchronizedOn(expression, target)) {
           return;
         }
@@ -115,41 +115,41 @@ public class WaitNotInSynchronizedContextInspection
       if (target == null) {
         return false;
       }
-      final PsiElement context =
+      PsiElement context =
         PsiTreeUtil.getParentOfType(element,
                                     PsiSynchronizedStatement.class);
       if (context == null) {
         return false;
       }
-      final PsiSynchronizedStatement synchronizedStatement =
+      PsiSynchronizedStatement synchronizedStatement =
         (PsiSynchronizedStatement)context;
-      final PsiExpression lockExpression =
+      PsiExpression lockExpression =
         synchronizedStatement.getLockExpression();
       if (!(lockExpression instanceof PsiReferenceExpression)) {
         return false;
       }
-      final PsiReferenceExpression referenceExpression =
+      PsiReferenceExpression referenceExpression =
         (PsiReferenceExpression)lockExpression;
-      final PsiElement lockTarget = referenceExpression.resolve();
+      PsiElement lockTarget = referenceExpression.resolve();
       return target.equals(lockTarget) ||
              isSynchronizedOn(synchronizedStatement, target);
     }
 
     private static boolean isSynchronizedOnThis(
       @Nonnull PsiElement element) {
-      final PsiElement context =
+      PsiElement context =
         PsiTreeUtil.getParentOfType(element, PsiMethod.class,
                                     PsiSynchronizedStatement.class);
       if (context instanceof PsiSynchronizedStatement) {
-        final PsiSynchronizedStatement synchronizedStatement =
+        PsiSynchronizedStatement synchronizedStatement =
           (PsiSynchronizedStatement)context;
-        final PsiExpression lockExpression =
+        PsiExpression lockExpression =
           synchronizedStatement.getLockExpression();
         return lockExpression instanceof PsiThisExpression ||
                isSynchronizedOnThis(synchronizedStatement);
       }
       else if (context instanceof PsiMethod) {
-        final PsiMethod method = (PsiMethod)context;
+        PsiMethod method = (PsiMethod)context;
         if (method.hasModifierProperty(PsiModifier.SYNCHRONIZED)) {
           return true;
         }

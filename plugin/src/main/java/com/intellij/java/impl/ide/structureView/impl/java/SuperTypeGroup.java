@@ -86,7 +86,7 @@ public class SuperTypeGroup implements Group, ItemPresentation, AccessLevelProvi
 
   @RequiredReadAction
   public String toString() {
-    final PsiClass superClass = getSuperClass();
+    PsiClass superClass = getSuperClass();
     return superClass != null ? superClass.getName() : IdeLocalize.nodeStructureviewInvalid().get();
   }
 
@@ -95,16 +95,16 @@ public class SuperTypeGroup implements Group, ItemPresentation, AccessLevelProvi
     if (this == o) return true;
     if (!(o instanceof SuperTypeGroup)) return false;
 
-    final SuperTypeGroup superTypeGroup = (SuperTypeGroup)o;
+    SuperTypeGroup superTypeGroup = (SuperTypeGroup)o;
 
     if (myOverrides != superTypeGroup.myOverrides) return false;
-    final PsiClass superClass = getSuperClass();
+    PsiClass superClass = getSuperClass();
     return superClass != null ? superClass.equals(superTypeGroup.getSuperClass()) : superTypeGroup.getSuperClass() == null;
   }
 
   @RequiredReadAction
   public int hashCode() {
-    final PsiClass superClass = getSuperClass();
+    PsiClass superClass = getSuperClass();
     return superClass  != null ? superClass .hashCode() : 0;
   }
 
@@ -114,7 +114,7 @@ public class SuperTypeGroup implements Group, ItemPresentation, AccessLevelProvi
 
   @RequiredReadAction
   public int getAccessLevel() {
-    final PsiClass superClass = getSuperClass();
+    PsiClass superClass = getSuperClass();
     PsiModifierList modifierList = superClass == null ? null : superClass.getModifierList();
     return modifierList == null ? PsiUtil.ACCESS_LEVEL_PUBLIC : PsiUtil.getAccessLevel(modifierList);
   }
@@ -123,7 +123,7 @@ public class SuperTypeGroup implements Group, ItemPresentation, AccessLevelProvi
     return 1;
   }
 
-  public void addMethod(final TreeElement superMethod) {
+  public void addMethod(TreeElement superMethod) {
      myChildren.add(superMethod);
   }
 }

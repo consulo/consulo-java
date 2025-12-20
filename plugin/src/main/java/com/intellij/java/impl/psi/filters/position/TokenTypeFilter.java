@@ -47,7 +47,7 @@ public class TokenTypeFilter implements ElementFilter{
   @Override
   public boolean isAcceptable(Object element, PsiElement context){
     if(element instanceof PsiElement) {
-      final ASTNode node = ((PsiElement)element).getNode();
+      ASTNode node = ((PsiElement)element).getNode();
       return node != null && node.getElementType() == myType;
     }
     else if(element instanceof ASTNode){

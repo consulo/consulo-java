@@ -59,12 +59,12 @@ public class ArrangementSectionDetector {
    * @return true for section comment, false otherwise
    */
   public boolean processComment(@Nonnull PsiComment comment) {
-    final TextRange range = comment.getTextRange();
-    final TextRange expandedRange = myDocument == null ? range : ArrangementUtil.expandToLineIfPossible(range, myDocument);
-    final TextRange sectionTextRange = new TextRange(expandedRange.getStartOffset(), expandedRange.getEndOffset());
+    TextRange range = comment.getTextRange();
+    TextRange expandedRange = myDocument == null ? range : ArrangementUtil.expandToLineIfPossible(range, myDocument);
+    TextRange sectionTextRange = new TextRange(expandedRange.getStartOffset(), expandedRange.getEndOffset());
 
-    final String commentText = comment.getText().trim();
-    final ArrangementSectionRule openSectionRule = isSectionStartComment(mySettings, commentText);
+    String commentText = comment.getText().trim();
+    ArrangementSectionRule openSectionRule = isSectionStartComment(mySettings, commentText);
     if (openSectionRule != null) {
       mySectionEntryProducer.accept(new ArrangementSectionEntryTemplate(comment, START_SECTION, sectionTextRange, commentText));
       myOpenedSections.push(openSectionRule);
@@ -72,7 +72,7 @@ public class ArrangementSectionDetector {
     }
 
     if (!myOpenedSections.isEmpty()) {
-      final ArrangementSectionRule lastSection = myOpenedSections.peek();
+      ArrangementSectionRule lastSection = myOpenedSections.peek();
       if (lastSection.getEndComment() != null && StringUtil.equals(commentText, lastSection.getEndComment())) {
         mySectionEntryProducer.accept(new ArrangementSectionEntryTemplate(comment, END_SECTION, sectionTextRange, commentText));
         myOpenedSections.pop();

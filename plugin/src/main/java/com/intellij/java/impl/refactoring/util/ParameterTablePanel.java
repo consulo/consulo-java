@@ -66,7 +66,7 @@ public abstract class ParameterTablePanel extends JPanel {
     return true;
   }
 
-  public ParameterTablePanel(Project project, VariableData[] variableData, final PsiElement... scopeElements) {
+  public ParameterTablePanel(Project project, VariableData[] variableData, PsiElement... scopeElements) {
     super(new BorderLayout());
     myProject = project;
     myVariableData = variableData;
@@ -94,7 +94,7 @@ public abstract class ParameterTablePanel extends JPanel {
     for (int i = 0; i < myParameterTypeSelectors.length; i++) {
       final PsiVariable variable = getVariableData()[i].variable;
       final PsiExpression[] occurrences = findVariableOccurrences(scopeElements, variable);
-      final TypeSelectorManager manager = new TypeSelectorManagerImpl(myProject, getVariableData()[i].type, occurrences, areTypesDirected()) {
+      TypeSelectorManager manager = new TypeSelectorManagerImpl(myProject, getVariableData()[i].type, occurrences, areTypesDirected()) {
         @Override
         protected boolean isUsedAfter() {
           return ParameterTablePanel.this.isUsedAfter(variable);
@@ -117,7 +117,7 @@ public abstract class ParameterTablePanel extends JPanel {
     });
 
 
-    final TableColumn typeColumn = myTable.getColumnModel().getColumn(MyTableModel.PARAMETER_TYPE_COLUMN);
+    TableColumn typeColumn = myTable.getColumnModel().getColumn(MyTableModel.PARAMETER_TYPE_COLUMN);
     typeColumn.setCellEditor(new AbstractTableCellEditor() {
       TypeSelector myCurrentSelector;
       final JBComboBoxTableCellEditorComponent myEditorComponent = new JBComboBoxTableCellEditorComponent();
@@ -127,11 +127,11 @@ public abstract class ParameterTablePanel extends JPanel {
         return myEditorComponent.getEditorValue();
       }
 
-      public Component getTableCellEditorComponent(final JTable table,
-                                                   final Object value,
-                                                   final boolean isSelected,
-                                                   final int row,
-                                                   final int column) {
+      public Component getTableCellEditorComponent(JTable table,
+                                                   Object value,
+                                                   boolean isSelected,
+                                                   int row,
+                                                   int column) {
         myEditorComponent.setCell(table, row, column);
         myEditorComponent.setOptions(myParameterTypeSelectors[row].getTypes());
         myEditorComponent.setDefaultValue(getVariableData()[row].type);
@@ -168,9 +168,9 @@ public abstract class ParameterTablePanel extends JPanel {
     myTable.setPreferredScrollableViewportSize(new Dimension(250, myTable.getRowHeight() * 5));
     myTable.setShowGrid(false);
     myTable.setIntercellSpacing(new Dimension(0, 0));
-    @NonNls final InputMap inputMap = myTable.getInputMap();
+    @NonNls InputMap inputMap = myTable.getInputMap();
     inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "enable_disable");
-    @NonNls final ActionMap actionMap = myTable.getActionMap();
+    @NonNls ActionMap actionMap = myTable.getActionMap();
     actionMap.put("enable_disable", new AbstractAction() {
       public void actionPerformed(ActionEvent e) {
         if (myTable.isEditing()) return;
@@ -244,11 +244,11 @@ public abstract class ParameterTablePanel extends JPanel {
     return false;
   }
 
-  public static PsiExpression[] findVariableOccurrences(final PsiElement[] scopeElements, final PsiVariable variable) {
+  public static PsiExpression[] findVariableOccurrences(PsiElement[] scopeElements, final PsiVariable variable) {
     final ArrayList<PsiExpression> result = new ArrayList<PsiExpression>();
-    for (final PsiElement element : scopeElements) {
+    for (PsiElement element : scopeElements) {
       element.accept(new JavaRecursiveElementWalkingVisitor() {
-        @Override public void visitReferenceExpression(final PsiReferenceExpression expression) {
+        @Override public void visitReferenceExpression(PsiReferenceExpression expression) {
           super.visitReferenceExpression(expression);
           if (!expression.isQualified() && expression.isReferenceTo(variable)) {
             result.add(expression);
@@ -366,7 +366,7 @@ public abstract class ParameterTablePanel extends JPanel {
       if (row < 0 || row >= getVariableData().length) return;
       if (targetRow < 0 || targetRow >= getVariableData().length) return;
 
-      final VariableData currentItem = getVariableData()[row];
+      VariableData currentItem = getVariableData()[row];
       getVariableData()[row] = getVariableData()[targetRow];
       getVariableData()[targetRow] = currentItem;
 

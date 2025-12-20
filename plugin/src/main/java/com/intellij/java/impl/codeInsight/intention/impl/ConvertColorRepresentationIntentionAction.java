@@ -45,22 +45,22 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
       return false;
     }
 
-    final PsiNewExpression expression = PsiTreeUtil.getParentOfType(element, PsiNewExpression.class, false);
+    PsiNewExpression expression = PsiTreeUtil.getParentOfType(element, PsiNewExpression.class, false);
     if (expression == null) {
       return false;
     }
 
-    final PsiExpressionList arguments = expression.getArgumentList();
+    PsiExpressionList arguments = expression.getArgumentList();
     if (arguments == null) {
       return false;
     }
 
-    final PsiMethod constructor = expression.resolveConstructor();
+    PsiMethod constructor = expression.resolveConstructor();
     if (constructor == null) {
       return false;
     }
 
-    final PsiExpressionList newArguments = createNewArguments(
+    PsiExpressionList newArguments = createNewArguments(
       JavaPsiFacade.getElementFactory(project),
       constructor.getParameterList().getParameters(),
       arguments.getExpressions()
@@ -79,22 +79,22 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
   public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
 
-    final PsiNewExpression expression = PsiTreeUtil.getParentOfType(element, PsiNewExpression.class, false);
+    PsiNewExpression expression = PsiTreeUtil.getParentOfType(element, PsiNewExpression.class, false);
     if (expression == null) {
       return;
     }
 
-    final PsiExpressionList arguments = expression.getArgumentList();
+    PsiExpressionList arguments = expression.getArgumentList();
     if (arguments == null) {
       return;
     }
 
-    final PsiMethod constructor = expression.resolveConstructor();
+    PsiMethod constructor = expression.resolveConstructor();
     if (constructor == null) {
       return;
     }
 
-    final PsiExpressionList newArguments = createNewArguments(
+    PsiExpressionList newArguments = createNewArguments(
       JavaPsiFacade.getElementFactory(project),
       constructor.getParameterList().getParameters(),
       arguments.getExpressions()
@@ -113,12 +113,12 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
     @Nonnull PsiParameter[] parameters,
     @Nonnull PsiExpression[] arguments
   ) {
-    final String[] newValues = createArguments(parameters, arguments);
+    String[] newValues = createArguments(parameters, arguments);
     if (newValues == null) {
       return null;
     }
 
-    final PsiExpressionList result = ((PsiNewExpression)factory.createExpressionFromText("new Object()", parameters[0])).getArgumentList();
+    PsiExpressionList result = ((PsiNewExpression)factory.createExpressionFromText("new Object()", parameters[0])).getArgumentList();
     if (result == null) {
       return null;
     }
@@ -157,7 +157,7 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
   @Nullable
   private static String[] createArguments(@Nonnull PsiExpression rgbExpression,
                                           @Nonnull PsiExpression hasAlphaExpression) {
-    final Boolean hasAlpha = computeBoolean(hasAlphaExpression);
+    Boolean hasAlpha = computeBoolean(hasAlphaExpression);
     if (hasAlpha == null) {
       return null;
     }
@@ -168,7 +168,7 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
   private static String[] createArguments(@Nonnull PsiExpression rExpression,
                                           @Nonnull PsiExpression gExpression,
                                           @Nonnull PsiExpression bExpression) {
-    final Integer value = createInt(computeInteger(rExpression), computeInteger(gExpression), computeInteger(bExpression));
+    Integer value = createInt(computeInteger(rExpression), computeInteger(gExpression), computeInteger(bExpression));
     return value != null ? new String[]{"0x" + Integer.toHexString(value)} : null;
   }
 
@@ -177,7 +177,7 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
                                           @Nonnull PsiExpression gExpression,
                                           @Nonnull PsiExpression bExpression,
                                           @Nonnull PsiExpression aExpression) {
-    final Integer value = createInt(computeInteger(rExpression), computeInteger(gExpression), computeInteger(bExpression), computeInteger(aExpression));
+    Integer value = createInt(computeInteger(rExpression), computeInteger(gExpression), computeInteger(bExpression), computeInteger(aExpression));
     if (value == null) {
       return null;
     }
@@ -191,12 +191,12 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
   @Nullable
   private static String[] createArguments(@Nonnull PsiExpression rgbExpression,
                                           int parts) {
-    final Integer rgb = computeInteger(rgbExpression);
+    Integer rgb = computeInteger(rgbExpression);
     if (rgb == null) {
       return null;
     }
 
-    final String[] result = new String[parts];
+    String[] result = new String[parts];
     for (int i = 0; i < result.length; i++) {
       result[result.length - i - 1] = String.valueOf(rgb >> (i * Byte.SIZE) & 0xFF);
     }
@@ -217,13 +217,13 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
 
   @Nullable
   public static Integer computeInteger(@Nonnull PsiExpression expr) {
-    final Object result = compute(expr);
+    Object result = compute(expr);
     return result instanceof Integer i ? i : null;
   }
 
   @Nullable
   public static Boolean computeBoolean(@Nonnull PsiExpression expr) {
-    final Object result = compute(expr);
+    Object result = compute(expr);
     return result instanceof Boolean b ? b : null;
   }
 

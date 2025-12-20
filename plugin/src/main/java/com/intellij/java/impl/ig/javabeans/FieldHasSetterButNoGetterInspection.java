@@ -49,14 +49,14 @@ public class FieldHasSetterButNoGetterInspection extends BaseInspection {
     private static class FieldHasSetterButNoGetterVisitor extends BaseInspectionVisitor {
         @Override
         public void visitField(@Nonnull PsiField field) {
-            final String propertyName = PropertyUtil.suggestPropertyName(field);
-            final boolean isStatic = field.hasModifierProperty(PsiModifier.STATIC);
-            final PsiClass containingClass = field.getContainingClass();
-            final PsiMethod setter = PropertyUtil.findPropertySetter(containingClass, propertyName, isStatic, false);
+            String propertyName = PropertyUtil.suggestPropertyName(field);
+            boolean isStatic = field.hasModifierProperty(PsiModifier.STATIC);
+            PsiClass containingClass = field.getContainingClass();
+            PsiMethod setter = PropertyUtil.findPropertySetter(containingClass, propertyName, isStatic, false);
             if (setter == null) {
                 return;
             }
-            final PsiMethod getter = PropertyUtil.findPropertyGetter(containingClass, propertyName, isStatic, false);
+            PsiMethod getter = PropertyUtil.findPropertyGetter(containingClass, propertyName, isStatic, false);
             if (getter != null) {
                 return;
             }

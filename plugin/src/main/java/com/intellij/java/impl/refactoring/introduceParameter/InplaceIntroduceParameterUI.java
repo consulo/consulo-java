@@ -73,7 +73,7 @@ public abstract class InplaceIntroduceParameterUI extends IntroduceParameterSett
 
   @Override
   protected JPanel createReplaceFieldsWithGettersPanel() {
-    final LabeledComponent<JComboBox> component = new LabeledComponent<JComboBox>();
+    LabeledComponent<JComboBox> component = new LabeledComponent<JComboBox>();
     myReplaceFieldsCb = new JComboBox(new Integer[]{IntroduceParameterRefactoring.REPLACE_FIELDS_WITH_GETTERS_ALL,
       IntroduceParameterRefactoring.REPLACE_FIELDS_WITH_GETTERS_INACCESSIBLE,
       IntroduceParameterRefactoring.REPLACE_FIELDS_WITH_GETTERS_NONE});
@@ -116,7 +116,7 @@ public abstract class InplaceIntroduceParameterUI extends IntroduceParameterSett
   }
 
   public void appendOccurrencesDelegate(JPanel myWholePanel) {
-    final GridBagConstraints gc =
+    GridBagConstraints gc =
       new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
     if (myOccurrences.length > 1 && !myIsInvokedOnDeclaration) {
       gc.gridy++;
@@ -136,7 +136,7 @@ public abstract class InplaceIntroduceParameterUI extends IntroduceParameterSett
 
   public boolean hasFinalModifier() {
     if (myHasWriteAccess) return false;
-    final Boolean createFinals = JavaRefactoringSettings.getInstance().INTRODUCE_PARAMETER_CREATE_FINALS;
+    Boolean createFinals = JavaRefactoringSettings.getInstance().INTRODUCE_PARAMETER_CREATE_FINALS;
     return createFinals == null ? CodeStyleSettingsManager.getSettings(myProject).GENERATE_FINAL_PARAMETERS : createFinals.booleanValue();
   }
 }

@@ -46,7 +46,7 @@ public class DeclarationMover extends LineMover {
   private PsiEnumConstant myEnumToInsertSemicolonAfter;
 
   @Override
-  public void beforeMove(@Nonnull final Editor editor, @Nonnull final MoveInfo info, final boolean down) {
+  public void beforeMove(@Nonnull Editor editor, @Nonnull MoveInfo info, boolean down) {
     super.beforeMove(editor, info, down);
 
     if (myEnumToInsertSemicolonAfter != null) {
@@ -55,7 +55,7 @@ public class DeclarationMover extends LineMover {
       try {
         PsiElement inserted = myEnumToInsertSemicolonAfter.getParent().addAfter(semicolon.getPsi(), myEnumToInsertSemicolonAfter);
         inserted = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(inserted);
-        final LogicalPosition position = editor.offsetToLogicalPosition(inserted.getTextRange().getEndOffset());
+        LogicalPosition position = editor.offsetToLogicalPosition(inserted.getTextRange().getEndOffset());
 
         info.toMove2 = new LineRange(position.line + 1, position.line + 1);
       } catch (IncorrectOperationException e) {
@@ -67,7 +67,7 @@ public class DeclarationMover extends LineMover {
   }
 
   @Override
-  public boolean checkAvailable(@Nonnull final Editor editor, @Nonnull final PsiFile file, @Nonnull final MoveInfo info, final boolean down) {
+  public boolean checkAvailable(@Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull MoveInfo info, boolean down) {
     if (!(file instanceof PsiJavaFile)) {
       return false;
     }
@@ -76,11 +76,11 @@ public class DeclarationMover extends LineMover {
     if (!available) return false;
 
     LineRange oldRange = info.toMove;
-    final Pair<PsiElement, PsiElement> psiRange = getElementRange(editor, file, oldRange);
+    Pair<PsiElement, PsiElement> psiRange = getElementRange(editor, file, oldRange);
     if (psiRange == null) return false;
 
-    final PsiMember firstMember = PsiTreeUtil.getParentOfType(psiRange.getFirst(), PsiMember.class, false);
-    final PsiMember lastMember = PsiTreeUtil.getParentOfType(psiRange.getSecond(), PsiMember.class, false);
+    PsiMember firstMember = PsiTreeUtil.getParentOfType(psiRange.getFirst(), PsiMember.class, false);
+    PsiMember lastMember = PsiTreeUtil.getParentOfType(psiRange.getSecond(), PsiMember.class, false);
     if (firstMember == null || lastMember == null) return false;
 
     LineRange range;
@@ -89,14 +89,14 @@ public class DeclarationMover extends LineMover {
       if (range == null) return false;
       range.firstElement = range.lastElement = firstMember;
     } else {
-      final PsiElement parent = PsiTreeUtil.findCommonParent(firstMember, lastMember);
+      PsiElement parent = PsiTreeUtil.findCommonParent(firstMember, lastMember);
       if (parent == null) return false;
 
-      final Pair<PsiElement, PsiElement> combinedRange = getElementRange(parent, firstMember, lastMember);
+      Pair<PsiElement, PsiElement> combinedRange = getElementRange(parent, firstMember, lastMember);
       if (combinedRange == null) return false;
-      final LineRange lineRange1 = memberRange(combinedRange.getFirst(), editor, oldRange);
+      LineRange lineRange1 = memberRange(combinedRange.getFirst(), editor, oldRange);
       if (lineRange1 == null) return false;
-      final LineRange lineRange2 = memberRange(combinedRange.getSecond(), editor, oldRange);
+      LineRange lineRange2 = memberRange(combinedRange.getSecond(), editor, oldRange);
       if (lineRange2 == null) return false;
       range = new LineRange(lineRange1.startLine, lineRange2.endLine);
       range.firstElement = combinedRange.getFirst();
@@ -107,7 +107,7 @@ public class DeclarationMover extends LineMover {
     PsiElement sibling = down ? range.lastElement.getNextSibling() : range.firstElement.getPrevSibling();
     if (sibling == null) return false;
     sibling = firstNonWhiteElement(sibling, down);
-    final boolean areWeMovingClass = range.firstElement instanceof PsiClass;
+    boolean areWeMovingClass = range.firstElement instanceof PsiClass;
     info.toMove = range;
     try {
       LineRange intraClassRange = moveInsideOutsideClassPosition(editor, sibling, down, areWeMovingClass);
@@ -124,20 +124,20 @@ public class DeclarationMover extends LineMover {
   }
 
   private static LineRange memberRange(@Nonnull PsiElement member, Editor editor, LineRange lineRange) {
-    final TextRange textRange = member.getTextRange();
+    TextRange textRange = member.getTextRange();
     if (editor.getDocument().getTextLength() < textRange.getEndOffset()) return null;
-    final int startLine = editor.offsetToLogicalPosition(textRange.getStartOffset()).line;
-    final int endLine = editor.offsetToLogicalPosition(textRange.getEndOffset()).line + 1;
+    int startLine = editor.offsetToLogicalPosition(textRange.getStartOffset()).line;
+    int endLine = editor.offsetToLogicalPosition(textRange.getEndOffset()).line + 1;
     if (!isInsideDeclaration(member, startLine, endLine, lineRange, editor)) return null;
 
     return new LineRange(startLine, endLine);
   }
 
-  private static boolean isInsideDeclaration(@Nonnull final PsiElement member,
-                                             final int startLine,
-                                             final int endLine,
-                                             final LineRange lineRange,
-                                             final Editor editor) {
+  private static boolean isInsideDeclaration(@Nonnull PsiElement member,
+                                             int startLine,
+                                             int endLine,
+                                             LineRange lineRange,
+                                             Editor editor) {
     // if we positioned on member start or end we'll be able to move it
     if (startLine == lineRange.startLine || startLine == lineRange.endLine || endLine == lineRange.startLine ||
         endLine == lineRange.endLine) {
@@ -147,20 +147,20 @@ public class DeclarationMover extends LineMover {
     PsiModifierList modifierList = member instanceof PsiMember ? ((PsiMember) member).getModifierList() : null;
     if (modifierList != null) memberSuspects.add(modifierList);
     if (member instanceof PsiClass) {
-      final PsiClass aClass = (PsiClass) member;
+      PsiClass aClass = (PsiClass) member;
       if (aClass instanceof PsiAnonymousClass) return false; // move new expression instead of anon class
       PsiIdentifier nameIdentifier = aClass.getNameIdentifier();
       if (nameIdentifier != null) memberSuspects.add(nameIdentifier);
     }
     if (member instanceof PsiMethod) {
-      final PsiMethod method = (PsiMethod) member;
+      PsiMethod method = (PsiMethod) member;
       PsiIdentifier nameIdentifier = method.getNameIdentifier();
       if (nameIdentifier != null) memberSuspects.add(nameIdentifier);
       PsiTypeElement returnTypeElement = method.getReturnTypeElement();
       if (returnTypeElement != null) memberSuspects.add(returnTypeElement);
     }
     if (member instanceof PsiField) {
-      final PsiField field = (PsiField) member;
+      PsiField field = (PsiField) member;
       PsiIdentifier nameIdentifier = field.getNameIdentifier();
       memberSuspects.add(nameIdentifier);
       PsiTypeElement typeElement = field.getTypeElement();
@@ -180,14 +180,14 @@ public class DeclarationMover extends LineMover {
   // null means we are not crossing class border
   // throws IllegalMoveException when corresponding movement has no sense
   @Nullable
-  private LineRange moveInsideOutsideClassPosition(Editor editor, PsiElement sibling, final boolean isDown, boolean areWeMovingClass) throws IllegalMoveException {
+  private LineRange moveInsideOutsideClassPosition(Editor editor, PsiElement sibling, boolean isDown, boolean areWeMovingClass) throws IllegalMoveException {
     if (sibling == null) throw new IllegalMoveException();
     if (sibling instanceof PsiJavaToken &&
         ((PsiJavaToken) sibling).getTokenType() == (isDown ? JavaTokenType.RBRACE : JavaTokenType.LBRACE) &&
         sibling.getParent() instanceof PsiClass) {
       // moving outside class
-      final PsiClass aClass = (PsiClass) sibling.getParent();
-      final PsiElement parent = aClass.getParent();
+      PsiClass aClass = (PsiClass) sibling.getParent();
+      PsiElement parent = aClass.getParent();
       if (!areWeMovingClass && !(parent instanceof PsiClass)) throw new IllegalMoveException();
       if (aClass instanceof PsiAnonymousClass) throw new IllegalMoveException();
       PsiElement start = isDown ? sibling : aClass.getModifierList();
@@ -227,7 +227,7 @@ public class DeclarationMover extends LineMover {
     return null;
   }
 
-  private PsiElement afterEnumConstantsPosition(final PsiClass aClass) {
+  private PsiElement afterEnumConstantsPosition(PsiClass aClass) {
     PsiField[] fields = aClass.getFields();
     for (int i = fields.length - 1; i >= 0; i--) {
       PsiField field = fields[i];

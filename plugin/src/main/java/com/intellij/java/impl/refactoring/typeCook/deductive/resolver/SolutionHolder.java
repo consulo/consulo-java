@@ -23,8 +23,8 @@ import java.util.LinkedList;
 public class SolutionHolder {
   private final LinkedList<Binding> mySolutions = new LinkedList<Binding>();
 
-  public void putSolution(final Binding b1) {
-    for (final Binding b2 : mySolutions) {
+  public void putSolution(Binding b1) {
+    for (Binding b2 : mySolutions) {
       switch (b1.compare(b2)) {
         case Binding.WORSE:
         case Binding.SAME:
@@ -47,8 +47,8 @@ public class SolutionHolder {
     Binding best = null;
     int width = 0;
 
-    for (final Binding binding : mySolutions) {
-      final int w = binding.getWidth();
+    for (Binding binding : mySolutions) {
+      int w = binding.getWidth();
 
       if (w > width && binding.isValid()) {
         width = w;

@@ -37,10 +37,10 @@ public class FlipAssertLiteralIntention extends MutablyNamedIntention {
     @Nonnull
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
-        final PsiMethodCallExpression call = (PsiMethodCallExpression) element;
-        final PsiReferenceExpression methodExpression = call.getMethodExpression();
-        final String fromMethodName = methodExpression.getReferenceName();
-        final String toMethodName;
+        PsiMethodCallExpression call = (PsiMethodCallExpression) element;
+        PsiReferenceExpression methodExpression = call.getMethodExpression();
+        String fromMethodName = methodExpression.getReferenceName();
+        String toMethodName;
         if ("assertTrue".equals(fromMethodName)) {
             toMethodName = "assertFalse";
         }
@@ -64,20 +64,20 @@ public class FlipAssertLiteralIntention extends MutablyNamedIntention {
 
     @Override
     public void processIntention(@Nonnull PsiElement element) {
-        final PsiMethodCallExpression call = (PsiMethodCallExpression) element;
-        final PsiReferenceExpression methodExpression = call.getMethodExpression();
-        @NonNls final String fromMethodName = methodExpression.getReferenceName();
-        @NonNls final String toMethodName;
+        PsiMethodCallExpression call = (PsiMethodCallExpression) element;
+        PsiReferenceExpression methodExpression = call.getMethodExpression();
+        @NonNls String fromMethodName = methodExpression.getReferenceName();
+        @NonNls String toMethodName;
         if ("assertTrue".equals(fromMethodName)) {
             toMethodName = "assertFalse";
         }
         else {
             toMethodName = "assertTrue";
         }
-        @NonNls final StringBuilder newCall = new StringBuilder();
-        final PsiElement qualifier = methodExpression.getQualifier();
+        @NonNls StringBuilder newCall = new StringBuilder();
+        PsiElement qualifier = methodExpression.getQualifier();
         if (qualifier == null) {
-            final PsiMethod containingMethod = PsiTreeUtil.getParentOfType(call, PsiMethod.class);
+            PsiMethod containingMethod = PsiTreeUtil.getParentOfType(call, PsiMethod.class);
             if (containingMethod != null && AnnotationUtil.isAnnotated(containingMethod, "org.junit.Test", true)) {
                 if (!ImportUtils.addStaticImport("org.junit.Assert", toMethodName, element)) {
                     newCall.append("org.junit.Assert.");
@@ -88,8 +88,8 @@ public class FlipAssertLiteralIntention extends MutablyNamedIntention {
             newCall.append(qualifier.getText()).append('.');
         }
         newCall.append(toMethodName).append('(');
-        final PsiExpressionList argumentList = call.getArgumentList();
-        final PsiExpression[] args = argumentList.getExpressions();
+        PsiExpressionList argumentList = call.getArgumentList();
+        PsiExpression[] args = argumentList.getExpressions();
         if (args.length == 1) {
             newCall.append(BoolUtils.getNegatedExpressionText(args[0]));
         }

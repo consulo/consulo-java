@@ -72,59 +72,59 @@ public class ReuseOfLocalVariableInspection extends BaseInspection {
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) descriptor.getPsiElement();
-            final PsiLocalVariable variable = (PsiLocalVariable) referenceExpression.resolve();
-            final PsiAssignmentExpression assignment = (PsiAssignmentExpression) referenceExpression.getParent();
+            PsiReferenceExpression referenceExpression = (PsiReferenceExpression) descriptor.getPsiElement();
+            PsiLocalVariable variable = (PsiLocalVariable) referenceExpression.resolve();
+            PsiAssignmentExpression assignment = (PsiAssignmentExpression) referenceExpression.getParent();
             assert assignment != null;
-            final PsiExpressionStatement assignmentStatement = (PsiExpressionStatement) assignment.getParent();
-            final PsiExpression lExpression = assignment.getLExpression();
-            final String originalVariableName = lExpression.getText();
+            PsiExpressionStatement assignmentStatement = (PsiExpressionStatement) assignment.getParent();
+            PsiExpression lExpression = assignment.getLExpression();
+            String originalVariableName = lExpression.getText();
             assert variable != null;
-            final PsiType type = variable.getType();
-            final JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
-            final PsiCodeBlock variableBlock = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
-            final String newVariableName = codeStyleManager.suggestUniqueVariableName(originalVariableName, variableBlock, false);
-            final PsiCodeBlock codeBlock = PsiTreeUtil.getParentOfType(assignmentStatement, PsiCodeBlock.class);
-            final SearchScope scope;
+            PsiType type = variable.getType();
+            JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
+            PsiCodeBlock variableBlock = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
+            String newVariableName = codeStyleManager.suggestUniqueVariableName(originalVariableName, variableBlock, false);
+            PsiCodeBlock codeBlock = PsiTreeUtil.getParentOfType(assignmentStatement, PsiCodeBlock.class);
+            SearchScope scope;
             if (codeBlock != null) {
                 scope = new LocalSearchScope(codeBlock);
             }
             else {
                 scope = variable.getUseScope();
             }
-            final Query<PsiReference> query = ReferencesSearch.search(variable, scope, false);
-            final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-            final PsiElementFactory factory = psiFacade.getElementFactory();
+            Query<PsiReference> query = ReferencesSearch.search(variable, scope, false);
+            JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+            PsiElementFactory factory = psiFacade.getElementFactory();
             List<PsiReferenceExpression> collectedReferences = new ArrayList<>();
             for (PsiReference reference : query) {
-                final PsiElement referenceElement = reference.getElement();
+                PsiElement referenceElement = reference.getElement();
                 if (referenceElement == null) {
                     continue;
                 }
-                final TextRange textRange = assignmentStatement.getTextRange();
+                TextRange textRange = assignmentStatement.getTextRange();
                 if (referenceElement.getTextOffset() <= textRange.getEndOffset()) {
                     continue;
                 }
-                final PsiExpression newExpression = factory.createExpressionFromText(newVariableName, referenceElement);
-                final PsiReferenceExpression replacementExpression = (PsiReferenceExpression) referenceElement.replace(newExpression);
+                PsiExpression newExpression = factory.createExpressionFromText(newVariableName, referenceElement);
+                PsiReferenceExpression replacementExpression = (PsiReferenceExpression) referenceElement.replace(newExpression);
                 collectedReferences.add(replacementExpression);
             }
-            final PsiExpression rhs = assignment.getRExpression();
-            final String rhsText;
+            PsiExpression rhs = assignment.getRExpression();
+            String rhsText;
             if (rhs == null) {
                 rhsText = "";
             }
             else {
                 rhsText = rhs.getText();
             }
-            @NonNls final String newStatementText = type.getCanonicalText() + ' ' + newVariableName + " =  " + rhsText + ';';
+            @NonNls String newStatementText = type.getCanonicalText() + ' ' + newVariableName + " =  " + rhsText + ';';
 
-            final PsiStatement newStatement = factory.createStatementFromText(newStatementText, assignmentStatement);
-            final PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement) assignmentStatement.replace(newStatement);
-            final PsiElement[] elements =
+            PsiStatement newStatement = factory.createStatementFromText(newStatementText, assignmentStatement);
+            PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement) assignmentStatement.replace(newStatement);
+            PsiElement[] elements =
                 declarationStatement.getDeclaredElements();
-            final PsiLocalVariable newVariable = (PsiLocalVariable) elements[0];
-            final PsiElement context = declarationStatement.getParent();
+            PsiLocalVariable newVariable = (PsiLocalVariable) elements[0];
+            PsiElement context = declarationStatement.getParent();
             HighlightUtils.showRenameTemplate(
                 context,
                 newVariable,
@@ -144,34 +144,34 @@ public class ReuseOfLocalVariableInspection extends BaseInspection {
             @Nonnull PsiAssignmentExpression assignment
         ) {
             super.visitAssignmentExpression(assignment);
-            final PsiElement assignmentParent = assignment.getParent();
+            PsiElement assignmentParent = assignment.getParent();
             if (!(assignmentParent instanceof PsiExpressionStatement)) {
                 return;
             }
-            final PsiExpression lhs = assignment.getLExpression();
+            PsiExpression lhs = assignment.getLExpression();
             if (!(lhs instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiReferenceExpression reference = (PsiReferenceExpression) lhs;
-            final PsiElement referent = reference.resolve();
+            PsiReferenceExpression reference = (PsiReferenceExpression) lhs;
+            PsiElement referent = reference.resolve();
             if (!(referent instanceof PsiLocalVariable)) {
                 return;
             }
-            final PsiVariable variable = (PsiVariable) referent;
+            PsiVariable variable = (PsiVariable) referent;
 
             //TODO: this is safe, but can be weakened
             if (variable.getInitializer() == null) {
                 return;
             }
-            final IElementType tokenType = assignment.getOperationTokenType();
+            IElementType tokenType = assignment.getOperationTokenType();
             if (!JavaTokenType.EQ.equals(tokenType)) {
                 return;
             }
-            final PsiExpression rhs = assignment.getRExpression();
+            PsiExpression rhs = assignment.getRExpression();
             if (rhs != null && VariableAccessUtils.variableIsUsed(variable, rhs)) {
                 return;
             }
-            final PsiCodeBlock variableBlock = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
+            PsiCodeBlock variableBlock = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
             if (variableBlock == null) {
                 return;
             }
@@ -184,15 +184,15 @@ public class ReuseOfLocalVariableInspection extends BaseInspection {
                 // that a variable is used in only one branch of a try statement
                 return;
             }
-            final PsiElement assignmentBlock = assignmentParent.getParent();
+            PsiElement assignmentBlock = assignmentParent.getParent();
             if (assignmentBlock == null) {
                 return;
             }
             if (variableBlock.equals(assignmentBlock)) {
                 registerError(lhs);
             }
-            final PsiStatement[] statements = variableBlock.getStatements();
-            final PsiElement containingStatement = getChildWhichContainsElement(variableBlock, assignment);
+            PsiStatement[] statements = variableBlock.getStatements();
+            PsiElement containingStatement = getChildWhichContainsElement(variableBlock, assignment);
             int statementPosition = -1;
             for (int i = 0; i < statements.length; i++) {
                 if (statements[i].equals(containingStatement)) {

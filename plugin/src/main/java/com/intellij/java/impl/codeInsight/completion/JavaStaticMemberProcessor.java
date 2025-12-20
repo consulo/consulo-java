@@ -40,9 +40,9 @@ public class JavaStaticMemberProcessor extends StaticMemberProcessor {
     super(parameters.getPosition());
     myOriginalPosition = parameters.getOriginalPosition();
 
-    final PsiFile file = parameters.getPosition().getContainingFile();
+    PsiFile file = parameters.getPosition().getContainingFile();
     if (file instanceof PsiJavaFile) {
-      final PsiImportList importList = ((PsiJavaFile) file).getImportList();
+      PsiImportList importList = ((PsiJavaFile) file).getImportList();
       if (importList != null) {
         for (PsiImportStaticStatement statement : importList.getImportStaticStatements()) {
           importMembersOf(statement.resolveTargetClass());
@@ -53,7 +53,7 @@ public class JavaStaticMemberProcessor extends StaticMemberProcessor {
 
   @Nonnull
   @Override
-  protected LookupElement createLookupElement(@Nonnull PsiMember member, @Nonnull final PsiClass containingClass, boolean shouldImport) {
+  protected LookupElement createLookupElement(@Nonnull PsiMember member, @Nonnull PsiClass containingClass, boolean shouldImport) {
     shouldImport |= myOriginalPosition != null && PsiTreeUtil.isAncestor(containingClass, myOriginalPosition, false);
 
     String exprText = member.getName() + (member instanceof PsiMethod ? "()" : "");
@@ -79,7 +79,7 @@ public class JavaStaticMemberProcessor extends StaticMemberProcessor {
   protected LookupElement createLookupElement(@Nonnull List<PsiMethod> overloads, @Nonnull PsiClass containingClass, boolean shouldImport) {
     shouldImport |= myOriginalPosition != null && PsiTreeUtil.isAncestor(containingClass, myOriginalPosition, false);
 
-    final JavaMethodCallElement element = new GlobalMethodCallElement(overloads.get(0), shouldImport, true);
+    JavaMethodCallElement element = new GlobalMethodCallElement(overloads.get(0), shouldImport, true);
     JavaCompletionUtil.putAllMethods(element, overloads);
     return element;
   }

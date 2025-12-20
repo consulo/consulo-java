@@ -35,7 +35,7 @@ public abstract class ClassUtilTest extends LightCodeInsightFixtureTestCase {
     assertNotNull(ClassUtil.findPsiClassByJVMName(getPsiManager(), "Local"));
     assertNotNull(ClassUtil.findPsiClassByJVMName(getPsiManager(), "Local$Sub"));
 
-    final PsiClass fooLocal2 = ClassUtil.findPsiClassByJVMName(getPsiManager(), "ManyClasses$2FooLocal");
+    PsiClass fooLocal2 = ClassUtil.findPsiClassByJVMName(getPsiManager(), "ManyClasses$2FooLocal");
     assertEquals("Runnable", fooLocal2.getImplementsListTypes() [0].getClassName());
   }
 

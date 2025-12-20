@@ -55,7 +55,7 @@ public class SplitDeclarationAction extends PsiElementBaseIntentionAction {
       return false;
     }
 
-    final PsiElement context = PsiTreeUtil.getParentOfType(element, PsiDeclarationStatement.class, PsiClass.class);
+    PsiElement context = PsiTreeUtil.getParentOfType(element, PsiDeclarationStatement.class, PsiClass.class);
     if (context instanceof PsiDeclarationStatement declarationStatement) {
       return isAvailableOnDeclarationStatement(declarationStatement, element);
     }
@@ -70,7 +70,7 @@ public class SplitDeclarationAction extends PsiElementBaseIntentionAction {
 
   @RequiredReadAction
   private static boolean isAvailableOnField(PsiField field) {
-    final PsiTypeElement typeElement = field.getTypeElement();
+    PsiTypeElement typeElement = field.getTypeElement();
     if (typeElement == null) {
       return false;
     }
@@ -144,9 +144,9 @@ public class SplitDeclarationAction extends PsiElementBaseIntentionAction {
   @Override
   @RequiredReadAction
   public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
-    final PsiDeclarationStatement decl = PsiTreeUtil.getParentOfType(element, PsiDeclarationStatement.class);
+    PsiDeclarationStatement decl = PsiTreeUtil.getParentOfType(element, PsiDeclarationStatement.class);
 
-    final PsiManager psiManager = PsiManager.getInstance(project);
+    PsiManager psiManager = PsiManager.getInstance(project);
     if (decl != null) {
       invokeOnDeclarationStatement(decl, psiManager, project);
     }
@@ -181,25 +181,25 @@ public class SplitDeclarationAction extends PsiElementBaseIntentionAction {
 
       PsiElement block = decl.getParent();
       if (block instanceof PsiForStatement) {
-        final PsiDeclarationStatement varDeclStatement = JavaPsiFacade.getInstance(psiManager.getProject())
+        PsiDeclarationStatement varDeclStatement = JavaPsiFacade.getInstance(psiManager.getProject())
           .getElementFactory()
           .createVariableDeclarationStatement(var.getName(), var.getType(), null);
 
         // For index can't be final, right?
         for (PsiElement varDecl : varDeclStatement.getDeclaredElements()) {
           if (varDecl instanceof PsiModifierListOwner modifierListOwner) {
-            final PsiModifierList modList = modifierListOwner.getModifierList();
+            PsiModifierList modList = modifierListOwner.getModifierList();
             assert modList != null;
             modList.setModifierProperty(PsiModifier.FINAL, false);
           }
         }
 
-        final PsiElement parent = block.getParent();
+        PsiElement parent = block.getParent();
         PsiExpressionStatement replaced = (PsiExpressionStatement)decl.replace(statement);
         if (!(parent instanceof PsiCodeBlock)) {
-          final PsiBlockStatement blockStatement =
+          PsiBlockStatement blockStatement =
             (PsiBlockStatement)JavaPsiFacade.getElementFactory(project).createStatementFromText("{}", null);
-          final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
+          PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
           codeBlock.add(varDeclStatement);
           codeBlock.add(block);
           block.replace(blockStatement);

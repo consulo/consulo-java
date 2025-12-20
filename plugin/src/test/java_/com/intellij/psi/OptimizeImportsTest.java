@@ -98,7 +98,7 @@ public abstract class OptimizeImportsTest extends PsiTestCase
 
 	private void doTest() throws Exception
 	{
-		final String extension = ".java";
+		String extension = ".java";
 		doTest(extension);
 	}
 

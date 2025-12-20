@@ -110,7 +110,7 @@ public abstract class MoveClassTest extends RefactoringTestCase {
   }
 
   private void performAction(String[] classNames, String newPackageName) throws Exception{
-    final PsiClass[] classes = new PsiClass[classNames.length];
+    PsiClass[] classes = new PsiClass[classNames.length];
     for(int i = 0; i < classes.length; i++){
       String className = classNames[i];
       classes[i] = myJavaFacade.findClass(className, GlobalSearchScope.projectScope(getProject()));
@@ -119,7 +119,7 @@ public abstract class MoveClassTest extends RefactoringTestCase {
 
     PsiJavaPackage aPackage = JavaPsiFacade.getInstance(myPsiManager.getProject()).findPackage(newPackageName);
     assertNotNull("Package " + newPackageName + " not found", aPackage);
-    final PsiDirectory[] dirs = aPackage.getDirectories();
+    PsiDirectory[] dirs = aPackage.getDirectories();
     assertEquals(dirs.length, 1);
 
     new MoveClassesOrPackagesProcessor(myProject, classes,

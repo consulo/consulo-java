@@ -86,12 +86,12 @@ public class RedundantFieldInitializationInspection extends BaseInspection {
             if (!field.hasInitializer() || field.hasModifierProperty(PsiModifier.FINAL)) {
                 return;
             }
-            final PsiExpression initializer = field.getInitializer();
+            PsiExpression initializer = field.getInitializer();
             if (initializer == null) {
                 return;
             }
-            final String text = initializer.getText();
-            final PsiType type = field.getType();
+            String text = initializer.getText();
+            PsiType type = field.getType();
             if (PsiType.BOOLEAN.equals(type)) {
                 if (onlyWarnOnNull || !PsiKeyword.FALSE.equals(text)) {
                     return;

@@ -40,7 +40,7 @@ import java.awt.*;
 public class JavaFoldingBuilder extends JavaFoldingBuilderBase {
   @Override
   protected boolean isBelowRightMargin(@Nonnull Project project, int lineLength) {
-    final CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(project);
+    CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(project);
     return lineLength <= settings.getRightMargin(JavaLanguage.INSTANCE);
   }
 

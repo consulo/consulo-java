@@ -26,7 +26,7 @@ import java.util.List;
  * @author peter
  */
 public class GenerateAccessorProviderRegistrar {
-  protected static List<EncapsulatableClassMember> getEncapsulatableClassMembers(final PsiClass psiClass) {
+  protected static List<EncapsulatableClassMember> getEncapsulatableClassMembers(PsiClass psiClass) {
     return ContainerUtil.concat(Application.get().getExtensionList(GenerateAccessorProvider.class),
                                 s -> s.getEncapsulatableClassMembers(psiClass));
   }

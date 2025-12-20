@@ -45,7 +45,7 @@ class ReturnDocTagInfo implements JavadocTagInfo {
   public boolean isValidInContext(PsiElement element) {
     if (!(element instanceof PsiMethod)) return false;
     PsiMethod method = (PsiMethod)element;
-    final PsiType type = method.getReturnType();
+    PsiType type = method.getReturnType();
     if (type == null) return false;
     return !PsiType.VOID.equals(type);
   }

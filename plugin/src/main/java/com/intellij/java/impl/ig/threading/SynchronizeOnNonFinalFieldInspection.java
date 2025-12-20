@@ -51,7 +51,7 @@ public class SynchronizeOnNonFinalFieldInspection extends BaseInspection {
   @Override
   @Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiField field = (PsiField)infos[0];
+    PsiField field = (PsiField)infos[0];
     return MakeFieldFinalFix.buildFix(field);
   }
 
@@ -67,19 +67,19 @@ public class SynchronizeOnNonFinalFieldInspection extends BaseInspection {
     public void visitSynchronizedStatement(
       @Nonnull PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
-      final PsiExpression lockExpression = statement.getLockExpression();
+      PsiExpression lockExpression = statement.getLockExpression();
       if (!(lockExpression instanceof PsiReferenceExpression)) {
         return;
       }
-      final PsiReference reference = lockExpression.getReference();
+      PsiReference reference = lockExpression.getReference();
       if (reference == null) {
         return;
       }
-      final PsiElement element = reference.resolve();
+      PsiElement element = reference.resolve();
       if (!(element instanceof PsiField)) {
         return;
       }
-      final PsiField field = (PsiField)element;
+      PsiField field = (PsiField)element;
       if (field.hasModifierProperty(PsiModifier.FINAL)) {
         return;
       }

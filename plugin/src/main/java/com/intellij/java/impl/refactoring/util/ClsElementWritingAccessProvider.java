@@ -32,12 +32,12 @@ public class ClsElementWritingAccessProvider extends WritingAccessProvider {
 
   @Nonnull
   @Override
-  public Collection<VirtualFile> requestWriting(final VirtualFile... files) {
+  public Collection<VirtualFile> requestWriting(VirtualFile... files) {
     return Collections.emptyList();
   }
 
   @Override
-  public boolean isPotentiallyWritable(@Nonnull final VirtualFile file) {
+  public boolean isPotentiallyWritable(@Nonnull VirtualFile file) {
     // TODO make library class files readonly not by their file type but by location in library roots
     return file.getFileType() != JavaClassFileType.INSTANCE;
   }

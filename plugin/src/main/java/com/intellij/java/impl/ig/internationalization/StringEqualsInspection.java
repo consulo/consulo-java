@@ -57,17 +57,17 @@ public class StringEqualsInspection extends BaseInspection {
     @Override
     @Nonnull
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
-        final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) infos[0];
-        final List<InspectionGadgetsFix> result = new ArrayList();
-        final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-        final PsiModifierListOwner annotatableQualifier = NonNlsUtils.getAnnotatableQualifier(methodExpression);
+        PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) infos[0];
+        List<InspectionGadgetsFix> result = new ArrayList();
+        PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+        PsiModifierListOwner annotatableQualifier = NonNlsUtils.getAnnotatableQualifier(methodExpression);
         if (annotatableQualifier != null) {
-            final InspectionGadgetsFix fix = new DelegatingFix(new AddAnnotationFix(AnnotationUtil.NON_NLS, annotatableQualifier));
+            InspectionGadgetsFix fix = new DelegatingFix(new AddAnnotationFix(AnnotationUtil.NON_NLS, annotatableQualifier));
             result.add(fix);
         }
-        final PsiModifierListOwner annotatableArgument = NonNlsUtils.getAnnotatableArgument(methodCallExpression);
+        PsiModifierListOwner annotatableArgument = NonNlsUtils.getAnnotatableArgument(methodCallExpression);
         if (annotatableArgument != null) {
-            final InspectionGadgetsFix fix = new DelegatingFix(new AddAnnotationFix(AnnotationUtil.NON_NLS, annotatableArgument));
+            InspectionGadgetsFix fix = new DelegatingFix(new AddAnnotationFix(AnnotationUtil.NON_NLS, annotatableArgument));
             result.add(fix);
         }
         return result.toArray(new InspectionGadgetsFix[result.size()]);
@@ -85,31 +85,31 @@ public class StringEqualsInspection extends BaseInspection {
             if (!MethodCallUtils.isEqualsCall(expression)) {
                 return;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return;
             }
-            final PsiParameterList paramList = method.getParameterList();
-            final PsiParameter[] parameters = paramList.getParameters();
-            final PsiType parameterType = parameters[0].getType();
+            PsiParameterList paramList = method.getParameterList();
+            PsiParameter[] parameters = paramList.getParameters();
+            PsiType parameterType = parameters[0].getType();
             if (!TypeUtils.isJavaLangObject(parameterType)) {
                 return;
             }
-            final PsiClass aClass = method.getContainingClass();
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null) {
                 return;
             }
-            final String className = aClass.getQualifiedName();
+            String className = aClass.getQualifiedName();
             if (!CommonClassNames.JAVA_LANG_STRING.equals(className)) {
                 return;
             }
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
             if (NonNlsUtils.isNonNlsAnnotated(qualifier)) {
                 return;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length != 1) {
                 return;
             }

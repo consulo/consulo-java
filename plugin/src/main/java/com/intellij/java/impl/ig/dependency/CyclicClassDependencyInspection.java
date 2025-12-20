@@ -48,23 +48,23 @@ public abstract class CyclicClassDependencyInspection extends BaseGlobalInspecti
     if (!(refEntity instanceof RefClass)) {
       return null;
     }
-    final RefClass refClass = (RefClass)refEntity;
-    final PsiClass aClass = refClass.getElement();
+    RefClass refClass = (RefClass)refEntity;
+    PsiClass aClass = refClass.getElement();
     if (aClass.getContainingClass() != null) {
       return null;
     }
-    final Set<RefClass> dependencies =
+    Set<RefClass> dependencies =
       DependencyUtils.calculateTransitiveDependenciesForClass(refClass);
-    final Set<RefClass> dependents =
+    Set<RefClass> dependents =
       DependencyUtils.calculateTransitiveDependentsForClass(refClass);
-    final Set<RefClass> mutualDependents =
+    Set<RefClass> mutualDependents =
       new HashSet<RefClass>(dependencies);
     mutualDependents.retainAll(dependents);
-    final int numMutualDependents = mutualDependents.size();
+    int numMutualDependents = mutualDependents.size();
     if (numMutualDependents <= 1) {
       return null;
     }
-    final LocalizeValue errorString =
+    LocalizeValue errorString =
       InspectionGadgetsLocalize.cyclicClassDependencyProblemDescriptor(refEntity.getName(), numMutualDependents - 1);
     return new CommonProblemDescriptor[]{
       inspectionManager.createProblemDescriptor(errorString.get())

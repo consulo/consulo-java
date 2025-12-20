@@ -63,7 +63,7 @@ public abstract class NullableStuffInspectionTest extends InspectionTestCase {
       ApplicationManager.getApplication().runWriteAction(new Runnable() {
         @Override
         public void run() {
-          final SdkModificator sdkMod = sdk.getSdkModificator();
+          SdkModificator sdkMod = sdk.getSdkModificator();
           for (VirtualFile file : sdkMod.getRoots(OrderRootType.CLASSES)) {
             if ("annotations.jar".equals(file.getName())) {
               sdkMod.removeRoot(file, OrderRootType.CLASSES);

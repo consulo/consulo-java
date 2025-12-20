@@ -53,7 +53,7 @@ public class MigrationElementFinder extends PsiElementFinder implements DumbAwar
   public PsiClass[] findClasses(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
     PsiMigrationImpl migration = PsiMigrationManager.getInstance(myProject).getCurrentMigration();
     if (migration != null) {
-      final PsiClass migrationClass = migration.getMigrationClass(qualifiedName);
+      PsiClass migrationClass = migration.getMigrationClass(qualifiedName);
       if (migrationClass != null) {
         return new PsiClass[]{migrationClass};
       }

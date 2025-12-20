@@ -38,11 +38,11 @@ public class AutomaticVariableRenamer extends AutomaticRenamer {
   private final Set<PsiNamedElement> myToUnpluralize = new HashSet<PsiNamedElement>();
 
   public AutomaticVariableRenamer(PsiClass aClass, String newClassName, Collection<UsageInfo> usages) {
-    final String oldClassName = aClass.getName();
-    for (final UsageInfo info : usages) {
-      final PsiElement element = info.getElement();
+    String oldClassName = aClass.getName();
+    for (UsageInfo info : usages) {
+      PsiElement element = info.getElement();
       if (!(element instanceof PsiJavaCodeReferenceElement)) continue;
-      final PsiDeclarationStatement statement = PsiTreeUtil.getParentOfType(element, PsiDeclarationStatement.class);
+      PsiDeclarationStatement statement = PsiTreeUtil.getParentOfType(element, PsiDeclarationStatement.class);
       if (statement != null) {
         for (PsiElement declaredElement : statement.getDeclaredElements()) {
           if (declaredElement instanceof PsiVariable) {
@@ -64,7 +64,7 @@ public class AutomaticVariableRenamer extends AutomaticRenamer {
     suggestAllNames(oldClassName, newClassName);
   }
 
-  private static List<PsiField> getFieldsInSameDeclaration(final PsiField variable) {
+  private static List<PsiField> getFieldsInSameDeclaration(PsiField variable) {
     List<PsiField> result = new ArrayList<PsiField>();
     ASTNode node = variable.getNode();
     if (node != null) {
@@ -80,12 +80,12 @@ public class AutomaticVariableRenamer extends AutomaticRenamer {
     return result;
   }
 
-  private void checkRenameVariable(final PsiElement element, final PsiVariable variable, final String oldClassName) {
-    final PsiTypeElement typeElement = variable.getTypeElement();
+  private void checkRenameVariable(PsiElement element, PsiVariable variable, String oldClassName) {
+    PsiTypeElement typeElement = variable.getTypeElement();
     if (typeElement == null) return;
-    final PsiJavaCodeReferenceElement ref = typeElement.getInnermostComponentReferenceElement();
+    PsiJavaCodeReferenceElement ref = typeElement.getInnermostComponentReferenceElement();
     if (ref == null) return;
-    final String variableName = variable.getName();
+    String variableName = variable.getName();
     if (variableName != null && !StringUtil.containsIgnoreCase(variableName, oldClassName)) return;
     if (ref.equals(element)) {
       myElements.add(variable);
@@ -96,9 +96,9 @@ public class AutomaticVariableRenamer extends AutomaticRenamer {
       PsiType collectionType = JavaPsiFacade.getInstance(variable.getProject()).getElementFactory()
           .createTypeByFQClassName(CommonClassNames.JAVA_UTIL_COLLECTION, variable.getResolveScope());
       if (!collectionType.isAssignableFrom(variable.getType())) return;
-      final PsiTypeElement[] typeParameterElements = ref.getParameterList().getTypeParameterElements();
+      PsiTypeElement[] typeParameterElements = ref.getParameterList().getTypeParameterElements();
       for (PsiTypeElement typeParameterElement : typeParameterElements) {
-        final PsiJavaCodeReferenceElement parameterRef = typeParameterElement.getInnermostComponentReferenceElement();
+        PsiJavaCodeReferenceElement parameterRef = typeParameterElement.getInnermostComponentReferenceElement();
         if (parameterRef != null && parameterRef.equals(element)) {
           myElements.add(variable);
           myToUnpluralize.add(variable);
@@ -121,10 +121,10 @@ public class AutomaticVariableRenamer extends AutomaticRenamer {
   }
 
   public String nameToCanonicalName(String name, PsiNamedElement psiVariable) {
-    final JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(psiVariable.getProject());
-    final String propertyName = codeStyleManager.variableNameToPropertyName(name, codeStyleManager.getVariableKind((PsiVariable) psiVariable));
+    JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(psiVariable.getProject());
+    String propertyName = codeStyleManager.variableNameToPropertyName(name, codeStyleManager.getVariableKind((PsiVariable) psiVariable));
     if (myToUnpluralize.contains(psiVariable)) {
-      final String singular = StringUtil.unpluralize(propertyName);
+      String singular = StringUtil.unpluralize(propertyName);
       if (singular != null) return singular;
       myToUnpluralize.remove(psiVariable); // no need to pluralize since it was initially in singular form
     }
@@ -132,8 +132,8 @@ public class AutomaticVariableRenamer extends AutomaticRenamer {
   }
 
   public String canonicalNameToName(String canonicalName, PsiNamedElement psiVariable) {
-    final JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(psiVariable.getProject());
-    final String variableName =
+    JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(psiVariable.getProject());
+    String variableName =
         codeStyleManager.propertyNameToVariableName(canonicalName, codeStyleManager.getVariableKind((PsiVariable) psiVariable));
     if (myToUnpluralize.contains(psiVariable)) return StringUtil.pluralize(variableName);
     return variableName;

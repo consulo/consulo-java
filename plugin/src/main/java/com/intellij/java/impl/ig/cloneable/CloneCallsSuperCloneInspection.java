@@ -69,7 +69,7 @@ public class CloneCallsSuperCloneInspection extends BaseInspection {
             if (method.hasModifierProperty(PsiModifier.ABSTRACT) || method.hasModifierProperty(PsiModifier.NATIVE)) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null || containingClass.isInterface() || containingClass.isAnnotationType()) {
                 return;
             }
@@ -78,7 +78,7 @@ public class CloneCallsSuperCloneInspection extends BaseInspection {
                     return;
                 }
             }
-            final CallToSuperCloneVisitor visitor = new CallToSuperCloneVisitor();
+            CallToSuperCloneVisitor visitor = new CallToSuperCloneVisitor();
             method.accept(visitor);
             if (visitor.isCallToSuperCloneFound()) {
                 return;

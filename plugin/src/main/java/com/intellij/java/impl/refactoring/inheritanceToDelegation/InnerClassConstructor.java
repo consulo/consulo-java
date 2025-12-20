@@ -30,10 +30,10 @@ public class InnerClassConstructor extends InnerClassMethod {
   }
 
   public void createMethod(PsiClass innerClass) throws IncorrectOperationException {
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(innerClass.getProject()).getElementFactory();
-    final PsiMethod constructor = factory.createConstructor();
+    PsiElementFactory factory = JavaPsiFacade.getInstance(innerClass.getProject()).getElementFactory();
+    PsiMethod constructor = factory.createConstructor();
     constructor.getNameIdentifier().replace(innerClass.getNameIdentifier());
-    final PsiParameterList parameterList = myMethod.getParameterList();
+    PsiParameterList parameterList = myMethod.getParameterList();
     constructor.getParameterList().replace(parameterList);
     PsiExpressionStatement superCallStatement =
             (PsiExpressionStatement) factory.createStatementFromText("super();", null);

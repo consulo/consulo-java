@@ -49,11 +49,11 @@ public class TransientFieldNotInitializedInspection extends BaseInspection {
             if (!field.hasModifierProperty(PsiModifier.TRANSIENT)) {
                 return;
             }
-            final PsiClass containingClass = field.getContainingClass();
+            PsiClass containingClass = field.getContainingClass();
             if (!SerializationUtils.isSerializable(containingClass)) {
                 return;
             }
-            final PsiExpression initializer = field.getInitializer();
+            PsiExpression initializer = field.getInitializer();
             if (initializer == null &&
                 !isInitializedInInitializer(field, containingClass) &&
                 !isInitializedInConstructors(field, containingClass)) {
@@ -66,11 +66,11 @@ public class TransientFieldNotInitializedInspection extends BaseInspection {
         }
 
         private static boolean isInitializedInConstructors(@Nonnull PsiField field, @Nonnull PsiClass aClass) {
-            final PsiMethod[] constructors = aClass.getConstructors();
+            PsiMethod[] constructors = aClass.getConstructors();
             if (constructors.length == 0) {
                 return false;
             }
-            for (final PsiMethod constructor : constructors) {
+            for (PsiMethod constructor : constructors) {
                 if (!InitializationUtils.methodAssignsVariableOrFails(
                     constructor, field)) {
                     return false;
@@ -80,12 +80,12 @@ public class TransientFieldNotInitializedInspection extends BaseInspection {
         }
 
         private static boolean isInitializedInInitializer(@Nonnull PsiField field, @Nonnull PsiClass aClass) {
-            final PsiClassInitializer[] initializers = aClass.getInitializers();
-            for (final PsiClassInitializer initializer : initializers) {
+            PsiClassInitializer[] initializers = aClass.getInitializers();
+            for (PsiClassInitializer initializer : initializers) {
                 if (initializer.hasModifierProperty(PsiModifier.STATIC)) {
                     continue;
                 }
-                final PsiCodeBlock body = initializer.getBody();
+                PsiCodeBlock body = initializer.getBody();
                 if (InitializationUtils.blockAssignsVariableOrFails(body, field)) {
                     return true;
                 }

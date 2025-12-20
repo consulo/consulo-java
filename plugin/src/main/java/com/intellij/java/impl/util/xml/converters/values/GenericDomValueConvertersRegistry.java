@@ -105,7 +105,7 @@ public class GenericDomValueConvertersRegistry {
 
   public void registerConverter(@Nonnull Converter<?> provider, @Nonnull final PsiType type) {
     registerConverter(provider, new Condition<Pair<PsiType, GenericDomValue>>() {
-      public boolean value(final Pair<PsiType, GenericDomValue> pair) {
+      public boolean value(Pair<PsiType, GenericDomValue> pair) {
         return Comparing.equal(pair.getFirst(), type);
       }
     });
@@ -117,7 +117,7 @@ public class GenericDomValueConvertersRegistry {
 
   @Nullable
   public Converter<?> getConverter(@Nonnull GenericDomValue domValue, @Nullable PsiType type) {
-    final Pair<PsiType, GenericDomValue> pair = new Pair<PsiType, GenericDomValue>(type, domValue);
+    Pair<PsiType, GenericDomValue> pair = new Pair<PsiType, GenericDomValue>(type, domValue);
     for (@Nonnull Condition<Pair<PsiType, GenericDomValue>> condition : myConditionConverters.keySet()) {
       if (condition.value(pair)) {
         return myConditionConverters.get(condition);
@@ -129,7 +129,7 @@ public class GenericDomValueConvertersRegistry {
   public void registerConverter(@Nonnull Converter<?> provider, @Nonnull Class type) {
     final String name = type.getCanonicalName();
     registerConverter(provider, new Condition<Pair<PsiType, GenericDomValue>>() {
-      public boolean value(final Pair<PsiType, GenericDomValue> pair) {
+      public boolean value(Pair<PsiType, GenericDomValue> pair) {
         return pair.first != null && Comparing.equal(name, pair.first.getCanonicalText());
       }
     });

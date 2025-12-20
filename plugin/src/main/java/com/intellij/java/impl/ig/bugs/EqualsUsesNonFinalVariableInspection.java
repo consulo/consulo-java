@@ -51,7 +51,7 @@ public class EqualsUsesNonFinalVariableInspection extends BaseInspection {
 
     @Nullable
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiField field = (PsiField) infos[0];
+        PsiField field = (PsiField) infos[0];
         return MakeFieldFinalFix.buildFix(field);
     }
 
@@ -77,11 +77,11 @@ public class EqualsUsesNonFinalVariableInspection extends BaseInspection {
                         @Nonnull PsiReferenceExpression expression
                     ) {
                         super.visitReferenceExpression(expression);
-                        final PsiElement element = expression.resolve();
+                        PsiElement element = expression.resolve();
                         if (!(element instanceof PsiField)) {
                             return;
                         }
-                        final PsiField field = (PsiField) element;
+                        PsiField field = (PsiField) element;
                         if (field.hasModifierProperty(PsiModifier.FINAL)) {
                             return;
                         }

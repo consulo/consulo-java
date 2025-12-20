@@ -87,8 +87,8 @@ public final class Settings {
     if (myMakeFieldParameters) {
       myFieldToNameMapping = new HashMap<PsiField, String>();
       for (int i = 0; i < fields.length; i++) {
-        final PsiField field = fields[i];
-        final String name = names[i];
+        PsiField field = fields[i];
+        String name = names[i];
         myFieldToNameMapping.put(field, name);
         myFieldToNameList.add(new FieldParameter(field, name, field.getType()));
       }
@@ -131,7 +131,7 @@ public final class Settings {
   }
 
   public int getNewParametersNumber() {
-    final int result = isMakeFieldParameters() ? myFieldToNameList.size() : 0;
+    int result = isMakeFieldParameters() ? myFieldToNameList.size() : 0;
     return result + (isMakeClassParameter() ? 1 : 0);
   }
 }

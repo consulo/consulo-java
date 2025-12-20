@@ -50,7 +50,7 @@ public class JavaVisibilityPanel extends VisibilityPanelBase<String> {
 
     private final LabeledLayout myLayout;
 
-    public JavaVisibilityPanel(boolean hasAsIs, final boolean hasEscalate) {
+    public JavaVisibilityPanel(boolean hasAsIs, boolean hasEscalate) {
         VerticalLayout layout = VerticalLayout.create();
 
         ValueGroup<Boolean> bg = ValueGroup.createBool();

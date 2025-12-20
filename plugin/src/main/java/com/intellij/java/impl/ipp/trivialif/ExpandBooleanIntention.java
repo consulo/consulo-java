@@ -46,63 +46,63 @@ public class ExpandBooleanIntention extends Intention {
 
     @Override
     public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-        final PsiStatement containingStatement = PsiTreeUtil.getParentOfType(element, PsiStatement.class);
+        PsiStatement containingStatement = PsiTreeUtil.getParentOfType(element, PsiStatement.class);
         if (containingStatement == null) {
             return;
         }
         if (ExpandBooleanPredicate.isBooleanAssignment(containingStatement)) {
-            final PsiExpressionStatement assignmentStatement = (PsiExpressionStatement) containingStatement;
-            final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) assignmentStatement.getExpression();
-            final PsiExpression rhs = assignmentExpression.getRExpression();
+            PsiExpressionStatement assignmentStatement = (PsiExpressionStatement) containingStatement;
+            PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) assignmentStatement.getExpression();
+            PsiExpression rhs = assignmentExpression.getRExpression();
             if (rhs == null) {
                 return;
             }
-            final PsiExpression lhs = assignmentExpression.getLExpression();
+            PsiExpression lhs = assignmentExpression.getLExpression();
             if (ErrorUtil.containsDeepError(lhs) || ErrorUtil.containsDeepError(rhs)) {
                 return;
             }
-            final String rhsText = rhs.getText();
-            final String lhsText = lhs.getText();
-            final PsiJavaToken sign = assignmentExpression.getOperationSign();
-            final String signText = sign.getText();
-            final String conditionText;
+            String rhsText = rhs.getText();
+            String lhsText = lhs.getText();
+            PsiJavaToken sign = assignmentExpression.getOperationSign();
+            String signText = sign.getText();
+            String conditionText;
             if (signText.length() == 2) {
                 conditionText = lhsText + signText.charAt(0) + rhsText;
             }
             else {
                 conditionText = rhsText;
             }
-            @NonNls final String statement = "if(" + conditionText + ") " + lhsText + " = true; else " + lhsText + " = false;";
+            @NonNls String statement = "if(" + conditionText + ") " + lhsText + " = true; else " + lhsText + " = false;";
             replaceStatement(statement, containingStatement);
         }
         else if (ExpandBooleanPredicate.isBooleanReturn(containingStatement)) {
-            final PsiReturnStatement returnStatement = (PsiReturnStatement) containingStatement;
-            final PsiExpression returnValue = returnStatement.getReturnValue();
+            PsiReturnStatement returnStatement = (PsiReturnStatement) containingStatement;
+            PsiExpression returnValue = returnStatement.getReturnValue();
             if (returnValue == null) {
                 return;
             }
             if (ErrorUtil.containsDeepError(returnValue)) {
                 return;
             }
-            final String valueText = returnValue.getText();
-            @NonNls final String statement = "if(" + valueText + ") return true; else return false;";
+            String valueText = returnValue.getText();
+            @NonNls String statement = "if(" + valueText + ") return true; else return false;";
             replaceStatement(statement, containingStatement);
         }
         else if (ExpandBooleanPredicate.isBooleanDeclaration(containingStatement)) {
-            final PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement) containingStatement;
-            final PsiElement declaredElement = declarationStatement.getDeclaredElements()[0];
+            PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement) containingStatement;
+            PsiElement declaredElement = declarationStatement.getDeclaredElements()[0];
             if (!(declaredElement instanceof PsiLocalVariable)) {
                 return;
             }
-            final PsiLocalVariable variable = (PsiLocalVariable) declaredElement;
-            final PsiExpression initializer = variable.getInitializer();
+            PsiLocalVariable variable = (PsiLocalVariable) declaredElement;
+            PsiExpression initializer = variable.getInitializer();
             if (initializer == null) {
                 return;
             }
-            final String name = variable.getName();
-            @NonNls final String newStatementText = "if(" + initializer.getText() + ") " + name + "=true; else " + name + "=false;";
-            final PsiElementFactory factory = JavaPsiFacade.getElementFactory(containingStatement.getProject());
-            final PsiStatement newStatement = factory.createStatementFromText(newStatementText, containingStatement);
+            String name = variable.getName();
+            @NonNls String newStatementText = "if(" + initializer.getText() + ") " + name + "=true; else " + name + "=false;";
+            PsiElementFactory factory = JavaPsiFacade.getElementFactory(containingStatement.getProject());
+            PsiStatement newStatement = factory.createStatementFromText(newStatementText, containingStatement);
             declarationStatement.getParent().addAfter(newStatement, declarationStatement);
             initializer.delete();
         }

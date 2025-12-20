@@ -33,17 +33,17 @@ import java.text.ParseException;
 public class SingleIntegerFieldOptionsPanel extends JPanel
 {
 
-	public SingleIntegerFieldOptionsPanel(String labelString, final InspectionTool owner, @NonNls final String property)
+	public SingleIntegerFieldOptionsPanel(String labelString, InspectionTool owner, @NonNls String property)
 	{
 		this(labelString, owner, property, 2);
 	}
 
-	public SingleIntegerFieldOptionsPanel(String labelString, final InspectionTool owner, @NonNls final String property, int integerFieldColumns)
+	public SingleIntegerFieldOptionsPanel(String labelString, InspectionTool owner, @NonNls String property, int integerFieldColumns)
 	{
 		super(new GridBagLayout());
-		final JLabel label = new JLabel(labelString);
-		final JFormattedTextField valueField = createIntegerFieldTrackingValue(owner, property, integerFieldColumns);
-		final GridBagConstraints constraints = new GridBagConstraints();
+		JLabel label = new JLabel(labelString);
+		JFormattedTextField valueField = createIntegerFieldTrackingValue(owner, property, integerFieldColumns);
+		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.insets.right = 10;
@@ -84,7 +84,7 @@ public class SingleIntegerFieldOptionsPanel extends JPanel
 		formatter.setParseIntegerOnly(true);
 		textField.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(formatter)));
 		textField.setValue(getPropertyValue(owner, property));
-		final Document document = textField.getDocument();
+		Document document = textField.getDocument();
 		document.addDocumentListener(new DocumentListener()
 		{
 			@Override

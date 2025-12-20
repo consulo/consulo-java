@@ -49,11 +49,11 @@ public class NestedAssignmentInspection extends BaseInspection {
             @Nonnull PsiAssignmentExpression expression
         ) {
             super.visitAssignmentExpression(expression);
-            final PsiElement parent = expression.getParent();
+            PsiElement parent = expression.getParent();
             if (parent == null) {
                 return;
             }
-            final PsiElement grandparent = parent.getParent();
+            PsiElement grandparent = parent.getParent();
             if (parent instanceof PsiExpressionStatement ||
                 grandparent instanceof PsiExpressionListStatement) {
                 return;

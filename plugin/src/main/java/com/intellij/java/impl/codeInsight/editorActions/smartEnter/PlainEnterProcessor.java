@@ -179,7 +179,7 @@ public class PlainEnterProcessor implements EnterProcessor
 		{
 			if(element != null && !(element instanceof PsiMember))
 			{
-				final PsiElement next = PsiTreeUtil.nextLeaf(element);
+				PsiElement next = PsiTreeUtil.nextLeaf(element);
 				if(next instanceof PsiWhiteSpace)
 				{
 					whiteSpace = (PsiWhiteSpace) next;
@@ -212,9 +212,9 @@ public class PlainEnterProcessor implements EnterProcessor
 			return false;
 		}
 
-		final TextRange textRange = whiteSpace.getTextRange();
-		final Document document = editor.getDocument();
-		final CharSequence whiteSpaceText = document.getCharsSequence().subSequence(textRange.getStartOffset(), textRange.getEndOffset());
+		TextRange textRange = whiteSpace.getTextRange();
+		Document document = editor.getDocument();
+		CharSequence whiteSpaceText = document.getCharsSequence().subSequence(textRange.getStartOffset(), textRange.getEndOffset());
 		if(StringUtil.countNewLines(whiteSpaceText) < 2)
 		{
 			return false;
@@ -230,7 +230,7 @@ public class PlainEnterProcessor implements EnterProcessor
 		editor.getCaretModel().moveToOffset(i + 1 + textRange.getStartOffset());
 		EditorActionManager actionManager = EditorActionManager.getInstance();
 		EditorActionHandler actionHandler = actionManager.getActionHandler(IdeActions.ACTION_EDITOR_MOVE_LINE_END);
-		final DataContext dataContext = DataManager.getInstance().getDataContext(editor.getComponent());
+		DataContext dataContext = DataManager.getInstance().getDataContext(editor.getComponent());
 		if(dataContext == null)
 		{
 			i = CharArrayUtil.shiftForwardUntil(whiteSpaceText, i, "\n");

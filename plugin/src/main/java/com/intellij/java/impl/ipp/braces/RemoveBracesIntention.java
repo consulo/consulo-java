@@ -38,16 +38,16 @@ public class RemoveBracesIntention extends BaseBracesIntention {
     @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return element -> {
-            final PsiStatement statement = getSurroundingStatement(element);
+            PsiStatement statement = getSurroundingStatement(element);
             if (statement == null || !(statement instanceof PsiBlockStatement)) {
                 return false;
             }
 
-            final PsiStatement[] statements = ((PsiBlockStatement) statement).getCodeBlock().getStatements();
+            PsiStatement[] statements = ((PsiBlockStatement) statement).getCodeBlock().getStatements();
             if (statements.length != 1 || statements[0] instanceof PsiDeclarationStatement) {
                 return false;
             }
-            final PsiFile file = statement.getContainingFile();
+            PsiFile file = statement.getContainingFile();
             //this intention doesn't work in JSP files, as it can't tell about tags
             // inside the braces
             return true;
@@ -70,26 +70,26 @@ public class RemoveBracesIntention extends BaseBracesIntention {
     @Override
     protected void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiStatement body = getSurroundingStatement(element);
+        PsiStatement body = getSurroundingStatement(element);
         if (body == null || !(body instanceof PsiBlockStatement)) {
             return;
         }
-        final PsiBlockStatement blockStatement = (PsiBlockStatement) body;
+        PsiBlockStatement blockStatement = (PsiBlockStatement) body;
 
-        final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
-        final PsiStatement[] statements = codeBlock.getStatements();
-        final PsiStatement statement = statements[0];
+        PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
+        PsiStatement[] statements = codeBlock.getStatements();
+        PsiStatement statement = statements[0];
 
         handleComments(blockStatement, codeBlock);
 
-        final String text = statement.getText();
+        String text = statement.getText();
         replaceStatement(text, blockStatement);
     }
 
     private static void handleComments(PsiBlockStatement blockStatement, PsiCodeBlock codeBlock) {
-        final PsiElement parent = blockStatement.getParent();
+        PsiElement parent = blockStatement.getParent();
         assert parent != null;
-        final PsiElement grandParent = parent.getParent();
+        PsiElement grandParent = parent.getParent();
         assert grandParent != null;
         PsiElement sibling = codeBlock.getFirstChild();
         assert sibling != null;
@@ -100,9 +100,9 @@ public class RemoveBracesIntention extends BaseBracesIntention {
             }
             sibling = sibling.getNextSibling();
         }
-        final PsiElement lastChild = blockStatement.getLastChild();
+        PsiElement lastChild = blockStatement.getLastChild();
         if (lastChild instanceof PsiComment) {
-            final PsiElement nextSibling = parent.getNextSibling();
+            PsiElement nextSibling = parent.getNextSibling();
             grandParent.addAfter(lastChild, nextSibling);
         }
     }

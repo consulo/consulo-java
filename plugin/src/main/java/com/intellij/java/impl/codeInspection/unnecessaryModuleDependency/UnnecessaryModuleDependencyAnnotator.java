@@ -21,19 +21,19 @@ public class UnnecessaryModuleDependencyAnnotator extends RefGraphAnnotator {
 
   private final RefManager myManager;
 
-  public UnnecessaryModuleDependencyAnnotator(final RefManager manager) {
+  public UnnecessaryModuleDependencyAnnotator(RefManager manager) {
     myManager = manager;
   }
 
   @Override
   public void onMarkReferenced(RefElement refWhat, RefElement refFrom, boolean referencedFromClassInitializer) {
-    final PsiElement onElement = refWhat.getElement();
-    final PsiElement fromElement = refFrom.getElement();
+    PsiElement onElement = refWhat.getElement();
+    PsiElement fromElement = refFrom.getElement();
     if (onElement != null && fromElement!= null){
-      final Module onModule = ModuleUtil.findModuleForPsiElement(onElement);
-      final Module fromModule = ModuleUtil.findModuleForPsiElement(fromElement);
+      Module onModule = ModuleUtil.findModuleForPsiElement(onElement);
+      Module fromModule = ModuleUtil.findModuleForPsiElement(fromElement);
       if (onModule != null && fromModule != null && onModule != fromModule){
-        final RefModule refModule = myManager.getRefModule(fromModule);
+        RefModule refModule = myManager.getRefModule(fromModule);
         if (refModule != null) {
           Set<Module> modules = refModule.getUserData(DEPENDENCIES);
           if (modules == null){

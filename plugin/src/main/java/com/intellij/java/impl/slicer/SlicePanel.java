@@ -71,7 +71,7 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
     }
 
     @Override
-    protected void setAutoScrollMode(final boolean state) {
+    protected void setAutoScrollMode(boolean state) {
       setAutoScroll(state);
     }
   };
@@ -90,7 +90,7 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
   ) {
     super(new BorderLayout());
     myToolWindow = toolWindow;
-    final ToolWindowManagerListener listener = new ToolWindowManagerListener() {
+    ToolWindowManagerListener listener = new ToolWindowManagerListener() {
       ToolWindowAnchor myAnchor = toolWindow.getAnchor();
 
       @Override
@@ -123,7 +123,7 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
       if (isDisposed || myBuilder.isDisposed() || myProject.isDisposed()) {
         return;
       }
-      final SliceNode rootNode1 = myBuilder.getRootSliceNode();
+      SliceNode rootNode1 = myBuilder.getRootSliceNode();
       myBuilder.expand(rootNode1, () -> {
         if (isDisposed || myBuilder.isDisposed() || myProject.isDisposed()) {
           return;
@@ -182,7 +182,7 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
   @Nonnull
   private JTree createTree() {
     DefaultMutableTreeNode root = new DefaultMutableTreeNode();
-    final Tree tree = new Tree(new DefaultTreeModel(root))/* {
+    Tree tree = new Tree(new DefaultTreeModel(root))/* {
     @Override
       protected void paintComponent(Graphics g) {
         DuplicateNodeRenderer.paintDuplicateNodesBackground(g, this);
@@ -282,7 +282,7 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
     if (paths == null) {
       return null;
     }
-    final ArrayList<UsageInfo> result = new ArrayList<>();
+    ArrayList<UsageInfo> result = new ArrayList<>();
     for (TreePath path : paths) {
       SliceNode sliceNode = fromPath(path);
       if (sliceNode != null) {
@@ -311,7 +311,7 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
     if (paths == null) {
       return Collections.emptyList();
     }
-    final ArrayList<Navigatable> navigatables = new ArrayList<>();
+    ArrayList<Navigatable> navigatables = new ArrayList<>();
     for (TreePath path : paths) {
       Object lastPathComponent = path.getLastPathComponent();
       if (lastPathComponent instanceof DefaultMutableTreeNode node) {
@@ -328,7 +328,7 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
 
   @Nonnull
   private ActionToolbar createToolbar() {
-    final DefaultActionGroup actionGroup = new DefaultActionGroup();
+    DefaultActionGroup actionGroup = new DefaultActionGroup();
     actionGroup.add(new MyRefreshAction(myTree));
     if (isToShowAutoScrollButton()) {
       actionGroup.add(myAutoScrollToSourceHandler.createToggleAction());
@@ -383,13 +383,13 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
 
   private class CloseAction extends CloseTabToolbarAction {
     @Override
-    public final void actionPerformed(@Nonnull final AnActionEvent e) {
+    public final void actionPerformed(@Nonnull AnActionEvent e) {
       close();
     }
   }
 
   protected void close() {
-    final ProgressIndicator progress = myBuilder.getUi().getProgress();
+    ProgressIndicator progress = myBuilder.getUi().getProgress();
     if (progress != null) {
       progress.cancel();
     }
@@ -402,15 +402,15 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
     }
 
     @Override
-    public final void actionPerformed(final AnActionEvent e) {
+    public final void actionPerformed(AnActionEvent e) {
       SliceNode rootNode = (SliceNode) myBuilder.getRootNode().getUserObject();
       rootNode.setChanged();
       myBuilder.addSubtreeToUpdate(myBuilder.getRootNode());
     }
 
     @Override
-    public final void update(final AnActionEvent event) {
-      final Presentation presentation = event.getPresentation();
+    public final void update(AnActionEvent event) {
+      Presentation presentation = event.getPresentation();
       presentation.setEnabled(true);
     }
   }

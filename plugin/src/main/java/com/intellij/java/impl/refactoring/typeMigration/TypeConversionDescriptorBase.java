@@ -36,7 +36,7 @@ public class TypeConversionDescriptorBase
 		return myRoot;
 	}
 
-	public void setRoot(final TypeMigrationUsageInfo root)
+	public void setRoot(TypeMigrationUsageInfo root)
 	{
 		myRoot = root;
 	}

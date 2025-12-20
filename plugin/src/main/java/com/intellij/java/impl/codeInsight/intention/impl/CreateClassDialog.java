@@ -197,7 +197,7 @@ public class CreateClassDialog extends DialogWrapper {
     gbConstraints.insets.top = 12;
     gbConstraints.anchor = GridBagConstraints.WEST;
     gbConstraints.fill = GridBagConstraints.NONE;
-    final JBLabel label = new JBLabel(RefactoringLocalize.targetDestinationFolder().get());
+    JBLabel label = new JBLabel(RefactoringLocalize.targetDestinationFolder().get());
     panel.add(label, gbConstraints);
 
     gbConstraints.gridy = 4;
@@ -206,7 +206,7 @@ public class CreateClassDialog extends DialogWrapper {
     gbConstraints.insets.top = 4;
     panel.add(myDestinationCB, gbConstraints);
 
-    final boolean isMultipleSourceRoots = ProjectRootManager.getInstance(myProject).getContentSourceRoots().length > 1;
+    boolean isMultipleSourceRoots = ProjectRootManager.getInstance(myProject).getContentSourceRoots().length > 1;
     myDestinationCB.setVisible(isMultipleSourceRoots);
     label.setVisible(isMultipleSourceRoots);
     label.setLabelFor(myDestinationCB);
@@ -235,15 +235,15 @@ public class CreateClassDialog extends DialogWrapper {
   @Override
   protected void doOKAction() {
     RecentsManager.getInstance(myProject).registerRecentEntry(RECENTS_KEY, myPackageComponent.getText());
-    final String packageName = getPackageName();
+    String packageName = getPackageName();
 
-    final String[] errorString = new String[1];
+    String[] errorString = new String[1];
     CommandProcessor.getInstance().executeCommand(
       myProject,
       () -> {
         try {
-          final PackageWrapper targetPackage = new PackageWrapper(PsiManager.getInstance(myProject), packageName);
-          final MoveDestination destination = myDestinationCB.selectDirectory(targetPackage, false);
+          PackageWrapper targetPackage = new PackageWrapper(PsiManager.getInstance(myProject), packageName);
+          MoveDestination destination = myDestinationCB.selectDirectory(targetPackage, false);
           if (destination == null) return;
           myTargetDirectory = myProject.getApplication()
             .runWriteAction((Computable<PsiDirectory>)() -> destination.getTargetDirectory(getBaseDir(packageName)));

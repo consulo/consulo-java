@@ -55,16 +55,16 @@ public class PsiPackageImplementationHelperImpl extends PsiPackageImplementation
   }
 
   @Override
-  public void handleQualifiedNameChange(final PsiJavaPackage psiPackage, final String newQualifiedName) {
+  public void handleQualifiedNameChange(PsiJavaPackage psiPackage, String newQualifiedName) {
 
   }
 
   @Override
-  public void navigate(final PsiJavaPackage psiPackage, final boolean requestFocus) {
-    final Project project = psiPackage.getProject();
+  public void navigate(PsiJavaPackage psiPackage, boolean requestFocus) {
+    Project project = psiPackage.getProject();
     ToolWindow window = ToolWindowManager.getInstance(project).getToolWindow(ToolWindowId.PROJECT_VIEW);
     window.activate(() -> {
-      final ProjectView projectView = ProjectView.getInstance(project);
+      ProjectView projectView = ProjectView.getInstance(project);
       PsiDirectory[] directories = suggestMostAppropriateDirectories(psiPackage);
       if (directories.length == 0) {
         return;
@@ -74,14 +74,14 @@ public class PsiPackageImplementationHelperImpl extends PsiPackageImplementation
   }
 
   private static PsiDirectory[] suggestMostAppropriateDirectories(PsiJavaPackage psiPackage) {
-    final Project project = psiPackage.getProject();
+    Project project = psiPackage.getProject();
     PsiDirectory[] directories = null;
-    final Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+    Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
     if (editor != null) {
-      final Document document = editor.getDocument();
-      final PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
+      Document document = editor.getDocument();
+      PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
       if (psiFile != null) {
-        final Module module = ModuleUtil.findModuleForPsiElement(psiFile);
+        Module module = ModuleUtil.findModuleForPsiElement(psiFile);
         if (module != null) {
           directories = psiPackage.getDirectories(GlobalSearchScope.moduleWithDependenciesScope(module));
         }

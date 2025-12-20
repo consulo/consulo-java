@@ -119,7 +119,7 @@ public class AnnotationDocGenerator {
   }
 
   private void generateAnnotationAttributes(StringBuilder buffer, boolean generateLink) {
-    final PsiNameValuePair[] attributes = myAnnotation.getParameterList().getAttributes();
+    PsiNameValuePair[] attributes = myAnnotation.getParameterList().getAttributes();
     if (attributes.length > 0) {
       buffer.append("(");
       boolean first = true;
@@ -135,12 +135,12 @@ public class AnnotationDocGenerator {
   }
 
   private static void generateAnnotationAttribute(StringBuilder buffer, boolean generateLink, PsiNameValuePair pair) {
-    final String name = pair.getName();
+    String name = pair.getName();
     if (name != null) {
       buffer.append(name);
       buffer.append(" = ");
     }
-    final PsiAnnotationMemberValue value = pair.getValue();
+    PsiAnnotationMemberValue value = pair.getValue();
     if (value != null) {
       if (value instanceof PsiArrayInitializerMemberValue) {
         buffer.append("{");

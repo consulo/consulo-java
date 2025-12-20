@@ -78,13 +78,13 @@ public class StringBufferReplaceableByStringBuilderInspection extends BaseInspec
             return (PsiNewExpression) expression;
         }
         else if (expression instanceof PsiMethodCallExpression) {
-            final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
-            final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-            @NonNls final String methodName = methodExpression.getReferenceName();
+            PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
+            PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+            @NonNls String methodName = methodExpression.getReferenceName();
             if (!"append".equals(methodName)) {
                 return null;
             }
-            final PsiExpression qualifier = methodExpression.getQualifierExpression();
+            PsiExpression qualifier = methodExpression.getQualifierExpression();
             return getNewStringBuffer(qualifier);
         }
         return null;
@@ -99,20 +99,20 @@ public class StringBufferReplaceableByStringBuilderInspection extends BaseInspec
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiElement parent = element.getParent();
-            final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-            final PsiClass stringBuilderClass = psiFacade.findClass(CommonClassNames.JAVA_LANG_STRING_BUILDER, element.getResolveScope());
+            PsiElement element = descriptor.getPsiElement();
+            PsiElement parent = element.getParent();
+            JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+            PsiClass stringBuilderClass = psiFacade.findClass(CommonClassNames.JAVA_LANG_STRING_BUILDER, element.getResolveScope());
             if (stringBuilderClass == null) {
                 return;
             }
-            final PsiElementFactory factory = psiFacade.getElementFactory();
-            final PsiJavaCodeReferenceElement stringBuilderClassReference = factory.createClassReferenceElement(stringBuilderClass);
-            final PsiClassType stringBuilderType = factory.createType(stringBuilderClass);
-            final PsiTypeElement stringBuilderTypeElement = factory.createTypeElement(stringBuilderType);
-            final PsiElement grandParent = parent.getParent();
-            final PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement) grandParent;
-            final PsiElement[] declaredElements = declarationStatement.getDeclaredElements();
+            PsiElementFactory factory = psiFacade.getElementFactory();
+            PsiJavaCodeReferenceElement stringBuilderClassReference = factory.createClassReferenceElement(stringBuilderClass);
+            PsiClassType stringBuilderType = factory.createType(stringBuilderClass);
+            PsiTypeElement stringBuilderTypeElement = factory.createTypeElement(stringBuilderType);
+            PsiElement grandParent = parent.getParent();
+            PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement) grandParent;
+            PsiElement[] declaredElements = declarationStatement.getDeclaredElements();
             for (PsiElement declaredElement : declaredElements) {
                 if (!(declaredElement instanceof PsiVariable)) {
                     continue;
@@ -126,17 +126,17 @@ public class StringBufferReplaceableByStringBuilderInspection extends BaseInspec
             PsiTypeElement newTypeElement,
             PsiVariable variable
         ) {
-            final PsiExpression initializer = getNewStringBuffer(variable.getInitializer());
+            PsiExpression initializer = getNewStringBuffer(variable.getInitializer());
             if (initializer == null) {
                 return;
             }
-            final PsiNewExpression newExpression = (PsiNewExpression) initializer;
-            final PsiJavaCodeReferenceElement classReference =
+            PsiNewExpression newExpression = (PsiNewExpression) initializer;
+            PsiJavaCodeReferenceElement classReference =
                 newExpression.getClassReference(); // no anonymous classes because StringBuffer is final
             if (classReference == null) {
                 return;
             }
-            final PsiTypeElement typeElement = variable.getTypeElement();
+            PsiTypeElement typeElement = variable.getTypeElement();
             if (typeElement != null && typeElement.getParent() == variable) {
                 typeElement.replace(newTypeElement);
             }
@@ -160,7 +160,7 @@ public class StringBufferReplaceableByStringBuilderInspection extends BaseInspec
                 return;
             }
             super.visitDeclarationStatement(statement);
-            final PsiElement[] declaredElements = statement.getDeclaredElements();
+            PsiElement[] declaredElements = statement.getDeclaredElements();
             if (declaredElements.length == 0) {
                 return;
             }
@@ -168,13 +168,13 @@ public class StringBufferReplaceableByStringBuilderInspection extends BaseInspec
                 if (!(declaredElement instanceof PsiLocalVariable)) {
                     return;
                 }
-                final PsiLocalVariable variable = (PsiLocalVariable) declaredElement;
-                final PsiElement context = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class, true, PsiClass.class);
+                PsiLocalVariable variable = (PsiLocalVariable) declaredElement;
+                PsiElement context = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class, true, PsiClass.class);
                 if (!isReplaceableStringBuffer(variable, context)) {
                     return;
                 }
             }
-            final PsiLocalVariable firstVariable = (PsiLocalVariable) declaredElements[0];
+            PsiLocalVariable firstVariable = (PsiLocalVariable) declaredElements[0];
             registerVariableError(firstVariable);
         }
 
@@ -182,11 +182,11 @@ public class StringBufferReplaceableByStringBuilderInspection extends BaseInspec
             if (context == null) {
                 return false;
             }
-            final PsiType type = variable.getType();
+            PsiType type = variable.getType();
             if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING_BUFFER, type)) {
                 return false;
             }
-            final PsiExpression initializer = variable.getInitializer();
+            PsiExpression initializer = variable.getInitializer();
             if (initializer == null) {
                 return false;
             }

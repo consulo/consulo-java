@@ -64,7 +64,7 @@ public abstract class GenerateConstructorTest extends LightCodeInsightTestCase {
                                             boolean copyJavadocCheckbox,
                                             Project project, Editor editor) {
         if (preSelect) {
-          final List<ClassMember> preselection = GenerateConstructorHandler.preselect(members);
+          List<ClassMember> preselection = GenerateConstructorHandler.preselect(members);
           return preselection.toArray(new ClassMember[preselection.size()]);
         }
         else {

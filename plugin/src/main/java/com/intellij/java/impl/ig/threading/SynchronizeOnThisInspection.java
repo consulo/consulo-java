@@ -48,7 +48,7 @@ public class SynchronizeOnThisInspection extends BaseInspection {
     public void visitSynchronizedStatement(
       @Nonnull PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
-      final PsiExpression lockExpression = statement.getLockExpression();
+      PsiExpression lockExpression = statement.getLockExpression();
       if (!(lockExpression instanceof PsiThisExpression)) {
         return;
       }
@@ -59,9 +59,9 @@ public class SynchronizeOnThisInspection extends BaseInspection {
     public void visitMethodCallExpression(
       @Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      final PsiExpression qualifier =
+      PsiExpression qualifier =
         methodExpression.getQualifierExpression();
       if (qualifier != null &&
           !(qualifier instanceof PsiThisExpression)) {
@@ -74,32 +74,32 @@ public class SynchronizeOnThisInspection extends BaseInspection {
     }
 
     private static boolean isWait(PsiMethodCallExpression expression) {
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
+      String methodName = methodExpression.getReferenceName();
 
       if (!HardcodedMethodConstants.WAIT.equals(methodName)) {
         return false;
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return false;
       }
-      final PsiParameterList parameterList = method.getParameterList();
-      final int numParams = parameterList.getParametersCount();
+      PsiParameterList parameterList = method.getParameterList();
+      int numParams = parameterList.getParametersCount();
       if (numParams > 2) {
         return false;
       }
-      final PsiParameter[] parameters = parameterList.getParameters();
+      PsiParameter[] parameters = parameterList.getParameters();
       if (numParams > 0) {
-        final PsiType parameterType = parameters[0].getType();
+        PsiType parameterType = parameters[0].getType();
         if (!parameterType.equals(PsiType.LONG)) {
           return false;
         }
       }
 
       if (numParams > 1) {
-        final PsiType parameterType = parameters[1].getType();
+        PsiType parameterType = parameters[1].getType();
         if (!parameterType.equals(PsiType.INT)) {
           return false;
         }
@@ -108,18 +108,18 @@ public class SynchronizeOnThisInspection extends BaseInspection {
     }
 
     private static boolean isNotify(PsiMethodCallExpression expression) {
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
+      String methodName = methodExpression.getReferenceName();
       if (!HardcodedMethodConstants.NOTIFY.equals(methodName) &&
           !HardcodedMethodConstants.NOTIFY_ALL.equals(methodName)) {
         return false;
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return false;
       }
-      final PsiParameterList parameterList = method.getParameterList();
+      PsiParameterList parameterList = method.getParameterList();
       return parameterList.getParametersCount() == 0;
     }
   }

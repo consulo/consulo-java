@@ -38,8 +38,8 @@ public class CloneInNonCloneableClassInspection extends BaseInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiClass aClass = (PsiClass) infos[0];
-        final String className = aClass.getName();
+        PsiClass aClass = (PsiClass) infos[0];
+        String className = aClass.getName();
         return aClass.isInterface()
             ? InspectionGadgetsLocalize.cloneMethodInNonCloneableInterfaceProblemDescriptor(className).get()
             : InspectionGadgetsLocalize.cloneMethodInNonCloneableClassProblemDescriptor(className).get();
@@ -47,7 +47,7 @@ public class CloneInNonCloneableClassInspection extends BaseInspection {
 
     @Override
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiClass aClass = (PsiClass) infos[0];
+        PsiClass aClass = (PsiClass) infos[0];
         return new MakeCloneableFix(aClass.isInterface());
     }
 
@@ -64,7 +64,7 @@ public class CloneInNonCloneableClassInspection extends BaseInspection {
             if (!CloneUtils.isClone(method)) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null ||
                 CloneUtils.isCloneable(containingClass)) {
                 return;

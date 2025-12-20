@@ -52,11 +52,11 @@ public class PsiMigrationImpl implements PsiMigration {
   public PsiClass createClass(String qualifiedName) {
     assertValid();
     ApplicationManager.getApplication().assertWriteAccessAllowed();
-    final MigrationClassImpl migrationClass = new MigrationClassImpl(this, qualifiedName);
-    final MigrationClassImpl oldMigrationClass = myQNameToClassMap.put(qualifiedName, migrationClass);
+    MigrationClassImpl migrationClass = new MigrationClassImpl(this, qualifiedName);
+    MigrationClassImpl oldMigrationClass = myQNameToClassMap.put(qualifiedName, migrationClass);
     LOG.assertTrue(oldMigrationClass == null, qualifiedName);
     String packageName = parentPackageName(qualifiedName);
-    final PsiJavaPackage aPackage = myFacade.findPackage(packageName);
+    PsiJavaPackage aPackage = myFacade.findPackage(packageName);
     if (aPackage == null) {
       createPackage(packageName);
     }
@@ -81,10 +81,10 @@ public class PsiMigrationImpl implements PsiMigration {
   public PsiJavaPackage createPackage(String qualifiedName) {
     assertValid();
     ApplicationManager.getApplication().assertWriteAccessAllowed();
-    final MigrationPackageImpl migrationPackage = new MigrationPackageImpl(this, qualifiedName);
+    MigrationPackageImpl migrationPackage = new MigrationPackageImpl(this, qualifiedName);
    	myQNameToPackageMap.putIfAbsent(qualifiedName, migrationPackage);
-    final String parentName = parentPackageName(qualifiedName);
-    final PsiJavaPackage aPackage = myFacade.findPackage(parentName);
+    String parentName = parentPackageName(qualifiedName);
+    PsiJavaPackage aPackage = myFacade.findPackage(parentName);
     if (aPackage == null) {
       createPackage(parentName);
     }
@@ -109,7 +109,7 @@ public class PsiMigrationImpl implements PsiMigration {
     LOG.assertTrue(myIsValid);
   }
 
-  private List<PsiJavaPackage> getSubpackagesList(final String parentName) {
+  private List<PsiJavaPackage> getSubpackagesList(String parentName) {
     assertValid();
     List<PsiJavaPackage> psiPackages = myPackageToSubpackagesMap.get(parentName);
     if (psiPackages == null) {
@@ -141,7 +141,7 @@ public class PsiMigrationImpl implements PsiMigration {
 
 
   private static String parentPackageName(String qualifiedName) {
-    final int lastDotIndex = qualifiedName.lastIndexOf('.');
+    int lastDotIndex = qualifiedName.lastIndexOf('.');
     return lastDotIndex >= 0 ? qualifiedName.substring(0, lastDotIndex) : "";
   }
 

@@ -56,7 +56,7 @@ public class ChainedMethodCallInspection extends BaseInspection {
 
   @Override
   public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
+    MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
     panel.addCheckbox(InspectionGadgetsLocalize.chainedMethodCallIgnoreOption().get(), "m_ignoreFieldInitializations");
     panel.addCheckbox(InspectionGadgetsLocalize.chainedMethodCallIgnoreThisSuperOption().get(), "m_ignoreThisSuperCalls");
     return panel;
@@ -78,11 +78,11 @@ public class ChainedMethodCallInspection extends BaseInspection {
       @Nullable
       @Override
       public PsiExpression getExpressionToExtract(PsiElement element) {
-        final PsiElement parent = element.getParent();
+        PsiElement parent = element.getParent();
         if (!(parent instanceof PsiReferenceExpression)) {
           return null;
         }
-        final PsiReferenceExpression methodExpression = (PsiReferenceExpression)parent;
+        PsiReferenceExpression methodExpression = (PsiReferenceExpression)parent;
         return methodExpression.getQualifierExpression();
       }
     };
@@ -93,8 +93,8 @@ public class ChainedMethodCallInspection extends BaseInspection {
     @Override
     public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression reference = expression.getMethodExpression();
-      final PsiExpression qualifier = reference.getQualifierExpression();
+      PsiReferenceExpression reference = expression.getMethodExpression();
+      PsiExpression qualifier = reference.getQualifierExpression();
       if (qualifier == null) {
         return;
       }
@@ -102,15 +102,15 @@ public class ChainedMethodCallInspection extends BaseInspection {
         return;
       }
       if (m_ignoreFieldInitializations) {
-        final PsiElement field = PsiTreeUtil.getParentOfType(expression, PsiField.class);
+        PsiElement field = PsiTreeUtil.getParentOfType(expression, PsiField.class);
         if (field != null) {
           return;
         }
       }
       if (m_ignoreThisSuperCalls) {
-        final PsiExpressionList expressionList = PsiTreeUtil.getParentOfType(expression, PsiExpressionList.class);
+        PsiExpressionList expressionList = PsiTreeUtil.getParentOfType(expression, PsiExpressionList.class);
         if (expressionList != null) {
-          final PsiElement parent = expressionList.getParent();
+          PsiElement parent = expressionList.getParent();
           if (ExpressionUtils.isConstructorInvocation(parent)) {
             return;
           }

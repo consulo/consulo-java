@@ -53,15 +53,15 @@ public class MoveDeclarationIntention extends Intention {
     @Override
     public void processIntention(@Nonnull PsiElement element)
         throws IncorrectOperationException {
-        final PsiLocalVariable variable = (PsiLocalVariable) element;
-        final PsiReference[] references = ReferencesSearch.search(variable, variable.getUseScope(), false).toArray(PsiReference.EMPTY_ARRAY);
-        final PsiCodeBlock tightestBlock =
+        PsiLocalVariable variable = (PsiLocalVariable) element;
+        PsiReference[] references = ReferencesSearch.search(variable, variable.getUseScope(), false).toArray(PsiReference.EMPTY_ARRAY);
+        PsiCodeBlock tightestBlock =
             MoveDeclarationPredicate.getTightestBlock(references);
         assert tightestBlock != null;
-        final PsiDeclarationStatement declaration =
+        PsiDeclarationStatement declaration =
             (PsiDeclarationStatement) variable.getParent();
-        final PsiReference firstReference = references[0];
-        final PsiElement referenceElement = firstReference.getElement();
+        PsiReference firstReference = references[0];
+        PsiElement referenceElement = firstReference.getElement();
         PsiDeclarationStatement newDeclaration;
         if (tightestBlock.equals(PsiTreeUtil.getParentOfType(referenceElement,
             PsiCodeBlock.class))) {
@@ -74,7 +74,7 @@ public class MoveDeclarationIntention extends Intention {
         else {
             // declaration must be moved to common block (first reference block
             // is too deep)
-            final PsiElement child =
+            PsiElement child =
                 MoveDeclarationPredicate.getChildWhichContainsElement(
                     tightestBlock, referenceElement);
             newDeclaration = createNewDeclaration(variable, null);
@@ -92,13 +92,13 @@ public class MoveDeclarationIntention extends Intention {
     }
 
     private static void highlightElement(@Nonnull PsiElement element) {
-        final Project project = element.getProject();
-        final FileEditorManager editorManager =
+        Project project = element.getProject();
+        FileEditorManager editorManager =
             FileEditorManager.getInstance(project);
-        final HighlightManager highlightManager =
+        HighlightManager highlightManager =
             HighlightManager.getInstance(project);
-        final Editor editor = editorManager.getSelectedTextEditor();
-        final PsiElement[] elements = new PsiElement[]{element};
+        Editor editor = editorManager.getSelectedTextEditor();
+        PsiElement[] elements = new PsiElement[]{element};
         highlightManager.addOccurrenceHighlights(editor, elements, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null);
     }
 
@@ -114,9 +114,9 @@ public class MoveDeclarationIntention extends Intention {
         if (statement.getParent() instanceof PsiForStatement) {
             statement = (PsiStatement) statement.getParent();
         }
-        final PsiElement referenceParent = referenceElement.getParent();
+        PsiElement referenceParent = referenceElement.getParent();
         if (referenceParent instanceof PsiAssignmentExpression) {
-            final PsiAssignmentExpression assignmentExpression =
+            PsiAssignmentExpression assignmentExpression =
                 (PsiAssignmentExpression) referenceParent;
             if (referenceElement.equals(
                 assignmentExpression.getLExpression())) {
@@ -126,7 +126,7 @@ public class MoveDeclarationIntention extends Intention {
                 newDeclaration = (PsiDeclarationStatement)
                     block.addBefore(newDeclaration,
                         statement);
-                final PsiElement parent = assignmentExpression.getParent();
+                PsiElement parent = assignmentExpression.getParent();
                 assert parent != null;
                 parent.delete();
                 return newDeclaration;
@@ -138,15 +138,15 @@ public class MoveDeclarationIntention extends Intention {
     private static PsiDeclarationStatement createNewDeclaration(
         @Nonnull PsiLocalVariable variable, PsiExpression initializer)
         throws IncorrectOperationException {
-        final PsiManager manager = variable.getManager();
-        final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-        final PsiDeclarationStatement newDeclaration =
+        PsiManager manager = variable.getManager();
+        PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
+        PsiDeclarationStatement newDeclaration =
             factory.createVariableDeclarationStatement(
                 variable.getName(), variable.getType(), initializer);
         if (variable.hasModifierProperty(PsiModifier.FINAL)) {
-            final PsiLocalVariable newVariable =
+            PsiLocalVariable newVariable =
                 (PsiLocalVariable) newDeclaration.getDeclaredElements()[0];
-            final PsiModifierList modifierList = newVariable.getModifierList();
+            PsiModifierList modifierList = newVariable.getModifierList();
             modifierList.setModifierProperty(PsiModifier.FINAL, true);
         }
         return newDeclaration;

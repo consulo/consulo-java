@@ -72,7 +72,7 @@ public class LoggerInitializedWithForeignClassInspection extends BaseInspection 
 
   @Override
   public JComponent createOptionsPanel() {
-    final ListTable table = new ListTable(new ListWrappingTableModel(
+    ListTable table = new ListTable(new ListWrappingTableModel(
       Arrays.asList(loggerFactoryClassNames, loggerFactoryMethodNames),
       InspectionGadgetsLocalize.loggerFactoryClassName().get(),
       InspectionGadgetsLocalize.loggerFactoryMethodName().get()
@@ -102,11 +102,11 @@ public class LoggerInitializedWithForeignClassInspection extends BaseInspection 
 
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
+      PsiElement element = descriptor.getPsiElement();
       if (!(element instanceof PsiClassObjectAccessExpression)) {
         return;
       }
-      final PsiClassObjectAccessExpression classObjectAccessExpression = (PsiClassObjectAccessExpression)element;
+      PsiClassObjectAccessExpression classObjectAccessExpression = (PsiClassObjectAccessExpression)element;
       replaceExpression(classObjectAccessExpression, newClassName + ".class");
     }
   }
@@ -123,20 +123,20 @@ public class LoggerInitializedWithForeignClassInspection extends BaseInspection 
       super.visitClassObjectAccessExpression(expression);
       PsiElement parent = expression.getParent();
       if (parent instanceof PsiReferenceExpression) {
-        final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)parent;
+        PsiReferenceExpression referenceExpression = (PsiReferenceExpression)parent;
         if (!expression.equals(referenceExpression.getQualifierExpression())) {
           return;
         }
-        final String name = referenceExpression.getReferenceName();
+        String name = referenceExpression.getReferenceName();
         if (!"getName".equals(name)) {
           return;
         }
-        final PsiElement grandParent = referenceExpression.getParent();
+        PsiElement grandParent = referenceExpression.getParent();
         if (!(grandParent instanceof PsiMethodCallExpression)) {
           return;
         }
-        final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)grandParent;
-        final PsiExpressionList list = methodCallExpression.getArgumentList();
+        PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)grandParent;
+        PsiExpressionList list = methodCallExpression.getArgumentList();
         if (list.getExpressions().length != 0) {
           return;
         }
@@ -145,50 +145,50 @@ public class LoggerInitializedWithForeignClassInspection extends BaseInspection 
       if (!(parent instanceof PsiExpressionList)) {
         return;
       }
-      final PsiElement grandParent = parent.getParent();
+      PsiElement grandParent = parent.getParent();
       if (!(grandParent instanceof PsiMethodCallExpression)) {
         return;
       }
-      final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)grandParent;
-      final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-      final PsiExpression[] expressions = argumentList.getExpressions();
+      PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)grandParent;
+      PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+      PsiExpression[] expressions = argumentList.getExpressions();
       if (expressions.length != 1) {
         return;
       }
-      final PsiClass containingClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
+      PsiClass containingClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
       if (containingClass == null) {
         return;
       }
-      final String containingClassName = containingClass.getName();
+      String containingClassName = containingClass.getName();
       if (containingClassName == null) {
         return;
       }
-      final PsiMethod method = methodCallExpression.resolveMethod();
+      PsiMethod method = methodCallExpression.resolveMethod();
       if (method == null) {
         return;
       }
-      final PsiClass aClass = method.getContainingClass();
+      PsiClass aClass = method.getContainingClass();
       if (aClass == null) {
         return;
       }
-      final String className = aClass.getQualifiedName();
-      final int index = loggerFactoryClassNames.indexOf(className);
+      String className = aClass.getQualifiedName();
+      int index = loggerFactoryClassNames.indexOf(className);
       if (index < 0) {
         return;
       }
-      final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-      final String referenceName = methodExpression.getReferenceName();
-      final String loggerFactoryMethodName = loggerFactoryMethodNames.get(index);
+      PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+      String referenceName = methodExpression.getReferenceName();
+      String loggerFactoryMethodName = loggerFactoryMethodNames.get(index);
       if (!loggerFactoryMethodName.equals(referenceName)) {
         return;
       }
-      final PsiTypeElement operand = expression.getOperand();
-      final PsiType type = operand.getType();
+      PsiTypeElement operand = expression.getOperand();
+      PsiType type = operand.getType();
       if (!(type instanceof PsiClassType)) {
         return;
       }
-      final PsiClassType classType = (PsiClassType)type;
-      final PsiClass initializerClass = classType.resolve();
+      PsiClassType classType = (PsiClassType)type;
+      PsiClass initializerClass = classType.resolve();
       if (initializerClass == null) {
         return;
       }

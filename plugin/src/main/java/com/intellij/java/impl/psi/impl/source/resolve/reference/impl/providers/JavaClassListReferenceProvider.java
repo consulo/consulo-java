@@ -64,9 +64,9 @@ public class JavaClassListReferenceProvider extends JavaClassReferenceProvider {
       @Nonnull
       @Override
       protected Set<String> compute() {
-        final Set<String> knownTopLevelPackages = new HashSet<String>();
-        final List<PsiElement> defaultPackages = getDefaultPackages(position.getProject());
-        for (final PsiElement pack : defaultPackages) {
+        Set<String> knownTopLevelPackages = new HashSet<String>();
+        List<PsiElement> defaultPackages = getDefaultPackages(position.getProject());
+        for (PsiElement pack : defaultPackages) {
           if (pack instanceof PsiJavaPackage) {
             knownTopLevelPackages.add(((PsiJavaPackage)pack).getName());
           }
@@ -74,7 +74,7 @@ public class JavaClassListReferenceProvider extends JavaClassReferenceProvider {
         return knownTopLevelPackages;
       }
     };
-    final List<PsiReference> results = new ArrayList<PsiReference>();
+    List<PsiReference> results = new ArrayList<PsiReference>();
 
     for(int dot = str.indexOf('.'); dot > 0; dot = str.indexOf('.', dot + 1)) {
       int start = dot;

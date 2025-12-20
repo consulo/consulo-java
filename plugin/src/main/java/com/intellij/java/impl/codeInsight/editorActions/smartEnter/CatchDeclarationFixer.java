@@ -33,19 +33,19 @@ public class CatchDeclarationFixer implements Fixer {
   @Override
   public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException {
     if (psiElement instanceof PsiCatchSection) {
-      final Document doc = editor.getDocument();
-      final PsiCatchSection catchSection = (PsiCatchSection) psiElement;
+      Document doc = editor.getDocument();
+      PsiCatchSection catchSection = (PsiCatchSection) psiElement;
 
-      final int catchStart = catchSection.getTextRange().getStartOffset();
+      int catchStart = catchSection.getTextRange().getStartOffset();
       int stopOffset = doc.getLineEndOffset(doc.getLineNumber(catchStart));
 
-      final PsiCodeBlock catchBlock = catchSection.getCatchBlock();
+      PsiCodeBlock catchBlock = catchSection.getCatchBlock();
       if (catchBlock != null) {
         stopOffset = Math.min(stopOffset, catchBlock.getTextRange().getStartOffset());
       }
       stopOffset = Math.min(stopOffset, catchSection.getTextRange().getEndOffset());
 
-      final PsiJavaToken lParenth = catchSection.getLParenth();
+      PsiJavaToken lParenth = catchSection.getLParenth();
       if (lParenth == null) {
         doc.replaceString(catchStart, stopOffset, "catch ()");
         processor.registerUnresolvedError(catchStart + "catch (".length());

@@ -58,7 +58,7 @@ public class MoveFieldAssignmentToInitializerAction extends BaseIntentionAction 
   @Override
   @RequiredReadAction
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    final PsiAssignmentExpression assignment = getAssignmentUnderCaret(editor, file);
+    PsiAssignmentExpression assignment = getAssignmentUnderCaret(editor, file);
     if (assignment == null) {
       return false;
     }
@@ -98,7 +98,7 @@ public class MoveFieldAssignmentToInitializerAction extends BaseIntentionAction 
     return result.get();
   }
 
-  private static PsiModifierListOwner enclosingMethodOrClassInitializer(final PsiAssignmentExpression assignment, final PsiField field) {
+  private static PsiModifierListOwner enclosingMethodOrClassInitializer(PsiAssignmentExpression assignment, PsiField field) {
     PsiElement parentOwner = assignment;
     while (true) {
       parentOwner = PsiTreeUtil.getParentOfType(parentOwner, PsiModifierListOwner.class, true, PsiMember.class);
@@ -158,13 +158,13 @@ public class MoveFieldAssignmentToInitializerAction extends BaseIntentionAction 
   }
 
   @RequiredReadAction
-  private static PsiField getAssignedField(final PsiAssignmentExpression assignment) {
+  private static PsiField getAssignedField(PsiAssignmentExpression assignment) {
     return assignment.getLExpression() instanceof PsiReferenceExpression lReferenceExpression
       && lReferenceExpression.resolve() instanceof PsiField field ? field : null;
   }
 
   @RequiredReadAction
-  private static PsiAssignmentExpression getAssignmentUnderCaret(final Editor editor, final PsiFile file) {
+  private static PsiAssignmentExpression getAssignmentUnderCaret(Editor editor, PsiFile file) {
     int offset = editor.getCaretModel().getOffset();
     PsiElement element = file.findElementAt(offset);
     if (element == null || element instanceof PsiCompiledElement) return null;
@@ -174,7 +174,7 @@ public class MoveFieldAssignmentToInitializerAction extends BaseIntentionAction 
   @Override
   @RequiredReadAction
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
-    final PsiAssignmentExpression assignment = getAssignmentUnderCaret(editor, file);
+    PsiAssignmentExpression assignment = getAssignmentUnderCaret(editor, file);
     if (assignment == null) return;
     PsiField field = getAssignedField(assignment);
     if (field == null) return;

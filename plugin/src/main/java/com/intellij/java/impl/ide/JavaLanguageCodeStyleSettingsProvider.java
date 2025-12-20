@@ -58,7 +58,7 @@ public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
   public Configurable createSettingsPage(CodeStyleSettings settings, CodeStyleSettings modelSettings) {
     return new CodeStyleAbstractConfigurable(settings, modelSettings, JavaLanguageLocalize.javaLanguageDisplayName()) {
       @Override
-      protected CodeStyleAbstractPanel createPanel(final CodeStyleSettings settings) {
+      protected CodeStyleAbstractPanel createPanel(CodeStyleSettings settings) {
         return new JavaCodeStyleMainPanel(getCurrentSettings(), settings);
       }
 
@@ -296,8 +296,8 @@ public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
   }
 
   @Override
-  public PsiFile createFileFromText(final Project project, final String text) {
-    final PsiFile file = PsiFileFactory.getInstance(project).createFileFromText("sample.java", JavaFileType.INSTANCE, text, LocalTimeCounter.currentTime(), false, false);
+  public PsiFile createFileFromText(Project project, String text) {
+    PsiFile file = PsiFileFactory.getInstance(project).createFileFromText("sample.java", JavaFileType.INSTANCE, text, LocalTimeCounter.currentTime(), false, false);
     file.putUserData(PsiUtil.FILE_LANGUAGE_LEVEL_KEY, LanguageLevel.HIGHEST);
     return file;
   }

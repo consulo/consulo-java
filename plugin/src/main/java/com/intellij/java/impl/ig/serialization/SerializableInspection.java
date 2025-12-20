@@ -45,21 +45,21 @@ public abstract class SerializableInspection extends BaseInspection {
 
   @Override
   public final JComponent createOptionsPanel() {
-    final JComponent panel = new JPanel(new GridBagLayout());
+    JComponent panel = new JPanel(new GridBagLayout());
 
-    final JPanel chooserList = UiUtils.createTreeClassChooserList(
+    JPanel chooserList = UiUtils.createTreeClassChooserList(
       superClassList,
       InspectionGadgetsLocalize.ignoreClassesInHierarchyColumnName().get(),
       InspectionGadgetsLocalize.chooseSuperClassToIgnore().get()
     );
     UiUtils.setComponentSize(chooserList, 7, 25);
-    final CheckBox checkBox = new CheckBox(
+    CheckBox checkBox = new CheckBox(
       InspectionGadgetsLocalize.ignoreAnonymousInnerClasses().get(),
       this,
       "ignoreAnonymousInnerClasses"
     );
 
-    final GridBagConstraints constraints = new GridBagConstraints();
+    GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 0;
     constraints.gridy = 0;
 
@@ -69,7 +69,7 @@ public abstract class SerializableInspection extends BaseInspection {
     panel.add(chooserList, constraints);
 
     constraints.fill = GridBagConstraints.BOTH;
-    final JComponent[] additionalOptions = createAdditionalOptions();
+    JComponent[] additionalOptions = createAdditionalOptions();
     for (JComponent additionalOption : additionalOptions) {
       constraints.gridy++;
       panel.add(additionalOption, constraints);

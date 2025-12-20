@@ -63,7 +63,7 @@ public class ConfusingMainMethodInspection extends BaseInspection {
     @Override
     public void visitMethod(@Nonnull PsiMethod aMethod) {
       // no call to super, so it doesn't drill down into inner classes
-      final String methodName = aMethod.getName();
+      String methodName = aMethod.getName();
       if (!HardcodedMethodConstants.MAIN.equals(methodName)) {
         return;
       }
@@ -75,19 +75,19 @@ public class ConfusingMainMethodInspection extends BaseInspection {
         registerMethodError(aMethod);
         return;
       }
-      final PsiType returnType = aMethod.getReturnType();
+      PsiType returnType = aMethod.getReturnType();
 
       if (!TypeUtils.typeEquals(PsiKeyword.VOID, returnType)) {
         registerMethodError(aMethod);
         return;
       }
-      final PsiParameterList parameterList = aMethod.getParameterList();
+      PsiParameterList parameterList = aMethod.getParameterList();
       if (parameterList.getParametersCount() != 1) {
         registerMethodError(aMethod);
         return;
       }
-      final PsiParameter[] parameters = parameterList.getParameters();
-      final PsiType parameterType = parameters[0].getType();
+      PsiParameter[] parameters = parameterList.getParameters();
+      PsiType parameterType = parameters[0].getType();
       if (!TypeUtils.typeEquals(CommonClassNames.JAVA_LANG_STRING + "[]", parameterType)) {
         registerMethodError(aMethod);
       }

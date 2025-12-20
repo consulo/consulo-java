@@ -116,14 +116,14 @@ public class SliceLeafAnalyzer {
     }
 
     @Nonnull
-    public static SliceRootNode createTreeGroupedByValues(Collection<PsiElement> leaves, SliceRootNode oldRoot, final Map<SliceNode, Collection<PsiElement>> map) {
+    public static SliceRootNode createTreeGroupedByValues(Collection<PsiElement> leaves, SliceRootNode oldRoot, Map<SliceNode, Collection<PsiElement>> map) {
         SliceNode oldRootStart = oldRoot.myCachedChildren.get(0);
         SliceRootNode root = oldRoot.copy();
         root.setChanged();
         root.targetEqualUsages.clear();
         root.myCachedChildren = new ArrayList<>(leaves.size());
 
-        for (final PsiElement leafExpression : leaves) {
+        for (PsiElement leafExpression : leaves) {
             SliceNode newNode = filterTree(oldRootStart, oldNode -> {
                 if (oldNode.getDuplicate() != null) {
                     return null;
@@ -159,7 +159,7 @@ public class SliceLeafAnalyzer {
 
         ProgressManager.getInstance().run(new Task.Backgroundable(root.getProject(), "Expanding all nodes... (may very well take the whole day)", true) {
             @Override
-            public void run(@Nonnull final ProgressIndicator indicator) {
+            public void run(@Nonnull ProgressIndicator indicator) {
                 Collection<PsiElement> l = calcLeafExpressions(root, treeStructure, map);
                 leafExpressions.set(l);
             }
@@ -240,7 +240,7 @@ public class SliceLeafAnalyzer {
     }
 
     @Nonnull
-    public static Collection<PsiElement> calcLeafExpressions(@Nonnull final SliceNode root,
+    public static Collection<PsiElement> calcLeafExpressions(@Nonnull SliceNode root,
                                                              @Nonnull AbstractTreeStructure treeStructure,
                                                              @Nonnull final Map<SliceNode, Collection<PsiElement>> map) {
         final SliceNodeGuide guide = new SliceNodeGuide(treeStructure);
@@ -254,7 +254,7 @@ public class SliceLeafAnalyzer {
                     node(element, map).addAll(node(duplicate, map));
                 }
                 else {
-                    final SliceUsage sliceUsage = element.getValue();
+                    SliceUsage sliceUsage = element.getValue();
 
                     Collection<? extends AbstractTreeNode> children = element.getChildren();
                     if (children.isEmpty()) {

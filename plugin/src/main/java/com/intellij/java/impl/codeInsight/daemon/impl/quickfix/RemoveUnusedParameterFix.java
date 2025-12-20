@@ -55,7 +55,7 @@ public class RemoveUnusedParameterFix extends LocalQuickFixAndIntentionActionOnP
         @Nonnull PsiElement startElement,
         @Nonnull PsiElement endElement
     ) {
-        final PsiParameter myParameter = (PsiParameter) startElement;
+        PsiParameter myParameter = (PsiParameter) startElement;
         return myParameter.isValid()
             && myParameter.getDeclarationScope() instanceof PsiMethod
             && myParameter.getManager().isInProject(myParameter);
@@ -69,7 +69,7 @@ public class RemoveUnusedParameterFix extends LocalQuickFixAndIntentionActionOnP
         @Nonnull PsiElement startElement,
         @Nonnull PsiElement endElement
     ) {
-        final PsiParameter myParameter = (PsiParameter) startElement;
+        PsiParameter myParameter = (PsiParameter) startElement;
         if (!FileModificationService.getInstance().prepareFileForWrite(myParameter.getContainingFile())) {
             return;
         }

@@ -93,14 +93,14 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
 
   @Override
   public JComponent createOptionsPanel() {
-    final JPanel panel = new JPanel(new GridBagLayout());
-    final ListTable table = new ListTable(new ListWrappingTableModel(
+    JPanel panel = new JPanel(new GridBagLayout());
+    ListTable table = new ListTable(new ListWrappingTableModel(
       questionList,
       InspectionGadgetsLocalize.booleanMethodNameMustStartWithQuestionTableColumnName().get()
     ));
-    final JPanel tablePanel = UiUtils.createAddRemovePanel(table);
+    JPanel tablePanel = UiUtils.createAddRemovePanel(table);
 
-    final GridBagConstraints constraints = new GridBagConstraints();
+    GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 0;
     constraints.gridy = 0;
     constraints.weightx = 1.0;
@@ -108,18 +108,18 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
     constraints.fill = GridBagConstraints.BOTH;
     panel.add(tablePanel, constraints);
 
-    final CheckBox checkBox1 =
+    CheckBox checkBox1 =
       new CheckBox(InspectionGadgetsLocalize.ignoreMethodsWithBooleanReturnTypeOption().get(), this, "ignoreBooleanMethods");
     constraints.gridy = 1;
     constraints.weighty = 0.0;
     panel.add(checkBox1, constraints);
 
-    final CheckBox checkBox2 =
+    CheckBox checkBox2 =
       new CheckBox(InspectionGadgetsLocalize.ignoreBooleanMethodsInAnInterfaceOption().get(), this, "ignoreInAnnotationInterface");
     constraints.gridy = 2;
     panel.add(checkBox2, constraints);
 
-    final CheckBox checkBox3 =
+    CheckBox checkBox3 =
       new CheckBox(InspectionGadgetsLocalize.ignoreMethodsOverridingSuperMethod().get(), this, "onlyWarnOnBaseMethods");
     constraints.gridy = 3;
     panel.add(checkBox3, constraints);
@@ -145,7 +145,7 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
 
     @Override
     public void visitMethod(@Nonnull PsiMethod method) {
-      final PsiType returnType = method.getReturnType();
+      PsiType returnType = method.getReturnType();
       if (returnType == null) {
         return;
       } else if (!returnType.equals(PsiType.BOOLEAN)) {
@@ -154,12 +154,12 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
         }
       }
       if (ignoreInAnnotationInterface) {
-        final PsiClass containingClass = method.getContainingClass();
+        PsiClass containingClass = method.getContainingClass();
         if (containingClass != null && containingClass.isAnnotationType()) {
           return;
         }
       }
-      final String name = method.getName();
+      String name = method.getName();
       for (String question : questionList) {
         if (name.startsWith(question)) {
           return;

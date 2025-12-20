@@ -64,7 +64,7 @@ class AddExternalLibraryToDependenciesQuickFix extends AddOrderEntryFix {
     }
 
     @Override
-    public void invoke(@Nonnull Project project, final Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         DependencyScope scope = suggestScopeByLocation(myCurrentModule, myReference.getElement());
         JavaProjectModelModificationService.getInstance(project)
             .addDependency(myCurrentModule, myLibraryDescriptor, scope)

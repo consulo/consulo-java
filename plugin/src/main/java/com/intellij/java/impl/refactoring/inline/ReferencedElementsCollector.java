@@ -35,13 +35,13 @@ public class ReferencedElementsCollector extends JavaRecursiveElementWalkingVisi
   }
 
   @Override public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
-    final PsiElement psiElement = reference.resolve();
+    PsiElement psiElement = reference.resolve();
     if (psiElement instanceof PsiMember) {
       checkAddMember((PsiMember)psiElement);
     }
   }
 
-  protected void checkAddMember(@Nonnull final PsiMember member) {
+  protected void checkAddMember(@Nonnull PsiMember member) {
     myReferencedMembers.add(member);
   }
 }

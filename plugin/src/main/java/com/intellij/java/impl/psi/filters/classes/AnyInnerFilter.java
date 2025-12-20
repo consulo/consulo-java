@@ -41,8 +41,8 @@ public class AnyInnerFilter implements ElementFilter{
   @Override
   public boolean isAcceptable(Object classElement, PsiElement place){
     if(classElement instanceof PsiClass){
-      final PsiClass[] inners = ((PsiClass)classElement).getInnerClasses();
-      for (final PsiClass inner : inners) {
+      PsiClass[] inners = ((PsiClass)classElement).getInnerClasses();
+      for (PsiClass inner : inners) {
         if (inner.hasModifierProperty(PsiModifier.STATIC)
             && PsiUtil.isAccessible(inner, place, null)
             && myFilter.isAcceptable(inner, place)) {

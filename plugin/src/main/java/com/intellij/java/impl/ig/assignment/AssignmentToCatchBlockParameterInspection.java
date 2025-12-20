@@ -62,18 +62,18 @@ public class AssignmentToCatchBlockParameterInspection extends BaseInspection {
             if (!WellFormednessUtils.isWellFormed(expression)) {
                 return;
             }
-            final PsiExpression lhs = expression.getLExpression();
+            PsiExpression lhs = expression.getLExpression();
             if (!(lhs instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiReferenceExpression reference =
+            PsiReferenceExpression reference =
                 (PsiReferenceExpression) lhs;
-            final PsiElement variable = reference.resolve();
+            PsiElement variable = reference.resolve();
             if (!(variable instanceof PsiParameter)) {
                 return;
             }
-            final PsiParameter parameter = (PsiParameter) variable;
-            final PsiElement declarationScope = parameter.getDeclarationScope();
+            PsiParameter parameter = (PsiParameter) variable;
+            PsiElement declarationScope = parameter.getDeclarationScope();
             if (!(declarationScope instanceof PsiCatchSection)) {
                 return;
             }

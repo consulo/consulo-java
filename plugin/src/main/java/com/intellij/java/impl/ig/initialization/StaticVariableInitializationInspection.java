@@ -84,7 +84,7 @@ public class StaticVariableInitializationInspection extends BaseInspection {
             if (field.getInitializer() != null) {
                 return;
             }
-            final PsiClass containingClass = field.getContainingClass();
+            PsiClass containingClass = field.getContainingClass();
             if (containingClass == null) {
                 return;
             }
@@ -92,16 +92,16 @@ public class StaticVariableInitializationInspection extends BaseInspection {
                 return;
             }
             if (m_ignorePrimitives) {
-                final PsiType type = field.getType();
+                PsiType type = field.getType();
                 if (ClassUtils.isPrimitive(type)) {
                     return;
                 }
             }
-            final PsiClassInitializer[] initializers =
+            PsiClassInitializer[] initializers =
                 containingClass.getInitializers();
-            for (final PsiClassInitializer initializer : initializers) {
+            for (PsiClassInitializer initializer : initializers) {
                 if (initializer.hasModifierProperty(PsiModifier.STATIC)) {
-                    final PsiCodeBlock body = initializer.getBody();
+                    PsiCodeBlock body = initializer.getBody();
                     if (InitializationUtils.blockAssignsVariableOrFails(
                         body,
                         field

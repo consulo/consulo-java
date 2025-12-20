@@ -47,9 +47,9 @@ public class CastConflictsWithInstanceofInspection extends BaseInspection {
 
   @Nonnull
   @Override
-  protected InspectionGadgetsFix[] buildFixes(final Object... infos) {
-    final String castExpressionType = ((PsiTypeElement)infos[1]).getText();
-    final String instanceofType = ((PsiTypeElement)infos[2]).getText();
+  protected InspectionGadgetsFix[] buildFixes(Object... infos) {
+    String castExpressionType = ((PsiTypeElement)infos[1]).getText();
+    String instanceofType = ((PsiTypeElement)infos[2]).getText();
     return new InspectionGadgetsFix[]{
       new ReplaceCastFix(instanceofType, castExpressionType),
       new ReplaceInstanceofFix(instanceofType, castExpressionType)
@@ -67,22 +67,22 @@ public class CastConflictsWithInstanceofInspection extends BaseInspection {
     @Override
     public void visitTypeCastExpression(@Nonnull PsiTypeCastExpression expression) {
       super.visitTypeCastExpression(expression);
-      final PsiTypeElement castType = expression.getCastType();
+      PsiTypeElement castType = expression.getCastType();
       if (castType == null) {
         return;
       }
-      final PsiType type = castType.getType();
-      final PsiExpression operand = expression.getOperand();
+      PsiType type = castType.getType();
+      PsiExpression operand = expression.getOperand();
       if (!(operand instanceof PsiReferenceExpression)) {
         return;
       }
-      final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)operand;
-      final PsiInstanceOfExpression conflictingInstanceof =
+      PsiReferenceExpression referenceExpression = (PsiReferenceExpression)operand;
+      PsiInstanceOfExpression conflictingInstanceof =
         InstanceOfUtils.getConflictingInstanceof(type, referenceExpression, expression);
       if (conflictingInstanceof == null) {
         return;
       }
-      final PsiTypeElement instanceofTypeElement = conflictingInstanceof.getCheckType();
+      PsiTypeElement instanceofTypeElement = conflictingInstanceof.getCheckType();
       if (instanceofTypeElement == null) {
         return;
       }
@@ -92,49 +92,49 @@ public class CastConflictsWithInstanceofInspection extends BaseInspection {
     @Override
     public void visitMethodCallExpression(PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
-      final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
+      PsiReferenceExpression methodExpression = expression.getMethodExpression();
+      String methodName = methodExpression.getReferenceName();
       if (!"cast".equals(methodName)) {
         return;
       }
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return;
       }
-      final PsiClass containingClass = method.getContainingClass();
+      PsiClass containingClass = method.getContainingClass();
       if (containingClass == null) {
         return;
       }
-      final String qualifiedName = containingClass.getQualifiedName();
+      String qualifiedName = containingClass.getQualifiedName();
       if (!"java.lang.Class".equals(qualifiedName)) {
         return;
       }
-      final PsiExpression qualifier = methodExpression.getQualifierExpression();
+      PsiExpression qualifier = methodExpression.getQualifierExpression();
       if (!(qualifier instanceof PsiClassObjectAccessExpression)) {
         return;
       }
-      final PsiClassObjectAccessExpression classObjectAccessExpression = (PsiClassObjectAccessExpression)qualifier;
-      final PsiTypeElement operand = classObjectAccessExpression.getOperand();
-      final PsiType castType = operand.getType();
+      PsiClassObjectAccessExpression classObjectAccessExpression = (PsiClassObjectAccessExpression)qualifier;
+      PsiTypeElement operand = classObjectAccessExpression.getOperand();
+      PsiType castType = operand.getType();
       if (!(castType instanceof PsiClassType)) {
         return;
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
+      PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpression[] arguments = argumentList.getExpressions();
       if (arguments.length != 1) {
         return;
       }
-      final PsiExpression argument = arguments[0];
+      PsiExpression argument = arguments[0];
       if (!(argument instanceof PsiReferenceExpression)) {
         return;
       }
-      final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)argument;
-      final PsiInstanceOfExpression conflictingInstanceof =
+      PsiReferenceExpression referenceExpression = (PsiReferenceExpression)argument;
+      PsiInstanceOfExpression conflictingInstanceof =
         InstanceOfUtils.getConflictingInstanceof(castType, referenceExpression, expression);
       if (conflictingInstanceof == null) {
         return;
       }
-      final PsiTypeElement instanceofTypeElement = conflictingInstanceof.getCheckType();
+      PsiTypeElement instanceofTypeElement = conflictingInstanceof.getCheckType();
       registerError(expression, referenceExpression, operand, instanceofTypeElement);
     }
   }
@@ -146,32 +146,32 @@ public class CastConflictsWithInstanceofInspection extends BaseInspection {
 
     @Override
     protected final void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-        final PsiElement element = descriptor.getPsiElement();
-      final PsiTypeElement castTypeElement;
-      final PsiReferenceExpression reference;
+        PsiElement element = descriptor.getPsiElement();
+      PsiTypeElement castTypeElement;
+      PsiReferenceExpression reference;
       if (element instanceof PsiTypeCastExpression) {
-        final PsiTypeCastExpression typeCastExpression = (PsiTypeCastExpression)element;
+        PsiTypeCastExpression typeCastExpression = (PsiTypeCastExpression)element;
         castTypeElement = typeCastExpression.getCastType();
-        final PsiExpression operand = typeCastExpression.getOperand();
+        PsiExpression operand = typeCastExpression.getOperand();
         if (!(operand instanceof PsiReferenceExpression)) {
           return;
         }
         reference = (PsiReferenceExpression)operand;
       } else if (element instanceof PsiMethodCallExpression) {
-        final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)element;
-        final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-        final PsiExpression qualifier = methodExpression.getQualifierExpression();
+        PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)element;
+        PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+        PsiExpression qualifier = methodExpression.getQualifierExpression();
         if (!(qualifier instanceof PsiClassObjectAccessExpression)) {
           return;
         }
-        final PsiClassObjectAccessExpression classObjectAccessExpression = (PsiClassObjectAccessExpression)qualifier;
+        PsiClassObjectAccessExpression classObjectAccessExpression = (PsiClassObjectAccessExpression)qualifier;
         castTypeElement = classObjectAccessExpression.getOperand();
-        final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-        final PsiExpression[] arguments = argumentList.getExpressions();
+        PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+        PsiExpression[] arguments = argumentList.getExpressions();
         if (arguments.length != 1) {
           return;
         }
-        final PsiExpression argument = arguments[0];
+        PsiExpression argument = arguments[0];
         if (!(argument instanceof PsiReferenceExpression)) {
           return;
         }
@@ -182,17 +182,17 @@ public class CastConflictsWithInstanceofInspection extends BaseInspection {
       if (castTypeElement == null) {
         return;
       }
-      final PsiInstanceOfExpression conflictingInstanceof =
+      PsiInstanceOfExpression conflictingInstanceof =
         InstanceOfUtils.getConflictingInstanceof(castTypeElement.getType(), reference, element);
       if (conflictingInstanceof == null) {
         return;
       }
-      final PsiTypeElement instanceofTypeElement = conflictingInstanceof.getCheckType();
+      PsiTypeElement instanceofTypeElement = conflictingInstanceof.getCheckType();
       if (instanceofTypeElement == null) {
         return;
       }
-      final PsiElement newElement = replace(castTypeElement, instanceofTypeElement);
-      final JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
+      PsiElement newElement = replace(castTypeElement, instanceofTypeElement);
+      JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
       codeStyleManager.shortenClassReferences(newElement);
     }
 

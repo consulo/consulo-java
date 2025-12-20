@@ -84,11 +84,11 @@ public class StandardVariableNamesInspection extends BaseInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiVariable variable = (PsiVariable) infos[0];
-        final String name = variable.getName();
-        final String expectedType = s_expectedTypes.get(name);
+        PsiVariable variable = (PsiVariable) infos[0];
+        String name = variable.getName();
+        String expectedType = s_expectedTypes.get(name);
         if (PsiUtil.isLanguageLevel5OrHigher(variable)) {
-            final String boxedType = s_boxingClasses.get(expectedType);
+            String boxedType = s_boxingClasses.get(expectedType);
             if (boxedType != null) {
                 return InspectionGadgetsLocalize.standardVariableNamesProblemDescriptor2(expectedType, boxedType).get();
             }
@@ -111,20 +111,20 @@ public class StandardVariableNamesInspection extends BaseInspection {
         @Override
         public void visitVariable(@Nonnull PsiVariable variable) {
             super.visitVariable(variable);
-            final String variableName = variable.getName();
-            final String expectedType = s_expectedTypes.get(variableName);
+            String variableName = variable.getName();
+            String expectedType = s_expectedTypes.get(variableName);
             if (expectedType == null) {
                 return;
             }
-            final PsiType type = variable.getType();
-            final String typeText = type.getCanonicalText();
+            PsiType type = variable.getType();
+            String typeText = type.getCanonicalText();
             if (expectedType.equals(typeText)) {
                 return;
             }
             if (PsiUtil.isLanguageLevel5OrHigher(variable)) {
-                final PsiPrimitiveType unboxedType = PsiPrimitiveType.getUnboxedType(type);
+                PsiPrimitiveType unboxedType = PsiPrimitiveType.getUnboxedType(type);
                 if (unboxedType != null) {
-                    final String unboxedTypeText = unboxedType.getCanonicalText();
+                    String unboxedTypeText = unboxedType.getCanonicalText();
                     if (expectedType.equals(unboxedTypeText)) {
                         return;
                     }
@@ -140,18 +140,18 @@ public class StandardVariableNamesInspection extends BaseInspection {
             if (!(variable instanceof PsiParameter)) {
                 return false;
             }
-            final PsiParameter parameter = (PsiParameter) variable;
-            final PsiElement scope = parameter.getDeclarationScope();
+            PsiParameter parameter = (PsiParameter) variable;
+            PsiElement scope = parameter.getDeclarationScope();
             if (!(scope instanceof PsiMethod)) {
                 return false;
             }
-            final String variableName = variable.getName();
-            final PsiMethod method = (PsiMethod) scope;
-            final int index = method.getParameterList().getParameterIndex(parameter);
-            final PsiMethod[] superMethods = method.findSuperMethods();
+            String variableName = variable.getName();
+            PsiMethod method = (PsiMethod) scope;
+            int index = method.getParameterList().getParameterIndex(parameter);
+            PsiMethod[] superMethods = method.findSuperMethods();
             for (PsiMethod superMethod : superMethods) {
-                final PsiParameter[] parameters = superMethod.getParameterList().getParameters();
-                final PsiParameter overriddenParameter = parameters[index];
+                PsiParameter[] parameters = superMethod.getParameterList().getParameters();
+                PsiParameter overriddenParameter = parameters[index];
                 if (variableName.equals(overriddenParameter.getName())) {
                     return true;
                 }

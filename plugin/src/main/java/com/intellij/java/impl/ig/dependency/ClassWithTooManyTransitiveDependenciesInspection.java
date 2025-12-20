@@ -54,18 +54,18 @@ public abstract class ClassWithTooManyTransitiveDependenciesInspection
     if (!(refEntity instanceof RefClass)) {
       return null;
     }
-    final RefClass refClass = (RefClass)refEntity;
-    final PsiClass aClass = refClass.getElement();
+    RefClass refClass = (RefClass)refEntity;
+    PsiClass aClass = refClass.getElement();
     if (ClassUtils.isInnerClass(aClass)) {
       return null;
     }
-    final Set<RefClass> dependencies =
+    Set<RefClass> dependencies =
       DependencyUtils.calculateTransitiveDependenciesForClass(refClass);
-    final int numDependencies = dependencies.size();
+    int numDependencies = dependencies.size();
     if (numDependencies <= limit) {
       return null;
     }
-    final String errorString =
+    String errorString =
       InspectionGadgetsLocalize.classWithTooManyTransitiveDependenciesProblemDescriptor(refEntity.getName(), numDependencies, limit).get();
     return new CommonProblemDescriptor[]{
       inspectionManager.createProblemDescriptor(errorString)

@@ -37,22 +37,22 @@ class ExceptionTagInfo implements JavadocTagInfo {
   @Override
   public String checkTagValue(PsiDocTagValue value) {
     if (value == null) return JavaErrorBundle.message("javadoc.exception.tag.exception.class.expected");
-    final PsiElement firstChild = value.getFirstChild();
+    PsiElement firstChild = value.getFirstChild();
     if (firstChild == null) return JavaErrorBundle.message("javadoc.exception.tag.exception.class.expected");
 
-    final PsiElement psiElement = firstChild.getFirstChild();
+    PsiElement psiElement = firstChild.getFirstChild();
     if (!(psiElement instanceof PsiJavaCodeReferenceElement)) {
       return JavaErrorBundle.message("javadoc.exception.tag.wrong.tag.value");
     }
 
-    final PsiJavaCodeReferenceElement ref = ((PsiJavaCodeReferenceElement)psiElement);
-    final PsiElement element = ref.resolve();
+    PsiJavaCodeReferenceElement ref = ((PsiJavaCodeReferenceElement)psiElement);
+    PsiElement element = ref.resolve();
     if (!(element instanceof PsiClass)) return null;
 
-    final PsiClass exceptionClass = (PsiClass)element;
+    PsiClass exceptionClass = (PsiClass)element;
 
 
-    final PsiClass throwable = JavaPsiFacade.getInstance(value.getProject()).findClass(CommonClassNames.JAVA_LANG_THROWABLE, value.getResolveScope());
+    PsiClass throwable = JavaPsiFacade.getInstance(value.getProject()).findClass(CommonClassNames.JAVA_LANG_THROWABLE, value.getResolveScope());
 
     if (throwable != null) {
       if (!exceptionClass.equals(throwable) && !exceptionClass.isInheritor(throwable, true)) {
@@ -60,7 +60,7 @@ class ExceptionTagInfo implements JavadocTagInfo {
       }
     }
 
-    final PsiClass runtimeException =
+    PsiClass runtimeException =
       JavaPsiFacade.getInstance(value.getProject()).findClass(CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION, value.getResolveScope());
 
     if (runtimeException != null &&
@@ -80,10 +80,10 @@ class ExceptionTagInfo implements JavadocTagInfo {
     if (method == null) {
       return null;
     }
-    final PsiClassType[] references = method.getThrowsList().getReferencedTypes();
+    PsiClassType[] references = method.getThrowsList().getReferencedTypes();
 
     for (PsiClassType reference : references) {
-      final PsiClass psiClass = reference.resolve();
+      PsiClass psiClass = reference.resolve();
       if (psiClass == null) continue;
       if (exceptionClass.isInheritor(psiClass, true) || exceptionClass.equals(psiClass)) return null;
     }

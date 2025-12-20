@@ -38,10 +38,10 @@ public class ExcludeSillyAssignment implements ElementFilter {
       }
 
       if (each instanceof PsiAssignmentExpression) {
-        final PsiExpression left = ((PsiAssignmentExpression)each).getLExpression();
+        PsiExpression left = ((PsiAssignmentExpression)each).getLExpression();
         if (left instanceof PsiReferenceExpression) {
-          final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)left;
-          final PsiElement qualifier = referenceExpression.getQualifier();
+          PsiReferenceExpression referenceExpression = (PsiReferenceExpression)left;
+          PsiElement qualifier = referenceExpression.getQualifier();
           if (qualifier != null) {
             if (!(qualifier instanceof PsiThisExpression) || ((PsiThisExpression)qualifier).getQualifier() != null) {
               return null;

@@ -31,7 +31,7 @@ public class MoveInnerRefactoringImpl extends RefactoringImpl<MoveInnerProcessor
                                   String name,
                                   boolean passOuterClass,
                                   String parameterName,
-                                  final PsiElement targetContainer) {
+                                  PsiElement targetContainer) {
     super(new MoveInnerProcessor(project, innerClass, name, passOuterClass, parameterName, targetContainer));
   }
 

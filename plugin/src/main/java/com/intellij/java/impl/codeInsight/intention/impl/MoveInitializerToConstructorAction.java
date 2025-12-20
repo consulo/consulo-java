@@ -54,7 +54,7 @@ public class MoveInitializerToConstructorAction extends BaseMoveInitializerToMet
   @Nonnull
   @Override
   protected Collection<PsiMethod> getOrCreateMethods(@Nonnull Project project, @Nonnull Editor editor, PsiFile file, @Nonnull PsiClass aClass) {
-    final Collection<PsiMethod> constructors = Arrays.asList(aClass.getConstructors());
+    Collection<PsiMethod> constructors = Arrays.asList(aClass.getConstructors());
     if (constructors.isEmpty()) {
       return createConstructor(project, editor, file, aClass);
     }
@@ -75,8 +75,8 @@ public class MoveInitializerToConstructorAction extends BaseMoveInitializerToMet
     PsiFile file,
     @Nonnull PsiClass aClass
   ) {
-    final IntentionAction addDefaultConstructorFix = QuickFixFactory.getInstance().createAddDefaultConstructorFix(aClass);
-    final int offset = editor.getCaretModel().getOffset();
+    IntentionAction addDefaultConstructorFix = QuickFixFactory.getInstance().createAddDefaultConstructorFix(aClass);
+    int offset = editor.getCaretModel().getOffset();
     addDefaultConstructorFix.invoke(project, editor, file);
     editor.getCaretModel().moveToOffset(offset); //restore caret
     return Arrays.asList(aClass.getConstructors());

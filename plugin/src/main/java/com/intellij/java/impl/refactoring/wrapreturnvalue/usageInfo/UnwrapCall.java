@@ -36,7 +36,7 @@ public class UnwrapCall extends FixableUsageInfo {
     }
 
     public void fixUsage() throws IncorrectOperationException {
-        @NonNls final String newExpression = call.getText() + '.' + unwrapMethod +"()";
+        @NonNls String newExpression = call.getText() + '.' + unwrapMethod +"()";
         MutationUtils.replaceExpression(newExpression, call);
     }
 }

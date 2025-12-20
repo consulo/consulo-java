@@ -74,7 +74,7 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
   }
 
   @Override
-  public boolean shouldEnterElement(final Object element) {
+  public boolean shouldEnterElement(Object element) {
     return element instanceof PsiClass;
   }
 
@@ -107,7 +107,7 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
   }
 
   @Override
-  protected boolean isSuitable(final PsiElement element) {
+  protected boolean isSuitable(PsiElement element) {
     if (super.isSuitable(element)) {
       if (element instanceof PsiMethod) {
         PsiMethod method = (PsiMethod) element;

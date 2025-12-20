@@ -26,12 +26,12 @@ class ConstantSubexpressionPredicate implements PsiElementPredicate {
 
   @Override
   public boolean satisfiedBy(PsiElement element) {
-    final PsiJavaToken token;
+    PsiJavaToken token;
     if (element instanceof PsiJavaToken) {
       token = (PsiJavaToken)element;
     }
     else {
-      final PsiElement prevSibling = element.getPrevSibling();
+      PsiElement prevSibling = element.getPrevSibling();
       if (prevSibling instanceof PsiJavaToken) {
         token = (PsiJavaToken)prevSibling;
       }
@@ -40,17 +40,17 @@ class ConstantSubexpressionPredicate implements PsiElementPredicate {
       }
     }
 
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!(parent instanceof PsiPolyadicExpression)) {
       return false;
     }
-    final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)parent;
-    final PsiType type = polyadicExpression.getType();
+    PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)parent;
+    PsiType type = polyadicExpression.getType();
     if (type == null || type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
       // handled by JoinConcatenatedStringLiteralsIntention
       return false;
     }
-    final PsiPolyadicExpression subexpression = getSubexpression(polyadicExpression, token);
+    PsiPolyadicExpression subexpression = getSubexpression(polyadicExpression, token);
     if (subexpression == null) {
       return false;
     }
@@ -61,22 +61,22 @@ class ConstantSubexpressionPredicate implements PsiElementPredicate {
     if (!PsiUtil.isConstantExpression(subexpression)) {
       return false;
     }
-    final Object value = ExpressionUtils.computeConstantExpression(subexpression);
+    Object value = ExpressionUtils.computeConstantExpression(subexpression);
     return value != null;
   }
 
   @Nullable
   static PsiPolyadicExpression getSubexpression(PsiPolyadicExpression expression, PsiJavaToken token) {
-    final PsiExpression[] operands = expression.getOperands();
+    PsiExpression[] operands = expression.getOperands();
     if (operands.length == 2) {
       return expression;
     }
     for (int i = 1; i < operands.length; i++) {
-      final PsiExpression operand = operands[i];
-      final PsiJavaToken currentToken = expression.getTokenBeforeOperand(operand);
+      PsiExpression operand = operands[i];
+      PsiJavaToken currentToken = expression.getTokenBeforeOperand(operand);
       if (currentToken == token) {
-        final String binaryExpressionText = operands[i - 1].getText() + ' ' + token.getText() + ' ' + operand.getText();
-        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(expression.getProject());
+        String binaryExpressionText = operands[i - 1].getText() + ' ' + token.getText() + ' ' + operand.getText();
+        PsiElementFactory factory = JavaPsiFacade.getElementFactory(expression.getProject());
         return (PsiPolyadicExpression)factory.createExpressionFromText(binaryExpressionText, expression);
       }
     }
@@ -87,9 +87,9 @@ class ConstantSubexpressionPredicate implements PsiElementPredicate {
     if (expression.getOperands().length > 2) {
       return true;
     }
-    final PsiElement containingElement = expression.getParent();
+    PsiElement containingElement = expression.getParent();
     if (containingElement instanceof PsiExpression) {
-      final PsiExpression containingExpression =
+      PsiExpression containingExpression =
         (PsiExpression)containingElement;
       if (!PsiUtil.isConstantExpression(containingExpression)) {
         return false;

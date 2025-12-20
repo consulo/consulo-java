@@ -36,9 +36,9 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
 
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiNamedElement element = (PsiNamedElement) infos[0];
-        final String containingClassName = element.getName();
-        final Boolean isAnonymous = (Boolean) infos[1];
+        PsiNamedElement element = (PsiNamedElement) infos[0];
+        String containingClassName = element.getName();
+        Boolean isAnonymous = (Boolean) infos[1];
         if (isAnonymous.booleanValue()) {
             return InspectionGadgetsLocalize.classReferencesSubclassProblemDescriptorAnonymous().get();
         }
@@ -52,13 +52,13 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
     private static class ClassReferencesSubclassVisitor extends BaseInspectionVisitor {
         @Override
         public void visitVariable(@Nonnull PsiVariable variable) {
-            final PsiTypeElement typeElement = variable.getTypeElement();
+            PsiTypeElement typeElement = variable.getTypeElement();
             checkTypeElement(typeElement);
         }
 
         @Override
         public void visitMethod(@Nonnull PsiMethod method) {
-            final PsiTypeElement typeElement = method.getReturnTypeElement();
+            PsiTypeElement typeElement = method.getReturnTypeElement();
             checkTypeElement(typeElement);
         }
 
@@ -66,7 +66,7 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
         public void visitInstanceOfExpression(
             @Nonnull PsiInstanceOfExpression expression
         ) {
-            final PsiTypeElement typeElement = expression.getCheckType();
+            PsiTypeElement typeElement = expression.getCheckType();
             checkTypeElement(typeElement);
         }
 
@@ -74,7 +74,7 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
         public void visitTypeCastExpression(
             @Nonnull PsiTypeCastExpression expression
         ) {
-            final PsiTypeElement typeElement = expression.getCastType();
+            PsiTypeElement typeElement = expression.getCastType();
             checkTypeElement(typeElement);
         }
 
@@ -82,7 +82,7 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
         public void visitClassObjectAccessExpression(
             @Nonnull PsiClassObjectAccessExpression expression
         ) {
-            final PsiTypeElement typeElement = expression.getOperand();
+            PsiTypeElement typeElement = expression.getOperand();
             checkTypeElement(typeElement);
         }
 
@@ -90,17 +90,17 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
             if (typeElement == null) {
                 return;
             }
-            final PsiType type = typeElement.getType();
-            final PsiType componentType = type.getDeepComponentType();
+            PsiType type = typeElement.getType();
+            PsiType componentType = type.getDeepComponentType();
             if (!(componentType instanceof PsiClassType)) {
                 return;
             }
-            final PsiClassType classType = (PsiClassType) componentType;
-            final PsiClass aClass = classType.resolve();
+            PsiClassType classType = (PsiClassType) componentType;
+            PsiClass aClass = classType.resolve();
             if (aClass instanceof PsiTypeParameter) {
                 return;
             }
-            final PsiClass parentClass =
+            PsiClass parentClass =
                 ClassUtils.getContainingClass(typeElement);
             if (!isSubclass(aClass, parentClass)) {
                 return;

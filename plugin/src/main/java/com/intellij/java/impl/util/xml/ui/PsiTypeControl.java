@@ -37,16 +37,16 @@ import jakarta.annotation.Nonnull;
  */
 public class PsiTypeControl extends EditorTextFieldControl<PsiTypePanel> {
 
-  public PsiTypeControl(final DomWrapper<String> domWrapper, final boolean commitOnEveryChange) {
+  public PsiTypeControl(DomWrapper<String> domWrapper, boolean commitOnEveryChange) {
     super(domWrapper, commitOnEveryChange);
   }
 
   @Nonnull
   public String getValue() {
-    final String rawValue = super.getValue();
+    String rawValue = super.getValue();
     try {
-      final PsiType psiType = JavaPsiFacade.getInstance(getProject()).getElementFactory().createTypeFromText(rawValue, null);
-      final String s = JvmPsiTypeConverterImpl.convertToString(psiType);
+      PsiType psiType = JavaPsiFacade.getInstance(getProject()).getElementFactory().createTypeFromText(rawValue, null);
+      String s = JvmPsiTypeConverterImpl.convertToString(psiType);
       if (s != null) {
         return s;
       }
@@ -60,7 +60,7 @@ public class PsiTypeControl extends EditorTextFieldControl<PsiTypePanel> {
   }
 
   public void setValue(String value) {
-    final PsiType type = JvmPsiTypeConverterImpl.convertFromString(value, new AbstractConvertContext() {
+    PsiType type = JvmPsiTypeConverterImpl.convertFromString(value, new AbstractConvertContext() {
       @Nonnull
       public DomElement getInvocationElement() {
         return getDomElement();
@@ -76,11 +76,11 @@ public class PsiTypeControl extends EditorTextFieldControl<PsiTypePanel> {
     super.setValue(value);
   }
 
-  protected EditorTextField getEditorTextField(@Nonnull final PsiTypePanel component) {
+  protected EditorTextField getEditorTextField(@Nonnull PsiTypePanel component) {
     return ((ReferenceEditorWithBrowseButton) component.getComponent(0)).getEditorTextField();
   }
 
-  protected PsiTypePanel createMainComponent(PsiTypePanel boundedComponent, final Project project) {
+  protected PsiTypePanel createMainComponent(PsiTypePanel boundedComponent, Project project) {
     if (boundedComponent == null) {
       boundedComponent = new PsiTypePanel();
     }

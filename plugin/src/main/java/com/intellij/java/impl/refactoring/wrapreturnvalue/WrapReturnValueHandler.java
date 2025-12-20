@@ -48,16 +48,16 @@ class WrapReturnValueHandler implements RefactoringActionHandler {
         PsiFile file,
         DataContext dataContext
     ) {
-        final ScrollingModel scrollingModel = editor.getScrollingModel();
+        ScrollingModel scrollingModel = editor.getScrollingModel();
         scrollingModel.scrollToCaret(ScrollType.MAKE_VISIBLE);
-        final PsiElement element = dataContext.getData(PsiElement.KEY);
+        PsiElement element = dataContext.getData(PsiElement.KEY);
         PsiMethod selectedMethod = null;
         if (element instanceof PsiMethod method) {
             selectedMethod = method;
         }
         else {
-            final CaretModel caretModel = editor.getCaretModel();
-            final int position = caretModel.getOffset();
+            CaretModel caretModel = editor.getCaretModel();
+            int position = caretModel.getOffset();
             PsiElement selectedElement = file.findElementAt(position);
             while (selectedElement != null) {
                 if (selectedElement instanceof PsiMethod method) {
@@ -105,7 +105,7 @@ class WrapReturnValueHandler implements RefactoringActionHandler {
     }
 
     @RequiredUIAccess
-    private void invoke(final Project project, PsiMethod method, Editor editor) {
+    private void invoke(Project project, PsiMethod method, Editor editor) {
         if (method.isConstructor()) {
             CommonRefactoringUtil.showErrorHint(
                 project,
@@ -118,7 +118,7 @@ class WrapReturnValueHandler implements RefactoringActionHandler {
             );
             return;
         }
-        final PsiType returnType = method.getReturnType();
+        PsiType returnType = method.getReturnType();
         if (PsiType.VOID.equals(returnType)) {
             CommonRefactoringUtil.showErrorHint(
                 project,

@@ -42,18 +42,18 @@ public class JavaChangeSignatureDetector implements LanguageChangeSignatureDetec
 
   @Nonnull
   @Override
-  public DetectedJavaChangeInfo createInitialChangeInfo(final @Nonnull PsiElement element) {
+  public DetectedJavaChangeInfo createInitialChangeInfo(@Nonnull PsiElement element) {
     return DetectedJavaChangeInfo.createFromMethod(PsiTreeUtil.getParentOfType(element, PsiMethod.class), false);
   }
 
   @Override
-  public void performChange(final DetectedJavaChangeInfo changeInfo, Editor editor, @Nonnull final String oldText) {
+  public void performChange(DetectedJavaChangeInfo changeInfo, Editor editor, @Nonnull String oldText) {
     changeInfo.perform(oldText, editor, true);
   }
 
   @Override
   public boolean isChangeSignatureAvailableOnElement(@Nonnull PsiElement element, DetectedJavaChangeInfo currentInfo) {
-    final PsiMethod method = currentInfo.getMethod();
+    PsiMethod method = currentInfo.getMethod();
     TextRange range = method.getTextRange();
     PsiCodeBlock body = method.getBody();
     if (body != null) {
@@ -77,7 +77,7 @@ public class JavaChangeSignatureDetector implements LanguageChangeSignatureDetec
   }
 
   @Override
-  public String getMethodSignaturePreview(DetectedJavaChangeInfo initialChangeInfo, final List<TextRange> deleteRanges, final List<TextRange> newRanges) {
+  public String getMethodSignaturePreview(DetectedJavaChangeInfo initialChangeInfo, List<TextRange> deleteRanges, List<TextRange> newRanges) {
     StringBuilder buf = new StringBuilder();
     String visibility = VisibilityUtil.getVisibilityString(initialChangeInfo.getNewVisibility());
     buf.append(visibility);
@@ -144,14 +144,14 @@ public class JavaChangeSignatureDetector implements LanguageChangeSignatureDetec
   }
 
   @Override
-  public DetectedJavaChangeInfo createNextChangeInfo(String signature, @Nonnull final DetectedJavaChangeInfo currentInfo, boolean delegate) {
-    final PsiElement currentInfoMethod = currentInfo.getMethod();
+  public DetectedJavaChangeInfo createNextChangeInfo(String signature, @Nonnull DetectedJavaChangeInfo currentInfo, boolean delegate) {
+    PsiElement currentInfoMethod = currentInfo.getMethod();
     if (currentInfoMethod == null) {
       return null;
     }
-    final Project project = currentInfoMethod.getProject();
+    Project project = currentInfoMethod.getProject();
 
-    final PsiMethod oldMethod = currentInfo.getMethod();
+    PsiMethod oldMethod = currentInfo.getMethod();
     String visibility = "";
     PsiClass containingClass = oldMethod.getContainingClass();
     if (containingClass != null && containingClass.isInterface()) {

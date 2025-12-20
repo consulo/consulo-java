@@ -55,8 +55,8 @@ public class IconLineMarkerProvider extends LineMarkerProviderDescriptor {
   @Override
   public LineMarkerInfo getLineMarkerInfo(@Nonnull PsiElement element) {
     if (element instanceof PsiAssignmentExpression) {
-      final PsiExpression lExpression = ((PsiAssignmentExpression) element).getLExpression();
-      final PsiExpression expr = ((PsiAssignmentExpression) element).getRExpression();
+      PsiExpression lExpression = ((PsiAssignmentExpression) element).getLExpression();
+      PsiExpression expr = ((PsiAssignmentExpression) element).getRExpression();
       if (lExpression instanceof PsiReferenceExpression) {
         PsiElement var = ((PsiReferenceExpression) lExpression).resolve();
         if (var instanceof PsiVariable) {
@@ -65,11 +65,11 @@ public class IconLineMarkerProvider extends LineMarkerProviderDescriptor {
       }
     } else if (element instanceof PsiReturnStatement) {
       PsiReturnStatement psiReturnStatement = (PsiReturnStatement) element;
-      final PsiExpression value = psiReturnStatement.getReturnValue();
-      final PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
+      PsiExpression value = psiReturnStatement.getReturnValue();
+      PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
       if (method != null) {
-        final PsiType returnType = method.getReturnType();
-        final LineMarkerInfo<PsiElement> result = createIconLineMarker(returnType, value);
+        PsiType returnType = method.getReturnType();
+        LineMarkerInfo<PsiElement> result = createIconLineMarker(returnType, value);
 
         if (result != null || !ProjectIconsAccessor.isIconClassType(returnType) || value == null) {
           return result;
@@ -77,7 +77,7 @@ public class IconLineMarkerProvider extends LineMarkerProviderDescriptor {
 
         if (methodContainsReturnStatementOnly(method)) {
           for (PsiReference ref : value.getReferences()) {
-            final PsiElement field = ref.resolve();
+            PsiElement field = ref.resolve();
             if (field instanceof PsiField) {
               return createIconLineMarker(returnType, ((PsiField) field).getInitializer(), psiReturnStatement);
             }
@@ -88,7 +88,7 @@ public class IconLineMarkerProvider extends LineMarkerProviderDescriptor {
       PsiVariable var = (PsiVariable) element;
 
       PsiUtilCore.ensureValid(var);
-      final PsiType type = var.getType();
+      PsiType type = var.getType();
       if (!type.isValid()) {
         PsiUtil.ensureValidType(type, "in variable: " + var + " of " + var.getClass());
       }
@@ -99,7 +99,7 @@ public class IconLineMarkerProvider extends LineMarkerProviderDescriptor {
   }
 
   private static boolean methodContainsReturnStatementOnly(@Nonnull PsiMethod method) {
-    final PsiCodeBlock body = method.getBody();
+    PsiCodeBlock body = method.getBody();
     if (body == null || body.getStatements().length != 1) {
       return false;
     }
@@ -118,19 +118,19 @@ public class IconLineMarkerProvider extends LineMarkerProviderDescriptor {
       return null;
     }
 
-    final Project project = initializer.getProject();
+    Project project = initializer.getProject();
 
-    final VirtualFile file = ProjectIconsAccessor.getInstance(project).resolveIconFile(type, initializer);
+    VirtualFile file = ProjectIconsAccessor.getInstance(project).resolveIconFile(type, initializer);
     if (file == null) {
       return null;
     }
 
-    final Image icon = ProjectIconsAccessor.getInstance(project).getIcon(file, initializer);
+    Image icon = ProjectIconsAccessor.getInstance(project).getIcon(file, initializer);
     if (icon == null) {
       return null;
     }
 
-    final GutterIconNavigationHandler<PsiElement> navHandler = (e, elt) -> FileEditorManager.getInstance(project).openFile(file, true);
+    GutterIconNavigationHandler<PsiElement> navHandler = (e, elt) -> FileEditorManager.getInstance(project).openFile(file, true);
 
     return new LineMarkerInfo<>(bindingElement, bindingElement.getTextRange(), icon, Pass.UPDATE_ALL, null, navHandler, GutterIconRenderer.Alignment.LEFT);
   }

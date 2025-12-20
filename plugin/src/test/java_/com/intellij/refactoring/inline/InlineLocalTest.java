@@ -228,7 +228,7 @@ public abstract class InlineLocalTest extends LightCodeInsightTestCase {
                  "Variable 'hello' is accessed for writing.");
   }
 
-  private void doTest(final boolean inlineDef, String conflictMessage) throws Exception {
+  private void doTest(boolean inlineDef, String conflictMessage) throws Exception {
     try {
       doTest(inlineDef);
       fail("Conflict was not detected");
@@ -239,7 +239,7 @@ public abstract class InlineLocalTest extends LightCodeInsightTestCase {
   }
 
 
-  private void doTest(final boolean inlineDef) throws Exception {
+  private void doTest(boolean inlineDef) throws Exception {
     setLanguageLevel(LanguageLevel.JDK_1_7);
     String name = getTestName(false);
     String fileName = "/refactoring/inlineLocal/" + name + ".java";
@@ -264,7 +264,7 @@ public abstract class InlineLocalTest extends LightCodeInsightTestCase {
   public static void performDefInline(Project project, Editor editor) {
     PsiReference reference = TargetElementUtil.findReference(editor);
     assertTrue(reference instanceof PsiReferenceExpression);
-    final PsiElement local = reference.resolve();
+    PsiElement local = reference.resolve();
     assertTrue(local instanceof PsiLocalVariable);
 
     InlineLocalHandler.invoke(project, editor, (PsiLocalVariable)local, (PsiReferenceExpression)reference);

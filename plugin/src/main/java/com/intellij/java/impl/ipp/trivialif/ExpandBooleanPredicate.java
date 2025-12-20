@@ -26,7 +26,7 @@ class ExpandBooleanPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiJavaToken)) {
       return false;
     }
-    final PsiStatement containingStatement = PsiTreeUtil.getParentOfType(element, PsiStatement.class);
+    PsiStatement containingStatement = PsiTreeUtil.getParentOfType(element, PsiStatement.class);
     if (containingStatement == null) {
       return false;
     }
@@ -37,12 +37,12 @@ class ExpandBooleanPredicate implements PsiElementPredicate {
     if (!(statement instanceof PsiReturnStatement)) {
       return false;
     }
-    final PsiReturnStatement returnStatement = (PsiReturnStatement)statement;
-    final PsiExpression returnValue = returnStatement.getReturnValue();
+    PsiReturnStatement returnStatement = (PsiReturnStatement)statement;
+    PsiExpression returnValue = returnStatement.getReturnValue();
     if (returnValue == null || returnValue instanceof PsiLiteralExpression) {
       return false;
     }
-    final PsiType returnType = returnValue.getType();
+    PsiType returnType = returnValue.getType();
     return PsiType.BOOLEAN.equals(returnType);
   }
 
@@ -50,17 +50,17 @@ class ExpandBooleanPredicate implements PsiElementPredicate {
     if (!(statement instanceof PsiExpressionStatement)) {
       return false;
     }
-    final PsiExpressionStatement expressionStatement = (PsiExpressionStatement)statement;
-    final PsiExpression expression = expressionStatement.getExpression();
+    PsiExpressionStatement expressionStatement = (PsiExpressionStatement)statement;
+    PsiExpression expression = expressionStatement.getExpression();
     if (!(expression instanceof PsiAssignmentExpression)) {
       return false;
     }
-    final PsiAssignmentExpression assignment = (PsiAssignmentExpression)expression;
-    final PsiExpression rhs = assignment.getRExpression();
+    PsiAssignmentExpression assignment = (PsiAssignmentExpression)expression;
+    PsiExpression rhs = assignment.getRExpression();
     if (rhs == null || rhs instanceof PsiLiteralExpression) {
       return false;
     }
-    final PsiType assignmentType = rhs.getType();
+    PsiType assignmentType = rhs.getType();
     return PsiType.BOOLEAN.equals(assignmentType);
   }
 
@@ -68,21 +68,21 @@ class ExpandBooleanPredicate implements PsiElementPredicate {
     if (!(statement instanceof PsiDeclarationStatement)) {
       return false;
     }
-    final PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement)statement;
-    final PsiElement[] declaredElements = declarationStatement.getDeclaredElements();
+    PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement)statement;
+    PsiElement[] declaredElements = declarationStatement.getDeclaredElements();
     if (declaredElements.length != 1) {
       return false;
     }
-    final PsiElement element = declaredElements[0];
+    PsiElement element = declaredElements[0];
     if (!(element instanceof PsiLocalVariable)) {
       return false;
     }
-    final PsiLocalVariable variable = (PsiLocalVariable)element;
-    final PsiExpression initializer = variable.getInitializer();
+    PsiLocalVariable variable = (PsiLocalVariable)element;
+    PsiExpression initializer = variable.getInitializer();
     if (initializer == null || initializer instanceof PsiLiteralExpression) {
       return false;
     }
-    final PsiType type = initializer.getType();
+    PsiType type = initializer.getType();
     return PsiType.BOOLEAN.equals(type);
   }
 }

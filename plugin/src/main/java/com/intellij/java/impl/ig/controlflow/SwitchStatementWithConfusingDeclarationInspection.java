@@ -56,21 +56,21 @@ public class SwitchStatementWithConfusingDeclarationInspection extends BaseInspe
 
         @Override
         public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
-            final PsiCodeBlock body = statement.getBody();
+            PsiCodeBlock body = statement.getBody();
             if (body == null) {
                 return;
             }
-            final Set<PsiLocalVariable> variablesInPreviousBranches = new HashSet<PsiLocalVariable>(5);
-            final Set<PsiLocalVariable> variablesInCurrentBranch = new HashSet<PsiLocalVariable>(5);
-            final PsiStatement[] statements = body.getStatements();
-            final LocalVariableAccessVisitor visitor = new LocalVariableAccessVisitor(variablesInPreviousBranches);
-            for (final PsiStatement child : statements) {
+            Set<PsiLocalVariable> variablesInPreviousBranches = new HashSet<PsiLocalVariable>(5);
+            Set<PsiLocalVariable> variablesInCurrentBranch = new HashSet<PsiLocalVariable>(5);
+            PsiStatement[] statements = body.getStatements();
+            LocalVariableAccessVisitor visitor = new LocalVariableAccessVisitor(variablesInPreviousBranches);
+            for (PsiStatement child : statements) {
                 if (child instanceof PsiDeclarationStatement) {
-                    final PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement) child;
-                    final PsiElement[] declaredElements = declarationStatement.getDeclaredElements();
-                    for (final PsiElement declaredElement : declaredElements) {
+                    PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement) child;
+                    PsiElement[] declaredElements = declarationStatement.getDeclaredElements();
+                    for (PsiElement declaredElement : declaredElements) {
                         if (declaredElement instanceof PsiLocalVariable) {
-                            final PsiLocalVariable localVariable = (PsiLocalVariable) declaredElement;
+                            PsiLocalVariable localVariable = (PsiLocalVariable) declaredElement;
                             variablesInCurrentBranch.add(localVariable);
                         }
                     }
@@ -94,15 +94,15 @@ public class SwitchStatementWithConfusingDeclarationInspection extends BaseInspe
             @Override
             public void visitReferenceExpression(@Nonnull PsiReferenceExpression referenceExpression) {
                 super.visitReferenceExpression(referenceExpression);
-                final PsiExpression qualifier = referenceExpression.getQualifierExpression();
+                PsiExpression qualifier = referenceExpression.getQualifierExpression();
                 if (qualifier != null) {
                     return;
                 }
-                final PsiElement element = referenceExpression.resolve();
+                PsiElement element = referenceExpression.resolve();
                 if (!(element instanceof PsiLocalVariable)) {
                     return;
                 }
-                final PsiLocalVariable accessedVariable = (PsiLocalVariable) element;
+                PsiLocalVariable accessedVariable = (PsiLocalVariable) element;
                 if (myVariablesInPreviousBranches.contains(accessedVariable)) {
                     myVariablesInPreviousBranches.remove(accessedVariable);
                     registerVariableError(accessedVariable);

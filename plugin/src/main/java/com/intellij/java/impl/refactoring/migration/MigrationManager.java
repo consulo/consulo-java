@@ -32,7 +32,7 @@ public class MigrationManager
 
 	public void showMigrationDialog()
 	{
-		final MigrationDialog migrationDialog = new MigrationDialog(myProject, myMigrationMapSet);
+		MigrationDialog migrationDialog = new MigrationDialog(myProject, myMigrationMapSet);
 		if(!migrationDialog.showAndGet())
 		{
 			return;

@@ -63,7 +63,7 @@ public class NullityInferrer
 		{
 			return false;
 		}
-		final ExpressionIsNeverNullVisitor visitor = new ExpressionIsNeverNullVisitor();
+		ExpressionIsNeverNullVisitor visitor = new ExpressionIsNeverNullVisitor();
 		expression.accept(visitor);
 		return visitor.isNeverNull();
 	}
@@ -74,21 +74,21 @@ public class NullityInferrer
 		{
 			return false;
 		}
-		final ExpressionIsSometimesNullVisitor visitor = new ExpressionIsSometimesNullVisitor();
+		ExpressionIsSometimesNullVisitor visitor = new ExpressionIsSometimesNullVisitor();
 		expression.accept(visitor);
 		return visitor.isSometimesNull();
 	}
 
 	private boolean methodNeverReturnsNull(@Nonnull PsiMethod method)
 	{
-		final MethodNeverReturnsNullVisitor visitor = new MethodNeverReturnsNullVisitor();
+		MethodNeverReturnsNullVisitor visitor = new MethodNeverReturnsNullVisitor();
 		method.accept(visitor);
 		return visitor.getNeverReturnsNull();
 	}
 
 	private boolean variableNeverAssignedNull(@Nonnull PsiVariable variable)
 	{
-		final PsiExpression initializer = variable.getInitializer();
+		PsiExpression initializer = variable.getInitializer();
 		if(initializer != null)
 		{
 			if(!expressionIsNeverNull(initializer))
@@ -100,20 +100,20 @@ public class NullityInferrer
 		{
 			return false;
 		}
-		final Query<PsiReference> references = ReferencesSearch.search(variable);
-		for(final PsiReference reference : references)
+		Query<PsiReference> references = ReferencesSearch.search(variable);
+		for(PsiReference reference : references)
 		{
-			final PsiElement element = reference.getElement();
+			PsiElement element = reference.getElement();
 			if(!(element instanceof PsiReferenceExpression))
 			{
 				continue;
 			}
-			final PsiElement parent = element.getParent();
+			PsiElement parent = element.getParent();
 			if(!(parent instanceof PsiAssignmentExpression))
 			{
 				continue;
 			}
-			final PsiAssignmentExpression assignment = (PsiAssignmentExpression) parent;
+			PsiAssignmentExpression assignment = (PsiAssignmentExpression) parent;
 			if(assignment.getLExpression().equals(element) && !expressionIsNeverNull(assignment.getRExpression()))
 			{
 				return false;
@@ -124,25 +124,25 @@ public class NullityInferrer
 
 	private boolean variableSometimesAssignedNull(@Nonnull PsiVariable variable)
 	{
-		final PsiExpression initializer = variable.getInitializer();
+		PsiExpression initializer = variable.getInitializer();
 		if(initializer != null && expressionIsSometimesNull(initializer))
 		{
 			return true;
 		}
-		final Query<PsiReference> references = ReferencesSearch.search(variable);
-		for(final PsiReference reference : references)
+		Query<PsiReference> references = ReferencesSearch.search(variable);
+		for(PsiReference reference : references)
 		{
-			final PsiElement element = reference.getElement();
+			PsiElement element = reference.getElement();
 			if(!(element instanceof PsiReferenceExpression))
 			{
 				continue;
 			}
-			final PsiElement parent = element.getParent();
+			PsiElement parent = element.getParent();
 			if(!(parent instanceof PsiAssignmentExpression))
 			{
 				continue;
 			}
-			final PsiAssignmentExpression assignment = (PsiAssignmentExpression) parent;
+			PsiAssignmentExpression assignment = (PsiAssignmentExpression) parent;
 			if(assignment.getLExpression().equals(element) && expressionIsSometimesNull(assignment.getRExpression()))
 			{
 				return true;
@@ -157,7 +157,7 @@ public class NullityInferrer
 		int pass = 0;
 		do
 		{
-			final NullityInferrerVisitor visitor = new NullityInferrerVisitor();
+			NullityInferrerVisitor visitor = new NullityInferrerVisitor();
 			prevNumAnnotationsAdded = numAnnotationsAdded;
 			file.accept(visitor);
 			pass++;
@@ -166,9 +166,9 @@ public class NullityInferrer
 	}
 
 	@TestOnly
-	public void apply(final Project project)
+	public void apply(Project project)
 	{
-		final NullableNotNullManager manager = NullableNotNullManager.getInstance(project);
+		NullableNotNullManager manager = NullableNotNullManager.getInstance(project);
 		for(SmartPsiElementPointer<? extends PsiModifierListOwner> pointer : myNullableSet)
 		{
 			annotateNullable(project, manager, pointer.getElement());
@@ -185,12 +185,12 @@ public class NullityInferrer
 		}
 	}
 
-	public static void nothingFoundMessage(final Project project)
+	public static void nothingFoundMessage(Project project)
 	{
 		SwingUtilities.invokeLater(() -> Messages.showInfoMessage(project, "No places found to infer @Nullable/@NotNull", "Infer Nullity Results"));
 	}
 
-	private static void annotateNotNull(Project project, NullableNotNullManager manager, final PsiModifierListOwner element)
+	private static void annotateNotNull(Project project, NullableNotNullManager manager, PsiModifierListOwner element)
 	{
 		if(element != null)
 		{
@@ -202,7 +202,7 @@ public class NullityInferrer
 		}
 	}
 
-	private static void annotateNullable(Project project, NullableNotNullManager manager, final PsiModifierListOwner element)
+	private static void annotateNullable(Project project, NullableNotNullManager manager, PsiModifierListOwner element)
 	{
 		if(element != null)
 		{
@@ -210,7 +210,7 @@ public class NullityInferrer
 		}
 	}
 
-	private static void invoke(final Project project, final PsiModifierListOwner element, final String fqn, final String toRemove)
+	private static void invoke(Project project, PsiModifierListOwner element, String fqn, String toRemove)
 	{
 		new AddAnnotationFix(fqn, element, toRemove).invoke(project, null, element.getContainingFile());
 	}
@@ -260,7 +260,7 @@ public class NullityInferrer
 
 	private void registerAnnotation(@Nonnull PsiModifierListOwner method, boolean isNullable)
 	{
-		final SmartPsiElementPointer<PsiModifierListOwner> methodPointer = myPointerManager.createSmartPsiElementPointer(method);
+		SmartPsiElementPointer<PsiModifierListOwner> methodPointer = myPointerManager.createSmartPsiElementPointer(method);
 		if(isNullable)
 		{
 			myNullableSet.add(methodPointer);
@@ -296,10 +296,10 @@ public class NullityInferrer
 
 	private void collect(List<UsageInfo> usages, boolean nullable)
 	{
-		final List<SmartPsiElementPointer<? extends PsiModifierListOwner>> set = nullable ? myNullableSet : myNotNullSet;
+		List<SmartPsiElementPointer<? extends PsiModifierListOwner>> set = nullable ? myNullableSet : myNotNullSet;
 		for(SmartPsiElementPointer<? extends PsiModifierListOwner> elementPointer : set)
 		{
-			final PsiModifierListOwner element = elementPointer.getElement();
+			PsiModifierListOwner element = elementPointer.getElement();
 			if(element != null && !shouldIgnore(element))
 			{
 				usages.add(nullable ? new NullableUsageInfo(element) : new NotNullUsageInfo(element));
@@ -331,9 +331,9 @@ public class NullityInferrer
 		@Override
 		public void visitConditionalExpression(@Nonnull PsiConditionalExpression expression)
 		{
-			final PsiExpression condition = expression.getCondition();
-			final PsiExpression thenExpression = expression.getThenExpression();
-			final PsiExpression elseExpression = expression.getElseExpression();
+			PsiExpression condition = expression.getCondition();
+			PsiExpression thenExpression = expression.getThenExpression();
+			PsiExpression elseExpression = expression.getElseExpression();
 			if(canTrunkImpossibleBrunch(condition, elseExpression))
 			{
 				neverNull = expressionIsNeverNull(thenExpression);
@@ -358,10 +358,10 @@ public class NullityInferrer
 		@Override
 		public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression)
 		{
-			final PsiElement referent = expression.resolve();
+			PsiElement referent = expression.resolve();
 			if(referent instanceof PsiVariable)
 			{
-				final PsiVariable var = (PsiVariable) referent;
+				PsiVariable var = (PsiVariable) referent;
 				if(var instanceof PsiEnumConstant || isNotNull(var))
 				{
 					neverNull = true;
@@ -374,7 +374,7 @@ public class NullityInferrer
 		@Override
 		public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression)
 		{
-			final PsiMethod method = expression.resolveMethod();
+			PsiMethod method = expression.resolveMethod();
 			neverNull = method != null && isNotNull(method);
 		}
 
@@ -388,7 +388,7 @@ public class NullityInferrer
 	{
 		if(rOperand instanceof PsiLiteralExpression && "null".equals(rOperand.getText()) && lOperand instanceof PsiReferenceExpression)
 		{
-			final PsiElement resolve = ((PsiReferenceExpression) lOperand).resolve();
+			PsiElement resolve = ((PsiReferenceExpression) lOperand).resolve();
 			if(resolve instanceof PsiVariable && ((PsiBinaryExpression) condition).getOperationTokenType() == JavaTokenType.EQEQ && elseExpression instanceof PsiReferenceExpression && (
 					(PsiReferenceExpression) elseExpression).resolve() == resolve)
 			{
@@ -402,8 +402,8 @@ public class NullityInferrer
 	{
 		if(condition instanceof PsiBinaryExpression)
 		{
-			final PsiExpression rOperand = ((PsiBinaryExpression) condition).getROperand();
-			final PsiExpression lOperand = ((PsiBinaryExpression) condition).getLOperand();
+			PsiExpression rOperand = ((PsiBinaryExpression) condition).getROperand();
+			PsiExpression lOperand = ((PsiBinaryExpression) condition).getLOperand();
 			if(trunkImpossibleBrunch(condition, elseExpression, rOperand, lOperand) || trunkImpossibleBrunch(condition, elseExpression, lOperand, rOperand))
 			{
 				return true;
@@ -446,9 +446,9 @@ public class NullityInferrer
 		@Override
 		public void visitConditionalExpression(@Nonnull PsiConditionalExpression expression)
 		{
-			final PsiExpression condition = expression.getCondition();
-			final PsiExpression thenExpression = expression.getThenExpression();
-			final PsiExpression elseExpression = expression.getElseExpression();
+			PsiExpression condition = expression.getCondition();
+			PsiExpression thenExpression = expression.getThenExpression();
+			PsiExpression elseExpression = expression.getElseExpression();
 			if(canTrunkImpossibleBrunch(condition, elseExpression))
 			{
 				sometimesNull = expressionIsSometimesNull(thenExpression);
@@ -461,10 +461,10 @@ public class NullityInferrer
 		@Override
 		public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression)
 		{
-			final PsiElement referent = expression.resolve();
+			PsiElement referent = expression.resolve();
 			if(referent instanceof PsiVariable)
 			{
-				final PsiVariable var = (PsiVariable) referent;
+				PsiVariable var = (PsiVariable) referent;
 				if(isNullable(var))
 				{
 					sometimesNull = true;
@@ -475,7 +475,7 @@ public class NullityInferrer
 		@Override
 		public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression)
 		{
-			final PsiMethod method = expression.resolveMethod();
+			PsiMethod method = expression.resolveMethod();
 			if(method != null)
 			{
 				sometimesNull = isNullable(method);
@@ -507,18 +507,18 @@ public class NullityInferrer
 		public void visitReturnStatement(@Nonnull PsiReturnStatement statement)
 		{
 			super.visitReturnStatement(statement);
-			final PsiExpression value = statement.getReturnValue();
+			PsiExpression value = statement.getReturnValue();
 			if(expressionIsNeverNull(value))
 			{
 				return;
 			}
 			if(value instanceof PsiMethodCallExpression)
 			{
-				final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) value;
+				PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) value;
 
 				//if it's a recursive call, don't throw the red flag
-				final PsiMethod method = methodCallExpression.resolveMethod();
-				final PsiMethod containingMethod = PsiTreeUtil.getParentOfType(value, PsiMethod.class);
+				PsiMethod method = methodCallExpression.resolveMethod();
+				PsiMethod containingMethod = PsiTreeUtil.getParentOfType(value, PsiMethod.class);
 				if(method != null && method.equals(containingMethod))
 				{
 					return;
@@ -539,7 +539,7 @@ public class NullityInferrer
 		{
 			return true;
 		}
-		final SmartPsiElementPointer<PsiModifierListOwner> pointer = myPointerManager.createSmartPsiElementPointer(owner);
+		SmartPsiElementPointer<PsiModifierListOwner> pointer = myPointerManager.createSmartPsiElementPointer(owner);
 		return myNotNullSet.contains(pointer);
 	}
 
@@ -549,7 +549,7 @@ public class NullityInferrer
 		{
 			return true;
 		}
-		final SmartPsiElementPointer<PsiModifierListOwner> pointer = myPointerManager.createSmartPsiElementPointer(owner);
+		SmartPsiElementPointer<PsiModifierListOwner> pointer = myPointerManager.createSmartPsiElementPointer(owner);
 		return myNullableSet.contains(pointer);
 	}
 
@@ -564,8 +564,8 @@ public class NullityInferrer
 			{
 				return;
 			}
-			final Collection<PsiMethod> overridingMethods = OverridingMethodsSearch.search(method).findAll();
-			for(final PsiMethod overridingMethod : overridingMethods)
+			Collection<PsiMethod> overridingMethods = OverridingMethodsSearch.search(method).findAll();
+			for(PsiMethod overridingMethod : overridingMethods)
 			{
 				if(isNullable(overridingMethod))
 				{
@@ -573,7 +573,7 @@ public class NullityInferrer
 					return;
 				}
 			}
-			final NullableNotNullManager manager = NullableNotNullManager.getInstance(method.getProject());
+			NullableNotNullManager manager = NullableNotNullManager.getInstance(method.getProject());
 			if(!manager.isNotNull(method, false) && manager.isNotNull(method, true))
 			{
 				registerNotNullAnnotation(method);
@@ -583,7 +583,7 @@ public class NullityInferrer
 			{
 				return;
 			}
-			final PsiCodeBlock body = method.getBody();
+			PsiCodeBlock body = method.getBody();
 			if(body != null)
 			{
 				final boolean[] sometimesReturnsNull = new boolean[1];
@@ -613,7 +613,7 @@ public class NullityInferrer
 					public void visitReturnStatement(PsiReturnStatement statement)
 					{
 						super.visitReturnStatement(statement);
-						final PsiExpression value = statement.getReturnValue();
+						PsiExpression value = statement.getReturnValue();
 						if(expressionIsSometimesNull(value))
 						{
 							sometimesReturnsNull[0] = true;
@@ -630,7 +630,7 @@ public class NullityInferrer
 
 			if(methodNeverReturnsNull(method))
 			{
-				for(final PsiMethod overridingMethod : overridingMethods)
+				for(PsiMethod overridingMethod : overridingMethods)
 				{
 					if(!isNotNull(overridingMethod))
 					{
@@ -671,20 +671,20 @@ public class NullityInferrer
 			{
 				return;
 			}
-			final PsiElement grandParent = parameter.getDeclarationScope();
+			PsiElement grandParent = parameter.getDeclarationScope();
 			if(grandParent instanceof PsiMethod)
 			{
-				final PsiMethod method = (PsiMethod) grandParent;
+				PsiMethod method = (PsiMethod) grandParent;
 				if(method.getBody() != null)
 				{
 
 					for(PsiReference reference : ReferencesSearch.search(parameter, new LocalSearchScope(method)))
 					{
-						final PsiElement place = reference.getElement();
+						PsiElement place = reference.getElement();
 						if(place instanceof PsiReferenceExpression)
 						{
-							final PsiReferenceExpression expr = (PsiReferenceExpression) place;
-							final PsiElement parent = PsiTreeUtil.skipParentsOfType(expr, PsiParenthesizedExpression.class, PsiTypeCastExpression.class);
+							PsiReferenceExpression expr = (PsiReferenceExpression) place;
+							PsiElement parent = PsiTreeUtil.skipParentsOfType(expr, PsiParenthesizedExpression.class, PsiTypeCastExpression.class);
 							if(processParameter(parameter, expr, parent))
 							{
 								return;
@@ -710,11 +710,11 @@ public class NullityInferrer
 			{
 				for(PsiReference reference : ReferencesSearch.search(parameter, new LocalSearchScope(grandParent)))
 				{
-					final PsiElement place = reference.getElement();
+					PsiElement place = reference.getElement();
 					if(place instanceof PsiReferenceExpression)
 					{
-						final PsiReferenceExpression expr = (PsiReferenceExpression) place;
-						final PsiElement parent = PsiTreeUtil.skipParentsOfType(expr, PsiParenthesizedExpression.class, PsiTypeCastExpression.class);
+						PsiReferenceExpression expr = (PsiReferenceExpression) place;
+						PsiElement parent = PsiTreeUtil.skipParentsOfType(expr, PsiParenthesizedExpression.class, PsiTypeCastExpression.class);
 						if(processParameter(parameter, expr, parent))
 						{
 							return;
@@ -744,8 +744,8 @@ public class NullityInferrer
 			if(parent instanceof PsiBinaryExpression)
 			{   //todo check if comparison operation
 				PsiExpression opposite = null;
-				final PsiExpression lOperand = ((PsiBinaryExpression) parent).getLOperand();
-				final PsiExpression rOperand = ((PsiBinaryExpression) parent).getROperand();
+				PsiExpression lOperand = ((PsiBinaryExpression) parent).getLOperand();
+				PsiExpression rOperand = ((PsiBinaryExpression) parent).getROperand();
 				if(lOperand == expr)
 				{
 					opposite = rOperand;
@@ -771,7 +771,7 @@ public class NullityInferrer
 			}
 			else if(parent instanceof PsiReferenceExpression)
 			{
-				final PsiExpression qualifierExpression = ((PsiReferenceExpression) parent).getQualifierExpression();
+				PsiExpression qualifierExpression = ((PsiReferenceExpression) parent).getQualifierExpression();
 				if(qualifierExpression == expr)
 				{
 					registerNotNullAnnotation(parameter);
@@ -795,13 +795,13 @@ public class NullityInferrer
 			{
 				if(((PsiAssignmentExpression) parent).getRExpression() == expr)
 				{
-					final PsiExpression expression = ((PsiAssignmentExpression) parent).getLExpression();
+					PsiExpression expression = ((PsiAssignmentExpression) parent).getLExpression();
 					if(expression instanceof PsiReferenceExpression)
 					{
-						final PsiElement resolve = ((PsiReferenceExpression) expression).resolve();
+						PsiElement resolve = ((PsiReferenceExpression) expression).resolve();
 						if(resolve instanceof PsiVariable)
 						{
-							final PsiVariable localVar = (PsiVariable) resolve;
+							PsiVariable localVar = (PsiVariable) resolve;
 							if(isNotNull(localVar))
 							{
 								registerNotNullAnnotation(parameter);
@@ -825,23 +825,23 @@ public class NullityInferrer
 				return true;
 			}
 
-			final PsiCall call = PsiTreeUtil.getParentOfType(expr, PsiCall.class);
+			PsiCall call = PsiTreeUtil.getParentOfType(expr, PsiCall.class);
 			if(call != null)
 			{
-				final PsiExpressionList argumentList = call.getArgumentList();
+				PsiExpressionList argumentList = call.getArgumentList();
 				if(argumentList != null)
 				{
-					final PsiExpression[] args = argumentList.getExpressions();
+					PsiExpression[] args = argumentList.getExpressions();
 					int idx = ArrayUtil.find(args, expr);
 					if(idx >= 0)
 					{
-						final PsiMethod resolvedMethod = call.resolveMethod();
+						PsiMethod resolvedMethod = call.resolveMethod();
 						if(resolvedMethod != null)
 						{
-							final PsiParameter[] parameters = resolvedMethod.getParameterList().getParameters();
+							PsiParameter[] parameters = resolvedMethod.getParameterList().getParameters();
 							if(idx < parameters.length)
 							{ //not vararg
-								final PsiParameter resolvedToParam = parameters[idx];
+								PsiParameter resolvedToParam = parameters[idx];
 								if(isNotNull(resolvedToParam) && !resolvedToParam.isVarArgs())
 								{
 									registerNotNullAnnotation(parameter);

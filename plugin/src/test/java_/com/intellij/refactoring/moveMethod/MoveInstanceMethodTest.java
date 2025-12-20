@@ -100,17 +100,17 @@ public abstract class MoveInstanceMethodTest extends LightRefactoringTestCase {
     }
   }
 
-  private void doTest(boolean isTargetParameter, final int targetIndex) throws Exception {
+  private void doTest(boolean isTargetParameter, int targetIndex) throws Exception {
     doTest(isTargetParameter, targetIndex, null);
   }
 
-  private void doTest(boolean isTargetParameter, final int targetIndex, final String newVisibility) throws Exception {
-    final String filePath = "/refactoring/moveInstanceMethod/" + getTestName(false) + ".java";
+  private void doTest(boolean isTargetParameter, int targetIndex, String newVisibility) throws Exception {
+    String filePath = "/refactoring/moveInstanceMethod/" + getTestName(false) + ".java";
     configureByFile(filePath);
-    final PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
+    PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
     assertTrue("<caret> is not on method name", targetElement instanceof PsiMethod);
     PsiMethod method = (PsiMethod) targetElement;
-    final PsiVariable targetVariable = isTargetParameter ? method.getParameterList().getParameters()[targetIndex] :
+    PsiVariable targetVariable = isTargetParameter ? method.getParameterList().getParameters()[targetIndex] :
                                        method.getContainingClass().getFields()[targetIndex];
     new MoveInstanceMethodProcessor(getProject(),
                                     method, targetVariable, newVisibility, MoveInstanceMethodHandler.suggestParameterNames (method, targetVariable)).run();

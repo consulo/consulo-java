@@ -18,7 +18,7 @@ public class PatternPackageReferenceSet extends PackageReferenceSet {
   }
 
   @Override
-  public Collection<PsiJavaPackage> resolvePackageName(@Nullable final PsiJavaPackage context, final String packageName) {
+  public Collection<PsiJavaPackage> resolvePackageName(@Nullable PsiJavaPackage context, String packageName) {
     if (context == null) return Collections.emptySet();
 
     if (packageName.contains("*")) {
@@ -43,9 +43,9 @@ public class PatternPackageReferenceSet extends PackageReferenceSet {
     }
   }
 
-   protected static boolean processSubPackages(final PsiJavaPackage pkg, final Processor<PsiJavaPackage> processor) {
+   protected static boolean processSubPackages(PsiJavaPackage pkg, Processor<PsiJavaPackage> processor) {
     if (!processor.process(pkg)) return false;
-    for (final PsiJavaPackage aPackage : pkg.getSubPackages()) {
+    for (PsiJavaPackage aPackage : pkg.getSubPackages()) {
       if (!processSubPackages(aPackage, processor)) return false;
     }
     return true;

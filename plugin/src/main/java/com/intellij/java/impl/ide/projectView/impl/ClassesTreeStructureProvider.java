@@ -54,22 +54,22 @@ public class ClassesTreeStructureProvider implements SelectableTreeStructureProv
   @RequiredReadAction
   public Collection<AbstractTreeNode> modify(AbstractTreeNode parent, Collection<AbstractTreeNode> children, ViewSettings settings) {
     List<AbstractTreeNode> result = new ArrayList<>(children.size());
-    for (final AbstractTreeNode child : children) {
+    for (AbstractTreeNode child : children) {
       ProgressManager.checkCanceled();
 
       Object o = child.getValue();
       if (o instanceof PsiClassOwner/* && !(o instanceof JspFile)*/) {
-        final PsiClassOwner classOwner = (PsiClassOwner) o;
-        final VirtualFile file = classOwner.getVirtualFile();
+        PsiClassOwner classOwner = (PsiClassOwner) o;
+        VirtualFile file = classOwner.getVirtualFile();
 
         if (!(classOwner instanceof PsiCompiledElement)) {
           //do not show duplicated items if jar file contains classes and sources
-          final ProjectFileIndex fileIndex = myProjectFileIndexProvider.get();
+          ProjectFileIndex fileIndex = myProjectFileIndexProvider.get();
           if (file != null && fileIndex.isInLibrarySource(file)) {
-            final PsiElement originalElement = classOwner.getOriginalElement();
+            PsiElement originalElement = classOwner.getOriginalElement();
             if (originalElement instanceof PsiFile) {
               PsiFile classFile = (PsiFile) originalElement;
-              final VirtualFile virtualClassFile = classFile.getVirtualFile();
+              VirtualFile virtualClassFile = classFile.getVirtualFile();
               if (virtualClassFile != null && fileIndex.isInLibraryClasses(virtualClassFile) && classOwner.getManager().areElementsEquivalent(classOwner.getContainingDirectory(), classFile.getContainingDirectory())) {
                 continue;
               }
@@ -99,7 +99,7 @@ public class ClassesTreeStructureProvider implements SelectableTreeStructureProv
 
   @Override
   @RequiredReadAction
-  public PsiElement getTopLevelElement(final PsiElement element) {
+  public PsiElement getTopLevelElement(PsiElement element) {
     PsiFile baseRootFile = getBaseRootFile(element);
     if (baseRootFile == null) {
       return null;
@@ -146,17 +146,17 @@ public class ClassesTreeStructureProvider implements SelectableTreeStructureProv
 
   @Nullable
   private static PsiFile getBaseRootFile(PsiElement element) {
-    final PsiFile containingFile = element.getContainingFile();
+    PsiFile containingFile = element.getContainingFile();
     if (containingFile == null) {
       return null;
     }
 
-    final FileViewProvider viewProvider = containingFile.getViewProvider();
+    FileViewProvider viewProvider = containingFile.getViewProvider();
     return viewProvider.getPsi(viewProvider.getBaseLanguage());
   }
 
   @RequiredReadAction
-  private static boolean isTopLevelClass(final PsiElement element, PsiFile baseRootFile) {
+  private static boolean isTopLevelClass(PsiElement element, PsiFile baseRootFile) {
     if (!(element instanceof PsiClass)) {
       return false;
     }
@@ -165,13 +165,13 @@ public class ClassesTreeStructureProvider implements SelectableTreeStructureProv
       return false;
     }
 
-    final PsiFile parentFile = parentFileOf((PsiClass) element);
+    PsiFile parentFile = parentFileOf((PsiClass) element);
     // do not select JspClass
     return parentFile != null && parentFile.getLanguage() == baseRootFile.getLanguage();
   }
 
   @Nullable
-  private static PsiFile parentFileOf(final PsiClass psiClass) {
+  private static PsiFile parentFileOf(PsiClass psiClass) {
     return psiClass.getContainingClass() == null ? psiClass.getContainingFile() : null;
   }
 
@@ -183,8 +183,8 @@ public class ClassesTreeStructureProvider implements SelectableTreeStructureProv
 
     @Override
     public Collection<AbstractTreeNode> getChildrenImpl() {
-      final ViewSettings settings = getSettings();
-      final ArrayList<AbstractTreeNode> result = new ArrayList<>();
+      ViewSettings settings = getSettings();
+      ArrayList<AbstractTreeNode> result = new ArrayList<>();
       for (PsiClass aClass : ((PsiClassOwner) getValue()).getClasses()) {
         if (!(aClass instanceof SyntheticElement)) {
           result.add(new ClassTreeNode(myProject, aClass, settings));

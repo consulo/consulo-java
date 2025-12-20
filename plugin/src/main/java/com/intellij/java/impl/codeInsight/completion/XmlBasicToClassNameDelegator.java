@@ -43,7 +43,7 @@ public class XmlBasicToClassNameDelegator extends CompletionContributor {
       return;
     }
 
-    final boolean empty = result.runRemainingContributors(parameters, true).isEmpty();
+    boolean empty = result.runRemainingContributors(parameters, true).isEmpty();
 
     if (!empty && parameters.getInvocationCount() == 0) {
       result.restartCompletionWhenNothingMatches();
@@ -53,7 +53,7 @@ public class XmlBasicToClassNameDelegator extends CompletionContributor {
         parameters.isExtendedCompletion()) {
       CompletionService.getCompletionService().getVariantsFromContributors(parameters.delegateToClassName(), null, new Consumer<CompletionResult>() {
         @Override
-        public void accept(final CompletionResult completionResult) {
+        public void accept(CompletionResult completionResult) {
           LookupElement lookupElement = completionResult.getLookupElement();
           JavaPsiClassReferenceElement classElement = lookupElement.as(JavaPsiClassReferenceElement.CLASS_CONDITION_KEY);
           if (classElement != null) {

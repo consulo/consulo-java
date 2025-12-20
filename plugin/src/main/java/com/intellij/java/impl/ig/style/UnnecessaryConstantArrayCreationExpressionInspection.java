@@ -62,12 +62,12 @@ public class UnnecessaryConstantArrayCreationExpressionInspection
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
+      PsiElement element = descriptor.getPsiElement();
       if (!(element instanceof PsiNewExpression)) {
         return;
       }
-      final PsiNewExpression newExpression = (PsiNewExpression)element;
-      final PsiArrayInitializerExpression arrayInitializer =
+      PsiNewExpression newExpression = (PsiNewExpression)element;
+      PsiArrayInitializerExpression arrayInitializer =
         newExpression.getArrayInitializer();
       if (arrayInitializer == null) {
         return;
@@ -88,15 +88,15 @@ public class UnnecessaryConstantArrayCreationExpressionInspection
     public void visitArrayInitializerExpression(
       PsiArrayInitializerExpression expression) {
       super.visitArrayInitializerExpression(expression);
-      final PsiElement parent = expression.getParent();
+      PsiElement parent = expression.getParent();
       if (!(parent instanceof PsiNewExpression)) {
         return;
       }
-      final PsiElement grandParent = parent.getParent();
+      PsiElement grandParent = parent.getParent();
       if (!(grandParent instanceof PsiVariable)) {
         return;
       }
-      final PsiVariable variable = (PsiVariable)grandParent;
+      PsiVariable variable = (PsiVariable)grandParent;
       if (hasGenericTypeParameters(variable)) {
         return;
       }
@@ -104,13 +104,13 @@ public class UnnecessaryConstantArrayCreationExpressionInspection
     }
 
     private static boolean hasGenericTypeParameters(PsiVariable variable) {
-      final PsiType type = variable.getType();
-      final PsiType componentType = type.getDeepComponentType();
+      PsiType type = variable.getType();
+      PsiType componentType = type.getDeepComponentType();
       if (!(componentType instanceof PsiClassType)) {
         return false;
       }
-      final PsiClassType classType = (PsiClassType)componentType;
-      final PsiType[] parameterTypes = classType.getParameters();
+      PsiClassType classType = (PsiClassType)componentType;
+      PsiType[] parameterTypes = classType.getParameters();
       for (PsiType parameterType : parameterTypes) {
         if (parameterType != null) {
           return true;

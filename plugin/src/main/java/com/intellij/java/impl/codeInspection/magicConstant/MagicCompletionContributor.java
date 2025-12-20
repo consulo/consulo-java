@@ -64,7 +64,7 @@ public class MagicCompletionContributor extends CompletionContributor {
 
   @RequiredReadAction
   @Override
-  public void fillCompletionVariants(@Nonnull final CompletionParameters parameters, @Nonnull final CompletionResultSet result) {
+  public void fillCompletionVariants(@Nonnull CompletionParameters parameters, @Nonnull CompletionResultSet result) {
     //if (parameters.getCompletionType() != CompletionType.SMART) return;
     PsiElement pos = parameters.getPosition();
     if (JavaKeywordCompletion.AFTER_DOT.accepts(pos)) {
@@ -175,8 +175,8 @@ public class MagicCompletionContributor extends CompletionContributor {
       if (element instanceof PsiMethod) {
         result.add(Pair.create((PsiModifierListOwner) element, ((PsiMethod) element).getReturnType()));
       } else if (element instanceof PsiLambdaExpression) {
-        final PsiType interfaceType = ((PsiLambdaExpression) element).getFunctionalInterfaceType();
-        final PsiMethod interfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(interfaceType);
+        PsiType interfaceType = ((PsiLambdaExpression) element).getFunctionalInterfaceType();
+        PsiMethod interfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(interfaceType);
         if (interfaceMethod != null) {
           result.add(Pair.create((PsiModifierListOwner) interfaceMethod, LambdaUtil.getFunctionalInterfaceReturnType(interfaceType)));
         }

@@ -27,12 +27,12 @@ import com.intellij.java.language.psi.util.PsiFormatUtil;
  */
 public class MethodNode extends BasePsiNode<PsiMethod> {
 
-  public MethodNode(final PsiMethod element) {
+  public MethodNode(PsiMethod element) {
     super(element);
   }
 
   public String toString() {
-    final PsiMethod method = (PsiMethod) getPsiElement();
+    PsiMethod method = (PsiMethod) getPsiElement();
     if (method == null || !method.isValid()) return "";
     String name = PsiFormatUtil.formatMethod(
         method,
@@ -52,7 +52,7 @@ public class MethodNode extends BasePsiNode<PsiMethod> {
 
   @Override
   public boolean isDeprecated() {
-    final PsiMethod psiMethod = (PsiMethod) getPsiElement();
+    PsiMethod psiMethod = (PsiMethod) getPsiElement();
     return psiMethod != null && psiMethod.isDeprecated();
   }
 }

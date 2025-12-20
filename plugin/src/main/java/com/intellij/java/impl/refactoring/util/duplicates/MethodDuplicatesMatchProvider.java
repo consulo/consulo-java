@@ -52,22 +52,22 @@ class MethodDuplicatesMatchProvider implements MatchProvider {
   @Override
   public PsiElement processMatch(Match match) throws IncorrectOperationException {
     MatchUtil.changeSignature(match, myMethod);
-    final PsiClass containingClass = myMethod.getContainingClass();
+    PsiClass containingClass = myMethod.getContainingClass();
     if (isEssentialStaticContextAbsent(match)) {
       PsiUtil.setModifierProperty(myMethod, PsiModifier.STATIC, true);
     }
 
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(myMethod.getProject()).getElementFactory();
-    final boolean needQualifier = match.getInstanceExpression() != null;
-    final boolean needStaticQualifier = isExternal(match);
-    final boolean nameConflicts = nameConflicts(match);
-    final String methodName = myMethod.isConstructor() ? "this" : myMethod.getName();
-    @NonNls final String text = needQualifier || needStaticQualifier || nameConflicts ? "q." + methodName + "()" : methodName + "()";
+    PsiElementFactory factory = JavaPsiFacade.getInstance(myMethod.getProject()).getElementFactory();
+    boolean needQualifier = match.getInstanceExpression() != null;
+    boolean needStaticQualifier = isExternal(match);
+    boolean nameConflicts = nameConflicts(match);
+    String methodName = myMethod.isConstructor() ? "this" : myMethod.getName();
+    @NonNls String text = needQualifier || needStaticQualifier || nameConflicts ? "q." + methodName + "()" : methodName + "()";
     PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) factory.createExpressionFromText(text, null);
     methodCallExpression = (PsiMethodCallExpression) CodeStyleManager.getInstance(myMethod.getManager()).reformat(methodCallExpression);
-    final PsiParameter[] parameters = myMethod.getParameterList().getParameters();
-    for (final PsiParameter parameter : parameters) {
-      final List<PsiElement> parameterValue = match.getParameterValues(parameter);
+    PsiParameter[] parameters = myMethod.getParameterList().getParameters();
+    for (PsiParameter parameter : parameters) {
+      List<PsiElement> parameterValue = match.getParameterValues(parameter);
       if (parameterValue != null) {
         for (PsiElement val : parameterValue) {
           methodCallExpression.getArgumentList().add(val);
@@ -77,14 +77,14 @@ class MethodDuplicatesMatchProvider implements MatchProvider {
       }
     }
     if (needQualifier || needStaticQualifier || nameConflicts) {
-      final PsiExpression qualifierExpression = methodCallExpression.getMethodExpression().getQualifierExpression();
+      PsiExpression qualifierExpression = methodCallExpression.getMethodExpression().getQualifierExpression();
       LOG.assertTrue(qualifierExpression != null);
       if (needQualifier) {
         qualifierExpression.replace(match.getInstanceExpression());
       } else if (needStaticQualifier || myMethod.hasModifierProperty(PsiModifier.STATIC)) {
         qualifierExpression.replace(factory.createReferenceExpression(containingClass));
       } else {
-        final PsiClass psiClass = PsiTreeUtil.getParentOfType(match.getMatchStart(), PsiClass.class);
+        PsiClass psiClass = PsiTreeUtil.getParentOfType(match.getMatchStart(), PsiClass.class);
         if (psiClass != null && psiClass.isInheritor(containingClass, true)) {
           qualifierExpression.replace(RefactoringChangeUtil.createSuperExpression(containingClass.getManager(), null));
         } else {
@@ -93,13 +93,13 @@ class MethodDuplicatesMatchProvider implements MatchProvider {
       }
     }
     VisibilityUtil.escalateVisibility(myMethod, match.getMatchStart());
-    final PsiCodeBlock body = myMethod.getBody();
+    PsiCodeBlock body = myMethod.getBody();
     assert body != null;
-    final PsiStatement[] statements = body.getStatements();
+    PsiStatement[] statements = body.getStatements();
     if (statements[statements.length - 1] instanceof PsiReturnStatement) {
-      final PsiExpression value = ((PsiReturnStatement) statements[statements.length - 1]).getReturnValue();
+      PsiExpression value = ((PsiReturnStatement) statements[statements.length - 1]).getReturnValue();
       if (value instanceof PsiReferenceExpression) {
-        final PsiElement var = ((PsiReferenceExpression) value).resolve();
+        PsiElement var = ((PsiReferenceExpression) value).resolve();
         if (var instanceof PsiVariable) {
           match.replace(myMethod, methodCallExpression, (PsiVariable) var);
           return methodCallExpression;
@@ -110,9 +110,9 @@ class MethodDuplicatesMatchProvider implements MatchProvider {
   }
 
 
-  private boolean isExternal(final Match match) {
-    final PsiElement matchStart = match.getMatchStart();
-    final PsiClass containingClass = myMethod.getContainingClass();
+  private boolean isExternal(Match match) {
+    PsiElement matchStart = match.getMatchStart();
+    PsiClass containingClass = myMethod.getContainingClass();
     if (PsiTreeUtil.isAncestor(containingClass, matchStart, false)) {
       return false;
     }
@@ -137,9 +137,9 @@ class MethodDuplicatesMatchProvider implements MatchProvider {
     return false;
   }
 
-  private boolean isEssentialStaticContextAbsent(final Match match) {
+  private boolean isEssentialStaticContextAbsent(Match match) {
     if (!myMethod.hasModifierProperty(PsiModifier.STATIC)) {
-      final PsiExpression instanceExpression = match.getInstanceExpression();
+      PsiExpression instanceExpression = match.getInstanceExpression();
       if (instanceExpression != null) {
         return false;
       }
@@ -165,17 +165,17 @@ class MethodDuplicatesMatchProvider implements MatchProvider {
 
   @Override
   @Nullable
-  public String getConfirmDuplicatePrompt(final Match match) {
-    final PsiElement matchStart = match.getMatchStart();
+  public String getConfirmDuplicatePrompt(Match match) {
+    PsiElement matchStart = match.getMatchStart();
     String visibility = VisibilityUtil.getPossibleVisibility(myMethod, matchStart);
-    final boolean shouldBeStatic = isEssentialStaticContextAbsent(match);
-    final String signature = MatchUtil.getChangedSignature(match, myMethod, myMethod.hasModifierProperty(PsiModifier.STATIC) || shouldBeStatic, visibility);
+    boolean shouldBeStatic = isEssentialStaticContextAbsent(match);
+    String signature = MatchUtil.getChangedSignature(match, myMethod, myMethod.hasModifierProperty(PsiModifier.STATIC) || shouldBeStatic, visibility);
     if (signature != null) {
       return RefactoringLocalize.replaceThisCodeFragmentAndChangeSignature(signature).get();
     }
-    final boolean needToEscalateVisibility = !PsiUtil.isAccessible(myMethod, matchStart, null);
+    boolean needToEscalateVisibility = !PsiUtil.isAccessible(myMethod, matchStart, null);
     if (needToEscalateVisibility) {
-      final String visibilityPresentation = VisibilityUtil.toPresentableText(visibility);
+      String visibilityPresentation = VisibilityUtil.toPresentableText(visibility);
       return shouldBeStatic
         ? RefactoringLocalize.replaceThisCodeFragmentAndMakeMethodStaticVisible(visibilityPresentation).get()
         : RefactoringLocalize.replaceThisCodeFragmentAndMakeMethodVisible(visibilityPresentation).get();

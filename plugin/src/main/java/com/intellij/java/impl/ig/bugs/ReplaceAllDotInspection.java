@@ -53,43 +53,43 @@ public class ReplaceAllDotInspection extends BaseInspection {
             @Nonnull PsiMethodCallExpression expression
         ) {
             super.visitMethodCallExpression(expression);
-            final PsiReferenceExpression methodExpression =
+            PsiReferenceExpression methodExpression =
                 expression.getMethodExpression();
-            @NonNls final String methodName =
+            @NonNls String methodName =
                 methodExpression.getReferenceName();
             if (!"replaceAll".equals(methodName)) {
                 return;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length != 2) {
                 return;
             }
-            final PsiExpression argument = arguments[0];
+            PsiExpression argument = arguments[0];
             if (!PsiUtil.isConstantExpression(argument)) {
                 return;
             }
-            final PsiType argumentType = argument.getType();
+            PsiType argumentType = argument.getType();
             if (argumentType == null) {
                 return;
             }
-            final String canonicalText = argumentType.getCanonicalText();
+            String canonicalText = argumentType.getCanonicalText();
             if (!CommonClassNames.JAVA_LANG_STRING.equals(canonicalText)) {
                 return;
             }
-            final String argValue = (String) ConstantExpressionUtil.computeCastTo(argument, argumentType);
+            String argValue = (String) ConstantExpressionUtil.computeCastTo(argument, argumentType);
             if (!".".equals(argValue)) {
                 return;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return;
             }
-            final String qualifiedName = containingClass.getQualifiedName();
+            String qualifiedName = containingClass.getQualifiedName();
             if (!CommonClassNames.JAVA_LANG_STRING.equals(qualifiedName)) {
                 return;
             }

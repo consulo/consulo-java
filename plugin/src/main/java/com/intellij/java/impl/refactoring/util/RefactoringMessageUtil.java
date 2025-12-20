@@ -74,7 +74,7 @@ public class RefactoringMessageUtil {
     }
   }
 
-  public static void showNotSupportedForJspClassesError(final Project project, Editor editor, final String refactoringName, final String helpId) {
+  public static void showNotSupportedForJspClassesError(Project project, Editor editor, String refactoringName, String helpId) {
     LocalizeValue message =
         RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.refactoringIsNotSupportedForJspClasses());
     CommonRefactoringUtil.showErrorHint(project, editor, message.get(), refactoringName, helpId);

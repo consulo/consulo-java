@@ -44,9 +44,9 @@ public class SurroundWithTryCatchFix implements SyntheticIntentionAction {
   private PsiStatement myStatement = null;
 
   public SurroundWithTryCatchFix(PsiElement element) {
-    final PsiMethodReferenceExpression methodReferenceExpression = PsiTreeUtil.getParentOfType(element, PsiMethodReferenceExpression.class, false);
+    PsiMethodReferenceExpression methodReferenceExpression = PsiTreeUtil.getParentOfType(element, PsiMethodReferenceExpression.class, false);
     if (methodReferenceExpression == null) {
-      final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
+      PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
       if (lambdaExpression == null || lambdaExpression.getBody() instanceof PsiCodeBlock) {
         myStatement = PsiTreeUtil.getNonStrictParentOfType(element, PsiStatement.class);
       }

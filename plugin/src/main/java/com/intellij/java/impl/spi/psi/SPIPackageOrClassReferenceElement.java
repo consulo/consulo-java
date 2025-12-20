@@ -48,7 +48,7 @@ public class SPIPackageOrClassReferenceElement extends ASTWrapperPsiElement impl
 
   @Override
   public TextRange getRangeInElement() {
-    final PsiElement last = PsiTreeUtil.getDeepestLast(this);
+    PsiElement last = PsiTreeUtil.getDeepestLast(this);
     return new TextRange(last.getStartOffsetInParent(), getTextLength());
   }
 
@@ -60,7 +60,7 @@ public class SPIPackageOrClassReferenceElement extends ASTWrapperPsiElement impl
 
   @Override
   public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-    final SPIClassProvidersElementList firstChild =
+    SPIClassProvidersElementList firstChild =
       (SPIClassProvidersElementList)PsiFileFactory.getInstance(getProject())
         .createFileFromText("spi_dummy", SPIFileType.INSTANCE, newElementName).getFirstChild();
     return replace(firstChild.getElements().get(0));
@@ -81,7 +81,7 @@ public class SPIPackageOrClassReferenceElement extends ASTWrapperPsiElement impl
     if (element instanceof PsiPackage) {
       return handleElementRename(((PsiPackage)element).getQualifiedName());
     } else if (element instanceof PsiClass) {
-      final String className = ClassUtil.getJVMClassName((PsiClass)element);
+      String className = ClassUtil.getJVMClassName((PsiClass)element);
       return className != null ? handleElementRename(className) : null;
     }
     return null;

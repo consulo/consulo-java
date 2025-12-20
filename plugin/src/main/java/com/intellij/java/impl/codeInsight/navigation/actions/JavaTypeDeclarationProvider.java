@@ -46,9 +46,9 @@ public class JavaTypeDeclarationProvider extends TypeDeclarationProvider {
     }
     if (type == null) return null;
     if (editor != null) {
-      final PsiReference reference = TargetElementUtil.findReference(editor, offset);
+      PsiReference reference = TargetElementUtil.findReference(editor, offset);
       if (reference instanceof PsiJavaReference) {
-        final JavaResolveResult resolveResult = ((PsiJavaReference) reference).advancedResolve(true);
+        JavaResolveResult resolveResult = ((PsiJavaReference) reference).advancedResolve(true);
         type = resolveResult.getSubstitutor().substitute(type);
       }
     }

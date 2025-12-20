@@ -60,7 +60,7 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiIfStatement statement = (PsiIfStatement) infos[0];
+        PsiIfStatement statement = (PsiIfStatement) infos[0];
         return InspectionGadgetsLocalize.simplifiableIfStatementProblemDescriptor(
             StringUtil.escapeXml(calculateReplacementStatement(statement))
         ).get();
@@ -69,13 +69,13 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
     @Nullable
     @NonNls
     static String calculateReplacementStatement(PsiIfStatement statement) {
-        final PsiStatement thenBranch = ControlFlowUtils.stripBraces(statement.getThenBranch());
+        PsiStatement thenBranch = ControlFlowUtils.stripBraces(statement.getThenBranch());
         if (thenBranch == null) {
             return null;
         }
         PsiStatement elseBranch = statement.getElseBranch();
         if (elseBranch == null) {
-            final PsiElement nextStatement = PsiTreeUtil.skipSiblingsForward(statement, PsiWhiteSpace.class);
+            PsiElement nextStatement = PsiTreeUtil.skipSiblingsForward(statement, PsiWhiteSpace.class);
             if (nextStatement instanceof PsiStatement) {
                 elseBranch = (PsiStatement) nextStatement;
             }
@@ -86,7 +86,7 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
         if (elseBranch == null) {
             return null;
         }
-        final PsiExpression condition = statement.getCondition();
+        PsiExpression condition = statement.getCondition();
         if (condition == null) {
             return null;
         }
@@ -94,15 +94,15 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
             return calculateReplacementReturnStatement(thenBranch, elseBranch, condition);
         }
         else if (thenBranch instanceof PsiExpressionStatement && elseBranch instanceof PsiExpressionStatement) {
-            final PsiExpressionStatement thenStatement = (PsiExpressionStatement) thenBranch;
-            final PsiExpressionStatement elseStatement = (PsiExpressionStatement) elseBranch;
-            final PsiExpression thenExpression = thenStatement.getExpression();
-            final PsiExpression elseExpression = elseStatement.getExpression();
+            PsiExpressionStatement thenStatement = (PsiExpressionStatement) thenBranch;
+            PsiExpressionStatement elseStatement = (PsiExpressionStatement) elseBranch;
+            PsiExpression thenExpression = thenStatement.getExpression();
+            PsiExpression elseExpression = elseStatement.getExpression();
             if (!(thenExpression instanceof PsiAssignmentExpression) || !(elseExpression instanceof PsiAssignmentExpression)) {
                 return null;
             }
-            final PsiAssignmentExpression thenAssignment = (PsiAssignmentExpression) thenExpression;
-            final PsiAssignmentExpression elseAssignment = (PsiAssignmentExpression) elseExpression;
+            PsiAssignmentExpression thenAssignment = (PsiAssignmentExpression) thenExpression;
+            PsiAssignmentExpression elseAssignment = (PsiAssignmentExpression) elseExpression;
             return calculateReplacementAssignmentStatement(thenAssignment, elseAssignment, condition);
         }
         return null;
@@ -112,16 +112,16 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
         PsiAssignmentExpression thenAssignment,
         PsiAssignmentExpression elseAssignment, PsiExpression condition
     ) {
-        final PsiExpression lhs = thenAssignment.getLExpression();
-        final PsiExpression thenRhs = thenAssignment.getRExpression();
+        PsiExpression lhs = thenAssignment.getLExpression();
+        PsiExpression thenRhs = thenAssignment.getRExpression();
         if (thenRhs == null) {
             return "";
         }
-        final PsiExpression elseRhs = elseAssignment.getRExpression();
+        PsiExpression elseRhs = elseAssignment.getRExpression();
         if (elseRhs == null) {
             return "";
         }
-        final PsiJavaToken token = elseAssignment.getOperationSign();
+        PsiJavaToken token = elseAssignment.getOperationSign();
         if (BoolUtils.isTrue(thenRhs)) {
             return lhs.getText() + ' ' + token.getText() + ' ' +
                 buildExpressionText(condition, ParenthesesUtils.OR_PRECEDENCE) + " || " +
@@ -146,13 +146,13 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
 
     @NonNls
     private static String calculateReplacementReturnStatement(PsiStatement thenBranch, PsiStatement elseBranch, PsiExpression condition) {
-        final PsiReturnStatement thenReturnStatement = (PsiReturnStatement) thenBranch;
-        final PsiExpression thenReturnValue = thenReturnStatement.getReturnValue();
+        PsiReturnStatement thenReturnStatement = (PsiReturnStatement) thenBranch;
+        PsiExpression thenReturnValue = thenReturnStatement.getReturnValue();
         if (thenReturnValue == null) {
             return "";
         }
-        final PsiReturnStatement elseReturnStatement = (PsiReturnStatement) elseBranch;
-        final PsiExpression elseReturnValue = elseReturnStatement.getReturnValue();
+        PsiReturnStatement elseReturnStatement = (PsiReturnStatement) elseBranch;
+        PsiExpression elseReturnValue = elseReturnStatement.getReturnValue();
         if (elseReturnValue == null) {
             return "";
         }
@@ -175,7 +175,7 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
     }
 
     private static String buildExpressionText(PsiExpression expression, int precedence) {
-        final StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
         if (ParenthesesUtils.getPrecedence(expression) > precedence) {
             builder.append('(');
             getPresentableText(expression, builder);
@@ -192,9 +192,9 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
             return;
         }
         if (element instanceof PsiWhiteSpace) {
-            final PsiElement prevSibling = element.getPrevSibling();
+            PsiElement prevSibling = element.getPrevSibling();
             if (prevSibling instanceof PsiComment) {
-                final PsiComment comment = (PsiComment) prevSibling;
+                PsiComment comment = (PsiComment) prevSibling;
                 if (JavaTokenType.END_OF_LINE_COMMENT.equals(comment.getTokenType())) {
                     builder.append('\n');
                     return;
@@ -203,7 +203,7 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
             builder.append(' ');
             return;
         }
-        final PsiElement[] children = element.getChildren();
+        PsiElement[] children = element.getChildren();
         if (children.length == 0) {
             builder.append(element.getText());
         }
@@ -217,17 +217,17 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
 
     public static String buildNegatedExpressionText(@Nullable PsiExpression expression, int precedence) {
         while (expression instanceof PsiParenthesizedExpression) {
-            final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) expression;
+            PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) expression;
             expression = parenthesizedExpression.getExpression();
         }
         if (expression == null) {
             return "";
         }
-        final StringBuilder result = new StringBuilder();
+        StringBuilder result = new StringBuilder();
         if (BoolUtils.isNegation(expression)) {
-            final PsiPrefixExpression prefixExpression = (PsiPrefixExpression) expression;
-            final PsiExpression operand = prefixExpression.getOperand();
-            final PsiExpression negated = ParenthesesUtils.stripParentheses(operand);
+            PsiPrefixExpression prefixExpression = (PsiPrefixExpression) expression;
+            PsiExpression operand = prefixExpression.getOperand();
+            PsiExpression negated = ParenthesesUtils.stripParentheses(operand);
             if (negated == null) {
                 return "";
             }
@@ -241,11 +241,11 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
             }
         }
         else if (ComparisonUtils.isComparison(expression)) {
-            final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) expression;
-            final IElementType tokenType = binaryExpression.getOperationTokenType();
-            final String negatedComparison = ComparisonUtils.getNegatedComparison(tokenType);
-            final PsiExpression lhs = binaryExpression.getLOperand();
-            final PsiExpression rhs = binaryExpression.getROperand();
+            PsiBinaryExpression binaryExpression = (PsiBinaryExpression) expression;
+            IElementType tokenType = binaryExpression.getOperationTokenType();
+            String negatedComparison = ComparisonUtils.getNegatedComparison(tokenType);
+            PsiExpression lhs = binaryExpression.getLOperand();
+            PsiExpression rhs = binaryExpression.getROperand();
             if (ParenthesesUtils.getPrecedence(expression) > precedence) {
                 result.append('(');
                 getPresentableText(lhs, result);
@@ -286,14 +286,14 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiIfStatement ifStatement = (PsiIfStatement) element.getParent();
-            final String newStatement = calculateReplacementStatement(ifStatement);
+            PsiElement element = descriptor.getPsiElement();
+            PsiIfStatement ifStatement = (PsiIfStatement) element.getParent();
+            String newStatement = calculateReplacementStatement(ifStatement);
             if (newStatement == null) {
                 return;
             }
             if (ifStatement.getElseBranch() == null) {
-                final PsiElement nextStatement = PsiTreeUtil.skipSiblingsForward(ifStatement, PsiWhiteSpace.class);
+                PsiElement nextStatement = PsiTreeUtil.skipSiblingsForward(ifStatement, PsiWhiteSpace.class);
                 if (nextStatement != null) {
                     nextStatement.delete();
                 }
@@ -322,7 +322,7 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
             PsiStatement elseBranch = ifStatement.getElseBranch();
             elseBranch = ControlFlowUtils.stripBraces(elseBranch);
             if (elseBranch == null) {
-                final PsiElement nextStatement = PsiTreeUtil.skipSiblingsForward(ifStatement, PsiWhiteSpace.class);
+                PsiElement nextStatement = PsiTreeUtil.skipSiblingsForward(ifStatement, PsiWhiteSpace.class);
                 if (nextStatement instanceof PsiStatement) {
                     elseBranch = (PsiStatement) nextStatement;
                 }
@@ -330,24 +330,24 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
             if (!(thenBranch instanceof PsiReturnStatement) || !(elseBranch instanceof PsiReturnStatement)) {
                 return false;
             }
-            final PsiExpression thenReturn = ((PsiReturnStatement) thenBranch).getReturnValue();
+            PsiExpression thenReturn = ((PsiReturnStatement) thenBranch).getReturnValue();
             if (thenReturn == null) {
                 return false;
             }
-            final PsiType thenType = thenReturn.getType();
+            PsiType thenType = thenReturn.getType();
             if (!PsiType.BOOLEAN.equals(thenType)) {
                 return false;
             }
-            final PsiExpression elseReturn = ((PsiReturnStatement) elseBranch).getReturnValue();
+            PsiExpression elseReturn = ((PsiReturnStatement) elseBranch).getReturnValue();
             if (elseReturn == null) {
                 return false;
             }
-            final PsiType elseType = elseReturn.getType();
+            PsiType elseType = elseReturn.getType();
             if (!PsiType.BOOLEAN.equals(elseType)) {
                 return false;
             }
-            final boolean thenConstant = BoolUtils.isFalse(thenReturn) || BoolUtils.isTrue(thenReturn);
-            final boolean elseConstant = BoolUtils.isFalse(elseReturn) || BoolUtils.isTrue(elseReturn);
+            boolean thenConstant = BoolUtils.isFalse(thenReturn) || BoolUtils.isTrue(thenReturn);
+            boolean elseConstant = BoolUtils.isFalse(elseReturn) || BoolUtils.isTrue(elseReturn);
             return thenConstant != elseConstant;
         }
 
@@ -368,37 +368,37 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
             if (elseBranch == null || !isAssignment(elseBranch)) {
                 return false;
             }
-            final PsiExpressionStatement thenStatement = (PsiExpressionStatement) thenBranch;
-            final PsiAssignmentExpression thenExpression = (PsiAssignmentExpression) thenStatement.getExpression();
-            final PsiExpressionStatement elseStatement = (PsiExpressionStatement) elseBranch;
-            final PsiAssignmentExpression elseExpression = (PsiAssignmentExpression) elseStatement.getExpression();
-            final IElementType elseTokenType = elseExpression.getOperationTokenType();
+            PsiExpressionStatement thenStatement = (PsiExpressionStatement) thenBranch;
+            PsiAssignmentExpression thenExpression = (PsiAssignmentExpression) thenStatement.getExpression();
+            PsiExpressionStatement elseStatement = (PsiExpressionStatement) elseBranch;
+            PsiAssignmentExpression elseExpression = (PsiAssignmentExpression) elseStatement.getExpression();
+            IElementType elseTokenType = elseExpression.getOperationTokenType();
             if (!thenExpression.getOperationTokenType().equals(elseTokenType)) {
                 return false;
             }
-            final PsiExpression thenRhs = thenExpression.getRExpression();
+            PsiExpression thenRhs = thenExpression.getRExpression();
             if (thenRhs == null) {
                 return false;
             }
-            final PsiType thenRhsType = thenRhs.getType();
+            PsiType thenRhsType = thenRhs.getType();
             if (!PsiType.BOOLEAN.equals(thenRhsType)) {
                 return false;
             }
-            final PsiExpression elseRhs = elseExpression.getRExpression();
+            PsiExpression elseRhs = elseExpression.getRExpression();
             if (elseRhs == null) {
                 return false;
             }
-            final PsiType elseRhsType = elseRhs.getType();
+            PsiType elseRhsType = elseRhs.getType();
             if (!PsiType.BOOLEAN.equals(elseRhsType)) {
                 return false;
             }
-            final boolean thenConstant = BoolUtils.isFalse(thenRhs) || BoolUtils.isTrue(thenRhs);
-            final boolean elseConstant = BoolUtils.isFalse(elseRhs) || BoolUtils.isTrue(elseRhs);
+            boolean thenConstant = BoolUtils.isFalse(thenRhs) || BoolUtils.isTrue(thenRhs);
+            boolean elseConstant = BoolUtils.isFalse(elseRhs) || BoolUtils.isTrue(elseRhs);
             if (thenConstant == elseConstant) {
                 return false;
             }
-            final PsiExpression thenLhs = thenExpression.getLExpression();
-            final PsiExpression elseLhs = elseExpression.getLExpression();
+            PsiExpression thenLhs = thenExpression.getLExpression();
+            PsiExpression elseLhs = elseExpression.getLExpression();
             return EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(thenLhs, elseLhs);
         }
 
@@ -406,8 +406,8 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
             if (!(statement instanceof PsiExpressionStatement)) {
                 return false;
             }
-            final PsiExpressionStatement expressionStatement = (PsiExpressionStatement) statement;
-            final PsiExpression expression = expressionStatement.getExpression();
+            PsiExpressionStatement expressionStatement = (PsiExpressionStatement) statement;
+            PsiExpression expression = expressionStatement.getExpression();
             return expression instanceof PsiAssignmentExpression;
         }
     }

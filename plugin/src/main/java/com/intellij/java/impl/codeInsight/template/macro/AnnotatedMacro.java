@@ -64,10 +64,10 @@ public class  AnnotatedMacro extends Macro {
     if (params == null || params.length == 0) return null;
     PsiManager instance = PsiManager.getInstance(context.getProject());
 
-    final String paramResult = params[0].calculateResult(context).toString();
+    String paramResult = params[0].calculateResult(context).toString();
     if (paramResult == null) return null;
-    final GlobalSearchScope scope = GlobalSearchScope.allScope(context.getProject());
-    final PsiClass myBaseClass = JavaPsiFacade.getInstance(instance.getProject()).findClass(paramResult,  scope);
+    GlobalSearchScope scope = GlobalSearchScope.allScope(context.getProject());
+    PsiClass myBaseClass = JavaPsiFacade.getInstance(instance.getProject()).findClass(paramResult,  scope);
 
     if (myBaseClass != null) {
       return AnnotatedMembersSearch.search(myBaseClass, scope);
@@ -77,10 +77,10 @@ public class  AnnotatedMacro extends Macro {
 
   @Override
   public Result calculateResult(@Nonnull Expression[] expressions, ExpressionContext expressionContext) {
-    final Query<PsiMember> psiMembers = findAnnotated(expressionContext, expressions);
+    Query<PsiMember> psiMembers = findAnnotated(expressionContext, expressions);
 
     if (psiMembers != null) {
-      final PsiMember member = psiMembers.findFirst();
+      PsiMember member = psiMembers.findFirst();
 
       if (member != null) {
         return new TextResult(member instanceof PsiClass ? ((PsiClass)member).getQualifiedName():member.getName());
@@ -96,21 +96,21 @@ public class  AnnotatedMacro extends Macro {
 
   @Override
   public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, ExpressionContext context) {
-    final Query<PsiMember> query = findAnnotated(context, params);
+    Query<PsiMember> query = findAnnotated(context, params);
 
     if (query != null) {
       Set<LookupElement> set = new LinkedHashSet<LookupElement>();
-      final String secondParamValue = params.length > 1 ? params[1].calculateResult(context).toString() : null;
-      final boolean isShortName = secondParamValue != null && !Boolean.valueOf(secondParamValue);
-      final Project project = context.getProject();
-      final PsiClass findInClass = secondParamValue != null
+      String secondParamValue = params.length > 1 ? params[1].calculateResult(context).toString() : null;
+      boolean isShortName = secondParamValue != null && !Boolean.valueOf(secondParamValue);
+      Project project = context.getProject();
+      PsiClass findInClass = secondParamValue != null
                                    ? JavaPsiFacade.getInstance(project).findClass(secondParamValue, GlobalSearchScope.allScope(project))
                                    : null;
 
       for (PsiMember object : query.findAll()) {
         if (findInClass != null && !object.getContainingClass().equals(findInClass)) continue;
         boolean isClazz = object instanceof PsiClass;
-        final String name = isShortName || !isClazz ? object.getName() : ((PsiClass) object).getQualifiedName();
+        String name = isShortName || !isClazz ? object.getName() : ((PsiClass) object).getQualifiedName();
         set.add(LookupElementBuilder.create(name));
       }
 

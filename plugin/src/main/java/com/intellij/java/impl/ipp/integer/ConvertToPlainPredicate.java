@@ -29,13 +29,13 @@ class ConvertToPlainPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiLiteralExpression)) {
       return false;
     }
-    final PsiLiteralExpression expression = (PsiLiteralExpression)element;
-    final PsiType type = expression.getType();
+    PsiLiteralExpression expression = (PsiLiteralExpression)element;
+    PsiType type = expression.getType();
 
     if (!PsiType.DOUBLE.equals(type) && !PsiType.FLOAT.equals(type)) {
       return false;
     }
-    final String text = expression.getText();
+    String text = expression.getText();
     return text != null && (text.contains("e") || text.contains("E"));
   }
 }

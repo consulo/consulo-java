@@ -61,26 +61,26 @@ public class ConstantJUnitAssertArgumentInspection extends BaseInspection {
 
         @Override
         public void visitMethodCallExpression(PsiMethodCallExpression expression) {
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            @NonNls final String methodName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            @NonNls String methodName = methodExpression.getReferenceName();
             if (!ASSERT_METHODS.contains(methodName)) {
                 return;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (!InheritanceUtil.isInheritor(containingClass, "junit.framework.Assert") &&
                 !InheritanceUtil.isInheritor(containingClass, "org.junit.Assert")) {
                 return;
             }
-            final PsiExpressionList argumentList = expression.getArgumentList();
-            final PsiExpression[] arguments = argumentList.getExpressions();
+            PsiExpressionList argumentList = expression.getArgumentList();
+            PsiExpression[] arguments = argumentList.getExpressions();
             if (arguments.length == 0) {
                 return;
             }
-            final PsiExpression lastArgument = arguments[arguments.length - 1];
+            PsiExpression lastArgument = arguments[arguments.length - 1];
             if (!PsiUtil.isConstantExpression(lastArgument)) {
                 return;
             }

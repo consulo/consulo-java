@@ -124,7 +124,7 @@ class SwitchStatementBranch
 			{
 				for(PsiExpression value : values.getExpressions())
 				{
-					final String valueText = getCaseValueText(value, commentTracker);
+					String valueText = getCaseValueText(value, commentTracker);
 					addCaseValue(valueText);
 				}
 			}
@@ -142,15 +142,15 @@ class SwitchStatementBranch
 		{
 			return commentTracker.text(value);
 		}
-		final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) value;
-		final PsiElement target = referenceExpression.resolve();
+		PsiReferenceExpression referenceExpression = (PsiReferenceExpression) value;
+		PsiElement target = referenceExpression.resolve();
 
 		if(!(target instanceof PsiEnumConstant))
 		{
 			return commentTracker.text(value);
 		}
-		final PsiEnumConstant enumConstant = (PsiEnumConstant) target;
-		final PsiClass aClass = enumConstant.getContainingClass();
+		PsiEnumConstant enumConstant = (PsiEnumConstant) target;
+		PsiClass aClass = enumConstant.getContainingClass();
 		if(aClass == null)
 		{
 			return commentTracker.text(value);

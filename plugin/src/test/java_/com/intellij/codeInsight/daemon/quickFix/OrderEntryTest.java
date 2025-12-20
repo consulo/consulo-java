@@ -58,8 +58,8 @@ public abstract class OrderEntryTest extends DaemonAnalyzerTestCase {
     VirtualFile virtualFile = root.findFileByRelativePath(fileName);
     configureByExistingFile(virtualFile);
     Pair<String, Boolean> pair = LightQuickFixTestCase.parseActionHint(getFile(), getFile().getText());
-    final String text = pair.getFirst();
-    final boolean actionShouldBeAvailable = pair.getSecond().booleanValue();
+    String text = pair.getFirst();
+    boolean actionShouldBeAvailable = pair.getSecond().booleanValue();
     Collection<HighlightInfo> infosBefore = highlightErrors();
     final IntentionAction action = findActionWithText(text, infosBefore);
 
@@ -83,7 +83,7 @@ public abstract class OrderEntryTest extends DaemonAnalyzerTestCase {
       });
 
       Collection<HighlightInfo> infosAfter = highlightErrors();
-      final IntentionAction afterAction = findActionWithText(text, infosAfter);
+      IntentionAction afterAction = findActionWithText(text, infosAfter);
       if (afterAction != null) {
         fail("Action '" + text + "' is still available after its invocation in test " + testFullPath);
       }
@@ -91,7 +91,7 @@ public abstract class OrderEntryTest extends DaemonAnalyzerTestCase {
     }
   }
 
-  private IntentionAction findActionWithText(final String actionText, final Collection<HighlightInfo> infos) {
+  private IntentionAction findActionWithText(String actionText, Collection<HighlightInfo> infos) {
     List<IntentionAction> actions = LightQuickFixTestCase.getAvailableActions(getEditor(), getFile());
     return LightQuickFixTestCase.findActionWithText(actions, actionText);
   }
@@ -105,8 +105,8 @@ public abstract class OrderEntryTest extends DaemonAnalyzerTestCase {
   }
 
   public void testAddCircularDependency() throws Exception {
-    final Module a = ModuleManager.getInstance(getProject()).findModuleByName("A");
-    final Module b = ModuleManager.getInstance(getProject()).findModuleByName("B");
+    Module a = ModuleManager.getInstance(getProject()).findModuleByName("A");
+    Module b = ModuleManager.getInstance(getProject()).findModuleByName("B");
     ModuleRootModificationUtil.addDependency(a, b);
 
     try {
@@ -114,7 +114,7 @@ public abstract class OrderEntryTest extends DaemonAnalyzerTestCase {
       fail("user should have been warned");
     }
     catch (RuntimeException e) {
-      final String expected = "Adding dependency on module '" + a.getName() + "'" +
+      String expected = "Adding dependency on module '" + a.getName() + "'" +
                               " will introduce circular dependency between modules '" + a.getName() + "' and '" +
                               b.getName() + "'.\n" + "Add dependency anyway?";
       String message = e.getMessage();

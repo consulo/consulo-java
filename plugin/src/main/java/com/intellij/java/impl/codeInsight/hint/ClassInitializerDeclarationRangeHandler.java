@@ -33,7 +33,7 @@ public class ClassInitializerDeclarationRangeHandler implements DeclarationRange
 
   @Override
   @Nonnull
-  public TextRange getDeclarationRange(@Nonnull final PsiElement container) {
+  public TextRange getDeclarationRange(@Nonnull PsiElement container) {
     PsiClassInitializer initializer = (PsiClassInitializer) container;
     int startOffset = initializer.getModifierList().getTextRange().getStartOffset();
     int endOffset = initializer.getBody().getTextRange().getStartOffset();

@@ -59,7 +59,7 @@ public class ExtendsListBlock extends AbstractJavaBlock
 	@Override
 	protected List<Block> buildChildren()
 	{
-		final ArrayList<Block> result = new ArrayList<>();
+		ArrayList<Block> result = new ArrayList<>();
 		ArrayList<Block> elementsExceptKeyword = new ArrayList<>();
 		myChildAlignment = createChildAlignment();
 		myChildIndent = Indent.getContinuationIndent(myIndentSettings.USE_RELATIVE_INDENTS);

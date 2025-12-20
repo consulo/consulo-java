@@ -63,29 +63,29 @@ public abstract class FindUsages15Test extends PsiTestCase{
   }
 
   public void testGenericMethodOverriderUsages () throws Exception {
-    final PsiClass baseClass = myJavaFacade.findClass("pack.GenericClass", GlobalSearchScope.moduleScope(myModule));
+    PsiClass baseClass = myJavaFacade.findClass("pack.GenericClass", GlobalSearchScope.moduleScope(myModule));
     assertNotNull(baseClass);
-    final PsiMethod method = baseClass.getMethods()[0];
+    PsiMethod method = baseClass.getMethods()[0];
     PsiReference[] references =
       MethodReferencesSearch.search(method, GlobalSearchScope.moduleScope(myModule), false).toArray(PsiReference.EMPTY_ARRAY);
     assertEquals(1, references.length);
-    final PsiElement element = references[0].getElement();
-    final PsiClass refClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
+    PsiElement element = references[0].getElement();
+    PsiClass refClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
     assertEquals(refClass.getName(), "GenericClassDerived");
   }
 
   public void testFindRawOverriddenUsages () throws Exception {
-    final PsiClass baseClass = myJavaFacade.findClass("pack.Base", GlobalSearchScope.moduleScope(myModule));
+    PsiClass baseClass = myJavaFacade.findClass("pack.Base", GlobalSearchScope.moduleScope(myModule));
     assertNotNull(baseClass);
-    final PsiMethod method = baseClass.getMethods()[0];
+    PsiMethod method = baseClass.getMethods()[0];
     PsiMethod[] overriders =
       OverridingMethodsSearch.search(method, GlobalSearchScope.moduleScope(myModule), true).toArray(PsiMethod.EMPTY_ARRAY);
     assertEquals(1, overriders.length);
   }
   public void testGenericOverride() throws Exception {
-    final PsiClass baseClass = myJavaFacade.findClass("pack.Gen", GlobalSearchScope.moduleScope(myModule));
+    PsiClass baseClass = myJavaFacade.findClass("pack.Gen", GlobalSearchScope.moduleScope(myModule));
     assertNotNull(baseClass);
-    final PsiMethod method = baseClass.getMethods()[0];
+    PsiMethod method = baseClass.getMethods()[0];
     PsiReference[] references =
       MethodReferencesSearch.search(method, GlobalSearchScope.projectScope(getProject()), true).toArray(PsiReference.EMPTY_ARRAY);
 

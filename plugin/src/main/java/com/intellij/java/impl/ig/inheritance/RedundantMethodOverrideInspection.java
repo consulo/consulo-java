@@ -69,8 +69,8 @@ public class RedundantMethodOverrideInspection extends BaseInspection {
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) {
-            final PsiElement methodNameIdentifier = descriptor.getPsiElement();
-            final PsiElement method = methodNameIdentifier.getParent();
+            PsiElement methodNameIdentifier = descriptor.getPsiElement();
+            PsiElement method = methodNameIdentifier.getParent();
             assert method != null;
             deleteElement(method);
         }
@@ -85,28 +85,28 @@ public class RedundantMethodOverrideInspection extends BaseInspection {
         @Override
         public void visitMethod(PsiMethod method) {
             super.visitMethod(method);
-            final PsiCodeBlock body = method.getBody();
+            PsiCodeBlock body = method.getBody();
             if (body == null) {
                 return;
             }
             if (method.getNameIdentifier() == null) {
                 return;
             }
-            final PsiMethod superMethod = MethodUtils.getSuper(method);
+            PsiMethod superMethod = MethodUtils.getSuper(method);
             if (superMethod == null) {
                 return;
             }
             if (!modifierListsAreEquivalent(method.getModifierList(), superMethod.getModifierList())) {
                 return;
             }
-            final PsiType superReturnType = superMethod.getReturnType();
+            PsiType superReturnType = superMethod.getReturnType();
             if (superReturnType == null || !superReturnType.equals(method.getReturnType())) {
                 return;
             }
             if (method.hasModifierProperty(PsiModifier.FINAL)) {
                 return;  // method overridden and made final - not redundant
             }
-            final PsiCodeBlock superBody = superMethod.getBody();
+            PsiCodeBlock superBody = superMethod.getBody();
 
             EquivalenceChecker checker = new ParameterEquivalenceChecker(method, superMethod);
             if (checker.codeBlocksAreEquivalent(body, superBody) || isSuperCallWithSameArguments(body, method, superMethod)) {
@@ -159,15 +159,15 @@ public class RedundantMethodOverrideInspection extends BaseInspection {
         }
 
         private boolean isSuperCallWithSameArguments(PsiCodeBlock body, PsiMethod method, PsiMethod superMethod) {
-            final PsiStatement[] statements = body.getStatements();
+            PsiStatement[] statements = body.getStatements();
             if (statements.length != 1) {
                 return false;
             }
-            final PsiStatement statement = statements[0];
-            final PsiExpression expression;
+            PsiStatement statement = statements[0];
+            PsiExpression expression;
             if (PsiType.VOID.equals(method.getReturnType())) {
                 if (statement instanceof PsiExpressionStatement) {
-                    final PsiExpressionStatement expressionStatement = (PsiExpressionStatement) statement;
+                    PsiExpressionStatement expressionStatement = (PsiExpressionStatement) statement;
                     expression = expressionStatement.getExpression();
                 }
                 else {
@@ -176,7 +176,7 @@ public class RedundantMethodOverrideInspection extends BaseInspection {
             }
             else {
                 if (statement instanceof PsiReturnStatement) {
-                    final PsiReturnStatement returnStatement = (PsiReturnStatement) statement;
+                    PsiReturnStatement returnStatement = (PsiReturnStatement) statement;
                     expression = ParenthesesUtils.stripParentheses(returnStatement.getReturnValue());
                 }
                 else {
@@ -186,22 +186,22 @@ public class RedundantMethodOverrideInspection extends BaseInspection {
             if (!(expression instanceof PsiMethodCallExpression)) {
                 return false;
             }
-            final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
+            PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
             if (!MethodCallUtils.isSuperMethodCall(methodCallExpression, method)) {
                 return false;
             }
 
             if (superMethod.hasModifierProperty(PsiModifier.PROTECTED)) {
-                final PsiJavaFile file = (PsiJavaFile) method.getContainingFile();
+                PsiJavaFile file = (PsiJavaFile) method.getContainingFile();
                 // implementing a protected method in another package makes it available to that package.
                 PsiJavaPackage aPackage = JavaPsiFacade.getInstance(method.getProject()).findPackage(file.getPackageName());
                 if (aPackage == null) {
                     return false; // when package statement is incorrect
                 }
-                final PackageScope scope = new PackageScope(aPackage, false, false);
+                PackageScope scope = new PackageScope(aPackage, false, false);
                 if (isOnTheFly()) {
-                    final PsiSearchHelper searchHelper = PsiSearchHelper.SERVICE.getInstance(method.getProject());
-                    final PsiSearchHelper.SearchCostResult cost = searchHelper.isCheapEnoughToSearch(method.getName(), scope, null, null);
+                    PsiSearchHelper searchHelper = PsiSearchHelper.SERVICE.getInstance(method.getProject());
+                    PsiSearchHelper.SearchCostResult cost = searchHelper.isCheapEnoughToSearch(method.getName(), scope, null, null);
                     if (cost == PsiSearchHelper.SearchCostResult.ZERO_OCCURRENCES) {
                         return true;
                     }
@@ -209,8 +209,8 @@ public class RedundantMethodOverrideInspection extends BaseInspection {
                         return false;
                     }
                 }
-                final Query<PsiReference> search = ReferencesSearch.search(method, scope);
-                final PsiClass containingClass = method.getContainingClass();
+                Query<PsiReference> search = ReferencesSearch.search(method, scope);
+                PsiClass containingClass = method.getContainingClass();
                 for (PsiReference reference : search) {
                     if (!PsiTreeUtil.isAncestor(containingClass, reference.getElement(), true)) {
                         return false;

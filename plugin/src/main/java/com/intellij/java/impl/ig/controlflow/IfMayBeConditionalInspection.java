@@ -73,66 +73,66 @@ public class IfMayBeConditionalInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
-            final PsiIfStatement ifStatement = (PsiIfStatement) element.getParent();
-            final PsiStatement thenBranch = ifStatement.getThenBranch();
-            final PsiStatement thenStatement = ControlFlowUtils.stripBraces(thenBranch);
-            final PsiStatement elseBranch = ifStatement.getElseBranch();
-            final PsiStatement elseStatement = ControlFlowUtils.stripBraces(elseBranch);
-            final PsiExpression condition = ifStatement.getCondition();
-            @NonNls final StringBuilder replacementText = new StringBuilder();
+            PsiElement element = descriptor.getPsiElement();
+            PsiIfStatement ifStatement = (PsiIfStatement) element.getParent();
+            PsiStatement thenBranch = ifStatement.getThenBranch();
+            PsiStatement thenStatement = ControlFlowUtils.stripBraces(thenBranch);
+            PsiStatement elseBranch = ifStatement.getElseBranch();
+            PsiStatement elseStatement = ControlFlowUtils.stripBraces(elseBranch);
+            PsiExpression condition = ifStatement.getCondition();
+            @NonNls StringBuilder replacementText = new StringBuilder();
             if (thenStatement instanceof PsiReturnStatement) {
-                final PsiReturnStatement elseReturn = (PsiReturnStatement) elseStatement;
-                final PsiReturnStatement thenReturn = (PsiReturnStatement) thenStatement;
+                PsiReturnStatement elseReturn = (PsiReturnStatement) elseStatement;
+                PsiReturnStatement thenReturn = (PsiReturnStatement) thenStatement;
                 replacementText.append("return ");
                 appendExpressionText(condition, replacementText);
                 replacementText.append('?');
-                final PsiExpression thenReturnValue = thenReturn.getReturnValue();
+                PsiExpression thenReturnValue = thenReturn.getReturnValue();
                 appendExpressionText(thenReturnValue, replacementText);
                 replacementText.append(':');
                 if (elseReturn != null) {
-                    final PsiExpression elseReturnValue = elseReturn.getReturnValue();
+                    PsiExpression elseReturnValue = elseReturn.getReturnValue();
                     appendExpressionText(elseReturnValue, replacementText);
                 }
                 replacementText.append(';');
             }
             else if (thenStatement instanceof PsiExpressionStatement && elseStatement instanceof PsiExpressionStatement) {
-                final PsiExpressionStatement thenExpressionStatement = (PsiExpressionStatement) thenStatement;
-                final PsiExpressionStatement elseExpressionStatement = (PsiExpressionStatement) elseStatement;
-                final PsiExpression thenExpression = thenExpressionStatement.getExpression();
-                final PsiExpression elseExpression = elseExpressionStatement.getExpression();
+                PsiExpressionStatement thenExpressionStatement = (PsiExpressionStatement) thenStatement;
+                PsiExpressionStatement elseExpressionStatement = (PsiExpressionStatement) elseStatement;
+                PsiExpression thenExpression = thenExpressionStatement.getExpression();
+                PsiExpression elseExpression = elseExpressionStatement.getExpression();
                 if (thenExpression instanceof PsiAssignmentExpression && elseExpression instanceof PsiAssignmentExpression) {
-                    final PsiAssignmentExpression thenAssignmentExpression = (PsiAssignmentExpression) thenExpression;
-                    final PsiExpression lhs = thenAssignmentExpression.getLExpression();
+                    PsiAssignmentExpression thenAssignmentExpression = (PsiAssignmentExpression) thenExpression;
+                    PsiExpression lhs = thenAssignmentExpression.getLExpression();
                     replacementText.append(lhs.getText());
-                    final PsiJavaToken token = thenAssignmentExpression.getOperationSign();
+                    PsiJavaToken token = thenAssignmentExpression.getOperationSign();
                     replacementText.append(token.getText());
                     appendExpressionText(condition, replacementText);
                     replacementText.append('?');
-                    final PsiExpression thenRhs = thenAssignmentExpression.getRExpression();
+                    PsiExpression thenRhs = thenAssignmentExpression.getRExpression();
                     appendExpressionText(thenRhs, replacementText);
                     replacementText.append(':');
-                    final PsiAssignmentExpression elseAssignmentExpression = (PsiAssignmentExpression) elseExpression;
-                    final PsiExpression elseRhs = elseAssignmentExpression.getRExpression();
+                    PsiAssignmentExpression elseAssignmentExpression = (PsiAssignmentExpression) elseExpression;
+                    PsiExpression elseRhs = elseAssignmentExpression.getRExpression();
                     appendExpressionText(elseRhs, replacementText);
                     replacementText.append(';');
                 }
                 else if (thenExpression instanceof PsiMethodCallExpression && elseExpression instanceof PsiMethodCallExpression) {
-                    final PsiMethodCallExpression thenMethodCallExpression = (PsiMethodCallExpression) thenExpression;
-                    final PsiMethodCallExpression elseMethodCallExpression = (PsiMethodCallExpression) elseExpression;
-                    final PsiReferenceExpression thenMethodExpression = thenMethodCallExpression.getMethodExpression();
+                    PsiMethodCallExpression thenMethodCallExpression = (PsiMethodCallExpression) thenExpression;
+                    PsiMethodCallExpression elseMethodCallExpression = (PsiMethodCallExpression) elseExpression;
+                    PsiReferenceExpression thenMethodExpression = thenMethodCallExpression.getMethodExpression();
                     replacementText.append(thenMethodExpression.getText());
                     replacementText.append('(');
-                    final PsiExpressionList thenArgumentList = thenMethodCallExpression.getArgumentList();
-                    final PsiExpression[] thenArguments = thenArgumentList.getExpressions();
-                    final PsiExpressionList elseArgumentList = elseMethodCallExpression.getArgumentList();
-                    final PsiExpression[] elseArguments = elseArgumentList.getExpressions();
+                    PsiExpressionList thenArgumentList = thenMethodCallExpression.getArgumentList();
+                    PsiExpression[] thenArguments = thenArgumentList.getExpressions();
+                    PsiExpressionList elseArgumentList = elseMethodCallExpression.getArgumentList();
+                    PsiExpression[] elseArguments = elseArgumentList.getExpressions();
                     for (int i = 0, length = thenArguments.length; i < length; i++) {
                         if (i > 0) {
                             replacementText.append(',');
                         }
-                        final PsiExpression thenArgument = thenArguments[i];
-                        final PsiExpression elseArgument = elseArguments[i];
+                        PsiExpression thenArgument = thenArguments[i];
+                        PsiExpression elseArgument = elseArguments[i];
                         if (EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(thenArgument, elseArgument)) {
                             replacementText.append(thenArgument.getText());
                         }
@@ -158,7 +158,7 @@ public class IfMayBeConditionalInspection extends BaseInspection {
             if (expression == null) {
                 return;
             }
-            final String expressionText = expression.getText();
+            String expressionText = expression.getText();
             if (ParenthesesUtils.getPrecedence(expression) > ParenthesesUtils.CONDITIONAL_PRECEDENCE) {
                 out.append('(');
                 out.append(expressionText);
@@ -180,13 +180,13 @@ public class IfMayBeConditionalInspection extends BaseInspection {
         @Override
         public void visitIfStatement(PsiIfStatement statement) {
             super.visitIfStatement(statement);
-            final PsiStatement thenBranch = statement.getThenBranch();
-            final PsiStatement elseBranch = statement.getElseBranch();
-            final PsiStatement thenStatement = ControlFlowUtils.stripBraces(thenBranch);
+            PsiStatement thenBranch = statement.getThenBranch();
+            PsiStatement elseBranch = statement.getElseBranch();
+            PsiStatement thenStatement = ControlFlowUtils.stripBraces(thenBranch);
             if (thenStatement == null) {
                 return;
             }
-            final PsiStatement elseStatement = ControlFlowUtils.stripBraces(elseBranch);
+            PsiStatement elseStatement = ControlFlowUtils.stripBraces(elseBranch);
             if (elseStatement == null) {
                 return;
             }
@@ -194,13 +194,13 @@ public class IfMayBeConditionalInspection extends BaseInspection {
                 if (!(elseStatement instanceof PsiReturnStatement)) {
                     return;
                 }
-                final PsiReturnStatement thenReturnStatement = (PsiReturnStatement) thenStatement;
-                final PsiExpression thenReturnValue = ParenthesesUtils.stripParentheses(thenReturnStatement.getReturnValue());
+                PsiReturnStatement thenReturnStatement = (PsiReturnStatement) thenStatement;
+                PsiExpression thenReturnValue = ParenthesesUtils.stripParentheses(thenReturnStatement.getReturnValue());
                 if (thenReturnValue instanceof PsiConditionalExpression) {
                     return;
                 }
-                final PsiReturnStatement elseReturnStatement = (PsiReturnStatement) elseStatement;
-                final PsiExpression elseReturnValue = ParenthesesUtils.stripParentheses(elseReturnStatement.getReturnValue());
+                PsiReturnStatement elseReturnStatement = (PsiReturnStatement) elseStatement;
+                PsiExpression elseReturnValue = ParenthesesUtils.stripParentheses(elseReturnStatement.getReturnValue());
                 if (elseReturnValue instanceof PsiConditionalExpression) {
                     return;
                 }
@@ -210,29 +210,29 @@ public class IfMayBeConditionalInspection extends BaseInspection {
                 if (!(elseStatement instanceof PsiExpressionStatement)) {
                     return;
                 }
-                final PsiExpressionStatement thenExpressionStatement = (PsiExpressionStatement) thenStatement;
-                final PsiExpression thenExpression = thenExpressionStatement.getExpression();
-                final PsiExpressionStatement elseExpressionStatement = (PsiExpressionStatement) elseStatement;
-                final PsiExpression elseExpression = elseExpressionStatement.getExpression();
+                PsiExpressionStatement thenExpressionStatement = (PsiExpressionStatement) thenStatement;
+                PsiExpression thenExpression = thenExpressionStatement.getExpression();
+                PsiExpressionStatement elseExpressionStatement = (PsiExpressionStatement) elseStatement;
+                PsiExpression elseExpression = elseExpressionStatement.getExpression();
                 if (thenExpression instanceof PsiAssignmentExpression) {
                     if (!(elseExpression instanceof PsiAssignmentExpression)) {
                         return;
                     }
-                    final PsiAssignmentExpression thenAssignmentExpression = (PsiAssignmentExpression) thenExpression;
-                    final PsiAssignmentExpression elseAssignmentExpression = (PsiAssignmentExpression) elseExpression;
+                    PsiAssignmentExpression thenAssignmentExpression = (PsiAssignmentExpression) thenExpression;
+                    PsiAssignmentExpression elseAssignmentExpression = (PsiAssignmentExpression) elseExpression;
                     if (!thenAssignmentExpression.getOperationTokenType().equals(elseAssignmentExpression.getOperationTokenType())) {
                         return;
                     }
-                    final PsiExpression thenLhs = thenAssignmentExpression.getLExpression();
-                    final PsiExpression elseLhs = elseAssignmentExpression.getLExpression();
+                    PsiExpression thenLhs = thenAssignmentExpression.getLExpression();
+                    PsiExpression elseLhs = elseAssignmentExpression.getLExpression();
                     if (!EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(thenLhs, elseLhs)) {
                         return;
                     }
-                    final PsiExpression thenRhs = ParenthesesUtils.stripParentheses(thenAssignmentExpression.getRExpression());
+                    PsiExpression thenRhs = ParenthesesUtils.stripParentheses(thenAssignmentExpression.getRExpression());
                     if (thenRhs instanceof PsiConditionalExpression) {
                         return;
                     }
-                    final PsiExpression elseRhs = ParenthesesUtils.stripParentheses(elseAssignmentExpression.getRExpression());
+                    PsiExpression elseRhs = ParenthesesUtils.stripParentheses(elseAssignmentExpression.getRExpression());
                     if (elseRhs instanceof PsiConditionalExpression) {
                         return;
                     }
@@ -242,25 +242,25 @@ public class IfMayBeConditionalInspection extends BaseInspection {
                     if (!(elseExpression instanceof PsiMethodCallExpression)) {
                         return;
                     }
-                    final PsiMethodCallExpression thenMethodCallExpression = (PsiMethodCallExpression) thenExpression;
-                    final PsiMethodCallExpression elseMethodCallExpression = (PsiMethodCallExpression) elseExpression;
-                    final PsiReferenceExpression thenMethodExpression = thenMethodCallExpression.getMethodExpression();
-                    final PsiReferenceExpression elseMethodExpression = elseMethodCallExpression.getMethodExpression();
+                    PsiMethodCallExpression thenMethodCallExpression = (PsiMethodCallExpression) thenExpression;
+                    PsiMethodCallExpression elseMethodCallExpression = (PsiMethodCallExpression) elseExpression;
+                    PsiReferenceExpression thenMethodExpression = thenMethodCallExpression.getMethodExpression();
+                    PsiReferenceExpression elseMethodExpression = elseMethodCallExpression.getMethodExpression();
                     if (!EquivalenceChecker.getCanonicalPsiEquivalence()
                         .expressionsAreEquivalent(thenMethodExpression, elseMethodExpression)) {
                         return;
                     }
-                    final PsiExpressionList thenArgumentList = thenMethodCallExpression.getArgumentList();
-                    final PsiExpression[] thenArguments = thenArgumentList.getExpressions();
-                    final PsiExpressionList elseArgumentList = elseMethodCallExpression.getArgumentList();
-                    final PsiExpression[] elseArguments = elseArgumentList.getExpressions();
+                    PsiExpressionList thenArgumentList = thenMethodCallExpression.getArgumentList();
+                    PsiExpression[] thenArguments = thenArgumentList.getExpressions();
+                    PsiExpressionList elseArgumentList = elseMethodCallExpression.getArgumentList();
+                    PsiExpression[] elseArguments = elseArgumentList.getExpressions();
                     if (thenArguments.length != elseArguments.length) {
                         return;
                     }
                     int differences = 0;
                     for (int i = 0, length = thenArguments.length; i < length; i++) {
-                        final PsiExpression thenArgument = thenArguments[i];
-                        final PsiExpression elseArgument = elseArguments[i];
+                        PsiExpression thenArgument = thenArguments[i];
+                        PsiExpression elseArgument = elseArguments[i];
                         if (!EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(thenArgument, elseArgument)) {
                             differences++;
                         }

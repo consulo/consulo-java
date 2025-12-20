@@ -53,19 +53,19 @@ public abstract class UsagesInAnalyzingDependenciesTest extends PsiTestCase{
   }
 
   public void testForwardPackageScope(){
-    final PsiJavaPackage bPackage = JavaPsiFacade.getInstance(myPsiManager.getProject()).findPackage("com.b");
-    final DependenciesBuilder builder = new ForwardDependenciesBuilder(myProject, new JavaAnalysisScope(bPackage, null));
+    PsiJavaPackage bPackage = JavaPsiFacade.getInstance(myPsiManager.getProject()).findPackage("com.b");
+    DependenciesBuilder builder = new ForwardDependenciesBuilder(myProject, new JavaAnalysisScope(bPackage, null));
     builder.analyze();
-    final Set<PsiFile> searchFor = new HashSet<PsiFile>();
+    Set<PsiFile> searchFor = new HashSet<PsiFile>();
     searchFor.add(myJavaFacade.findClass("com.a.A", GlobalSearchScope.allScope(myProject)).getContainingFile());
-    final Set<PsiFile> searchIn = new HashSet<PsiFile>();
-    final PsiClass bClass = myJavaFacade.findClass("com.b.B", GlobalSearchScope.allScope(myProject));
+    Set<PsiFile> searchIn = new HashSet<PsiFile>();
+    PsiClass bClass = myJavaFacade.findClass("com.b.B", GlobalSearchScope.allScope(myProject));
     searchIn.add(bClass.getContainingFile());
-    final PsiClass cClass = myJavaFacade.findClass("com.b.C", GlobalSearchScope.allScope(myProject));
+    PsiClass cClass = myJavaFacade.findClass("com.b.C", GlobalSearchScope.allScope(myProject));
     searchIn.add(cClass.getContainingFile());
-    final UsageInfo[] usagesInfos = FindDependencyUtil.findDependencies(builder, searchIn, searchFor);
-    final UsageInfo2UsageAdapter[] usages = UsageInfo2UsageAdapter.convert(usagesInfos);
-    final String [] psiUsages = new String [usagesInfos.length];
+    UsageInfo[] usagesInfos = FindDependencyUtil.findDependencies(builder, searchIn, searchFor);
+    UsageInfo2UsageAdapter[] usages = UsageInfo2UsageAdapter.convert(usagesInfos);
+    String [] psiUsages = new String [usagesInfos.length];
     for (int i = 0; i < usagesInfos.length; i++) {
       psiUsages[i] = toString(usages[i]);
     }
@@ -92,19 +92,19 @@ public abstract class UsagesInAnalyzingDependenciesTest extends PsiTestCase{
   }
 
    public void testBackwardPackageScope(){
-     final PsiJavaPackage bPackage = JavaPsiFacade.getInstance(myPsiManager.getProject()).findPackage("com.a");
-    final DependenciesBuilder builder = new BackwardDependenciesBuilder(myProject, new JavaAnalysisScope(bPackage, null));
+     PsiJavaPackage bPackage = JavaPsiFacade.getInstance(myPsiManager.getProject()).findPackage("com.a");
+    DependenciesBuilder builder = new BackwardDependenciesBuilder(myProject, new JavaAnalysisScope(bPackage, null));
     builder.analyze();
-    final Set<PsiFile> searchFor = new HashSet<PsiFile>();
+    Set<PsiFile> searchFor = new HashSet<PsiFile>();
     searchFor.add(myJavaFacade.findClass("com.a.A", GlobalSearchScope.allScope(myProject)).getContainingFile());
-    final Set<PsiFile> searchIn = new HashSet<PsiFile>();
-    final PsiClass bClass = myJavaFacade.findClass("com.b.B", GlobalSearchScope.allScope(myProject));
+    Set<PsiFile> searchIn = new HashSet<PsiFile>();
+    PsiClass bClass = myJavaFacade.findClass("com.b.B", GlobalSearchScope.allScope(myProject));
     searchIn.add(bClass.getContainingFile());
-    final PsiClass cClass = myJavaFacade.findClass("com.a.C", GlobalSearchScope.allScope(myProject));
+    PsiClass cClass = myJavaFacade.findClass("com.a.C", GlobalSearchScope.allScope(myProject));
     searchFor.add(cClass.getContainingFile());
-    final UsageInfo[] usagesInfos = FindDependencyUtil.findBackwardDependencies(builder, searchIn, searchFor);
-    final UsageInfo2UsageAdapter[] usages = UsageInfo2UsageAdapter.convert(usagesInfos);
-    final String [] psiUsages = new String [usagesInfos.length];
+    UsageInfo[] usagesInfos = FindDependencyUtil.findBackwardDependencies(builder, searchIn, searchFor);
+    UsageInfo2UsageAdapter[] usages = UsageInfo2UsageAdapter.convert(usagesInfos);
+    String [] psiUsages = new String [usagesInfos.length];
     for (int i = 0; i < usagesInfos.length; i++) {
       psiUsages[i] = toString(usages[i]);
     }
@@ -112,26 +112,26 @@ public abstract class UsagesInAnalyzingDependenciesTest extends PsiTestCase{
   }
 
   public void testForwardSimple(){
-    final DependenciesBuilder builder = new ForwardDependenciesBuilder(myProject, new AnalysisScope(myProject));
+    DependenciesBuilder builder = new ForwardDependenciesBuilder(myProject, new AnalysisScope(myProject));
     builder.analyze();
 
-    final Set<PsiFile> searchIn = new HashSet<PsiFile>();
-    final PsiClass aClass = myJavaFacade.findClass("A", GlobalSearchScope.allScope(myProject));
+    Set<PsiFile> searchIn = new HashSet<PsiFile>();
+    PsiClass aClass = myJavaFacade.findClass("A", GlobalSearchScope.allScope(myProject));
     searchIn.add(aClass.getContainingFile());
-    final Set<PsiFile> searchFor = new HashSet<PsiFile>();
-    final PsiClass bClass = myJavaFacade.findClass("B", GlobalSearchScope.allScope(myProject));
+    Set<PsiFile> searchFor = new HashSet<PsiFile>();
+    PsiClass bClass = myJavaFacade.findClass("B", GlobalSearchScope.allScope(myProject));
     searchFor.add(bClass.getContainingFile());
 
-    final UsageInfo[] usagesInfos = FindDependencyUtil.findDependencies(builder, searchIn, searchFor);
-    final UsageInfo2UsageAdapter[] usages = UsageInfo2UsageAdapter.convert(usagesInfos);
-    final String [] psiUsages = new String [usagesInfos.length];
+    UsageInfo[] usagesInfos = FindDependencyUtil.findDependencies(builder, searchIn, searchFor);
+    UsageInfo2UsageAdapter[] usages = UsageInfo2UsageAdapter.convert(usagesInfos);
+    String [] psiUsages = new String [usagesInfos.length];
     for (int i = 0; i < usagesInfos.length; i++) {
       psiUsages[i] = toString(usages[i]);
     }
     checkResult(new String []{"(2: 3) B myB = new B();", "(2: 15) B myB = new B();", "(4: 9) myB.bb();"}, psiUsages);
   }
 
-  private static void checkResult(final String[] usages, final String [] psiUsages) {
+  private static void checkResult(String[] usages, String [] psiUsages) {
     assertEquals(usages.length , psiUsages.length);
     for (int i = 0; i < psiUsages.length; i++) {
       assertEquals(usages[i], psiUsages[i]);

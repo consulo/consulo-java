@@ -162,7 +162,7 @@ public class TemplateResource implements Serializable
 		}
 
 		// skip the starting and ending { }
-		final String trimmed = s.trim();
+		String trimmed = s.trim();
 		return trimmed.substring(1, trimmed.length() - 1);
 	}
 

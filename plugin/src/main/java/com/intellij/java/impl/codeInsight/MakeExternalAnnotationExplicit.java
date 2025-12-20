@@ -55,16 +55,16 @@ public class MakeExternalAnnotationExplicit extends BaseIntentionAction {
 
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    final PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
-    final PsiModifierListOwner owner = ExternalAnnotationsLineMarkerProvider.getAnnotationOwner(leaf);
+    PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
+    PsiModifierListOwner owner = ExternalAnnotationsLineMarkerProvider.getAnnotationOwner(leaf);
     if (owner != null && owner.getLanguage().isKindOf(JavaLanguage.INSTANCE) && isWritable(owner) && ModuleUtilCore.findModuleForPsiElement(file) != null && PsiUtil.getLanguageLevel(file)
         .isAtLeast(LanguageLevel.JDK_1_5)) {
-      final PsiAnnotation[] annotations = getAnnotations(project, owner);
+      PsiAnnotation[] annotations = getAnnotations(project, owner);
       if (annotations.length > 0) {
-        final String annos = StringUtil.join(annotations, annotation ->
+        String annos = StringUtil.join(annotations, annotation ->
         {
-          final PsiJavaCodeReferenceElement nameRef = annotation.getNameReferenceElement();
-          final String name = nameRef != null ? nameRef.getReferenceName() : annotation.getQualifiedName();
+          PsiJavaCodeReferenceElement nameRef = annotation.getNameReferenceElement();
+          String name = nameRef != null ? nameRef.getReferenceName() : annotation.getQualifiedName();
           return "@" + name + annotation.getParameterList().getText();
         }, " ");
         setText(LocalizeValue.localizeTODO("Insert '" + annos + "'"));
@@ -77,12 +77,12 @@ public class MakeExternalAnnotationExplicit extends BaseIntentionAction {
 
   @Override
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
-    final PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
-    final PsiModifierListOwner owner = ExternalAnnotationsLineMarkerProvider.getAnnotationOwner(leaf);
+    PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
+    PsiModifierListOwner owner = ExternalAnnotationsLineMarkerProvider.getAnnotationOwner(leaf);
     assert owner != null;
-    final PsiModifierList modifierList = owner.getModifierList();
+    PsiModifierList modifierList = owner.getModifierList();
     assert modifierList != null;
-    final Module module = ModuleUtilCore.findModuleForPsiElement(file);
+    Module module = ModuleUtilCore.findModuleForPsiElement(file);
     assert module != null;
 
     ExternalAnnotationsManager externalAnnotationsManager = ExternalAnnotationsManager.getInstance(project);
@@ -92,7 +92,7 @@ public class MakeExternalAnnotationExplicit extends BaseIntentionAction {
     }
 
     for (PsiAnnotation anno : getAnnotations(project, owner)) {
-      final String qname = anno.getQualifiedName();
+      String qname = anno.getQualifiedName();
       assert qname != null;
       externalAnnotationsManager.deannotate(owner, qname);
 

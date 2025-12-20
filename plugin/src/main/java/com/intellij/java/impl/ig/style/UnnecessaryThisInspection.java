@@ -73,10 +73,10 @@ public class UnnecessaryThisInspection extends BaseInspection {
         }
 
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement thisToken = descriptor.getPsiElement();
-            final PsiReferenceExpression thisExpression = (PsiReferenceExpression) thisToken.getParent();
+            PsiElement thisToken = descriptor.getPsiElement();
+            PsiReferenceExpression thisExpression = (PsiReferenceExpression) thisToken.getParent();
             assert thisExpression != null;
-            final String newExpression = thisExpression.getReferenceName();
+            String newExpression = thisExpression.getReferenceName();
             if (newExpression == null) {
                 return;
             }
@@ -93,66 +93,66 @@ public class UnnecessaryThisInspection extends BaseInspection {
         @Override
         public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
             super.visitReferenceExpression(expression);
-            final PsiReferenceParameterList parameterList = expression.getParameterList();
+            PsiReferenceParameterList parameterList = expression.getParameterList();
             if (parameterList == null) {
                 return;
             }
             if (parameterList.getTypeArguments().length > 0) {
                 return;
             }
-            final PsiExpression qualifierExpression = expression.getQualifierExpression();
+            PsiExpression qualifierExpression = expression.getQualifierExpression();
             if (!(qualifierExpression instanceof PsiThisExpression)) {
                 return;
             }
-            final PsiThisExpression thisExpression = (PsiThisExpression) qualifierExpression;
-            final PsiJavaCodeReferenceElement qualifier = thisExpression.getQualifier();
-            final String referenceName = expression.getReferenceName();
+            PsiThisExpression thisExpression = (PsiThisExpression) qualifierExpression;
+            PsiJavaCodeReferenceElement qualifier = thisExpression.getQualifier();
+            String referenceName = expression.getReferenceName();
             if (referenceName == null) {
                 return;
             }
             if (ignoreAssignments && PsiUtil.isAccessedForWriting(expression)) {
                 return;
             }
-            final PsiElement parent = expression.getParent();
+            PsiElement parent = expression.getParent();
             if (qualifier == null) {
                 if (parent instanceof PsiCallExpression) {
                     // method calls are always in error
                     registerError(qualifierExpression, ProblemHighlightType.LIKE_UNUSED_SYMBOL);
                     return;
                 }
-                final PsiElement target = expression.resolve();
+                PsiElement target = expression.resolve();
                 if (!(target instanceof PsiVariable)) {
                     return;
                 }
-                final PsiVariable variable = (PsiVariable) target;
+                PsiVariable variable = (PsiVariable) target;
                 if (!VariableSearchUtils.variableNameResolvesToTarget(referenceName, variable, expression)) {
                     return;
                 }
                 registerError(thisExpression, ProblemHighlightType.LIKE_UNUSED_SYMBOL);
             }
             else {
-                final String qualifierName = qualifier.getReferenceName();
+                String qualifierName = qualifier.getReferenceName();
                 if (qualifierName == null) {
                     return;
                 }
                 if (parent instanceof PsiCallExpression) {
-                    final PsiCallExpression callExpression = (PsiCallExpression) parent;
-                    final PsiMethod calledMethod = callExpression.resolveMethod();
+                    PsiCallExpression callExpression = (PsiCallExpression) parent;
+                    PsiMethod calledMethod = callExpression.resolveMethod();
                     if (calledMethod == null) {
                         return;
                     }
-                    final String methodName = calledMethod.getName();
+                    String methodName = calledMethod.getName();
                     PsiClass parentClass = ClassUtils.getContainingClass(expression);
-                    final Project project = expression.getProject();
-                    final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-                    final PsiResolveHelper resolveHelper = psiFacade.getResolveHelper();
+                    Project project = expression.getProject();
+                    JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+                    PsiResolveHelper resolveHelper = psiFacade.getResolveHelper();
                     while (parentClass != null) {
                         if (qualifierName.equals(parentClass.getName())) {
                             registerError(thisExpression, ProblemHighlightType.LIKE_UNUSED_SYMBOL);
                         }
-                        final PsiMethod[] methods = parentClass.findMethodsByName(methodName, true);
+                        PsiMethod[] methods = parentClass.findMethodsByName(methodName, true);
                         for (PsiMethod method : methods) {
-                            final PsiClass containingClass = method.getContainingClass();
+                            PsiClass containingClass = method.getContainingClass();
                             if (resolveHelper.isAccessible(method, expression, containingClass)) {
                                 if (method.hasModifierProperty(PsiModifier.PRIVATE)
                                     && !PsiTreeUtil.isAncestor(containingClass, expression, true)) {
@@ -165,11 +165,11 @@ public class UnnecessaryThisInspection extends BaseInspection {
                     }
                 }
                 else {
-                    final PsiElement target = expression.resolve();
+                    PsiElement target = expression.resolve();
                     if (!(target instanceof PsiVariable)) {
                         return;
                     }
-                    final PsiVariable variable = (PsiVariable) target;
+                    PsiVariable variable = (PsiVariable) target;
                     if (!VariableSearchUtils.variableNameResolvesToTarget(referenceName, variable, expression)) {
                         return;
                     }
@@ -178,7 +178,7 @@ public class UnnecessaryThisInspection extends BaseInspection {
                         if (qualifierName.equals(parentClass.getName())) {
                             registerError(thisExpression, ProblemHighlightType.LIKE_UNUSED_SYMBOL);
                         }
-                        final PsiField field = parentClass.findFieldByName(referenceName, true);
+                        PsiField field = parentClass.findFieldByName(referenceName, true);
                         if (field != null) {
                             return;
                         }

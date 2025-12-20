@@ -222,7 +222,7 @@ public abstract class ImportHelperTest extends DaemonAnalyzerTestCase
 
 
 		@NonNls String fullPath = getTestDataPath() + BASE_PATH + "/x/Usage_afterOptimize.txt";
-		final VirtualFile vFile = LocalFileSystem.getInstance().findFileByPath(fullPath.replace(File.separatorChar, '/'));
+		VirtualFile vFile = LocalFileSystem.getInstance().findFileByPath(fullPath.replace(File.separatorChar, '/'));
 		String text = LoadTextUtil.loadText(vFile).toString();
 		assertEquals(text, getFile().getText());
 	}
@@ -374,7 +374,7 @@ public abstract class ImportHelperTest extends DaemonAnalyzerTestCase
 
 	public void testAutoImportWorks() throws Throwable
 	{
-		@NonNls final String text = "class S { JFrame x; <caret> }";
+		@NonNls String text = "class S { JFrame x; <caret> }";
 		configureByText(JavaFileType.INSTANCE, text);
 		((UndoManagerImpl) UndoManager.getInstance(getProject())).flushCurrentCommandMerger();
 		((UndoManagerImpl) UndoManager.getInstance(getProject())).clearUndoRedoQueueInTests(getFile().getVirtualFile());
@@ -395,7 +395,7 @@ public abstract class ImportHelperTest extends DaemonAnalyzerTestCase
 
 	public void testAutoImportOfGenericReference() throws Throwable
 	{
-		@NonNls final String text = "class S {{ new ArrayList<caret><> }}";
+		@NonNls String text = "class S {{ new ArrayList<caret><> }}";
 		configureByText(JavaFileType.INSTANCE, text);
 		boolean old = CodeInsightSettings.getInstance().ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY;
 		CodeInsightSettings.getInstance().ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY = true;

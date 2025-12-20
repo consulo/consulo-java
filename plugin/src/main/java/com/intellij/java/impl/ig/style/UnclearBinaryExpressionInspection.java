@@ -60,35 +60,35 @@ public class UnclearBinaryExpressionInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
+            PsiElement element = descriptor.getPsiElement();
             if (!(element instanceof PsiExpression)) {
                 return;
             }
-            final PsiExpression expression = (PsiExpression) element;
-            final StringBuilder newExpressionText = createReplacementText(expression, new StringBuilder());
+            PsiExpression expression = (PsiExpression) element;
+            StringBuilder newExpressionText = createReplacementText(expression, new StringBuilder());
             replaceExpression(expression, newExpressionText.toString());
         }
 
         private static StringBuilder createReplacementText(@Nullable PsiExpression expression, StringBuilder out) {
             if (expression instanceof PsiPolyadicExpression) {
-                final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
-                final IElementType tokenType = polyadicExpression.getOperationTokenType();
-                final PsiElement parent = expression.getParent();
+                PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) expression;
+                IElementType tokenType = polyadicExpression.getOperationTokenType();
+                PsiElement parent = expression.getParent();
                 if (parent instanceof PsiPolyadicExpression) {
-                    final PsiPolyadicExpression parentPolyadicExpression = (PsiPolyadicExpression) parent;
-                    final IElementType parentOperationSign = parentPolyadicExpression.getOperationTokenType();
-                    final boolean parentheses = !tokenType.equals(parentOperationSign);
+                    PsiPolyadicExpression parentPolyadicExpression = (PsiPolyadicExpression) parent;
+                    IElementType parentOperationSign = parentPolyadicExpression.getOperationTokenType();
+                    boolean parentheses = !tokenType.equals(parentOperationSign);
                     appendText(polyadicExpression, parentheses, out);
                 }
                 else {
-                    final boolean parentheses = parent instanceof PsiConditionalExpression || parent instanceof PsiInstanceOfExpression;
+                    boolean parentheses = parent instanceof PsiConditionalExpression || parent instanceof PsiInstanceOfExpression;
                     appendText(polyadicExpression, parentheses, out);
                 }
             }
             else if (expression instanceof PsiParenthesizedExpression) {
-                final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) expression;
-                final PsiExpression unwrappedExpression = parenthesizedExpression.getExpression();
-                final PsiElement parent = expression.getParent();
+                PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) expression;
+                PsiExpression unwrappedExpression = parenthesizedExpression.getExpression();
+                PsiElement parent = expression.getParent();
                 if (!(parent instanceof PsiParenthesizedExpression)) {
                     out.append('(');
                     createReplacementText(unwrappedExpression, out);
@@ -99,21 +99,21 @@ public class UnclearBinaryExpressionInspection extends BaseInspection {
                 }
             }
             else if (expression instanceof PsiInstanceOfExpression) {
-                final PsiInstanceOfExpression instanceofExpression = (PsiInstanceOfExpression) expression;
-                final PsiElement parent = expression.getParent();
-                final boolean parentheses = mightBeConfusingExpression(parent);
+                PsiInstanceOfExpression instanceofExpression = (PsiInstanceOfExpression) expression;
+                PsiElement parent = expression.getParent();
+                boolean parentheses = mightBeConfusingExpression(parent);
                 appendText(instanceofExpression, parentheses, out);
             }
             else if (expression instanceof PsiConditionalExpression) {
-                final PsiConditionalExpression conditionalExpression = (PsiConditionalExpression) expression;
-                final PsiElement parent = expression.getParent();
-                final boolean parentheses = mightBeConfusingExpression(parent);
+                PsiConditionalExpression conditionalExpression = (PsiConditionalExpression) expression;
+                PsiElement parent = expression.getParent();
+                boolean parentheses = mightBeConfusingExpression(parent);
                 appendText(conditionalExpression, parentheses, out);
             }
             else if (expression instanceof PsiAssignmentExpression) {
-                final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) expression;
-                final PsiElement parent = expression.getParent();
-                final boolean parentheses = mightBeConfusingExpression(parent) && !isSimpleAssignment(assignmentExpression, parent);
+                PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) expression;
+                PsiElement parent = expression.getParent();
+                boolean parentheses = mightBeConfusingExpression(parent) && !isSimpleAssignment(assignmentExpression, parent);
                 appendText(assignmentExpression, parentheses, out);
             }
             else if (expression != null) {
@@ -126,9 +126,9 @@ public class UnclearBinaryExpressionInspection extends BaseInspection {
             if (!(parent instanceof PsiAssignmentExpression)) {
                 return false;
             }
-            final PsiAssignmentExpression parentAssignmentExpression = (PsiAssignmentExpression) parent;
-            final IElementType parentTokenType = parentAssignmentExpression.getOperationTokenType();
-            final IElementType tokenType = assignmentExpression.getOperationTokenType();
+            PsiAssignmentExpression parentAssignmentExpression = (PsiAssignmentExpression) parent;
+            IElementType parentTokenType = parentAssignmentExpression.getOperationTokenType();
+            IElementType tokenType = assignmentExpression.getOperationTokenType();
             return parentTokenType.equals(tokenType);
         }
 
@@ -136,11 +136,11 @@ public class UnclearBinaryExpressionInspection extends BaseInspection {
             if (parentheses) {
                 out.append('(');
             }
-            final PsiExpression lhs = assignmentExpression.getLExpression();
+            PsiExpression lhs = assignmentExpression.getLExpression();
             out.append(lhs.getText());
-            final PsiJavaToken sign = assignmentExpression.getOperationSign();
+            PsiJavaToken sign = assignmentExpression.getOperationSign();
             out.append(sign.getText());
-            final PsiExpression rhs = assignmentExpression.getRExpression();
+            PsiExpression rhs = assignmentExpression.getRExpression();
             createReplacementText(rhs, out);
             if (parentheses) {
                 out.append(')');
@@ -151,10 +151,10 @@ public class UnclearBinaryExpressionInspection extends BaseInspection {
             if (parentheses) {
                 out.append('(');
             }
-            final PsiExpression operand = instanceofExpression.getOperand();
+            PsiExpression operand = instanceofExpression.getOperand();
             createReplacementText(operand, out);
             out.append(" instanceof ");
-            final PsiTypeElement checkType = instanceofExpression.getCheckType();
+            PsiTypeElement checkType = instanceofExpression.getCheckType();
             if (checkType != null) {
                 out.append(checkType.getText());
             }
@@ -167,13 +167,13 @@ public class UnclearBinaryExpressionInspection extends BaseInspection {
             if (parentheses) {
                 out.append('(');
             }
-            final PsiExpression condition = conditionalExpression.getCondition();
+            PsiExpression condition = conditionalExpression.getCondition();
             createReplacementText(condition, out);
             out.append('?');
-            final PsiExpression thenExpression = conditionalExpression.getThenExpression();
+            PsiExpression thenExpression = conditionalExpression.getThenExpression();
             createReplacementText(thenExpression, out);
             out.append(':');
-            final PsiExpression elseExpression = conditionalExpression.getElseExpression();
+            PsiExpression elseExpression = conditionalExpression.getElseExpression();
             createReplacementText(elseExpression, out);
             if (parentheses) {
                 out.append(')');
@@ -184,7 +184,7 @@ public class UnclearBinaryExpressionInspection extends BaseInspection {
             if (parentheses) {
                 out.append('(');
             }
-            final PsiExpression[] operands = polyadicExpression.getOperands();
+            PsiExpression[] operands = polyadicExpression.getOperands();
             for (PsiExpression operand : operands) {
                 if (operand == null) {
                     continue;
@@ -195,14 +195,14 @@ public class UnclearBinaryExpressionInspection extends BaseInspection {
                 if (operands.length == 1) {
                     createReplacementText(operand, out);
                 }
-                final PsiJavaToken token = polyadicExpression.getTokenBeforeOperand(operand);
+                PsiJavaToken token = polyadicExpression.getTokenBeforeOperand(operand);
                 if (token != null) {
-                    final PsiElement beforeToken = token.getPrevSibling();
+                    PsiElement beforeToken = token.getPrevSibling();
                     if (beforeToken instanceof PsiWhiteSpace) {
                         out.append(beforeToken.getText());
                     }
                     out.append(token.getText());
-                    final PsiElement afterToken = token.getNextSibling();
+                    PsiElement afterToken = token.getNextSibling();
                     if (afterToken instanceof PsiWhiteSpace) {
                         out.append(afterToken.getText());
                     }
@@ -226,12 +226,12 @@ public class UnclearBinaryExpressionInspection extends BaseInspection {
         @Override
         public void visitPolyadicExpression(PsiPolyadicExpression expression) {
             super.visitPolyadicExpression(expression);
-            final PsiElement parent = expression.getParent();
+            PsiElement parent = expression.getParent();
             if (mightBeConfusingExpression(parent)) {
                 return;
             }
-            final IElementType tokenType = expression.getOperationTokenType();
-            final PsiExpression[] operands = expression.getOperands();
+            IElementType tokenType = expression.getOperationTokenType();
+            PsiExpression[] operands = expression.getOperands();
             for (PsiExpression operand : operands) {
                 if (operand instanceof PsiInstanceOfExpression) {
                     registerError(expression);
@@ -240,8 +240,8 @@ public class UnclearBinaryExpressionInspection extends BaseInspection {
                 if (!(operand instanceof PsiPolyadicExpression)) {
                     continue;
                 }
-                final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) operand;
-                final IElementType childTokenType = polyadicExpression.getOperationTokenType();
+                PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) operand;
+                IElementType childTokenType = polyadicExpression.getOperationTokenType();
                 if (!tokenType.equals(childTokenType)) {
                     registerError(expression);
                     return;
@@ -252,13 +252,13 @@ public class UnclearBinaryExpressionInspection extends BaseInspection {
         @Override
         public void visitConditionalExpression(PsiConditionalExpression expression) {
             super.visitConditionalExpression(expression);
-            final PsiElement parent = expression.getParent();
+            PsiElement parent = expression.getParent();
             if (mightBeConfusingExpression(parent)) {
                 return;
             }
-            final PsiExpression condition = expression.getCondition();
-            final PsiExpression thenExpression = expression.getThenExpression();
-            final PsiExpression elseExpression = expression.getElseExpression();
+            PsiExpression condition = expression.getCondition();
+            PsiExpression thenExpression = expression.getThenExpression();
+            PsiExpression elseExpression = expression.getElseExpression();
             if (!mightBeConfusingExpression(condition) && !mightBeConfusingExpression(thenExpression) &&
                 !mightBeConfusingExpression(elseExpression)) {
                 return;
@@ -269,11 +269,11 @@ public class UnclearBinaryExpressionInspection extends BaseInspection {
         @Override
         public void visitInstanceOfExpression(PsiInstanceOfExpression expression) {
             super.visitInstanceOfExpression(expression);
-            final PsiElement parent = expression.getParent();
+            PsiElement parent = expression.getParent();
             if (mightBeConfusingExpression(parent)) {
                 return;
             }
-            final PsiExpression operand = expression.getOperand();
+            PsiExpression operand = expression.getOperand();
             if (!mightBeConfusingExpression(operand)) {
                 return;
             }
@@ -283,20 +283,20 @@ public class UnclearBinaryExpressionInspection extends BaseInspection {
         @Override
         public void visitAssignmentExpression(PsiAssignmentExpression expression) {
             super.visitAssignmentExpression(expression);
-            final PsiElement parent = expression.getParent();
+            PsiElement parent = expression.getParent();
             if (mightBeConfusingExpression(parent)) {
                 return;
             }
-            final PsiExpression rhs = expression.getRExpression();
+            PsiExpression rhs = expression.getRExpression();
             if (!mightBeConfusingExpression(rhs)) {
                 return;
             }
             if (!(rhs instanceof PsiAssignmentExpression)) {
                 return;
             }
-            final PsiAssignmentExpression nestedAssignment = (PsiAssignmentExpression) rhs;
-            final IElementType nestedTokenType = nestedAssignment.getOperationTokenType();
-            final IElementType tokenType = expression.getOperationTokenType();
+            PsiAssignmentExpression nestedAssignment = (PsiAssignmentExpression) rhs;
+            IElementType nestedTokenType = nestedAssignment.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (nestedTokenType.equals(tokenType)) {
                 return;
             }

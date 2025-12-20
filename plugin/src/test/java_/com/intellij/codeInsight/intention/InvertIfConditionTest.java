@@ -29,15 +29,15 @@ public abstract class InvertIfConditionTest extends LightIntentionActionTestCase
   }
 
   @Override
-  protected void beforeActionStarted(final String testName, final String contents) {
+  protected void beforeActionStarted(String testName, String contents) {
     super.beforeActionStarted(testName, contents);
-    final CommonCodeStyleSettings settings = CodeStyleSettingsManager.getSettings(getProject()).getCommonSettings(JavaLanguage.INSTANCE);
+    CommonCodeStyleSettings settings = CodeStyleSettingsManager.getSettings(getProject()).getCommonSettings(JavaLanguage.INSTANCE);
     myElseOnNewLine = settings.ELSE_ON_NEW_LINE;
     settings.ELSE_ON_NEW_LINE = !contents.contains("else on the same line");
   }
 
   @Override
-  protected void afterActionCompleted(final String testName, final String contents) {
+  protected void afterActionCompleted(String testName, String contents) {
     super.afterActionCompleted(testName, contents);
     CommonCodeStyleSettings settings = CodeStyleSettingsManager.getSettings(getProject()).getCommonSettings(JavaLanguage.INSTANCE);
     settings.ELSE_ON_NEW_LINE = myElseOnNewLine;

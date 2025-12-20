@@ -32,9 +32,9 @@ import consulo.language.editor.TargetElementUtil;
 @ExtensionImpl
 public class HighlightOverridingMethodsHandlerFactory implements HighlightUsagesHandlerFactory {
   @Override
-  public HighlightUsagesHandlerBase createHighlightUsagesHandler(final Editor editor, final PsiFile file) {
+  public HighlightUsagesHandlerBase createHighlightUsagesHandler(Editor editor, PsiFile file) {
     int offset = TargetElementUtil.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
-    final PsiElement target = file.findElementAt(offset);
+    PsiElement target = file.findElementAt(offset);
     if (target instanceof PsiKeyword && (PsiKeyword.EXTENDS.equals(target.getText()) || PsiKeyword.IMPLEMENTS.equals(target.getText()))) {
       PsiElement parent = target.getParent();
       if (!(parent instanceof PsiReferenceList)) return null;

@@ -342,7 +342,7 @@ public abstract class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCa
     assertEmpty(highlightErrors());
     PsiDocumentManager.getInstance(getProject()).commitAllDocuments();
 
-    final StringBuilder sb = new StringBuilder("\"-\"");
+    StringBuilder sb = new StringBuilder("\"-\"");
     for (int i = 0; i < 10000; i++) sb.append("+\"b\"");
     final String hugeExpr = sb.toString();
     final int pos = getEditor().getDocument().getText().indexOf("\"\"");
@@ -355,10 +355,10 @@ public abstract class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCa
       }
     });
 
-    final PsiField field = ((PsiJavaFile)getFile()).getClasses()[0].getFields()[0];
-    final PsiExpression expression = field.getInitializer();
+    PsiField field = ((PsiJavaFile)getFile()).getClasses()[0].getFields()[0];
+    PsiExpression expression = field.getInitializer();
     assert expression != null;
-    final PsiType type = expression.getType();
+    PsiType type = expression.getType();
     assert type != null;
     assertEquals("PsiType:String", type.toString());
   }

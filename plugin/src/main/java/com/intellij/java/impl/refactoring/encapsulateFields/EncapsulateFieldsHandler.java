@@ -72,9 +72,9 @@ public class EncapsulateFieldsHandler implements RefactoringActionHandler {
    * if elements.length == 1 the expected value is either PsiClass or PsiField
    * if elements.length > 1 the expected values are PsiField objects only
    */
-  public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, DataContext dataContext) {
+  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
     PsiClass aClass = null;
-    final HashSet<PsiField> preselectedFields = new HashSet<>();
+    HashSet<PsiField> preselectedFields = new HashSet<>();
     if (elements.length == 1) {
       if (elements[0] instanceof PsiClass psiClass) {
         aClass = psiClass;
@@ -111,7 +111,7 @@ public class EncapsulateFieldsHandler implements RefactoringActionHandler {
     }
 
     LOG.assertTrue(aClass != null);
-    final PsiField[] fields = aClass.getFields();
+    PsiField[] fields = aClass.getFields();
     if (fields.length == 0) {
       CommonRefactoringUtil.showErrorHint(
         project,

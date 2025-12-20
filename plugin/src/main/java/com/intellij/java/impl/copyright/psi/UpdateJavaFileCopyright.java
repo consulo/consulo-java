@@ -79,7 +79,7 @@ public class UpdateJavaFileCopyright extends UpdatePsiFileCopyright<CopyrightFil
     }
 
     if (topclass != null) {
-      final List<PsiComment> comments = new ArrayList<PsiComment>();
+      List<PsiComment> comments = new ArrayList<PsiComment>();
       collectComments(first, topclass, comments);
       collectComments(topclass.getFirstChild(), topclass.getModifierList(), comments);
       checkCommentsForTopClass(topclass, location, comments);
@@ -94,8 +94,8 @@ public class UpdateJavaFileCopyright extends UpdatePsiFileCopyright<CopyrightFil
 
   @Nullable
   protected PsiElement[] getImportsList() {
-    final PsiJavaFile javaFile = (PsiJavaFile) getFile();
-    final PsiImportList importList = javaFile.getImportList();
+    PsiJavaFile javaFile = (PsiJavaFile) getFile();
+    PsiImportList importList = javaFile.getImportList();
     return importList == null ? null : importList.getChildren();
   }
 

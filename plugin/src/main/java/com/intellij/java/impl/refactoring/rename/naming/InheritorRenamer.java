@@ -25,7 +25,7 @@ import consulo.language.editor.refactoring.rename.AutomaticRenamer;
  */
 public class InheritorRenamer extends AutomaticRenamer {
   public InheritorRenamer(PsiClass aClass, String newClassName) {
-    for (final PsiClass inheritor : ClassInheritorsSearch.search(aClass, true).findAll()) {
+    for (PsiClass inheritor : ClassInheritorsSearch.search(aClass, true).findAll()) {
       if (inheritor.getName() != null) {
         myElements.add(inheritor);
       }

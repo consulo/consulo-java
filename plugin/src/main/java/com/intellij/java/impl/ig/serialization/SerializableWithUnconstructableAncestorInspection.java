@@ -47,7 +47,7 @@ public class SerializableWithUnconstructableAncestorInspection extends BaseInspe
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final PsiClass ancestor = (PsiClass) infos[0];
+        PsiClass ancestor = (PsiClass) infos[0];
         return InspectionGadgetsLocalize.serializableWithUnconstructableAncestorProblemDescriptor(ancestor.getName()).get();
     }
 
@@ -67,7 +67,7 @@ public class SerializableWithUnconstructableAncestorInspection extends BaseInspe
                 return;
             }
             PsiClass ancestor = aClass.getSuperClass();
-            final Set<PsiClass> visitedClasses = new HashSet<PsiClass>(8);
+            Set<PsiClass> visitedClasses = new HashSet<PsiClass>(8);
             while (ancestor != null && SerializationUtils.isSerializable(ancestor)) {
                 if (SerializationUtils.hasWriteReplace(ancestor)) {
                     return;
@@ -86,9 +86,9 @@ public class SerializableWithUnconstructableAncestorInspection extends BaseInspe
         private static boolean classHasNoArgConstructor(PsiClass aClass) {
             boolean hasConstructor = false;
             boolean hasNoArgConstructor = false;
-            for (final PsiMethod constructor : aClass.getConstructors()) {
+            for (PsiMethod constructor : aClass.getConstructors()) {
                 hasConstructor = true;
-                final PsiParameterList parameterList = constructor.getParameterList();
+                PsiParameterList parameterList = constructor.getParameterList();
                 if (parameterList.getParametersCount() == 0 &&
                     (constructor.hasModifierProperty(PsiModifier.PUBLIC) || constructor.hasModifierProperty(PsiModifier.PROTECTED))) {
                     hasNoArgConstructor = true;

@@ -47,7 +47,7 @@ class ParameterObjectBuilder {
     }
 
     public void addField(PsiParameter variable, String name, PsiType type, boolean setterRequired) {
-        final ParameterSpec field = new ParameterSpec(variable, name, type, setterRequired);
+        ParameterSpec field = new ParameterSpec(variable, name, type, setterRequired);
         fields.add(field);
     }
 
@@ -56,13 +56,13 @@ class ParameterObjectBuilder {
         this.typeParams.addAll(typeParams);
     }
 
-  public void setProject(final Project project) {
+  public void setProject(Project project) {
     myProject = project;
     myJavaCodeStyleManager = JavaCodeStyleManager.getInstance(myProject);
   }
 
   public String buildBeanClass() {
-        @NonNls final StringBuffer out = new StringBuffer(1024);
+        @NonNls StringBuffer out = new StringBuffer(1024);
         if (packageName.length() > 0) out.append("package " + packageName + ';');
         out.append('\n');
         out.append(myVisibility + " class " + className);
@@ -90,19 +90,19 @@ class ParameterObjectBuilder {
     }
 
     private void outputSetters(StringBuffer out) {
-        for (final ParameterSpec field : fields) {
+        for (ParameterSpec field : fields) {
             outputSetter(field, out);
         }
     }
 
     private void outputGetters(StringBuffer out) {
-        for (final ParameterSpec field : fields) {
+        for (ParameterSpec field : fields) {
             outputGetter(field, out);
         }
     }
 
     private void outputFields(StringBuffer out) {
-        for (final ParameterSpec field : fields) {
+        for (ParameterSpec field : fields) {
             outputField(field, out);
         }
     }
@@ -111,17 +111,17 @@ class ParameterObjectBuilder {
         if (!field.isSetterRequired()) {
             return;
         }
-      final PsiParameter parameter = field.getParameter();
-      final PsiType type = field.getType();
-        final String typeText;
+      PsiParameter parameter = field.getParameter();
+      PsiType type = field.getType();
+        String typeText;
         if (parameter.isVarArgs()) {
             typeText = ((PsiArrayType) type).getComponentType().getCanonicalText() + "...";
         } else {
             typeText = type.getCanonicalText();
         }
-        final String name = calculateStrippedName(field.getName());
-        final String capitalizedName = StringUtil.capitalize(name);
-        final String parameterName =
+        String name = calculateStrippedName(field.getName());
+        String capitalizedName = StringUtil.capitalize(name);
+        String parameterName =
                 myJavaCodeStyleManager.propertyNameToVariableName(name, VariableKind.PARAMETER);
 
         out.append("\tpublic void set" + capitalizedName + '(');
@@ -129,12 +129,12 @@ class ParameterObjectBuilder {
         out.append(CodeStyleSettingsManager.getSettings(myProject).GENERATE_FINAL_PARAMETERS?"final " : "");
         out.append(' ' +typeText + ' ' + parameterName + ")\n");
         out.append("\t{\n");
-        final String fieldName = myJavaCodeStyleManager.propertyNameToVariableName(name, VariableKind.FIELD);
+        String fieldName = myJavaCodeStyleManager.propertyNameToVariableName(name, VariableKind.FIELD);
       generateFieldAssignment(out, parameterName, fieldName);
       out.append("\t}\n");
     }
 
-  private static void generateFieldAssignment(final StringBuffer out, final String parameterName, final String fieldName) {
+  private static void generateFieldAssignment(StringBuffer out, String parameterName, String fieldName) {
     if (fieldName.equals(parameterName)) {
         out.append("\t\tthis." + fieldName + " = " + parameterName + ";\n");
     } else {
@@ -148,16 +148,16 @@ class ParameterObjectBuilder {
     }
 
     private void outputGetter(ParameterSpec field, @NonNls StringBuffer out) {
-        final PsiParameter parameter = field.getParameter();
-        final PsiType type = field.getType();
-        final String typeText;
+        PsiParameter parameter = field.getParameter();
+        PsiType type = field.getType();
+        String typeText;
         if (parameter.isVarArgs()) {
             typeText = ((PsiArrayType) type).getComponentType().getCanonicalText() + "[]";
         } else {
             typeText = type.getCanonicalText();
         }
-        final String name = calculateStrippedName(field.getName());
-        final String capitalizedName = StringUtil.capitalize(name);
+        String name = calculateStrippedName(field.getName());
+        String capitalizedName = StringUtil.capitalize(name);
         if (PsiType.BOOLEAN.equals(type)) {
             out.append('\t');
             outputAnnotationString(parameter, out);
@@ -168,7 +168,7 @@ class ParameterObjectBuilder {
             out.append(" public " +typeText + " get" + capitalizedName + "()\n");
         }
         out.append("\t{\n");
-        final String fieldName = myJavaCodeStyleManager.propertyNameToVariableName(name, VariableKind.FIELD);
+        String fieldName = myJavaCodeStyleManager.propertyNameToVariableName(name, VariableKind.FIELD);
         out.append("\t\treturn " + fieldName + ";\n");
         out.append("\t}\n");
     }
@@ -176,20 +176,20 @@ class ParameterObjectBuilder {
     private void outputConstructor(@NonNls StringBuffer out) {
         out.append("\t" + myVisibility + " " + className + '(');
         for (Iterator<ParameterSpec> iterator = fields.iterator(); iterator.hasNext();) {
-            final ParameterSpec field = iterator.next();
-            final PsiParameter parameter = field.getParameter();
+            ParameterSpec field = iterator.next();
+            PsiParameter parameter = field.getParameter();
             outputAnnotationString(parameter, out);
             out.append(CodeStyleSettingsManager.getSettings(myProject).GENERATE_FINAL_PARAMETERS ? " final " : "");
 
-            final PsiType type = field.getType();
-            final String typeText;
+            PsiType type = field.getType();
+            String typeText;
             if (parameter.isVarArgs()) {
               typeText = ((PsiArrayType) type).getComponentType().getCanonicalText() + "...";
             } else {
               typeText = type.getCanonicalText();
             }
-            final String name = calculateStrippedName(field.getName());
-            final String parameterName =
+            String name = calculateStrippedName(field.getName());
+            String parameterName =
               myJavaCodeStyleManager.propertyNameToVariableName(name, VariableKind.PARAMETER);
             out.append(' ' +typeText + ' ' + parameterName);
             if (iterator.hasNext()) {
@@ -198,10 +198,10 @@ class ParameterObjectBuilder {
         }
         out.append(")\n");
         out.append("\t{\n");
-        for (final ParameterSpec field : fields) {
-            final String name = calculateStrippedName(field.getName());
-            final String fieldName = myJavaCodeStyleManager.propertyNameToVariableName(name, VariableKind.FIELD);
-            final String parameterName =
+        for (ParameterSpec field : fields) {
+            String name = calculateStrippedName(field.getName());
+            String fieldName = myJavaCodeStyleManager.propertyNameToVariableName(name, VariableKind.FIELD);
+            String parameterName =
             myJavaCodeStyleManager.propertyNameToVariableName(name, VariableKind.PARAMETER);
           generateFieldAssignment(out, parameterName, fieldName);
         }
@@ -209,21 +209,21 @@ class ParameterObjectBuilder {
     }
 
     private void outputField(ParameterSpec field, StringBuffer out) {
-        final PsiParameter parameter = field.getParameter();
-        final PsiDocComment docComment = getJavadocForVariable(parameter);
+        PsiParameter parameter = field.getParameter();
+        PsiDocComment docComment = getJavadocForVariable(parameter);
         if (docComment != null) {
             out.append(docComment.getText());
             out.append('\n');
         }
-        final PsiType type = field.getType();
-        final String typeText;
+        PsiType type = field.getType();
+        String typeText;
         if (parameter.isVarArgs()) {
-            final PsiType componentType = ((PsiArrayType) type).getComponentType();
+            PsiType componentType = ((PsiArrayType) type).getComponentType();
             typeText = componentType.getCanonicalText() + "[]";
         } else {
             typeText = type.getCanonicalText();
         }
-        final String name = calculateStrippedName(field.getName());
+        String name = calculateStrippedName(field.getName());
         @NonNls String modifierString = "private ";
         if (!field.isSetterRequired()) {
             modifierString += "final ";
@@ -233,24 +233,24 @@ class ParameterObjectBuilder {
     }
 
     private void outputAnnotationString(PsiParameter parameter, StringBuffer out) {
-        final PsiModifierList modifierList = parameter.getModifierList();
-        final PsiAnnotation[] annotations = modifierList.getAnnotations();
+        PsiModifierList modifierList = parameter.getModifierList();
+        PsiAnnotation[] annotations = modifierList.getAnnotations();
         for (PsiAnnotation annotation : annotations) {
-            final PsiJavaCodeReferenceElement reference = annotation.getNameReferenceElement();
+            PsiJavaCodeReferenceElement reference = annotation.getNameReferenceElement();
             if (reference == null) {
                 continue;
             }
-            final PsiClass annotationClass = (PsiClass) reference.resolve();
+            PsiClass annotationClass = (PsiClass) reference.resolve();
             if (annotationClass != null) {
-                final PsiAnnotationParameterList parameterList = annotation.getParameterList();
-                final String annotationText = '@' + annotationClass.getQualifiedName() + parameterList.getText();
+                PsiAnnotationParameterList parameterList = annotation.getParameterList();
+                String annotationText = '@' + annotationClass.getQualifiedName() + parameterList.getText();
                 out.append(annotationText);
             }
         }
     }
 
     private static PsiDocComment getJavadocForVariable(PsiVariable variable) {
-        final PsiElement[] children = variable.getChildren();
+        PsiElement[] children = variable.getChildren();
         for (PsiElement child : children) {
             if (child instanceof PsiDocComment) {
                 return (PsiDocComment) child;

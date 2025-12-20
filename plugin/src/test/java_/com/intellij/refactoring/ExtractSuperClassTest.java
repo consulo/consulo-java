@@ -140,25 +140,25 @@ public abstract class ExtractSuperClassTest extends RefactoringTestCase {
     return JavaTestUtil.getJavaTestDataPath() + "/refactoring/extractSuperClass/" + getTestName(true);
   }
 
-  private void doTest(@NonNls final String className, @NonNls final String newClassName,
+  private void doTest(@NonNls String className, @NonNls String newClassName,
                       RefactoringTestUtil.MemberDescriptor... membersToFind) throws Exception {
     doTest(className, newClassName, null, membersToFind);
   }
 
-  private void doTest(@NonNls final String className, @NonNls final String newClassName,
+  private void doTest(@NonNls String className, @NonNls String newClassName,
                       String[] conflicts,
                       RefactoringTestUtil.MemberDescriptor... membersToFind) throws Exception {
     doTest(className, newClassName, conflicts, null, membersToFind);
   }
 
-  private void doTest(@NonNls final String className,
-                      @NonNls final String newClassName,
+  private void doTest(@NonNls String className,
+                      @NonNls String newClassName,
                       String[] conflicts,
                       String targetPackageName,
                       RefactoringTestUtil.MemberDescriptor... membersToFind) throws Exception {
     String rootBefore = getRoot() + "/before";
     PsiTestUtil.removeAllRoots(myModule, IdeaTestUtil.getMockJdk14());
-    final VirtualFile rootDir = PsiTestUtil.createTestProjectStructure(myProject, myModule, rootBefore, myFilesToDelete);
+    VirtualFile rootDir = PsiTestUtil.createTestProjectStructure(myProject, myModule, rootBefore, myFilesToDelete);
     PsiClass psiClass = myJavaFacade.findClass(className, ProjectScope.getAllScope(myProject));
     assertNotNull(psiClass);
     final MemberInfo[] members = RefactoringTestUtil.findMembers(psiClass, membersToFind);
@@ -166,7 +166,7 @@ public abstract class ExtractSuperClassTest extends RefactoringTestCase {
     if (targetPackageName == null) {
       targetDirectory = psiClass.getContainingFile().getContainingDirectory();
     } else {
-      final PsiJavaPackage aPackage = myJavaFacade.findPackage(targetPackageName);
+      PsiJavaPackage aPackage = myJavaFacade.findPackage(targetPackageName);
       assertNotNull(aPackage);
       targetDirectory = aPackage.getDirectories()[0];
     }
@@ -176,15 +176,15 @@ public abstract class ExtractSuperClassTest extends RefactoringTestCase {
                                                                           psiClass, members,
                                                                           false,
                                                                           new DocCommentPolicy<PsiComment>(DocCommentPolicy.ASIS));
-    final PsiJavaPackage targetPackage;
+    PsiJavaPackage targetPackage;
     if (targetDirectory != null) {
       targetPackage = JavaDirectoryService.getInstance().getPackage(targetDirectory);
     }
     else {
       targetPackage = null;
     }
-    final PsiClass superClass = psiClass.getExtendsListTypes().length > 0 ? psiClass.getSuperClass() : null;
-    final MultiMap<PsiElement, String> conflictsMap =
+    PsiClass superClass = psiClass.getExtendsListTypes().length > 0 ? psiClass.getSuperClass() : null;
+    MultiMap<PsiElement, String> conflictsMap =
       PullUpConflictsUtil.checkConflicts(members, psiClass, superClass, targetPackage, targetDirectory, new InterfaceContainmentVerifier() {
         @Override
         public boolean checkedInterfacesContain(PsiMethod psiMethod) {
@@ -195,8 +195,8 @@ public abstract class ExtractSuperClassTest extends RefactoringTestCase {
       if (conflictsMap.isEmpty()) {
         fail("Conflicts were not detected");
       }
-      final HashSet<String> expectedConflicts = new HashSet<String>(Arrays.asList(conflicts));
-      final HashSet<String> actualConflicts = new HashSet<String>(conflictsMap.values());
+      HashSet<String> expectedConflicts = new HashSet<String>(Arrays.asList(conflicts));
+      HashSet<String> actualConflicts = new HashSet<String>(conflictsMap.values());
       assertEquals(expectedConflicts.size(), actualConflicts.size());
       for (String actualConflict : actualConflicts) {
         if (!expectedConflicts.contains(actualConflict)) {

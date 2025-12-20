@@ -41,7 +41,7 @@ public class ErrorUtil {
    * @return true, if an PsiErrorElement was found, false otherwise.
    */
   public static boolean containsDeepError(PsiElement element) {
-    final ErrorElementVisitor visitor = new ErrorElementVisitor();
+    ErrorElementVisitor visitor = new ErrorElementVisitor();
     element.accept(visitor);
     return visitor.containsErrorElement();
   }

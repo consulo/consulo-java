@@ -49,7 +49,7 @@ public abstract class AbstractMakeStaticDialog extends RefactoringDialog {
     if (!validateData())
       return;
 
-    final Settings settings = new Settings(
+    Settings settings = new Settings(
             isReplaceUsages(),
             isMakeClassParameter() ? getClassParameterName() : null,
             getVariableData()

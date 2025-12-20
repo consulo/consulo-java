@@ -42,8 +42,8 @@ public class DemorgansIntention extends MutablyNamedIntention {
 
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
-        final PsiPolyadicExpression binaryExpression = (PsiPolyadicExpression) element;
-        final IElementType tokenType = binaryExpression.getOperationTokenType();
+        PsiPolyadicExpression binaryExpression = (PsiPolyadicExpression) element;
+        IElementType tokenType = binaryExpression.getOperationTokenType();
         if (tokenType.equals(JavaTokenType.ANDAND)) {
             return IntentionPowerPackLocalize.demorgansIntentionName1();
         }
@@ -64,17 +64,17 @@ public class DemorgansIntention extends MutablyNamedIntention {
     }
 
     public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-        final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) element;
-        final String newExpression = convertConjunctionExpression(polyadicExpression);
+        PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) element;
+        String newExpression = convertConjunctionExpression(polyadicExpression);
         replaceExpressionWithNegatedExpressionString(newExpression, polyadicExpression);
     }
 
     private static String convertConjunctionExpression(PsiPolyadicExpression polyadicExpression) {
-        final IElementType tokenType = polyadicExpression.getOperationTokenType();
-        final String flippedConjunction;
-        final boolean tokenTypeAndAnd = tokenType.equals(JavaTokenType.ANDAND);
+        IElementType tokenType = polyadicExpression.getOperationTokenType();
+        String flippedConjunction;
+        boolean tokenTypeAndAnd = tokenType.equals(JavaTokenType.ANDAND);
         flippedConjunction = tokenTypeAndAnd ? "||" : "&&";
-        final StringBuilder result = new StringBuilder();
+        StringBuilder result = new StringBuilder();
         for (PsiExpression operand : polyadicExpression.getOperands()) {
             if (result.length() != 0) {
                 result.append(flippedConjunction);
@@ -86,7 +86,7 @@ public class DemorgansIntention extends MutablyNamedIntention {
 
     private static String convertLeafExpression(PsiExpression expression, boolean tokenTypeAndAnd) {
         if (BoolUtils.isNegation(expression)) {
-            final PsiExpression negatedExpression = BoolUtils.getNegated(expression);
+            PsiExpression negatedExpression = BoolUtils.getNegated(expression);
             if (negatedExpression == null) {
                 return "";
             }
@@ -101,10 +101,10 @@ public class DemorgansIntention extends MutablyNamedIntention {
             return negatedExpression.getText();
         }
         else if (ComparisonUtils.isComparison(expression)) {
-            final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) expression;
-            final String negatedComparison = ComparisonUtils.getNegatedComparison(binaryExpression.getOperationTokenType());
-            final PsiExpression lhs = binaryExpression.getLOperand();
-            final PsiExpression rhs = binaryExpression.getROperand();
+            PsiBinaryExpression binaryExpression = (PsiBinaryExpression) expression;
+            String negatedComparison = ComparisonUtils.getNegatedComparison(binaryExpression.getOperationTokenType());
+            PsiExpression lhs = binaryExpression.getLOperand();
+            PsiExpression rhs = binaryExpression.getROperand();
             assert rhs != null;
             return lhs.getText() + negatedComparison + rhs.getText();
         }

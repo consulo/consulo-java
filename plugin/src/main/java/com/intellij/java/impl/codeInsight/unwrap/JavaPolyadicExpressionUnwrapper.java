@@ -44,18 +44,18 @@ public class JavaPolyadicExpressionUnwrapper extends JavaUnwrapper {
       return false;
     }
 
-    final PsiPolyadicExpression expression = (PsiPolyadicExpression)e.getParent();
+    PsiPolyadicExpression expression = (PsiPolyadicExpression)e.getParent();
 
-    final PsiExpression operand = findOperand(e, expression);
+    PsiExpression operand = findOperand(e, expression);
 
     return operand != null;
   }
 
   @Override
   protected void doUnwrap(PsiElement element, Context context) throws IncorrectOperationException {
-    final PsiPolyadicExpression parent = (PsiPolyadicExpression)element.getParent();
+    PsiPolyadicExpression parent = (PsiPolyadicExpression)element.getParent();
 
-    final PsiExpression operand = findOperand(element, parent);
+    PsiExpression operand = findOperand(element, parent);
 
     if (operand == null) {
       return;
@@ -68,10 +68,10 @@ public class JavaPolyadicExpressionUnwrapper extends JavaUnwrapper {
   @Nullable
   @RequiredReadAction
   private static PsiExpression findOperand(@Nonnull PsiElement e, @Nonnull PsiPolyadicExpression expression) {
-    final TextRange elementTextRange = e.getTextRange();
+    TextRange elementTextRange = e.getTextRange();
 
     for (PsiExpression operand : expression.getOperands()) {
-      final TextRange operandTextRange = operand.getTextRange();
+      TextRange operandTextRange = operand.getTextRange();
       if (operandTextRange != null && operandTextRange.contains(elementTextRange)) {
         return operand;
       }

@@ -62,7 +62,7 @@ public class MethodReturnOfConcreteClassInspection extends BaseInspection {
             if (method.isConstructor()) {
                 return;
             }
-            final PsiTypeElement typeElement = method.getReturnTypeElement();
+            PsiTypeElement typeElement = method.getReturnTypeElement();
             if (typeElement == null) {
                 return;
             }

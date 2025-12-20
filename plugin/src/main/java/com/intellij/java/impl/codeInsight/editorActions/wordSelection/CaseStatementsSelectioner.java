@@ -63,9 +63,9 @@ public class CaseStatementsSelectioner extends BasicSelectioner {
         sibling = sibling.getNextSibling();
       }
 
-      final Document document = editor.getDocument();
-      final int startOffset = document.getLineStartOffset(document.getLineNumber(caseStart.getTextOffset()));
-      final int endOffset = document.getLineEndOffset(document.getLineNumber(caseEnd.getTextOffset() + caseEnd.getTextLength())) + 1;
+      Document document = editor.getDocument();
+      int startOffset = document.getLineStartOffset(document.getLineNumber(caseStart.getTextOffset()));
+      int endOffset = document.getLineEndOffset(document.getLineNumber(caseEnd.getTextOffset() + caseEnd.getTextLength())) + 1;
 
       result.add(new TextRange(startOffset,endOffset));
       return result;

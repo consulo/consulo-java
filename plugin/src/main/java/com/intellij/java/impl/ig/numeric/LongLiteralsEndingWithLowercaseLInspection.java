@@ -65,9 +65,9 @@ public class LongLiteralsEndingWithLowercaseLInspection
 
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiExpression literal = (PsiExpression)descriptor.getPsiElement();
-      final String text = literal.getText();
-      final String newText = text.replace('l', 'L');
+      PsiExpression literal = (PsiExpression)descriptor.getPsiElement();
+      String text = literal.getText();
+      String newText = text.replace('l', 'L');
       replaceExpression(literal, newText);
     }
   }
@@ -78,18 +78,18 @@ public class LongLiteralsEndingWithLowercaseLInspection
     public void visitLiteralExpression(
       @Nonnull PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
-      final PsiType type = expression.getType();
+      PsiType type = expression.getType();
       if (type == null) {
         return;
       }
       if (!type.equals(PsiType.LONG)) {
         return;
       }
-      final String text = expression.getText();
+      String text = expression.getText();
       if (text == null) {
         return;
       }
-      final int length = text.length();
+      int length = text.length();
       if (length == 0) {
         return;
       }

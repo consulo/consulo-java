@@ -27,8 +27,8 @@ class ShiftUtils {
     if (!(rhs instanceof PsiLiteralExpression)) {
       return false;
     }
-    final PsiLiteralExpression literal = (PsiLiteralExpression)rhs;
-    final Object value = literal.getValue();
+    PsiLiteralExpression literal = (PsiLiteralExpression)rhs;
+    Object value = literal.getValue();
     if (!(value instanceof Number)) {
       return false;
     }
@@ -46,8 +46,8 @@ class ShiftUtils {
   }
 
   public static int getLogBase2(PsiExpression rhs) {
-    final PsiLiteralExpression literal = (PsiLiteralExpression)rhs;
-    final Object value = literal.getValue();
+    PsiLiteralExpression literal = (PsiLiteralExpression)rhs;
+    Object value = literal.getValue();
     int intValue = ((Number)value).intValue();
     int log = 0;
     while (intValue % 2 == 0) {
@@ -58,12 +58,12 @@ class ShiftUtils {
   }
 
   public static int getExpBase2(PsiExpression rhs) {
-    final PsiLiteralExpression literal = (PsiLiteralExpression)rhs;
-    final Object value = literal.getValue();
+    PsiLiteralExpression literal = (PsiLiteralExpression)rhs;
+    Object value = literal.getValue();
     if (value == null) {
       return 0;
     }
-    final int intValue = ((Number)value).intValue() & 31;
+    int intValue = ((Number)value).intValue() & 31;
     int exp = 1;
     for (int i = 0; i < intValue; i++) {
       exp <<= 1;
@@ -83,8 +83,8 @@ class ShiftUtils {
     if (!(rhs instanceof PsiLiteralExpression)) {
       return false;
     }
-    final PsiLiteralExpression literal = (PsiLiteralExpression)rhs;
-    final Object value = literal.getValue();
+    PsiLiteralExpression literal = (PsiLiteralExpression)rhs;
+    Object value = literal.getValue();
     if (!(value instanceof Number)) {
       return false;
     }

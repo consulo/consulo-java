@@ -47,25 +47,25 @@ public class ReplaceEqualityWithEqualsIntention extends Intention {
 
     public void processIntention(PsiElement element)
         throws IncorrectOperationException {
-        final PsiBinaryExpression exp =
+        PsiBinaryExpression exp =
             (PsiBinaryExpression) element;
-        final PsiExpression lhs = exp.getLOperand();
-        final PsiExpression rhs = exp.getROperand();
+        PsiExpression lhs = exp.getLOperand();
+        PsiExpression rhs = exp.getROperand();
         if (rhs == null) {
             return;
         }
-        final PsiExpression strippedLhs =
+        PsiExpression strippedLhs =
             ParenthesesUtils.stripParentheses(lhs);
         if (strippedLhs == null) {
             return;
         }
-        final PsiExpression strippedRhs =
+        PsiExpression strippedRhs =
             ParenthesesUtils.stripParentheses(rhs);
         if (strippedRhs == null) {
             return;
         }
-        final IElementType tokenType = exp.getOperationTokenType();
-        @NonNls final String expString;
+        IElementType tokenType = exp.getOperationTokenType();
+        @NonNls String expString;
         if (tokenType.equals(JavaTokenType.EQEQ)) {
             if (ParenthesesUtils.getPrecedence(strippedLhs) >
                 ParenthesesUtils.METHOD_CALL_PRECEDENCE) {

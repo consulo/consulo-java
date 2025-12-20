@@ -30,34 +30,34 @@ class IndexedForEachLoopPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiJavaToken)) {
       return false;
     }
-    final PsiJavaToken token = (PsiJavaToken)element;
-    final IElementType tokenType = token.getTokenType();
+    PsiJavaToken token = (PsiJavaToken)element;
+    IElementType tokenType = token.getTokenType();
     if (!JavaTokenType.FOR_KEYWORD.equals(tokenType)) {
       return false;
     }
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!(parent instanceof PsiForeachStatement)) {
       return false;
     }
-    final PsiForeachStatement foreachStatement =
+    PsiForeachStatement foreachStatement =
       (PsiForeachStatement)parent;
-    final PsiExpression iteratedValue = foreachStatement.getIteratedValue();
+    PsiExpression iteratedValue = foreachStatement.getIteratedValue();
     if (iteratedValue == null) {
       return false;
     }
-    final PsiType type = iteratedValue.getType();
+    PsiType type = iteratedValue.getType();
     if (!(type instanceof PsiArrayType)) {
       if (!(type instanceof PsiClassType)) {
         return false;
       }
-      final PsiClassType classType = (PsiClassType)type;
-      final PsiClass aClass = classType.resolve();
+      PsiClassType classType = (PsiClassType)type;
+      PsiClass aClass = classType.resolve();
       if (aClass == null) {
         return false;
       }
-      final Project project = element.getProject();
-      final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
-      final PsiClass listInterface =
+      Project project = element.getProject();
+      JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+      PsiClass listInterface =
         psiFacade.findClass(CommonClassNames.JAVA_UTIL_LIST, GlobalSearchScope.allScope(project));
       if (listInterface == null ||
           !InheritanceUtil.isInheritorOrSelf(aClass, listInterface, true)) {

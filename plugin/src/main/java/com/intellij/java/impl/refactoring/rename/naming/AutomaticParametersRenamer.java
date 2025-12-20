@@ -29,15 +29,15 @@ import consulo.language.editor.refactoring.rename.AutomaticRenamer;
 
 public class AutomaticParametersRenamer extends AutomaticRenamer {
   public AutomaticParametersRenamer(PsiParameter param, String newParamName) {
-    final PsiElement scope = param.getDeclarationScope();
+    PsiElement scope = param.getDeclarationScope();
     if (scope instanceof PsiMethod) {
-      final PsiMethod method = (PsiMethod) scope;
-      final int parameterIndex = method.getParameterList().getParameterIndex(param);
+      PsiMethod method = (PsiMethod) scope;
+      int parameterIndex = method.getParameterList().getParameterIndex(param);
       if (parameterIndex < 0) return;
       for (PsiMethod overrider : OverridingMethodsSearch.search(method)) {
-        final PsiParameter[] parameters = overrider.getParameterList().getParameters();
+        PsiParameter[] parameters = overrider.getParameterList().getParameters();
         if (parameterIndex >= parameters.length) continue;
-        final PsiParameter inheritedParam = parameters[parameterIndex];
+        PsiParameter inheritedParam = parameters[parameterIndex];
         if (!Comparing.strEqual(inheritedParam.getName(), newParamName)) {
           myElements.add(inheritedParam);
           suggestAllNames(inheritedParam.getName(), newParamName);

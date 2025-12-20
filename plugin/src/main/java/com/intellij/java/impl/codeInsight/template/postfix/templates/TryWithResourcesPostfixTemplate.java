@@ -52,12 +52,12 @@ public class TryWithResourcesPostfixTemplate extends PostfixTemplate {
 
     if (initializer == null) return false;
 
-    final PsiType type = initializer.getType();
+    PsiType type = initializer.getType();
     if (!(type instanceof PsiClassType)) return false;
-    final PsiClass aClass = ((PsiClassType)type).resolve();
+    PsiClass aClass = ((PsiClassType)type).resolve();
     Project project = element.getProject();
-    final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-    final PsiClass autoCloseable = facade.findClass(CommonClassNames.JAVA_LANG_AUTO_CLOSEABLE, (GlobalSearchScope) ProjectScopes.getLibrariesScope(project));
+    JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
+    PsiClass autoCloseable = facade.findClass(CommonClassNames.JAVA_LANG_AUTO_CLOSEABLE, (GlobalSearchScope) ProjectScopes.getLibrariesScope(project));
     if (!InheritanceUtil.isInheritorOrSelf(aClass, autoCloseable, true)) return false;
 
     return true;

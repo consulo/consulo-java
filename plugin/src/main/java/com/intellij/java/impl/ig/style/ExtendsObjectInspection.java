@@ -68,17 +68,17 @@ public class ExtendsObjectInspection extends BaseInspection {
     @Override
     public void doFix(@Nonnull Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement extendClassIdentifier = descriptor.getPsiElement();
-      final PsiClass element =
+      PsiElement extendClassIdentifier = descriptor.getPsiElement();
+      PsiClass element =
         (PsiClass)extendClassIdentifier.getParent();
       if (element == null) {
         return;
       }
-      final PsiReferenceList extendsList = element.getExtendsList();
+      PsiReferenceList extendsList = element.getExtendsList();
       if (extendsList == null) {
         return;
       }
-      final PsiJavaCodeReferenceElement[] referenceElements =
+      PsiJavaCodeReferenceElement[] referenceElements =
         extendsList.getReferenceElements();
       for (PsiJavaCodeReferenceElement referenceElement :
         referenceElements) {
@@ -102,8 +102,8 @@ public class ExtendsObjectInspection extends BaseInspection {
       if (aClass instanceof PsiTypeParameter) {
         return;
       }
-      final PsiClassType[] types = aClass.getExtendsListTypes();
-      for (final PsiClassType type : types) {
+      PsiClassType[] types = aClass.getExtendsListTypes();
+      for (PsiClassType type : types) {
         if (type.equalsToText(CommonClassNames.JAVA_LANG_OBJECT)) {
           registerClassError(aClass);
         }

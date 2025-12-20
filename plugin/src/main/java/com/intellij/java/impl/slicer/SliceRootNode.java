@@ -33,7 +33,7 @@ public class SliceRootNode extends SliceNode
 {
 	private final SliceUsage myRootUsage;
 
-	public SliceRootNode(@Nonnull Project project, @Nonnull DuplicateMap targetEqualUsages, final SliceUsage rootUsage)
+	public SliceRootNode(@Nonnull Project project, @Nonnull DuplicateMap targetEqualUsages, SliceUsage rootUsage)
 	{
 		super(project, SliceUsage.createRootUsage(rootUsage.getElement().getContainingFile(), rootUsage.params), targetEqualUsages);
 		myRootUsage = rootUsage;

@@ -58,22 +58,22 @@ public abstract class PsiDocumentManagerImplTest extends PlatformTestCase
 
 	public void testGetCachedPsiFile_NoFile() throws Exception
 	{
-		final PsiFile file = getPsiDocumentManager().getCachedPsiFile(new MockDocument());
+		PsiFile file = getPsiDocumentManager().getCachedPsiFile(new MockDocument());
 		assertNull(file);
 	}
 
 	public void testGetPsiFile_NotRegisteredDocument() throws Exception
 	{
-		final PsiFile file = getPsiDocumentManager().getPsiFile(new MockDocument());
+		PsiFile file = getPsiDocumentManager().getPsiFile(new MockDocument());
 		assertNull(file);
 	}
 
 	public void testGetDocument_FirstGet() throws Exception
 	{
 		VirtualFile vFile = createFile();
-		final PsiFile file = new MockPsiFile(vFile, getPsiManager());
+		PsiFile file = new MockPsiFile(vFile, getPsiManager());
 
-		final Document document = getPsiDocumentManager().getDocument(file);
+		Document document = getPsiDocumentManager().getDocument(file);
 		assertNotNull(document);
 		assertSame(document, FileDocumentManager.getInstance().getDocument(vFile));
 	}
@@ -222,7 +222,7 @@ public abstract class PsiDocumentManagerImplTest extends PlatformTestCase
 		final Document document = getPsiDocumentManager().getDocument(file);
 
 		File temp = createTempDirectory();
-		final Project alienProject = createProject(new File(temp, "alien.ipr"), DebugUtil.currentStackTrace());
+		Project alienProject = createProject(new File(temp, "alien.ipr"), DebugUtil.currentStackTrace());
 		boolean succ2 = ProjectManagerEx.getInstanceEx().openProject(alienProject);
 		assertTrue(succ2);
 
@@ -230,10 +230,10 @@ public abstract class PsiDocumentManagerImplTest extends PlatformTestCase
 		try
 		{
 			PsiManager alienManager = PsiManager.getInstance(alienProject);
-			final String alienText = "alien";
+			String alienText = "alien";
 
 			LightVirtualFile alienVirt = new LightVirtualFile("foo.java", alienText);
-			final PsiFile alienFile = alienManager.findFile(alienVirt);
+			PsiFile alienFile = alienManager.findFile(alienVirt);
 			final PsiDocumentManagerImpl alienDocManager = (PsiDocumentManagerImpl) PsiDocumentManager.getInstance(alienProject);
 			final Document alienDocument = alienDocManager.getDocument(alienFile);
 			//alienDocument.putUserData(CACHED_VIEW_PROVIDER, new MockFileViewProvider(alienFile));
@@ -369,7 +369,7 @@ public abstract class PsiDocumentManagerImplTest extends PlatformTestCase
 
 	private static void waitAndPump(Semaphore semaphore, int timeout)
 	{
-		final long limit = System.currentTimeMillis() + timeout;
+		long limit = System.currentTimeMillis() + timeout;
 		while(System.currentTimeMillis() < limit)
 		{
 			if(semaphore.waitFor(10))
@@ -389,7 +389,7 @@ public abstract class PsiDocumentManagerImplTest extends PlatformTestCase
 		final Document document = getPsiDocumentManager().getDocument(file);
 
 		File temp = createTempDirectory();
-		final Project alienProject = createProject(new File(temp, "alien.ipr"), DebugUtil.currentStackTrace());
+		Project alienProject = createProject(new File(temp, "alien.ipr"), DebugUtil.currentStackTrace());
 		boolean succ2 = ProjectManagerEx.getInstanceEx().openProject(alienProject);
 		assertTrue(succ2);
 
@@ -398,7 +398,7 @@ public abstract class PsiDocumentManagerImplTest extends PlatformTestCase
 		{
 			PsiManager alienManager = PsiManager.getInstance(alienProject);
 
-			final PsiFile alienFile = alienManager.findFile(virtualFile);
+			PsiFile alienFile = alienManager.findFile(virtualFile);
 			assertNotNull(alienFile);
 			final PsiDocumentManagerImpl alienDocManager = (PsiDocumentManagerImpl) PsiDocumentManager.getInstance(alienProject);
 			final Document alienDocument = alienDocManager.getDocument(alienFile);

@@ -51,18 +51,18 @@ public class CallToNativeMethodWhileLockedInspection
     @Override
     public void visitMethodCallExpression(
       @Nonnull PsiMethodCallExpression expression) {
-      final PsiMethod method = expression.resolveMethod();
+      PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return;
       }
       if (!method.hasModifierProperty(PsiModifier.NATIVE)) {
         return;
       }
-      final PsiClass containingClass = method.getContainingClass();
+      PsiClass containingClass = method.getContainingClass();
       if (containingClass == null) {
         return;
       }
-      final String className = containingClass.getQualifiedName();
+      String className = containingClass.getQualifiedName();
       if (CommonClassNames.JAVA_LANG_OBJECT.equals(className)) {
         return;
       }

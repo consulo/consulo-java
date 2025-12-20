@@ -36,17 +36,17 @@ public class SerializationUtils {
   }
 
   public static boolean isDirectlySerializable(@Nonnull PsiClass aClass) {
-    final PsiReferenceList implementsList = aClass.getImplementsList();
+    PsiReferenceList implementsList = aClass.getImplementsList();
     if (implementsList == null) {
       return false;
     }
-    final PsiJavaCodeReferenceElement[] interfaces = implementsList.getReferenceElements();
+    PsiJavaCodeReferenceElement[] interfaces = implementsList.getReferenceElements();
     for (PsiJavaCodeReferenceElement aInterfaces : interfaces) {
-      final PsiClass implemented = (PsiClass) aInterfaces.resolve();
+      PsiClass implemented = (PsiClass) aInterfaces.resolve();
       if (implemented == null) {
         continue;
       }
-      final String name = implemented.getQualifiedName();
+      String name = implemented.getQualifiedName();
       if (CommonClassNames.JAVA_IO_SERIALIZABLE.equals(name)) {
         return true;
       }
@@ -55,8 +55,8 @@ public class SerializationUtils {
   }
 
   public static boolean hasReadObject(@Nonnull PsiClass aClass) {
-    final PsiMethod[] methods = aClass.findMethodsByName("readObject", false);
-    for (final PsiMethod method : methods) {
+    PsiMethod[] methods = aClass.findMethodsByName("readObject", false);
+    for (PsiMethod method : methods) {
       if (isReadObject(method)) {
         return true;
       }
@@ -65,7 +65,7 @@ public class SerializationUtils {
   }
 
   public static boolean hasReadResolve(@Nonnull PsiClass aClass) {
-    final PsiMethod[] methods = aClass.findMethodsByName("readResolve", true);
+    PsiMethod[] methods = aClass.findMethodsByName("readResolve", true);
     for (PsiMethod method : methods) {
       if (isReadResolve(method)) {
         return true;
@@ -75,8 +75,8 @@ public class SerializationUtils {
   }
 
   public static boolean hasWriteObject(@Nonnull PsiClass aClass) {
-    final PsiMethod[] methods = aClass.findMethodsByName("writeObject", false);
-    for (final PsiMethod method : methods) {
+    PsiMethod[] methods = aClass.findMethodsByName("writeObject", false);
+    for (PsiMethod method : methods) {
       if (isWriteObject(method)) {
         return true;
       }
@@ -85,7 +85,7 @@ public class SerializationUtils {
   }
 
   public static boolean hasWriteReplace(@Nonnull PsiClass aClass) {
-    final PsiMethod[] methods = aClass.findMethodsByName("writeReplace", true);
+    PsiMethod[] methods = aClass.findMethodsByName("writeReplace", true);
     for (PsiMethod method : methods) {
       if (isWriteReplace(method)) {
         return true;
@@ -95,12 +95,12 @@ public class SerializationUtils {
   }
 
   public static boolean isReadObject(@Nonnull PsiMethod method) {
-    final PsiClassType type = TypeUtils.getType("java.io.ObjectInputStream", method);
+    PsiClassType type = TypeUtils.getType("java.io.ObjectInputStream", method);
     return MethodUtils.methodMatches(method, null, PsiType.VOID, "readObject", type);
   }
 
   public static boolean isWriteObject(@Nonnull PsiMethod method) {
-    final PsiClassType type = TypeUtils.getType("java.io.ObjectOutputStream", method);
+    PsiClassType type = TypeUtils.getType("java.io.ObjectOutputStream", method);
     return MethodUtils.methodMatches(method, null, PsiType.VOID, "writeObject", type);
   }
 
@@ -120,13 +120,13 @@ public class SerializationUtils {
       return true;
     }
     if (type instanceof PsiArrayType) {
-      final PsiArrayType arrayType = (PsiArrayType) type;
-      final PsiType componentType = arrayType.getComponentType();
+      PsiArrayType arrayType = (PsiArrayType) type;
+      PsiType componentType = arrayType.getComponentType();
       return isProbablySerializable(componentType);
     }
     if (type instanceof PsiClassType) {
-      final PsiClassType classTYpe = (PsiClassType) type;
-      final PsiClass psiClass = classTYpe.resolve();
+      PsiClassType classTYpe = (PsiClassType) type;
+      PsiClass psiClass = classTYpe.resolve();
       if (isSerializable(psiClass)) {
         return true;
       }
@@ -135,7 +135,7 @@ public class SerializationUtils {
       }
       if (InheritanceUtil.isInheritor(psiClass, CommonClassNames.JAVA_UTIL_COLLECTION) ||
           InheritanceUtil.isInheritor(psiClass, CommonClassNames.JAVA_UTIL_MAP)) {
-        final PsiType[] parameters = classTYpe.getParameters();
+        PsiType[] parameters = classTYpe.getParameters();
         for (PsiType parameter : parameters) {
           if (!isProbablySerializable(parameter)) {
             return false;

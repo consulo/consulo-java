@@ -30,7 +30,7 @@ public class PsiClassOrFunctionalExpressionListCellRenderer extends PsiElementLi
   }
 
   @Override
-  protected String getContainerText(NavigatablePsiElement element, final String name) {
+  protected String getContainerText(NavigatablePsiElement element, String name) {
     return PsiClassListCellRenderer.getContainerTextStatic(element);
   }
 

@@ -41,21 +41,21 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
   public static final String ALL_METHODS = "*";
   private final Class<ParentType> myDomMethodClass;
 
-  protected AbstractMethodResolveConverter(final Class<ParentType> domMethodClass) {
+  protected AbstractMethodResolveConverter(Class<ParentType> domMethodClass) {
     myDomMethodClass = domMethodClass;
   }
 
   @Nonnull
-  protected abstract Collection<PsiClass> getPsiClasses(final ParentType parent, final ConvertContext context);
+  protected abstract Collection<PsiClass> getPsiClasses(ParentType parent, ConvertContext context);
 
   @Nullable
   protected abstract AbstractMethodParams getMethodParams(@Nonnull ParentType parent);
 
-  public void bindReference(final GenericDomValue<PsiMethod> genericValue, final ConvertContext context, final PsiElement element) {
+  public void bindReference(GenericDomValue<PsiMethod> genericValue, ConvertContext context, PsiElement element) {
     assert element instanceof PsiMethod : "PsiMethod expected";
-    final PsiMethod psiMethod = (PsiMethod)element;
-    final ParentType parent = getParent(context);
-    final AbstractMethodParams methodParams = getMethodParams(parent);
+    PsiMethod psiMethod = (PsiMethod)element;
+    ParentType parent = getParent(context);
+    AbstractMethodParams methodParams = getMethodParams(parent);
     genericValue.setStringValue(psiMethod.getName());
     if (methodParams != null) {
       methodParams.undefine();
@@ -65,8 +65,8 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
     }
   }
 
-  public String getErrorMessage(final String s, final ConvertContext context) {
-    final ParentType parent = getParent(context);
+  public String getErrorMessage(String s, ConvertContext context) {
+    ParentType parent = getParent(context);
     return CodeInsightLocalize.errorCannotResolve01(
       IdeLocalize.elementMethod(),
       getReferenceCanonicalText(s, getMethodParams(parent))
@@ -74,17 +74,17 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
   }
 
   @Nonnull
-  protected final ParentType getParent(final ConvertContext context) {
+  protected final ParentType getParent(ConvertContext context) {
     ParentType parent = context.getInvocationElement().getParentOfType(myDomMethodClass, true);
     assert parent != null: "Can't get parent of type " + myDomMethodClass + " for " + context.getInvocationElement();
     return parent;
   }
 
-  public boolean isReferenceTo(@Nonnull final PsiElement element, final String stringValue, final PsiMethod resolveResult,
-                               final ConvertContext context) {
+  public boolean isReferenceTo(@Nonnull PsiElement element, String stringValue, PsiMethod resolveResult,
+                               ConvertContext context) {
     if (super.isReferenceTo(element, stringValue, resolveResult, context)) return true;
 
-    final Ref<Boolean> result = new Ref<>(Boolean.FALSE);
+    Ref<Boolean> result = new Ref<>(Boolean.FALSE);
     processMethods(context, method -> {
       if (method.equals(element)) {
         result.set(Boolean.TRUE);
@@ -97,7 +97,7 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
   }
 
   @SuppressWarnings({"WeakerAccess"})
-  protected void processMethods(final ConvertContext context, Processor<PsiMethod> processor, Function<PsiClass, PsiMethod[]> methodGetter) {
+  protected void processMethods(ConvertContext context, Processor<PsiMethod> processor, Function<PsiClass, PsiMethod[]> methodGetter) {
     for (PsiClass psiClass : getPsiClasses(getParent(context), context)) {
       if (psiClass != null) {
         for (PsiMethod psiMethod : methodGetter.apply(psiClass)) {
@@ -110,25 +110,25 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
   }
 
   @Nonnull
-  public Collection<? extends PsiMethod> getVariants(final ConvertContext context) {
+  public Collection<? extends PsiMethod> getVariants(ConvertContext context) {
     LinkedHashSet<PsiMethod> methodList = new LinkedHashSet<>();
     Processor<PsiMethod> processor = CommonProcessors.notNullProcessor(new CommonProcessors.CollectProcessor<>(methodList));
     processMethods(context, processor, s -> {
-      final List<PsiMethod> list = ContainerUtil.findAll(getVariants(s), object -> acceptMethod(object, context));
+      List<PsiMethod> list = ContainerUtil.findAll(getVariants(s), object -> acceptMethod(object, context));
       return list.toArray(new PsiMethod[list.size()]);
     });
     return methodList;
   }
 
-  protected Collection<PsiMethod> getVariants(final PsiClass s) {
+  protected Collection<PsiMethod> getVariants(PsiClass s) {
     return Arrays.asList(s.getAllMethods());
   }
 
-  protected boolean acceptMethod(final PsiMethod psiMethod, final ConvertContext context) {
+  protected boolean acceptMethod(PsiMethod psiMethod, ConvertContext context) {
     return methodSuits(psiMethod);
   }
 
-  public static boolean methodSuits(final PsiMethod psiMethod) {
+  public static boolean methodSuits(PsiMethod psiMethod) {
     if (psiMethod.isConstructor()) return false;
     return psiMethod.getContainingClass().isInterface()
       || (!psiMethod.hasModifierProperty(PsiModifier.FINAL) && !psiMethod.hasModifierProperty(PsiModifier.STATIC));
@@ -138,10 +138,10 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
     return Collections.singleton(ALL_METHODS);
   }
 
-  public PsiMethod fromString(final String methodName, final ConvertContext context) {
-    final CommonProcessors.FindFirstProcessor<PsiMethod> processor = new CommonProcessors.FindFirstProcessor<>();
+  public PsiMethod fromString(String methodName, ConvertContext context) {
+    CommonProcessors.FindFirstProcessor<PsiMethod> processor = new CommonProcessors.FindFirstProcessor<>();
     processMethods(context, processor, s -> {
-      final PsiMethod method = findMethod(s, methodName, getMethodParams(getParent(context)));
+      PsiMethod method = findMethod(s, methodName, getMethodParams(getParent(context)));
       if (method != null && acceptMethod(method, context)) {
         return new PsiMethod[]{method};
       }
@@ -153,18 +153,18 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
     return processor.getFoundValue();
   }
 
-  public String toString(final PsiMethod method, final ConvertContext context) {
+  public String toString(PsiMethod method, ConvertContext context) {
     return method.getName();
   }
 
-  public static String getReferenceCanonicalText(final String name, @Nullable final AbstractMethodParams methodParams) {
+  public static String getReferenceCanonicalText(String name, @Nullable AbstractMethodParams methodParams) {
     StringBuilder sb = new StringBuilder(name);
     if (methodParams == null) {
       sb.append("()");
     }
     else if (methodParams.getXmlTag() != null) {
       sb.append("(");
-      final List<GenericDomValue<PsiType>> list = methodParams.getMethodParams();
+      List<GenericDomValue<PsiType>> list = methodParams.getMethodParams();
       boolean first = true;
       for (GenericDomValue<PsiType> value : list) {
         if (first) first = false;
@@ -177,7 +177,7 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
   }
 
   @Nullable
-  public static PsiMethod findMethod(final PsiClass psiClass, final String methodName, @Nullable final AbstractMethodParams methodParameters) {
+  public static PsiMethod findMethod(PsiClass psiClass, String methodName, @Nullable AbstractMethodParams methodParameters) {
     if (psiClass == null || methodName == null) return null;
     return ContainerUtil.find(
       psiClass.findMethodsByName(methodName, true),
@@ -185,7 +185,7 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
     );
   }
 
-  public static boolean methodParamsMatchSignature(@Nullable final AbstractMethodParams params, final PsiMethod psiMethod) {
+  public static boolean methodParamsMatchSignature(@Nullable AbstractMethodParams params, PsiMethod psiMethod) {
     if (params != null && params.getXmlTag() == null) return true;
 
     PsiParameter[] parameters = psiMethod.getParameterList().getParameters();

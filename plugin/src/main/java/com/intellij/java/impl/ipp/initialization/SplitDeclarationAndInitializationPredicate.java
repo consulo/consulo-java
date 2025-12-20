@@ -27,7 +27,7 @@ class SplitDeclarationAndInitializationPredicate
   implements PsiElementPredicate {
 
   public boolean satisfiedBy(@Nonnull PsiElement element) {
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!(parent instanceof PsiField)) {
       return false;
     }
@@ -35,12 +35,12 @@ class SplitDeclarationAndInitializationPredicate
         element == parent.getFirstChild()) {
       return false;
     }
-    final PsiField field = (PsiField)parent;
-    final PsiExpression initializer = field.getInitializer();
+    PsiField field = (PsiField)parent;
+    PsiExpression initializer = field.getInitializer();
     if (initializer == null) {
       return false;
     }
-    final PsiClass containingClass = field.getContainingClass();
+    PsiClass containingClass = field.getContainingClass();
     if (containingClass == null || containingClass.isInterface()) {
       return false;
     }

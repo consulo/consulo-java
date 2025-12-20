@@ -62,7 +62,7 @@ public abstract class CompletionTestCase extends DaemonAnalyzerTestCase {
     complete(1);
   }
 
-  protected void complete(final int time) {
+  protected void complete(int time) {
     new CodeCompletionHandlerBase(myType).invokeCompletion(myProject, myEditor, time);
 
     LookupImpl lookup = (LookupImpl)LookupManager.getActiveLookup(myEditor);
@@ -75,7 +75,7 @@ public abstract class CompletionTestCase extends DaemonAnalyzerTestCase {
   }
 
   protected void selectItem(LookupElement item, char ch) {
-    final LookupImpl lookup = (LookupImpl)LookupManager.getInstance(myProject).getActiveLookup();
+    LookupImpl lookup = (LookupImpl)LookupManager.getInstance(myProject).getActiveLookup();
     assert lookup != null;
     lookup.setCurrentItem(item);
     lookup.finishLookup(ch);
@@ -91,7 +91,7 @@ public abstract class CompletionTestCase extends DaemonAnalyzerTestCase {
       assertEquals(0, finalCount);
       return;
     }
-    for (final LookupElement myItem : myItems) {
+    for (LookupElement myItem : myItems) {
       for (String value : values) {
         if (value == null) {
           assertFalse("Unacceptable value reached", true);

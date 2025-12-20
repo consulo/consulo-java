@@ -62,15 +62,15 @@ public class StringBufferToStringInConcatenationInspection extends BaseInspectio
 
         @Override
         public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement methodNameToken = descriptor.getPsiElement();
-            final PsiElement methodCallExpression = methodNameToken.getParent();
+            PsiElement methodNameToken = descriptor.getPsiElement();
+            PsiElement methodCallExpression = methodNameToken.getParent();
             assert methodCallExpression != null;
-            final PsiMethodCallExpression methodCall = (PsiMethodCallExpression) methodCallExpression.getParent();
+            PsiMethodCallExpression methodCall = (PsiMethodCallExpression) methodCallExpression.getParent();
             assert methodCall != null;
-            final PsiReferenceExpression expression = methodCall.getMethodExpression();
-            final PsiExpression qualifier = expression.getQualifierExpression();
+            PsiReferenceExpression expression = methodCall.getMethodExpression();
+            PsiExpression qualifier = expression.getQualifierExpression();
             assert qualifier != null;
-            final String newExpression = qualifier.getText();
+            String newExpression = qualifier.getText();
             replaceExpression(methodCall, newExpression);
         }
     }
@@ -89,24 +89,24 @@ public class StringBufferToStringInConcatenationInspection extends BaseInspectio
         }
 
         private static boolean isStringBufferToString(PsiMethodCallExpression expression) {
-            final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            final String referenceName = methodExpression.getReferenceName();
+            PsiReferenceExpression methodExpression = expression.getMethodExpression();
+            String referenceName = methodExpression.getReferenceName();
             if (!HardcodedMethodConstants.TO_STRING.equals(referenceName)) {
                 return false;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return false;
             }
-            final PsiParameterList parameterList = method.getParameterList();
+            PsiParameterList parameterList = method.getParameterList();
             if (parameterList.getParametersCount() != 0) {
                 return false;
             }
-            final PsiClass aClass = method.getContainingClass();
+            PsiClass aClass = method.getContainingClass();
             if (aClass == null) {
                 return false;
             }
-            final String className = aClass.getQualifiedName();
+            String className = aClass.getQualifiedName();
             return CommonClassNames.JAVA_LANG_STRING_BUFFER.equals(className)
                 || CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(className);
         }

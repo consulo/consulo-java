@@ -65,7 +65,7 @@ public abstract class MoveClassAndFileTest extends RefactoringTestCase {
   }
 
   private void performAction(String newPackageName, String fileName, String... classNames) {
-    final PsiElement[] elements = new PsiElement[classNames.length + 1];
+    PsiElement[] elements = new PsiElement[classNames.length + 1];
     for(int i = 0; i < classNames.length; i++){
       String className = classNames[i];
       elements[i] = myJavaFacade.findClass(className, GlobalSearchScope.projectScope(getProject()));
@@ -75,7 +75,7 @@ public abstract class MoveClassAndFileTest extends RefactoringTestCase {
 
     PsiJavaPackage aPackage = JavaPsiFacade.getInstance(myPsiManager.getProject()).findPackage(newPackageName);
     assertNotNull("Package " + newPackageName + " not found", aPackage);
-    final PsiDirectory[] dirs = aPackage.getDirectories();
+    PsiDirectory[] dirs = aPackage.getDirectories();
     assertEquals(dirs.length, 1);
 
     new JavaMoveFilesOrDirectoriesHandler().doMove(getProject(), elements, dirs[0], null);

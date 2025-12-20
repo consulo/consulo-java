@@ -29,7 +29,7 @@ class RemoveConditionalPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiConditionalExpression)) {
       return false;
     }
-    final PsiConditionalExpression condition =
+    PsiConditionalExpression condition =
       (PsiConditionalExpression)element;
     PsiExpression thenExpression = condition.getThenExpression();
     PsiExpression elseExpression = condition.getElseExpression();
@@ -41,8 +41,8 @@ class RemoveConditionalPredicate implements PsiElementPredicate {
     if (thenExpression == null || elseExpression == null) {
       return false;
     }
-    @NonNls final String thenText = thenExpression.getText();
-    @NonNls final String elseText = elseExpression.getText();
+    @NonNls String thenText = thenExpression.getText();
+    @NonNls String elseText = elseExpression.getText();
     if ("true".equals(elseText) && "false".equals(thenText)) {
       return !ErrorUtil.containsError(element);
     }

@@ -40,20 +40,20 @@ class MigrateGetterNameSetting
 
 	private final AtomicReference<Boolean> myGlobalValue = new AtomicReference<>();
 
-	void askUserIfNeed(final OverriddenUsageInfo info, final String newMethodName, final PsiType migrationReturnType)
+	void askUserIfNeed(OverriddenUsageInfo info, String newMethodName, PsiType migrationReturnType)
 	{
-		final Boolean globalValue = myGlobalValue.get();
+		Boolean globalValue = myGlobalValue.get();
 		if(globalValue == null)
 		{
-			final String currentName = ((PsiMethod) info.getElement()).getName();
-			final String messageText = String.format("Do migrate getter name from '%s' to '%s' since return type is migrated to '%s'?", currentName, newMethodName, migrationReturnType
+			String currentName = ((PsiMethod) info.getElement()).getName();
+			String messageText = String.format("Do migrate getter name from '%s' to '%s' since return type is migrated to '%s'?", currentName, newMethodName, migrationReturnType
 					.getCanonicalText());
 			UIUtil.invokeAndWaitIfNeeded((Runnable) () ->
 			{
-				final Boolean globalValue1 = myGlobalValue.get();
+				Boolean globalValue1 = myGlobalValue.get();
 				if(globalValue1 == null)
 				{
-					final int code = showChooserDialog(messageText);
+					int code = showChooserDialog(messageText);
 					if(code == 0)
 					{
 						myGlobalValue.set(true);

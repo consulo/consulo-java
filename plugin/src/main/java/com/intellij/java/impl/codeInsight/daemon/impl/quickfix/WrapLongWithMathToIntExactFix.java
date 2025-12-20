@@ -39,7 +39,7 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
 
     private final PsiType myType;
 
-    public WrapLongWithMathToIntExactFix(final PsiType type, final @Nonnull PsiExpression expression) {
+    public WrapLongWithMathToIntExactFix(PsiType type, @Nonnull PsiExpression expression) {
         super(expression);
         myType = type;
     }
@@ -114,14 +114,14 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
         @Nullable
         @Override
         protected PsiExpression getModifiedArgument(
-            final PsiExpression expression,
-            final PsiType toType
+            PsiExpression expression,
+            PsiType toType
         ) throws IncorrectOperationException {
             return areSameTypes(toType, PsiType.INT) ? (PsiExpression) getModifiedExpression(expression) : null;
         }
 
         @Override
-        public boolean areTypesConvertible(final PsiType exprType, final PsiType parameterType, @Nonnull final PsiElement context) {
+        public boolean areTypesConvertible(PsiType exprType, PsiType parameterType, @Nonnull PsiElement context) {
             return parameterType.isConvertibleFrom(exprType) || (areSameTypes(parameterType, PsiType.INT) && areSameTypes(
                 exprType,
                 PsiType.LONG
@@ -129,7 +129,7 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
         }
 
         @Override
-        public MethodArgumentFix createFix(final PsiExpressionList list, final int i, final PsiType toType) {
+        public MethodArgumentFix createFix(PsiExpressionList list, int i, PsiType toType) {
             return new MyMethodArgumentFix(list, i, toType, this);
         }
     }

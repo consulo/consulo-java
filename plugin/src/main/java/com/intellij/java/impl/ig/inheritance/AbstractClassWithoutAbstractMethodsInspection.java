@@ -64,11 +64,11 @@ public class AbstractClassWithoutAbstractMethodsInspection extends BaseInspectio
         }
 
         private static boolean hasAbstractMethods(PsiClass aClass) {
-            final PsiMethod[] methods = aClass.getMethods();
-            final Set<PsiMethod> overriddenMethods =
+            PsiMethod[] methods = aClass.getMethods();
+            Set<PsiMethod> overriddenMethods =
                 calculateOverriddenMethods(methods);
-            final PsiMethod[] allMethods = aClass.getAllMethods();
-            for (final PsiMethod method : allMethods) {
+            PsiMethod[] allMethods = aClass.getAllMethods();
+            for (PsiMethod method : allMethods) {
                 if (method.hasModifierProperty(PsiModifier.ABSTRACT) &&
                     !overriddenMethods.contains(method)) {
                     return true;
@@ -80,9 +80,9 @@ public class AbstractClassWithoutAbstractMethodsInspection extends BaseInspectio
         private static Set<PsiMethod> calculateOverriddenMethods(
             PsiMethod[] methods
         ) {
-            final Set<PsiMethod> overriddenMethods =
+            Set<PsiMethod> overriddenMethods =
                 new HashSet<PsiMethod>(methods.length);
-            for (final PsiMethod method : methods) {
+            for (PsiMethod method : methods) {
                 calculateOverriddenMethods(method, overriddenMethods);
             }
             return overriddenMethods;
@@ -91,8 +91,8 @@ public class AbstractClassWithoutAbstractMethodsInspection extends BaseInspectio
         private static void calculateOverriddenMethods(
             PsiMethod method, Set<PsiMethod> overriddenMethods
         ) {
-            final PsiMethod[] superMethods = method.findSuperMethods();
-            for (final PsiMethod superMethod : superMethods) {
+            PsiMethod[] superMethods = method.findSuperMethods();
+            for (PsiMethod superMethod : superMethods) {
                 overriddenMethods.add(superMethod);
             }
         }

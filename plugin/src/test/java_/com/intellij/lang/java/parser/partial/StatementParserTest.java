@@ -148,22 +148,22 @@ public abstract class StatementParserTest extends JavaParsingTestCase {
   public void testWhileIncomplete4() { doParserTest("while(cond)"); }
   public void testWhileIncomplete5() { doParserTest("while() foo();"); }
 
-  private void doBlockParserTest(final String text) {
+  private void doBlockParserTest(String text) {
     doParserTest(text, new MyBlockTestParser());
   }
   private static class MyBlockTestParser implements TestParser {
     @Override
-    public void parse(final PsiBuilder builder) {
+    public void parse(PsiBuilder builder) {
       JavaParser.INSTANCE.getStatementParser().parseCodeBlockDeep(builder, true);
     }
   }
 
-  private void doParserTest(final String text) {
+  private void doParserTest(String text) {
     doParserTest(text, new MyStatementsTestParser());
   }
   private static class MyStatementsTestParser implements TestParser {
     @Override
-    public void parse(final PsiBuilder builder) {
+    public void parse(PsiBuilder builder) {
       JavaParser.INSTANCE.getStatementParser().parseStatements(builder);
     }
   }

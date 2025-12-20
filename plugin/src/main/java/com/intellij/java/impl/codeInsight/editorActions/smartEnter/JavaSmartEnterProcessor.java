@@ -77,7 +77,7 @@ public class JavaSmartEnterProcessor extends SmartEnterProcessor {
   };
 
   static {
-    final List<Fixer> fixers = new ArrayList<>();
+    List<Fixer> fixers = new ArrayList<>();
     fixers.add(new LiteralFixer());
     fixers.add(new MethodCallFixer());
     fixers.add(new IfConditionFixer());
@@ -126,7 +126,7 @@ public class JavaSmartEnterProcessor extends SmartEnterProcessor {
   private final JavadocFixer myJavadocFixer = new JavadocFixer();
 
   @Override
-  public boolean process(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull final PsiFile psiFile) {
+  public boolean process(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile psiFile) {
     FeatureUsageTracker.getInstance().triggerFeatureUsed("codeassists.complete.statement");
 
     return invokeProcessor(editor, psiFile, false);
@@ -138,8 +138,8 @@ public class JavaSmartEnterProcessor extends SmartEnterProcessor {
   }
 
   private boolean invokeProcessor(Editor editor, PsiFile psiFile, boolean afterCompletion) {
-    final Document document = editor.getDocument();
-    final CharSequence textForRollback = document.getImmutableCharSequence();
+    Document document = editor.getDocument();
+    CharSequence textForRollback = document.getImmutableCharSequence();
     try {
       editor.putUserData(SMART_ENTER_TIMESTAMP, editor.getDocument().getModificationStamp());
       myFirstErrorOffset = Integer.MAX_VALUE;
@@ -153,7 +153,7 @@ public class JavaSmartEnterProcessor extends SmartEnterProcessor {
     return true;
   }
 
-  private void process(@Nonnull final Editor editor, @Nonnull final PsiFile file, final int attempt, boolean afterCompletion) throws TooManyAttemptsException {
+  private void process(@Nonnull Editor editor, @Nonnull PsiFile file, int attempt, boolean afterCompletion) throws TooManyAttemptsException {
     if (attempt > MAX_ATTEMPTS) {
       throw new TooManyAttemptsException();
     }
@@ -228,7 +228,7 @@ public class JavaSmartEnterProcessor extends SmartEnterProcessor {
 
 
   private void doEnter(PsiElement atCaret, Editor editor, boolean afterCompletion) throws IncorrectOperationException {
-    final PsiFile psiFile = atCaret.getContainingFile();
+    PsiFile psiFile = atCaret.getContainingFile();
 
     if (myFirstErrorOffset != Integer.MAX_VALUE) {
       editor.getCaretModel().moveToOffset(myFirstErrorOffset);
@@ -236,7 +236,7 @@ public class JavaSmartEnterProcessor extends SmartEnterProcessor {
       return;
     }
 
-    final RangeMarker rangeMarker = createRangeMarker(atCaret);
+    RangeMarker rangeMarker = createRangeMarker(atCaret);
     reformat(atCaret);
     commit(editor);
 
@@ -276,7 +276,7 @@ public class JavaSmartEnterProcessor extends SmartEnterProcessor {
       recurse = false;
     }
 
-    final PsiElement[] children = atCaret.getChildren();
+    PsiElement[] children = atCaret.getChildren();
     for (PsiElement child : children) {
       if (atCaret instanceof PsiStatement && child instanceof PsiStatement && !(atCaret instanceof PsiForStatement && child == ((PsiForStatement) atCaret).getInitialization())) {
         continue;
@@ -321,9 +321,9 @@ public class JavaSmartEnterProcessor extends SmartEnterProcessor {
         PsiPackageStatement ? statementAtCaret : null;
   }
 
-  protected void moveCaretInsideBracesIfAny(@Nonnull final Editor editor, @Nonnull final PsiFile file) throws IncorrectOperationException {
+  protected void moveCaretInsideBracesIfAny(@Nonnull Editor editor, @Nonnull PsiFile file) throws IncorrectOperationException {
     int caretOffset = editor.getCaretModel().getOffset();
-    final CharSequence chars = editor.getDocument().getCharsSequence();
+    CharSequence chars = editor.getDocument().getCharsSequence();
 
     if (CharArrayUtil.regionMatches(chars, caretOffset, "{}")) {
       caretOffset += 2;
@@ -336,8 +336,8 @@ public class JavaSmartEnterProcessor extends SmartEnterProcessor {
     if (CharArrayUtil.regionMatches(chars, caretOffset - "{}".length(), "{}") ||
         CharArrayUtil.regionMatches(chars, caretOffset - "{\n}".length(), "{\n}")) {
       commit(editor);
-      final CommonCodeStyleSettings settings = CodeStyle.getSettings(file).getCommonSettings(JavaLanguage.INSTANCE);
-      final boolean old = settings.KEEP_SIMPLE_BLOCKS_IN_ONE_LINE;
+      CommonCodeStyleSettings settings = CodeStyle.getSettings(file).getCommonSettings(JavaLanguage.INSTANCE);
+      boolean old = settings.KEEP_SIMPLE_BLOCKS_IN_ONE_LINE;
       settings.KEEP_SIMPLE_BLOCKS_IN_ONE_LINE = false;
       PsiElement leaf = file.findElementAt(caretOffset - 1);
       PsiElement elt = PsiTreeUtil.getParentOfType(leaf, PsiCodeBlock.class);
@@ -360,7 +360,7 @@ public class JavaSmartEnterProcessor extends SmartEnterProcessor {
     mySkipEnter = skipEnter;
   }
 
-  protected static void plainEnter(@Nonnull final Editor editor) {
+  protected static void plainEnter(@Nonnull Editor editor) {
     getEnterHandler().execute(editor, ((EditorEx) editor).getDataContext());
   }
 
@@ -368,8 +368,8 @@ public class JavaSmartEnterProcessor extends SmartEnterProcessor {
     return EditorActionManager.getInstance().getActionHandler(IdeActions.ACTION_EDITOR_START_NEW_LINE);
   }
 
-  protected static boolean isModified(@Nonnull final Editor editor) {
-    final Long timestamp = editor.getUserData(SMART_ENTER_TIMESTAMP);
+  protected static boolean isModified(@Nonnull Editor editor) {
+    Long timestamp = editor.getUserData(SMART_ENTER_TIMESTAMP);
     return editor.getDocument().getModificationStamp() != timestamp.longValue();
   }
 

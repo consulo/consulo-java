@@ -39,7 +39,7 @@ public abstract class BaseColorIntentionAction extends PsiElementBaseIntentionAc
       return false;
     }
 
-    final PsiNewExpression expression = PsiTreeUtil.getParentOfType(element, PsiNewExpression.class, false);
+    PsiNewExpression expression = PsiTreeUtil.getParentOfType(element, PsiNewExpression.class, false);
     if (expression == null) {
       return false;
     }
@@ -52,12 +52,12 @@ public abstract class BaseColorIntentionAction extends PsiElementBaseIntentionAc
       return false;
     }
 
-    final PsiReference reference = ref.getReference();
+    PsiReference reference = ref.getReference();
     if (reference == null) {
       return false;
     }
 
-    final PsiElement psiElement = reference.resolve();
+    PsiElement psiElement = reference.resolve();
     if (psiElement instanceof PsiClass && JAVA_AWT_COLOR.equals(((PsiClass)psiElement).getQualifiedName())) {
       return true;
     }

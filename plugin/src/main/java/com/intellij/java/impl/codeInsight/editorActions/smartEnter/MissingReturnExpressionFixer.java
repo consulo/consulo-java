@@ -54,10 +54,10 @@ public class MissingReturnExpressionFixer implements Fixer
 		PsiElement parent = PsiTreeUtil.getParentOfType(psiElement, PsiClassInitializer.class, PsiMethod.class);
 		if(parent instanceof PsiMethod)
 		{
-			final PsiType returnType = ((PsiMethod) parent).getReturnType();
+			PsiType returnType = ((PsiMethod) parent).getReturnType();
 			if(returnType != null && !PsiType.VOID.equals(returnType))
 			{
-				final int startOffset = retStatement.getTextRange().getStartOffset();
+				int startOffset = retStatement.getTextRange().getStartOffset();
 				if(returnValue != null)
 				{
 					editor.getDocument().insertString(startOffset + "return".length(), ";");
@@ -74,7 +74,7 @@ public class MissingReturnExpressionFixer implements Fixer
 		{
 			return false;
 		}
-		final PsiElement lastChild = returnStatement.getLastChild();
+		PsiElement lastChild = returnStatement.getLastChild();
 		if(!(lastChild instanceof PsiErrorElement))
 		{
 			return false;
@@ -88,7 +88,7 @@ public class MissingReturnExpressionFixer implements Fixer
 		if(!(prev instanceof PsiJavaToken))
 		{
 			int offset = returnStatement.getTextRange().getEndOffset();
-			final PsiMethod method = PsiTreeUtil.getParentOfType(returnStatement, PsiMethod.class, true, PsiLambdaExpression.class);
+			PsiMethod method = PsiTreeUtil.getParentOfType(returnStatement, PsiMethod.class, true, PsiLambdaExpression.class);
 			if(method != null && PsiType.VOID.equals(method.getReturnType()))
 			{
 				offset = returnStatement.getTextRange().getStartOffset() + "return".length();
@@ -104,11 +104,11 @@ public class MissingReturnExpressionFixer implements Fixer
 			return false;
 		}
 
-		final int offset = returnStatement.getTextRange().getEndOffset();
+		int offset = returnStatement.getTextRange().getEndOffset();
 		editor.getDocument().insertString(offset, ";");
 		if(prevToken.getTokenType() == JavaTokenType.RETURN_KEYWORD)
 		{
-			final PsiMethod method = PsiTreeUtil.getParentOfType(returnStatement, PsiMethod.class);
+			PsiMethod method = PsiTreeUtil.getParentOfType(returnStatement, PsiMethod.class);
 			if(method != null && !PsiType.VOID.equals(method.getReturnType()))
 			{
 				editor.getCaretModel().moveToOffset(offset);

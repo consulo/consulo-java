@@ -27,7 +27,7 @@ class ClassNameConvertor implements TreeStructureProvider {
   public Collection<AbstractTreeNode> modify(AbstractTreeNode parent, Collection<AbstractTreeNode> children, ViewSettings settings) {
     ArrayList<AbstractTreeNode> result = new ArrayList<AbstractTreeNode>();
 
-    for (final AbstractTreeNode aChildren : children) {
+    for (AbstractTreeNode aChildren : children) {
       ProjectViewNode treeNode = (ProjectViewNode)aChildren;
       Object o = treeNode.getValue();
       if (o instanceof PsiFile && ((PsiFile)o).getVirtualFile().getExtension().equals("java")) {

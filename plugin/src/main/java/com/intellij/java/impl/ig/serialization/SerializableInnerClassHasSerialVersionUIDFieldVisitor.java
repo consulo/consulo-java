@@ -48,7 +48,7 @@ class SerializableInnerClassHasSerialVersionUIDFieldVisitor
     if (hasSerialVersionUIDField(aClass)) {
       return;
     }
-    final PsiClass containingClass = aClass.getContainingClass();
+    PsiClass containingClass = aClass.getContainingClass();
     if (containingClass == null) {
       return;
     }
@@ -65,10 +65,10 @@ class SerializableInnerClassHasSerialVersionUIDFieldVisitor
   }
 
   private static boolean hasSerialVersionUIDField(PsiClass aClass) {
-    final PsiField[] fields = aClass.getFields();
+    PsiField[] fields = aClass.getFields();
     boolean hasSerialVersionUID = false;
     for (PsiField field : fields) {
-      final String fieldName = field.getName();
+      String fieldName = field.getName();
       if (HardcodedMethodConstants.SERIAL_VERSION_UID.equals(
         fieldName)) {
         hasSerialVersionUID = true;

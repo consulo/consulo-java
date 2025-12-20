@@ -28,7 +28,7 @@ public abstract class I18nQuickFixTest extends LightQuickFix15TestCase {
   }
 
   @Override
-  protected void beforeActionStarted(final String testName, final String contents) {
+  protected void beforeActionStarted(String testName, String contents) {
     myMustBeAvailableAfterInvoke = Comparing.strEqual(testName, "SystemCall.java");
   }
 

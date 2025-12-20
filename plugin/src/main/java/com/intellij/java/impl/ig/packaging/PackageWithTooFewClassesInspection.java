@@ -54,7 +54,7 @@ public abstract class PackageWithTooFewClassesInspection extends BaseGlobalInspe
         if (!(refEntity instanceof RefPackage)) {
             return null;
         }
-        final List<RefEntity> children = refEntity.getChildren();
+        List<RefEntity> children = refEntity.getChildren();
         if (children == null) {
             return null;
         }
@@ -67,7 +67,7 @@ public abstract class PackageWithTooFewClassesInspection extends BaseGlobalInspe
         if (numClasses >= limit || numClasses == 0) {
             return null;
         }
-        final LocalizeValue errorString =
+        LocalizeValue errorString =
             InspectionGadgetsLocalize.packageWithTooFewClassesProblemDescriptor(refEntity.getQualifiedName(), numClasses, limit);
         return new CommonProblemDescriptor[]{inspectionManager.createProblemDescriptor(errorString.get())};
     }

@@ -39,7 +39,7 @@ public class ThrownExceptionsPerMethodInspection extends MethodMetricInspection 
 
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final Integer exceptionCount = (Integer) infos[0];
+        Integer exceptionCount = (Integer) infos[0];
         return InspectionGadgetsLocalize.thrownExceptionsPerMethodProblemDescriptor(exceptionCount).get();
     }
 
@@ -62,9 +62,9 @@ public class ThrownExceptionsPerMethodInspection extends MethodMetricInspection 
             if (method.getNameIdentifier() == null) {
                 return;
             }
-            final PsiReferenceList throwList = method.getThrowsList();
-            final PsiJavaCodeReferenceElement[] thrownExceptions = throwList.getReferenceElements();
-            final int exceptionCount = thrownExceptions.length;
+            PsiReferenceList throwList = method.getThrowsList();
+            PsiJavaCodeReferenceElement[] thrownExceptions = throwList.getReferenceElements();
+            int exceptionCount = thrownExceptions.length;
             if (exceptionCount <= getLimit()) {
                 return;
             }

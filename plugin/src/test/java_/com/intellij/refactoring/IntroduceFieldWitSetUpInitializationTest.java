@@ -32,9 +32,9 @@ public abstract class IntroduceFieldWitSetUpInitializationTest extends CodeInsig
   }
 
   @Override
-  protected Module createModule(final String name) {
-    final Module module = super.createModule(name);
-    final String url = VfsUtil.getUrlForLibraryRoot(new File(PathUtil.getJarPathForClass(Before.class)));
+  protected Module createModule(String name) {
+    Module module = super.createModule(name);
+    String url = VfsUtil.getUrlForLibraryRoot(new File(PathUtil.getJarPathForClass(Before.class)));
     ModuleRootModificationUtil.addModuleLibrary(module, url);
     return module;
   }
@@ -73,14 +73,14 @@ public abstract class IntroduceFieldWitSetUpInitializationTest extends CodeInsig
 
   private void doTest() throws Exception {
     configureByFile("/refactoring/introduceField/before" + getTestName(false) + ".java");
-    final PsiLocalVariable local =
+    PsiLocalVariable local =
       PsiTreeUtil.getParentOfType(getFile().findElementAt(getEditor().getCaretModel().getOffset()), PsiLocalVariable.class);
     new LocalToFieldHandler(getProject(), false) {
       @Override
-      protected BaseExpressionToFieldHandler.Settings showRefactoringDialog(final PsiClass aClass,
-                                                                            final PsiLocalVariable local,
-                                                                            final PsiExpression[] occurences,
-                                                                            final boolean isStatic) {
+      protected BaseExpressionToFieldHandler.Settings showRefactoringDialog(PsiClass aClass,
+                                                                            PsiLocalVariable local,
+                                                                            PsiExpression[] occurences,
+                                                                            boolean isStatic) {
         return new BaseExpressionToFieldHandler.Settings("i", null, occurences, true, false, false,
                                                          BaseExpressionToFieldHandler.InitializationPlace.IN_SETUP_METHOD,
                                                          PsiModifier.PRIVATE, local, local.getType(), true, (BaseExpressionToFieldHandler.TargetDestination)null, false,

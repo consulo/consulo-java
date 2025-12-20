@@ -55,8 +55,8 @@ class CanBeFinalAnnotator extends RefGraphAnnotatorEx {
   public void onInitialize(RefElement refElement) {
     ((RefElementImpl) refElement).setFlag(true, CAN_BE_FINAL_MASK);
     if (refElement instanceof RefClass) {
-      final RefClass refClass = (RefClass) refElement;
-      final PsiClass psiClass = refClass.getElement();
+      RefClass refClass = (RefClass) refElement;
+      PsiClass psiClass = refClass.getElement();
       if (refClass.isEntry()) {
         ((RefClassImpl) refClass).setFlag(false, CAN_BE_FINAL_MASK);
         return;
@@ -76,8 +76,8 @@ class CanBeFinalAnnotator extends RefGraphAnnotatorEx {
         }
       }
     } else if (refElement instanceof RefMethod) {
-      final RefMethod refMethod = (RefMethod) refElement;
-      final PsiElement element = refMethod.getElement();
+      RefMethod refMethod = (RefMethod) refElement;
+      PsiElement element = refMethod.getElement();
       if (element instanceof PsiMethod) {
         PsiMethod psiMethod = (PsiMethod) element;
         if (refMethod.isConstructor() || refMethod.isAbstract() || refMethod.isStatic() ||
@@ -123,7 +123,7 @@ class CanBeFinalAnnotator extends RefGraphAnnotatorEx {
   @Override
   public void onReferencesBuild(RefElement refElement) {
     if (refElement instanceof RefClass) {
-      final PsiClass psiClass = (PsiClass) refElement.getElement();
+      PsiClass psiClass = (PsiClass) refElement.getElement();
       if (psiClass != null) {
 
         if (refElement.isEntry()) {
@@ -201,7 +201,7 @@ class CanBeFinalAnnotator extends RefGraphAnnotatorEx {
 
         for (PsiField psiField : psiFields) {
           if ((!hasInitializers || !allFields.contains(psiField)) && psiField.getInitializer() == null) {
-            final RefFieldImpl refField = (RefFieldImpl) myManager.getReference(psiField);
+            RefFieldImpl refField = (RefFieldImpl) myManager.getReference(psiField);
             if (refField != null) {
               refField.setFlag(false, CAN_BE_FINAL_MASK);
             }
@@ -210,7 +210,7 @@ class CanBeFinalAnnotator extends RefGraphAnnotatorEx {
 
       }
     } else if (refElement instanceof RefMethod) {
-      final RefMethod refMethod = (RefMethod) refElement;
+      RefMethod refMethod = (RefMethod) refElement;
       if (refMethod.isEntry()) {
         ((RefMethodImpl) refMethod).setFlag(false, CAN_BE_FINAL_MASK);
       }

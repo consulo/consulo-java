@@ -72,7 +72,7 @@ public class ModifierChooser {
   };
 
   static String[] getKeywords(@Nonnull PsiElement position) {
-    final PsiModifierList list = findModifierList(position);
+    PsiModifierList list = findModifierList(position);
     if (list == null && !shouldSuggestModifiers(position)) {
       return ArrayUtil.EMPTY_STRING_ARRAY;
     }
@@ -98,14 +98,14 @@ public class ModifierChooser {
     return addKeywords(list, CLASS_MODIFIERS);
   }
 
-  public static String[] addMemberModifiers(PsiModifierList list, final boolean inInterface) {
+  public static String[] addMemberModifiers(PsiModifierList list, boolean inInterface) {
     return addKeywords(list, inInterface ? INTERFACE_MEMBER_MODIFIERS : CLASS_MEMBER_MODIFIERS);
   }
 
   private static String[] addKeywords(PsiModifierList list, String[][] keywordSets) {
-    final List<String> ret = new ArrayList<String>();
+    List<String> ret = new ArrayList<String>();
     for (int i = 0; i < keywordSets.length; i++) {
-      final String[] keywords = keywordSets[keywordSets.length - i - 1];
+      String[] keywords = keywordSets[keywordSets.length - i - 1];
       boolean containModifierFlag = false;
       if (list != null) {
         for (@PsiModifier.ModifierConstant String keyword : keywords) {

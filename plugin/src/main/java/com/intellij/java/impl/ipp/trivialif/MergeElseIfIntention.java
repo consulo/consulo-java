@@ -42,15 +42,15 @@ public class MergeElseIfIntention extends Intention {
 
     public void processIntention(PsiElement element)
         throws IncorrectOperationException {
-        final PsiJavaToken token = (PsiJavaToken) element;
-        final PsiIfStatement parentStatement =
+        PsiJavaToken token = (PsiJavaToken) element;
+        PsiIfStatement parentStatement =
             (PsiIfStatement) token.getParent();
         assert parentStatement != null;
-        final PsiBlockStatement elseBranch =
+        PsiBlockStatement elseBranch =
             (PsiBlockStatement) parentStatement.getElseBranch();
         assert elseBranch != null;
-        final PsiCodeBlock elseBranchBlock = elseBranch.getCodeBlock();
-        final PsiStatement elseBranchContents =
+        PsiCodeBlock elseBranchBlock = elseBranch.getCodeBlock();
+        PsiStatement elseBranchContents =
             elseBranchBlock.getStatements()[0];
         replaceStatement(elseBranchContents.getText(), elseBranch);
     }

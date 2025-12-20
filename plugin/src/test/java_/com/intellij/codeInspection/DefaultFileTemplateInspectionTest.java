@@ -8,7 +8,7 @@ import com.intellij.testFramework.InspectionTestCase;
 public abstract class DefaultFileTemplateInspectionTest extends InspectionTestCase {
   @Override
   protected Sdk getTestProjectSdk() {
-    final Sdk sdk = super.getTestProjectSdk();
+    Sdk sdk = super.getTestProjectSdk();
     //LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.JDK_1_7);
     return sdk;
   }

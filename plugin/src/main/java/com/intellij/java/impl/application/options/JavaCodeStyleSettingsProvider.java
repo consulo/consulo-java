@@ -39,7 +39,7 @@ public class JavaCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
     public Configurable createSettingsPage(CodeStyleSettings settings, CodeStyleSettings originalSettings) {
         return new CodeStyleAbstractConfigurable(settings, originalSettings, JavaLanguageLocalize.javaLanguageDisplayName()) {
             @Override
-            protected CodeStyleAbstractPanel createPanel(final CodeStyleSettings settings) {
+            protected CodeStyleAbstractPanel createPanel(CodeStyleSettings settings) {
                 return new JavaCodeStyleMainPanel(getCurrentSettings(), settings);
             }
 

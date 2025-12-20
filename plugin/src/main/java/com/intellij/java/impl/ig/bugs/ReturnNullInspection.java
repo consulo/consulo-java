@@ -70,11 +70,11 @@ public class ReturnNullInspection extends BaseInspection {
     @Override
     @Nullable
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiElement elt = (PsiElement) infos[0];
+        PsiElement elt = (PsiElement) infos[0];
         if (!AnnotationUtil.isAnnotatingApplicable(elt)) {
             return null;
         }
-        final NullableNotNullManager manager =
+        NullableNotNullManager manager =
             NullableNotNullManager.getInstance(elt.getProject());
         return new DelegatingFix(new AnnotateMethodFix(
             manager.getDefaultNullable(),
@@ -84,7 +84,7 @@ public class ReturnNullInspection extends BaseInspection {
 
     @Override
     public JComponent createOptionsPanel() {
-        final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
+        MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
         optionsPanel.addCheckbox(InspectionGadgetsLocalize.returnOfNullIgnorePrivateOption().get(), "m_ignorePrivateMethods");
         optionsPanel.addCheckbox(InspectionGadgetsLocalize.returnOfNullArraysOption().get(), "m_reportArrayMethods");
         optionsPanel.addCheckbox(InspectionGadgetsLocalize.returnOfNullCollectionsOption().get(), "m_reportCollectionMethods");
@@ -104,7 +104,7 @@ public class ReturnNullInspection extends BaseInspection {
             @Nonnull PsiLiteralExpression value
         ) {
             super.visitLiteralExpression(value);
-            final String text = value.getText();
+            String text = value.getText();
             if (!PsiKeyword.NULL.equals(text)) {
                 return;
             }
@@ -117,7 +117,7 @@ public class ReturnNullInspection extends BaseInspection {
             if (!(parent instanceof PsiReturnStatement)) {
                 return;
             }
-            final PsiMethod method =
+            PsiMethod method =
                 PsiTreeUtil.getParentOfType(value, PsiMethod.class);
             if (method == null) {
                 return;
@@ -126,12 +126,12 @@ public class ReturnNullInspection extends BaseInspection {
                 method.hasModifierProperty(PsiModifier.PRIVATE)) {
                 return;
             }
-            final PsiType returnType = method.getReturnType();
+            PsiType returnType = method.getReturnType();
             if (returnType == null) {
                 return;
             }
-            final boolean isArray = returnType.getArrayDimensions() > 0;
-            final NullableNotNullManager nullableNotNullManager =
+            boolean isArray = returnType.getArrayDimensions() > 0;
+            NullableNotNullManager nullableNotNullManager =
                 NullableNotNullManager.getInstance(method.getProject());
             if (nullableNotNullManager.isNullable(method, false)) {
                 return;

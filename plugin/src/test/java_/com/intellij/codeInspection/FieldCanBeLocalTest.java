@@ -34,7 +34,7 @@ public abstract class FieldCanBeLocalTest extends InspectionTestCase {
   public void testFieldWithImmutableType() throws Exception {doTest();}
   public void testFieldUsedForWritingInLambda() throws Exception {doTest();}
   public void testIgnoreAnnotated() throws Exception {
-    final FieldCanBeLocalInspection inspection = new FieldCanBeLocalInspection();
+    FieldCanBeLocalInspection inspection = new FieldCanBeLocalInspection();
     inspection.EXCLUDE_ANNOS.add(Deprecated.class.getName());
     doTest("fieldCanBeLocal/" + getTestName(true), inspection);
   }

@@ -62,11 +62,11 @@ public class MisspelledTearDownInspection extends BaseInspection {
     @Override
     public void visitMethod(@Nonnull PsiMethod method) {
       // note: no call to super
-      final String methodName = method.getName();
+      String methodName = method.getName();
       if (!"teardown".equals(methodName)) {
         return;
       }
-      final PsiClass aClass = method.getContainingClass();
+      PsiClass aClass = method.getContainingClass();
       if (aClass == null) {
         return;
       }

@@ -34,20 +34,20 @@ import jakarta.annotation.Nullable;
  */
 public class PsiClassConverter extends Converter<PsiClass> implements CustomReferenceConverter<PsiClass> {
 
-  public PsiClass fromString(final String s, final ConvertContext context) {
+  public PsiClass fromString(String s, ConvertContext context) {
     if (StringUtil.isEmptyOrSpaces(s)) return null;
 
-    final DomElement element = context.getInvocationElement();
-    final GlobalSearchScope scope = element instanceof GenericDomValue ? getScope(context) : null;
+    DomElement element = context.getInvocationElement();
+    GlobalSearchScope scope = element instanceof GenericDomValue ? getScope(context) : null;
     return DomJavaUtil.findClass(s.trim(), context.getFile(), context.getModule(), scope);
   }
 
   @Nullable
-  public String getErrorMessage(@Nullable final String s, final ConvertContext context) {
+  public String getErrorMessage(@Nullable String s, ConvertContext context) {
     return null;
   }
 
-  public String toString(final PsiClass t, final ConvertContext context) {
+  public String toString(PsiClass t, ConvertContext context) {
     return t == null ? null : t.getQualifiedName();
   }
 
@@ -55,11 +55,11 @@ public class PsiClassConverter extends Converter<PsiClass> implements CustomRefe
   public PsiReference[] createReferences(GenericDomValue<PsiClass> genericDomValue, PsiElement element, ConvertContext context) {
 
     ExtendClass extendClass = genericDomValue.getAnnotation(ExtendClass.class);
-    final JavaClassReferenceProvider provider = createClassReferenceProvider(genericDomValue, context, extendClass);
+    JavaClassReferenceProvider provider = createClassReferenceProvider(genericDomValue, context, extendClass);
     return provider.getReferencesByElement(element);
   }
 
-  protected JavaClassReferenceProvider createClassReferenceProvider(final GenericDomValue<PsiClass> genericDomValue,
+  protected JavaClassReferenceProvider createClassReferenceProvider(GenericDomValue<PsiClass> genericDomValue,
                                                                     final ConvertContext context,
                                                                     ExtendClass extendClass) {
     return createJavaClassReferenceProvider(genericDomValue, extendClass, new JavaClassReferenceProvider() {
@@ -71,9 +71,9 @@ public class PsiClassConverter extends Converter<PsiClass> implements CustomRefe
     });
   }
 
-  public static JavaClassReferenceProvider createJavaClassReferenceProvider(final GenericDomValue genericDomValue,
+  public static JavaClassReferenceProvider createJavaClassReferenceProvider(GenericDomValue genericDomValue,
                                                                             ExtendClass extendClass,
-                                                                            final JavaClassReferenceProvider provider) {
+                                                                            JavaClassReferenceProvider provider) {
 
     if (extendClass != null) {
       if (StringUtil.isNotEmpty(extendClass.value())) {
@@ -120,7 +120,7 @@ public class PsiClassConverter extends Converter<PsiClass> implements CustomRefe
     protected JavaClassReferenceProvider createClassReferenceProvider(GenericDomValue<PsiClass> genericDomValue,
                                                                       ConvertContext context,
                                                                       ExtendClass extendClass) {
-      final JavaClassReferenceProvider provider = super.createClassReferenceProvider(genericDomValue, context,
+      JavaClassReferenceProvider provider = super.createClassReferenceProvider(genericDomValue, context,
           extendClass);
 
       provider.setOption(JavaClassReferenceProvider.CLASS_KIND, ClassKind.ANNOTATION);
@@ -136,7 +136,7 @@ public class PsiClassConverter extends Converter<PsiClass> implements CustomRefe
     protected JavaClassReferenceProvider createClassReferenceProvider(GenericDomValue<PsiClass> genericDomValue,
                                                                       ConvertContext context,
                                                                       ExtendClass extendClass) {
-      final JavaClassReferenceProvider provider = super.createClassReferenceProvider(genericDomValue, context,
+      JavaClassReferenceProvider provider = super.createClassReferenceProvider(genericDomValue, context,
           extendClass);
       provider.setOption(JavaClassReferenceProvider.CLASS_KIND, ClassKind.ENUM);
 

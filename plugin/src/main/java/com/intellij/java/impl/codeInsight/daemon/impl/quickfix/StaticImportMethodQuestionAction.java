@@ -73,7 +73,7 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
     public boolean execute() {
         PsiDocumentManager.getInstance(myProject).commitAllDocuments();
 
-        final PsiElement element = myRef.getElement();
+        PsiElement element = myRef.getElement();
         if (element == null || !element.isValid()) {
             return false;
         }
@@ -93,9 +93,9 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
         return true;
     }
 
-    private void doImport(final T toImport) {
-        final Project project = toImport.getProject();
-        final PsiElement element = myRef.getElement();
+    private void doImport(T toImport) {
+        Project project = toImport.getProject();
+        PsiElement element = myRef.getElement();
         if (element == null) {
             return;
         }
@@ -103,7 +103,7 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
             toImport, toImport.getName(), toImport.getContainingClass()));
     }
 
-    private void chooseAndImport(final Editor editor, final Project project) {
+    private void chooseAndImport(Editor editor, final Project project) {
         if (ApplicationManager.getApplication().isUnitTestMode()) {
             doImport(myCandidates.get(0));
             return;
@@ -156,7 +156,7 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
             }
         };
 
-        final ListPopupImpl popup = new ListPopupImpl(step) {
+        ListPopupImpl popup = new ListPopupImpl(step) {
             final PopupListElementRenderer rightArrow = new PopupListElementRenderer(this);
 
             @Override
@@ -166,7 +166,7 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
                         return getElementPresentableName(element);
                     }
 
-                    public String getContainerText(final T element, final String name) {
+                    public String getContainerText(T element, String name) {
                         return PsiClassListCellRenderer.getContainerTextStatic(element);
                     }
 
@@ -188,7 +188,7 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
                     }
 
                     @Override
-                    protected DefaultListCellRenderer getRightCellRenderer(final Object value) {
+                    protected DefaultListCellRenderer getRightCellRenderer(Object value) {
                         final DefaultListCellRenderer moduleRenderer = super.getRightCellRenderer(value);
                         return new DefaultListCellRenderer() {
                             @Override
@@ -215,7 +215,7 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
     }
 
     private String getElementPresentableName(T element) {
-        final PsiClass aClass = element.getContainingClass();
+        PsiClass aClass = element.getContainingClass();
         LOG.assertTrue(aClass != null);
         return ClassPresentationUtil.getNameForClass(aClass, false) + "." + element.getName();
     }

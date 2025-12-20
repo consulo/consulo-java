@@ -48,16 +48,16 @@ public class ExpandOneLineLambda2CodeBlockIntention extends Intention {
 
   @Override
   protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-    final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
+    PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
     LOG.assertTrue(lambdaExpression != null);
-    final PsiElement body = lambdaExpression.getBody();
+    PsiElement body = lambdaExpression.getBody();
     LOG.assertTrue(body instanceof PsiExpression);
     String blockText = "{";
     blockText += PsiType.VOID.equals(((PsiExpression) body).getType()) ? "" : "return ";
     blockText +=  body.getText() + ";}";
 
-    final String resultedLambdaText = lambdaExpression.getParameterList().getText() + "->" + blockText;
-    final PsiExpression expressionFromText =
+    String resultedLambdaText = lambdaExpression.getParameterList().getText() + "->" + blockText;
+    PsiExpression expressionFromText =
       JavaPsiFacade.getElementFactory(element.getProject()).createExpressionFromText(resultedLambdaText, lambdaExpression);
     lambdaExpression.replace(expressionFromText);
   }
@@ -67,7 +67,7 @@ public class ExpandOneLineLambda2CodeBlockIntention extends Intention {
   private static class LambdaExpressionPredicate implements PsiElementPredicate {
     @Override
     public boolean satisfiedBy(PsiElement element) {
-      final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
+      PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
       if (lambdaExpression != null) {
         return lambdaExpression.getBody() instanceof PsiExpression;
       }

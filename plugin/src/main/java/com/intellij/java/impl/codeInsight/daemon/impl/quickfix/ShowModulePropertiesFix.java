@@ -51,7 +51,7 @@ public class ShowModulePropertiesFix extends IntentionAndQuickFixAction implemen
     }
 
     @Override
-    public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
+    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
         return myModuleName != null;
     }
 

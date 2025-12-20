@@ -16,14 +16,14 @@ import java.util.Set;
  */
 public class JavaEditorTemplateUtilImpl {
   public static LookupElement addElementLookupItem(Set<LookupElement> items, PsiElement element) {
-    final LookupElement item = LookupItemUtil.objectToLookupItem(element);
+    LookupElement item = LookupItemUtil.objectToLookupItem(element);
     items.add(item);
     item.putUserData(TemplateLookupSelectionHandler.KEY_IN_LOOKUP_ITEM, new JavaTemplateLookupSelectionHandler());
     return item;
   }
 
   public static LookupElement addTypeLookupItem(Set<LookupElement> items, PsiType type) {
-    final LookupElement item = PsiTypeLookupItem.createLookupItem(type, null);
+    LookupElement item = PsiTypeLookupItem.createLookupItem(type, null);
     items.add(item);
     item.putUserData(TemplateLookupSelectionHandler.KEY_IN_LOOKUP_ITEM, new JavaTemplateLookupSelectionHandler());
     return item;

@@ -37,13 +37,13 @@ public class JavaLangClassMemberReference extends PsiReferenceBase<PsiLiteralExp
 
   @Override
   public PsiElement resolve() {
-    final Object value = myElement.getValue();
+    Object value = myElement.getValue();
     if (value instanceof String) {
-      final String name = (String) value;
-      final String type = getMemberType(myElement);
+      String name = (String) value;
+      String type = getMemberType(myElement);
 
       if (type != null) {
-        final ReflectiveClass ownerClass = getOwnerClass();
+        ReflectiveClass ownerClass = getOwnerClass();
         if (ownerClass != null) {
           switch (type) {
             case GET_FIELD: {
@@ -51,7 +51,7 @@ public class JavaLangClassMemberReference extends PsiReferenceBase<PsiLiteralExp
             }
 
             case GET_DECLARED_FIELD: {
-              final PsiField field = ownerClass.getPsiClass().findFieldByName(name, false);
+              PsiField field = ownerClass.getPsiClass().findFieldByName(name, false);
               return isPotentiallyAccessible(field, ownerClass) ? field : null;
             }
 
@@ -96,9 +96,9 @@ public class JavaLangClassMemberReference extends PsiReferenceBase<PsiLiteralExp
   @Override
   @Nonnull
   public Object[] getVariants() {
-    final String type = getMemberType(myElement);
+    String type = getMemberType(myElement);
     if (type != null) {
-      final ReflectiveClass ownerClass = getOwnerClass();
+      ReflectiveClass ownerClass = getOwnerClass();
       if (ownerClass != null) {
         switch (type) {
 
@@ -109,7 +109,7 @@ public class JavaLangClassMemberReference extends PsiReferenceBase<PsiLiteralExp
                 .toArray();
 
           case GET_FIELD: {
-            final Set<String> uniqueNames = new HashSet<>();
+            Set<String> uniqueNames = new HashSet<>();
             return Arrays.stream(ownerClass.getPsiClass().getAllFields())
                 .filter(field -> isPotentiallyAccessible(field, ownerClass) && uniqueNames.add(field.getName()))
                 .sorted(Comparator.comparingInt((PsiField field) -> isPublic(field) ? 0 : 1).thenComparing(PsiField::getName))
@@ -159,11 +159,11 @@ public class JavaLangClassMemberReference extends PsiReferenceBase<PsiLiteralExp
 
   @Nullable
   private PsiElement findOverloadedMethod(PsiMethod[] methods) {
-    final PsiMethodCallExpression definitionCall = PsiTreeUtil.getParentOfType(myElement, PsiMethodCallExpression.class);
+    PsiMethodCallExpression definitionCall = PsiTreeUtil.getParentOfType(myElement, PsiMethodCallExpression.class);
     if (definitionCall != null) {
-      final List<PsiExpression> arguments = getReflectionMethodArguments(definitionCall, 1);
+      List<PsiExpression> arguments = getReflectionMethodArguments(definitionCall, 1);
       if (arguments != null) {
-        final List<ReflectiveType> parameterTypes = ContainerUtil.map(arguments, type -> getReflectiveType(type));
+        List<ReflectiveType> parameterTypes = ContainerUtil.map(arguments, type -> getReflectiveType(type));
         return matchMethod(methods, parameterTypes);
       }
     }
@@ -172,10 +172,10 @@ public class JavaLangClassMemberReference extends PsiReferenceBase<PsiLiteralExp
 
   @Override
   public void handleInsert(@Nonnull InsertionContext context, @Nonnull LookupElement item) {
-    final Object object = item.getObject();
+    Object object = item.getObject();
     if (object instanceof ReflectiveSignature) {
-      final ReflectiveSignature signature = (ReflectiveSignature) object;
-      final String text = signature.getText(false, false, type -> type + ".class");
+      ReflectiveSignature signature = (ReflectiveSignature) object;
+      String text = signature.getText(false, false, type -> type + ".class");
       replaceText(context, text.isEmpty() ? "" : ", " + text);
     }
   }
@@ -186,7 +186,7 @@ public class JavaLangClassMemberReference extends PsiReferenceBase<PsiLiteralExp
     int mismatchCount = Integer.MAX_VALUE;
     PsiMethod bestGuess = null;
     for (PsiMethod method : methods) {
-      final int match = matchMethodArguments(method, argumentTypes);
+      int match = matchMethodArguments(method, argumentTypes);
       if (match == 0) {
         return method;
       }
@@ -202,13 +202,13 @@ public class JavaLangClassMemberReference extends PsiReferenceBase<PsiLiteralExp
   }
 
   private static int matchMethodArguments(PsiMethod method, List<? extends ReflectiveType> argumentTypes) {
-    final PsiParameter[] parameters = method.getParameterList().getParameters();
+    PsiParameter[] parameters = method.getParameterList().getParameters();
     if (parameters.length != argumentTypes.size()) {
       return -1;
     }
     int mismatchCount = 0;
     for (int i = 0; i < parameters.length; i++) {
-      final ReflectiveType argumentType = argumentTypes.get(i);
+      ReflectiveType argumentType = argumentTypes.get(i);
       if (argumentType == null) {
         mismatchCount++;
         continue;
@@ -222,10 +222,10 @@ public class JavaLangClassMemberReference extends PsiReferenceBase<PsiLiteralExp
 
   @Nullable
   public static List<PsiExpression> getReflectionMethodArguments(@Nonnull PsiMethodCallExpression definitionCall, int argumentOffset) {
-    final PsiExpression[] arguments = definitionCall.getArgumentList().getExpressions();
+    PsiExpression[] arguments = definitionCall.getArgumentList().getExpressions();
 
     if (arguments.length == argumentOffset + 1) {
-      final List<PsiExpression> arrayElements = getVarargs(arguments[argumentOffset]);
+      List<PsiExpression> arrayElements = getVarargs(arguments[argumentOffset]);
       if (arrayElements != null) {
         return arrayElements;
       }

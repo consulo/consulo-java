@@ -32,7 +32,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class JavaNonCodeSearchElementDescriptionProvider implements ElementDescriptionProvider {
   @Override
-  public String getElementDescription(@Nonnull final PsiElement element, @Nonnull final ElementDescriptionLocation location) {
+  public String getElementDescription(@Nonnull PsiElement element, @Nonnull ElementDescriptionLocation location) {
     if (!(location instanceof NonCodeSearchDescriptionLocation)) return null;
     NonCodeSearchDescriptionLocation ncdLocation = (NonCodeSearchDescriptionLocation) location;
     if (element instanceof PsiJavaPackage) {

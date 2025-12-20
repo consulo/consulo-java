@@ -72,15 +72,15 @@ public class StringConcatenationInLoopsInspection extends BaseInspection {
         @Override
         public void visitPolyadicExpression(PsiPolyadicExpression expression) {
             super.visitPolyadicExpression(expression);
-            final PsiExpression[] operands = expression.getOperands();
+            PsiExpression[] operands = expression.getOperands();
             if (operands.length <= 1) {
                 return;
             }
-            final IElementType tokenType = expression.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (!tokenType.equals(JavaTokenType.PLUS)) {
                 return;
             }
-            final PsiType type = expression.getType();
+            PsiType type = expression.getType();
             if (!TypeUtils.isJavaLangString(type)) {
                 return;
             }
@@ -99,7 +99,7 @@ public class StringConcatenationInLoopsInspection extends BaseInspection {
             if (m_ignoreUnlessAssigned && !isAppendedRepeatedly(expression)) {
                 return;
             }
-            final PsiJavaToken sign = expression.getTokenBeforeOperand(operands[1]);
+            PsiJavaToken sign = expression.getTokenBeforeOperand(operands[1]);
             registerError(sign);
         }
 
@@ -109,13 +109,13 @@ public class StringConcatenationInLoopsInspection extends BaseInspection {
             if (expression.getRExpression() == null) {
                 return;
             }
-            final PsiJavaToken sign = expression.getOperationSign();
-            final IElementType tokenType = sign.getTokenType();
+            PsiJavaToken sign = expression.getOperationSign();
+            IElementType tokenType = sign.getTokenType();
             if (!tokenType.equals(JavaTokenType.PLUSEQ)) {
                 return;
             }
             PsiExpression lhs = expression.getLExpression();
-            final PsiType type = lhs.getType();
+            PsiType type = lhs.getType();
             if (type == null) {
                 return;
             }
@@ -133,7 +133,7 @@ public class StringConcatenationInLoopsInspection extends BaseInspection {
             }
             if (m_ignoreUnlessAssigned) {
                 while (lhs instanceof PsiParenthesizedExpression) {
-                    final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) lhs;
+                    PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) lhs;
                     lhs = parenthesizedExpression.getExpression();
                 }
                 if (!(lhs instanceof PsiReferenceExpression)) {
@@ -144,11 +144,11 @@ public class StringConcatenationInLoopsInspection extends BaseInspection {
         }
 
         private boolean containingStatementExits(PsiElement element) {
-            final PsiStatement newExpressionStatement = PsiTreeUtil.getParentOfType(element, PsiStatement.class);
+            PsiStatement newExpressionStatement = PsiTreeUtil.getParentOfType(element, PsiStatement.class);
             if (newExpressionStatement == null) {
                 return containingStatementExits(element);
             }
-            final PsiStatement parentStatement = PsiTreeUtil.getParentOfType(newExpressionStatement, PsiStatement.class);
+            PsiStatement parentStatement = PsiTreeUtil.getParentOfType(newExpressionStatement, PsiStatement.class);
             return !ControlFlowUtils.statementMayCompleteNormally(parentStatement);
         }
 
@@ -160,10 +160,10 @@ public class StringConcatenationInLoopsInspection extends BaseInspection {
             if (!(parent instanceof PsiAssignmentExpression)) {
                 return false;
             }
-            final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) parent;
+            PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) parent;
             PsiExpression lhs = assignmentExpression.getLExpression();
             while (lhs instanceof PsiParenthesizedExpression) {
-                final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) lhs;
+                PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression) lhs;
                 lhs = parenthesizedExpression.getExpression();
             }
             if (!(lhs instanceof PsiReferenceExpression)) {
@@ -172,13 +172,13 @@ public class StringConcatenationInLoopsInspection extends BaseInspection {
             if (assignmentExpression.getOperationTokenType() == JavaTokenType.PLUSEQ) {
                 return true;
             }
-            final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) lhs;
-            final PsiElement element = referenceExpression.resolve();
+            PsiReferenceExpression referenceExpression = (PsiReferenceExpression) lhs;
+            PsiElement element = referenceExpression.resolve();
             if (!(element instanceof PsiVariable)) {
                 return false;
             }
-            final PsiVariable variable = (PsiVariable) element;
-            final PsiExpression rhs = assignmentExpression.getRExpression();
+            PsiVariable variable = (PsiVariable) element;
+            PsiExpression rhs = assignmentExpression.getRExpression();
             return rhs != null && VariableAccessUtils.variableIsUsed(variable, rhs);
         }
     }

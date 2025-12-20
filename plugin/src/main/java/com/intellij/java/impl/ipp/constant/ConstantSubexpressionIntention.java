@@ -42,12 +42,12 @@ public class ConstantSubexpressionIntention extends MutablyNamedIntention {
 
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
-        final PsiJavaToken token;
+        PsiJavaToken token;
         if (element instanceof PsiJavaToken) {
             token = (PsiJavaToken) element;
         }
         else {
-            final PsiElement prevSibling = element.getPrevSibling();
+            PsiElement prevSibling = element.getPrevSibling();
             if (prevSibling instanceof PsiJavaToken) {
                 token = (PsiJavaToken) prevSibling;
             }
@@ -55,9 +55,9 @@ public class ConstantSubexpressionIntention extends MutablyNamedIntention {
                 throw new AssertionError();
             }
         }
-        final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) element.getParent();
-        final PsiPolyadicExpression subexpression = ConstantSubexpressionPredicate.getSubexpression(polyadicExpression, token);
-        final String text = HighlightUtil.getPresentableText(subexpression);
+        PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) element.getParent();
+        PsiPolyadicExpression subexpression = ConstantSubexpressionPredicate.getSubexpression(polyadicExpression, token);
+        String text = HighlightUtil.getPresentableText(subexpression);
         return IntentionPowerPackLocalize.constantExpressionIntentionName(text);
     }
 
@@ -69,12 +69,12 @@ public class ConstantSubexpressionIntention extends MutablyNamedIntention {
 
     @Override
     public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-        final PsiJavaToken token;
+        PsiJavaToken token;
         if (element instanceof PsiJavaToken) {
             token = (PsiJavaToken) element;
         }
         else {
-            final PsiElement prevSibling = element.getPrevSibling();
+            PsiElement prevSibling = element.getPrevSibling();
             if (prevSibling instanceof PsiJavaToken) {
                 token = (PsiJavaToken) prevSibling;
             }
@@ -82,18 +82,18 @@ public class ConstantSubexpressionIntention extends MutablyNamedIntention {
                 throw new AssertionError();
             }
         }
-        final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) element.getParent();
-        final PsiPolyadicExpression subexpression = ConstantSubexpressionPredicate.getSubexpression(polyadicExpression, token);
+        PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) element.getParent();
+        PsiPolyadicExpression subexpression = ConstantSubexpressionPredicate.getSubexpression(polyadicExpression, token);
         if (subexpression == null) {
             return;
         }
-        final Object value = ExpressionUtils.computeConstantExpression(subexpression);
-        final StringBuilder newExpressionText = new StringBuilder();
-        final PsiExpression[] operands = polyadicExpression.getOperands();
+        Object value = ExpressionUtils.computeConstantExpression(subexpression);
+        StringBuilder newExpressionText = new StringBuilder();
+        PsiExpression[] operands = polyadicExpression.getOperands();
         PsiExpression prevOperand = null;
         PsiJavaToken prevToken = null;
         for (PsiExpression operand : operands) {
-            final PsiJavaToken currentToken = polyadicExpression.getTokenBeforeOperand(operand);
+            PsiJavaToken currentToken = polyadicExpression.getTokenBeforeOperand(operand);
             if (token == currentToken) {
                 if (prevToken != null) {
                     newExpressionText.append(prevToken.getText());
@@ -105,7 +105,7 @@ public class ConstantSubexpressionIntention extends MutablyNamedIntention {
                     newExpressionText.append(value).append('L');
                 }
                 else if (value instanceof Double) {
-                    final double v = ((Double) value).doubleValue();
+                    double v = ((Double) value).doubleValue();
                     if (Double.isNaN(v)) {
                         newExpressionText.append("java.lang.Double.NaN");
                     }
@@ -122,7 +122,7 @@ public class ConstantSubexpressionIntention extends MutablyNamedIntention {
                     }
                 }
                 else if (value instanceof Float) {
-                    final float v = ((Float) value).floatValue();
+                    float v = ((Float) value).floatValue();
                     if (Float.isNaN(v)) {
                         newExpressionText.append("java.lang.Float.NaN");
                     }

@@ -68,9 +68,9 @@ public class GenerationHelper
 
 	public static String getPropertyName(FieldElement fieldElement, Project project)
 	{
-		final JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
-		final VariableKind variableKind = fieldElement.isModifierStatic() ? VariableKind.STATIC_FIELD : VariableKind.FIELD;
-		final String propertyName = codeStyleManager.variableNameToPropertyName(fieldElement.getName(), variableKind);
+		JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
+		VariableKind variableKind = fieldElement.isModifierStatic() ? VariableKind.STATIC_FIELD : VariableKind.FIELD;
+		String propertyName = codeStyleManager.variableNameToPropertyName(fieldElement.getName(), variableKind);
 		if(!fieldElement.isModifierStatic() && fieldElement.isBoolean())
 		{
 			if(propertyName.startsWith("is") &&

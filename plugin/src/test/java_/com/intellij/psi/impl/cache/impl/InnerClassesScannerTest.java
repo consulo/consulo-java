@@ -42,11 +42,11 @@ public abstract class InnerClassesScannerTest extends PsiTestCase
 	private void doTest() throws Exception
 	{
 		configureByFileWithMarker("/psi/repositoryUse/innerClassesScanner/".replace('/', File.separatorChar) + getTestName(false) + ".java", "");
-		final List<PsiClass> list = getInnerClasses(((PsiJavaFile) myFile).getClasses()[0].getMethods()[0], myFile.getViewProvider().getContents());
+		List<PsiClass> list = getInnerClasses(((PsiJavaFile) myFile).getClasses()[0].getMethods()[0], myFile.getViewProvider().getContents());
 		assertTrue(list != null && list.size() == 1);
 	}
 
-	private static List<PsiClass> getInnerClasses(PsiElement psiElement, final CharSequence fileBuffer)
+	private static List<PsiClass> getInnerClasses(PsiElement psiElement, CharSequence fileBuffer)
 	{
 		final Ref<ArrayList<PsiClass>> ourList = new Ref<ArrayList<PsiClass>>();
 		ourList.set(null);
@@ -76,7 +76,7 @@ public abstract class InnerClassesScannerTest extends PsiTestCase
 		return ourList.get();
 	}
 
-	private static boolean mayContainClassesInside(PsiElement psiElement, final CharSequence fileBuffer)
+	private static boolean mayContainClassesInside(PsiElement psiElement, CharSequence fileBuffer)
 	{
 		PsiFile psiFile = psiElement.getContainingFile();
 
@@ -85,7 +85,7 @@ public abstract class InnerClassesScannerTest extends PsiTestCase
 		{
 			Lexer originalLexer = new JavaParserDefinition().createLexer(LanguageLevel.HIGHEST.toLangVersion());
 			FilterLexer lexer = new FilterLexer(originalLexer, new FilterLexer.SetFilter(StdTokenSets.WHITE_SPACE_OR_COMMENT_BIT_SET));
-			final TextRange range = psiElement.getTextRange();
+			TextRange range = psiElement.getTextRange();
 			lexer.start(fileBuffer, range.getStartOffset(), range.getEndOffset());
 			boolean isInNewExpression = false;
 			boolean isRightAfterNewExpression = false;

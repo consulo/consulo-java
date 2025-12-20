@@ -28,12 +28,12 @@ class MulticatchPredicate implements PsiElementPredicate {
     if (element instanceof PsiCodeBlock) {
       return false;
     }
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!(parent instanceof PsiCatchSection)) {
       return false;
     }
-    final PsiCatchSection catchSection = (PsiCatchSection)parent;
-    final PsiType type = catchSection.getCatchType();
+    PsiCatchSection catchSection = (PsiCatchSection)parent;
+    PsiType type = catchSection.getCatchType();
     return type instanceof PsiDisjunctionType;
   }
 }

@@ -44,9 +44,9 @@ public class ToggleSourceInferredAnnotations extends BaseIntentionAction {
     }
 
     @Override
-    public boolean isAvailable(@Nonnull final Project project, Editor editor, PsiFile file) {
-        final PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
-        final PsiModifierListOwner owner = getAnnotationOwner(leaf);
+    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+        PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
+        PsiModifierListOwner owner = getAnnotationOwner(leaf);
         if (owner != null) {
             boolean hasSrcInferredAnnotation =
                 ContainerUtil.exists(AnnotationDocGenerator.getAnnotationsToShow(owner), AnnotationDocGenerator::isInferredFromSource);
@@ -61,7 +61,7 @@ public class ToggleSourceInferredAnnotations extends BaseIntentionAction {
     }
 
     @Override
-    public void invoke(@Nonnull final Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         JavaCodeInsightSettings.getInstance().SHOW_SOURCE_INFERRED_ANNOTATIONS =
             !JavaCodeInsightSettings.getInstance().SHOW_SOURCE_INFERRED_ANNOTATIONS;
         DaemonCodeAnalyzer.getInstance(project).restart(file);

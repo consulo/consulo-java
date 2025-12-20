@@ -54,19 +54,19 @@ public class StringTokenizerInspection extends BaseInspection {
         @Override
         public void visitVariable(@Nonnull PsiVariable variable) {
             super.visitVariable(variable);
-            final PsiType type = variable.getType();
-            final PsiType deepComponentType = type.getDeepComponentType();
+            PsiType type = variable.getType();
+            PsiType deepComponentType = type.getDeepComponentType();
             if (!TypeUtils.typeEquals(
                 "java.util.StringTokenizer",
                 deepComponentType
             )) {
                 return;
             }
-            final PsiTypeElement typeElement = variable.getTypeElement();
+            PsiTypeElement typeElement = variable.getTypeElement();
             if (typeElement == null) {
                 return;
             }
-            final PsiExpression initializer = variable.getInitializer();
+            PsiExpression initializer = variable.getInitializer();
             if (isTokenizingNonNlsAnnotatedElement(initializer)) {
                 return;
             }
@@ -79,14 +79,14 @@ public class StringTokenizerInspection extends BaseInspection {
             if (!(initializer instanceof PsiNewExpression)) {
                 return false;
             }
-            final PsiNewExpression newExpression =
+            PsiNewExpression newExpression =
                 (PsiNewExpression) initializer;
-            final PsiExpressionList argumentList =
+            PsiExpressionList argumentList =
                 newExpression.getArgumentList();
             if (argumentList == null) {
                 return false;
             }
-            final PsiExpression[] expressions =
+            PsiExpression[] expressions =
                 argumentList.getExpressions();
             if (expressions.length <= 0) {
                 return false;

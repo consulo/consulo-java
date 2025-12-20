@@ -46,13 +46,13 @@ public abstract class ReplaceConstructorWithBuilderTest extends MultiFileTestCas
   }
 
   public void testConstructorChain() throws Exception {
-    final HashMap<String, String> defaults = new HashMap<String, String>();
+    HashMap<String, String> defaults = new HashMap<String, String>();
     defaults.put("i", "2");
     doTest(true, defaults);
   }
 
   public void testConstructorChainWithoutDefaults() throws Exception {
-    final HashMap<String, String> defaults = new HashMap<String, String>();
+    HashMap<String, String> defaults = new HashMap<String, String>();
     defaults.put("i", "2");
     defaults.put("j", null);
     doTest(true, defaults);
@@ -70,15 +70,15 @@ public abstract class ReplaceConstructorWithBuilderTest extends MultiFileTestCas
     doTest(true, null, null, "foo");
   }
 
-  private void doTest(final boolean createNewBuilderClass) throws Exception {
+  private void doTest(boolean createNewBuilderClass) throws Exception {
     doTest(createNewBuilderClass, null);
   }
 
-  private void doTest(final boolean createNewBuilderClass, final Map<String, String> expectedDefaults) throws Exception {
+  private void doTest(boolean createNewBuilderClass, Map<String, String> expectedDefaults) throws Exception {
     doTest(createNewBuilderClass, expectedDefaults, null);
   }
 
-  private void doTest(final boolean createNewBuilderClass, final Map<String, String> expectedDefaults, final String conflicts) throws Exception {
+  private void doTest(boolean createNewBuilderClass, Map<String, String> expectedDefaults, String conflicts) throws Exception {
     doTest(createNewBuilderClass, expectedDefaults, conflicts, "");
   }
 
@@ -88,18 +88,18 @@ public abstract class ReplaceConstructorWithBuilderTest extends MultiFileTestCas
                       final String packageName) throws Exception {
     doTest(new PerformAction() {
       @Override
-      public void performAction(final VirtualFile rootDir, final VirtualFile rootAfter) throws Exception {
-        final PsiClass aClass = myJavaFacade.findClass("Test", GlobalSearchScope.projectScope(getProject()));
+      public void performAction(VirtualFile rootDir, VirtualFile rootAfter) throws Exception {
+        PsiClass aClass = myJavaFacade.findClass("Test", GlobalSearchScope.projectScope(getProject()));
         assertNotNull("Class Test not found", aClass);
 
-        final LinkedHashMap<String, ParameterData> map = new LinkedHashMap<String, ParameterData>();
-        final PsiMethod[] constructors = aClass.getConstructors();
+        LinkedHashMap<String, ParameterData> map = new LinkedHashMap<String, ParameterData>();
+        PsiMethod[] constructors = aClass.getConstructors();
         for (PsiMethod constructor : constructors) {
           ParameterData.createFromConstructor(constructor, map);
         }
         if (expectedDefaults != null) {
           for (Map.Entry<String, String> entry : expectedDefaults.entrySet()) {
-            final ParameterData parameterData = map.get(entry.getKey());
+            ParameterData parameterData = map.get(entry.getKey());
             assertNotNull(parameterData);
             assertEquals(entry.getValue(), parameterData.getDefaultValue());
           }

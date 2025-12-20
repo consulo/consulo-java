@@ -34,12 +34,12 @@ public abstract class LibrariesHelper {
     return ServiceManager.getService(LibrariesHelper.class);
   }
 
-  public abstract boolean isClassAvailableInLibrary(final Library library, @NonNls final String fqn);
+  public abstract boolean isClassAvailableInLibrary(Library library, @NonNls String fqn);
 
   public abstract boolean isClassAvailable(@NonNls String[] urls, @NonNls String fqn);
 
   @Nullable
-  public abstract VirtualFile findJarByClass(final Library library, @NonNls String fqn);
+  public abstract VirtualFile findJarByClass(Library library, @NonNls String fqn);
 
   @Nullable
   public abstract VirtualFile findRootByClass(List<VirtualFile> roots, String fqn);

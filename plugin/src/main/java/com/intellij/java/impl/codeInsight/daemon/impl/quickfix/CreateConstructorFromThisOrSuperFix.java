@@ -98,14 +98,14 @@ public abstract class CreateConstructorFromThisOrSuperFix extends CreateFromUsag
             PsiMethod constructor = elementFactory.createConstructor();
             constructor = (PsiMethod) targetClass.add(constructor);
 
-            final TemplateBuilder templateBuilder = TemplateBuilderFactory.getInstance().createTemplateBuilder(constructor);
+            TemplateBuilder templateBuilder = TemplateBuilderFactory.getInstance().createTemplateBuilder(constructor);
             CreateFromUsageUtils.setupMethodParameters(constructor, templateBuilder, myMethodCall.getArgumentList(),
                 getTargetSubstitutor(myMethodCall));
 
-            final PsiFile psiFile = myMethodCall.getContainingFile();
+            PsiFile psiFile = myMethodCall.getContainingFile();
 
             templateBuilder.setEndVariableAfter(constructor.getBody().getLBrace());
-            final RangeMarker rangeMarker = psiFile.getViewProvider().getDocument().createRangeMarker(myMethodCall.getTextRange());
+            RangeMarker rangeMarker = psiFile.getViewProvider().getDocument().createRangeMarker(myMethodCall.getTextRange());
 
             constructor = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(constructor);
 
@@ -118,7 +118,7 @@ public abstract class CreateConstructorFromThisOrSuperFix extends CreateFromUsag
             if (editor == null) {
                 return;
             }
-            final TextRange textRange = constructor.getTextRange();
+            TextRange textRange = constructor.getTextRange();
             final PsiFile file = targetClass.getContainingFile();
             editor.getDocument().deleteString(textRange.getStartOffset(), textRange.getEndOffset());
             editor.getCaretModel().moveToOffset(textRange.getStartOffset());
@@ -132,7 +132,7 @@ public abstract class CreateConstructorFromThisOrSuperFix extends CreateFromUsag
                         public void run() {
                             try {
                                 PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
-                                final int offset = editor.getCaretModel().getOffset();
+                                int offset = editor.getCaretModel().getOffset();
                                 PsiMethod constructor = PsiTreeUtil.findElementOfClassAtOffset(file, offset, PsiMethod.class, false);
                                 CreateFromUsageUtils.setupMethodBody(constructor);
                                 CreateFromUsageUtils.setupEditor(constructor, editor);

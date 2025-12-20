@@ -23,7 +23,7 @@ import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 
 class ConvertIntegerToBinaryPredicate implements PsiElementPredicate {
   @Override
-  public boolean satisfiedBy(final PsiElement element) {
+  public boolean satisfiedBy(PsiElement element) {
     if (!(element instanceof PsiLiteralExpression)) {
       return false;
     }
@@ -32,9 +32,9 @@ class ConvertIntegerToBinaryPredicate implements PsiElementPredicate {
       return false;
     }
 
-    final PsiType type = ((PsiLiteralExpression)element).getType();
+    PsiType type = ((PsiLiteralExpression)element).getType();
     if (PsiType.INT.equals(type) || PsiType.LONG.equals(type)) {
-      final String text = element.getText();
+      String text = element.getText();
       return !(text.startsWith("0b") || text.startsWith("0B"));
     }
 

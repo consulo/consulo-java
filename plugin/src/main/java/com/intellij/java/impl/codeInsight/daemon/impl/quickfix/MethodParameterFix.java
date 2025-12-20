@@ -70,7 +70,7 @@ public class MethodParameterFix extends LocalQuickFixAndIntentionActionOnPsiElem
         @Nonnull PsiElement startElement,
         @Nonnull PsiElement endElement
     ) {
-        final PsiMethod myMethod = (PsiMethod) startElement;
+        PsiMethod myMethod = (PsiMethod) startElement;
         return myMethod.isValid()
             && myMethod.getManager().isInProject(myMethod)
             && myParameterType != null
@@ -81,13 +81,13 @@ public class MethodParameterFix extends LocalQuickFixAndIntentionActionOnPsiElem
 
     @Override
     public void invoke(
-        @Nonnull final Project project,
-        @Nonnull final PsiFile file,
+        @Nonnull Project project,
+        @Nonnull PsiFile file,
         @Nullable Editor editor,
         @Nonnull PsiElement startElement,
         @Nonnull PsiElement endElement
     ) {
-        final PsiMethod myMethod = (PsiMethod) startElement;
+        PsiMethod myMethod = (PsiMethod) startElement;
         if (!FileModificationService.getInstance().prepareFileForWrite(myMethod.getContainingFile())) {
             return;
         }
@@ -100,7 +100,7 @@ public class MethodParameterFix extends LocalQuickFixAndIntentionActionOnPsiElem
                 }
             }
 
-            final PsiMethod finalMethod = method;
+            PsiMethod finalMethod = method;
             ChangeSignatureProcessor processor = new ChangeSignatureProcessor(project,
                 finalMethod,
                 false, null,

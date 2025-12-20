@@ -61,13 +61,13 @@ public class MultipleTopLevelClassesInFileInspection extends BaseInspection {
             if (!(aClass.getParent() instanceof PsiJavaFile)) {
                 return;
             }
-            final PsiJavaFile file = (PsiJavaFile) aClass.getParent();
+            PsiJavaFile file = (PsiJavaFile) aClass.getParent();
             if (file == null) {
                 return;
             }
             int numClasses = 0;
-            final PsiElement[] children = file.getChildren();
-            for (final PsiElement child : children) {
+            PsiElement[] children = file.getChildren();
+            for (PsiElement child : children) {
                 if (child instanceof PsiClass) {
                     numClasses++;
                 }

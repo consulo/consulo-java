@@ -61,7 +61,7 @@ public class StaticVariableNamingConventionInspection
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final String fieldName = (String)infos[0];
+    String fieldName = (String)infos[0];
     if (fieldName.length() < getMinLength()) {
       return InspectionGadgetsLocalize.staticVariableNamingConventionProblemDescriptorShort().get();
     }
@@ -109,13 +109,13 @@ public class StaticVariableNamingConventionInspection
           return;
         }
         else {
-          final PsiType type = field.getType();
+          PsiType type = field.getType();
           if (ClassUtils.isImmutable(type)) {
             return;
           }
         }
       }
-      final String name = field.getName();
+      String name = field.getName();
       if (name == null) {
         return;
       }

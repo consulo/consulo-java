@@ -77,15 +77,15 @@ public class MissortedModifiersInspection extends BaseInspection {
     public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
 
-      final PsiModifierList modifierList = (PsiModifierList)descriptor.getPsiElement();
-      final List<String> modifiers = new ArrayList<>();
-      final PsiElement[] children = modifierList.getChildren();
-      for (final PsiElement child : children) {
+      PsiModifierList modifierList = (PsiModifierList)descriptor.getPsiElement();
+      List<String> modifiers = new ArrayList<>();
+      PsiElement[] children = modifierList.getChildren();
+      for (PsiElement child : children) {
         if (child instanceof PsiComment) {
-          final PsiComment comment = (PsiComment)child;
-          final IElementType tokenType = comment.getTokenType();
+          PsiComment comment = (PsiComment)child;
+          IElementType tokenType = comment.getTokenType();
           if (JavaTokenType.END_OF_LINE_COMMENT.equals(tokenType)) {
-            @NonNls final String text = child.getText() + '\n';
+            @NonNls String text = child.getText() + '\n';
             modifiers.add(text);
           }
           else {
@@ -100,18 +100,18 @@ public class MissortedModifiersInspection extends BaseInspection {
         }
       }
       Collections.sort(modifiers, new ModifierComparator());
-      @NonNls final StringBuilder buffer = new StringBuilder();
+      @NonNls StringBuilder buffer = new StringBuilder();
       for (String modifier : modifiers) {
         buffer.append(modifier);
         buffer.append(' ');
       }
-      final PsiManager manager = modifierList.getManager();
-      final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
+      PsiManager manager = modifierList.getManager();
+      PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
       buffer.append("void x() {}");
-      final String text = buffer.toString();
-      final PsiMethod method =
+      String text = buffer.toString();
+      PsiMethod method =
         factory.createMethodFromText(text, modifierList);
-      final PsiModifierList newModifierList = method.getModifierList();
+      PsiModifierList newModifierList = method.getModifierList();
       modifierList.replace(newModifierList);
     }
   }
@@ -160,7 +160,7 @@ public class MissortedModifiersInspection extends BaseInspection {
 
     private void checkForMissortedModifiers(
       PsiModifierListOwner listOwner) {
-      final PsiModifierList modifierList = listOwner.getModifierList();
+      PsiModifierList modifierList = listOwner.getModifierList();
       if (modifierList == null) {
         return;
       }
@@ -174,11 +174,11 @@ public class MissortedModifiersInspection extends BaseInspection {
       if (modifierList == null) {
         return false;
       }
-      final PsiElement[] children = modifierList.getChildren();
+      PsiElement[] children = modifierList.getChildren();
       String currentModifier = null;
-      for (final PsiElement child : children) {
+      for (PsiElement child : children) {
         if (child instanceof PsiJavaToken) {
-          final String text = child.getText();
+          String text = child.getText();
           if (modifierComparator.compare(text, currentModifier) < 0) {
             return true;
           }
@@ -218,11 +218,11 @@ public class MissortedModifiersInspection extends BaseInspection {
     }
 
     public int compare(String modifier1, String modifier2) {
-      final Integer ordinal1 = s_modifierOrder.get(modifier1);
+      Integer ordinal1 = s_modifierOrder.get(modifier1);
       if (ordinal1 == null) {
         return 0;
       }
-      final Integer ordinal2 = s_modifierOrder.get(modifier2);
+      Integer ordinal2 = s_modifierOrder.get(modifier2);
       if (ordinal2 == null) {
         return 0;
       }

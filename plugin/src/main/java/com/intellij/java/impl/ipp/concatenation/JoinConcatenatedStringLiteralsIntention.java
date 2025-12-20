@@ -56,16 +56,16 @@ public class JoinConcatenatedStringLiteralsIntention extends Intention {
         if (!(element instanceof PsiJavaToken)) {
             return;
         }
-        final PsiJavaToken token = (PsiJavaToken) element;
-        final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) element.getParent();
+        PsiJavaToken token = (PsiJavaToken) element;
+        PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) element.getParent();
         StringBuilder newExpression = new StringBuilder();
-        final PsiElement[] children = polyadicExpression.getChildren();
-        final List<PsiElement> buffer = new ArrayList(3);
+        PsiElement[] children = polyadicExpression.getChildren();
+        List<PsiElement> buffer = new ArrayList(3);
         for (PsiElement child : children) {
             if (child instanceof PsiJavaToken) {
                 if (token.equals(child)) {
-                    final PsiLiteralExpression literalExpression = (PsiLiteralExpression) buffer.get(0);
-                    final Object value = literalExpression.getValue();
+                    PsiLiteralExpression literalExpression = (PsiLiteralExpression) buffer.get(0);
+                    Object value = literalExpression.getValue();
                     assert value != null;
                     newExpression.append('"').append(StringUtil.escapeStringCharacters(value.toString()));
                 }
@@ -82,8 +82,8 @@ public class JoinConcatenatedStringLiteralsIntention extends Intention {
                     buffer.add(child);
                 }
                 else {
-                    final PsiLiteralExpression literalExpression = (PsiLiteralExpression) child;
-                    final Object value = literalExpression.getValue();
+                    PsiLiteralExpression literalExpression = (PsiLiteralExpression) child;
+                    Object value = literalExpression.getValue();
                     assert value != null;
                     newExpression.append(StringUtil.escapeStringCharacters(value.toString())).append('"');
                     buffer.clear();

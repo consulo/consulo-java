@@ -39,8 +39,8 @@ public class ExpandToNormalAnnotationIntention extends MutablyNamedIntention {
 
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
-        final PsiNameValuePair annotation = (PsiNameValuePair) element;
-        final String text = buildReplacementText(annotation);
+        PsiNameValuePair annotation = (PsiNameValuePair) element;
+        String text = buildReplacementText(annotation);
         return IntentionPowerPackLocalize.expandToNormalAnnotationName(text);
     }
 
@@ -57,8 +57,8 @@ public class ExpandToNormalAnnotationIntention extends MutablyNamedIntention {
     }
 
     public static String buildReplacementText(PsiNameValuePair attribute) {
-        final StringBuilder text = new StringBuilder();
-        final PsiAnnotationMemberValue value = attribute.getValue();
+        StringBuilder text = new StringBuilder();
+        PsiAnnotationMemberValue value = attribute.getValue();
         text.append("value = ");
         if (value != null) {
             text.append(value.getText());
@@ -68,19 +68,19 @@ public class ExpandToNormalAnnotationIntention extends MutablyNamedIntention {
 
     @Override
     protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
-        final PsiNameValuePair attribute = (PsiNameValuePair) element;
-        final int textOffset = attribute.getTextOffset();
-        final Project project = attribute.getProject();
-        final String text = buildReplacementText(attribute);
-        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-        final PsiAnnotation newAnnotation = factory.createAnnotationFromText("@A(" + text + " )", attribute);
+        PsiNameValuePair attribute = (PsiNameValuePair) element;
+        int textOffset = attribute.getTextOffset();
+        Project project = attribute.getProject();
+        String text = buildReplacementText(attribute);
+        PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+        PsiAnnotation newAnnotation = factory.createAnnotationFromText("@A(" + text + " )", attribute);
         attribute.replace(newAnnotation.getParameterList().getAttributes()[0]);
-        final FileEditorManager editorManager = FileEditorManager.getInstance(project);
-        final Editor editor = editorManager.getSelectedTextEditor();
+        FileEditorManager editorManager = FileEditorManager.getInstance(project);
+        Editor editor = editorManager.getSelectedTextEditor();
         if (editor == null) {
             return;
         }
-        final CaretModel caretModel = editor.getCaretModel();
+        CaretModel caretModel = editor.getCaretModel();
         caretModel.moveToOffset(textOffset + text.length() - 1);
     }
 }

@@ -51,7 +51,7 @@ public class TreeClassChooserFactoryImpl extends TreeClassChooserFactory {
   @Nonnull
   public TreeClassChooser createWithInnerClassesScopeChooser(String title,
                                                              GlobalSearchScope scope,
-                                                             final ClassFilter classFilter,
+                                                             ClassFilter classFilter,
                                                              PsiClass initialClass) {
     return TreeJavaClassChooserDialog.withInnerClasses(title, myProject, scope, classFilter, initialClass);
   }
@@ -111,7 +111,7 @@ public class TreeClassChooserFactoryImpl extends TreeClassChooserFactory {
   @Override
   @Nonnull
   public TreeFileChooser createFileChooser(@Nonnull String title,
-                                           final PsiFile initialFile,
+                                           PsiFile initialFile,
                                            FileType fileType,
                                            Predicate<PsiFile> filter) {
     return new TreeFileChooserDialog(myProject, title, initialFile, fileType, filter, false, false);

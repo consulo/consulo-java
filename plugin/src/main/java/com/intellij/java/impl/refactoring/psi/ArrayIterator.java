@@ -39,7 +39,7 @@ class ArrayIterator<T> implements Iterator<T> {
       if (currentIndex >= contents.length) {
         throw new NoSuchElementException();
       }
-      final T out = contents[currentIndex];
+      T out = contents[currentIndex];
       currentIndex++;
       return out;
     }

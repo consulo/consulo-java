@@ -138,7 +138,7 @@ public abstract class PullUpTest extends LightRefactoringTestCase
 
 	public void testAsDefault()
 	{
-		final RefactoringTestUtil.MemberDescriptor descriptor = new RefactoringTestUtil.MemberDescriptor("get", PsiMethod.class);
+		RefactoringTestUtil.MemberDescriptor descriptor = new RefactoringTestUtil.MemberDescriptor("get", PsiMethod.class);
 		doTest(descriptor);
 	}
 
@@ -273,42 +273,42 @@ public abstract class PullUpTest extends LightRefactoringTestCase
 		doTest(true, membersToFind);
 	}
 
-	private void doTest(final boolean checkMembersMovedCount, RefactoringTestUtil.MemberDescriptor... membersToFind)
+	private void doTest(boolean checkMembersMovedCount, RefactoringTestUtil.MemberDescriptor... membersToFind)
 	{
 		doTest(checkMembersMovedCount, null, membersToFind);
 	}
 
-	private void doTest(final boolean checkMembersMovedCount, String conflictMessage, RefactoringTestUtil.MemberDescriptor... membersToFind)
+	private void doTest(boolean checkMembersMovedCount, String conflictMessage, RefactoringTestUtil.MemberDescriptor... membersToFind)
 	{
-		final MultiMap<PsiElement, String> conflictsMap = new MultiMap<>();
+		MultiMap<PsiElement, String> conflictsMap = new MultiMap<>();
 		configureByFile(BASE_PATH + getTestName(false) + ".java");
 		PsiElement elementAt = getFile().findElementAt(getEditor().getCaretModel().getOffset());
-		final PsiClass sourceClass = PsiTreeUtil.getParentOfType(elementAt, PsiClass.class);
+		PsiClass sourceClass = PsiTreeUtil.getParentOfType(elementAt, PsiClass.class);
 		assertNotNull(sourceClass);
 
 		PsiClass targetClass = sourceClass.getSuperClass();
 		assertNotNull(targetClass);
 		if(!targetClass.isWritable())
 		{
-			final PsiClass[] interfaces = sourceClass.getInterfaces();
+			PsiClass[] interfaces = sourceClass.getInterfaces();
 			assertEquals(1, interfaces.length);
 			assertTrue(interfaces[0].isWritable());
 			targetClass = interfaces[0];
 		}
-		final MemberInfo[] infos = RefactoringTestUtil.findMembers(sourceClass, membersToFind);
+		MemberInfo[] infos = RefactoringTestUtil.findMembers(sourceClass, membersToFind);
 
-		final int[] countMoved = {0};
-		final MoveMemberListener listener = (aClass, member) ->
+		int[] countMoved = {0};
+		MoveMemberListener listener = (aClass, member) ->
 		{
 			assertEquals(sourceClass, aClass);
 			countMoved[0]++;
 		};
 		JavaRefactoringListenerManager.getInstance(getProject()).addMoveMembersListener(listener);
-		final PsiDirectory targetDirectory = targetClass.getContainingFile().getContainingDirectory();
-		final PsiJavaPackage targetPackage = targetDirectory != null ? JavaDirectoryService.getInstance().getPackage(targetDirectory) : null;
+		PsiDirectory targetDirectory = targetClass.getContainingFile().getContainingDirectory();
+		PsiJavaPackage targetPackage = targetDirectory != null ? JavaDirectoryService.getInstance().getPackage(targetDirectory) : null;
 		conflictsMap.putAllValues(PullUpConflictsUtil.checkConflicts(infos, sourceClass, targetClass, targetPackage, targetDirectory, psiMethod -> PullUpProcessor.checkedInterfacesContain(Arrays
 				.asList(infos), psiMethod)));
-		final PullUpProcessor helper = new PullUpProcessor(sourceClass, targetClass, infos, new DocCommentPolicy(DocCommentPolicy.ASIS));
+		PullUpProcessor helper = new PullUpProcessor(sourceClass, targetClass, infos, new DocCommentPolicy(DocCommentPolicy.ASIS));
 		helper.run();
 		UIUtil.dispatchAllInvocationEvents();
 		JavaRefactoringListenerManager.getInstance(getProject()).removeMoveMembersListener(listener);

@@ -23,7 +23,7 @@ public class TypeMigrationTreeBuilder extends AbstractTreeBuilder
 	}
 
 	@Override
-	protected boolean isAutoExpandNode(final NodeDescriptor nodeDescriptor)
+	protected boolean isAutoExpandNode(NodeDescriptor nodeDescriptor)
 	{
 		return false;
 	}

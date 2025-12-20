@@ -64,20 +64,20 @@ public class MultipleExceptionsDeclaredOnTestMethodInspection
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
+      PsiElement element = descriptor.getPsiElement();
       if (!(element instanceof PsiReferenceList)) {
         return;
       }
-      final PsiReferenceList referenceList = (PsiReferenceList)element;
-      final PsiJavaCodeReferenceElement[] referenceElements =
+      PsiReferenceList referenceList = (PsiReferenceList)element;
+      PsiJavaCodeReferenceElement[] referenceElements =
         referenceList.getReferenceElements();
       for (PsiJavaCodeReferenceElement referenceElement : referenceElements) {
         referenceElement.delete();
       }
-      final PsiElementFactory factory = JavaPsiFacade.getElementFactory(
+      PsiElementFactory factory = JavaPsiFacade.getElementFactory(
         project);
-      final GlobalSearchScope scope = referenceList.getResolveScope();
-      final PsiJavaCodeReferenceElement referenceElement =
+      GlobalSearchScope scope = referenceList.getResolveScope();
+      PsiJavaCodeReferenceElement referenceElement =
         factory.createReferenceElementByFQClassName(CommonClassNames.JAVA_LANG_EXCEPTION, scope);
       referenceList.add(referenceElement);
     }
@@ -97,16 +97,16 @@ public class MultipleExceptionsDeclaredOnTestMethodInspection
       if (!TestUtils.isJUnitTestMethod(method)) {
         return;
       }
-      final PsiReferenceList throwsList = method.getThrowsList();
-      final PsiJavaCodeReferenceElement[] referenceElements =
+      PsiReferenceList throwsList = method.getThrowsList();
+      PsiJavaCodeReferenceElement[] referenceElements =
         throwsList.getReferenceElements();
       if (referenceElements.length < 2) {
         return;
       }
 
-      final Query<PsiReference> query =
+      Query<PsiReference> query =
         MethodReferencesSearch.search(method);
-      final PsiReference firstReference = query.findFirst();
+      PsiReference firstReference = query.findFirst();
       if (firstReference != null) {
         return;
       }

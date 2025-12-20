@@ -55,11 +55,11 @@ public class AssertWithSideEffectsInspection extends BaseInspection {
         @Override
         public void visitAssertStatement(PsiAssertStatement statement) {
             super.visitAssertStatement(statement);
-            final PsiExpression condition = statement.getAssertCondition();
+            PsiExpression condition = statement.getAssertCondition();
             if (condition == null) {
                 return;
             }
-            final SideEffectVistor visitor = new SideEffectVistor();
+            SideEffectVistor visitor = new SideEffectVistor();
             condition.accept(visitor);
             if (!visitor.hasSideEffects()) {
                 return;
@@ -98,7 +98,7 @@ public class AssertWithSideEffectsInspection extends BaseInspection {
             if (hasSideEffects) {
                 return;
             }
-            final PsiMethod method = expression.resolveMethod();
+            PsiMethod method = expression.resolveMethod();
             if (method == null) {
                 return;
             }
@@ -112,7 +112,7 @@ public class AssertWithSideEffectsInspection extends BaseInspection {
 
         @Override
         public void visitPrefixExpression(PsiPrefixExpression expression) {
-            final IElementType tokenType = expression.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (JavaTokenType.PLUSPLUS.equals(tokenType) ||
                 JavaTokenType.MINUSMINUS.equals(tokenType)) {
                 hasSideEffects = true;
@@ -121,7 +121,7 @@ public class AssertWithSideEffectsInspection extends BaseInspection {
 
         @Override
         public void visitPostfixExpression(PsiPostfixExpression expression) {
-            final IElementType tokenType = expression.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (JavaTokenType.PLUSPLUS.equals(tokenType) ||
                 JavaTokenType.MINUSMINUS.equals(tokenType)) {
                 hasSideEffects = true;
@@ -130,11 +130,11 @@ public class AssertWithSideEffectsInspection extends BaseInspection {
     }
 
     private static boolean methodHasSideEffects(PsiMethod method) {
-        final PsiCodeBlock body = method.getBody();
+        PsiCodeBlock body = method.getBody();
         if (body == null) {
             return false;
         }
-        final MethodSideEffectVisitor visitor = new MethodSideEffectVisitor();
+        MethodSideEffectVisitor visitor = new MethodSideEffectVisitor();
         body.accept(visitor);
         return visitor.hasSideEffects();
     }
@@ -160,7 +160,7 @@ public class AssertWithSideEffectsInspection extends BaseInspection {
             if (hasSideEffects) {
                 return;
             }
-            final IElementType tokenType = expression.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (JavaTokenType.PLUSPLUS.equals(tokenType) ||
                 JavaTokenType.MINUSMINUS.equals(tokenType)) {
                 checkExpression(expression.getOperand());
@@ -173,7 +173,7 @@ public class AssertWithSideEffectsInspection extends BaseInspection {
             if (hasSideEffects) {
                 return;
             }
-            final IElementType tokenType = expression.getOperationTokenType();
+            IElementType tokenType = expression.getOperationTokenType();
             if (JavaTokenType.PLUSPLUS.equals(tokenType) ||
                 JavaTokenType.MINUSMINUS.equals(tokenType)) {
                 checkExpression(expression.getOperand());
@@ -185,9 +185,9 @@ public class AssertWithSideEffectsInspection extends BaseInspection {
             if (!(operand instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiReferenceExpression referenceExpression =
+            PsiReferenceExpression referenceExpression =
                 (PsiReferenceExpression) operand;
-            final PsiElement target = referenceExpression.resolve();
+            PsiElement target = referenceExpression.resolve();
             if (target instanceof PsiField) {
                 hasSideEffects = true;
             }

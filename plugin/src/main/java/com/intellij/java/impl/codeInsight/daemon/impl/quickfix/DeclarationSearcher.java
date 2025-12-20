@@ -29,7 +29,7 @@ public class DeclarationSearcher {
 
   private final Map<PsiElement, PsiVariable> cache;
 
-  public DeclarationSearcher(final PsiMethod method, final PsiType targetType) {
+  public DeclarationSearcher(PsiMethod method, PsiType targetType) {
     myMethod = method;
     myTargetType = targetType;
 
@@ -38,7 +38,7 @@ public class DeclarationSearcher {
 
   @Nullable
   public PsiVariable getDeclaration(@Nonnull PsiElement endPositionElement) {
-    final PsiVariable localVariable = getLocalDeclaration(endPositionElement);
+    PsiVariable localVariable = getLocalDeclaration(endPositionElement);
     if (localVariable != null) {
       return localVariable;
     }
@@ -57,17 +57,17 @@ public class DeclarationSearcher {
 
   @Nullable
   private PsiVariable getLocalDeclaration(@Nonnull PsiElement endPositionElement) {
-    final PsiElement parent = endPositionElement.getParent();
+    PsiElement parent = endPositionElement.getParent();
 
     // reuse of cache is possible IF requests are done up-to-down. otherwise - not first declaration can be returned
-    final PsiVariable cachedCandidate = cache.get(parent);
+    PsiVariable cachedCandidate = cache.get(parent);
     if (cachedCandidate != null) {
       return cachedCandidate;
     }
 
     if (parent != myMethod) {
       // go up
-      final PsiVariable parentResult = getLocalDeclaration(parent);
+      PsiVariable parentResult = getLocalDeclaration(parent);
       if (parentResult != null) {
         return parentResult;
       }
@@ -79,8 +79,8 @@ public class DeclarationSearcher {
         break;
       }
       if (element instanceof PsiDeclarationStatement) {
-        final PsiElement[] declared = ((PsiDeclarationStatement) element).getDeclaredElements();
-        for (final PsiElement declaredElement : declared) {
+        PsiElement[] declared = ((PsiDeclarationStatement) element).getDeclaredElements();
+        for (PsiElement declaredElement : declared) {
           if (declaredElement instanceof PsiLocalVariable && myTargetType.equals(((PsiLocalVariable)declaredElement).getType())) {
             return goThroughCache(parent, (PsiVariable) declaredElement);
           }
@@ -96,7 +96,7 @@ public class DeclarationSearcher {
     return null;
   }
 
-  private PsiVariable goThroughCache(final PsiElement parent, final PsiVariable variable) {
+  private PsiVariable goThroughCache(PsiElement parent, PsiVariable variable) {
     cache.put(parent, variable);
     return variable;
   }

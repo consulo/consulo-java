@@ -57,21 +57,21 @@ public class SystemOutErrInspection extends BaseInspection {
             @Nonnull PsiReferenceExpression expression
         ) {
             super.visitReferenceExpression(expression);
-            final String name = expression.getReferenceName();
+            String name = expression.getReferenceName();
             if (!HardcodedMethodConstants.OUT.equals(name) &&
                 !HardcodedMethodConstants.ERR.equals(name)) {
                 return;
             }
-            final PsiElement referent = expression.resolve();
+            PsiElement referent = expression.resolve();
             if (!(referent instanceof PsiField)) {
                 return;
             }
-            final PsiField field = (PsiField) referent;
-            final PsiClass containingClass = field.getContainingClass();
+            PsiField field = (PsiField) referent;
+            PsiClass containingClass = field.getContainingClass();
             if (containingClass == null) {
                 return;
             }
-            final String className = containingClass.getQualifiedName();
+            String className = containingClass.getQualifiedName();
             if (!"java.lang.System".equals(className)) {
                 return;
             }

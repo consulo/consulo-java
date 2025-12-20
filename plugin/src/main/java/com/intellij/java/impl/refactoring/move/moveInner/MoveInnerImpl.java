@@ -38,17 +38,17 @@ public class MoveInnerImpl {
 
   public static final String REFACTORING_NAME = RefactoringBundle.message("move.inner.to.upper.level.title");
 
-  public static void doMove(final Project project, PsiElement[] elements, final MoveCallback moveCallback) {
+  public static void doMove(Project project, PsiElement[] elements, MoveCallback moveCallback) {
     if (elements.length != 1) return;
-    final PsiClass aClass = (PsiClass) elements[0];
+    PsiClass aClass = (PsiClass) elements[0];
     boolean condition = aClass.getContainingClass() != null;
     LOG.assertTrue(condition);
 
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, aClass)) return;
-    final PsiElement targetContainer = getTargetContainer(aClass, true);
+    PsiElement targetContainer = getTargetContainer(aClass, true);
     if (targetContainer == null) return;
 
-    final MoveInnerDialog dialog = new MoveInnerDialog(
+    MoveInnerDialog dialog = new MoveInnerDialog(
             project,
             aClass,
             new MoveInnerProcessor(project, moveCallback),
@@ -61,8 +61,8 @@ public class MoveInnerImpl {
    * must be called in atomic action
    */
   @Nullable
-  public static PsiElement getTargetContainer(PsiClass innerClass, final boolean chooseIfNotUnderSource) {
-    final PsiClass outerClass = innerClass.getContainingClass();
+  public static PsiElement getTargetContainer(PsiClass innerClass, boolean chooseIfNotUnderSource) {
+    PsiClass outerClass = innerClass.getContainingClass();
     assert outerClass != null; // Only inner classes allowed.
 
     PsiElement outerClassParent = outerClass.getParent();
@@ -71,14 +71,14 @@ public class MoveInnerImpl {
         return outerClassParent;
       }
       else if (outerClassParent instanceof PsiFile) {
-        final PsiDirectory directory = innerClass.getContainingFile().getContainingDirectory();
-        final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
+        PsiDirectory directory = innerClass.getContainingFile().getContainingDirectory();
+        PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
         if (aPackage == null) {
           if (chooseIfNotUnderSource) {
             PackageChooserDialog chooser = new PackageChooserDialog("Select Target Package", innerClass.getProject());
             chooser.show();
             if (!chooser.isOK()) return null;
-            final PsiJavaPackage chosenPackage = chooser.getSelectedPackage();
+            PsiJavaPackage chosenPackage = chooser.getSelectedPackage();
             if (chosenPackage == null) return null;
             return chosenPackage.getDirectories()[0];
           }

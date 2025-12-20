@@ -52,9 +52,9 @@ public class ConstantAssertConditionInspection extends BaseInspection {
         @Override
         public void visitAssertStatement(PsiAssertStatement statement) {
             super.visitAssertStatement(statement);
-            final PsiExpression assertCondition =
+            PsiExpression assertCondition =
                 statement.getAssertCondition();
-            final PsiExpression expression =
+            PsiExpression expression =
                 ParenthesesUtils.stripParentheses(assertCondition);
             if (expression == null) {
                 return;

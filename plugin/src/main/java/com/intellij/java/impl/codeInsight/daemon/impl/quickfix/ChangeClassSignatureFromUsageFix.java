@@ -53,7 +53,7 @@ public class ChangeClassSignatureFromUsageFix extends BaseIntentionAction implem
       return false;
     }
 
-    final PsiTypeParameterList classTypeParameterList = myClass.getTypeParameterList();
+    PsiTypeParameterList classTypeParameterList = myClass.getTypeParameterList();
     if (classTypeParameterList == null) {
       return false;
     }
@@ -65,7 +65,7 @@ public class ChangeClassSignatureFromUsageFix extends BaseIntentionAction implem
 
   @Override
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
-    final PsiTypeParameterList classTypeParameterList = myClass.getTypeParameterList();
+    PsiTypeParameterList classTypeParameterList = myClass.getTypeParameterList();
     if (classTypeParameterList == null) {
       return;
     }
@@ -86,13 +86,13 @@ public class ChangeClassSignatureFromUsageFix extends BaseIntentionAction implem
   private static Map<TypeParameterInfo, PsiTypeCodeFragment> createTypeParameters(@Nonnull JavaCodeFragmentFactory factory,
                                                                                   @Nonnull List<PsiTypeParameter> classTypeParameters,
                                                                                   @Nonnull List<PsiTypeElement> typeElements) {
-    final LinkedHashMap<TypeParameterInfo, PsiTypeCodeFragment> result = new LinkedHashMap<TypeParameterInfo, PsiTypeCodeFragment>();
-    final TypeParameterNameSuggester suggester = new TypeParameterNameSuggester(classTypeParameters);
+    LinkedHashMap<TypeParameterInfo, PsiTypeCodeFragment> result = new LinkedHashMap<TypeParameterInfo, PsiTypeCodeFragment>();
+    TypeParameterNameSuggester suggester = new TypeParameterNameSuggester(classTypeParameters);
 
     int listIndex = 0;
     for (PsiTypeElement typeElement : typeElements) {
       if (listIndex < classTypeParameters.size()) {
-        final PsiTypeParameter typeParameter = classTypeParameters.get(listIndex);
+        PsiTypeParameter typeParameter = classTypeParameters.get(listIndex);
 
         if (isAssignable(typeParameter, typeElement.getType())) {
           result.put(new TypeParameterInfo(listIndex++), null);
@@ -100,7 +100,7 @@ public class ChangeClassSignatureFromUsageFix extends BaseIntentionAction implem
         }
       }
 
-      final PsiClassType type = (PsiClassType)typeElement.getType();
+      PsiClassType type = (PsiClassType)typeElement.getType();
       result.put(new TypeParameterInfo(suggester.suggest(type), type),
                  factory.createTypeCodeFragment(type.getClassName(), typeElement, true));
     }

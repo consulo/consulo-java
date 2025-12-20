@@ -58,7 +58,7 @@ public class ReferenceSelectioner extends BasicSelectioner {
         result.addAll(expandToWholeLine(editorText, new TextRange(referenceName.getTextRange().getStartOffset(),
                                                                   endElement.getTextRange().getEndOffset())));
         if (endElement instanceof PsiJavaCodeReferenceElement) {
-          final PsiElement endReferenceName = ((PsiJavaCodeReferenceElement)endElement).getReferenceNameElement();
+          PsiElement endReferenceName = ((PsiJavaCodeReferenceElement)endElement).getReferenceNameElement();
           if (endReferenceName != null) {
             result.addAll(expandToWholeLine(editorText, new TextRange(referenceName.getTextRange().getStartOffset(),
                                                                       endReferenceName.getTextRange().getEndOffset())));

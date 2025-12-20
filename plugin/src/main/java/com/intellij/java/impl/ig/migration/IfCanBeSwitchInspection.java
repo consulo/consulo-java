@@ -86,14 +86,14 @@ public class IfCanBeSwitchInspection extends BaseInspection {
 
   @Override
   public JComponent createOptionsPanel() {
-    final JPanel panel = new JPanel(new GridBagLayout());
-    final JLabel label = new JLabel(InspectionGadgetsLocalize.ifCanBeSwitchMinimumBranchOption().get());
-    final NumberFormat formatter = NumberFormat.getIntegerInstance();
+    JPanel panel = new JPanel(new GridBagLayout());
+    JLabel label = new JLabel(InspectionGadgetsLocalize.ifCanBeSwitchMinimumBranchOption().get());
+    NumberFormat formatter = NumberFormat.getIntegerInstance();
     formatter.setParseIntegerOnly(true);
     final JFormattedTextField valueField = new JFormattedTextField(formatter);
     valueField.setValue(Integer.valueOf(minimumBranches));
     valueField.setColumns(2);
-    final Document document = valueField.getDocument();
+    Document document = valueField.getDocument();
     document.addDocumentListener(new DocumentAdapter() {
       @Override
       public void textChanged(DocumentEvent e) {
@@ -107,7 +107,7 @@ public class IfCanBeSwitchInspection extends BaseInspection {
         }
       }
     });
-    final GridBagConstraints constraints = new GridBagConstraints();
+    GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 0;
     constraints.gridy = 0;
     constraints.insets.bottom = 4;
@@ -124,7 +124,7 @@ public class IfCanBeSwitchInspection extends BaseInspection {
     constraints.gridx = 0;
     constraints.gridy = 1;
     constraints.gridwidth = 2;
-    final JCheckBox checkBox1 = new JCheckBox(InspectionGadgetsLocalize.ifCanBeSwitchIntOption().get(), suggestIntSwitches);
+    JCheckBox checkBox1 = new JCheckBox(InspectionGadgetsLocalize.ifCanBeSwitchIntOption().get(), suggestIntSwitches);
     final ButtonModel model1 = checkBox1.getModel();
     model1.addChangeListener(new ChangeListener() {
       public void stateChanged(ChangeEvent e) {
@@ -134,7 +134,7 @@ public class IfCanBeSwitchInspection extends BaseInspection {
     panel.add(checkBox1, constraints);
     constraints.gridy = 2;
     constraints.weighty = 1.0;
-    final JCheckBox checkBox2 = new JCheckBox(InspectionGadgetsLocalize.ifCanBeSwitchEnumOption().get(), suggestEnumSwitches);
+    JCheckBox checkBox2 = new JCheckBox(InspectionGadgetsLocalize.ifCanBeSwitchEnumOption().get(), suggestEnumSwitches);
     final ButtonModel model2 = checkBox2.getModel();
     model2.addChangeListener(new ChangeListener() {
       public void stateChanged(ChangeEvent e) {
@@ -159,7 +159,7 @@ public class IfCanBeSwitchInspection extends BaseInspection {
 
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor) {
-      final PsiElement element = descriptor.getPsiElement().getParent();
+      PsiElement element = descriptor.getPsiElement().getParent();
       if (!(element instanceof PsiIfStatement)) {
         return;
       }
@@ -170,9 +170,9 @@ public class IfCanBeSwitchInspection extends BaseInspection {
       if (ControlFlowUtils.statementContainsNakedBreak(ifStatement)) {
         breakTarget = PsiTreeUtil.getParentOfType(ifStatement, PsiLoopStatement.class, PsiSwitchStatement.class);
         if (breakTarget != null) {
-          final PsiElement parent = breakTarget.getParent();
+          PsiElement parent = breakTarget.getParent();
           if (parent instanceof PsiLabeledStatement) {
-            final PsiLabeledStatement labeledStatement = (PsiLabeledStatement)parent;
+            PsiLabeledStatement labeledStatement = (PsiLabeledStatement)parent;
             labelString = labeledStatement.getLabelIdentifier().getText();
             breakTarget = labeledStatement;
             breaksNeedRelabeled = true;
@@ -183,23 +183,23 @@ public class IfCanBeSwitchInspection extends BaseInspection {
           }
         }
       }
-      final PsiIfStatement statementToReplace = ifStatement;
-      final PsiExpression switchExpression = SwitchUtils.getSwitchExpression(ifStatement, myMinimumBranches);
+      PsiIfStatement statementToReplace = ifStatement;
+      PsiExpression switchExpression = SwitchUtils.getSwitchExpression(ifStatement, myMinimumBranches);
       if (switchExpression == null) {
         return;
       }
-      final List<IfStatementBranch> branches = new ArrayList<IfStatementBranch>(20);
+      List<IfStatementBranch> branches = new ArrayList<IfStatementBranch>(20);
       while (true) {
-        final PsiExpression condition = ifStatement.getCondition();
-        final PsiStatement thenBranch = ifStatement.getThenBranch();
-        final IfStatementBranch ifBranch = new IfStatementBranch(thenBranch, false);
+        PsiExpression condition = ifStatement.getCondition();
+        PsiStatement thenBranch = ifStatement.getThenBranch();
+        IfStatementBranch ifBranch = new IfStatementBranch(thenBranch, false);
         extractCaseExpressions(condition, switchExpression, ifBranch);
         if (!branches.isEmpty()) {
           extractIfComments(ifStatement, ifBranch);
         }
         extractStatementComments(thenBranch, ifBranch);
         branches.add(ifBranch);
-        final PsiStatement elseBranch = ifStatement.getElseBranch();
+        PsiStatement elseBranch = ifStatement.getElseBranch();
         if (elseBranch instanceof PsiIfStatement) {
           ifStatement = (PsiIfStatement)elseBranch;
         }
@@ -207,8 +207,8 @@ public class IfCanBeSwitchInspection extends BaseInspection {
           break;
         }
         else {
-          final IfStatementBranch elseIfBranch = new IfStatementBranch(elseBranch, true);
-          final PsiKeyword elseKeyword = ifStatement.getElseElement();
+          IfStatementBranch elseIfBranch = new IfStatementBranch(elseBranch, true);
+          PsiKeyword elseKeyword = ifStatement.getElseElement();
           extractIfComments(elseKeyword, elseIfBranch);
           extractStatementComments(elseBranch, elseIfBranch);
           branches.add(elseIfBranch);
@@ -216,10 +216,10 @@ public class IfCanBeSwitchInspection extends BaseInspection {
         }
       }
 
-      @NonNls final StringBuilder switchStatementText = new StringBuilder();
+      @NonNls StringBuilder switchStatementText = new StringBuilder();
       switchStatementText.append("switch(").append(switchExpression.getText()).append("){");
-      final PsiType type = switchExpression.getType();
-      final boolean castToInt = type != null && type.equalsToText(CommonClassNames.JAVA_LANG_INTEGER);
+      PsiType type = switchExpression.getType();
+      boolean castToInt = type != null && type.equalsToText(CommonClassNames.JAVA_LANG_INTEGER);
       for (IfStatementBranch branch : branches) {
         boolean hasConflicts = false;
         for (IfStatementBranch testBranch : branches) {
@@ -233,20 +233,20 @@ public class IfCanBeSwitchInspection extends BaseInspection {
         dumpBranch(branch, castToInt, hasConflicts, breaksNeedRelabeled, labelString, switchStatementText);
       }
       switchStatementText.append('}');
-      final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(element.getProject());
-      final PsiElementFactory factory = psiFacade.getElementFactory();
+      JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(element.getProject());
+      PsiElementFactory factory = psiFacade.getElementFactory();
       if (breaksNeedRelabeled) {
-        final StringBuilder out = new StringBuilder();
+        StringBuilder out = new StringBuilder();
         if (!(breakTarget instanceof PsiLabeledStatement)) {
           out.append(labelString).append(':');
         }
         termReplace(breakTarget, statementToReplace, switchStatementText, out);
-        final String newStatementText = out.toString();
-        final PsiStatement newStatement = factory.createStatementFromText(newStatementText, element);
+        String newStatementText = out.toString();
+        PsiStatement newStatement = factory.createStatementFromText(newStatementText, element);
         breakTarget.replace(newStatement);
       }
       else {
-        final PsiStatement newStatement = factory.createStatementFromText(switchStatementText.toString(), element);
+        PsiStatement newStatement = factory.createStatementFromText(switchStatementText.toString(), element);
         statementToReplace.replace(newStatement);
       }
     }
@@ -272,10 +272,10 @@ public class IfCanBeSwitchInspection extends BaseInspection {
     private static void extractIfComments(PsiElement element, IfStatementBranch out) {
       PsiComment comment = getPrevSiblingOfType(element, PsiComment.class, PsiStatement.class);
       while (comment != null) {
-        final PsiElement sibling = comment.getPrevSibling();
-        final String commentText;
+        PsiElement sibling = comment.getPrevSibling();
+        String commentText;
         if (sibling instanceof PsiWhiteSpace) {
-          final String whiteSpaceText = sibling.getText();
+          String whiteSpaceText = sibling.getText();
           if (whiteSpaceText.startsWith("\n")) {
             commentText = whiteSpaceText.substring(1) + comment.getText();
           }
@@ -294,10 +294,10 @@ public class IfCanBeSwitchInspection extends BaseInspection {
     private static void extractStatementComments(PsiElement element, IfStatementBranch out) {
       PsiComment comment = getPrevSiblingOfType(element, PsiComment.class, PsiStatement.class, PsiKeyword.class);
       while (comment != null) {
-        final PsiElement sibling = comment.getPrevSibling();
-        final String commentText;
+        PsiElement sibling = comment.getPrevSibling();
+        String commentText;
         if (sibling instanceof PsiWhiteSpace) {
-          final String whiteSpaceText = sibling.getText();
+          String whiteSpaceText = sibling.getText();
           if (whiteSpaceText.startsWith("\n")) {
             commentText = whiteSpaceText.substring(1) + comment.getText();
           }
@@ -321,8 +321,8 @@ public class IfCanBeSwitchInspection extends BaseInspection {
         out.append(target.getText());
       }
       else {
-        final PsiElement[] children = target.getChildren();
-        for (final PsiElement child : children) {
+        PsiElement[] children = target.getChildren();
+        for (PsiElement child : children) {
           termReplace(child, replace, stringToReplaceWith, out);
         }
       }
@@ -330,12 +330,12 @@ public class IfCanBeSwitchInspection extends BaseInspection {
 
     private static void extractCaseExpressions(PsiExpression expression, PsiExpression switchExpression, IfStatementBranch branch) {
       if (expression instanceof PsiMethodCallExpression) {
-        final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)expression;
-        final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-        final PsiExpression[] arguments = argumentList.getExpressions();
-        final PsiExpression argument = arguments[0];
-        final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-        final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
+        PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)expression;
+        PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+        PsiExpression[] arguments = argumentList.getExpressions();
+        PsiExpression argument = arguments[0];
+        PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+        PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
         if (EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(switchExpression, argument)) {
           branch.addCaseExpression(qualifierExpression);
         }
@@ -344,17 +344,17 @@ public class IfCanBeSwitchInspection extends BaseInspection {
         }
       }
       else if (expression instanceof PsiPolyadicExpression) {
-        final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)expression;
-        final PsiExpression[] operands = polyadicExpression.getOperands();
-        final IElementType tokenType = polyadicExpression.getOperationTokenType();
+        PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)expression;
+        PsiExpression[] operands = polyadicExpression.getOperands();
+        IElementType tokenType = polyadicExpression.getOperationTokenType();
         if (JavaTokenType.OROR.equals(tokenType)) {
           for (PsiExpression operand : operands) {
             extractCaseExpressions(operand, switchExpression, branch);
           }
         }
         else if (operands.length == 2) {
-          final PsiExpression lhs = operands[0];
-          final PsiExpression rhs = operands[1];
+          PsiExpression lhs = operands[0];
+          PsiExpression rhs = operands[1];
           if (EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(switchExpression, rhs)) {
             branch.addCaseExpression(lhs);
           }
@@ -364,8 +364,8 @@ public class IfCanBeSwitchInspection extends BaseInspection {
         }
       }
       else if (expression instanceof PsiParenthesizedExpression) {
-        final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression)expression;
-        final PsiExpression contents = parenthesizedExpression.getExpression();
+        PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression)expression;
+        PsiExpression contents = parenthesizedExpression.getExpression();
         extractCaseExpressions(contents, switchExpression, branch);
       }
     }
@@ -388,15 +388,15 @@ public class IfCanBeSwitchInspection extends BaseInspection {
     @NonNls
     private static String getCaseLabelText(PsiExpression expression, boolean castToInt) {
       if (expression instanceof PsiReferenceExpression) {
-        final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)expression;
-        final PsiElement target = referenceExpression.resolve();
+        PsiReferenceExpression referenceExpression = (PsiReferenceExpression)expression;
+        PsiElement target = referenceExpression.resolve();
         if (target instanceof PsiEnumConstant) {
-          final PsiEnumConstant enumConstant = (PsiEnumConstant)target;
+          PsiEnumConstant enumConstant = (PsiEnumConstant)target;
           return enumConstant.getName();
         }
       }
       if (castToInt) {
-        final PsiType type = expression.getType();
+        PsiType type = expression.getType();
         if (!PsiType.INT.equals(type)) {
           /*
          because
@@ -428,11 +428,11 @@ public class IfCanBeSwitchInspection extends BaseInspection {
         switchStatementText.append('{');
       }
       if (bodyStatement instanceof PsiBlockStatement) {
-        final PsiCodeBlock codeBlock = ((PsiBlockStatement)bodyStatement).getCodeBlock();
-        final PsiElement[] children = codeBlock.getChildren();
+        PsiCodeBlock codeBlock = ((PsiBlockStatement)bodyStatement).getCodeBlock();
+        PsiElement[] children = codeBlock.getChildren();
         //skip the first and last members, to unwrap the block
         for (int i = 1; i < children.length - 1; i++) {
-          final PsiElement child = children[i];
+          PsiElement child = children[i];
           appendElement(child, renameBreaks, breakLabelName, switchStatementText);
         }
       }
@@ -449,13 +449,13 @@ public class IfCanBeSwitchInspection extends BaseInspection {
 
     private static void appendElement(PsiElement element, boolean renameBreakElements, String breakLabelString,
                                       @NonNls StringBuilder switchStatementText) {
-      final String text = element.getText();
+      String text = element.getText();
       if (!renameBreakElements) {
         switchStatementText.append(text);
       }
       else if (element instanceof PsiBreakStatement) {
-        final PsiBreakStatement breakStatement = (PsiBreakStatement)element;
-        final PsiIdentifier identifier = breakStatement.getLabelIdentifier();
+        PsiBreakStatement breakStatement = (PsiBreakStatement)element;
+        PsiIdentifier identifier = breakStatement.getLabelIdentifier();
         if (identifier == null) {
           switchStatementText.append("break ").append(breakLabelString).append(';');
         }
@@ -464,15 +464,15 @@ public class IfCanBeSwitchInspection extends BaseInspection {
         }
       }
       else if (element instanceof PsiBlockStatement || element instanceof PsiCodeBlock || element instanceof PsiIfStatement) {
-        final PsiElement[] children = element.getChildren();
-        for (final PsiElement child : children) {
+        PsiElement[] children = element.getChildren();
+        for (PsiElement child : children) {
           appendElement(child, renameBreakElements, breakLabelString, switchStatementText);
         }
       }
       else {
         switchStatementText.append(text);
       }
-      final PsiElement lastChild = element.getLastChild();
+      PsiElement lastChild = element.getLastChild();
       if (isEndOfLineComment(lastChild)) {
         switchStatementText.append('\n');
       }
@@ -482,8 +482,8 @@ public class IfCanBeSwitchInspection extends BaseInspection {
       if (!(element instanceof PsiComment)) {
         return false;
       }
-      final PsiComment comment = (PsiComment)element;
-      final IElementType tokenType = comment.getTokenType();
+      PsiComment comment = (PsiComment)element;
+      IElementType tokenType = comment.getTokenType();
       return JavaTokenType.END_OF_LINE_COMMENT.equals(tokenType);
     }
   }
@@ -498,23 +498,23 @@ public class IfCanBeSwitchInspection extends BaseInspection {
     @Override
     public void visitIfStatement(PsiIfStatement statement) {
       super.visitIfStatement(statement);
-      final PsiElement parent = statement.getParent();
+      PsiElement parent = statement.getParent();
       if (parent instanceof PsiIfStatement) {
         return;
       }
-      final PsiExpression switchExpression = SwitchUtils.getSwitchExpression(statement, minimumBranches);
+      PsiExpression switchExpression = SwitchUtils.getSwitchExpression(statement, minimumBranches);
       if (switchExpression == null) {
         return;
       }
-      final PsiExpression unwrappedExpression = ParenthesesUtils.stripParentheses(switchExpression);
+      PsiExpression unwrappedExpression = ParenthesesUtils.stripParentheses(switchExpression);
       if (unwrappedExpression instanceof PsiReferenceExpression) {
-        final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)unwrappedExpression;
-        final PsiElement target = referenceExpression.resolve();
+        PsiReferenceExpression referenceExpression = (PsiReferenceExpression)unwrappedExpression;
+        PsiElement target = referenceExpression.resolve();
         if (target instanceof PsiModifierListOwner && NullableNotNullManager.isNullable((PsiModifierListOwner)target)) {
           return;
         }
       }
-      final PsiType type = switchExpression.getType();
+      PsiType type = switchExpression.getType();
       if (!suggestIntSwitches) {
         if (type instanceof PsiClassType) {
           if (type.equalsToText(CommonClassNames.JAVA_LANG_INTEGER) ||
@@ -529,8 +529,8 @@ public class IfCanBeSwitchInspection extends BaseInspection {
         }
       }
       if (!suggestEnumSwitches && type instanceof PsiClassType) {
-        final PsiClassType classType = (PsiClassType)type;
-        final PsiClass aClass = classType.resolve();
+        PsiClassType classType = (PsiClassType)type;
+        PsiClass aClass = classType.resolve();
         if (aClass == null || aClass.isEnum()) {
           return;
         }

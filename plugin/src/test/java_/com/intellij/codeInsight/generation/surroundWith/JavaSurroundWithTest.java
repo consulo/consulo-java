@@ -126,13 +126,13 @@ public abstract class JavaSurroundWithTest extends LightCodeInsightTestCase {
     doTest(getTestName(false), new JavaWithNullCheckSurrounder());
   }
 
-  private void doTest(@Nonnull String fileName, final Surrounder surrounder) {
+  private void doTest(@Nonnull String fileName, Surrounder surrounder) {
     configureByFile(BASE_PATH + fileName + ".java");
     SurroundWithHandler.invoke(getProject(), getEditor(), getFile(), surrounder);
     checkResultByFile(BASE_PATH + fileName + "_after.java");
   }
 
-  private void doTestWithTemplateFinish(@Nonnull String fileName, final Surrounder surrounder, @Nullable String textToType)
+  private void doTestWithTemplateFinish(@Nonnull String fileName, Surrounder surrounder, @Nullable String textToType)
     throws Exception {
     TemplateManagerImpl.setTemplateTesting(getProject(), getTestRootDisposable());
     configureByFile(BASE_PATH + fileName + ".java");

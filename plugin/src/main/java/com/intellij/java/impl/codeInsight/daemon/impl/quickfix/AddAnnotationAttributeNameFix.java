@@ -70,34 +70,34 @@ public class AddAnnotationAttributeNameFix extends LocalQuickFixAndIntentionActi
 
     @Nonnull
     public static List<IntentionAction> createFixes(@Nonnull PsiNameValuePair pair) {
-        final PsiAnnotationMemberValue value = pair.getValue();
+        PsiAnnotationMemberValue value = pair.getValue();
         if (value == null || pair.getName() != null) {
             return Collections.emptyList();
         }
 
-        final Collection<String> methodNames = getAvailableAnnotationMethodNames(pair);
+        Collection<String> methodNames = getAvailableAnnotationMethodNames(pair);
         return ContainerUtil.map2List(methodNames, name -> new AddAnnotationAttributeNameFix(pair, name));
     }
 
     public static void doFix(@Nonnull PsiNameValuePair annotationParameter, @Nonnull String name) {
-        final String text = buildReplacementText(annotationParameter, name);
-        final PsiElementFactory factory = JavaPsiFacade.getElementFactory(annotationParameter.getProject());
-        final PsiAnnotation newAnnotation = factory.createAnnotationFromText("@A(" + text + " )", annotationParameter);
+        String text = buildReplacementText(annotationParameter, name);
+        PsiElementFactory factory = JavaPsiFacade.getElementFactory(annotationParameter.getProject());
+        PsiAnnotation newAnnotation = factory.createAnnotationFromText("@A(" + text + " )", annotationParameter);
         annotationParameter.replace(newAnnotation.getParameterList().getAttributes()[0]);
     }
 
     private static String buildReplacementText(@Nonnull PsiNameValuePair annotationParameter, @Nonnull String name) {
-        final PsiAnnotationMemberValue value = annotationParameter.getValue();
+        PsiAnnotationMemberValue value = annotationParameter.getValue();
         return value != null ? name + "=" + value.getText() : name + "=";
     }
 
     public static boolean isCompatibleReturnType(@Nonnull PsiMethod psiMethod, @Nullable PsiType valueType) {
-        final PsiType expectedType = psiMethod.getReturnType();
+        PsiType expectedType = psiMethod.getReturnType();
         if (expectedType == null || valueType == null || expectedType.isAssignableFrom(valueType)) {
             return true;
         }
         if (expectedType instanceof PsiArrayType) {
-            final PsiType componentType = ((PsiArrayType) expectedType).getComponentType();
+            PsiType componentType = ((PsiArrayType) expectedType).getComponentType();
             return componentType.isAssignableFrom(valueType);
         }
         return false;
@@ -105,23 +105,23 @@ public class AddAnnotationAttributeNameFix extends LocalQuickFixAndIntentionActi
 
     @Nonnull
     private static Collection<String> getAvailableAnnotationMethodNames(@Nonnull PsiNameValuePair pair) {
-        final PsiAnnotationMemberValue value = pair.getValue();
+        PsiAnnotationMemberValue value = pair.getValue();
         if (value != null && pair.getName() == null) {
-            final PsiElement parent = pair.getParent();
+            PsiElement parent = pair.getParent();
             if ((parent instanceof PsiAnnotationParameterList)) {
-                final PsiAnnotationParameterList parameterList = (PsiAnnotationParameterList) parent;
-                final PsiClass annotationClass = getAnnotationClass(parameterList);
+                PsiAnnotationParameterList parameterList = (PsiAnnotationParameterList) parent;
+                PsiClass annotationClass = getAnnotationClass(parameterList);
 
                 if (annotationClass != null) {
-                    final Set<String> usedNames = getUsedAttributeNames(parameterList);
+                    Set<String> usedNames = getUsedAttributeNames(parameterList);
 
-                    final Collection<PsiMethod> availableMethods = Arrays.stream(annotationClass.getMethods())
+                    Collection<PsiMethod> availableMethods = Arrays.stream(annotationClass.getMethods())
                         .filter(PsiAnnotationMethod.class::isInstance)
                         .filter(psiMethod -> !usedNames.contains(psiMethod.getName()))
                         .collect(Collectors.toList());
 
                     if (!availableMethods.isEmpty()) {
-                        final PsiType valueType = CreateAnnotationMethodFromUsageFix.getAnnotationValueType(value);
+                        PsiType valueType = CreateAnnotationMethodFromUsageFix.getAnnotationValueType(value);
                         return availableMethods.stream()
                             .filter(psiMethod -> isCompatibleReturnType(psiMethod, valueType))
                             .map(PsiMethod::getName)
@@ -143,11 +143,11 @@ public class AddAnnotationAttributeNameFix extends LocalQuickFixAndIntentionActi
 
     @Nullable
     private static PsiClass getAnnotationClass(@Nonnull PsiAnnotationParameterList parameterList) {
-        final PsiElement parent = parameterList.getParent();
+        PsiElement parent = parameterList.getParent();
         if (parent instanceof PsiAnnotation) {
-            final PsiJavaCodeReferenceElement reference = ((PsiAnnotation) parent).getNameReferenceElement();
+            PsiJavaCodeReferenceElement reference = ((PsiAnnotation) parent).getNameReferenceElement();
             if (reference != null) {
-                final PsiElement resolved = reference.resolve();
+                PsiElement resolved = reference.resolve();
                 if (resolved instanceof PsiClass && ((PsiClass) resolved).isAnnotationType()) {
                     return (PsiClass) resolved;
                 }

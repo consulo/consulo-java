@@ -63,9 +63,9 @@ public class RemoveMiddlemanDialog extends RefactoringDialog {
 
     @Override
     protected JComponent createCenterPanel() {
-        final JPanel panel = new JPanel(new BorderLayout());
+        JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
-        final MemberSelectionPanel selectionPanel = new MemberSelectionPanel(
+        MemberSelectionPanel selectionPanel = new MemberSelectionPanel(
             JavaRefactoringLocalize.removeMiddlemanMethodsToInlineTitle().get(),
             delegateMethods,
             JavaRefactoringLocalize.removeMiddlemanColumnHeader().get()
@@ -73,18 +73,18 @@ public class RemoveMiddlemanDialog extends RefactoringDialog {
         final MemberSelectionTable table = selectionPanel.getTable();
         table.setMemberInfoModel(new DelegatingMemberInfoModel<>(table.getMemberInfoModel()) {
             @Override
-            public int checkForProblems(@Nonnull final MemberInfo member) {
+            public int checkForProblems(@Nonnull MemberInfo member) {
                 return hasSuperMethods(member) ? ERROR : OK;
             }
 
             @Override
-            public String getTooltipText(final MemberInfo member) {
+            public String getTooltipText(MemberInfo member) {
                 return hasSuperMethods(member)
                     ? JavaRefactoringLocalize.removeMiddlemanTooltipWarning().get()
                     : super.getTooltipText(member);
             }
 
-            private boolean hasSuperMethods(final MemberInfo member) {
+            private boolean hasSuperMethods(MemberInfo member) {
                 return member.isChecked() && member.isToAbstract()
                     && member.getMember() instanceof PsiMethod method
                     && method.findDeepestSuperMethods().length > 0;
@@ -97,7 +97,7 @@ public class RemoveMiddlemanDialog extends RefactoringDialog {
     @Override
     protected JComponent createNorthPanel() {
         fieldNameLabel.setEditable(false);
-        final JPanel sourceClassPanel = new JPanel(new BorderLayout());
+        JPanel sourceClassPanel = new JPanel(new BorderLayout());
         sourceClassPanel.add(new JLabel(LocalizeValue.localizeTODO("Delegating field").get()), BorderLayout.NORTH);
         sourceClassPanel.add(fieldNameLabel, BorderLayout.CENTER);
         return sourceClassPanel;

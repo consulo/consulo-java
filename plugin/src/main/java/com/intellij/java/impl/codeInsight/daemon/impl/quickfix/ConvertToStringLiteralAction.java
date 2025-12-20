@@ -42,21 +42,21 @@ public class ConvertToStringLiteralAction implements IntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
-    final PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
     return PsiUtil.isJavaToken(element, JavaTokenType.CHARACTER_LITERAL);
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
-    final PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
     if (element != null && PsiUtil.isJavaToken(element, JavaTokenType.CHARACTER_LITERAL)) {
-      final String text = StringUtil.unescapeStringCharacters(element.getText());
-      final int length = text.length();
+      String text = StringUtil.unescapeStringCharacters(element.getText());
+      int length = text.length();
       if (length > 1 && text.charAt(0) == '\'' && text.charAt(length - 1) == '\'') {
-        final String value = StringUtil.escapeStringCharacters(text.substring(1, length - 1));
-        final PsiExpression expression = JavaPsiFacade.getElementFactory(project).createExpressionFromText('"' + value + '"', null);
-        final PsiElement literal = expression.getFirstChild();
+        String value = StringUtil.escapeStringCharacters(text.substring(1, length - 1));
+        PsiExpression expression = JavaPsiFacade.getElementFactory(project).createExpressionFromText('"' + value + '"', null);
+        PsiElement literal = expression.getFirstChild();
         if (literal != null && PsiUtil.isJavaToken(literal, JavaTokenType.STRING_LITERAL)) {
           element.replace(literal);
         }

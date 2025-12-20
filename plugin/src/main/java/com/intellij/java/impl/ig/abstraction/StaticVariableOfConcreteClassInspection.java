@@ -65,14 +65,14 @@ public class StaticVariableOfConcreteClassInspection extends BaseInspection {
             if (!field.hasModifierProperty(PsiModifier.STATIC)) {
                 return;
             }
-            final PsiTypeElement typeElement = field.getTypeElement();
+            PsiTypeElement typeElement = field.getTypeElement();
             if (typeElement == null) {
                 return;
             }
             if (!ConcreteClassUtil.typeIsConcreteClass(typeElement, ignoreAbstractClasses)) {
                 return;
             }
-            final String variableName = field.getName();
+            String variableName = field.getName();
             registerError(typeElement, variableName);
         }
     }

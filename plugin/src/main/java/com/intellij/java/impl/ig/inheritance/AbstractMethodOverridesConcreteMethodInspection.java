@@ -54,7 +54,7 @@ public class AbstractMethodOverridesConcreteMethodInspection extends BaseInspect
             if (method.isConstructor()) {
                 return;
             }
-            final PsiClass containingClass = method.getContainingClass();
+            PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return;
             }
@@ -65,13 +65,13 @@ public class AbstractMethodOverridesConcreteMethodInspection extends BaseInspect
             if (!method.hasModifierProperty(PsiModifier.ABSTRACT)) {
                 return;
             }
-            final PsiMethod[] superMethods = method.findSuperMethods();
-            for (final PsiMethod superMethod : superMethods) {
-                final PsiClass superClass = superMethod.getContainingClass();
+            PsiMethod[] superMethods = method.findSuperMethods();
+            for (PsiMethod superMethod : superMethods) {
+                PsiClass superClass = superMethod.getContainingClass();
                 if (superClass == null) {
                     continue;
                 }
-                final String superClassName = superClass.getQualifiedName();
+                String superClassName = superClass.getQualifiedName();
                 if (!superClass.isInterface() &&
                     !CommonClassNames.JAVA_LANG_OBJECT.equals(superClassName) &&
                     !superMethod.hasModifierProperty(PsiModifier.ABSTRACT)) {

@@ -34,12 +34,12 @@ import java.util.Arrays;
 @ExtensionImpl
 public class ReferenceParameterInfoHandler implements ParameterInfoHandler<PsiReferenceParameterList, PsiTypeParameter> {
   @Override
-  public Object[] getParametersForLookup(final LookupElement item, final ParameterInfoContext context) {
+  public Object[] getParametersForLookup(LookupElement item, ParameterInfoContext context) {
     return null;
   }
 
   @Override
-  public Object[] getParametersForDocumentation(final PsiTypeParameter p, final ParameterInfoContext context) {
+  public Object[] getParametersForDocumentation(PsiTypeParameter p, ParameterInfoContext context) {
     return new Object[]{p};
   }
 
@@ -49,17 +49,17 @@ public class ReferenceParameterInfoHandler implements ParameterInfoHandler<PsiRe
   }
 
   @Override
-  public PsiReferenceParameterList findElementForParameterInfo(final CreateParameterInfoContext context) {
-    final PsiReferenceParameterList referenceParameterList =
+  public PsiReferenceParameterList findElementForParameterInfo(CreateParameterInfoContext context) {
+    PsiReferenceParameterList referenceParameterList =
         ParameterInfoUtils.findParentOfType(context.getFile(), context.getOffset(), PsiReferenceParameterList.class);
 
     if (referenceParameterList != null) {
       if (!(referenceParameterList.getParent() instanceof PsiJavaCodeReferenceElement)) return null;
-      final PsiJavaCodeReferenceElement ref = ((PsiJavaCodeReferenceElement) referenceParameterList.getParent());
-      final PsiElement psiElement = ref.resolve();
+      PsiJavaCodeReferenceElement ref = ((PsiJavaCodeReferenceElement) referenceParameterList.getParent());
+      PsiElement psiElement = ref.resolve();
       if (!(psiElement instanceof PsiTypeParameterListOwner)) return null;
 
-      final PsiTypeParameter[] typeParams = ((PsiTypeParameterListOwner) psiElement).getTypeParameters();
+      PsiTypeParameter[] typeParams = ((PsiTypeParameterListOwner) psiElement).getTypeParameters();
       if (typeParams.length == 0) return null;
 
       context.setItemsToShow(typeParams);
@@ -70,20 +70,20 @@ public class ReferenceParameterInfoHandler implements ParameterInfoHandler<PsiRe
   }
 
   @Override
-  public void showParameterInfo(@Nonnull final PsiReferenceParameterList element, final CreateParameterInfoContext context) {
+  public void showParameterInfo(@Nonnull PsiReferenceParameterList element, CreateParameterInfoContext context) {
     context.showHint(element, element.getTextRange().getStartOffset() + 1, this);
   }
 
   @Override
-  public PsiReferenceParameterList findElementForUpdatingParameterInfo(final UpdateParameterInfoContext context) {
+  public PsiReferenceParameterList findElementForUpdatingParameterInfo(UpdateParameterInfoContext context) {
     return ParameterInfoUtils.findParentOfType(context.getFile(), context.getOffset(), PsiReferenceParameterList.class);
   }
 
   @Override
-  public void updateParameterInfo(@Nonnull final PsiReferenceParameterList o, final UpdateParameterInfoContext context) {
+  public void updateParameterInfo(@Nonnull PsiReferenceParameterList o, UpdateParameterInfoContext context) {
     int index = ParameterInfoUtils.getCurrentParameterIndex(o.getNode(), context.getOffset(), JavaTokenType.COMMA);
     context.setCurrentParameter(index);
-    final Object[] objectsToView = context.getObjectsToView();
+    Object[] objectsToView = context.getObjectsToView();
     context.setHighlightedParameter(index < objectsToView.length && index >= 0 ? (PsiElement) objectsToView[index] : null);
   }
 

@@ -28,53 +28,53 @@ public class AdapterToListenerPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiJavaCodeReferenceElement)) {
       return false;
     }
-    final PsiElement parent = element.getParent();
+    PsiElement parent = element.getParent();
     if (!(parent instanceof PsiReferenceList)) {
       return false;
     }
-    final PsiReferenceList referenceList = (PsiReferenceList)parent;
+    PsiReferenceList referenceList = (PsiReferenceList)parent;
     if (PsiReferenceList.Role.EXTENDS_LIST != referenceList.getRole()) {
       return false;
     }
-    final PsiElement grandParent = referenceList.getParent();
+    PsiElement grandParent = referenceList.getParent();
     if (!(grandParent instanceof PsiClass)) {
       return false;
     }
-    final PsiJavaCodeReferenceElement[] referenceElements =
+    PsiJavaCodeReferenceElement[] referenceElements =
       referenceList.getReferenceElements();
     if (referenceElements.length != 1) {
       return false;
     }
-    final PsiJavaCodeReferenceElement referenceElement =
+    PsiJavaCodeReferenceElement referenceElement =
       referenceElements[0];
-    final PsiElement target = referenceElement.resolve();
+    PsiElement target = referenceElement.resolve();
     if (!(target instanceof PsiClass)) {
       return false;
     }
-    final PsiClass aClass = (PsiClass)target;
-    final String className = aClass.getName();
+    PsiClass aClass = (PsiClass)target;
+    String className = aClass.getName();
     if (!className.endsWith("Adapter")) {
       return false;
     }
     if (!aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
       return false;
     }
-    final PsiReferenceList implementsList = aClass.getImplementsList();
-    final PsiJavaCodeReferenceElement[] implementsReferences =
+    PsiReferenceList implementsList = aClass.getImplementsList();
+    PsiJavaCodeReferenceElement[] implementsReferences =
       implementsList.getReferenceElements();
     //final List<PsiJavaCodeReferenceElement> listenerReferences =
     //        new ArrayList();
     for (PsiJavaCodeReferenceElement implementsReference :
       implementsReferences) {
-      final String name = implementsReference.getReferenceName();
+      String name = implementsReference.getReferenceName();
       if (!name.endsWith("Listener")) {
         continue;
       }
-      final PsiElement implementsTarget = implementsReference.resolve();
+      PsiElement implementsTarget = implementsReference.resolve();
       if (!(implementsTarget instanceof PsiClass)) {
         continue;
       }
-      final PsiClass implementsClass = (PsiClass)implementsTarget;
+      PsiClass implementsClass = (PsiClass)implementsTarget;
       if (!implementsClass.isInterface()) {
         continue;
       }

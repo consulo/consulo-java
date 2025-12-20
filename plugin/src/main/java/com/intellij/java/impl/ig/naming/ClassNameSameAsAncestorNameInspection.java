@@ -59,13 +59,13 @@ public class ClassNameSameAsAncestorNameInspection extends BaseInspection {
     @Override
     public void visitClass(@Nonnull PsiClass aClass) {
       // no call to super, so it doesn't drill down into inner classes
-      final String className = aClass.getName();
+      String className = aClass.getName();
       if (className == null) {
         return;
       }
-      final Set<PsiClass> alreadyVisited = new HashSet<PsiClass>(8);
-      final PsiClass[] supers = aClass.getSupers();
-      for (final PsiClass aSuper : supers) {
+      Set<PsiClass> alreadyVisited = new HashSet<PsiClass>(8);
+      PsiClass[] supers = aClass.getSupers();
+      for (PsiClass aSuper : supers) {
         if (hasMatchingName(aSuper, className, alreadyVisited)) {
           registerClassError(aClass);
         }
@@ -82,11 +82,11 @@ public class ClassNameSameAsAncestorNameInspection extends BaseInspection {
         return false;
       }
       alreadyVisited.add(aSuper);
-      final String superName = aSuper.getName();
+      String superName = aSuper.getName();
       if (className.equals(superName)) {
         return true;
       }
-      final PsiClass[] supers = aSuper.getSupers();
+      PsiClass[] supers = aSuper.getSupers();
       for (PsiClass aSupers : supers) {
         if (hasMatchingName(aSupers, className, alreadyVisited)) {
           return true;

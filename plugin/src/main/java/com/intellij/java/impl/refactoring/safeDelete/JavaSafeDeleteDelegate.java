@@ -44,8 +44,8 @@ public interface JavaSafeDeleteDelegate extends LanguageExtension {
     return Application.get().getExtensionPoint(JavaSafeDeleteDelegate.class).getOrBuildCache(KEY).get(language);
   }
 
-  void createUsageInfoForParameter(final PsiReference reference,
-                                   final List<UsageInfo> usages,
-                                   final PsiParameter parameter,
-                                   final PsiMethod method);
+  void createUsageInfoForParameter(PsiReference reference,
+                                   List<UsageInfo> usages,
+                                   PsiParameter parameter,
+                                   PsiMethod method);
 }

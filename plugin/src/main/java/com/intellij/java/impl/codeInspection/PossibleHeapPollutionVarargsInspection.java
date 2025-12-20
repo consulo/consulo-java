@@ -85,13 +85,13 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
     return new HeapPollutionVisitor() {
       @Override
       protected void registerProblem(PsiMethod method, PsiIdentifier nameIdentifier) {
-        final LocalQuickFix quickFix;
+        LocalQuickFix quickFix;
         if (method.hasModifierProperty(PsiModifier.FINAL) ||
             method.hasModifierProperty(PsiModifier.STATIC) ||
             method.isConstructor()) {
           quickFix = new AnnotateAsSafeVarargsQuickFix();
         } else {
-          final PsiClass containingClass = method.getContainingClass();
+          PsiClass containingClass = method.getContainingClass();
           LOG.assertTrue(containingClass != null);
           boolean canBeFinal = !method.hasModifierProperty(PsiModifier.ABSTRACT) &&
               !containingClass.isInterface() &&
@@ -112,9 +112,9 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
 
     @Override
     public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
-      final PsiElement psiElement = descriptor.getPsiElement();
+      PsiElement psiElement = descriptor.getPsiElement();
       if (psiElement instanceof PsiIdentifier) {
-        final PsiMethod psiMethod = (PsiMethod) psiElement.getParent();
+        PsiMethod psiMethod = (PsiMethod) psiElement.getParent();
         if (psiMethod != null) {
           new AddAnnotationPsiFix(CommonClassNames.JAVA_LANG_SAFE_VARARGS, psiMethod, PsiNameValuePair.EMPTY_ARRAY).applyFix(project, descriptor);
         }
@@ -131,9 +131,9 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
 
     @Override
     public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
-      final PsiElement psiElement = descriptor.getPsiElement();
+      PsiElement psiElement = descriptor.getPsiElement();
       if (psiElement instanceof PsiIdentifier) {
-        final PsiMethod psiMethod = (PsiMethod) psiElement.getParent();
+        PsiMethod psiMethod = (PsiMethod) psiElement.getParent();
         psiMethod.getModifierList().setModifierProperty(PsiModifier.FINAL, true);
         new AddAnnotationPsiFix(CommonClassNames.JAVA_LANG_SAFE_VARARGS, psiMethod, PsiNameValuePair.EMPTY_ARRAY).applyFix(project, descriptor);
       }
@@ -148,18 +148,18 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
       if (AnnotationUtil.isAnnotated(method, CommonClassNames.JAVA_LANG_SAFE_VARARGS, false)) return;
       if (!method.isVarArgs()) return;
 
-      final PsiParameter psiParameter = method.getParameterList().getParameters()[method.getParameterList().getParametersCount() - 1];
-      final PsiType componentType = ((PsiEllipsisType) psiParameter.getType()).getComponentType();
+      PsiParameter psiParameter = method.getParameterList().getParameters()[method.getParameterList().getParametersCount() - 1];
+      PsiType componentType = ((PsiEllipsisType) psiParameter.getType()).getComponentType();
       if (JavaGenericsUtil.isReifiableType(componentType)) {
         return;
       }
       for (PsiReference reference : ReferencesSearch.search(psiParameter)) {
-        final PsiElement element = reference.getElement();
+        PsiElement element = reference.getElement();
         if (element instanceof PsiExpression && !PsiUtil.isAccessedForReading((PsiExpression) element)) {
           return;
         }
       }
-      final PsiIdentifier nameIdentifier = method.getNameIdentifier();
+      PsiIdentifier nameIdentifier = method.getNameIdentifier();
       if (nameIdentifier != null) {
         //if (method.hasModifierProperty(PsiModifier.ABSTRACT)) return;
         //final PsiClass containingClass = method.getContainingClass();

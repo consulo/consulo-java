@@ -50,35 +50,35 @@ public class ToArrayCallWithZeroLengthArrayArgumentInspection extends ToArrayCal
 
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiElement parent = element.getParent();
-      final PsiElement grandParent = parent.getParent();
+      PsiElement element = descriptor.getPsiElement();
+      PsiElement parent = element.getParent();
+      PsiElement grandParent = parent.getParent();
       if (!(grandParent instanceof PsiMethodCallExpression)) {
         return;
       }
-      final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) grandParent;
-      final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-      final PsiExpression qualifier = methodExpression.getQualifierExpression();
-      final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-      final PsiExpressionList argumentList = methodCallExpression.getArgumentList();
-      final PsiExpression[] arguments = argumentList.getExpressions();
+      PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) grandParent;
+      PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
+      PsiExpression qualifier = methodExpression.getQualifierExpression();
+      PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+      PsiExpressionList argumentList = methodCallExpression.getArgumentList();
+      PsiExpression[] arguments = argumentList.getExpressions();
       if (arguments.length != 1) {
         return;
       }
-      final PsiExpression argument = arguments[0];
+      PsiExpression argument = arguments[0];
       if (qualifier == null) {
         return;
       }
-      final String collectionText = qualifier.getText();
-      final PsiType type = argument.getType();
+      String collectionText = qualifier.getText();
+      PsiType type = argument.getType();
       if (type == null) {
         return;
       }
-      final PsiType componentType = type.getDeepComponentType();
-      final String typeText = componentType.getCanonicalText();
+      PsiType componentType = type.getDeepComponentType();
+      String typeText = componentType.getCanonicalText();
       if (!(qualifier instanceof PsiMethodCallExpression)) {
-        @NonNls final String replacementText = "new " + typeText + '[' + collectionText + ".size()]";
-        final String newExpressionText = PsiReplacementUtil.getElementText(methodCallExpression, argument, replacementText);
+        @NonNls String replacementText = "new " + typeText + '[' + collectionText + ".size()]";
+        String newExpressionText = PsiReplacementUtil.getElementText(methodCallExpression, argument, replacementText);
         PsiReplacementUtil.replaceExpression(methodCallExpression, newExpressionText);
         return;
       }
@@ -87,7 +87,7 @@ public class ToArrayCallWithZeroLengthArrayArgumentInspection extends ToArrayCal
       if (statement == null) {
         return;
       }
-      final PsiType qualifierType = qualifier.getType();
+      PsiType qualifierType = qualifier.getType();
       if (qualifierType == null) {
         return;
       }
@@ -97,7 +97,7 @@ public class ToArrayCallWithZeroLengthArrayArgumentInspection extends ToArrayCal
         statement = (PsiStatement) statementParent;
         statementParent = statement.getParent();
       }
-      final String toArrayText = "var.toArray(new " + typeText + "[var.size()])";
+      String toArrayText = "var.toArray(new " + typeText + "[var.size()])";
       PsiMethodCallExpression newMethodCallExpression = (PsiMethodCallExpression) factory.createExpressionFromText(toArrayText, methodCallExpression);
       declarationStatement = (PsiDeclarationStatement) statementParent.addBefore(declarationStatement, statement);
       newMethodCallExpression = (PsiMethodCallExpression) methodCallExpression.replace(newMethodCallExpression);
@@ -108,11 +108,11 @@ public class ToArrayCallWithZeroLengthArrayArgumentInspection extends ToArrayCal
       if (!isOnTheFly()) {
         return;
       }
-      final PsiVariable variable = (PsiVariable) declarationStatement.getDeclaredElements()[0];
-      final PsiReferenceExpression ref1 = (PsiReferenceExpression) methodCallExpression.getMethodExpression().getQualifierExpression();
-      final PsiNewExpression argument = (PsiNewExpression) methodCallExpression.getArgumentList().getExpressions()[0];
-      final PsiMethodCallExpression sizeExpression = (PsiMethodCallExpression) argument.getArrayDimensions()[0];
-      final PsiReferenceExpression ref2 = (PsiReferenceExpression) sizeExpression.getMethodExpression().getQualifierExpression();
+      PsiVariable variable = (PsiVariable) declarationStatement.getDeclaredElements()[0];
+      PsiReferenceExpression ref1 = (PsiReferenceExpression) methodCallExpression.getMethodExpression().getQualifierExpression();
+      PsiNewExpression argument = (PsiNewExpression) methodCallExpression.getArgumentList().getExpressions()[0];
+      PsiMethodCallExpression sizeExpression = (PsiMethodCallExpression) argument.getArrayDimensions()[0];
+      PsiReferenceExpression ref2 = (PsiReferenceExpression) sizeExpression.getMethodExpression().getQualifierExpression();
       HighlightUtils.showRenameTemplate(context, variable, ref1, ref2);
     }
   }

@@ -30,55 +30,55 @@ class FlipCommutativeMethodCallPredicate implements PsiElementPredicate {
     if (ErrorUtil.containsError(element)) {
       return false;
     }
-    final PsiMethodCallExpression expression =
+    PsiMethodCallExpression expression =
       (PsiMethodCallExpression)element;
     // do it only when there is just one argument.
-    final PsiExpressionList argumentList = expression.getArgumentList();
-    final PsiExpression[] args = argumentList.getExpressions();
+    PsiExpressionList argumentList = expression.getArgumentList();
+    PsiExpression[] args = argumentList.getExpressions();
     if (args.length != 1) {
       return false;
     }
-    final PsiReferenceExpression methodExpression =
+    PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
-    final PsiExpression qualifier =
+    PsiExpression qualifier =
       methodExpression.getQualifierExpression();
     // make sure that there is a caller and a caller
     if (qualifier == null) {
       return false;
     }
-    final String methodName = methodExpression.getReferenceName();
+    String methodName = methodExpression.getReferenceName();
     // the logic is...
     // if the argument takes a method of the same name with the caller
     // as parameter then we can switch the argument and the caller.
-    final PsiType callerType = qualifier.getType();
-    final PsiType argumentType = args[0].getType();
+    PsiType callerType = qualifier.getType();
+    PsiType argumentType = args[0].getType();
     if (argumentType == null || !(argumentType instanceof PsiClassType)) {
       return false;
     }
     if (callerType == null || !(callerType instanceof PsiClassType)) {
       return false;
     }
-    final PsiClassType.ClassResolveResult resolveResult = ((PsiClassType)argumentType).resolveGenerics();
-    final PsiClass argumentClass = resolveResult.getElement();
+    PsiClassType.ClassResolveResult resolveResult = ((PsiClassType)argumentType).resolveGenerics();
+    PsiClass argumentClass = resolveResult.getElement();
     if (argumentClass == null) {
       return false;
     }
-    final PsiMethod[] methods =
+    PsiMethod[] methods =
       argumentClass.findMethodsByName(methodName, true);
-    for (final PsiMethod testMethod : methods) {
-      final String testMethodName = testMethod.getName();
+    for (PsiMethod testMethod : methods) {
+      String testMethodName = testMethod.getName();
       if (testMethodName.equals(methodName)) {
-        final PsiParameterList parameterList =
+        PsiParameterList parameterList =
           testMethod.getParameterList();
-        final PsiParameter[] parameters = parameterList.getParameters();
+        PsiParameter[] parameters = parameterList.getParameters();
         if (parameters.length == 1) {
-          final PsiParameter parameter = parameters[0];
-          final PsiClass containingClass = testMethod.getContainingClass();
+          PsiParameter parameter = parameters[0];
+          PsiClass containingClass = testMethod.getContainingClass();
           if (containingClass != null) {
-            final PsiSubstitutor substitutor =
+            PsiSubstitutor substitutor =
               TypeConversionUtil.getClassSubstitutor(containingClass, argumentClass, resolveResult.getSubstitutor());
             if (substitutor != null) {
-              final PsiType type = substitutor.substitute(parameter.getType());
+              PsiType type = substitutor.substitute(parameter.getType());
               if (type != null && type.isAssignableFrom(callerType)) {
                 return true;
               }

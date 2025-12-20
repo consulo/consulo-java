@@ -95,7 +95,7 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
       return myCachedChildren == null ? Collections.<AbstractTreeNode>emptyList() : myCachedChildren;
     }
     final List<SliceNode> children = new ArrayList<SliceNode>();
-    final SliceManager manager = SliceManager.getInstance(getProject());
+    SliceManager manager = SliceManager.getInstance(getProject());
     manager.runInterruptibly(progress, new Runnable() {
                                @Override
                                public void run() {

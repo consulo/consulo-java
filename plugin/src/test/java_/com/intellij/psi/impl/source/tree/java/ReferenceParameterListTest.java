@@ -13,27 +13,27 @@ import consulo.logging.Logger;
 public abstract class ReferenceParameterListTest extends PsiTestCase {
   private static final Logger LOG = Logger.getInstance(ReferenceParameterListTest.class);
   public void testParameterListInExtends() throws Exception {
-    final PsiManager manager = PsiManager.getInstance(myProject);
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-    final PsiClass classFromText = factory.createClassFromText("class X extends Y<Z, W> {}", null);
-    final PsiClass classX = classFromText.getInnerClasses()[0];
-    final PsiJavaCodeReferenceElement[] extendsOfX = classX.getExtendsList().getReferenceElements();
+    PsiManager manager = PsiManager.getInstance(myProject);
+    PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
+    PsiClass classFromText = factory.createClassFromText("class X extends Y<Z, W> {}", null);
+    PsiClass classX = classFromText.getInnerClasses()[0];
+    PsiJavaCodeReferenceElement[] extendsOfX = classX.getExtendsList().getReferenceElements();
     assertEquals(1, extendsOfX.length);
-    final PsiJavaCodeReferenceElement ref = extendsOfX[0];
+    PsiJavaCodeReferenceElement ref = extendsOfX[0];
     assertEquals("Y<Z,W>", ref.getCanonicalText());
     assertEquals("Y", ref.getReferenceName());
-    final PsiTypeElement[] refParams = ref.getParameterList().getTypeParameterElements();
+    PsiTypeElement[] refParams = ref.getParameterList().getTypeParameterElements();
     assertEquals(2, refParams.length);
     assertEquals("Z", refParams[0].getType().getCanonicalText());
     assertEquals("W", refParams[1].getType().getCanonicalText());
-    final PsiType refType = factory.createType(ref);
+    PsiType refType = factory.createType(ref);
     assertEquals("Y<Z,W>", refType.getCanonicalText());
-    final PsiJavaCodeReferenceElement reference = ((PsiClassReferenceType) refType).getReference();
+    PsiJavaCodeReferenceElement reference = ((PsiClassReferenceType) refType).getReference();
     assertEquals("Y<Z,W>", reference.getCanonicalText());
   }
   public void testResolvableParameterListInExtends() throws Exception {
-    final PsiManager manager = PsiManager.getInstance(myProject);
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
+    PsiManager manager = PsiManager.getInstance(myProject);
+    PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
     final PsiClass classFromText = factory.createClassFromText(
             "class Z {} class W{}" +
             "class Y<A, B> {} " +
@@ -51,19 +51,19 @@ public abstract class ReferenceParameterListTest extends PsiTestCase {
         }
       }
     });
-    final PsiClass classX = classFromText.getInnerClasses()[3];
-    final PsiJavaCodeReferenceElement[] extendsOfX = classX.getExtendsList().getReferenceElements();
+    PsiClass classX = classFromText.getInnerClasses()[3];
+    PsiJavaCodeReferenceElement[] extendsOfX = classX.getExtendsList().getReferenceElements();
     assertEquals(1, extendsOfX.length);
-    final PsiJavaCodeReferenceElement ref = extendsOfX[0];
+    PsiJavaCodeReferenceElement ref = extendsOfX[0];
     assertEquals("Q.Y<Q.Z,Q.W>", ref.getCanonicalText());
     assertEquals("Y", ref.getReferenceName());
-    final PsiTypeElement[] refParams = ref.getParameterList().getTypeParameterElements();
+    PsiTypeElement[] refParams = ref.getParameterList().getTypeParameterElements();
     assertEquals(2, refParams.length);
     assertEquals("Q.Z", refParams[0].getType().getCanonicalText());
     assertEquals("Q.W", refParams[1].getType().getCanonicalText());
-    final PsiType refType = factory.createType(ref);
+    PsiType refType = factory.createType(ref);
     assertEquals("Q.Y<Q.Z,Q.W>", refType.getCanonicalText());
-    final PsiJavaCodeReferenceElement reference = ((PsiClassReferenceType) refType).getReference();
+    PsiJavaCodeReferenceElement reference = ((PsiClassReferenceType) refType).getReference();
     assertEquals("Q.Y<Q.Z,Q.W>", reference.getCanonicalText());
   }
 }

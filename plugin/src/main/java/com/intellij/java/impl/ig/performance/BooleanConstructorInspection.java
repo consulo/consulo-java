@@ -81,19 +81,19 @@ public class BooleanConstructorInspection extends BaseInspection {
 
     @Override
     public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiNewExpression expression = (PsiNewExpression)descriptor.getPsiElement();
-      final PsiExpressionList argumentList = expression.getArgumentList();
+      PsiNewExpression expression = (PsiNewExpression)descriptor.getPsiElement();
+      PsiExpressionList argumentList = expression.getArgumentList();
       if (argumentList == null) {
         return;
       }
-      final PsiExpression[] arguments = argumentList.getExpressions();
+      PsiExpression[] arguments = argumentList.getExpressions();
       if (arguments.length != 1) {
         return;
       }
-      final PsiExpression argument = arguments[0];
-      final String text = argument.getText();
-      final LanguageLevel languageLevel = PsiUtil.getLanguageLevel(expression);
-      @NonNls final String newExpression;
+      PsiExpression argument = arguments[0];
+      String text = argument.getText();
+      LanguageLevel languageLevel = PsiUtil.getLanguageLevel(expression);
+      @NonNls String newExpression;
       if (PsiKeyword.TRUE.equals(text) || TRUE.equalsIgnoreCase(text)) {
         newExpression = "java.lang.Boolean.TRUE";
       }
@@ -104,18 +104,18 @@ public class BooleanConstructorInspection extends BaseInspection {
         newExpression = buildText(argument, false);
       }
       else {
-        final PsiClass booleanClass = ClassUtils.findClass(CommonClassNames.JAVA_LANG_BOOLEAN, argument);
+        PsiClass booleanClass = ClassUtils.findClass(CommonClassNames.JAVA_LANG_BOOLEAN, argument);
         boolean methodFound = false;
         if (booleanClass != null) {
-          final PsiMethod[] methods = booleanClass.findMethodsByName("valueOf", false);
+          PsiMethod[] methods = booleanClass.findMethodsByName("valueOf", false);
           for (PsiMethod method : methods) {
-            final PsiParameterList parameterList = method.getParameterList();
-            final PsiParameter[] parameters = parameterList.getParameters();
+            PsiParameterList parameterList = method.getParameterList();
+            PsiParameter[] parameters = parameterList.getParameters();
             if (parameters.length == 0) {
               continue;
             }
-            final PsiParameter parameter = parameters[0];
-            final PsiType type = parameter.getType();
+            PsiParameter parameter = parameters[0];
+            PsiType type = parameter.getType();
             if (PsiType.BOOLEAN.equals(type)) {
               methodFound = true;
               break;
@@ -129,8 +129,8 @@ public class BooleanConstructorInspection extends BaseInspection {
 
     @NonNls
     private static String buildText(PsiExpression argument, boolean useValueOf) {
-      final String text = argument.getText();
-      final PsiType argumentType = argument.getType();
+      String text = argument.getText();
+      PsiType argumentType = argument.getType();
       if (!useValueOf && PsiType.BOOLEAN.equals(argumentType)) {
         if (ParenthesesUtils.getPrecedence(argument) > ParenthesesUtils.CONDITIONAL_PRECEDENCE) {
           return text + "?java.lang.fBoolean.TRUE:java.lang.Boolean.FALSE";
@@ -150,22 +150,22 @@ public class BooleanConstructorInspection extends BaseInspection {
     @Override
     public void visitNewExpression(@Nonnull PsiNewExpression expression) {
       super.visitNewExpression(expression);
-      final PsiType type = expression.getType();
+      PsiType type = expression.getType();
       if (type == null || !type.equalsToText(CommonClassNames.JAVA_LANG_BOOLEAN)) {
         return;
       }
-      final PsiClass aClass = ClassUtils.getContainingClass(expression);
+      PsiClass aClass = ClassUtils.getContainingClass(expression);
       if (aClass != null) {
-        final String qualifiedName = aClass.getQualifiedName();
+        String qualifiedName = aClass.getQualifiedName();
         if (CommonClassNames.JAVA_LANG_BOOLEAN.equals(qualifiedName)) {
           return;
         }
       }
-      final PsiExpressionList argumentList = expression.getArgumentList();
+      PsiExpressionList argumentList = expression.getArgumentList();
       if (argumentList == null) {
         return;
       }
-      final PsiExpression[] expressions = argumentList.getExpressions();
+      PsiExpression[] expressions = argumentList.getExpressions();
       if (expressions.length != 1) {
         return;
       }

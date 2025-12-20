@@ -46,25 +46,25 @@ public abstract class PushDownMultifileTest extends MultiFileTestCase {
     doTest(false);
   }
 
-  private void doTest(final boolean fail) throws Exception {
+  private void doTest(boolean fail) throws Exception {
     doTest(fail, "a.A", "b.B");
   }
 
-  private void doTest(final boolean fail, final String sourceClassName, final String targetClassName) throws Exception {
+  private void doTest(boolean fail, final String sourceClassName, final String targetClassName) throws Exception {
     try {
       doTest(new PerformAction() {
         @Override
-        public void performAction(final VirtualFile rootDir, final VirtualFile rootAfter) throws Exception {
-          final PsiClass srcClass = myJavaFacade.findClass(sourceClassName, GlobalSearchScope.allScope(myProject));
+        public void performAction(VirtualFile rootDir, VirtualFile rootAfter) throws Exception {
+          PsiClass srcClass = myJavaFacade.findClass(sourceClassName, GlobalSearchScope.allScope(myProject));
           assertTrue("Source class not found", srcClass != null);
 
-          final PsiClass targetClass = myJavaFacade.findClass(targetClassName, GlobalSearchScope.allScope(myProject));
+          PsiClass targetClass = myJavaFacade.findClass(targetClassName, GlobalSearchScope.allScope(myProject));
           assertTrue("Target class not found", targetClass != null);
 
-          final PsiMethod[] methods = srcClass.getMethods();
+          PsiMethod[] methods = srcClass.getMethods();
           assertTrue("No methods found", methods.length > 0);
-          final MemberInfo[] membersToMove = new MemberInfo[1];
-          final MemberInfo memberInfo = new MemberInfo(methods[0]);
+          MemberInfo[] membersToMove = new MemberInfo[1];
+          MemberInfo memberInfo = new MemberInfo(methods[0]);
           memberInfo.setChecked(true);
           membersToMove[0] = memberInfo;
 
@@ -110,17 +110,17 @@ public abstract class PushDownMultifileTest extends MultiFileTestCase {
     try {
       doTest(new PerformAction() {
         @Override
-        public void performAction(final VirtualFile rootDir, final VirtualFile rootAfter) throws Exception {
-          final PsiClass srcClass = myJavaFacade.findClass("a.A", GlobalSearchScope.allScope(myProject));
+        public void performAction(VirtualFile rootDir, VirtualFile rootAfter) throws Exception {
+          PsiClass srcClass = myJavaFacade.findClass("a.A", GlobalSearchScope.allScope(myProject));
           assertTrue("Source class not found", srcClass != null);
 
-          final PsiClass targetClass = myJavaFacade.findClass("b.B", GlobalSearchScope.allScope(myProject));
+          PsiClass targetClass = myJavaFacade.findClass("b.B", GlobalSearchScope.allScope(myProject));
           assertTrue("Target class not found", targetClass != null);
 
-          final PsiField[] fields = srcClass.getFields();
+          PsiField[] fields = srcClass.getFields();
           assertTrue("No methods found", fields.length > 0);
-          final MemberInfo[] membersToMove = new MemberInfo[1];
-          final MemberInfo memberInfo = new MemberInfo(fields[0]);
+          MemberInfo[] membersToMove = new MemberInfo[1];
+          MemberInfo memberInfo = new MemberInfo(fields[0]);
           memberInfo.setChecked(true);
           membersToMove[0] = memberInfo;
 

@@ -36,7 +36,7 @@ import java.util.List;
 @ExtensionImpl
 public class JavaCompletionStatistician extends CompletionStatistician {
   @Override
-  public StatisticsInfo serialize(final LookupElement element, final CompletionLocation location) {
+  public StatisticsInfo serialize(LookupElement element, CompletionLocation location) {
     Object o = element.getObject();
 
     if (o instanceof PsiLocalVariable || o instanceof PsiParameter || o instanceof PsiThisExpression || o instanceof PsiKeyword) {
@@ -51,8 +51,8 @@ public class JavaCompletionStatistician extends CompletionStatistician {
     PsiType qualifierType = JavaCompletionUtil.getQualifierType(item);
 
     if (o instanceof PsiMember) {
-      final ExpectedTypeInfo[] infos = JavaCompletionUtil.EXPECTED_TYPES.getValue(location);
-      final ExpectedTypeInfo firstInfo = infos != null && infos.length > 0 ? infos[0] : null;
+      ExpectedTypeInfo[] infos = JavaCompletionUtil.EXPECTED_TYPES.getValue(location);
+      ExpectedTypeInfo firstInfo = infos != null && infos.length > 0 ? infos[0] : null;
       String key2 = JavaStatisticsManager.getMemberUseKey2((PsiMember) o);
       if (o instanceof PsiClass) {
         PsiType expectedType = firstInfo != null ? firstInfo.getDefaultType() : null;

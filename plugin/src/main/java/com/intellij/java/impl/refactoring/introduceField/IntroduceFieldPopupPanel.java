@@ -66,8 +66,8 @@ public class IntroduceFieldPopupPanel extends IntroduceFieldCentralPanel {
       myInitialisersPlaceModel.removeAllElements();
     }
 
-    final PsiMethod setUpMethod = TestFrameworks.getInstance().findSetUpMethod(myParentClass);
-    final boolean setupEnabled = hasSetUpChoice();
+    PsiMethod setUpMethod = TestFrameworks.getInstance().findSetUpMethod(myParentClass);
+    boolean setupEnabled = hasSetUpChoice();
     if (ourLastInitializerPlace == BaseExpressionToFieldHandler.InitializationPlace.IN_SETUP_METHOD && 
         setupEnabled && (myInitializerExpression != null && PsiTreeUtil.isAncestor(setUpMethod, myInitializerExpression, false) ||
                          TestFrameworks.getInstance().isTestClass(myParentClass))) {
@@ -126,7 +126,7 @@ public class IntroduceFieldPopupPanel extends IntroduceFieldCentralPanel {
   protected JComponent createInitializerPlacePanel(final ItemListener itemListener, final ItemListener finalUpdater) {
 
    JPanel groupPanel = new JPanel(new GridBagLayout());
-    final GridBagConstraints gridBagConstraints =
+    GridBagConstraints gridBagConstraints =
       new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                              new Insets(0, 0, 0, 0), 0, 0);
 
@@ -139,7 +139,7 @@ public class IntroduceFieldPopupPanel extends IntroduceFieldCentralPanel {
     }
     initializeInitializerPlace(myInitializerExpression, InplaceIntroduceFieldPopup.ourLastInitializerPlace);
     if (myInitialisersPlaceModel.getSize() > 1) {
-      final JLabel initLabel = new JLabel(RefactoringLocalize.initializeInBorderTitle() + ":");
+      JLabel initLabel = new JLabel(RefactoringLocalize.initializeInBorderTitle() + ":");
       initLabel.setDisplayedMnemonic('i');
       gridBagConstraints.insets.left = 5;
       gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -219,11 +219,11 @@ public class IntroduceFieldPopupPanel extends IntroduceFieldCentralPanel {
 
   @Override
   protected boolean allowFinal() {
-    final Object selectedItem = getInitializerPlace();
+    Object selectedItem = getInitializerPlace();
     boolean allowFinal = selectedItem == BaseExpressionToFieldHandler.InitializationPlace.IN_FIELD_DECLARATION ||
                          (selectedItem == BaseExpressionToFieldHandler.InitializationPlace.IN_CONSTRUCTOR && !myWillBeDeclaredStatic);
     if (selectedItem == BaseExpressionToFieldHandler.InitializationPlace.IN_CURRENT_METHOD && myIsCurrentMethodConstructor) {
-      final PsiMethod[] constructors = myParentClass.getConstructors();
+      PsiMethod[] constructors = myParentClass.getConstructors();
       allowFinal = constructors.length <= 1;
     }
     return super.allowFinal() && allowFinal;
@@ -247,14 +247,14 @@ public class IntroduceFieldPopupPanel extends IntroduceFieldCentralPanel {
 
   @Override
   protected JPanel appendCheckboxes(ItemListener itemListener) {
-    final JPanel panel = new JPanel(new GridBagLayout());
+    JPanel panel = new JPanel(new GridBagLayout());
     appendOccurrences(itemListener, new GridBagConstraints(0,0,1,1,0,0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(0,0,0,0), 0,0), panel);
     return panel;
   }
 
   protected JPanel composeWholePanel(JComponent initializerPlacePanel, JPanel checkboxPanel) {
-    final JPanel panel = new JPanel(new GridBagLayout());
-    final GridBagConstraints constraints =
+    JPanel panel = new JPanel(new GridBagLayout());
+    GridBagConstraints constraints =
       new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                              new Insets(0, 0, 0, 0), 0, 0);
     panel.add(initializerPlacePanel, constraints);

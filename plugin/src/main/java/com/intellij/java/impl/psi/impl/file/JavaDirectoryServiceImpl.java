@@ -86,7 +86,7 @@ public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService {
                               @Nonnull String name,
                               @Nonnull String templateName,
                               boolean askForUndefinedVariables,
-                              @Nonnull final Map<String, String> additionalProperties) throws IncorrectOperationException {
+                              @Nonnull Map<String, String> additionalProperties) throws IncorrectOperationException {
     return createClassFromTemplate(dir, name, templateName, askForUndefinedVariables, additionalProperties);
   }
 
@@ -160,7 +160,7 @@ public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService {
     if (element == null) {
       return null;
     }
-    final PsiJavaFile file = (PsiJavaFile) element.getContainingFile();
+    PsiJavaFile file = (PsiJavaFile) element.getContainingFile();
     PsiClass[] classes = file.getClasses();
     if (classes.length < 1) {
       throw new IncorrectOperationException(getIncorrectTemplateMessage(dir.getProject(), templateName));
@@ -193,8 +193,8 @@ public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService {
 
   @Override
   public boolean isSourceRoot(@Nonnull PsiDirectory dir) {
-    final VirtualFile file = dir.getVirtualFile();
-    final VirtualFile sourceRoot = ProjectRootManager.getInstance(dir.getProject()).getFileIndex().getSourceRootForFile(file);
+    VirtualFile file = dir.getVirtualFile();
+    VirtualFile sourceRoot = ProjectRootManager.getInstance(dir.getProject()).getFileIndex().getSourceRootForFile(file);
     return file.equals(sourceRoot);
   }
 

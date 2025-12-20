@@ -42,7 +42,7 @@ public class ProtectedFieldInspection extends BaseInspection {
 
     @Override
     protected InspectionGadgetsFix buildFix(Object... infos) {
-        final PsiField field = (PsiField) infos[0];
+        PsiField field = (PsiField) infos[0];
         return new EncapsulateVariableFix(field.getName());
     }
 

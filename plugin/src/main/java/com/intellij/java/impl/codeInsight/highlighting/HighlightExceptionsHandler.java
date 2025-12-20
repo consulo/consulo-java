@@ -40,12 +40,12 @@ public class HighlightExceptionsHandler extends HighlightUsagesHandlerBase<PsiCl
   private final Condition<PsiType> myTypeFilter;
 
   public HighlightExceptionsHandler(
-    final Editor editor,
-    final PsiFile file,
-    final PsiElement target,
-    final PsiClassType[] classTypes,
-    final PsiElement place,
-    final Condition<PsiType> typeFilter
+    Editor editor,
+    PsiFile file,
+    PsiElement target,
+    PsiClassType[] classTypes,
+    PsiElement place,
+    Condition<PsiType> typeFilter
   ) {
     super(editor, file);
     myTarget = target;
@@ -60,7 +60,7 @@ public class HighlightExceptionsHandler extends HighlightUsagesHandlerBase<PsiCl
   }
 
   @Override
-  protected void selectTargets(final List<PsiClass> targets, final Consumer<List<PsiClass>> selectionConsumer) {
+  protected void selectTargets(List<PsiClass> targets, final Consumer<List<PsiClass>> selectionConsumer) {
     new ChooseClassAndDoHighlightRunnable(myClassTypes, myEditor, CodeInsightLocalize.highlightExceptionsThrownChooserTitle().get()) {
       @Override
       protected void selected(PsiClass... classes) {
@@ -71,9 +71,9 @@ public class HighlightExceptionsHandler extends HighlightUsagesHandlerBase<PsiCl
 
   @Override
   @RequiredReadAction
-  public void computeUsages(final List<PsiClass> targets) {
-    final Project project = myEditor.getProject();
-    final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
+  public void computeUsages(List<PsiClass> targets) {
+    Project project = myEditor.getProject();
+    PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
 
     addOccurrence(myTarget);
     for (PsiClass aClass : targets) {
@@ -94,7 +94,7 @@ public class HighlightExceptionsHandler extends HighlightUsagesHandlerBase<PsiCl
         @RequiredReadAction
         public void visitThrowStatement(@Nonnull PsiThrowStatement statement) {
           super.visitThrowStatement(statement);
-          final List<PsiClassType> actualTypes = ExceptionUtil.getUnhandledExceptions(statement, myPlace);
+          List<PsiClassType> actualTypes = ExceptionUtil.getUnhandledExceptions(statement, myPlace);
           for (PsiClassType actualType : actualTypes) {
             if (actualType != null && type.isAssignableFrom(actualType) && myTypeFilter.value(actualType)) {
               PsiExpression psiExpression = statement.getException();
@@ -117,7 +117,7 @@ public class HighlightExceptionsHandler extends HighlightUsagesHandlerBase<PsiCl
           PsiReference reference = expression.getMethodExpression().getReference();
           if (reference == null) return;
           List<PsiClassType> exceptionTypes = ExceptionUtil.getUnhandledExceptions(expression, myPlace);
-          for (final PsiClassType actualType : exceptionTypes) {
+          for (PsiClassType actualType : exceptionTypes) {
             if (type.isAssignableFrom(actualType) && myTypeFilter.value(actualType)) {
               addOccurrence(expression.getMethodExpression());
               break;

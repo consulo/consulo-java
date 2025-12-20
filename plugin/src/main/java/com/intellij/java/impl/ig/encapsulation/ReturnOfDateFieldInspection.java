@@ -48,7 +48,7 @@ public class ReturnOfDateFieldInspection extends BaseInspection {
     @Override
     @Nonnull
     public String buildErrorString(Object... infos) {
-        final String type = (String) infos[0];
+        String type = (String) infos[0];
         return InspectionGadgetsLocalize.returnDateCalendarFieldProblemDescriptor(type).get();
     }
 
@@ -79,12 +79,12 @@ public class ReturnOfDateFieldInspection extends BaseInspection {
 
         @Override
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-            final PsiElement element = descriptor.getPsiElement();
+            PsiElement element = descriptor.getPsiElement();
             if (!(element instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) element;
-            final String type =
+            PsiReferenceExpression referenceExpression = (PsiReferenceExpression) element;
+            String type =
                 TypeUtils.expressionHasTypeOrSubtype(
                     referenceExpression,
                     CommonClassNames.JAVA_UTIL_DATE,
@@ -107,20 +107,20 @@ public class ReturnOfDateFieldInspection extends BaseInspection {
         @Override
         public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
             super.visitReturnStatement(statement);
-            final PsiExpression returnValue = statement.getReturnValue();
+            PsiExpression returnValue = statement.getReturnValue();
             if (!(returnValue instanceof PsiReferenceExpression)) {
                 return;
             }
-            final PsiMethod method = PsiTreeUtil.getParentOfType(statement, PsiMethod.class, true, PsiClass.class);
+            PsiMethod method = PsiTreeUtil.getParentOfType(statement, PsiMethod.class, true, PsiClass.class);
             if (method == null || (ignorePrivateMethods && method.hasModifierProperty(PsiModifier.PRIVATE))) {
                 return;
             }
-            final PsiReferenceExpression fieldReference = (PsiReferenceExpression) returnValue;
-            final PsiElement element = fieldReference.resolve();
+            PsiReferenceExpression fieldReference = (PsiReferenceExpression) returnValue;
+            PsiElement element = fieldReference.resolve();
             if (!(element instanceof PsiField)) {
                 return;
             }
-            final String type =
+            String type =
                 TypeUtils.expressionHasTypeOrSubtype(returnValue, CommonClassNames.JAVA_UTIL_DATE, CommonClassNames.JAVA_UTIL_CALENDAR);
             if (type == null) {
                 return;

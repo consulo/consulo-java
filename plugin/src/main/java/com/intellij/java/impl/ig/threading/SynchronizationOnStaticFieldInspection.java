@@ -52,17 +52,17 @@ public class SynchronizationOnStaticFieldInspection extends BaseInspection {
     public void visitSynchronizedStatement(
       PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
-      final PsiExpression lockExpression = statement.getLockExpression();
+      PsiExpression lockExpression = statement.getLockExpression();
       if (!(lockExpression instanceof PsiReferenceExpression)) {
         return;
       }
-      final PsiReferenceExpression expression =
+      PsiReferenceExpression expression =
         (PsiReferenceExpression)lockExpression;
-      final PsiElement target = expression.resolve();
+      PsiElement target = expression.resolve();
       if (!(target instanceof PsiField)) {
         return;
       }
-      final PsiField field = (PsiField)target;
+      PsiField field = (PsiField)target;
       if (!field.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }

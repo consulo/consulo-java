@@ -56,7 +56,7 @@ class AnonymousToInnerDialog extends DialogWrapper{
   private final Map<PsiVariable,VariableInfo> myVariableToInfoMap = new HashMap<PsiVariable, VariableInfo>();
   private JCheckBox myCbMakeStatic;
 
-  public AnonymousToInnerDialog(Project project, PsiAnonymousClass anonClass, final VariableInfo[] variableInfos,
+  public AnonymousToInnerDialog(Project project, PsiAnonymousClass anonClass, VariableInfo[] variableInfos,
                                 boolean showCanBeStatic) {
     super(project, true);
     myProject = project;
@@ -70,7 +70,7 @@ class AnonymousToInnerDialog extends DialogWrapper{
     }
     myVariableData = new VariableData[variableInfos.length];
 
-    final JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(myProject);
+    JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(myProject);
     for(int idx = 0; idx < variableInfos.length; idx++){
       VariableInfo info = variableInfos[idx];
       String name = info.variable.getName();
@@ -85,7 +85,7 @@ class AnonymousToInnerDialog extends DialogWrapper{
 
     init();
 
-    final String[] names;
+    String[] names;
     String name = myAnonClass.getBaseClassReference().getReferenceName();
     PsiType[] typeParameters = myAnonClass.getBaseClassReference().getTypeParameters();
     if (typeParameters.length > 0) {
@@ -146,8 +146,8 @@ class AnonymousToInnerDialog extends DialogWrapper{
 
   protected void doOKAction(){
     String errorString = null;
-    final String innerClassName = getClassName();
-    final PsiManager manager = PsiManager.getInstance(myProject);
+    String innerClassName = getClassName();
+    PsiManager manager = PsiManager.getInstance(myProject);
     if ("".equals(innerClassName)) {
       errorString = RefactoringLocalize.anonymoustoinnerNoInnerClassName().get();
     }

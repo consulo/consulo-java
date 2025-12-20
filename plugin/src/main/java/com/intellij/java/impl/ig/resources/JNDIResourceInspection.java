@@ -49,10 +49,10 @@ public class JNDIResourceInspection extends ResourceInspection {
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final PsiExpression expression = (PsiExpression)infos[0];
-    final PsiType type = expression.getType();
+    PsiExpression expression = (PsiExpression)infos[0];
+    PsiType type = expression.getType();
     assert type != null;
-    final String text = type.getPresentableText();
+    String text = type.getPresentableText();
     return InspectionGadgetsLocalize.resourceOpenedNotClosedProblemDescriptor(text).get();
   }
 
@@ -83,11 +83,11 @@ public class JNDIResourceInspection extends ResourceInspection {
       if (!isJNDIFactoryMethod(expression)) {
         return;
       }
-      final PsiElement parent = getExpressionParent(expression);
+      PsiElement parent = getExpressionParent(expression);
       if (parent instanceof PsiReturnStatement) {
         return;
       }
-      final PsiVariable boundVariable = getVariable(parent);
+      PsiVariable boundVariable = getVariable(parent);
       if (isSafelyClosed(boundVariable, expression, insideTryAllowed)) {
         return;
       }
@@ -105,11 +105,11 @@ public class JNDIResourceInspection extends ResourceInspection {
       if (!isJNDIResource(expression)) {
         return;
       }
-      final PsiElement parent = getExpressionParent(expression);
+      PsiElement parent = getExpressionParent(expression);
       if (parent instanceof PsiReturnStatement) {
         return;
       }
-      final PsiVariable boundVariable = getVariable(parent);
+      PsiVariable boundVariable = getVariable(parent);
       if (isSafelyClosed(boundVariable, expression, insideTryAllowed)) {
         return;
       }
@@ -126,11 +126,11 @@ public class JNDIResourceInspection extends ResourceInspection {
 
     private boolean isJNDIFactoryMethod(
       PsiMethodCallExpression expression) {
-      final PsiReferenceExpression methodExpression =
+      PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      final String methodName = methodExpression.getReferenceName();
+      String methodName = methodExpression.getReferenceName();
       if (LIST.equals(methodName) || LIST_BINDING.equals(methodName)) {
-        final PsiExpression qualifier =
+        PsiExpression qualifier =
           methodExpression.getQualifierExpression();
         if (qualifier == null) {
           return false;
@@ -139,7 +139,7 @@ public class JNDIResourceInspection extends ResourceInspection {
                                                     "javax.naming.Context");
       }
       else if (GET_ALL.equals(methodName)) {
-        final PsiExpression qualifier =
+        PsiExpression qualifier =
           methodExpression.getQualifierExpression();
         if (qualifier == null) {
           return false;
