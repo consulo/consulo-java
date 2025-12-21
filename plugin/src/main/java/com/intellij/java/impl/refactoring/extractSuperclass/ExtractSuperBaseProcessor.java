@@ -22,6 +22,8 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.editor.ui.util.DocCommentPolicy;
@@ -32,6 +34,7 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
@@ -42,146 +45,163 @@ import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author dsl
  */
 public abstract class ExtractSuperBaseProcessor extends TurnRefsToSuperProcessorBase {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.extractSuperclass.ExtractSuperClassProcessor");
-  protected PsiDirectory myTargetDirectory;
-  protected final String myNewClassName;
-  protected final MemberInfo[] myMemberInfos;
-  protected final DocCommentPolicy myJavaDocPolicy;
+    private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.extractSuperclass.ExtractSuperClassProcessor");
+    protected PsiDirectory myTargetDirectory;
+    protected final String myNewClassName;
+    protected final MemberInfo[] myMemberInfos;
+    protected final DocCommentPolicy myJavaDocPolicy;
 
 
-  public ExtractSuperBaseProcessor(Project project,
-                                   boolean replaceInstanceOf,
-                                   PsiDirectory targetDirectory,
-                                   String newClassName,
-                                   PsiClass aClass, MemberInfo[] memberInfos, DocCommentPolicy javaDocPolicy) {
-    super(project, replaceInstanceOf, newClassName);
-    myTargetDirectory = targetDirectory;
-    myNewClassName = newClassName;
-    myClass = aClass;
-    myMemberInfos = memberInfos;
-    myJavaDocPolicy = javaDocPolicy;
-  }
+    public ExtractSuperBaseProcessor(
+        Project project,
+        boolean replaceInstanceOf,
+        PsiDirectory targetDirectory,
+        String newClassName,
+        PsiClass aClass, MemberInfo[] memberInfos, DocCommentPolicy javaDocPolicy
+    ) {
+        super(project, replaceInstanceOf, newClassName);
+        myTargetDirectory = targetDirectory;
+        myNewClassName = newClassName;
+        myClass = aClass;
+        myMemberInfos = memberInfos;
+        myJavaDocPolicy = javaDocPolicy;
+    }
 
-  @Nonnull
-  protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
-    return new ExtractSuperClassViewDescriptor(myTargetDirectory, myClass, myMemberInfos);
-  }
+    @Nonnull
+    @Override
+    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+        return new ExtractSuperClassViewDescriptor(myTargetDirectory, myClass, myMemberInfos);
+    }
 
-  protected boolean doesAnyExtractedInterfaceExtends(PsiClass aClass) {
-    for (MemberInfo memberInfo : myMemberInfos) {
-      PsiElement member = memberInfo.getMember();
-      if (member instanceof PsiClass && memberInfo.getOverrides() != null) {
-        if (InheritanceUtil.isInheritorOrSelf((PsiClass)member, aClass, true)) {
-          return true;
+    protected boolean doesAnyExtractedInterfaceExtends(PsiClass aClass) {
+        for (MemberInfo memberInfo : myMemberInfos) {
+            PsiElement member = memberInfo.getMember();
+            if (member instanceof PsiClass && memberInfo.getOverrides() != null) {
+                if (InheritanceUtil.isInheritorOrSelf((PsiClass) member, aClass, true)) {
+                    return true;
+                }
+            }
         }
-      }
+        return false;
     }
-    return false;
-  }
 
-  protected boolean doMemberInfosContain(PsiMethod method) {
-    for (MemberInfo info : myMemberInfos) {
-      if (info.getMember() instanceof PsiMethod) {
-        if (MethodSignatureUtil.areSignaturesEqual(method, (PsiMethod)info.getMember())) return true;
-      }
-      else if (info.getMember() instanceof PsiClass && info.getOverrides() != null) {
-        PsiMethod methodBySignature = ((PsiClass)info.getMember()).findMethodBySignature(method, true);
-        if (methodBySignature != null) {
-          return true;
+    protected boolean doMemberInfosContain(PsiMethod method) {
+        for (MemberInfo info : myMemberInfos) {
+            if (info.getMember() instanceof PsiMethod) {
+                if (MethodSignatureUtil.areSignaturesEqual(method, (PsiMethod) info.getMember())) {
+                    return true;
+                }
+            }
+            else if (info.getMember() instanceof PsiClass && info.getOverrides() != null) {
+                PsiMethod methodBySignature = ((PsiClass) info.getMember()).findMethodBySignature(method, true);
+                if (methodBySignature != null) {
+                    return true;
+                }
+            }
         }
-      }
+        return false;
     }
-    return false;
-  }
 
-  protected boolean doMemberInfosContain(PsiField field) {
-    for (MemberInfo info : myMemberInfos) {
-      if (myManager.areElementsEquivalent(field, info.getMember())) return true;
-    }
-    return false;
-  }
-
-  @Nonnull
-  protected UsageInfo[] findUsages() {
-    PsiReference[] refs = ReferencesSearch.search(myClass, GlobalSearchScope.projectScope(myProject), false).toArray(new PsiReference[0]);
-    ArrayList<UsageInfo> result = new ArrayList<UsageInfo>();
-    detectTurnToSuperRefs(refs, result);
-    PsiJavaPackage originalPackage = JavaDirectoryService.getInstance().getPackage(myClass.getContainingFile().getContainingDirectory());
-    if (Comparing.equal(JavaDirectoryService.getInstance().getPackage(myTargetDirectory), originalPackage)) {
-      result.clear();
-    }
-    for (PsiReference ref : refs) {
-      PsiElement element = ref.getElement();
-      if (!canTurnToSuper(element) && !RefactoringUtil.inImportStatement(ref, element)) {
-        result.add(new BindToOldUsageInfo(element, ref, myClass));
-      }
-    }
-    UsageInfo[] usageInfos = result.toArray(new UsageInfo[result.size()]);
-    return UsageViewUtil.removeDuplicatedUsages(usageInfos);
-  }
-
-  protected void performRefactoring(UsageInfo[] usages) {
-    try {
-      String superClassName = myClass.getName();
-      String oldQualifiedName = myClass.getQualifiedName();
-      myClass.setName(myNewClassName);
-      PsiClass superClass = extractSuper(superClassName);
-      PsiDirectory initialDirectory = myClass.getContainingFile().getContainingDirectory();
-      try {
-        if (myTargetDirectory != initialDirectory) {
-          myTargetDirectory.add(myClass.getContainingFile().copy());
-          myClass.getContainingFile().delete();
+    protected boolean doMemberInfosContain(PsiField field) {
+        for (MemberInfo info : myMemberInfos) {
+            if (myManager.areElementsEquivalent(field, info.getMember())) {
+                return true;
+            }
         }
-      }
-      catch (IncorrectOperationException e) {
-        RefactoringUIUtil.processIncorrectOperation(myProject, e);
-      }
-      for (UsageInfo usage : usages) {
-        if (usage instanceof BindToOldUsageInfo) {
-          PsiReference reference = usage.getReference();
-          if (reference != null && reference.getElement().isValid()) {
-            reference.bindToElement(myClass);
-          }
+        return false;
+    }
+
+    @Nonnull
+    @Override
+    @RequiredReadAction
+    protected UsageInfo[] findUsages() {
+        PsiReference[] refs =
+            ReferencesSearch.search(myClass, GlobalSearchScope.projectScope(myProject), false).toArray(new PsiReference[0]);
+        List<UsageInfo> result = new ArrayList<>();
+        detectTurnToSuperRefs(refs, result);
+        PsiJavaPackage originalPackage =
+            JavaDirectoryService.getInstance().getPackage(myClass.getContainingFile().getContainingDirectory());
+        if (Comparing.equal(JavaDirectoryService.getInstance().getPackage(myTargetDirectory), originalPackage)) {
+            result.clear();
         }
-      }
-      if (!Comparing.equal(oldQualifiedName, superClass.getQualifiedName())) {
-        processTurnToSuperRefs(usages, superClass);
-      }
-      PsiFile containingFile = myClass.getContainingFile();
-      if (containingFile instanceof PsiJavaFile) {
-        JavaCodeStyleManager.getInstance(myProject).removeRedundantImports((PsiJavaFile) containingFile);
-      }
-    }
-    catch (IncorrectOperationException e) {
-      LOG.error(e);
+        for (PsiReference ref : refs) {
+            PsiElement element = ref.getElement();
+            if (!canTurnToSuper(element) && !RefactoringUtil.inImportStatement(ref, element)) {
+                result.add(new BindToOldUsageInfo(element, ref, myClass));
+            }
+        }
+        UsageInfo[] usageInfos = result.toArray(new UsageInfo[result.size()]);
+        return UsageViewUtil.removeDuplicatedUsages(usageInfos);
     }
 
-    performVariablesRenaming();
-  }
+    @Override
+    @RequiredWriteAction
+    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+        try {
+            String superClassName = myClass.getName();
+            String oldQualifiedName = myClass.getQualifiedName();
+            myClass.setName(myNewClassName);
+            PsiClass superClass = extractSuper(superClassName);
+            PsiDirectory initialDirectory = myClass.getContainingFile().getContainingDirectory();
+            try {
+                if (myTargetDirectory != initialDirectory) {
+                    myTargetDirectory.add(myClass.getContainingFile().copy());
+                    myClass.getContainingFile().delete();
+                }
+            }
+            catch (IncorrectOperationException e) {
+                RefactoringUIUtil.processIncorrectOperation(myProject, e);
+            }
+            for (UsageInfo usage : usages) {
+                if (usage instanceof BindToOldUsageInfo) {
+                    PsiReference reference = usage.getReference();
+                    if (reference != null && reference.getElement().isValid()) {
+                        reference.bindToElement(myClass);
+                    }
+                }
+            }
+            if (!Comparing.equal(oldQualifiedName, superClass.getQualifiedName())) {
+                processTurnToSuperRefs(usages, superClass);
+            }
+            PsiFile containingFile = myClass.getContainingFile();
+            if (containingFile instanceof PsiJavaFile) {
+                JavaCodeStyleManager.getInstance(myProject).removeRedundantImports((PsiJavaFile) containingFile);
+            }
+        }
+        catch (IncorrectOperationException e) {
+            LOG.error(e);
+        }
 
-  protected abstract PsiClass extractSuper(String superClassName) throws IncorrectOperationException;
-
-  protected void refreshElements(PsiElement[] elements) {
-    myClass = (PsiClass)elements[0];
-    myTargetDirectory = (PsiDirectory)elements[1];
-    for (int i = 0; i < myMemberInfos.length; i++) {
-      MemberInfo info = myMemberInfos[i];
-      info.updateMember((PsiMember)elements[i + 2]);
+        performVariablesRenaming();
     }
-  }
 
-  protected String getCommandName() {
-    return RefactoringLocalize.extractSubclassCommand().get();
-  }
+    protected abstract PsiClass extractSuper(String superClassName) throws IncorrectOperationException;
 
-  @Nonnull
-  @Override
-  protected Collection<? extends PsiElement> getElementsToWrite(@Nonnull UsageViewDescriptor descriptor) {
-    return ((ExtractSuperClassViewDescriptor) descriptor).getMembersToMakeWritable();
-  }
+    @Override
+    protected void refreshElements(PsiElement[] elements) {
+        myClass = (PsiClass) elements[0];
+        myTargetDirectory = (PsiDirectory) elements[1];
+        for (int i = 0; i < myMemberInfos.length; i++) {
+            MemberInfo info = myMemberInfos[i];
+            info.updateMember((PsiMember) elements[i + 2]);
+        }
+    }
+
+    @Nonnull
+    @Override
+    protected LocalizeValue getCommandName() {
+        return RefactoringLocalize.extractSubclassCommand();
+    }
+
+    @Nonnull
+    @Override
+    protected Collection<? extends PsiElement> getElementsToWrite(@Nonnull UsageViewDescriptor descriptor) {
+        return ((ExtractSuperClassViewDescriptor) descriptor).getMembersToMakeWritable();
+    }
 }

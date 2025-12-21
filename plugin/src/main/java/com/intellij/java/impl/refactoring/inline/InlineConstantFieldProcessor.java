@@ -281,8 +281,8 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor {
     @Nonnull
     @Override
     @RequiredReadAction
-    protected String getCommandName() {
-        return RefactoringLocalize.inlineFieldCommand(DescriptiveNameUtil.getDescriptiveName(myField)).get();
+    protected LocalizeValue getCommandName() {
+        return RefactoringLocalize.inlineFieldCommand(DescriptiveNameUtil.getDescriptiveName(myField));
     }
 
     @Override
