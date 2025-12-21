@@ -18,26 +18,29 @@ package com.intellij.java.impl.refactoring.util;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
-import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import consulo.language.impl.psi.LightElement;
+import consulo.localize.LocalizeValue;
+import consulo.module.Module;
+import consulo.module.content.util.ModuleContentUtil;
+import consulo.project.Project;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.ProjectRootManager;
+import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.psi.*;
+import consulo.language.impl.psi.LightElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.scope.PsiSearchScopeUtil;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
-import consulo.localize.LocalizeValue;
-import consulo.module.Module;
-import consulo.module.content.ModuleRootManager;
-import consulo.module.content.ProjectRootManager;
-import consulo.project.Project;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.usage.MoveRenameUsageInfo;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.usage.UsageInfo;
+import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.MultiMap;
-import consulo.virtualFileSystem.VirtualFile;
+
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -53,6 +56,7 @@ public class RefactoringConflictsUtil {
     private RefactoringConflictsUtil() {
     }
 
+    @RequiredReadAction
     public static void analyzeAccessibilityConflicts(
         @Nonnull Set<PsiMember> membersToMove,
         @Nonnull PsiClass targetClass,
@@ -62,6 +66,7 @@ public class RefactoringConflictsUtil {
         analyzeAccessibilityConflicts(membersToMove, targetClass, conflicts, newVisibility, targetClass, null);
     }
 
+    @RequiredReadAction
     public static void analyzeAccessibilityConflicts(
         @Nonnull Set<PsiMember> membersToMove,
         @Nullable PsiClass targetClass,
@@ -80,6 +85,7 @@ public class RefactoringConflictsUtil {
         }
     }
 
+    @RequiredReadAction
     public static void checkAccessibilityConflicts(
         @Nonnull PsiMember member,
         @PsiModifier.ModifierConstant @Nullable String newVisibility,
@@ -106,6 +112,7 @@ public class RefactoringConflictsUtil {
         checkAccessibilityConflicts(member, modifierListCopy, targetClass, membersToMove, conflicts);
     }
 
+    @RequiredReadAction
     public static void checkAccessibilityConflicts(
         @Nonnull PsiMember member,
         @Nullable PsiModifierList modifierListCopy,
@@ -118,6 +125,7 @@ public class RefactoringConflictsUtil {
         }
     }
 
+    @RequiredReadAction
     public static void checkAccessibilityConflicts(
         @Nonnull PsiReference reference,
         @Nonnull PsiMember member,
@@ -126,11 +134,11 @@ public class RefactoringConflictsUtil {
         @Nonnull Set<PsiMember> membersToMove,
         @Nonnull MultiMap<PsiElement, LocalizeValue> conflicts
     ) {
-        JavaPsiFacade manager = JavaPsiFacade.getInstance(member.getProject());
         PsiElement ref = reference.getElement();
         if (!RefactoringHierarchyUtil.willBeInTargetClass(ref, membersToMove, targetClass, false)) {
+            PsiResolveHelper resolveHelper = PsiResolveHelper.getInstance(member.getProject());
             // check for target class accessibility
-            if (targetClass != null && !manager.getResolveHelper()
+            if (targetClass != null && !resolveHelper
                 .isAccessible(targetClass, targetClass.getModifierList(), ref, null, null)) {
                 LocalizeValue message = RefactoringLocalize.zeroIs1AndWillNotBeAccessibleFrom2InTheTargetClass(
                     RefactoringUIUtil.getDescription(targetClass, true),
@@ -140,7 +148,7 @@ public class RefactoringConflictsUtil {
                 conflicts.putValue(targetClass, message.capitalize());
             }
             // check for member accessibility
-            else if (!manager.getResolveHelper().isAccessible(member, modifierListCopy, ref, targetClass, null)) {
+            else if (!resolveHelper.isAccessible(member, modifierListCopy, ref, targetClass, null)) {
                 LocalizeValue message = RefactoringLocalize.zeroIs1AndWillNotBeAccessibleFrom2InTheTargetClass(
                     RefactoringUIUtil.getDescription(member, true),
                     VisibilityUtil.toPresentableText(VisibilityUtil.getVisibilityModifier(modifierListCopy)),
@@ -151,6 +159,7 @@ public class RefactoringConflictsUtil {
         }
     }
 
+    @RequiredReadAction
     public static void checkUsedElements(
         PsiMember member,
         PsiElement scope,
@@ -160,23 +169,19 @@ public class RefactoringConflictsUtil {
         @Nonnull PsiElement context,
         MultiMap<PsiElement, LocalizeValue> conflicts
     ) {
-        Set<PsiMember> moving = new HashSet<PsiMember>(membersToMove);
+        Set<PsiMember> moving = new HashSet<>(membersToMove);
         if (abstractMethods != null) {
             moving.addAll(abstractMethods);
         }
-        if (scope instanceof PsiReferenceExpression) {
-            PsiReferenceExpression refExpr = (PsiReferenceExpression) scope;
-            PsiElement refElement = refExpr.resolve();
-            if (refElement instanceof PsiMember) {
-                if (!RefactoringHierarchyUtil.willBeInTargetClass(refElement, moving, targetClass, false)) {
-                    PsiExpression qualifier = refExpr.getQualifierExpression();
-                    PsiClass accessClass = (PsiClass) (qualifier != null ? PsiUtil.getAccessObjectClass(qualifier).getElement() : null);
-                    checkAccessibility((PsiMember) refElement, context, accessClass, member, conflicts);
-                }
+        if (scope instanceof PsiReferenceExpression refExpr) {
+            if (refExpr.resolve() instanceof PsiMember memberRef
+                && !RefactoringHierarchyUtil.willBeInTargetClass(memberRef, moving, targetClass, false)) {
+                PsiExpression qualifier = refExpr.getQualifierExpression();
+                PsiClass accessClass = (PsiClass) (qualifier != null ? PsiUtil.getAccessObjectClass(qualifier).getElement() : null);
+                checkAccessibility(memberRef, context, accessClass, member, conflicts);
             }
         }
-        else if (scope instanceof PsiNewExpression) {
-            PsiNewExpression newExpression = (PsiNewExpression) scope;
+        else if (scope instanceof PsiNewExpression newExpression) {
             PsiAnonymousClass anonymousClass = newExpression.getAnonymousClass();
             if (anonymousClass != null) {
                 if (!RefactoringHierarchyUtil.willBeInTargetClass(anonymousClass, moving, targetClass, false)) {
@@ -192,13 +197,10 @@ public class RefactoringConflictsUtil {
                 }
             }
         }
-        else if (scope instanceof PsiJavaCodeReferenceElement) {
-            PsiJavaCodeReferenceElement refExpr = (PsiJavaCodeReferenceElement) scope;
-            PsiElement refElement = refExpr.resolve();
-            if (refElement instanceof PsiMember) {
-                if (!RefactoringHierarchyUtil.willBeInTargetClass(refElement, moving, targetClass, false)) {
-                    checkAccessibility((PsiMember) refElement, context, null, member, conflicts);
-                }
+        else if (scope instanceof PsiJavaCodeReferenceElement refExpr) {
+            if (refExpr.resolve() instanceof PsiMember memberRef
+                && !RefactoringHierarchyUtil.willBeInTargetClass(memberRef, moving, targetClass, false)) {
+                checkAccessibility(memberRef, context, null, member, conflicts);
             }
         }
 
@@ -225,21 +227,24 @@ public class RefactoringConflictsUtil {
             );
             conflicts.putValue(refMember, message.capitalize());
         }
-        else if (newContext instanceof PsiClass && refMember instanceof PsiField && refMember.getContainingClass() == member.getContainingClass()) {
-            PsiField fieldInSubClass = ((PsiClass) newContext).findFieldByName(refMember.getName(), false);
+        else if (newContext instanceof PsiClass psiClass
+            && refMember instanceof PsiField
+            && refMember.getContainingClass() == member.getContainingClass()) {
+            PsiField fieldInSubClass = psiClass.findFieldByName(refMember.getName(), false);
             if (fieldInSubClass != null && fieldInSubClass != refMember) {
                 conflicts.putValue(
                     refMember,
-                    LocalizeValue.localizeTODO(CommonRefactoringUtil.capitalize(
-                        RefactoringUIUtil.getDescription(fieldInSubClass, true) +
+                    LocalizeValue.localizeTODO(
+                        CommonRefactoringUtil.capitalize(RefactoringUIUtil.getDescription(fieldInSubClass, true)) +
                             " would hide " + RefactoringUIUtil.getDescription(refMember, true) +
                             " which is used by moved " + RefactoringUIUtil.getDescription(member, false)
-                    ))
+                    )
                 );
             }
         }
     }
 
+    @RequiredReadAction
     public static void analyzeModuleConflicts(
         Project project,
         Collection<? extends PsiElement> scopes,
@@ -258,6 +263,7 @@ public class RefactoringConflictsUtil {
         analyzeModuleConflicts(project, scopes, usages, vFile, conflicts);
     }
 
+    @RequiredReadAction
     public static void analyzeModuleConflicts(
         Project project,
         final Collection<? extends PsiElement> scopes,
@@ -274,30 +280,31 @@ public class RefactoringConflictsUtil {
             }
         }
 
-        final Module targetModule = ModuleUtil.findModuleForFile(vFile, project);
+        final Module targetModule = ModuleContentUtil.findModuleForFile(vFile, project);
         if (targetModule == null) {
             return;
         }
         final GlobalSearchScope resolveScope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(targetModule);
-        final HashSet<PsiElement> reported = new HashSet<PsiElement>();
+        final Set<PsiElement> reported = new HashSet<>();
         for (PsiElement scope : scopes) {
             scope.accept(new JavaRecursiveElementVisitor() {
                 @Override
-                public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
+                @RequiredReadAction
+                public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
                     super.visitReferenceElement(reference);
                     PsiElement resolved = reference.resolve();
-                    if (resolved != null &&
-                        !reported.contains(resolved) &&
-                        !CommonRefactoringUtil.isAncestor(resolved, scopes) &&
-                        !PsiSearchScopeUtil.isInScope(resolveScope, resolved) &&
-                        !(resolved instanceof LightElement)) {
+                    if (resolved != null
+                        && !reported.contains(resolved)
+                        && !CommonRefactoringUtil.isAncestor(resolved, scopes)
+                        && !PsiSearchScopeUtil.isInScope(resolveScope, resolved)
+                        && !(resolved instanceof LightElement)) {
                         String scopeDescription = RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(reference), true);
                         LocalizeValue message = RefactoringLocalize.zeroReferencedIn1WillNotBeAccessibleInModule2(
-                            RefactoringUIUtil.getDescription(resolved, true),
+                            CommonRefactoringUtil.capitalize(RefactoringUIUtil.getDescription(resolved, true)),
                             scopeDescription,
                             CommonRefactoringUtil.htmlEmphasize(targetModule.getName())
                         );
-                        conflicts.putValue(resolved, message.capitalize());
+                        conflicts.putValue(resolved, message);
                         reported.add(resolved);
                     }
                 }
@@ -332,13 +339,9 @@ public class RefactoringConflictsUtil {
                         Module module = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(usageVFile);
                         if (module != null) {
                             LocalizeValue message;
-                            PsiElement referencedElement;
-                            if (usage instanceof MoveRenameUsageInfo) {
-                                referencedElement = ((MoveRenameUsageInfo) usage).getReferencedElement();
-                            }
-                            else {
-                                referencedElement = usage.getElement();
-                            }
+                            PsiElement referencedElement = usage instanceof MoveRenameUsageInfo moveRenameUsageInfo
+                                ? moveRenameUsageInfo.getReferencedElement()
+                                : usage.getElement();
                             assert referencedElement != null : usage;
                             String description = RefactoringUIUtil.getDescription(referencedElement, true);
                             String emphasizedName = CommonRefactoringUtil.htmlEmphasize(module.getName());
@@ -347,16 +350,16 @@ public class RefactoringConflictsUtil {
                                     description,
                                     scopeDescription,
                                     emphasizedName
-                                );
+                                ).capitalize();
                             }
                             else {
                                 message = RefactoringLocalize.zeroReferencedIn1WillNotBeAccessibleFromModule2(
                                     description,
                                     scopeDescription,
                                     emphasizedName
-                                );
+                                ).capitalize();
                             }
-                            conflicts.putValue(referencedElement, message.capitalize());
+                            conflicts.putValue(referencedElement, message);
                         }
                     }
                 }

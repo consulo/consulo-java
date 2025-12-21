@@ -27,6 +27,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.TestOnly;
 
@@ -34,48 +35,57 @@ import org.jetbrains.annotations.TestOnly;
  * @author dsl
  */
 public abstract class IntroduceHandlerBase implements RefactoringActionHandler {
-  private static final Logger LOG = Logger.getInstance(IntroduceHandlerBase.class);
+    private static final Logger LOG = Logger.getInstance(IntroduceHandlerBase.class);
 
-  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
-    LOG.assertTrue(elements.length >= 1 && elements[0] instanceof PsiExpression, "incorrect invoke() parameters");
-    PsiElement tempExpr = elements[0];
-    Editor editor;
-    if (dataContext != null) {
-      Editor editorFromDC = dataContext.getData(Editor.KEY);
-      PsiFile cachedPsiFile = editorFromDC != null ? PsiDocumentManager.getInstance(project).getCachedPsiFile(editorFromDC.getDocument()) : null;
-      if (cachedPsiFile != null && PsiTreeUtil.isAncestor(cachedPsiFile, tempExpr, false)) {
-        editor = editorFromDC;
-      } else {
-        editor = null;
-      }
-    } else {
-      editor = null;
+    @Override
+    @RequiredUIAccess
+    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+        LOG.assertTrue(elements.length >= 1 && elements[0] instanceof PsiExpression, "incorrect invoke() parameters");
+        PsiElement tempExpr = elements[0];
+        Editor editor;
+        if (dataContext != null) {
+            Editor editorFromDC = dataContext.getData(Editor.KEY);
+            PsiFile cachedPsiFile =
+                editorFromDC != null ? PsiDocumentManager.getInstance(project).getCachedPsiFile(editorFromDC.getDocument()) : null;
+            if (cachedPsiFile != null && PsiTreeUtil.isAncestor(cachedPsiFile, tempExpr, false)) {
+                editor = editorFromDC;
+            }
+            else {
+                editor = null;
+            }
+        }
+        else {
+            editor = null;
+        }
+        if (tempExpr instanceof PsiExpression) {
+            invokeImpl(project, (PsiExpression) tempExpr, editor);
+        }
+        else if (tempExpr instanceof PsiLocalVariable) {
+            invokeImpl(project, (PsiLocalVariable) tempExpr, editor);
+        }
+        else {
+            LOG.error("elements[0] should be PsiExpression or PsiLocalVariable");
+        }
     }
-    if (tempExpr instanceof PsiExpression) {
-      invokeImpl(project, (PsiExpression) tempExpr, editor);
-    } else if (tempExpr instanceof PsiLocalVariable) {
-      invokeImpl(project, (PsiLocalVariable) tempExpr, editor);
-    } else {
-      LOG.error("elements[0] should be PsiExpression or PsiLocalVariable");
-    }
-  }
 
-  /**
-   * @param project
-   * @param tempExpr
-   * @param editor   editor to highlight stuff in. Should accept <code>null</code>
-   * @return
-   */
-  protected abstract boolean invokeImpl(Project project, PsiExpression tempExpr, Editor editor);
+    /**
+     * @param project
+     * @param tempExpr
+     * @param editor   editor to highlight stuff in. Should accept <code>null</code>
+     * @return
+     */
+    @RequiredUIAccess
+    protected abstract boolean invokeImpl(@Nonnull Project project, PsiExpression tempExpr, Editor editor);
 
-  /**
-   * @param project
-   * @param localVariable
-   * @param editor        editor to highlight stuff in. Should accept <code>null</code>
-   * @return
-   */
-  protected abstract boolean invokeImpl(Project project, PsiLocalVariable localVariable, Editor editor);
+    /**
+     * @param project
+     * @param localVariable
+     * @param editor        editor to highlight stuff in. Should accept <code>null</code>
+     * @return
+     */
+    @RequiredUIAccess
+    protected abstract boolean invokeImpl(@Nonnull Project project, PsiLocalVariable localVariable, Editor editor);
 
-  @TestOnly
-  public abstract AbstractInplaceIntroducer getInplaceIntroducer();
+    @TestOnly
+    public abstract AbstractInplaceIntroducer getInplaceIntroducer();
 }

@@ -22,8 +22,9 @@ import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.ClassUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.util.function.Processor;
 import consulo.content.scope.SearchScope;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
@@ -38,17 +39,16 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.usage.MoveRenameUsageInfo;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.Comparing;
+import consulo.util.lang.Couple;
 import consulo.util.lang.Pair;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -58,12 +58,13 @@ import java.util.regex.Pattern;
  */
 @ExtensionImpl
 public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
-    private static final Logger LOG = Logger.getInstance(RenameJavaClassProcessor.class);
-
+    @Override
     public boolean canProcessElement(@Nonnull PsiElement element) {
         return element instanceof PsiClass;
     }
 
+    @Override
+    @RequiredWriteAction
     public void renameElement(
         PsiElement element,
         String newName,
@@ -71,16 +72,16 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
         @Nullable RefactoringElementListener listener
     ) throws IncorrectOperationException {
         PsiClass aClass = (PsiClass) element;
-        ArrayList<UsageInfo> postponedCollisions = new ArrayList<UsageInfo>();
-        List<MemberHidesOuterMemberUsageInfo> hidesOut = new ArrayList<MemberHidesOuterMemberUsageInfo>();
+        List<UsageInfo> postponedCollisions = new ArrayList<>();
+        List<MemberHidesOuterMemberUsageInfo> hidesOut = new ArrayList<>();
         // rename all references
         for (UsageInfo usage : usages) {
             if (usage instanceof ResolvableCollisionUsageInfo) {
-                if (usage instanceof CollidingClassImportUsageInfo) {
-                    ((CollidingClassImportUsageInfo) usage).getImportStatement().delete();
+                if (usage instanceof CollidingClassImportUsageInfo collidingClassImportUsageInfo) {
+                    collidingClassImportUsageInfo.getImportStatement().delete();
                 }
-                else if (usage instanceof MemberHidesOuterMemberUsageInfo) {
-                    hidesOut.add((MemberHidesOuterMemberUsageInfo) usage);
+                else if (usage instanceof MemberHidesOuterMemberUsageInfo memberHidesOuterMemberUsageInfo) {
+                    hidesOut.add(memberHidesOuterMemberUsageInfo);
                 }
                 else {
                     postponedCollisions.add(usage);
@@ -132,21 +133,20 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
     }
 
     @Nullable
+    @Override
     public Pair<String, String> getTextOccurrenceSearchStrings(@Nonnull PsiElement element, @Nonnull String newName) {
-        if (element instanceof PsiClass) {
-            PsiClass aClass = (PsiClass) element;
-            if (aClass.getParent() instanceof PsiClass) {
-                String dollaredStringToSearch = ClassUtil.getJVMClassName(aClass);
-                String dollaredStringToReplace =
-                    dollaredStringToSearch == null ? null : RefactoringUtil.getNewInnerClassName(aClass, dollaredStringToSearch, newName);
-                if (dollaredStringToReplace != null) {
-                    return new Pair<String, String>(dollaredStringToSearch, dollaredStringToReplace);
-                }
+        if (element instanceof PsiClass aClass && aClass.getParent() instanceof PsiClass) {
+            String dollaredStringToSearch = ClassUtil.getJVMClassName(aClass);
+            String dollaredStringToReplace =
+                dollaredStringToSearch == null ? null : RefactoringUtil.getNewInnerClassName(aClass, dollaredStringToSearch, newName);
+            if (dollaredStringToReplace != null) {
+                return Couple.of(dollaredStringToSearch, dollaredStringToReplace);
             }
         }
         return null;
     }
 
+    @Override
     public String getQualifiedNameAfterRename(PsiElement element, String newName, boolean nonJava) {
         if (nonJava) {
             PsiClass aClass = (PsiClass) element;
@@ -161,10 +161,9 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
     public void prepareRenaming(PsiElement element, String newName, Map<PsiElement, String> allRenames, SearchScope scope) {
         PsiMethod[] constructors = ((PsiClass) element).getConstructors();
         for (PsiMethod constructor : constructors) {
-            if (constructor instanceof PsiMirrorElement) {
-                PsiElement prototype = ((PsiMirrorElement) constructor).getPrototype();
-                if (prototype instanceof PsiNamedElement) {
-                    allRenames.put(prototype, newName);
+            if (constructor instanceof PsiMirrorElement mirrorElem) {
+                if (mirrorElem.getPrototype() instanceof PsiNamedElement namedPrototype) {
+                    allRenames.put(namedPrototype, newName);
                 }
             }
             else if (!(constructor instanceof LightElement)) {
@@ -173,15 +172,17 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
         }
     }
 
+    @Override
+    @RequiredReadAction
     public void findCollisions(
         PsiElement element,
         final String newName,
         Map<? extends PsiElement, String> allRenames,
         List<UsageInfo> result
     ) {
-        final PsiClass aClass = (PsiClass) element;
+        PsiClass aClass = (PsiClass) element;
         ClassCollisionsDetector classCollisionsDetector = new ClassCollisionsDetector(aClass);
-        Collection<UsageInfo> initialResults = new ArrayList<UsageInfo>(result);
+        Collection<UsageInfo> initialResults = new ArrayList<>(result);
         for (UsageInfo usageInfo : initialResults) {
             if (usageInfo instanceof MoveRenameUsageInfo) {
                 classCollisionsDetector.addClassCollisions(usageInfo.getElement(), newName, result);
@@ -189,18 +190,16 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
         }
         findSubmemberHidesMemberCollisions(aClass, newName, result);
 
-        if (aClass instanceof PsiTypeParameter) {
-            PsiTypeParameterListOwner owner = ((PsiTypeParameter) aClass).getOwner();
+        if (aClass instanceof PsiTypeParameter typeParam) {
+            PsiTypeParameterListOwner owner = typeParam.getOwner();
             if (owner != null) {
                 for (PsiTypeParameter typeParameter : owner.getTypeParameters()) {
                     if (Comparing.equal(newName, typeParameter.getName())) {
-                        result.add(new UnresolvableCollisionUsageInfo(aClass, typeParameter) {
+                        result.add(new UnresolvableCollisionUsageInfo(typeParam, typeParameter) {
                             @Override
                             public String getDescription() {
-                                return "There is already type parameter in " + RefactoringUIUtil.getDescription(
-                                    aClass,
-                                    false
-                                ) + " with name " + newName;
+                                return "There is already type parameter in " +
+                                    RefactoringUIUtil.getDescription(typeParam, false) + " with name " + newName;
                             }
                         });
                     }
@@ -209,9 +208,9 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
         }
     }
 
-    public static void findSubmemberHidesMemberCollisions(final PsiClass aClass, String newName, final List<UsageInfo> result) {
-        if (aClass.getParent() instanceof PsiClass) {
-            PsiClass parent = (PsiClass) aClass.getParent();
+    @RequiredReadAction
+    public static void findSubmemberHidesMemberCollisions(PsiClass aClass, String newName, List<UsageInfo> result) {
+        if (aClass.getParent() instanceof PsiClass parent) {
             Collection<PsiClass> inheritors = ClassInheritorsSearch.search(parent, true).findAll();
             for (PsiClass inheritor : inheritors) {
                 if (newName.equals(inheritor.getName())) {
@@ -228,11 +227,9 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
                 }
             }
         }
-        else if (aClass instanceof PsiTypeParameter) {
-            PsiTypeParameterListOwner owner = ((PsiTypeParameter) aClass).getOwner();
-            if (owner instanceof PsiClass) {
-                PsiClass[] supers = ((PsiClass) owner).getSupers();
-                for (PsiClass superClass : supers) {
+        else if (aClass instanceof PsiTypeParameter typeParam) {
+            if (typeParam.getOwner() instanceof PsiClass ownerClass) {
+                for (PsiClass superClass : ownerClass.getSupers()) {
                     if (newName.equals(superClass.getName())) {
                         ClassCollisionsDetector classCollisionsDetector = new ClassCollisionsDetector(aClass);
                         for (PsiReference reference : ReferencesSearch.search(superClass, new LocalSearchScope(superClass))) {
@@ -242,16 +239,14 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
                     PsiClass[] inners = superClass.getInnerClasses();
                     for (PsiClass inner : inners) {
                         if (newName.equals(inner.getName())) {
-                            ReferencesSearch.search(inner).forEach(new Processor<PsiReference>() {
-                                public boolean process(PsiReference reference) {
-                                    PsiElement refElement = reference.getElement();
-                                    if (refElement instanceof PsiReferenceExpression && ((PsiReferenceExpression) refElement).isQualified()) {
-                                        return true;
-                                    }
-                                    MemberHidesOuterMemberUsageInfo info = new MemberHidesOuterMemberUsageInfo(refElement, aClass);
-                                    result.add(info);
+                            ReferencesSearch.search(inner).forEach(reference -> {
+                                PsiElement refElement = reference.getElement();
+                                if (refElement instanceof PsiReferenceExpression refExpr && refExpr.isQualified()) {
                                     return true;
                                 }
+                                MemberHidesOuterMemberUsageInfo info = new MemberHidesOuterMemberUsageInfo(refElement, aClass);
+                                result.add(info);
+                                return true;
                             });
                         }
                     }
@@ -261,7 +256,7 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
     }
 
     private static class ClassCollisionsDetector {
-        final HashSet<PsiFile> myProcessedFiles = new HashSet<PsiFile>();
+        final Set<PsiFile> myProcessedFiles = new HashSet<>();
         final PsiClass myRenamedClass;
         private final String myRenamedClassQualifiedName;
 
@@ -270,6 +265,7 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
             myRenamedClassQualifiedName = myRenamedClass.getQualifiedName();
         }
 
+        @RequiredReadAction
         public void addClassCollisions(PsiElement referenceElement, String newName, List<UsageInfo> results) {
             PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(referenceElement.getProject()).getResolveHelper();
             PsiClass aClass = resolveHelper.resolveReferencedClass(newName, referenceElement);
@@ -280,10 +276,10 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
                 PsiTypeParameterListOwner member = PsiTreeUtil.getParentOfType(referenceElement, PsiTypeParameterListOwner.class);
                 if (member != null) {
                     PsiTypeParameterList typeParameterList = member.getTypeParameterList();
-                    if (typeParameterList != null && ArrayUtil.find(typeParameterList.getTypeParameters(), myRenamedClass) > -1) {
-                        if (member.hasModifierProperty(PsiModifier.STATIC)) {
-                            return;
-                        }
+                    if (typeParameterList != null
+                        && ArrayUtil.find(typeParameterList.getTypeParameters(), myRenamedClass) > -1
+                        && member.isStatic()) {
+                        return;
                     }
                 }
             }
@@ -296,23 +292,15 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
                 return;
             }
             for (PsiReference reference : ReferencesSearch.search(aClass, new LocalSearchScope(containingFile))) {
-                PsiElement collisionReferenceElement = reference.getElement();
-                if (collisionReferenceElement instanceof PsiJavaCodeReferenceElement) {
-                    PsiElement parent = collisionReferenceElement.getParent();
-                    if (parent instanceof PsiImportStatement) {
-                        results.add(new CollidingClassImportUsageInfo((PsiImportStatement) parent, myRenamedClass));
+                if (reference.getElement() instanceof PsiJavaCodeReferenceElement collisionRefElem) {
+                    if (collisionRefElem.getParent() instanceof PsiImportStatement importStmt) {
+                        results.add(new CollidingClassImportUsageInfo(importStmt, myRenamedClass));
+                    }
+                    else if (aClass.getQualifiedName() != null) {
+                        results.add(new ClassHidesImportedClassUsageInfo(collisionRefElem, myRenamedClass, aClass));
                     }
                     else {
-                        if (aClass.getQualifiedName() != null) {
-                            results.add(new ClassHidesImportedClassUsageInfo((PsiJavaCodeReferenceElement) collisionReferenceElement,
-                                myRenamedClass, aClass
-                            ));
-                        }
-                        else {
-                            results.add(new ClassHidesUnqualifiableClassUsageInfo((PsiJavaCodeReferenceElement) collisionReferenceElement,
-                                myRenamedClass, aClass
-                            ));
-                        }
+                        results.add(new ClassHidesUnqualifiableClassUsageInfo(collisionRefElem, myRenamedClass, aClass));
                     }
                 }
             }
@@ -320,7 +308,6 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
         }
     }
 
-    @NonNls
     private static final Pattern WHITE_SPACE_PATTERN = Pattern.compile("\\s");
 
     private static String removeSpaces(String s) {
@@ -328,6 +315,7 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
     }
 
     @Override
+    @RequiredReadAction
     public void findExistingNameConflicts(PsiElement element, String newName, MultiMap<PsiElement, LocalizeValue> conflicts) {
         if (element instanceof PsiCompiledElement) {
             return;
@@ -361,23 +349,27 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
     }
 
     @Nullable
-    @NonNls
+    @Override
     public String getHelpID(PsiElement element) {
         return HelpID.RENAME_CLASS;
     }
 
+    @Override
     public boolean isToSearchInComments(PsiElement psiElement) {
         return JavaRefactoringSettings.getInstance().RENAME_SEARCH_IN_COMMENTS_FOR_CLASS;
     }
 
+    @Override
     public void setToSearchInComments(PsiElement element, boolean enabled) {
         JavaRefactoringSettings.getInstance().RENAME_SEARCH_IN_COMMENTS_FOR_CLASS = enabled;
     }
 
+    @Override
     public boolean isToSearchForTextOccurrences(PsiElement element) {
         return JavaRefactoringSettings.getInstance().RENAME_SEARCH_FOR_TEXT_FOR_CLASS;
     }
 
+    @Override
     public void setToSearchForTextOccurrences(PsiElement element, boolean enabled) {
         JavaRefactoringSettings.getInstance().RENAME_SEARCH_FOR_TEXT_FOR_CLASS = enabled;
     }
