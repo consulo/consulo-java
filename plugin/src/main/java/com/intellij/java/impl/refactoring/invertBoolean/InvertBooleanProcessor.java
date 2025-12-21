@@ -20,6 +20,7 @@ import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.util.query.Query;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.rename.RenameProcessor;
@@ -222,7 +223,7 @@ public class InvertBooleanProcessor extends BaseRefactoringProcessor {
     }
 
     @Override
-    @RequiredUIAccess
+    @RequiredWriteAction
     protected void performRefactoring(@Nonnull UsageInfo[] usages) {
         for (PsiElement element : myRenameProcessor.getElements()) {
             try {
@@ -268,6 +269,6 @@ public class InvertBooleanProcessor extends BaseRefactoringProcessor {
     @Nonnull
     @Override
     protected String getCommandName() {
-        return InvertBooleanHandler.REFACTORING_NAME;
+        return InvertBooleanHandler.REFACTORING_NAME.get();
     }
 }

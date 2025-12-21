@@ -36,11 +36,13 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.usage.UsageViewUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class VariableTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     static final Logger LOG = Logger.getInstance(VariableTypeFix.class);
@@ -121,46 +123,42 @@ public class VariableTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement
         }.execute();
     }
 
+    @RequiredUIAccess
     private boolean changeMethodSignatureIfNeeded(PsiVariable myVariable) {
-        if (myVariable instanceof PsiParameter) {
-            PsiElement scope = ((PsiParameter) myVariable).getDeclarationScope();
-            if (scope instanceof PsiMethod) {
-                PsiMethod method = (PsiMethod) scope;
-                PsiMethod psiMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringLocalize.toRefactor().get());
-                if (psiMethod == null) {
-                    return true;
-                }
-                int parameterIndex = method.getParameterList().getParameterIndex((PsiParameter) myVariable);
-                if (!FileModificationService.getInstance().prepareFileForWrite(psiMethod.getContainingFile())) {
-                    return true;
-                }
-                ArrayList<ParameterInfoImpl> infos = new ArrayList<ParameterInfoImpl>();
-                int i = 0;
-                for (PsiParameter parameter : psiMethod.getParameterList().getParameters()) {
-                    boolean changeType = i == parameterIndex;
-                    infos.add(new ParameterInfoImpl(i++, parameter.getName(), changeType ? getReturnType() : parameter.getType()));
-                }
-
-                if (!ApplicationManager.getApplication().isUnitTestMode()) {
-                    JavaChangeSignatureDialog dialog =
-                        new JavaChangeSignatureDialog(psiMethod.getProject(), psiMethod, false, myVariable);
-                    dialog.setParameterInfos(infos);
-                    dialog.show();
-                }
-                else {
-                    ChangeSignatureProcessor processor = new ChangeSignatureProcessor(
-                        psiMethod.getProject(),
-                        psiMethod,
-                        false,
-                        null,
-                        psiMethod.getName(),
-                        psiMethod.getReturnType(),
-                        infos.toArray(new ParameterInfoImpl[infos.size()])
-                    );
-                    processor.run();
-                }
+        if (myVariable instanceof PsiParameter param && param.getDeclarationScope() instanceof PsiMethod method) {
+            PsiMethod psiMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringLocalize.toRefactor());
+            if (psiMethod == null) {
                 return true;
             }
+            int parameterIndex = method.getParameterList().getParameterIndex(param);
+            if (!FileModificationService.getInstance().prepareFileForWrite(psiMethod.getContainingFile())) {
+                return true;
+            }
+            List<ParameterInfoImpl> infos = new ArrayList<>();
+            int i = 0;
+            for (PsiParameter parameter : psiMethod.getParameterList().getParameters()) {
+                boolean changeType = i == parameterIndex;
+                infos.add(new ParameterInfoImpl(i++, parameter.getName(), changeType ? getReturnType() : parameter.getType()));
+            }
+
+            if (!param.getApplication().isUnitTestMode()) {
+                JavaChangeSignatureDialog dialog = new JavaChangeSignatureDialog(psiMethod.getProject(), psiMethod, false, param);
+                dialog.setParameterInfos(infos);
+                dialog.show();
+            }
+            else {
+                ChangeSignatureProcessor processor = new ChangeSignatureProcessor(
+                    psiMethod.getProject(),
+                    psiMethod,
+                    false,
+                    null,
+                    psiMethod.getName(),
+                    psiMethod.getReturnType(),
+                    infos.toArray(new ParameterInfoImpl[infos.size()])
+                );
+                processor.run();
+            }
+            return true;
         }
         return false;
     }

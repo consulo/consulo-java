@@ -49,8 +49,8 @@ public class IntroduceParameterObjectHandler implements RefactoringActionHandler
         scrollingModel.scrollToCaret(ScrollType.MAKE_VISIBLE);
         PsiElement element = dataContext.getData(PsiElement.KEY);
         PsiMethod selectedMethod = null;
-        if (element instanceof PsiMethod) {
-            selectedMethod = (PsiMethod)element;
+        if (element instanceof PsiMethod method) {
+            selectedMethod = method;
         }
         else if (element instanceof PsiParameter parameter && parameter.getDeclarationScope() instanceof PsiMethod methodScope) {
             selectedMethod = methodScope;
@@ -59,15 +59,14 @@ public class IntroduceParameterObjectHandler implements RefactoringActionHandler
             CaretModel caretModel = editor.getCaretModel();
             int position = caretModel.getOffset();
             PsiElement elementAt = file.findElementAt(position);
-            PsiMethodCallExpression methodCallExpression =
-                PsiTreeUtil.getParentOfType(elementAt, PsiMethodCallExpression.class);
+            PsiMethodCallExpression methodCallExpression = PsiTreeUtil.getParentOfType(elementAt, PsiMethodCallExpression.class);
             if (methodCallExpression != null) {
                 selectedMethod = methodCallExpression.resolveMethod();
             }
             else {
                 PsiParameterList parameterList = PsiTreeUtil.getParentOfType(elementAt, PsiParameterList.class);
-                if (parameterList != null && parameterList.getParent() instanceof PsiMethod) {
-                    selectedMethod = (PsiMethod)parameterList.getParent();
+                if (parameterList != null && parameterList.getParent() instanceof PsiMethod method) {
+                    selectedMethod = method;
                 }
             }
         }
@@ -75,7 +74,7 @@ public class IntroduceParameterObjectHandler implements RefactoringActionHandler
             LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
                 JavaRefactoringLocalize.theCaretShouldBePositionedAtTheNameOfTheMethodToBeRefactored()
             );
-            CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.IntroduceParameterObject);
+            CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.IntroduceParameterObject);
             return;
         }
         invoke(project, selectedMethod, editor);
@@ -97,7 +96,7 @@ public class IntroduceParameterObjectHandler implements RefactoringActionHandler
 
     @RequiredUIAccess
     private static void invoke(Project project, PsiMethod selectedMethod, Editor editor) {
-        PsiMethod newMethod = SuperMethodWarningUtil.checkSuperMethod(selectedMethod, RefactoringLocalize.toRefactor().get());
+        PsiMethod newMethod = SuperMethodWarningUtil.checkSuperMethod(selectedMethod, RefactoringLocalize.toRefactor());
         if (newMethod == null) {
             return;
         }
@@ -109,7 +108,7 @@ public class IntroduceParameterObjectHandler implements RefactoringActionHandler
         if (parameters.length == 0) {
             LocalizeValue message =
                 RefactoringLocalize.cannotPerformRefactoringWithReason(JavaRefactoringLocalize.methodSelectedHasNoParameters());
-            CommonRefactoringUtil.showErrorHint(project, editor, message.get(), REFACTORING_NAME.get(), HelpID.IntroduceParameterObject);
+            CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.IntroduceParameterObject);
             return;
         }
         if (newMethod instanceof PsiCompiledElement) {
@@ -118,8 +117,8 @@ public class IntroduceParameterObjectHandler implements RefactoringActionHandler
                 editor,
                 RefactoringLocalize.cannotPerformRefactoringWithReason(
                     JavaRefactoringLocalize.theSelectedMethodCannotBeWrappedBecauseItIsDefinedInANonProjectClass()
-                ).get(),
-                REFACTORING_NAME.get(),
+                ),
+                REFACTORING_NAME,
                 HelpID.IntroduceParameterObject
             );
             return;

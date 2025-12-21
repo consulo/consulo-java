@@ -23,8 +23,8 @@ import com.intellij.java.impl.refactoring.introduceParameter.IntroduceParameterH
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.Application;
-import consulo.application.ApplicationManager;
 import consulo.application.Result;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.WriteCommandAction;
@@ -35,6 +35,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.lang.Comparing;
 
 import java.util.ArrayList;
@@ -45,111 +46,131 @@ import java.util.List;
  * @author Mike
  */
 public class CreateParameterFromUsageFix extends CreateVarFromUsageFix {
-  private static final Logger LOG = Logger.getInstance(CreateParameterFromUsageFix.class);
+    private static final Logger LOG = Logger.getInstance(CreateParameterFromUsageFix.class);
 
-  public CreateParameterFromUsageFix(PsiReferenceExpression referenceElement) {
-    super(referenceElement);
-    setText(JavaQuickFixLocalize.createParameterFromUsageFamily());
-  }
-
-  @Override
-  protected boolean isAvailableImpl(int offset) {
-    if (!super.isAvailableImpl(offset)) return false;
-    if(myReferenceExpression.isQualified()) return false;
-    PsiElement scope = myReferenceExpression;
-    do {
-      scope = PsiTreeUtil.getParentOfType(scope, PsiMethod.class, PsiClass.class);
-      if (!(scope instanceof PsiAnonymousClass)) {
-        return scope instanceof PsiMethod &&
-               ((PsiMethod)scope).getParameterList().isPhysical();
-      }
-    }
-    while (true);
-  }
-
-  @Override
-  public LocalizeValue getText(String varName) {
-    return JavaQuickFixLocalize.createParameterFromUsageText(varName);
-  }
-
-  @Override
-  protected void invokeImpl(PsiClass targetClass) {
-    if (CreateFromUsageUtils.isValidReference(myReferenceExpression, false)) return;
-
-    final Project project = myReferenceExpression.getProject();
-
-    PsiType[] expectedTypes = CreateFromUsageUtils.guessType(myReferenceExpression, false);
-    PsiType type = expectedTypes[0];
-
-    final String varName = myReferenceExpression.getReferenceName();
-    PsiMethod method = PsiTreeUtil.getParentOfType(myReferenceExpression, PsiMethod.class);
-    LOG.assertTrue(method != null);
-    method = IntroduceParameterHandler.chooseEnclosingMethod(method);
-    if (method == null) return;
-
-    method = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringLocalize.toRefactor().get());
-    if (method == null) return;
-
-    final List<ParameterInfoImpl> parameterInfos =
-      new ArrayList<ParameterInfoImpl>(Arrays.asList(ParameterInfoImpl.fromMethod(method)));
-    ParameterInfoImpl parameterInfo = new ParameterInfoImpl(-1, varName, type, PsiTypesUtil.getDefaultValueOfType(type), false);
-    if (!method.isVarArgs()) {
-      parameterInfos.add(parameterInfo);
-    }
-    else {
-      parameterInfos.add(parameterInfos.size() - 1, parameterInfo);
+    public CreateParameterFromUsageFix(PsiReferenceExpression referenceElement) {
+        super(referenceElement);
+        setText(JavaQuickFixLocalize.createParameterFromUsageFamily());
     }
 
-    Application application = ApplicationManager.getApplication();
-    if (application.isUnitTestMode()) {
-      ParameterInfoImpl[] array = parameterInfos.toArray(new ParameterInfoImpl[parameterInfos.size()]);
-      String modifier = PsiUtil.getAccessModifier(PsiUtil.getAccessLevel(method.getModifierList()));
-      ChangeSignatureProcessor processor =
-        new ChangeSignatureProcessor(project, method, false, modifier, method.getName(), method.getReturnType(), array);
-      processor.run();
-    }
-    else {
-      final PsiMethod finalMethod = method;
-      application.invokeLater(new Runnable() {
-        @Override
-        public void run() {
-          if (project.isDisposed()) return;
-          try {
-            JavaChangeSignatureDialog dialog = JavaChangeSignatureDialog.createAndPreselectNew(project, finalMethod, parameterInfos, true, myReferenceExpression);
-            dialog.setParameterInfos(parameterInfos);
-            dialog.show();
-            if (dialog.isOK()) {
-              for (ParameterInfoImpl info : parameterInfos) {
-                if (info.getOldIndex() == -1) {
-                  String newParamName = info.getName();
-                  if (!Comparing.strEqual(varName, newParamName)) {
-                    final PsiExpression newExpr = JavaPsiFacade.getElementFactory(project).createExpressionFromText(newParamName, finalMethod);
-                    new WriteCommandAction(project){
-                      @Override
-                      protected void run(Result result) throws Throwable {
-                        PsiReferenceExpression[] refs =
-                          CreateFromUsageUtils.collectExpressions(myReferenceExpression, PsiMember.class, PsiFile.class);
-                        for (PsiReferenceExpression ref : refs) {
-                          ref.replace(newExpr.copy());
-                        }
-                      }
-                    }.execute();
-                  }
-                  break;
-                }
-              }
-            }
-          }
-          catch (Exception e) {
-            throw new RuntimeException(e);
-          }
+    @Override
+    protected boolean isAvailableImpl(int offset) {
+        if (!super.isAvailableImpl(offset)) {
+            return false;
         }
-      });
+        if (myReferenceExpression.isQualified()) {
+            return false;
+        }
+        PsiElement scope = myReferenceExpression;
+        do {
+            scope = PsiTreeUtil.getParentOfType(scope, PsiMethod.class, PsiClass.class);
+            if (!(scope instanceof PsiAnonymousClass)) {
+                return scope instanceof PsiMethod method
+                    && method.getParameterList().isPhysical();
+            }
+        }
+        while (true);
     }
-  }
 
-  @Override
-  protected boolean isAllowOuterTargetClass() {
-    return false;
-  }
+    @Override
+    public LocalizeValue getText(String varName) {
+        return JavaQuickFixLocalize.createParameterFromUsageText(varName);
+    }
+
+    @Override
+    @RequiredUIAccess
+    protected void invokeImpl(PsiClass targetClass) {
+        if (CreateFromUsageUtils.isValidReference(myReferenceExpression, false)) {
+            return;
+        }
+
+        final Project project = myReferenceExpression.getProject();
+
+        PsiType[] expectedTypes = CreateFromUsageUtils.guessType(myReferenceExpression, false);
+        PsiType type = expectedTypes[0];
+
+        String varName = myReferenceExpression.getReferenceName();
+        PsiMethod method = PsiTreeUtil.getParentOfType(myReferenceExpression, PsiMethod.class);
+        LOG.assertTrue(method != null);
+        method = IntroduceParameterHandler.chooseEnclosingMethod(method);
+        if (method == null) {
+            return;
+        }
+
+        method = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringLocalize.toRefactor());
+        if (method == null) {
+            return;
+        }
+
+        List<ParameterInfoImpl> parameterInfos = new ArrayList<>(Arrays.asList(ParameterInfoImpl.fromMethod(method)));
+        ParameterInfoImpl parameterInfo = new ParameterInfoImpl(-1, varName, type, PsiTypesUtil.getDefaultValueOfType(type), false);
+        if (!method.isVarArgs()) {
+            parameterInfos.add(parameterInfo);
+        }
+        else {
+            parameterInfos.add(parameterInfos.size() - 1, parameterInfo);
+        }
+
+        Application application = Application.get();
+        if (application.isUnitTestMode()) {
+            ParameterInfoImpl[] array = parameterInfos.toArray(new ParameterInfoImpl[parameterInfos.size()]);
+            String modifier = PsiUtil.getAccessModifier(PsiUtil.getAccessLevel(method.getModifierList()));
+            ChangeSignatureProcessor processor =
+                new ChangeSignatureProcessor(project, method, false, modifier, method.getName(), method.getReturnType(), array);
+            processor.run();
+        }
+        else {
+            PsiMethod finalMethod = method;
+            application.invokeLater(() -> {
+                if (project.isDisposed()) {
+                    return;
+                }
+                try {
+                    JavaChangeSignatureDialog dialog = JavaChangeSignatureDialog.createAndPreselectNew(
+                        project,
+                        finalMethod,
+                        parameterInfos,
+                        true,
+                        myReferenceExpression
+                    );
+                    dialog.setParameterInfos(parameterInfos);
+                    dialog.show();
+                    if (dialog.isOK()) {
+                        for (ParameterInfoImpl info : parameterInfos) {
+                            if (info.getOldIndex() == -1) {
+                                String newParamName = info.getName();
+                                if (!Comparing.strEqual(varName, newParamName)) {
+                                    final PsiExpression newExpr =
+                                        JavaPsiFacade.getElementFactory(project).createExpressionFromText(newParamName, finalMethod);
+                                    new WriteCommandAction(project) {
+                                        @Override
+                                        @RequiredWriteAction
+                                        protected void run(Result result) throws Throwable {
+                                            PsiReferenceExpression[] refs = CreateFromUsageUtils.collectExpressions(
+                                                myReferenceExpression,
+                                                PsiMember.class,
+                                                PsiFile.class
+                                            );
+                                            for (PsiReferenceExpression ref : refs) {
+                                                ref.replace(newExpr.copy());
+                                            }
+                                        }
+                                    }.execute();
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+    }
+
+    @Override
+    protected boolean isAllowOuterTargetClass() {
+        return false;
+    }
 }
