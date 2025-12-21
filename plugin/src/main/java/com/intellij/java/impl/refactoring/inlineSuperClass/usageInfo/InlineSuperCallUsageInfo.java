@@ -13,11 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * User: anna
- * Date: 10-Oct-2009
- */
 package com.intellij.java.impl.refactoring.inlineSuperClass.usageInfo;
 
 import com.intellij.java.impl.refactoring.inline.InlineMethodProcessor;
@@ -25,38 +20,47 @@ import com.intellij.java.impl.refactoring.inline.ReferencedElementsCollector;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
 import com.intellij.java.impl.refactoring.util.InlineUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.MultiMap;
+import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 
+/**
+ * @author anna
+ * @since 2009-10-10
+ */
 public class InlineSuperCallUsageInfo extends FixableUsageInfo {
-    private PsiCodeBlock myConstrBody;
+    private PsiCodeBlock myConstructorBody;
 
+    @RequiredReadAction
     public InlineSuperCallUsageInfo(PsiMethodCallExpression methodCallExpression) {
         super(methodCallExpression);
     }
 
-    public InlineSuperCallUsageInfo(PsiMethodCallExpression methodCallExpression, PsiCodeBlock constrBody) {
+    @RequiredReadAction
+    public InlineSuperCallUsageInfo(PsiMethodCallExpression methodCallExpression, PsiCodeBlock constructorBody) {
         super(methodCallExpression);
-        myConstrBody = constrBody;
+        myConstructorBody = constructorBody;
     }
 
     @Override
+    @RequiredWriteAction
     public void fixUsage() throws IncorrectOperationException {
         PsiElement element = getElement();
-        if (element != null && myConstrBody != null) {
+        if (element != null && myConstructorBody != null) {
             assert !element.isPhysical();
-            PsiStatement statement = JavaPsiFacade.getElementFactory(getProject()).createStatementFromText("super();", myConstrBody);
-            element = ((PsiExpressionStatement) myConstrBody.addBefore(statement, myConstrBody.getFirstBodyElement())).getExpression();
+            PsiStatement statement = JavaPsiFacade.getElementFactory(getProject()).createStatementFromText("super();", myConstructorBody);
+            element = ((PsiExpressionStatement) myConstructorBody.addBefore(statement, myConstructorBody.getFirstBodyElement())).getExpression();
         }
-        if (element instanceof PsiMethodCallExpression) {
-            PsiReferenceExpression methodExpression = ((PsiMethodCallExpression) element).getMethodExpression();
+        if (element instanceof PsiMethodCallExpression call) {
+            PsiReferenceExpression methodExpression = call.getMethodExpression();
             PsiMethod superConstructor = (PsiMethod) methodExpression.resolve();
             if (superConstructor != null) {
                 PsiMethod methodCopy = JavaPsiFacade.getElementFactory(getProject()).createMethod("toInline", PsiType.VOID);
@@ -84,11 +88,10 @@ public class InlineSuperCallUsageInfo extends FixableUsageInfo {
     }
 
     @Override
+    @RequiredReadAction
     public LocalizeValue getConflictMessage() {
         MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
-        PsiElement element = getElement();
-        if (element instanceof PsiMethodCallExpression) {
-            PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) element;
+        if (getElement() instanceof PsiMethodCallExpression methodCallExpression) {
             final PsiMethod superConstructor = methodCallExpression.resolveMethod();
             if (superConstructor != null) {
                 InlineMethodProcessor.addInaccessibleMemberConflicts(
@@ -107,7 +110,7 @@ public class InlineSuperCallUsageInfo extends FixableUsageInfo {
                 if (InlineMethodProcessor.checkBadReturns(superConstructor) && !InlineUtil.allUsagesAreTailCalls(superConstructor)) {
                     conflicts.putValue(
                         superConstructor,
-                        LocalizeValue.localizeTODO(CommonRefactoringUtil.capitalize(
+                        LocalizeValue.localizeTODO(StringUtil.capitalize(
                             RefactoringLocalize.refactoringIsNotSupportedWhenReturnStatementInterruptsTheExecutionFlow("") +
                                 " of super constructor"
                         ))

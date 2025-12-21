@@ -23,7 +23,8 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.refactoring.ui.ConflictsDialog;
 import consulo.language.editor.ui.util.DocCommentPolicy;
@@ -37,14 +38,13 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.module.content.ProjectRootManager;
+import consulo.module.content.util.ModuleContentUtil;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.util.collection.MultiMap;
-import consulo.util.lang.function.Condition;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 
@@ -57,6 +57,7 @@ public class ExtractSuperClassUtil {
     private ExtractSuperClassUtil() {
     }
 
+    @RequiredWriteAction
     public static PsiClass extractSuperClass(
         Project project,
         PsiDirectory targetDirectory,
@@ -64,8 +65,7 @@ public class ExtractSuperClassUtil {
         PsiClass subclass,
         MemberInfo[] selectedMemberInfos,
         DocCommentPolicy javaDocPolicy
-    )
-        throws IncorrectOperationException {
+    ) throws IncorrectOperationException {
         PsiClass superclass = JavaDirectoryService.getInstance().createClass(targetDirectory, superclassName);
         PsiModifierList superClassModifierList = superclass.getModifierList();
         assert superClassModifierList != null;
@@ -101,18 +101,16 @@ public class ExtractSuperClassUtil {
         return superclass;
     }
 
-    private static void createConstructorsByPattern(
-        Project project,
-        PsiClass superclass,
-        PsiMethod[] patternConstructors
-    ) throws IncorrectOperationException {
+    @RequiredWriteAction
+    private static void createConstructorsByPattern(Project project, PsiClass superclass, PsiMethod[] patternConstructors)
+        throws IncorrectOperationException {
         PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
         CodeStyleManager styleManager = CodeStyleManager.getInstance(project);
         for (PsiMethod baseConstructor : patternConstructors) {
             PsiMethod constructor = (PsiMethod) superclass.add(factory.createConstructor());
             PsiParameterList paramList = constructor.getParameterList();
             PsiParameter[] baseParams = baseConstructor.getParameterList().getParameters();
-            @NonNls StringBuilder superCallText = new StringBuilder();
+            StringBuilder superCallText = new StringBuilder();
             superCallText.append("super(");
             PsiClass baseClass = baseConstructor.getContainingClass();
             LOG.assertTrue(baseClass != null);
@@ -139,8 +137,9 @@ public class ExtractSuperClassUtil {
         }
     }
 
+    @RequiredReadAction
     private static PsiMethod[] getCalledBaseConstructors(PsiClass subclass) {
-        Set<PsiMethod> baseConstructors = new HashSet<PsiMethod>();
+        Set<PsiMethod> baseConstructors = new HashSet<>();
         PsiMethod[] constructors = subclass.getConstructors();
         for (PsiMethod constructor : constructors) {
             PsiCodeBlock body = constructor.getBody();
@@ -148,19 +147,15 @@ public class ExtractSuperClassUtil {
                 continue;
             }
             PsiStatement[] statements = body.getStatements();
-            if (statements.length > 0) {
-                PsiStatement first = statements[0];
-                if (first instanceof PsiExpressionStatement) {
-                    PsiExpression expression = ((PsiExpressionStatement) first).getExpression();
-                    if (expression instanceof PsiMethodCallExpression) {
-                        PsiReferenceExpression calledMethod = ((PsiMethodCallExpression) expression).getMethodExpression();
-                        @NonNls String text = calledMethod.getText();
-                        if ("super".equals(text)) {
-                            PsiMethod baseConstructor = (PsiMethod) calledMethod.resolve();
-                            if (baseConstructor != null) {
-                                baseConstructors.add(baseConstructor);
-                            }
-                        }
+            if (statements.length > 0
+                && statements[0] instanceof PsiExpressionStatement firstExpr
+                && firstExpr.getExpression() instanceof PsiMethodCallExpression call) {
+                PsiReferenceExpression calledMethod = call.getMethodExpression();
+                String text = calledMethod.getText();
+                if ("super".equals(text)) {
+                    PsiMethod baseConstructor = (PsiMethod) calledMethod.resolve();
+                    if (baseConstructor != null) {
+                        baseConstructors.add(baseConstructor);
                     }
                 }
             }
@@ -168,6 +163,7 @@ public class ExtractSuperClassUtil {
         return baseConstructors.toArray(new PsiMethod[baseConstructors.size()]);
     }
 
+    @RequiredWriteAction
     private static void clearPsiReferenceList(PsiReferenceList refList) throws IncorrectOperationException {
         PsiJavaCodeReferenceElement[] refs = refList.getReferenceElements();
         for (PsiJavaCodeReferenceElement ref : refs) {
@@ -175,10 +171,9 @@ public class ExtractSuperClassUtil {
         }
     }
 
-    private static void copyPsiReferenceList(
-        PsiReferenceList sourceList,
-        PsiReferenceList destinationList
-    ) throws IncorrectOperationException {
+    @RequiredWriteAction
+    private static void copyPsiReferenceList(PsiReferenceList sourceList, PsiReferenceList destinationList)
+        throws IncorrectOperationException {
         clearPsiReferenceList(destinationList);
         PsiJavaCodeReferenceElement[] refs = sourceList.getReferenceElements();
         for (PsiJavaCodeReferenceElement ref : refs) {
@@ -186,39 +181,32 @@ public class ExtractSuperClassUtil {
         }
     }
 
+    @RequiredWriteAction
     public static PsiJavaCodeReferenceElement createExtendingReference(
         PsiClass superClass,
-        final PsiClass derivedClass,
+        PsiClass derivedClass,
         MemberInfo[] selectedMembers
     ) throws IncorrectOperationException {
         PsiManager manager = derivedClass.getManager();
-        Set<PsiElement> movedElements = new HashSet<PsiElement>();
+        Set<PsiElement> movedElements = new HashSet<>();
         for (MemberInfo info : selectedMembers) {
             movedElements.add(info.getMember());
         }
-        PsiTypeParameterList typeParameterList = RefactoringUtil.createTypeParameterListWithUsedTypeParameters(null,
-            new Condition<PsiTypeParameter>() {
-                @Override
-                public boolean value(
-                    PsiTypeParameter parameter
-                ) {
-                    return
-                        findTypeParameterInDerived(
-                            derivedClass,
-                            parameter
-                                .getName()
-                        ) !=
-                            null;
-                }
-            }, PsiUtilBase
-                .toPsiElementArray(movedElements)
+        PsiTypeParameterList typeParameterList = RefactoringUtil.createTypeParameterListWithUsedTypeParameters(
+            null,
+            parameter -> findTypeParameterInDerived(
+                derivedClass,
+                parameter.getName()
+            ) != null,
+            PsiUtilBase.toPsiElementArray(movedElements)
         );
         PsiTypeParameterList originalTypeParameterList = superClass.getTypeParameterList();
         assert originalTypeParameterList != null;
-        PsiTypeParameterList newList =
-            typeParameterList != null ? (PsiTypeParameterList) originalTypeParameterList.replace(typeParameterList) : originalTypeParameterList;
+        PsiTypeParameterList newList = typeParameterList != null
+            ? (PsiTypeParameterList) originalTypeParameterList.replace(typeParameterList)
+            : originalTypeParameterList;
         PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-        Map<PsiTypeParameter, PsiType> substitutionMap = new HashMap<PsiTypeParameter, PsiType>();
+        Map<PsiTypeParameter, PsiType> substitutionMap = new HashMap<>();
         for (PsiTypeParameter parameter : newList.getTypeParameters()) {
             PsiTypeParameter parameterInDerived = findTypeParameterInDerived(derivedClass, parameter.getName());
             if (parameterInDerived != null) {
@@ -231,6 +219,7 @@ public class ExtractSuperClassUtil {
     }
 
     @Nullable
+    @RequiredReadAction
     public static PsiTypeParameter findTypeParameterInDerived(PsiClass aClass, String name) {
         for (PsiTypeParameter typeParameter : PsiUtil.typeParametersIterable(aClass)) {
             if (name.equals(typeParameter.getName())) {
@@ -241,16 +230,20 @@ public class ExtractSuperClassUtil {
         return null;
     }
 
-    public static void checkSuperAccessible(PsiDirectory targetDirectory, MultiMap<PsiElement, LocalizeValue> conflicts, PsiClass subclass) {
+    public static void checkSuperAccessible(
+        PsiDirectory targetDirectory,
+        MultiMap<PsiElement, LocalizeValue> conflicts,
+        PsiClass subclass
+    ) {
         VirtualFile virtualFile = subclass.getContainingFile().getVirtualFile();
         if (virtualFile != null) {
             boolean inTestSourceContent =
                 ProjectRootManager.getInstance(subclass.getProject()).getFileIndex().isInTestSourceContent(virtualFile);
-            Module module = ModuleUtil.findModuleForFile(virtualFile, subclass.getProject());
-            if (targetDirectory != null &&
-                module != null &&
-                !GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module, inTestSourceContent)
-                    .contains(targetDirectory.getVirtualFile())) {
+            Module module = ModuleContentUtil.findModuleForFile(virtualFile, subclass.getProject());
+            if (targetDirectory != null
+                && module != null
+                && !GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module, inTestSourceContent)
+                .contains(targetDirectory.getVirtualFile())) {
                 conflicts.putValue(subclass, LocalizeValue.localizeTODO("Superclass won't be accessible in subclass"));
             }
         }

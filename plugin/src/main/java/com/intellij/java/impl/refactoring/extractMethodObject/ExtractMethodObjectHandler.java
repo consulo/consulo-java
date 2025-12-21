@@ -24,6 +24,7 @@ import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.extractMethod.ExtractMethodHandler;
 import com.intellij.java.impl.refactoring.extractMethod.PrepareFailedException;
 import com.intellij.java.impl.refactoring.util.duplicates.DuplicatesImpl;
+import consulo.application.Application;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.dataContext.DataContext;
@@ -44,51 +45,44 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.undoRedo.CommandProcessor;
 import jakarta.annotation.Nonnull;
 
-import java.util.function.Consumer;
-
 public class ExtractMethodObjectHandler implements RefactoringActionHandler {
     private static final Logger LOG = Logger.getInstance(ExtractMethodObjectHandler.class);
 
-    public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file, final DataContext dataContext) {
-        ExtractMethodHandler.selectAndPass(project, editor, file, new Consumer<PsiElement[]>() {
-            public void accept(final PsiElement[] selectedValue) {
-                invokeOnElements(project, editor, file, selectedValue);
-            }
-        });
+    @Override
+    @RequiredUIAccess
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+        ExtractMethodHandler.selectAndPass(project, editor, file, selectedValue -> invokeOnElements(project, editor, file, selectedValue));
     }
 
     @RequiredUIAccess
     private void invokeOnElements(
-        @Nonnull final Project project,
-        @Nonnull final Editor editor,
+        @Nonnull Project project,
+        @Nonnull Editor editor,
         @Nonnull PsiFile file,
         @Nonnull PsiElement[] elements
     ) {
         if (elements.length == 0) {
-            LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
-                RefactoringLocalize.selectedBlockShouldRepresentASetOfStatementsOrAnExpression()
-            );
             CommonRefactoringUtil.showErrorHint(
                 project,
                 editor,
-                message,
+                RefactoringLocalize.cannotPerformRefactoringWithReason(
+                    RefactoringLocalize.selectedBlockShouldRepresentASetOfStatementsOrAnExpression()
+                ),
                 ExtractMethodObjectProcessor.REFACTORING_NAME,
                 HelpID.EXTRACT_METHOD_OBJECT
             );
             return;
         }
 
-        final ExtractMethodObjectProcessor processor = new ExtractMethodObjectProcessor(project, editor, elements, "");
-        final ExtractMethodObjectProcessor.MyExtractMethodProcessor extractProcessor = processor.getExtractProcessor();
+        ExtractMethodObjectProcessor processor = new ExtractMethodObjectProcessor(project, editor, elements, "");
+        ExtractMethodObjectProcessor.MyExtractMethodProcessor extractProcessor = processor.getExtractProcessor();
         try {
             if (!extractProcessor.prepare()) {
                 return;
             }
         }
         catch (PrepareFailedException e) {
-            CommonRefactoringUtil.showErrorHint(
-                project,
-                editor,
+            CommonRefactoringUtil.showErrorHint(project, editor,
                 LocalizeValue.ofNullable(e.getMessage()),
                 ExtractMethodObjectProcessor.REFACTORING_NAME,
                 HelpID.EXTRACT_METHOD_OBJECT
@@ -105,14 +99,15 @@ public class ExtractMethodObjectHandler implements RefactoringActionHandler {
         }
     }
 
+    @RequiredUIAccess
     public static void run(
-        @Nonnull final Project project,
-        @Nonnull final Editor editor,
-        @Nonnull final ExtractMethodObjectProcessor processor,
-        @Nonnull final ExtractMethodObjectProcessor.MyExtractMethodProcessor extractProcessor
+        @Nonnull Project project,
+        @Nonnull Editor editor,
+        @Nonnull ExtractMethodObjectProcessor processor,
+        @Nonnull ExtractMethodObjectProcessor.MyExtractMethodProcessor extractProcessor
     ) {
-        final int offset = editor.getCaretModel().getOffset();
-        final RangeMarker marker = editor.getDocument().createRangeMarker(new TextRange(offset, offset));
+        int offset = editor.getCaretModel().getOffset();
+        RangeMarker marker = editor.getDocument().createRangeMarker(new TextRange(offset, offset));
         CommandProcessor.getInstance().newCommand()
             .project(project)
             .name(ExtractMethodObjectProcessor.REFACTORING_NAME)
@@ -149,7 +144,9 @@ public class ExtractMethodObjectHandler implements RefactoringActionHandler {
         editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
     }
 
-    public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, final DataContext dataContext) {
+    @Override
+    @RequiredUIAccess
+    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
         throw new UnsupportedOperationException();
     }
 }
