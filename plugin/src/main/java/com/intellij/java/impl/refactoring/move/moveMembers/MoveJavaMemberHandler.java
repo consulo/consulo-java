@@ -23,6 +23,8 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.editor.highlight.ReadWriteAccessDetector;
@@ -50,15 +52,16 @@ import java.util.*;
  */
 @ExtensionImpl
 public class MoveJavaMemberHandler implements MoveMemberHandler {
-    @Override
     @Nullable
+    @Override
+    @RequiredReadAction
     public MoveMembersProcessor.MoveMembersUsageInfo getUsage(
-        @Nonnull PsiMember member, @Nonnull PsiReference psiReference,
-        @Nonnull Set<PsiMember> membersToMove, @Nonnull PsiClass targetClass
+        @Nonnull PsiMember member,
+        @Nonnull PsiReference psiReference,
+        @Nonnull Set<PsiMember> membersToMove,
+        @Nonnull PsiClass targetClass
     ) {
-        PsiElement ref = psiReference.getElement();
-        if (ref instanceof PsiReferenceExpression) {
-            PsiReferenceExpression refExpr = (PsiReferenceExpression) ref;
+        if (psiReference.getElement() instanceof PsiReferenceExpression refExpr) {
             PsiExpression qualifier = refExpr.getQualifierExpression();
             if (RefactoringHierarchyUtil.willBeInTargetClass(refExpr, membersToMove, targetClass, true)) {
                 // both member and the reference to it will be in target class
@@ -73,45 +76,43 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
                         );  // remove qualifier
                     }
                 }
-                else {
-                    if (qualifier instanceof PsiReferenceExpression
-                        && ((PsiReferenceExpression) qualifier).isReferenceTo(member.getContainingClass())) {
-                        return new MoveMembersProcessor.MoveMembersUsageInfo(
-                            member,
-                            refExpr,
-                            null,
-                            qualifier,
-                            psiReference
-                        );  // change qualifier
-                    }
-                }
-            }
-            else {
-                // member in target class, the reference will be outside target class
-                if (qualifier == null) {
+                else if (qualifier instanceof PsiReferenceExpression qRefExpr && qRefExpr.isReferenceTo(member.getContainingClass())) {
+                    // change qualifier
                     return new MoveMembersProcessor.MoveMembersUsageInfo(
                         member,
                         refExpr,
-                        targetClass,
-                        refExpr,
-                        psiReference
-                    ); // add qualifier
-                }
-                else {
-                    return new MoveMembersProcessor.MoveMembersUsageInfo(
-                        member,
-                        refExpr,
-                        targetClass,
+                        null,
                         qualifier,
                         psiReference
-                    ); // change qualifier
+                    );
                 }
+            }
+            else if (qualifier == null) {
+                // member in target class, the reference will be outside target class
+                return new MoveMembersProcessor.MoveMembersUsageInfo(
+                    member,
+                    refExpr,
+                    targetClass,
+                    refExpr,
+                    psiReference
+                ); // add qualifier
+            }
+            else {
+                // change qualifier
+                return new MoveMembersProcessor.MoveMembersUsageInfo(
+                    member,
+                    refExpr,
+                    targetClass,
+                    qualifier,
+                    psiReference
+                );
             }
         }
         return null;
     }
 
     @Override
+    @RequiredReadAction
     public void checkConflictsOnUsage(
         @Nonnull MoveMembersProcessor.MoveMembersUsageInfo usageInfo,
         @Nullable String newVisibility,
@@ -126,8 +127,8 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
         }
 
         PsiMember member = usageInfo.member;
-        if (element instanceof PsiReferenceExpression) {
-            PsiExpression qualifier = ((PsiReferenceExpression) element).getQualifierExpression();
+        if (element instanceof PsiReferenceExpression refExpr) {
+            PsiExpression qualifier = refExpr.getQualifierExpression();
             PsiClass accessObjectClass = null;
             if (qualifier != null) {
                 accessObjectClass = (PsiClass) PsiUtil.getAccessObjectClass(qualifier).getElement();
@@ -169,6 +170,7 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
     }
 
     @Override
+    @RequiredReadAction
     public void checkConflictsOnMember(
         @Nonnull PsiMember member,
         @Nullable String newVisibility,
@@ -177,8 +179,8 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
         @Nonnull Set<PsiMember> membersToMove,
         @Nonnull MultiMap<PsiElement, LocalizeValue> conflicts
     ) {
-        if (member instanceof PsiMethod && hasMethod(targetClass, (PsiMethod) member)
-            || member instanceof PsiField && hasField(targetClass, (PsiField) member)) {
+        if (member instanceof PsiMethod method && hasMethod(targetClass, method)
+            || member instanceof PsiField field && hasField(targetClass, field)) {
             LocalizeValue message =
                 RefactoringLocalize.zeroAlreadyExistsInTheTargetClass(RefactoringUIUtil.getDescription(member, false));
             conflicts.putValue(member, message.capitalize());
@@ -212,6 +214,7 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
     }
 
     @Override
+    @RequiredWriteAction
     public boolean changeExternalUsage(@Nonnull MoveMembersOptions options, @Nonnull MoveMembersProcessor.MoveMembersUsageInfo usage) {
         PsiElement element = usage.getElement();
         if (element == null || !element.isValid()) {
@@ -266,25 +269,26 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
         }
     }
 
-    @Override
     @Nonnull
+    @Override
+    @RequiredWriteAction
     public PsiMember doMove(
         @Nonnull MoveMembersOptions options,
         @Nonnull PsiMember member,
         PsiElement anchor,
         @Nonnull PsiClass targetClass
     ) {
-        if (member instanceof PsiVariable) {
-            ((PsiVariable) member).normalizeDeclaration();
+        if (member instanceof PsiVariable variable) {
+            variable.normalizeDeclaration();
         }
 
         ChangeContextUtil.encodeContextInfo(member, true);
 
         PsiMember memberCopy;
-        if (options.makeEnumConstant() &&
-            member instanceof PsiVariable &&
-            EnumConstantsUtil.isSuitableForEnumConstant(((PsiVariable) member).getType(), targetClass)) {
-            memberCopy = EnumConstantsUtil.createEnumConstant(targetClass, member.getName(), ((PsiVariable) member).getInitializer());
+        if (options.makeEnumConstant()
+            && member instanceof PsiVariable variable
+            && EnumConstantsUtil.isSuitableForEnumConstant(variable.getType(), targetClass)) {
+            memberCopy = EnumConstantsUtil.createEnumConstant(targetClass, member.getName(), variable.getInitializer());
         }
         else {
             memberCopy = (PsiMember) member.copy();
@@ -293,8 +297,8 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
                 // might need to make modifiers explicit, see IDEADEV-11416
                 PsiModifierList list = memberCopy.getModifierList();
                 assert list != null;
-                list.setModifierProperty(PsiModifier.STATIC, member.hasModifierProperty(PsiModifier.STATIC));
-                list.setModifierProperty(PsiModifier.FINAL, member.hasModifierProperty(PsiModifier.FINAL));
+                list.setModifierProperty(PsiModifier.STATIC, member.isStatic());
+                list.setModifierProperty(PsiModifier.FINAL, member.isFinal());
                 VisibilityUtil.setVisibility(list, VisibilityUtil.getVisibilityModifier(member.getModifierList()));
             }
         }
@@ -307,22 +311,22 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
         ChangeContextUtil.decodeContextInfo(scope, null, null);
     }
 
-    @Override
     @Nullable
+    @Override
+    @RequiredReadAction
     public PsiElement getAnchor(@Nonnull PsiMember member, @Nonnull final PsiClass targetClass, final Set<PsiMember> membersToMove) {
-        if (member instanceof PsiField && member.hasModifierProperty(PsiModifier.STATIC)) {
-            final List<PsiField> afterFields = new ArrayList<PsiField>();
-            PsiExpression psiExpression = ((PsiField) member).getInitializer();
+        if (member instanceof PsiField field && field.isStatic()) {
+            final List<PsiField> afterFields = new ArrayList<>();
+            PsiExpression psiExpression = field.getInitializer();
             if (psiExpression != null) {
                 psiExpression.accept(new JavaRecursiveElementWalkingVisitor() {
                     @Override
-                    public void visitReferenceExpression(PsiReferenceExpression expression) {
+                    @RequiredReadAction
+                    public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
                         super.visitReferenceExpression(expression);
-                        PsiElement psiElement = expression.resolve();
-                        if (psiElement instanceof PsiField) {
-                            PsiField psiField = (PsiField) psiElement;
-                            if ((psiField.getContainingClass() == targetClass || membersToMove.contains(psiField)) && !afterFields.contains(
-                                psiField)) {
+                        if (expression.resolve() instanceof PsiField psiField) {
+                            if ((psiField.getContainingClass() == targetClass || membersToMove.contains(psiField))
+                                && !afterFields.contains(psiField)) {
                                 afterFields.add(psiField);
                             }
                         }
@@ -331,21 +335,14 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
             }
 
             if (!afterFields.isEmpty()) {
-                Collections.sort(afterFields, new Comparator<PsiField>() {
-                    @Override
-                    public int compare(PsiField o1, PsiField o2) {
-                        return -PsiUtilCore.compareElementsByPosition(o1, o2);
-                    }
-                });
+                Collections.sort(afterFields, (o1, o2) -> -PsiUtilCore.compareElementsByPosition(o1, o2));
                 return afterFields.get(0);
             }
 
-            List<PsiField> beforeFields = new ArrayList<PsiField>();
-            for (PsiReference psiReference : ReferencesSearch.search(member, new LocalSearchScope(targetClass))) {
+            List<PsiField> beforeFields = new ArrayList<>();
+            for (PsiReference psiReference : ReferencesSearch.search(field, new LocalSearchScope(targetClass))) {
                 PsiField fieldWithReference = PsiTreeUtil.getParentOfType(psiReference.getElement(), PsiField.class);
-                if (fieldWithReference != null
-                    && !afterFields.contains(fieldWithReference)
-                    && fieldWithReference.getContainingClass() == targetClass) {
+                if (fieldWithReference != null && !afterFields.contains(fieldWithReference) && fieldWithReference.getContainingClass() == targetClass) {
                     beforeFields.add(fieldWithReference);
                 }
             }
