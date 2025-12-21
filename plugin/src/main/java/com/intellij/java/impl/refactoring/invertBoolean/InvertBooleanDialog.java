@@ -15,15 +15,16 @@
  */
 package com.intellij.java.impl.refactoring.invertBoolean;
 
-import consulo.language.editor.refactoring.localize.RefactoringLocalize;
-import consulo.language.findUsage.DescriptiveNameUtil;
-import consulo.project.Project;
-import consulo.application.HelpManager;
-import consulo.language.psi.PsiNamedElement;
 import com.intellij.java.impl.refactoring.HelpID;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.application.HelpManager;
+import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.language.psi.PsiNamedElement;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.usage.UsageViewUtil;
 
 import javax.swing.*;
@@ -32,52 +33,60 @@ import javax.swing.*;
  * @author ven
  */
 public class InvertBooleanDialog extends RefactoringDialog {
-  private JTextField myNameField;
-  private JPanel myPanel;
-  private JLabel myLabel;
-  private JLabel myCaptionLabel;
+    private JTextField myNameField;
+    private JPanel myPanel;
+    private JLabel myLabel;
+    private JLabel myCaptionLabel;
 
-  private final PsiNamedElement myElement;
+    private final PsiNamedElement myElement;
 
-  public InvertBooleanDialog(PsiNamedElement element) {
-    super(element.getProject(), false);
-    myElement = element;
-    String name = myElement.getName();
-    myNameField.setText(name);
-    myLabel.setLabelFor(myNameField);
-    String typeString = UsageViewUtil.getType(myElement);
-    myLabel.setText(RefactoringLocalize.invertBooleanNameOfInvertedElement(typeString).get());
-    myCaptionLabel.setText(RefactoringLocalize.invert01(typeString, DescriptiveNameUtil.getDescriptiveName(myElement)).get());
+    @RequiredReadAction
+    public InvertBooleanDialog(PsiNamedElement element) {
+        super(element.getProject(), false);
+        myElement = element;
+        String name = myElement.getName();
+        myNameField.setText(name);
+        myLabel.setLabelFor(myNameField);
+        String typeString = UsageViewUtil.getType(myElement);
+        myLabel.setText(RefactoringLocalize.invertBooleanNameOfInvertedElement(typeString).get());
+        myCaptionLabel.setText(RefactoringLocalize.invert01(typeString, DescriptiveNameUtil.getDescriptiveName(myElement)).get());
 
-    setTitle(InvertBooleanHandler.REFACTORING_NAME);
-    init();
-  }
-
-  public JComponent getPreferredFocusedComponent() {
-    return myNameField;
-  }
-
-  protected void doAction() {
-    Project project = myElement.getProject();
-    String name = myNameField.getText().trim();
-    if (name.length() == 0) {
-      CommonRefactoringUtil.showErrorMessage(
-        InvertBooleanHandler.REFACTORING_NAME,
-        RefactoringLocalize.pleaseEnterAValidNameForInvertedElement(UsageViewUtil.getType(myElement)).get(),
-        HelpID.INVERT_BOOLEAN,
-        project
-      );
-      return;
+        setTitle(InvertBooleanHandler.REFACTORING_NAME);
+        init();
     }
 
-    invokeRefactoring(new InvertBooleanProcessor(myElement, name));
-  }
+    @Override
+    @RequiredUIAccess
+    public JComponent getPreferredFocusedComponent() {
+        return myNameField;
+    }
 
-  protected void doHelpAction() {
-    HelpManager.getInstance().invokeHelp(HelpID.INVERT_BOOLEAN);
-  }
+    @Override
+    @RequiredUIAccess
+    protected void doAction() {
+        Project project = myElement.getProject();
+        String name = myNameField.getText().trim();
+        if (name.length() == 0) {
+            CommonRefactoringUtil.showErrorMessage(
+                InvertBooleanHandler.REFACTORING_NAME,
+                RefactoringLocalize.pleaseEnterAValidNameForInvertedElement(UsageViewUtil.getType(myElement)),
+                HelpID.INVERT_BOOLEAN,
+                project
+            );
+            return;
+        }
 
-  protected JComponent createCenterPanel() {
-    return myPanel;
-  }
+        invokeRefactoring(new InvertBooleanProcessor(myElement, name));
+    }
+
+    @Override
+    @RequiredUIAccess
+    protected void doHelpAction() {
+        HelpManager.getInstance().invokeHelp(HelpID.INVERT_BOOLEAN);
+    }
+
+    @Override
+    protected JComponent createCenterPanel() {
+        return myPanel;
+    }
 }

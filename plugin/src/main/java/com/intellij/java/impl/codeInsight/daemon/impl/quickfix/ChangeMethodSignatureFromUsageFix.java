@@ -226,7 +226,7 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
             return;
         }
 
-        PsiMethod method = SuperMethodWarningUtil.checkSuperMethod(myTargetMethod, RefactoringLocalize.toRefactor().get());
+        PsiMethod method = SuperMethodWarningUtil.checkSuperMethod(myTargetMethod, RefactoringLocalize.toRefactor());
         if (method == null) {
             return;
         }
@@ -457,8 +457,8 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
                     if (exprType == null || PsiType.VOID.equals(exprType)) {
                         return null;
                     }
-                    if (exprType instanceof PsiDisjunctionType) {
-                        exprType = ((PsiDisjunctionType) exprType).getLeastUpperBound();
+                    if (exprType instanceof PsiDisjunctionType disjunctionType) {
+                        exprType = disjunctionType.getLeastUpperBound();
                     }
                     if (!PsiTypesUtil.allTypeParametersResolved(myTargetMethod, exprType)) {
                         return null;
@@ -548,8 +548,8 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
                 if (exprType == null || PsiType.VOID.equals(exprType)) {
                     return false;
                 }
-                if (exprType instanceof PsiDisjunctionType) {
-                    exprType = ((PsiDisjunctionType) exprType).getLeastUpperBound();
+                if (exprType instanceof PsiDisjunctionType disjunctionType) {
+                    exprType = disjunctionType.getLeastUpperBound();
                 }
                 if (!PsiTypesUtil.allTypeParametersResolved(myTargetMethod, exprType)) {
                     return false;

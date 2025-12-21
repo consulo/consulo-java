@@ -198,6 +198,14 @@ javac.name:
     text: Javac
 jrt.node.short:
     text: '[JRT]'
+label.implements.method.of.class.or.interface.name:
+    text: implements method of {0, choice, 0#interface|1#class} ''{1}''.
+label.implements.method.of.interfaces:
+    text: 'implements methods of the following classes/interfaces:'
+label.method:
+    text: Method ''{0}''
+label.overrides.method.of.class.or.interface.name:
+    text: overrides method of {0, choice, 0#interface|1#class} ''{1}''.
 library.choose.one.to.attach:
     text: <html><body>Multiple libraries contain the file.<br>Choose libraries to attach sources to</body></html>
 notification.navigation.to.overriding.classes:
@@ -218,6 +226,8 @@ options.java.attribute.descriptor.lambda.parameter:
     text: Parameters//Lambda parameter
 project.roots.native.library.node.text:
     text: Native Library Locations
+prompt.do.you.want.to.action.verb.the.method.from.class:
+    text: Do you want {0} the base {1,choice,1#method|2#methods}?
 quickfix.family.remove.redundant.parameter:
     text: Remove redundant parameter
 settings.inlay.java.annotations:

@@ -25,83 +25,86 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.find.FindBundle;
 import consulo.find.FindUsagesHandler;
 import consulo.find.FindUsagesHandlerFactory;
+import consulo.find.localize.FindLocalize;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.inject.Inject;
 
 import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
-*/
+ */
 @ExtensionImpl(id = "java", order = "last, before default")
 public class JavaFindUsagesHandlerFactory extends FindUsagesHandlerFactory {
-  private final JavaClassFindUsagesOptions myFindClassOptions;
-  private final JavaMethodFindUsagesOptions myFindMethodOptions;
-  private final JavaPackageFindUsagesOptions myFindPackageOptions;
-  private final JavaThrowFindUsagesOptions myFindThrowOptions;
-  private final JavaVariableFindUsagesOptions myFindVariableOptions;
+    private final JavaClassFindUsagesOptions myFindClassOptions;
+    private final JavaMethodFindUsagesOptions myFindMethodOptions;
+    private final JavaPackageFindUsagesOptions myFindPackageOptions;
+    private final JavaThrowFindUsagesOptions myFindThrowOptions;
+    private final JavaVariableFindUsagesOptions myFindVariableOptions;
 
-  public static JavaFindUsagesHandlerFactory getInstance(@Nonnull Project project) {
-    return project.getExtensionPoint(FindUsagesHandlerFactory.class).findExtensionOrFail(JavaFindUsagesHandlerFactory.class);
-  }
-
-  @Inject
-  public JavaFindUsagesHandlerFactory(Project project) {
-    myFindClassOptions = new JavaClassFindUsagesOptions(project);
-    myFindMethodOptions = new JavaMethodFindUsagesOptions(project);
-    myFindPackageOptions = new JavaPackageFindUsagesOptions(project);
-    myFindThrowOptions = new JavaThrowFindUsagesOptions(project);
-    myFindVariableOptions = new JavaVariableFindUsagesOptions(project);
-  }
-
-  @Override
-  public boolean canFindUsages(@Nonnull PsiElement element) {
-    return new JavaFindUsagesProvider().canFindUsagesFor(element);
-  }
-
-  @Override
-  public FindUsagesHandler createFindUsagesHandler(@Nonnull PsiElement element, boolean forHighlightUsages) {
-    if (element instanceof PsiDirectory directory) {
-      PsiJavaPackage psiPackage = JavaDirectoryService.getInstance().getPackage(directory);
-      return psiPackage == null ? null : new JavaFindUsagesHandler(psiPackage, this);
+    public static JavaFindUsagesHandlerFactory getInstance(@Nonnull Project project) {
+        return project.getExtensionPoint(FindUsagesHandlerFactory.class).findExtensionOrFail(JavaFindUsagesHandlerFactory.class);
     }
 
-    if (element instanceof PsiMethod method && !forHighlightUsages) {
-      PsiMethod[] methods = SuperMethodWarningUtil.checkSuperMethods(
-        method,
-        FindBundle.message("find.super.method.warning.action.verb")
-      );
-      if (methods.length > 1) {
-        return new JavaFindUsagesHandler(element, methods, this);
-      }
-      if (methods.length == 1) {
-        return new JavaFindUsagesHandler(methods[0], this);
-      }
-      return FindUsagesHandler.NULL_HANDLER;
+    @Inject
+    public JavaFindUsagesHandlerFactory(Project project) {
+        myFindClassOptions = new JavaClassFindUsagesOptions(project);
+        myFindMethodOptions = new JavaMethodFindUsagesOptions(project);
+        myFindPackageOptions = new JavaPackageFindUsagesOptions(project);
+        myFindThrowOptions = new JavaThrowFindUsagesOptions(project);
+        myFindVariableOptions = new JavaVariableFindUsagesOptions(project);
     }
 
-    return new JavaFindUsagesHandler(element, this);
-  }
+    @Override
+    public boolean canFindUsages(@Nonnull PsiElement element) {
+        return new JavaFindUsagesProvider().canFindUsagesFor(element);
+    }
 
-  public JavaClassFindUsagesOptions getFindClassOptions() {
-    return myFindClassOptions;
-  }
+    @Override
+    @RequiredUIAccess
+    public FindUsagesHandler createFindUsagesHandler(@Nonnull PsiElement element, boolean forHighlightUsages) {
+        if (element instanceof PsiDirectory directory) {
+            PsiJavaPackage psiPackage = JavaDirectoryService.getInstance().getPackage(directory);
+            return psiPackage == null ? null : new JavaFindUsagesHandler(psiPackage, this);
+        }
 
-  public JavaMethodFindUsagesOptions getFindMethodOptions() {
-    return myFindMethodOptions;
-  }
+        if (element instanceof PsiMethod method && !forHighlightUsages) {
+            PsiMethod[] methods = SuperMethodWarningUtil.checkSuperMethods(
+                method,
+                FindLocalize.findSuperMethodWarningActionVerb()
+            );
+            if (methods.length > 1) {
+                return new JavaFindUsagesHandler(element, methods, this);
+            }
+            if (methods.length == 1) {
+                return new JavaFindUsagesHandler(methods[0], this);
+            }
+            return FindUsagesHandler.NULL_HANDLER;
+        }
 
-  public JavaPackageFindUsagesOptions getFindPackageOptions() {
-    return myFindPackageOptions;
-  }
+        return new JavaFindUsagesHandler(element, this);
+    }
 
-  public JavaThrowFindUsagesOptions getFindThrowOptions() {
-    return myFindThrowOptions;
-  }
+    public JavaClassFindUsagesOptions getFindClassOptions() {
+        return myFindClassOptions;
+    }
 
-  public JavaVariableFindUsagesOptions getFindVariableOptions() {
-    return myFindVariableOptions;
-  }
+    public JavaMethodFindUsagesOptions getFindMethodOptions() {
+        return myFindMethodOptions;
+    }
+
+    public JavaPackageFindUsagesOptions getFindPackageOptions() {
+        return myFindPackageOptions;
+    }
+
+    public JavaThrowFindUsagesOptions getFindThrowOptions() {
+        return myFindThrowOptions;
+    }
+
+    public JavaVariableFindUsagesOptions getFindVariableOptions() {
+        return myFindVariableOptions;
+    }
 }

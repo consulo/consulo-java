@@ -50,9 +50,8 @@ class WrapReturnValueHandler implements RefactoringActionHandler {
     ) {
         ScrollingModel scrollingModel = editor.getScrollingModel();
         scrollingModel.scrollToCaret(ScrollType.MAKE_VISIBLE);
-        PsiElement element = dataContext.getData(PsiElement.KEY);
         PsiMethod selectedMethod = null;
-        if (element instanceof PsiMethod method) {
+        if (dataContext.getData(PsiElement.KEY) instanceof PsiMethod method) {
             selectedMethod = method;
         }
         else {
@@ -73,8 +72,8 @@ class WrapReturnValueHandler implements RefactoringActionHandler {
                 editor,
                 RefactoringLocalize.cannotPerformRefactoringWithReason(
                     JavaRefactoringLocalize.theCaretShouldBePositionedAtTheNameOfTheMethodToBeRefactored()
-                ).get(),
-                REFACTORING_NAME.get(),
+                ),
+                REFACTORING_NAME,
                 this.getHelpID()
             );
             return;
@@ -112,8 +111,8 @@ class WrapReturnValueHandler implements RefactoringActionHandler {
                 editor,
                 RefactoringLocalize.cannotPerformRefactoringWithReason(
                     JavaRefactoringLocalize.constructorReturnsCanNotBeWrapped()
-                ).get(),
-                REFACTORING_NAME.get(),
+                ),
+                REFACTORING_NAME,
                 this.getHelpID()
             );
             return;
@@ -125,13 +124,13 @@ class WrapReturnValueHandler implements RefactoringActionHandler {
                 editor,
                 RefactoringLocalize.cannotPerformRefactoringWithReason(
                     JavaRefactoringLocalize.methodSelectedReturnsVoid()
-                ).get(),
-                REFACTORING_NAME.get(),
+                ),
+                REFACTORING_NAME,
                 this.getHelpID()
             );
             return;
         }
-        method = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringLocalize.toRefactor().get());
+        method = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringLocalize.toRefactor());
         if (method == null) {
             return;
         }
@@ -142,8 +141,8 @@ class WrapReturnValueHandler implements RefactoringActionHandler {
                 editor,
                 RefactoringLocalize.cannotPerformRefactoringWithReason(
                     JavaRefactoringLocalize.theSelectedMethodCannotBeWrappedBecauseItIsDefinedInANonProjectClass()
-                ).get(),
-                REFACTORING_NAME.get(),
+                ),
+                REFACTORING_NAME,
                 this.getHelpID()
             );
             return;

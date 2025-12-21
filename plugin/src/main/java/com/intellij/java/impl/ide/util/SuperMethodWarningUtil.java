@@ -48,13 +48,13 @@ public class SuperMethodWarningUtil {
 
     @Nonnull
     @RequiredUIAccess
-    public static PsiMethod[] checkSuperMethods(PsiMethod method, String actionString) {
+    public static PsiMethod[] checkSuperMethods(PsiMethod method, @Nonnull LocalizeValue actionString) {
         return checkSuperMethods(method, actionString, null);
     }
 
     @Nonnull
     @RequiredUIAccess
-    public static PsiMethod[] checkSuperMethods(PsiMethod method, String actionString, Collection<PsiElement> ignore) {
+    public static PsiMethod[] checkSuperMethods(PsiMethod method, @Nonnull LocalizeValue actionString, Collection<PsiElement> ignore) {
         PsiClass aClass = method.getContainingClass();
         if (aClass == null) {
             return new PsiMethod[]{method};
@@ -102,7 +102,7 @@ public class SuperMethodWarningUtil {
     }
 
     @RequiredUIAccess
-    public static PsiMethod checkSuperMethod(PsiMethod method, String actionString) {
+    public static PsiMethod checkSuperMethod(PsiMethod method, @Nonnull LocalizeValue actionString) {
         PsiClass aClass = method.getContainingClass();
         if (aClass == null) {
             return method;
@@ -141,7 +141,12 @@ public class SuperMethodWarningUtil {
     }
 
     @RequiredReadAction
-    public static void checkSuperMethod(PsiMethod method, String actionString, PsiElementProcessor<PsiMethod> processor, Editor editor) {
+    public static void checkSuperMethod(
+        PsiMethod method,
+        @Nonnull LocalizeValue actionString,
+        PsiElementProcessor<PsiMethod> processor,
+        Editor editor
+    ) {
         PsiClass aClass = method.getContainingClass();
         if (aClass == null) {
             processor.execute(method);
@@ -171,9 +176,8 @@ public class SuperMethodWarningUtil {
         JBList<String> list = new JBList<>(renameBase, renameCurrent);
         JBPopup popup = ((AWTPopupFactory) JBPopupFactory.getInstance()).createListPopupBuilder(list)
             .setItemChoosenCallback(() -> {
-                Object value = list.getSelectedValue();
-                if (value instanceof String) {
-                    processor.execute(methods[value.equals(renameBase) ? 0 : 1]);
+                if (list.getSelectedValue() instanceof String stringValue) {
+                    processor.execute(methods[stringValue.equals(renameBase) ? 0 : 1]);
                 }
             })
             .setMovable(false)

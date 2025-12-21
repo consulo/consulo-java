@@ -138,7 +138,7 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
         else if (element instanceof PsiMethod method) {
             PsiMethod[] methods = SuperMethodWarningUtil.checkSuperMethods(
                 method,
-                RefactoringLocalize.toDeleteWithUsageSearch().get(),
+                RefactoringLocalize.toDeleteWithUsageSearch(),
                 allElementsToDelete
             );
             if (methods.length == 0) {

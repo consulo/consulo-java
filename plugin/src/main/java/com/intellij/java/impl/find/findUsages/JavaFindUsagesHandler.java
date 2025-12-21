@@ -247,7 +247,7 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
                         for (PsiMethod accessor : accessors) {
                             ContainerUtil.addAll(
                                 elements,
-                                SuperMethodWarningUtil.checkSuperMethods(accessor, FindLocalize.findSuperMethodWarningActionVerb().get())
+                                SuperMethodWarningUtil.checkSuperMethods(accessor, FindLocalize.findSuperMethodWarningActionVerb())
                             );
                         }
                         return PsiUtilCore.toPsiElementArray(elements);

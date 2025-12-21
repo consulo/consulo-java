@@ -346,7 +346,7 @@ public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
                 return element;
             }
         }
-        return SuperMethodWarningUtil.checkSuperMethod(method, RefactoringLocalize.toRename().get());
+        return SuperMethodWarningUtil.checkSuperMethod(method, RefactoringLocalize.toRename());
     }
 
     @Override
@@ -371,7 +371,7 @@ public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
         else {
             SuperMethodWarningUtil.checkSuperMethod(
                 psiMethod,
-                "Rename",
+                LocalizeValue.localizeTODO("Rename"),
                 method -> {
                     if (!PsiElementRenameHandler.canRename(method.getProject(), editor, method)) {
                         return false;
