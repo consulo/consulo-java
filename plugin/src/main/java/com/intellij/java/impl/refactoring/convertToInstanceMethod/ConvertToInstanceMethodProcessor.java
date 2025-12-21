@@ -184,7 +184,7 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
     }
 
     @Override
-    @RequiredUIAccess
+    @RequiredWriteAction
     protected void performRefactoring(@Nonnull UsageInfo[] usages) {
         if (!CommonRefactoringUtil.checkReadOnlyStatus(myProject, myTargetClass)) {
             return;
@@ -240,7 +240,8 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
                 PsiMethod newMethod = addMethodToClass(psiClass);
                 PsiUtil.setModifierProperty(
                     newMethod,
-                    myNewVisibility != null && !myNewVisibility.equals(VisibilityUtil.ESCALATE_VISIBILITY) ? myNewVisibility
+                    myNewVisibility != null && !myNewVisibility.equals(VisibilityUtil.ESCALATE_VISIBILITY)
+                        ? myNewVisibility
                         : PsiModifier.PUBLIC,
                     true
                 );
@@ -381,7 +382,7 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
 
     @Nonnull
     @Override
-    protected String getCommandName() {
+    protected LocalizeValue getCommandName() {
         return ConvertToInstanceMethodHandler.REFACTORING_NAME;
     }
 

@@ -91,8 +91,8 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
     @Nonnull
     @Override
     @RequiredReadAction
-    protected String getCommandName() {
-        return RefactoringLocalize.encapsulateFieldsCommandName(DescriptiveNameUtil.getDescriptiveName(myClass)).get();
+    protected LocalizeValue getCommandName() {
+        return RefactoringLocalize.encapsulateFieldsCommandName(DescriptiveNameUtil.getDescriptiveName(myClass));
     }
 
     @Override

@@ -19,6 +19,7 @@ import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.ui.util.DocCommentPolicy;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
@@ -29,43 +30,60 @@ import consulo.project.Project;
  * @author dsl
  */
 public class ExtractSuperClassProcessor extends ExtractSuperBaseProcessor {
-
-  public ExtractSuperClassProcessor(Project project,
-                                    PsiDirectory targetDirectory, String newClassName, PsiClass aClass, MemberInfo[] memberInfos, boolean replaceInstanceOf,
-                                    DocCommentPolicy javaDocPolicy) {
-    super(project, replaceInstanceOf, targetDirectory, newClassName, aClass, memberInfos, javaDocPolicy);
-  }
-
-
-  protected PsiClass extractSuper(String superClassName) throws IncorrectOperationException {
-    return ExtractSuperClassUtil.extractSuperClass(myProject, myClass.getContainingFile().getContainingDirectory(), superClassName, myClass, myMemberInfos, myJavaDocPolicy);
-  }
-
-  protected boolean isSuperInheritor(PsiClass aClass) {
-    if (!aClass.isInterface()) {
-      return myClass.isInheritor(aClass, true);
+    public ExtractSuperClassProcessor(
+        Project project,
+        PsiDirectory targetDirectory,
+        String newClassName,
+        PsiClass aClass,
+        MemberInfo[] memberInfos,
+        boolean replaceInstanceOf,
+        DocCommentPolicy javaDocPolicy
+    ) {
+        super(project, replaceInstanceOf, targetDirectory, newClassName, aClass, memberInfos, javaDocPolicy);
     }
-    else {
-      return doesAnyExtractedInterfaceExtends(aClass);
-    }
-  }
 
-  protected boolean isInSuper(PsiElement member) {
-    if (member instanceof PsiField) {
-      PsiClass containingClass = ((PsiField)member).getContainingClass();
-      if (myClass.isInheritor(containingClass, true)) return true;
-      PsiField field = ((PsiField)member);
-      return doMemberInfosContain(field);
+    @Override
+    @RequiredWriteAction
+    protected PsiClass extractSuper(String superClassName) throws IncorrectOperationException {
+        return ExtractSuperClassUtil.extractSuperClass(
+            myProject,
+            myClass.getContainingFile().getContainingDirectory(),
+            superClassName,
+            myClass,
+            myMemberInfos,
+            myJavaDocPolicy
+        );
     }
-    else if (member instanceof PsiMethod) {
-      PsiMethod method = (PsiMethod) member;
-      PsiClass currentSuperClass = myClass.getSuperClass();
-      if (currentSuperClass != null) {
-        PsiMethod methodBySignature = currentSuperClass.findMethodBySignature(method, true);
-        if (methodBySignature != null) return true;
-      }
-      return doMemberInfosContain(method);
+
+    @Override
+    protected boolean isSuperInheritor(PsiClass aClass) {
+        if (!aClass.isInterface()) {
+            return myClass.isInheritor(aClass, true);
+        }
+        else {
+            return doesAnyExtractedInterfaceExtends(aClass);
+        }
     }
-    return false;
-  }
+
+    @Override
+    protected boolean isInSuper(PsiElement member) {
+        if (member instanceof PsiField field) {
+            //noinspection SimplifiableIfStatement
+            if (myClass.isInheritor(field.getContainingClass(), true)) {
+                return true;
+            }
+            return doMemberInfosContain(field);
+        }
+        else if (member instanceof PsiMethod method) {
+            PsiClass currentSuperClass = myClass.getSuperClass();
+            if (currentSuperClass != null) {
+                PsiMethod methodBySignature = currentSuperClass.findMethodBySignature(method, true);
+                if (methodBySignature != null) {
+                    return true;
+                }
+            }
+            return doMemberInfosContain(method);
+        }
+        return false;
+    }
 }

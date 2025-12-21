@@ -157,7 +157,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
             }
             typeParams.addAll(typeParamSet);
         }
-        myClass = new WriteCommandAction<PsiClass>(myProject, getCommandName()) {
+        myClass = new WriteCommandAction<PsiClass>(myProject, getCommandName().get()) {
             @Override
             @RequiredReadAction
             protected void run(Result<PsiClass> result) throws Throwable {
@@ -282,8 +282,8 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
 
     @Nonnull
     @Override
-    protected String getCommandName() {
-        return JavaRefactoringLocalize.extractedClassCommandName(newClassName).get();
+    protected LocalizeValue getCommandName() {
+        return JavaRefactoringLocalize.extractedClassCommandName(newClassName);
     }
 
     @Nonnull

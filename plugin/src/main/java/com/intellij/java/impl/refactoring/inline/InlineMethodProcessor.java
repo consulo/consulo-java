@@ -137,8 +137,8 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
 
     @Nonnull
     @Override
-    protected String getCommandName() {
-        return RefactoringLocalize.inlineMethodCommand(myDescriptiveName).get();
+    protected LocalizeValue getCommandName() {
+        return RefactoringLocalize.inlineMethodCommand(myDescriptiveName);
     }
 
     @Nonnull

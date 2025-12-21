@@ -329,7 +329,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
         SimpleReference<Usage[]> convertUsagesRef = new SimpleReference<>();
         if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(
             () -> project.getApplication().runReadAction(() -> convertUsagesRef.set(UsageInfo2UsageAdapter.convert(usageInfos))),
-            "Preprocess Usages",
+            LocalizeValue.localizeTODO("Preprocess Usages"),
             true,
             project
         )) {
@@ -342,13 +342,14 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
         Usage[] usages = convertUsagesRef.get();
 
         UsageViewPresentation presentation = new UsageViewPresentation();
-        presentation.setTabText("Infer Nullity Preview");
+        presentation.setTabText(LocalizeValue.localizeTODO("Infer Nullity Preview"));
         presentation.setShowReadOnlyStatusAsRed(true);
         presentation.setShowCancelButton(true);
         presentation.setUsagesString(RefactoringLocalize.usageviewUsagestext());
 
         UsageView usageView =
-            UsageViewManager.getInstance(project).showUsages(targets, usages, presentation, rerunFactory(annotateLocalVars, project, scope));
+            UsageViewManager.getInstance(project)
+                .showUsages(targets, usages, presentation, rerunFactory(annotateLocalVars, project, scope));
 
         Runnable refactoringRunnable = applyRunnable(project, () ->
         {
@@ -356,13 +357,15 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
             return infos.toArray(new UsageInfo[infos.size()]);
         });
 
-        String canNotMakeString = "Cannot perform operation.\n" +
-            "There were changes in code after usages have been found.\n" +
-            "Please perform operation search again.";
+        LocalizeValue canNotMakeString = LocalizeValue.localizeTODO(
+            "Cannot perform operation.\n" +
+                "There were changes in code after usages have been found.\n" +
+                "Please perform operation search again."
+        );
 
         usageView.addPerformOperationAction(
             refactoringRunnable,
-            INFER_NULLITY_ANNOTATIONS.get(),
+            INFER_NULLITY_ANNOTATIONS,
             canNotMakeString,
             INFER_NULLITY_ANNOTATIONS,
             false

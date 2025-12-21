@@ -24,25 +24,26 @@ import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 
 /**
- *  @author dsl
+ * @author dsl
  */
 public class NewParameterCollidesWithLocalUsageInfo extends UnresolvableCollisionUsageInfo {
-  private final PsiElement myConflictingElement;
-  private final PsiMethod myMethod;
+    private final PsiElement myConflictingElement;
+    private final PsiMethod myMethod;
 
-  public NewParameterCollidesWithLocalUsageInfo(PsiElement element, PsiElement referencedElement,
-                                                PsiMethod method) {
-    super(element, referencedElement);
-    myConflictingElement = referencedElement;
-    myMethod = method;
-  }
+    public NewParameterCollidesWithLocalUsageInfo(
+        PsiElement element, PsiElement referencedElement,
+        PsiMethod method
+    ) {
+        super(element, referencedElement);
+        myConflictingElement = referencedElement;
+        myMethod = method;
+    }
 
-  public String getDescription() {
-    LocalizeValue buffer = RefactoringLocalize.thereIsAlreadyA0In1ItWillConflictWithTheNewParameter(
-      RefactoringUIUtil.getDescription(myConflictingElement, true),
-      RefactoringUIUtil.getDescription(myMethod, true)
-    );
-
-    return CommonRefactoringUtil.capitalize(buffer.get());
-  }
+    @Override
+    public LocalizeValue getDescription() {
+        return RefactoringLocalize.thereIsAlreadyA0In1ItWillConflictWithTheNewParameter(
+            RefactoringUIUtil.getDescription(myConflictingElement, true),
+            RefactoringUIUtil.getDescription(myMethod, true)
+        );
+    }
 }

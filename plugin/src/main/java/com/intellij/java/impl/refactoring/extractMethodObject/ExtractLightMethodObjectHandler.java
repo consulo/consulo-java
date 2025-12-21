@@ -27,6 +27,8 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.document.util.TextRange;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.psi.*;
@@ -38,279 +40,308 @@ import consulo.usage.UsageInfo;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
-
 import jakarta.annotation.Nullable;
+
 import java.util.List;
 
 public class ExtractLightMethodObjectHandler {
-  private static final Logger LOG = Logger.getInstance(ExtractLightMethodObjectHandler.class);
+    private static final Logger LOG = Logger.getInstance(ExtractLightMethodObjectHandler.class);
 
-  public static class ExtractedData {
-    private final String myGeneratedCallText;
-    private final PsiClass myGeneratedInnerClass;
-    private final PsiElement myAnchor;
+    public static class ExtractedData {
+        private final String myGeneratedCallText;
+        private final PsiClass myGeneratedInnerClass;
+        private final PsiElement myAnchor;
 
-    public ExtractedData(String generatedCallText, PsiClass generatedInnerClass, PsiElement anchor) {
-      myGeneratedCallText = generatedCallText;
-      myGeneratedInnerClass = generatedInnerClass;
-      myAnchor = anchor;
-    }
-
-    public PsiElement getAnchor() {
-      return myAnchor;
-    }
-
-    public String getGeneratedCallText() {
-      return myGeneratedCallText;
-    }
-
-    public PsiClass getGeneratedInnerClass() {
-      return myGeneratedInnerClass;
-    }
-  }
-
-  @Nullable
-  public static ExtractedData extractLightMethodObject(final Project project,
-                                                       @Nullable PsiElement originalContext,
-                                                       @Nonnull PsiCodeFragment fragment,
-                                                       final String methodName) throws PrepareFailedException {
-    PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
-    PsiElement[] elements = completeToStatementArray(fragment, elementFactory);
-    if (elements == null) {
-      elements = CodeInsightUtil.findStatementsInRange(fragment, 0, fragment.getTextLength());
-    }
-    if (elements.length == 0) {
-      return null;
-    }
-
-    if (originalContext == null) {
-      return null;
-    }
-
-    PsiFile file = originalContext.getContainingFile();
-
-    PsiFile copy = PsiFileFactory.getInstance(project).createFileFromText(file.getName(), file.getFileType(), file.getText(), file.getModificationStamp(), false);
-
-    if (originalContext instanceof PsiKeyword && PsiModifier.PRIVATE.equals(originalContext.getText())) {
-      PsiNameIdentifierOwner identifierOwner = PsiTreeUtil.getParentOfType(originalContext, PsiNameIdentifierOwner.class);
-      if (identifierOwner != null) {
-        PsiElement identifier = identifierOwner.getNameIdentifier();
-        if (identifier != null) {
-          originalContext = identifier;
+        public ExtractedData(String generatedCallText, PsiClass generatedInnerClass, PsiElement anchor) {
+            myGeneratedCallText = generatedCallText;
+            myGeneratedInnerClass = generatedInnerClass;
+            myAnchor = anchor;
         }
-      }
-    }
 
-    TextRange range = originalContext.getTextRange();
-    PsiElement originalAnchor = CodeInsightUtil.findElementInRange(copy, range.getStartOffset(), range.getEndOffset(), originalContext.getClass());
-    if (originalAnchor == null) {
-      PsiElement elementAt = copy.findElementAt(range.getStartOffset());
-      if (elementAt != null && elementAt.getClass() == originalContext.getClass()) {
-        originalAnchor = PsiTreeUtil.skipSiblingsForward(elementAt, PsiWhiteSpace.class);
-      }
-    }
-
-    PsiClass containingClass = PsiTreeUtil.getParentOfType(originalAnchor, PsiClass.class, false);
-    if (containingClass == null) {
-      return null;
-    }
-
-    PsiElement anchor = RefactoringUtil.getParentStatement(originalAnchor, false);
-    if (anchor == null) {
-      if (PsiTreeUtil.getParentOfType(originalAnchor, PsiCodeBlock.class) != null) {
-        anchor = originalAnchor;
-      }
-    }
-
-    PsiElement container;
-    if (anchor == null) {
-      container = ((PsiClassInitializer) containingClass.add(elementFactory.createClassInitializer())).getBody();
-      anchor = container.getLastChild();
-    } else {
-      container = anchor.getParent();
-    }
-
-    PsiElement firstElementCopy = container.addRangeBefore(elements[0], elements[elements.length - 1], anchor);
-    final PsiElement[] elementsCopy = CodeInsightUtil.findStatementsInRange(copy, firstElementCopy.getTextRange().getStartOffset(), anchor.getTextRange().getStartOffset());
-    if (elementsCopy.length == 0) {
-      return null;
-    }
-    if (elementsCopy[elementsCopy.length - 1] instanceof PsiExpressionStatement) {
-      PsiExpression expr = ((PsiExpressionStatement) elementsCopy[elementsCopy.length - 1]).getExpression();
-      if (!(expr instanceof PsiAssignmentExpression)) {
-        PsiType expressionType = GenericsUtil.getVariableTypeByExpressionType(expr.getType());
-        if (expressionType instanceof PsiDisjunctionType) {
-          expressionType = ((PsiDisjunctionType) expressionType).getLeastUpperBound();
+        public PsiElement getAnchor() {
+            return myAnchor;
         }
-        if (isValidVariableType(expressionType)) {
-          String uniqueResultName = JavaCodeStyleManager.getInstance(project).suggestUniqueVariableName("result", elementsCopy[0], true);
-          String statementText = expressionType.getCanonicalText() + " " + uniqueResultName + " = " + expr.getText() + ";";
-          elementsCopy[elementsCopy.length - 1] = elementsCopy[elementsCopy.length - 1].replace(elementFactory.createStatementFromText(statementText, elementsCopy[elementsCopy.length -
-              1]));
+
+        public String getGeneratedCallText() {
+            return myGeneratedCallText;
         }
-      }
+
+        public PsiClass getGeneratedInnerClass() {
+            return myGeneratedInnerClass;
+        }
     }
 
-    LOG.assertTrue(elementsCopy[0].getParent() == container, "element: " + elementsCopy[0].getText() + "; container: " + container.getText());
-    int startOffsetInContainer = elementsCopy[0].getStartOffsetInParent();
-
-    ControlFlow controlFlow;
-    try {
-      controlFlow = ControlFlowFactory.getInstance(project).getControlFlow(container, LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance(), ControlFlowOptions.NO_CONST_EVALUATE);
-    } catch (AnalysisCanceledException e) {
-      return null;
-    }
-
-    List<PsiVariable> variables = ControlFlowUtil.getUsedVariables(controlFlow, controlFlow.getStartOffset(elementsCopy[0]), controlFlow.getEndOffset(elementsCopy[elementsCopy.length - 1]));
-
-    variables = ContainerUtil.filter(variables, variable ->
-    {
-      PsiElement variableScope = PsiUtil.getVariableCodeBlock(variable, null);
-      return variableScope != null && PsiTreeUtil.isAncestor(variableScope, elementsCopy[elementsCopy.length - 1], true);
-    });
-
-    String outputVariables = StringUtil.join(variables, variable -> "\"variable: \" + " + variable.getName(), " +");
-    PsiStatement outStatement = elementFactory.createStatementFromText("System.out.println(" + outputVariables + ");", anchor);
-    outStatement = (PsiStatement) container.addAfter(outStatement, elementsCopy[elementsCopy.length - 1]);
-
-    copy.accept(new JavaRecursiveElementWalkingVisitor() {
-      private void makePublic(PsiMember method) {
-        if (method.hasModifierProperty(PsiModifier.PRIVATE)) {
-          VisibilityUtil.setVisibility(method.getModifierList(), PsiModifier.PUBLIC);
+    @Nullable
+    @RequiredWriteAction
+    public static ExtractedData extractLightMethodObject(
+        final Project project,
+        @Nullable PsiElement originalContext,
+        @Nonnull PsiCodeFragment fragment,
+        final String methodName
+    ) throws PrepareFailedException {
+        PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
+        PsiElement[] elements = completeToStatementArray(fragment, elementFactory);
+        if (elements == null) {
+            elements = CodeInsightUtil.findStatementsInRange(fragment, 0, fragment.getTextLength());
         }
-      }
+        if (elements.length == 0) {
+            return null;
+        }
 
-      @Override
-      public void visitMethod(PsiMethod method) {
-        super.visitMethod(method);
-        makePublic(method);
-      }
+        if (originalContext == null) {
+            return null;
+        }
 
-      @Override
-      public void visitField(PsiField field) {
-        super.visitField(field);
-        makePublic(field);
-      }
-    });
+        PsiFile file = originalContext.getContainingFile();
 
-    ExtractMethodObjectProcessor extractMethodObjectProcessor = new ExtractMethodObjectProcessor(project, null, elementsCopy, "") {
-      @Override
-      protected AbstractExtractDialog createExtractMethodObjectDialog(MyExtractMethodProcessor processor) {
-        return new LightExtractMethodObjectDialog(this, methodName);
-      }
+        PsiFile copy = PsiFileFactory.getInstance(project)
+            .createFileFromText(file.getName(), file.getFileType(), file.getText(), file.getModificationStamp(), false);
 
-      @Override
-      protected boolean isFoldingApplicable() {
-        return false;
-      }
-    };
-    extractMethodObjectProcessor.getExtractProcessor().setShowErrorDialogs(false);
+        if (originalContext instanceof PsiKeyword && PsiModifier.PRIVATE.equals(originalContext.getText())) {
+            PsiNameIdentifierOwner identifierOwner = PsiTreeUtil.getParentOfType(originalContext, PsiNameIdentifierOwner.class);
+            if (identifierOwner != null) {
+                PsiElement identifier = identifierOwner.getNameIdentifier();
+                if (identifier != null) {
+                    originalContext = identifier;
+                }
+            }
+        }
 
-    ExtractMethodObjectProcessor.MyExtractMethodProcessor extractProcessor = extractMethodObjectProcessor.getExtractProcessor();
-    if (extractProcessor.prepare()) {
-      if (extractProcessor.showDialog()) {
+        TextRange range = originalContext.getTextRange();
+        PsiElement originalAnchor =
+            CodeInsightUtil.findElementInRange(copy, range.getStartOffset(), range.getEndOffset(), originalContext.getClass());
+        if (originalAnchor == null) {
+            PsiElement elementAt = copy.findElementAt(range.getStartOffset());
+            if (elementAt != null && elementAt.getClass() == originalContext.getClass()) {
+                originalAnchor = PsiTreeUtil.skipSiblingsForward(elementAt, PsiWhiteSpace.class);
+            }
+        }
+
+        PsiClass containingClass = PsiTreeUtil.getParentOfType(originalAnchor, PsiClass.class, false);
+        if (containingClass == null) {
+            return null;
+        }
+
+        PsiElement anchor = RefactoringUtil.getParentStatement(originalAnchor, false);
+        if (anchor == null) {
+            if (PsiTreeUtil.getParentOfType(originalAnchor, PsiCodeBlock.class) != null) {
+                anchor = originalAnchor;
+            }
+        }
+
+        PsiElement container;
+        if (anchor == null) {
+            container = ((PsiClassInitializer) containingClass.add(elementFactory.createClassInitializer())).getBody();
+            anchor = container.getLastChild();
+        }
+        else {
+            container = anchor.getParent();
+        }
+
+        PsiElement firstElementCopy = container.addRangeBefore(elements[0], elements[elements.length - 1], anchor);
+        final PsiElement[] elementsCopy = CodeInsightUtil.findStatementsInRange(
+            copy,
+            firstElementCopy.getTextRange().getStartOffset(),
+            anchor.getTextRange().getStartOffset()
+        );
+        if (elementsCopy.length == 0) {
+            return null;
+        }
+        if (elementsCopy[elementsCopy.length - 1] instanceof PsiExpressionStatement) {
+            PsiExpression expr = ((PsiExpressionStatement) elementsCopy[elementsCopy.length - 1]).getExpression();
+            if (!(expr instanceof PsiAssignmentExpression)) {
+                PsiType expressionType = GenericsUtil.getVariableTypeByExpressionType(expr.getType());
+                if (expressionType instanceof PsiDisjunctionType disjunctionType) {
+                    expressionType = ((PsiDisjunctionType) disjunctionType).getLeastUpperBound();
+                }
+                if (isValidVariableType(expressionType)) {
+                    String uniqueResultName =
+                        JavaCodeStyleManager.getInstance(project).suggestUniqueVariableName("result", elementsCopy[0], true);
+                    String statementText = expressionType.getCanonicalText() + " " + uniqueResultName + " = " + expr.getText() + ";";
+                    elementsCopy[elementsCopy.length - 1] = elementsCopy[elementsCopy.length - 1]
+                        .replace(elementFactory.createStatementFromText(statementText, elementsCopy[elementsCopy.length - 1]));
+                }
+            }
+        }
+
+        LOG.assertTrue(
+            elementsCopy[0].getParent() == container,
+            "element: " + elementsCopy[0].getText() + "; container: " + container.getText()
+        );
+        int startOffsetInContainer = elementsCopy[0].getStartOffsetInParent();
+
+        ControlFlow controlFlow;
         try {
-          extractProcessor.doExtract();
-          UsageInfo[] usages = extractMethodObjectProcessor.findUsages();
-          extractMethodObjectProcessor.performRefactoring(usages);
-          extractMethodObjectProcessor.runChangeSignature();
-        } catch (IncorrectOperationException e) {
-          LOG.error(e);
+            controlFlow = ControlFlowFactory.getInstance(project)
+                .getControlFlow(container, LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance(), ControlFlowOptions.NO_CONST_EVALUATE);
         }
-        if (extractMethodObjectProcessor.isCreateInnerClass()) {
-          extractMethodObjectProcessor.changeInstanceAccess(project);
+        catch (AnalysisCanceledException e) {
+            return null;
         }
-        PsiElement method = extractMethodObjectProcessor.getMethod();
-        LOG.assertTrue(method != null);
-        method.delete();
-      }
-    } else {
-      return null;
-    }
 
-    int startOffset = startOffsetInContainer + container.getTextRange().getStartOffset();
-    String generatedCall = copy.getText().substring(startOffset, outStatement.getTextOffset());
-    return new ExtractedData(generatedCall, (PsiClass) CodeStyleManager.getInstance(project).reformat(extractMethodObjectProcessor.getInnerClass()), originalAnchor);
-  }
+        List<PsiVariable> variables = ControlFlowUtil.getUsedVariables(
+            controlFlow,
+            controlFlow.getStartOffset(elementsCopy[0]),
+            controlFlow.getEndOffset(elementsCopy[elementsCopy.length - 1])
+        );
 
-  @Nullable
-  private static PsiElement[] completeToStatementArray(PsiCodeFragment fragment, PsiElementFactory elementFactory) {
-    PsiExpression expression = CodeInsightUtil.findExpressionInRange(fragment, 0, fragment.getTextLength());
-    if (expression != null) {
-      String completeExpressionText = null;
-      if (expression instanceof PsiArrayInitializerExpression) {
-        PsiExpression[] initializers = ((PsiArrayInitializerExpression) expression).getInitializers();
-        if (initializers.length > 0) {
-          PsiType type = initializers[0].getType();
-          if (type != null) {
-            completeExpressionText = "new " + type.getCanonicalText() + "[]" + expression.getText();
-          }
+        variables = ContainerUtil.filter(
+            variables,
+            variable -> {
+                PsiElement variableScope = PsiUtil.getVariableCodeBlock(variable, null);
+                return variableScope != null && PsiTreeUtil.isAncestor(variableScope, elementsCopy[elementsCopy.length - 1], true);
+            }
+        );
+
+        String outputVariables = StringUtil.join(variables, variable -> "\"variable: \" + " + variable.getName(), " +");
+        PsiStatement outStatement = elementFactory.createStatementFromText("System.out.println(" + outputVariables + ");", anchor);
+        outStatement = (PsiStatement) container.addAfter(outStatement, elementsCopy[elementsCopy.length - 1]);
+
+        copy.accept(new JavaRecursiveElementWalkingVisitor() {
+            private void makePublic(PsiMember method) {
+                if (method.isPrivate()) {
+                    VisibilityUtil.setVisibility(method.getModifierList(), PsiModifier.PUBLIC);
+                }
+            }
+
+            @Override
+            public void visitMethod(@Nonnull PsiMethod method) {
+                super.visitMethod(method);
+                makePublic(method);
+            }
+
+            @Override
+            public void visitField(@Nonnull PsiField field) {
+                super.visitField(field);
+                makePublic(field);
+            }
+        });
+
+        ExtractMethodObjectProcessor extractMethodObjectProcessor = new ExtractMethodObjectProcessor(project, null, elementsCopy, "") {
+            @Override
+            protected AbstractExtractDialog createExtractMethodObjectDialog(MyExtractMethodProcessor processor) {
+                return new LightExtractMethodObjectDialog(this, methodName);
+            }
+
+            @Override
+            protected boolean isFoldingApplicable() {
+                return false;
+            }
+        };
+        extractMethodObjectProcessor.getExtractProcessor().setShowErrorDialogs(false);
+
+        ExtractMethodObjectProcessor.MyExtractMethodProcessor extractProcessor = extractMethodObjectProcessor.getExtractProcessor();
+        if (extractProcessor.prepare()) {
+            if (extractProcessor.showDialog()) {
+                try {
+                    extractProcessor.doExtract();
+                    UsageInfo[] usages = extractMethodObjectProcessor.findUsages();
+                    extractMethodObjectProcessor.performRefactoring(usages);
+                    extractMethodObjectProcessor.runChangeSignature();
+                }
+                catch (IncorrectOperationException e) {
+                    LOG.error(e);
+                }
+                if (extractMethodObjectProcessor.isCreateInnerClass()) {
+                    extractMethodObjectProcessor.changeInstanceAccess(project);
+                }
+                PsiElement method = extractMethodObjectProcessor.getMethod();
+                LOG.assertTrue(method != null);
+                method.delete();
+            }
         }
-      } else {
-        completeExpressionText = expression.getText();
-      }
+        else {
+            return null;
+        }
 
-      if (completeExpressionText != null) {
-        return new PsiElement[]{elementFactory.createStatementFromText(completeExpressionText + ";", expression)};
-      }
-    }
-    return null;
-  }
-
-  private static boolean isValidVariableType(PsiType type) {
-    if (type instanceof PsiClassType || type instanceof PsiArrayType || type instanceof PsiPrimitiveType && !PsiType.VOID.equals(type)) {
-      return true;
-    }
-    return false;
-  }
-
-  private static class LightExtractMethodObjectDialog implements AbstractExtractDialog {
-    private final ExtractMethodObjectProcessor myProcessor;
-    private final String myMethodName;
-
-    public LightExtractMethodObjectDialog(ExtractMethodObjectProcessor processor, String methodName) {
-      myProcessor = processor;
-      myMethodName = methodName;
+        int startOffset = startOffsetInContainer + container.getTextRange().getStartOffset();
+        String generatedCall = copy.getText().substring(startOffset, outStatement.getTextOffset());
+        return new ExtractedData(
+            generatedCall,
+            (PsiClass) CodeStyleManager.getInstance(project).reformat(extractMethodObjectProcessor.getInnerClass()),
+            originalAnchor
+        );
     }
 
-    @Override
-    public String getChosenMethodName() {
-      return myMethodName;
+    @Nullable
+    @RequiredReadAction
+    private static PsiElement[] completeToStatementArray(PsiCodeFragment fragment, PsiElementFactory elementFactory) {
+        PsiExpression expression = CodeInsightUtil.findExpressionInRange(fragment, 0, fragment.getTextLength());
+        if (expression != null) {
+            String completeExpressionText = null;
+            if (expression instanceof PsiArrayInitializerExpression arrayInitializer) {
+                PsiExpression[] initializers = arrayInitializer.getInitializers();
+                if (initializers.length > 0) {
+                    PsiType type = initializers[0].getType();
+                    if (type != null) {
+                        completeExpressionText = "new " + type.getCanonicalText() + "[]" + expression.getText();
+                    }
+                }
+            }
+            else {
+                completeExpressionText = expression.getText();
+            }
+
+            if (completeExpressionText != null) {
+                return new PsiElement[]{elementFactory.createStatementFromText(completeExpressionText + ";", expression)};
+            }
+        }
+        return null;
     }
 
-    @Override
-    public VariableData[] getChosenParameters() {
-      InputVariables inputVariables = myProcessor.getExtractProcessor().getInputVariables();
-      return inputVariables.getInputVariables().toArray(new VariableData[inputVariables.getInputVariables().size()]);
+    private static boolean isValidVariableType(PsiType type) {
+        return type instanceof PsiClassType
+            || type instanceof PsiArrayType
+            || type instanceof PsiPrimitiveType && !PsiType.VOID.equals(type);
     }
 
-    @Override
-    public String getVisibility() {
-      return PsiModifier.PUBLIC;
-    }
+    private static class LightExtractMethodObjectDialog implements AbstractExtractDialog {
+        private final ExtractMethodObjectProcessor myProcessor;
+        private final String myMethodName;
 
-    @Override
-    public boolean isMakeStatic() {
-      return false;
-    }
+        public LightExtractMethodObjectDialog(ExtractMethodObjectProcessor processor, String methodName) {
+            myProcessor = processor;
+            myMethodName = methodName;
+        }
 
-    @Override
-    public boolean isChainedConstructor() {
-      return false;
-    }
+        @Override
+        public String getChosenMethodName() {
+            return myMethodName;
+        }
 
-    @Override
-    public PsiType getReturnType() {
-      return null;
-    }
+        @Override
+        public VariableData[] getChosenParameters() {
+            InputVariables inputVariables = myProcessor.getExtractProcessor().getInputVariables();
+            return inputVariables.getInputVariables().toArray(new VariableData[inputVariables.getInputVariables().size()]);
+        }
 
-    @Override
-    public void show() {
-    }
+        @Override
+        public String getVisibility() {
+            return PsiModifier.PUBLIC;
+        }
 
-    @Override
-    public boolean isOK() {
-      return true;
+        @Override
+        public boolean isMakeStatic() {
+            return false;
+        }
+
+        @Override
+        public boolean isChainedConstructor() {
+            return false;
+        }
+
+        @Override
+        public PsiType getReturnType() {
+            return null;
+        }
+
+        @Override
+        public void show() {
+        }
+
+        @Override
+        public boolean isOK() {
+            return true;
+        }
     }
-  }
 }

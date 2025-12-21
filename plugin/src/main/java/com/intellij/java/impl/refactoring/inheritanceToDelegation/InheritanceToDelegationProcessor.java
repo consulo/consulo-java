@@ -942,8 +942,8 @@ public class InheritanceToDelegationProcessor extends BaseRefactoringProcessor {
     @Nonnull
     @Override
     @RequiredReadAction
-    protected String getCommandName() {
-        return RefactoringLocalize.replaceInheritanceWithDelegationCommand(DescriptiveNameUtil.getDescriptiveName(myClass)).get();
+    protected LocalizeValue getCommandName() {
+        return RefactoringLocalize.replaceInheritanceWithDelegationCommand(DescriptiveNameUtil.getDescriptiveName(myClass));
     }
 
     private Set<PsiMember> getAllBaseClassMembers() {
