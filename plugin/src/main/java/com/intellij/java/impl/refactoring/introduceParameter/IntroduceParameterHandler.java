@@ -13,15 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * Created by IntelliJ IDEA.
- * User: dsl
- * Date: 06.05.2002
- * Time: 13:36:30
- * To change template for new class use
- * Code Style | Class Templates options (Tools | IDE Options).
- */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
@@ -38,7 +29,6 @@ import com.intellij.java.impl.refactoring.util.occurrences.ExpressionOccurrenceM
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import consulo.application.ApplicationManager;
 import consulo.application.ui.wm.IdeFocusManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
@@ -52,7 +42,6 @@ import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.TextAttributes;
 import consulo.dataContext.DataContext;
 import consulo.document.util.TextRange;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
@@ -64,6 +53,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.awt.ScrollPaneFactory;
 import consulo.ui.ex.popup.JBPopup;
@@ -75,425 +65,504 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
 import consulo.util.lang.Pair;
-import org.jetbrains.annotations.NonNls;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
+/**
+ * @author dsl
+ * @since 2002-05-06
+ */
 public class IntroduceParameterHandler extends IntroduceHandlerBase {
-  private static final Logger LOG = Logger.getInstance(IntroduceParameterHandler.class);
-  static final String REFACTORING_NAME = RefactoringBundle.message("introduce.parameter.title");
-  private JBPopup myEnclosingMethodsPopup;
-  private InplaceIntroduceParameterPopup myInplaceIntroduceParameterPopup;
+    private static final Logger LOG = Logger.getInstance(IntroduceParameterHandler.class);
+    static final LocalizeValue REFACTORING_NAME = RefactoringLocalize.introduceParameterTitle();
+    private JBPopup myEnclosingMethodsPopup;
+    private InplaceIntroduceParameterPopup myInplaceIntroduceParameterPopup;
 
-  public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
-    PsiDocumentManager.getInstance(project).commitAllDocuments();
-    editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
-    ElementToWorkOn.processElementToWorkOn(editor, file, REFACTORING_NAME, HelpID.INTRODUCE_PARAMETER, project, new ElementToWorkOn.ElementsProcessor<ElementToWorkOn>() {
-      @Override
-      public boolean accept(ElementToWorkOn el) {
-        return true;
-      }
+    @Override
+    @RequiredUIAccess
+    public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
+        PsiDocumentManager.getInstance(project).commitAllDocuments();
+        editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
+        ElementToWorkOn.processElementToWorkOn(
+            editor,
+            file,
+            REFACTORING_NAME.get(),
+            HelpID.INTRODUCE_PARAMETER,
+            project,
+            new ElementToWorkOn.ElementsProcessor<>() {
+                @Override
+                public boolean accept(ElementToWorkOn el) {
+                    return true;
+                }
 
-      @Override
-      public void pass(ElementToWorkOn elementToWorkOn) {
-        if (elementToWorkOn == null) return;
+                @Override
+                @RequiredUIAccess
+                public void pass(ElementToWorkOn elementToWorkOn) {
+                    if (elementToWorkOn == null) {
+                        return;
+                    }
 
-        PsiExpression expr = elementToWorkOn.getExpression();
-        PsiLocalVariable localVar = elementToWorkOn.getLocalVariable();
-        boolean isInvokedOnDeclaration = elementToWorkOn.isInvokedOnDeclaration();
+                    PsiExpression expr = elementToWorkOn.getExpression();
+                    PsiLocalVariable localVar = elementToWorkOn.getLocalVariable();
+                    boolean isInvokedOnDeclaration = elementToWorkOn.isInvokedOnDeclaration();
 
-        invoke(editor, project, expr, localVar, isInvokedOnDeclaration);
-      }
-    });
-  }
-
-  protected boolean invokeImpl(Project project, PsiExpression tempExpr, Editor editor) {
-    return invoke(editor, project, tempExpr, null, false);
-  }
-
-  protected boolean invokeImpl(Project project, PsiLocalVariable localVariable, Editor editor) {
-    return invoke(editor, project, null, localVariable, true);
-  }
-
-  private boolean invoke(Editor editor, Project project, PsiExpression expr,
-                         PsiLocalVariable localVar, boolean invokedOnDeclaration) {
-    LOG.assertTrue(!PsiDocumentManager.getInstance(project).hasUncommitedDocuments());
-    PsiMethod method;
-    if (expr != null) {
-      method = Util.getContainingMethod(expr);
-    } else {
-      method = Util.getContainingMethod(localVar);
+                    invoke(editor, project, expr, localVar, isInvokedOnDeclaration);
+                }
+            }
+        );
     }
 
-    if (LOG.isDebugEnabled()) {
-      LOG.debug("expression:" + expr);
+    @Override
+    @RequiredUIAccess
+    protected boolean invokeImpl(@Nonnull Project project, PsiExpression tempExpr, Editor editor) {
+        return invoke(editor, project, tempExpr, null, false);
     }
 
-    if (expr == null && localVar == null) {
-      LocalizeValue message =
-          RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.selectedBlockShouldRepresentAnExpression());
-      showErrorMessage(project, message.get(), editor);
-      return false;
+    @Override
+    @RequiredUIAccess
+    protected boolean invokeImpl(@Nonnull Project project, PsiLocalVariable localVariable, Editor editor) {
+        return invoke(editor, project, null, localVariable, true);
     }
 
-    if (localVar != null) {
-      PsiElement parent = localVar.getParent();
-      if (!(parent instanceof PsiDeclarationStatement)) {
-        LocalizeValue message =
-            RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.errorWrongCaretPositionLocalOrExpressionName());
-        showErrorMessage(project, message.get(), editor);
-        return false;
-      }
-    }
-
-    if (method == null) {
-      LocalizeValue message =
-          RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.isNotSupportedInTheCurrentContext(REFACTORING_NAME));
-      showErrorMessage(project, message.get(), editor);
-      return false;
-    }
-
-    if (!CommonRefactoringUtil.checkReadOnlyStatus(project, method)) return false;
-
-    PsiType typeByExpression = invokedOnDeclaration ? null : RefactoringUtil.getTypeByExpressionWithExpectedType(expr);
-    if (!invokedOnDeclaration && (typeByExpression == null || LambdaUtil.notInferredType(typeByExpression))) {
-      LocalizeValue message =
-          RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.typeOfTheSelectedExpressionCannotBeDetermined());
-      showErrorMessage(project, message.get(), editor);
-      return false;
-    }
-
-    if (!invokedOnDeclaration && PsiType.VOID.equals(typeByExpression)) {
-      LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.selectedExpressionHasVoidType());
-      showErrorMessage(project, message.get(), editor);
-      return false;
-    }
-
-    List<PsiMethod> validEnclosingMethods = getEnclosingMethods(method);
-    if (validEnclosingMethods.isEmpty()) {
-      return false;
-    }
-    Introducer introducer = new Introducer(project, expr, localVar, editor);
-    boolean unitTestMode = ApplicationManager.getApplication().isUnitTestMode();
-    if (validEnclosingMethods.size() == 1 || unitTestMode) {
-      PsiMethod methodToIntroduceParameterTo = validEnclosingMethods.get(0);
-      if (methodToIntroduceParameterTo.findDeepestSuperMethod() == null || unitTestMode) {
-        introducer.introduceParameter(methodToIntroduceParameterTo, methodToIntroduceParameterTo);
-        return true;
-      }
-    }
-
-    chooseMethodToIntroduceParameter(editor, validEnclosingMethods, introducer);
-
-    return true;
-  }
-
-  private void chooseMethodToIntroduceParameter(final Editor editor,
-                                                List<PsiMethod> validEnclosingMethods,
-                                                final Introducer introducer) {
-    AbstractInplaceIntroducer inplaceIntroducer = AbstractInplaceIntroducer.getActiveIntroducer(editor);
-    if (inplaceIntroducer instanceof InplaceIntroduceParameterPopup) {
-      InplaceIntroduceParameterPopup introduceParameterPopup = (InplaceIntroduceParameterPopup) inplaceIntroducer;
-      introducer.introduceParameter(introduceParameterPopup.getMethodToIntroduceParameter(),
-          introduceParameterPopup.getMethodToSearchFor());
-      return;
-    }
-    JPanel panel = new JPanel(new BorderLayout());
-    final JCheckBox superMethod = new JCheckBox("Refactor super method", true);
-    superMethod.setMnemonic('U');
-    panel.add(superMethod, BorderLayout.SOUTH);
-    final JBList list = new JBList(validEnclosingMethods.toArray());
-    list.setVisibleRowCount(5);
-    list.setCellRenderer(new MethodCellRenderer());
-    list.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    list.setSelectedIndex(0);
-    final List<RangeHighlighter> highlighters = new ArrayList<RangeHighlighter>();
-    final TextAttributes attributes =
-        EditorColorsManager.getInstance().getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
-    list.addListSelectionListener(new ListSelectionListener() {
-      public void valueChanged(ListSelectionEvent e) {
-        PsiMethod selectedMethod = (PsiMethod) list.getSelectedValue();
-        if (selectedMethod == null) return;
-        dropHighlighters(highlighters);
-        updateView(selectedMethod, editor, attributes, highlighters, superMethod);
-      }
-    });
-    updateView(validEnclosingMethods.get(0), editor, attributes, highlighters, superMethod);
-    JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(list);
-    scrollPane.setBorder(null);
-    panel.add(scrollPane, BorderLayout.CENTER);
-
-    List<Pair<ActionListener, KeyStroke>>
-        keyboardActions = Collections.singletonList(Pair.<ActionListener, KeyStroke>create(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        final PsiMethod methodToSearchIn = (PsiMethod) list.getSelectedValue();
-        if (myEnclosingMethodsPopup != null && myEnclosingMethodsPopup.isVisible()) {
-          myEnclosingMethodsPopup.cancel();
+    @RequiredUIAccess
+    private boolean invoke(
+        Editor editor,
+        @Nonnull Project project,
+        PsiExpression expr,
+        PsiLocalVariable localVar,
+        boolean invokedOnDeclaration
+    ) {
+        LOG.assertTrue(!PsiDocumentManager.getInstance(project).hasUncommitedDocuments());
+        PsiMethod method;
+        if (expr != null) {
+            method = Util.getContainingMethod(expr);
+        }
+        else {
+            method = Util.getContainingMethod(localVar);
         }
 
-        final PsiMethod methodToSearchFor = superMethod.isEnabled() && superMethod.isSelected()
-            ? methodToSearchIn.findDeepestSuperMethod() : methodToSearchIn;
-        Runnable runnable = new Runnable() {
-          public void run() {
-            introducer.introduceParameter(methodToSearchIn, methodToSearchFor);
-          }
-        };
-        IdeFocusManager.findInstance().doWhenFocusSettlesDown(runnable);
-      }
-    }, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0)));
-    myEnclosingMethodsPopup = JBPopupFactory.getInstance().createComponentPopupBuilder(panel, list)
-        .setTitle("Introduce parameter to method")
-        .setMovable(false)
-        .setResizable(false)
-        .setRequestFocus(true)
-        .setKeyboardActions(keyboardActions).addListener(new JBPopupAdapter() {
-          @Override
-          public void onClosed(LightweightWindowEvent event) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("expression:" + expr);
+        }
+
+        if (expr == null && localVar == null) {
+            LocalizeValue message =
+                RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.selectedBlockShouldRepresentAnExpression());
+            showErrorMessage(project, message, editor);
+            return false;
+        }
+
+        if (localVar != null) {
+            PsiElement parent = localVar.getParent();
+            if (!(parent instanceof PsiDeclarationStatement)) {
+                LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
+                    RefactoringLocalize.errorWrongCaretPositionLocalOrExpressionName()
+                );
+                showErrorMessage(project, message, editor);
+                return false;
+            }
+        }
+
+        if (method == null) {
+            LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
+                RefactoringLocalize.isNotSupportedInTheCurrentContext(REFACTORING_NAME)
+            );
+            showErrorMessage(project, message, editor);
+            return false;
+        }
+
+        if (!CommonRefactoringUtil.checkReadOnlyStatus(project, method)) {
+            return false;
+        }
+
+        PsiType typeByExpression = invokedOnDeclaration ? null : RefactoringUtil.getTypeByExpressionWithExpectedType(expr);
+        if (!invokedOnDeclaration && (typeByExpression == null || LambdaUtil.notInferredType(typeByExpression))) {
+            LocalizeValue message =
+                RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.typeOfTheSelectedExpressionCannotBeDetermined());
+            showErrorMessage(project, message, editor);
+            return false;
+        }
+
+        if (!invokedOnDeclaration && PsiType.VOID.equals(typeByExpression)) {
+            LocalizeValue message =
+                RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.selectedExpressionHasVoidType());
+            showErrorMessage(project, message, editor);
+            return false;
+        }
+
+        List<PsiMethod> validEnclosingMethods = getEnclosingMethods(method);
+        if (validEnclosingMethods.isEmpty()) {
+            return false;
+        }
+        Introducer introducer = new Introducer(project, expr, localVar, editor);
+        boolean unitTestMode = project.getApplication().isUnitTestMode();
+        if (validEnclosingMethods.size() == 1 || unitTestMode) {
+            PsiMethod methodToIntroduceParameterTo = validEnclosingMethods.get(0);
+            if (methodToIntroduceParameterTo.findDeepestSuperMethod() == null || unitTestMode) {
+                introducer.introduceParameter(methodToIntroduceParameterTo, methodToIntroduceParameterTo);
+                return true;
+            }
+        }
+
+        chooseMethodToIntroduceParameter(editor, validEnclosingMethods, introducer);
+
+        return true;
+    }
+
+    @RequiredUIAccess
+    private void chooseMethodToIntroduceParameter(
+        Editor editor,
+        @Nonnull List<PsiMethod> validEnclosingMethods,
+        @Nonnull Introducer introducer
+    ) {
+        AbstractInplaceIntroducer inplaceIntroducer = AbstractInplaceIntroducer.getActiveIntroducer(editor);
+        if (inplaceIntroducer instanceof InplaceIntroduceParameterPopup) {
+            InplaceIntroduceParameterPopup introduceParameterPopup = (InplaceIntroduceParameterPopup) inplaceIntroducer;
+            introducer.introduceParameter(
+                introduceParameterPopup.getMethodToIntroduceParameter(),
+                introduceParameterPopup.getMethodToSearchFor()
+            );
+            return;
+        }
+        JPanel panel = new JPanel(new BorderLayout());
+        JCheckBox superMethod = new JCheckBox("Refactor super method", true);
+        superMethod.setMnemonic('U');
+        panel.add(superMethod, BorderLayout.SOUTH);
+        JBList<PsiMethod> list = new JBList<>(validEnclosingMethods);
+        list.setVisibleRowCount(5);
+        list.setCellRenderer(new MethodCellRenderer());
+        list.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list.setSelectedIndex(0);
+        final List<RangeHighlighter> highlighters = new ArrayList<>();
+        TextAttributes attributes =
+            EditorColorsManager.getInstance().getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
+        list.addListSelectionListener(e -> {
+            PsiMethod selectedMethod = (PsiMethod) list.getSelectedValue();
+            if (selectedMethod == null) {
+                return;
+            }
             dropHighlighters(highlighters);
-          }
-        }).createPopup();
-    EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, myEnclosingMethodsPopup);
-  }
+            updateView(selectedMethod, editor, attributes, highlighters, superMethod);
+        });
+        updateView(validEnclosingMethods.get(0), editor, attributes, highlighters, superMethod);
+        JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(list);
+        scrollPane.setBorder(null);
+        panel.add(scrollPane, BorderLayout.CENTER);
 
-  private static void updateView(PsiMethod selectedMethod,
-                                 Editor editor,
-                                 TextAttributes attributes,
-                                 List<RangeHighlighter> highlighters,
-                                 JCheckBox superMethod) {
-    MarkupModel markupModel = editor.getMarkupModel();
-    PsiIdentifier nameIdentifier = selectedMethod.getNameIdentifier();
-    if (nameIdentifier != null) {
-      TextRange textRange = nameIdentifier.getTextRange();
-      RangeHighlighter rangeHighlighter = markupModel.addRangeHighlighter(
-          textRange.getStartOffset(), textRange.getEndOffset(), HighlighterLayer.SELECTION - 1,
-          attributes,
-          HighlighterTargetArea.EXACT_RANGE);
-      highlighters.add(rangeHighlighter);
+        List<Pair<ActionListener, KeyStroke>>
+            keyboardActions = Collections.singletonList(Pair.<ActionListener, KeyStroke>create(e -> {
+            PsiMethod methodToSearchIn = (PsiMethod) list.getSelectedValue();
+            if (myEnclosingMethodsPopup != null && myEnclosingMethodsPopup.isVisible()) {
+                myEnclosingMethodsPopup.cancel();
+            }
+
+            PsiMethod methodToSearchFor = superMethod.isEnabled() && superMethod.isSelected()
+                ? methodToSearchIn.findDeepestSuperMethod() : methodToSearchIn;
+            Runnable runnable = () -> introducer.introduceParameter(methodToSearchIn, methodToSearchFor);
+            IdeFocusManager.findInstance().doWhenFocusSettlesDown(runnable);
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0)));
+        myEnclosingMethodsPopup = JBPopupFactory.getInstance().createComponentPopupBuilder(panel, list)
+            .setTitle(LocalizeValue.localizeTODO("Introduce parameter to method"))
+            .setMovable(false)
+            .setResizable(false)
+            .setRequestFocus(true)
+            .setKeyboardActions(keyboardActions)
+            .addListener(new JBPopupAdapter() {
+                @Override
+                public void onClosed(LightweightWindowEvent event) {
+                    dropHighlighters(highlighters);
+                }
+            })
+            .createPopup();
+        EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, myEnclosingMethodsPopup);
     }
-    superMethod.setEnabled(selectedMethod.findDeepestSuperMethod() != null);
-  }
 
-  private static void dropHighlighters(List<RangeHighlighter> highlighters) {
-    for (RangeHighlighter highlighter : highlighters) {
-      highlighter.dispose();
-    }
-    highlighters.clear();
-  }
-
-  protected static NameSuggestionsGenerator createNameSuggestionGenerator(final PsiExpression expr,
-                                                                          final String propName,
-                                                                          final Project project,
-                                                                          final String enteredName) {
-    return new NameSuggestionsGenerator() {
-      public SuggestedNameInfo getSuggestedNameInfo(PsiType type) {
-        JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
-        SuggestedNameInfo info = codeStyleManager.suggestVariableName(VariableKind.PARAMETER, propName, expr != null && expr.isValid() ? expr : null, type);
-        if (expr != null && expr.isValid()) {
-          info = codeStyleManager.suggestUniqueVariableName(info, expr, true);
+    private static void updateView(
+        PsiMethod selectedMethod,
+        Editor editor,
+        TextAttributes attributes,
+        List<RangeHighlighter> highlighters,
+        JCheckBox superMethod
+    ) {
+        MarkupModel markupModel = editor.getMarkupModel();
+        PsiIdentifier nameIdentifier = selectedMethod.getNameIdentifier();
+        if (nameIdentifier != null) {
+            TextRange textRange = nameIdentifier.getTextRange();
+            RangeHighlighter rangeHighlighter = markupModel.addRangeHighlighter(
+                textRange.getStartOffset(), textRange.getEndOffset(), HighlighterLayer.SELECTION - 1,
+                attributes,
+                HighlighterTargetArea.EXACT_RANGE
+            );
+            highlighters.add(rangeHighlighter);
         }
-        String[] strings = AbstractJavaInplaceIntroducer.appendUnresolvedExprName(JavaCompletionUtil
-            .completeVariableNameForRefactoring(codeStyleManager, type, VariableKind.LOCAL_VARIABLE, info), expr);
-        return new SuggestedNameInfo.Delegate(enteredName != null ? ArrayUtil.mergeArrays(new String[]{enteredName}, strings) : strings, info);
-      }
-
-    };
-  }
-
-  private static void showErrorMessage(Project project, String message, Editor editor) {
-    CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INTRODUCE_PARAMETER);
-  }
-
-
-  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
-    // Never called
-    /* do nothing */
-  }
-
-  public static List<PsiMethod> getEnclosingMethods(PsiMethod nearest) {
-    List<PsiMethod> enclosingMethods = new ArrayList<PsiMethod>();
-    enclosingMethods.add(nearest);
-    PsiMethod method = nearest;
-    while (true) {
-      method = PsiTreeUtil.getParentOfType(method, PsiMethod.class, true);
-      if (method == null) break;
-      enclosingMethods.add(method);
+        superMethod.setEnabled(selectedMethod.findDeepestSuperMethod() != null);
     }
-    if (enclosingMethods.size() > 1) {
-      List<PsiMethod> methodsNotImplementingLibraryInterfaces = new ArrayList<PsiMethod>();
-      for (PsiMethod enclosing : enclosingMethods) {
-        PsiMethod[] superMethods = enclosing.findDeepestSuperMethods();
-        boolean libraryInterfaceMethod = false;
-        for (PsiMethod superMethod : superMethods) {
-          libraryInterfaceMethod |= isLibraryInterfaceMethod(superMethod);
+
+    private static void dropHighlighters(List<RangeHighlighter> highlighters) {
+        for (RangeHighlighter highlighter : highlighters) {
+            highlighter.dispose();
         }
-        if (!libraryInterfaceMethod) {
-          methodsNotImplementingLibraryInterfaces.add(enclosing);
+        highlighters.clear();
+    }
+
+    protected static NameSuggestionsGenerator createNameSuggestionGenerator(
+        PsiExpression expr,
+        String propName,
+        Project project,
+        String enteredName
+    ) {
+        return type -> {
+            JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
+            SuggestedNameInfo info = codeStyleManager.suggestVariableName(
+                VariableKind.PARAMETER,
+                propName,
+                expr != null && expr.isValid() ? expr : null,
+                type
+            );
+            if (expr != null && expr.isValid()) {
+                info = codeStyleManager.suggestUniqueVariableName(info, expr, true);
+            }
+            String[] strings = AbstractJavaInplaceIntroducer.appendUnresolvedExprName(
+                JavaCompletionUtil.completeVariableNameForRefactoring(codeStyleManager, type, VariableKind.LOCAL_VARIABLE, info),
+                expr
+            );
+            return new SuggestedNameInfo.Delegate(
+                enteredName != null ? ArrayUtil.mergeArrays(new String[]{enteredName}, strings) : strings,
+                info
+            );
+        };
+    }
+
+    @RequiredUIAccess
+    private static void showErrorMessage(Project project, @Nonnull LocalizeValue message, Editor editor) {
+        CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INTRODUCE_PARAMETER);
+    }
+
+    @Override
+    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+        // Never called
+        /* do nothing */
+    }
+
+    public static List<PsiMethod> getEnclosingMethods(PsiMethod nearest) {
+        List<PsiMethod> enclosingMethods = new ArrayList<>();
+        enclosingMethods.add(nearest);
+        PsiMethod method = nearest;
+        while (true) {
+            method = PsiTreeUtil.getParentOfType(method, PsiMethod.class, true);
+            if (method == null) {
+                break;
+            }
+            enclosingMethods.add(method);
         }
-      }
-      if (methodsNotImplementingLibraryInterfaces.size() > 0) {
-        return methodsNotImplementingLibraryInterfaces;
-      }
-    }
-    return enclosingMethods;
-  }
-
-
-  @Nullable
-  public static PsiMethod chooseEnclosingMethod(@Nonnull PsiMethod method) {
-    List<PsiMethod> validEnclosingMethods = getEnclosingMethods(method);
-    if (validEnclosingMethods.size() > 1 && !ApplicationManager.getApplication().isUnitTestMode()) {
-      EnclosingMethodSelectionDialog dialog = new EnclosingMethodSelectionDialog(method.getProject(), validEnclosingMethods);
-      dialog.show();
-      if (!dialog.isOK()) return null;
-      method = dialog.getSelectedMethod();
-    } else if (validEnclosingMethods.size() == 1) {
-      method = validEnclosingMethods.get(0);
-    }
-    return method;
-  }
-
-  private static boolean isLibraryInterfaceMethod(PsiMethod method) {
-    return method.hasModifierProperty(PsiModifier.ABSTRACT) && !method.getManager().isInProject(method);
-  }
-
-  private class Introducer {
-
-    private final Project myProject;
-
-    private PsiExpression myExpr;
-    private PsiLocalVariable myLocalVar;
-    private final Editor myEditor;
-
-    public Introducer(Project project,
-                      PsiExpression expr,
-                      PsiLocalVariable localVar,
-                      Editor editor) {
-      myProject = project;
-      myExpr = expr;
-      myLocalVar = localVar;
-      myEditor = editor;
-    }
-
-    public void introduceParameter(PsiMethod method, PsiMethod methodToSearchFor) {
-      if (!CommonRefactoringUtil.checkReadOnlyStatus(myProject, methodToSearchFor)) return;
-
-      PsiExpression[] occurences;
-      if (myExpr != null) {
-        occurences = new ExpressionOccurrenceManager(myExpr, method, null).findExpressionOccurrences();
-      } else { // local variable
-        occurences = CodeInsightUtil.findReferenceExpressions(method, myLocalVar);
-      }
-
-      String enteredName = null;
-      boolean replaceAllOccurrences = false;
-      boolean delegate = false;
-      PsiType initializerType = IntroduceParameterProcessor.getInitializerType(null, myExpr, myLocalVar);
-
-      AbstractInplaceIntroducer activeIntroducer = AbstractInplaceIntroducer.getActiveIntroducer(myEditor);
-      if (activeIntroducer != null) {
-        activeIntroducer.stopIntroduce(myEditor);
-        myExpr = (PsiExpression) activeIntroducer.getExpr();
-        myLocalVar = (PsiLocalVariable) activeIntroducer.getLocalVariable();
-        occurences = (PsiExpression[]) activeIntroducer.getOccurrences();
-        enteredName = activeIntroducer.getInputName();
-        replaceAllOccurrences = activeIntroducer.isReplaceAllOccurrences();
-        delegate = ((InplaceIntroduceParameterPopup) activeIntroducer).isGenerateDelegate();
-        initializerType = ((AbstractJavaInplaceIntroducer) activeIntroducer).getType();
-      }
-
-      boolean mustBeFinal = false;
-      for (PsiExpression occurrence : occurences) {
-        if (PsiTreeUtil.getParentOfType(occurrence, PsiClass.class, PsiMethod.class) != method) {
-          mustBeFinal = true;
-          break;
+        if (enclosingMethods.size() > 1) {
+            List<PsiMethod> methodsNotImplementingLibraryInterfaces = new ArrayList<>();
+            for (PsiMethod enclosing : enclosingMethods) {
+                PsiMethod[] superMethods = enclosing.findDeepestSuperMethods();
+                boolean libraryInterfaceMethod = false;
+                for (PsiMethod superMethod : superMethods) {
+                    libraryInterfaceMethod |= isLibraryInterfaceMethod(superMethod);
+                }
+                if (!libraryInterfaceMethod) {
+                    methodsNotImplementingLibraryInterfaces.add(enclosing);
+                }
+            }
+            if (methodsNotImplementingLibraryInterfaces.size() > 0) {
+                return methodsNotImplementingLibraryInterfaces;
+            }
         }
-      }
-
-      List<UsageInfo> localVars = new ArrayList<UsageInfo>();
-      List<UsageInfo> classMemberRefs = new ArrayList<UsageInfo>();
-      List<UsageInfo> params = new ArrayList<UsageInfo>();
-
-
-      if (myExpr != null) {
-        Util.analyzeExpression(myExpr, localVars, classMemberRefs, params);
-      }
-
-      String propName = myLocalVar != null ? JavaCodeStyleManager
-          .getInstance(myProject).variableNameToPropertyName(myLocalVar.getName(), VariableKind.LOCAL_VARIABLE) : null;
-
-      boolean isInplaceAvailableOnDataContext = myEditor != null && myEditor.getSettings().isVariableInplaceRenameEnabled();
-
-      if (myExpr != null) {
-        isInplaceAvailableOnDataContext &= myExpr.isPhysical();
-      }
-
-      if (isInplaceAvailableOnDataContext && activeIntroducer == null) {
-        myInplaceIntroduceParameterPopup =
-            new InplaceIntroduceParameterPopup(myProject, myEditor, classMemberRefs,
-                createTypeSelectorManager(occurences, initializerType),
-                myExpr, myLocalVar, method, methodToSearchFor, occurences,
-                getParamsToRemove(method, occurences),
-                mustBeFinal);
-        if (myInplaceIntroduceParameterPopup.startInplaceIntroduceTemplate()) {
-          return;
-        }
-      }
-      if (ApplicationManager.getApplication().isUnitTestMode()) {
-        @NonNls String parameterName = "anObject";
-        boolean replaceAllOccurences = true;
-        boolean isDeleteLocalVariable = true;
-        PsiExpression initializer = myLocalVar != null && myExpr == null ? myLocalVar.getInitializer() : myExpr;
-        new IntroduceParameterProcessor(myProject, method, methodToSearchFor, initializer, myExpr, myLocalVar, isDeleteLocalVariable, parameterName,
-            replaceAllOccurences, IntroduceParameterRefactoring.REPLACE_FIELDS_WITH_GETTERS_NONE, mustBeFinal,
-            false, null,
-            getParamsToRemove(method, occurences)).run();
-      } else {
-        if (myEditor != null) {
-          RefactoringUtil.highlightAllOccurrences(myProject, occurences, myEditor);
-        }
-        IntroduceParameterDialog dialog =
-            new IntroduceParameterDialog(myProject, classMemberRefs, occurences, myLocalVar, myExpr,
-                createNameSuggestionGenerator(myExpr, propName, myProject, enteredName),
-                createTypeSelectorManager(occurences, initializerType), methodToSearchFor, method, getParamsToRemove(method, occurences), mustBeFinal);
-        dialog.setReplaceAllOccurrences(replaceAllOccurrences);
-        dialog.setGenerateDelegate(delegate);
-        dialog.show();
-        if (myEditor != null) {
-          myEditor.getSelectionModel().removeSelection();
-        }
-      }
+        return enclosingMethods;
     }
 
-    private TypeSelectorManagerImpl createTypeSelectorManager(PsiExpression[] occurences, PsiType initializerType) {
-      return myExpr != null ? new TypeSelectorManagerImpl(myProject, initializerType, myExpr, occurences)
-          : new TypeSelectorManagerImpl(myProject, initializerType, occurences);
+    @Nullable
+    @RequiredUIAccess
+    public static PsiMethod chooseEnclosingMethod(@Nonnull PsiMethod method) {
+        List<PsiMethod> validEnclosingMethods = getEnclosingMethods(method);
+        if (validEnclosingMethods.size() > 1 && !method.getApplication().isUnitTestMode()) {
+            EnclosingMethodSelectionDialog dialog = new EnclosingMethodSelectionDialog(method.getProject(), validEnclosingMethods);
+            dialog.show();
+            if (!dialog.isOK()) {
+                return null;
+            }
+            method = dialog.getSelectedMethod();
+        }
+        else if (validEnclosingMethods.size() == 1) {
+            method = validEnclosingMethods.get(0);
+        }
+        return method;
     }
 
-    private IntList getParamsToRemove(PsiMethod method, PsiExpression[] occurences) {
-      PsiExpression expressionToRemoveParamFrom = myExpr;
-      if (myExpr == null) {
-        expressionToRemoveParamFrom = myLocalVar.getInitializer();
-      }
-      return expressionToRemoveParamFrom == null ? IntLists.newArrayList() : Util
-          .findParametersToRemove(method, expressionToRemoveParamFrom, occurences);
+    private static boolean isLibraryInterfaceMethod(PsiMethod method) {
+        return method.isAbstract() && !method.getManager().isInProject(method);
     }
-  }
 
-  @Override
-  public AbstractInplaceIntroducer getInplaceIntroducer() {
-    return myInplaceIntroduceParameterPopup;
-  }
+    private class Introducer {
+        @Nonnull
+        private final Project myProject;
+
+        private PsiExpression myExpr;
+        private PsiLocalVariable myLocalVar;
+        private final Editor myEditor;
+
+        public Introducer(
+            @Nonnull Project project,
+            PsiExpression expr,
+            PsiLocalVariable localVar,
+            Editor editor
+        ) {
+            myProject = project;
+            myExpr = expr;
+            myLocalVar = localVar;
+            myEditor = editor;
+        }
+
+        @RequiredUIAccess
+        public void introduceParameter(PsiMethod method, PsiMethod methodToSearchFor) {
+            if (!CommonRefactoringUtil.checkReadOnlyStatus(myProject, methodToSearchFor)) {
+                return;
+            }
+
+            PsiExpression[] occurrences = myExpr != null
+                ? new ExpressionOccurrenceManager(myExpr, method, null).findExpressionOccurrences()
+                // local variable
+                : CodeInsightUtil.findReferenceExpressions(method, myLocalVar);
+
+            String enteredName = null;
+            boolean replaceAllOccurrences = false;
+            boolean delegate = false;
+            PsiType initializerType = IntroduceParameterProcessor.getInitializerType(null, myExpr, myLocalVar);
+
+            AbstractInplaceIntroducer activeIntroducer = AbstractInplaceIntroducer.getActiveIntroducer(myEditor);
+            if (activeIntroducer != null) {
+                activeIntroducer.stopIntroduce(myEditor);
+                myExpr = (PsiExpression) activeIntroducer.getExpr();
+                myLocalVar = (PsiLocalVariable) activeIntroducer.getLocalVariable();
+                occurrences = (PsiExpression[]) activeIntroducer.getOccurrences();
+                enteredName = activeIntroducer.getInputName();
+                replaceAllOccurrences = activeIntroducer.isReplaceAllOccurrences();
+                delegate = ((InplaceIntroduceParameterPopup) activeIntroducer).isGenerateDelegate();
+                initializerType = ((AbstractJavaInplaceIntroducer) activeIntroducer).getType();
+            }
+
+            boolean mustBeFinal = false;
+            for (PsiExpression occurrence : occurrences) {
+                if (PsiTreeUtil.getParentOfType(occurrence, PsiClass.class, PsiMethod.class) != method) {
+                    mustBeFinal = true;
+                    break;
+                }
+            }
+
+            List<UsageInfo> localVars = new ArrayList<>();
+            List<UsageInfo> classMemberRefs = new ArrayList<>();
+            List<UsageInfo> params = new ArrayList<>();
+
+            if (myExpr != null) {
+                Util.analyzeExpression(myExpr, localVars, classMemberRefs, params);
+            }
+
+            String propName = myLocalVar != null
+                ? JavaCodeStyleManager.getInstance(myProject).variableNameToPropertyName(myLocalVar.getName(), VariableKind.LOCAL_VARIABLE)
+                : null;
+
+            boolean isInplaceAvailableOnDataContext = myEditor != null && myEditor.getSettings().isVariableInplaceRenameEnabled();
+
+            if (myExpr != null) {
+                isInplaceAvailableOnDataContext &= myExpr.isPhysical();
+            }
+
+            if (isInplaceAvailableOnDataContext && activeIntroducer == null) {
+                myInplaceIntroduceParameterPopup = new InplaceIntroduceParameterPopup(
+                    myProject,
+                    myEditor,
+                    classMemberRefs,
+                    createTypeSelectorManager(occurrences, initializerType),
+                    myExpr,
+                    myLocalVar,
+                    method,
+                    methodToSearchFor,
+                    occurrences,
+                    getParamsToRemove(method, occurrences),
+                    mustBeFinal
+                );
+                if (myInplaceIntroduceParameterPopup.startInplaceIntroduceTemplate()) {
+                    return;
+                }
+            }
+            if (myProject.getApplication().isUnitTestMode()) {
+                String parameterName = "anObject";
+                boolean isDeleteLocalVariable = true;
+                PsiExpression initializer = myLocalVar != null && myExpr == null ? myLocalVar.getInitializer() : myExpr;
+                new IntroduceParameterProcessor(
+                    myProject,
+                    method,
+                    methodToSearchFor,
+                    initializer,
+                    myExpr,
+                    myLocalVar,
+                    isDeleteLocalVariable,
+                    parameterName,
+                    replaceAllOccurrences,
+                    IntroduceParameterRefactoring.REPLACE_FIELDS_WITH_GETTERS_NONE,
+                    mustBeFinal,
+                    false,
+                    null,
+                    getParamsToRemove(method, occurrences)
+                ).run();
+            }
+            else {
+                if (myEditor != null) {
+                    RefactoringUtil.highlightAllOccurrences(myProject, occurrences, myEditor);
+                }
+                IntroduceParameterDialog dialog =
+                    new IntroduceParameterDialog(
+                        myProject,
+                        classMemberRefs,
+                        occurrences,
+                        myLocalVar,
+                        myExpr,
+                        createNameSuggestionGenerator(myExpr, propName, myProject, enteredName),
+                        createTypeSelectorManager(occurrences, initializerType),
+                        methodToSearchFor,
+                        method,
+                        getParamsToRemove(method, occurrences),
+                        mustBeFinal
+                    );
+                dialog.setReplaceAllOccurrences(replaceAllOccurrences);
+                dialog.setGenerateDelegate(delegate);
+                dialog.show();
+                if (myEditor != null) {
+                    myEditor.getSelectionModel().removeSelection();
+                }
+            }
+        }
+
+        private TypeSelectorManagerImpl createTypeSelectorManager(PsiExpression[] occurrences, PsiType initializerType) {
+            return myExpr != null
+                ? new TypeSelectorManagerImpl(myProject, initializerType, myExpr, occurrences)
+                : new TypeSelectorManagerImpl(myProject, initializerType, occurrences);
+        }
+
+        private IntList getParamsToRemove(PsiMethod method, PsiExpression[] occurrences) {
+            PsiExpression expressionToRemoveParamFrom = myExpr;
+            if (myExpr == null) {
+                expressionToRemoveParamFrom = myLocalVar.getInitializer();
+            }
+            return expressionToRemoveParamFrom == null
+                ? IntLists.newArrayList()
+                : Util.findParametersToRemove(method, expressionToRemoveParamFrom, occurrences);
+        }
+    }
+
+    @Override
+    public AbstractInplaceIntroducer getInplaceIntroducer() {
+        return myInplaceIntroduceParameterPopup;
+    }
 }

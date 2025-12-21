@@ -223,6 +223,7 @@ public class MakeMethodStaticProcessor extends MakeMethodOrClassStaticProcessor<
             }
         }
 
+
         if (mySettings.isMakeFieldParameters()) {
             List<Settings.FieldParameter> parameters = mySettings.getParameterOrderList();
 
