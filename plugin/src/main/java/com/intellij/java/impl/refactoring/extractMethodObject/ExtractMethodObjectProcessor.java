@@ -531,8 +531,8 @@ public class ExtractMethodObjectProcessor extends BaseRefactoringProcessor {
 
     @Nonnull
     @Override
-    protected String getCommandName() {
-        return REFACTORING_NAME.get();
+    protected LocalizeValue getCommandName() {
+        return REFACTORING_NAME;
     }
 
     @RequiredReadAction
@@ -736,7 +736,7 @@ public class ExtractMethodObjectProcessor extends BaseRefactoringProcessor {
         @Override
         protected void apply(AbstractExtractDialog dialog) {
             super.apply(dialog);
-            myCreateInnerClass = !(dialog instanceof ExtractMethodObjectDialog) || ((ExtractMethodObjectDialog) dialog).createInnerClass();
+            myCreateInnerClass = !(dialog instanceof ExtractMethodObjectDialog extractDialog && !extractDialog.createInnerClass());
             myInnerClassName = myCreateInnerClass ? StringUtil.capitalize(dialog.getChosenMethodName()) : dialog.getChosenMethodName();
         }
 

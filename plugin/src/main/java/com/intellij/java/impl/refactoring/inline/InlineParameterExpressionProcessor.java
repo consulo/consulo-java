@@ -81,8 +81,8 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
 
     @Nonnull
     @Override
-    protected String getCommandName() {
-        return InlineParameterHandler.REFACTORING_NAME.get();
+    protected LocalizeValue getCommandName() {
+        return InlineParameterHandler.REFACTORING_NAME;
     }
 
     @Nonnull

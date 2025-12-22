@@ -24,7 +24,6 @@ import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.NonCodeUsageInfoFactory;
 import consulo.language.editor.refactoring.util.TextOccurrencesUtil;
 import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
@@ -346,7 +345,7 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
 
     @Nonnull
     @Override
-    protected String getCommandName() {
-        return RefactoringLocalize.inlineToAnonymousCommandName(myClass.getQualifiedName()).get();
+    protected LocalizeValue getCommandName() {
+        return RefactoringLocalize.inlineToAnonymousCommandName(myClass.getQualifiedName());
     }
 }

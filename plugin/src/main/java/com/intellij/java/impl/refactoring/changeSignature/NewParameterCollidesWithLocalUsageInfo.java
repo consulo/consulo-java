@@ -19,9 +19,9 @@ import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.UnresolvableCollisionUsageInfo;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author dsl
@@ -39,6 +39,7 @@ public class NewParameterCollidesWithLocalUsageInfo extends UnresolvableCollisio
         myMethod = method;
     }
 
+    @Nonnull
     @Override
     public LocalizeValue getDescription() {
         return RefactoringLocalize.thereIsAlreadyA0In1ItWillConflictWithTheNewParameter(

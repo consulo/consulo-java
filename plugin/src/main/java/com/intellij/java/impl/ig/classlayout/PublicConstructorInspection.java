@@ -19,12 +19,13 @@ import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactor
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiParameterList;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataContext;
 import consulo.dataContext.DataManager;
@@ -77,6 +78,7 @@ public class PublicConstructorInspection extends BaseInspection {
         }
 
         @Override
+        @RequiredWriteAction
         protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
             PsiElement element = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiClass.class, PsiMethod.class);
             AsyncResult<DataContext> context = DataManager.getInstance().getDataContextFromFocus();
@@ -94,18 +96,18 @@ public class PublicConstructorInspection extends BaseInspection {
     }
 
     private static class PublicConstructorVisitor extends BaseInspectionVisitor {
-
         @Override
-        public void visitMethod(PsiMethod method) {
+        @RequiredReadAction
+        public void visitMethod(@Nonnull PsiMethod method) {
             super.visitMethod(method);
             if (!method.isConstructor()) {
                 return;
             }
-            if (!method.hasModifierProperty(PsiModifier.PUBLIC)) {
+            if (!method.isPublic()) {
                 return;
             }
             PsiClass aClass = method.getContainingClass();
-            if (aClass == null || aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
+            if (aClass == null || aClass.isAbstract()) {
                 return;
             }
             if (SerializationUtils.isExternalizable(aClass)) {
@@ -118,12 +120,13 @@ public class PublicConstructorInspection extends BaseInspection {
         }
 
         @Override
-        public void visitClass(PsiClass aClass) {
+        @RequiredReadAction
+        public void visitClass(@Nonnull PsiClass aClass) {
             super.visitClass(aClass);
             if (aClass.isInterface() || aClass.isEnum()) {
                 return;
             }
-            if (!aClass.hasModifierProperty(PsiModifier.PUBLIC) || aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
+            if (!aClass.isPublic() || aClass.isAbstract()) {
                 return;
             }
             PsiMethod[] constructors = aClass.getConstructors();
