@@ -23,7 +23,6 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
-import consulo.application.Application;
 import consulo.component.extension.ExtensionPoint;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
@@ -129,7 +128,7 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
 
     @Override
     protected void refreshElements(@Nonnull PsiElement[] elements) {
-        Application.get().runReadAction(() -> {
+        myProject.getApplication().runReadAction(() -> {
             PsiClass[] classesToMove = new PsiClass[elements.length];
             for (int i = 0; i < classesToMove.length; i++) {
                 classesToMove[i] = (PsiClass)elements[i];
@@ -235,12 +234,12 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
 
     @Nonnull
     @Override
-    protected String getCommandName() {
+    protected LocalizeValue getCommandName() {
         return RefactoringLocalize.moveClassToInnerCommandName(
             (myClassesToMove.length > 1 ? "classes " : "class ") +
                 StringUtil.join(myClassesToMove, PsiNamedElement::getName, ", "),
             myTargetClass.getQualifiedName()
-        ).get();
+        );
     }
 
     @Nonnull

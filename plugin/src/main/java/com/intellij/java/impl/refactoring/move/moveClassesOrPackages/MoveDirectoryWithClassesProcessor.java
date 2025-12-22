@@ -246,8 +246,8 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
 
     @Nonnull
     @Override
-    protected String getCommandName() {
-        return RefactoringLocalize.movingDirectoriesCommand().get();
+    protected LocalizeValue getCommandName() {
+        return RefactoringLocalize.movingDirectoriesCommand();
     }
 
     public TargetDirectoryWrapper getTargetDirectory(PsiDirectory dir) {

@@ -19,7 +19,6 @@ import com.intellij.java.impl.psi.impl.migration.PsiMigrationManager;
 import com.intellij.java.language.psi.PsiMigration;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.application.Application;
 import consulo.application.WriteAction;
 import consulo.content.scope.SearchScope;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
@@ -29,6 +28,7 @@ import consulo.language.psi.SmartPsiElementPointer;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.localHistory.LocalHistory;
 import consulo.localHistory.LocalHistoryAction;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
@@ -40,6 +40,7 @@ import consulo.util.lang.ref.SimpleReference;
 import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author ven
@@ -48,7 +49,7 @@ public class MigrationProcessor extends BaseRefactoringProcessor {
     private final MigrationMap myMigrationMap;
     private PsiMigration myPsiMigration;
     private final SearchScope mySearchScope;
-    private ArrayList<SmartPsiElementPointer<PsiElement>> myRefsToShorten;
+    private List<SmartPsiElementPointer<PsiElement>> myRefsToShorten;
 
     public MigrationProcessor(Project project, MigrationMap migrationMap) {
         this(project, migrationMap, GlobalSearchScope.projectScope(project));
@@ -94,7 +95,7 @@ public class MigrationProcessor extends BaseRefactoringProcessor {
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
-        ArrayList<UsageInfo> usagesVector = new ArrayList<>();
+        List<UsageInfo> usagesVector = new ArrayList<>();
         try {
             if (myMigrationMap == null) {
                 return UsageInfo.EMPTY_ARRAY;
@@ -119,7 +120,7 @@ public class MigrationProcessor extends BaseRefactoringProcessor {
             // when somebody with read action resolves reference and gets ResolveResult.
             // Then here, in another read actions, all caches are invalidated but those resolve result
             // is used without additional checks inside that read action - but it's already invalid
-            Application.get().invokeLater(() -> WriteAction.run(this::finishFindMigration), myProject.getDisposed());
+            myProject.getApplication().invokeLater(() -> WriteAction.run(this::finishFindMigration), myProject.getDisposed());
         }
         return usagesVector.toArray(UsageInfo.EMPTY_ARRAY);
     }
@@ -194,8 +195,8 @@ public class MigrationProcessor extends BaseRefactoringProcessor {
 
     @Override
     @Nonnull
-    protected String getCommandName() {
-        return RefactoringLocalize.migrationTitle().get();
+    protected LocalizeValue getCommandName() {
+        return RefactoringLocalize.migrationTitle();
     }
 
     static class MigrationUsageInfo extends UsageInfo {

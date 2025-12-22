@@ -18,24 +18,27 @@ package com.intellij.java.impl.refactoring.memberPullUp;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiSubstitutor;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.refactoring.classMember.MemberInfoBase;
 import consulo.language.psi.PsiElement;
 
-import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
- * Created by Max Medvedev on 10/4/13
+ * @author Max Medvedev
+ * @since 2013-10-04
  */
 public interface PullUpHelper<T extends MemberInfoBase<? extends PsiMember>> {
-  void encodeContextInfo(T info);
+    void encodeContextInfo(T info);
 
-  void move(T info, PsiSubstitutor substitutor);
+    @RequiredWriteAction
+    void move(T info, PsiSubstitutor substitutor);
 
-  void postProcessMember(PsiMember member);
+    void postProcessMember(PsiMember member);
 
-  void setCorrectVisibility(T info);
+    void setCorrectVisibility(T info);
 
-  void moveFieldInitializations(LinkedHashSet<PsiField> movedFields);
+    void moveFieldInitializations(Set<PsiField> movedFields);
 
-  void updateUsage(PsiElement element);
+    void updateUsage(PsiElement element);
 }

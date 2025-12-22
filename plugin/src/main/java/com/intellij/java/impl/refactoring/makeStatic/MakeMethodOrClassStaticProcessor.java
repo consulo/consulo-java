@@ -296,8 +296,8 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
     @Nonnull
     @Override
     @RequiredReadAction
-    protected String getCommandName() {
-        return RefactoringLocalize.makeStaticCommand(DescriptiveNameUtil.getDescriptiveName(myMember)).get();
+    protected LocalizeValue getCommandName() {
+        return RefactoringLocalize.makeStaticCommand(DescriptiveNameUtil.getDescriptiveName(myMember));
     }
 
     public T getMember() {

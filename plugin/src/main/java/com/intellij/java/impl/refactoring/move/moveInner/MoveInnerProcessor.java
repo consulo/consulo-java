@@ -98,8 +98,8 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
 
     @Nonnull
     @Override
-    protected String getCommandName() {
-        return RefactoringLocalize.moveInnerClassCommand(myDescriptiveName).get();
+    protected LocalizeValue getCommandName() {
+        return RefactoringLocalize.moveInnerClassCommand(myDescriptiveName);
     }
 
     @Nonnull
