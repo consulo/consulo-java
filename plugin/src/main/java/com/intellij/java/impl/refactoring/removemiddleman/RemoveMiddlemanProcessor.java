@@ -90,8 +90,10 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         for (MemberInfo memberInfo : myDelegateMethodInfos) {
-            if (memberInfo.isChecked() && memberInfo.isToAbstract()
-                && memberInfo.getMember() instanceof PsiMethod method && method.findDeepestSuperMethods().length > 0) {
+            if (memberInfo.isChecked()
+                && memberInfo.isToAbstract()
+                && memberInfo.getMember() instanceof PsiMethod method
+                && method.findDeepestSuperMethods().length > 0) {
                 conflicts.putValue(
                     method,
                     JavaRefactoringLocalize.removeMiddlemanDeletedHierarchyConflict(
@@ -103,7 +105,7 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
         return showConflicts(conflicts, refUsages.get());
     }
 
-    @RequiredWriteAction
+    @RequiredReadAction
     private void processUsagesForMethod(
         boolean deleteMethodHierarchy,
         PsiMethod method,
@@ -152,7 +154,7 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
     @Nonnull
     @Override
     @RequiredReadAction
-    protected String getCommandName() {
-        return JavaRefactoringLocalize.exposedDelegationCommandName(containingClass.getName(), '.', field.getName()).get();
+    protected LocalizeValue getCommandName() {
+        return JavaRefactoringLocalize.exposedDelegationCommandName(containingClass.getName(), '.', field.getName());
     }
 }

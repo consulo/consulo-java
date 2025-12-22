@@ -238,8 +238,8 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor {
 
     @Nonnull
     @Override
-    protected String getCommandName() {
-        return RefactoringLocalize.moveInstanceMethodCommand().get();
+    protected LocalizeValue getCommandName() {
+        return RefactoringLocalize.moveInstanceMethodCommand();
     }
 
     public PsiClass getTargetClass() {

@@ -20,6 +20,8 @@ import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiMigration;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.WriteAction;
 import consulo.content.scope.SearchScope;
 import consulo.document.util.TextRange;
@@ -33,91 +35,96 @@ import consulo.usage.UsageInfo;
 import consulo.util.lang.Comparing;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MigrationUtil {
-  private static final Logger LOG = Logger.getInstance(MigrationUtil.class);
+    private static final Logger LOG = Logger.getInstance(MigrationUtil.class);
 
-  private MigrationUtil() {
-  }
+    private MigrationUtil() {
+    }
 
-  public static UsageInfo[] findPackageUsages(Project project, PsiMigration migration, String qName, SearchScope searchScope) {
-    PsiPackage aPackage = findOrCreatePackage(project, migration, qName);
+    @RequiredReadAction
+    public static UsageInfo[] findPackageUsages(Project project, PsiMigration migration, String qName, SearchScope searchScope) {
+        PsiPackage aPackage = findOrCreatePackage(project, migration, qName);
 
-    return findRefs(aPackage, searchScope);
-  }
+        return findRefs(aPackage, searchScope);
+    }
 
-  private static PsiElement bindNonJavaReference(PsiElement bindTo, PsiElement element, UsageInfo usage) {
-    TextRange range = usage.getRangeInElement();
-    for (PsiReference reference : element.getReferences()) {
-      if (reference instanceof JavaClassReference) {
-        JavaClassReference classReference = (JavaClassReference) reference;
-        if (classReference.getRangeInElement().equals(range)) {
-          return classReference.bindToElement(bindTo);
+    @RequiredReadAction
+    private static PsiElement bindNonJavaReference(PsiElement bindTo, PsiElement element, UsageInfo usage) {
+        TextRange range = usage.getRangeInElement();
+        for (PsiReference reference : element.getReferences()) {
+            if (reference instanceof JavaClassReference classReference && classReference.getRangeInElement().equals(range)) {
+                return classReference.bindToElement(bindTo);
+            }
         }
-      }
-    }
-    return bindTo;
-  }
-
-  public static UsageInfo[] findClassUsages(Project project, PsiMigration migration, String qName, SearchScope searchScope) {
-    PsiClass aClass = findOrCreateClass(project, migration, qName);
-
-    return findRefs(aClass, searchScope);
-  }
-
-  private static UsageInfo[] findRefs(PsiElement aClass, SearchScope searchScope) {
-    ArrayList<UsageInfo> results = new ArrayList<>();
-    for (PsiReference usage : ReferencesSearch.search(aClass, searchScope, false)) {
-      results.add(new UsageInfo(usage));
+        return bindTo;
     }
 
-    return results.toArray(UsageInfo.EMPTY_ARRAY);
-  }
+    @RequiredReadAction
+    public static UsageInfo[] findClassUsages(Project project, PsiMigration migration, String qName, SearchScope searchScope) {
+        PsiClass aClass = findOrCreateClass(project, migration, qName);
 
-  static void doMigration(PsiElement elementToBind, String newQName, UsageInfo[] usages, ArrayList<SmartPsiElementPointer<PsiElement>> refsToShorten) {
-    try {
-      SmartPointerManager smartPointerManager = SmartPointerManager.getInstance(elementToBind.getProject());
-      // rename all references
-      for (UsageInfo usage : usages) {
-        if (usage instanceof MigrationProcessor.MigrationUsageInfo) {
-          MigrationProcessor.MigrationUsageInfo usageInfo = (MigrationProcessor.MigrationUsageInfo) usage;
-          if (Comparing.equal(newQName, usageInfo.mapEntry.getNewName())) {
-            PsiElement element = usage.getElement();
-            if (element == null || !element.isValid()) {
-              continue;
-            }
-            PsiElement psiElement;
-            if (element instanceof PsiJavaCodeReferenceElement) {
-              psiElement = ((PsiJavaCodeReferenceElement) element).bindToElement(elementToBind);
-            } else {
-              psiElement = bindNonJavaReference(elementToBind, element, usage);
-            }
-            if (psiElement != null) {
-              refsToShorten.add(smartPointerManager.createSmartPsiElementPointer(psiElement));
-            }
-          }
+        return findRefs(aClass, searchScope);
+    }
+
+    @RequiredReadAction
+    private static UsageInfo[] findRefs(PsiElement aClass, SearchScope searchScope) {
+        List<UsageInfo> results = new ArrayList<>();
+        for (PsiReference usage : ReferencesSearch.search(aClass, searchScope, false)) {
+            results.add(new UsageInfo(usage));
         }
-      }
-    } catch (IncorrectOperationException e) {
-      // should not happen!
-      LOG.error(e);
-    }
-  }
 
-  static PsiPackage findOrCreatePackage(Project project, PsiMigration migration, String qName) {
-    PsiPackage aPackage = JavaPsiFacade.getInstance(project).findPackage(qName);
-    if (aPackage != null) {
-      return aPackage;
-    } else {
-      return WriteAction.compute(() -> migration.createPackage(qName));
+        return results.toArray(UsageInfo.EMPTY_ARRAY);
     }
-  }
 
-  static PsiClass findOrCreateClass(Project project, PsiMigration migration, String qName) {
-    PsiClass aClass = JavaPsiFacade.getInstance(project).findClass(qName, GlobalSearchScope.allScope(project));
-    if (aClass == null) {
-      aClass = WriteAction.compute(() -> migration.createClass(qName));
+    @RequiredWriteAction
+    static void doMigration(
+        PsiElement elementToBind,
+        String newQName,
+        UsageInfo[] usages,
+        List<SmartPsiElementPointer<PsiElement>> refsToShorten
+    ) {
+        try {
+            SmartPointerManager smartPointerManager = SmartPointerManager.getInstance(elementToBind.getProject());
+            // rename all references
+            for (UsageInfo usage : usages) {
+                if (usage instanceof MigrationProcessor.MigrationUsageInfo usageInfo
+                    && Comparing.equal(newQName, usageInfo.mapEntry.getNewName())) {
+                    PsiElement element = usageInfo.getElement();
+                    if (element == null || !element.isValid()) {
+                        continue;
+                    }
+                    PsiElement psiElement = element instanceof PsiJavaCodeReferenceElement codeRef
+                        ? codeRef.bindToElement(elementToBind)
+                        : bindNonJavaReference(elementToBind, element, usageInfo);
+                    if (psiElement != null) {
+                        refsToShorten.add(smartPointerManager.createSmartPsiElementPointer(psiElement));
+                    }
+                }
+            }
+        }
+        catch (IncorrectOperationException e) {
+            // should not happen!
+            LOG.error(e);
+        }
     }
-    return aClass;
-  }
+
+    static PsiPackage findOrCreatePackage(Project project, PsiMigration migration, String qName) {
+        PsiPackage aPackage = JavaPsiFacade.getInstance(project).findPackage(qName);
+        if (aPackage != null) {
+            return aPackage;
+        }
+        else {
+            return WriteAction.compute(() -> migration.createPackage(qName));
+        }
+    }
+
+    static PsiClass findOrCreateClass(Project project, PsiMigration migration, String qName) {
+        PsiClass aClass = JavaPsiFacade.getInstance(project).findClass(qName, GlobalSearchScope.allScope(project));
+        if (aClass == null) {
+            aClass = WriteAction.compute(() -> migration.createClass(qName));
+        }
+        return aClass;
+    }
 }

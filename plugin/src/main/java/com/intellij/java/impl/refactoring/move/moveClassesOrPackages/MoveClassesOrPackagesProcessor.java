@@ -278,7 +278,7 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
             if (element == null) {
                 continue;
             }
-            if (usage instanceof MoveRenameUsageInfo moveRenameUsageInfo && !(usage instanceof NonCodeUsageInfo)
+            if (usage instanceof MoveRenameUsageInfo moveRenameUsageInfo && !(moveRenameUsageInfo instanceof NonCodeUsageInfo)
                 && moveRenameUsageInfo.getReferencedElement() instanceof PsiClass aClass) {
                 if (!movedClasses.contains(aClass)) {
                     movedClasses.add(aClass);
@@ -551,10 +551,10 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
 
     @Nonnull
     @Override
-    protected String getCommandName() {
+    protected LocalizeValue getCommandName() {
         String elements = RefactoringUIUtil.calculatePsiElementDescriptionList(myElementsToMove);
         String target = myTargetPackage.getQualifiedName();
-        return RefactoringLocalize.moveClassesCommand(elements, target).get();
+        return RefactoringLocalize.moveClassesCommand(elements, target);
     }
 
     private class MyClassInstanceReferenceVisitor implements ClassInstanceScanner.ClassInstanceReferenceVisitor {
