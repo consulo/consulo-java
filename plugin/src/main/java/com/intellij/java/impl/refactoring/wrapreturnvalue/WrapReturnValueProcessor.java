@@ -59,7 +59,7 @@ import java.util.List;
 import java.util.Set;
 
 public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor {
-    private static final Logger LOG = Logger.getInstance("com.siyeh.rpp.wrapreturnvalue.WrapReturnValueProcessor");
+    private static final Logger LOG = Logger.getInstance(WrapReturnValueProcessor.class);
 
     private MoveDestination myMoveDestination;
     private final PsiMethod method;
@@ -140,8 +140,7 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
     @RequiredReadAction
     private void findUsagesForMethod(PsiMethod psiMethod, List<FixableUsageInfo> usages) {
         for (PsiReference reference : ReferencesSearch.search(psiMethod, psiMethod.getUseScope())) {
-            PsiElement referenceElement = reference.getElement();
-            if (referenceElement.getParent() instanceof PsiCallExpression callExpr) {
+            if (reference.getElement().getParent() instanceof PsiCallExpression callExpr) {
                 usages.add(new UnwrapCall(callExpr, unwrapMethodName));
             }
         }
@@ -333,9 +332,9 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
     @Nonnull
     @Override
     @RequiredReadAction
-    protected String getCommandName() {
+    protected LocalizeValue getCommandName() {
         PsiClass containingClass = method.getContainingClass();
-        return JavaRefactoringLocalize.wrappedReturnCommandName(className, containingClass.getName(), '.', method.getName()).get();
+        return JavaRefactoringLocalize.wrappedReturnCommandName(className, containingClass.getName(), '.', method.getName());
     }
 
     private class ReturnSearchVisitor extends JavaRecursiveElementWalkingVisitor {

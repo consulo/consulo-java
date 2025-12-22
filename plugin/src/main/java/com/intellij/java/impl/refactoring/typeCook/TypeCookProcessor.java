@@ -21,103 +21,112 @@ import com.intellij.java.impl.refactoring.typeCook.deductive.builder.SystemBuild
 import com.intellij.java.impl.refactoring.typeCook.deductive.resolver.Binding;
 import com.intellij.java.impl.refactoring.typeCook.deductive.resolver.ResolverTree;
 import com.intellij.java.language.psi.PsiTypeCastExpression;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import jakarta.annotation.Nonnull;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class TypeCookProcessor extends BaseRefactoringProcessor {
-  private PsiElement[] myElements;
-  private final Settings mySettings;
-  private Result myResult;
+    private PsiElement[] myElements;
+    private final Settings mySettings;
+    private Result myResult;
 
-  public TypeCookProcessor(Project project, PsiElement[] elements, Settings settings) {
-    super(project);
+    public TypeCookProcessor(Project project, PsiElement[] elements, Settings settings) {
+        super(project);
 
-    myElements = elements;
-    mySettings = settings;
-  }
+        myElements = elements;
+        mySettings = settings;
+    }
 
-  @Nonnull
-  protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
-    return new TypeCookViewDescriptor(myElements);
-  }
+    @Nonnull
+    @Override
+    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+        return new TypeCookViewDescriptor(myElements);
+    }
 
-  @Nonnull
-  protected UsageInfo[] findUsages() {
-    SystemBuilder systemBuilder = new SystemBuilder(myProject, mySettings);
+    @Nonnull
+    @Override
+    @RequiredReadAction
+    protected UsageInfo[] findUsages() {
+        SystemBuilder systemBuilder = new SystemBuilder(myProject, mySettings);
 
-    ReductionSystem commonSystem = systemBuilder.build(myElements);
-    myResult = new Result(commonSystem);
+        ReductionSystem commonSystem = systemBuilder.build(myElements);
+        myResult = new Result(commonSystem);
 
-    ReductionSystem[] systems = commonSystem.isolate();
+        ReductionSystem[] systems = commonSystem.isolate();
 
-    for (ReductionSystem system : systems) {
-      if (system != null) {
-        ResolverTree tree = new ResolverTree(system);
+        for (ReductionSystem system : systems) {
+            if (system != null) {
+                ResolverTree tree = new ResolverTree(system);
 
-        tree.resolve();
+                tree.resolve();
 
-        Binding solution = tree.getBestSolution();
+                Binding solution = tree.getBestSolution();
 
-        if (solution != null) {
-          myResult.incorporateSolution(solution);
+                if (solution != null) {
+                    myResult.incorporateSolution(solution);
+                }
+            }
         }
-      }
+
+        Set<PsiElement> changedItems = myResult.getCookedElements();
+        UsageInfo[] usages = new UsageInfo[changedItems.size()];
+
+        int i = 0;
+        for (final PsiElement element : changedItems) {
+            if (!(element instanceof PsiTypeCastExpression)) {
+                usages[i++] = new UsageInfo(element) {
+                    @Override
+                    public String getTooltipText() {
+                        return myResult.getCookedType(element).getCanonicalText();
+                    }
+                };
+            }
+            else {
+                usages[i++] = new UsageInfo(element);
+            }
+        }
+
+        return usages;
     }
 
-    HashSet<PsiElement> changedItems = myResult.getCookedElements();
-    UsageInfo[] usages = new UsageInfo[changedItems.size()];
-
-    int i = 0;
-    for (final PsiElement element : changedItems) {
-      if (!(element instanceof PsiTypeCastExpression)) {
-        usages[i++] = new UsageInfo(element) {
-          public String getTooltipText() {
-            return myResult.getCookedType(element).getCanonicalText();
-          }
-        };
-      }
-      else {
-        usages[i++] = new UsageInfo(element);
-      }
+    @Override
+    protected void refreshElements(@Nonnull PsiElement[] elements) {
+        myElements = elements;
     }
 
-    return usages;
-  }
+    @Override
+    @RequiredWriteAction
+    protected void performRefactoring(UsageInfo[] usages) {
+        Set<PsiElement> victims = new HashSet<>();
 
-  protected void refreshElements(PsiElement[] elements) {
-    myElements = elements;
-  }
+        for (UsageInfo usage : usages) {
+            victims.add(usage.getElement());
+        }
 
-  protected void performRefactoring(UsageInfo[] usages) {
-    HashSet<PsiElement> victims = new HashSet<PsiElement>();
-
-    for (UsageInfo usage : usages) {
-      victims.add(usage.getElement());
+        myResult.apply(victims);
     }
 
-    myResult.apply (victims);
-  }
+    @Override
+    protected boolean isGlobalUndoAction() {
+        return true;
+    }
 
-  @Override
-  protected boolean isGlobalUndoAction() {
-    return true;
-  }
+    @Nonnull
+    @Override
+    protected LocalizeValue getCommandName() {
+        return RefactoringLocalize.typeCookCommand();
+    }
 
-  protected String getCommandName() {
-    return RefactoringLocalize.typeCookCommand().get();
-  }
-
-  public List<PsiElement> getElements() {
-    return Collections.unmodifiableList(Arrays.asList(myElements));
-  }
+    public List<PsiElement> getElements() {
+        return Collections.unmodifiableList(Arrays.asList(myElements));
+    }
 }

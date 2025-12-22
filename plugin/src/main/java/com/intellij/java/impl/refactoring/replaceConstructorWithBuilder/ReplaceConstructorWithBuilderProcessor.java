@@ -60,7 +60,7 @@ import java.util.Map;
  * @since 2008-09-04
  */
 public class ReplaceConstructorWithBuilderProcessor extends FixableUsagesRefactoringProcessor {
-    public static final String REFACTORING_NAME = "Replace Constructor with Builder";
+    public static final LocalizeValue REFACTORING_NAME = LocalizeValue.localizeTODO("Replace Constructor with Builder");
     private final PsiMethod[] myConstructors;
     private final Map<String, ParameterData> myParametersMap;
     private final String myClassName;
@@ -68,7 +68,6 @@ public class ReplaceConstructorWithBuilderProcessor extends FixableUsagesRefacto
     private final boolean myCreateNewBuilderClass;
     private final PsiElementFactory myElementFactory;
     private MoveDestination myMoveDestination;
-
 
     public ReplaceConstructorWithBuilderProcessor(
         Project project,
@@ -348,7 +347,7 @@ public class ReplaceConstructorWithBuilderProcessor extends FixableUsagesRefacto
 
     @Nonnull
     @Override
-    protected String getCommandName() {
+    protected LocalizeValue getCommandName() {
         return REFACTORING_NAME;
     }
 }

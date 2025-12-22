@@ -22,23 +22,27 @@ import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.UnresolvableCollisionUsageInfo;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author dsl
  */
 public class ClassHidesUnqualifiableClassUsageInfo extends UnresolvableCollisionUsageInfo {
-  private final PsiClass myHiddenClass;
+    private final PsiClass myHiddenClass;
 
-  public ClassHidesUnqualifiableClassUsageInfo(PsiJavaCodeReferenceElement element, PsiClass renamedClass, PsiClass hiddenClass) {
-    super(element, renamedClass);
-    myHiddenClass = hiddenClass;
-  }
+    public ClassHidesUnqualifiableClassUsageInfo(PsiJavaCodeReferenceElement element, PsiClass renamedClass, PsiClass hiddenClass) {
+        super(element, renamedClass);
+        myHiddenClass = hiddenClass;
+    }
 
-  public String getDescription() {
-    PsiElement container = ConflictsUtil.getContainer(myHiddenClass);
-    return RefactoringLocalize.renamedClassWillHide0In1(
-      RefactoringUIUtil.getDescription(myHiddenClass, false),
-      RefactoringUIUtil.getDescription(container, false)
-    ).get();
-  }
+    @Nonnull
+    @Override
+    public LocalizeValue getDescription() {
+        PsiElement container = ConflictsUtil.getContainer(myHiddenClass);
+        return RefactoringLocalize.renamedClassWillHide0In1(
+            RefactoringUIUtil.getDescription(myHiddenClass, false),
+            RefactoringUIUtil.getDescription(container, false)
+        );
+    }
 }

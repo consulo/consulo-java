@@ -128,15 +128,18 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
         }
 
         //if (myConstructor != null && myConstructor.getParameterList().getParametersCount() == 0) {
-        //    RefactoringUtil.visitImplicitConstructorUsages(getConstructorContainingClass(), new RefactoringUtil.ImplicitConstructorUsageVisitor() {
-        //        @Override public void visitConstructor(PsiMethod constructor, PsiMethod baseConstructor) {
-        //            myNonNewConstructorUsages.add(constructor);
-        //        }
+        //    RefactoringUtil.visitImplicitConstructorUsages(
+        //        getConstructorContainingClass(),
+        //        new RefactoringUtil.ImplicitConstructorUsageVisitor() {
+        //            @Override public void visitConstructor(PsiMethod constructor, PsiMethod baseConstructor) {
+        //                myNonNewConstructorUsages.add(constructor);
+        //            }
         //
-        //        @Override public void visitClassWithoutConstructors(PsiClass aClass) {
-        //            myNonNewConstructorUsages.add(aClass);
+        //            @Override public void visitClassWithoutConstructors(PsiClass aClass) {
+        //                myNonNewConstructorUsages.add(aClass);
+        //            }
         //        }
-        //    });
+        //    );
         //}
 
         return usages.toArray(new UsageInfo[usages.size()]);
@@ -195,12 +198,7 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
     }
 
     private PsiClass getConstructorContainingClass() {
-        if (myConstructor != null) {
-            return myConstructor.getContainingClass();
-        }
-        else {
-            return myOriginalClass;
-        }
+        return myConstructor != null ? myConstructor.getContainingClass() : myOriginalClass;
     }
 
     @Override
@@ -308,28 +306,17 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
 
     @PsiModifier.ModifierConstant
     private String getDefaultFactoryVisibility() {
-        PsiModifierList modifierList;
-        if (myConstructor != null) {
-            modifierList = myConstructor.getModifierList();
-        }
-        else {
-            modifierList = myOriginalClass.getModifierList();
-        }
+        PsiModifierList modifierList = myConstructor != null ? myConstructor.getModifierList() : myOriginalClass.getModifierList();
         return VisibilityUtil.getVisibilityModifier(modifierList);
     }
 
     @Nonnull
     @Override
     @RequiredReadAction
-    protected String getCommandName() {
-        if (myConstructor != null) {
-            return RefactoringLocalize.replaceConstructor0WithAFactoryMethod(DescriptiveNameUtil.getDescriptiveName(myConstructor)).get();
-        }
-        else {
-            return RefactoringLocalize.replaceDefaultConstructorOf0WithAFactoryMethod(
-                DescriptiveNameUtil.getDescriptiveName(myOriginalClass)
-            ).get();
-        }
+    protected LocalizeValue getCommandName() {
+        return myConstructor != null
+            ? RefactoringLocalize.replaceConstructor0WithAFactoryMethod(DescriptiveNameUtil.getDescriptiveName(myConstructor))
+            : RefactoringLocalize.replaceDefaultConstructorOf0WithAFactoryMethod(DescriptiveNameUtil.getDescriptiveName(myOriginalClass));
     }
 
     public PsiClass getOriginalClass() {

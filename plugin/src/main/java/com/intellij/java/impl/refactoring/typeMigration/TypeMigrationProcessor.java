@@ -28,6 +28,7 @@ import consulo.codeEditor.Editor;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.project.ui.wm.ToolWindowId;
 import consulo.project.ui.wm.ToolWindowManager;
@@ -330,7 +331,7 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor {
 
     @Nonnull
     @Override
-    protected String getCommandName() {
-        return "TypeMigration";
+    protected LocalizeValue getCommandName() {
+        return LocalizeValue.localizeTODO("TypeMigration");
     }
 }
