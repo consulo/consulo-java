@@ -147,19 +147,19 @@ public class ExtractLightMethodObjectHandler {
         if (elementsCopy.length == 0) {
             return null;
         }
-        if (elementsCopy[elementsCopy.length - 1] instanceof PsiExpressionStatement) {
-            PsiExpression expr = ((PsiExpressionStatement) elementsCopy[elementsCopy.length - 1]).getExpression();
+        if (elementsCopy[elementsCopy.length - 1] instanceof PsiExpressionStatement expressionStmt) {
+            PsiExpression expr = expressionStmt.getExpression();
             if (!(expr instanceof PsiAssignmentExpression)) {
                 PsiType expressionType = GenericsUtil.getVariableTypeByExpressionType(expr.getType());
                 if (expressionType instanceof PsiDisjunctionType disjunctionType) {
-                    expressionType = ((PsiDisjunctionType) disjunctionType).getLeastUpperBound();
+                    expressionType = disjunctionType.getLeastUpperBound();
                 }
                 if (isValidVariableType(expressionType)) {
                     String uniqueResultName =
                         JavaCodeStyleManager.getInstance(project).suggestUniqueVariableName("result", elementsCopy[0], true);
                     String statementText = expressionType.getCanonicalText() + " " + uniqueResultName + " = " + expr.getText() + ";";
-                    elementsCopy[elementsCopy.length - 1] = elementsCopy[elementsCopy.length - 1]
-                        .replace(elementFactory.createStatementFromText(statementText, elementsCopy[elementsCopy.length - 1]));
+                    elementsCopy[elementsCopy.length - 1] =
+                        expressionStmt.replace(elementFactory.createStatementFromText(statementText, expressionStmt));
                 }
             }
         }

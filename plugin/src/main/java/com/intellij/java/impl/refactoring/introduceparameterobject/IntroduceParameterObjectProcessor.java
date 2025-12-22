@@ -407,9 +407,9 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
     @Nonnull
     @Override
     @RequiredReadAction
-    protected String getCommandName() {
+    protected LocalizeValue getCommandName() {
         PsiClass containingClass = method.getContainingClass();
-        return JavaRefactoringLocalize.introducedParameterClassCommandName(className, containingClass.getName(), method.getName()).get();
+        return JavaRefactoringLocalize.introducedParameterClassCommandName(className, containingClass.getName(), method.getName());
     }
 
     private static class ParamUsageVisitor extends JavaRecursiveElementVisitor {

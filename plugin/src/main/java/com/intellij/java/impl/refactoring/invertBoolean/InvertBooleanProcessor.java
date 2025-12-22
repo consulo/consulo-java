@@ -28,6 +28,7 @@ import consulo.language.editor.refactoring.rename.RenameUtil;
 import consulo.language.psi.*;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -213,7 +214,7 @@ public class InvertBooleanProcessor extends BaseRefactoringProcessor {
     }
 
     private static UsageInfo[] extractUsagesForElement(PsiElement element, UsageInfo[] usages) {
-        ArrayList<UsageInfo> extractedUsages = new ArrayList<>(usages.length);
+        List<UsageInfo> extractedUsages = new ArrayList<>(usages.length);
         for (UsageInfo usage : usages) {
             if (usage instanceof MoveRenameUsageInfo usageInfo && element.equals(usageInfo.getReferencedElement())) {
                 extractedUsages.add(usageInfo);
@@ -268,7 +269,7 @@ public class InvertBooleanProcessor extends BaseRefactoringProcessor {
 
     @Nonnull
     @Override
-    protected String getCommandName() {
-        return InvertBooleanHandler.REFACTORING_NAME.get();
+    protected LocalizeValue getCommandName() {
+        return InvertBooleanHandler.REFACTORING_NAME;
     }
 }

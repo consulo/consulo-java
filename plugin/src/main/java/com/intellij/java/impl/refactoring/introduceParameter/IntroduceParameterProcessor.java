@@ -299,8 +299,7 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
                                 //check getter access instead
                                 PsiClass psiClass = field.getContainingClass();
                                 LOG.assertTrue(psiClass != null);
-                                PsiMethod method =
-                                    psiClass.findMethodBySignature(PropertyUtil.generateGetterPrototype(field), true);
+                                PsiMethod method = psiClass.findMethodBySignature(PropertyUtil.generateGetterPrototype(field), true);
                                 if (method != null) {
                                     element = method;
                                 }
@@ -309,10 +308,10 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
                                 && !JavaPsiFacade.getInstance(myProject).getResolveHelper().isAccessible(member, place, null)) {
                                 LocalizeValue message =
                                     RefactoringLocalize.zeroIsNotAccessibleFrom1ValueForIntroducedParameterInThatMethodCallWillBeIncorrect(
-                                        RefactoringUIUtil.getDescription(element, true),
+                                        RefactoringUIUtil.getDescription(member, true),
                                         RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(place), true)
                                     );
-                                conflicts.putValue(element, message);
+                                conflicts.putValue(member, message);
                             }
                         }
                     }
@@ -584,8 +583,8 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
     @Nonnull
     @Override
     @RequiredReadAction
-    protected String getCommandName() {
-        return RefactoringLocalize.introduceParameterCommand(DescriptiveNameUtil.getDescriptiveName(myMethodToReplaceIn)).get();
+    protected LocalizeValue getCommandName() {
+        return RefactoringLocalize.introduceParameterCommand(DescriptiveNameUtil.getDescriptiveName(myMethodToReplaceIn));
     }
 
     @Nullable

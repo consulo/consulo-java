@@ -43,6 +43,7 @@ import consulo.usage.UsageViewUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.xml.psi.xml.XmlElement;
+import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -64,9 +65,7 @@ class JavaChangeSignatureUsageSearcher {
     public UsageInfo[] findUsages() {
         List<UsageInfo> result = new ArrayList<>();
         PsiElement element = myChangeInfo.getMethod();
-        if (element instanceof PsiMethod) {
-            PsiMethod method = (PsiMethod) element;
-
+        if (element instanceof PsiMethod method) {
             findSimpleUsages(method, result);
 
             UsageInfo[] usageInfos = result.toArray(new UsageInfo[result.size()]);
@@ -248,11 +247,8 @@ class JavaChangeSignatureUsageSearcher {
                 }
                 else if (element instanceof PsiMethod refMethod && refMethod.isConstructor()) {
                     if (JavaLanguage.INSTANCE.equals(element.getLanguage())) {
-                        DefaultConstructorImplicitUsageInfo implicitUsageInfo = new DefaultConstructorImplicitUsageInfo(
-                            (PsiMethod) element,
-                            ((PsiMethod) element).getContainingClass(),
-                            method
-                        );
+                        DefaultConstructorImplicitUsageInfo implicitUsageInfo =
+                            new DefaultConstructorImplicitUsageInfo(refMethod, refMethod.getContainingClass(), method);
                         result.add(implicitUsageInfo);
                     }
                 }
@@ -270,8 +266,8 @@ class JavaChangeSignatureUsageSearcher {
                         result.add(new NoConstructorClassUsageInfo(psiClass));
                     }
                 }
-                else if (ref instanceof PsiCallReference) {
-                    result.add(new CallReferenceUsageInfo((PsiCallReference) ref));
+                else if (ref instanceof PsiCallReference callRef) {
+                    result.add(new CallReferenceUsageInfo(callRef));
                 }
                 else {
                     result.add(new MoveRenameUsageInfo(element, ref, method));
@@ -279,8 +275,10 @@ class JavaChangeSignatureUsageSearcher {
             }
 
             //if (method.isConstructor() && parameterCount == 0) {
-            //    RefactoringUtil.visitImplicitConstructorUsages(method.getContainingClass(),
-            //                                                   new DefaultConstructorUsageCollector(result));
+            //    RefactoringUtil.visitImplicitConstructorUsages(
+            //        method.getContainingClass(),
+            //        new DefaultConstructorUsageCollector(result)
+            //    );
             //}
         }
         else if (myChangeInfo.isParameterTypesChanged()) {
@@ -338,6 +336,7 @@ class JavaChangeSignatureUsageSearcher {
             myMethod = method;
         }
 
+        @Nonnull
         @Override
         public LocalizeValue getDescription() {
             return RefactoringLocalize.thereIsAlreadyA0InThe1ItWillConflictWithTheRenamedParameter(
