@@ -94,13 +94,7 @@ public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
                 outerHides.add(new MemberHidesOuterMemberUsageInfo(element, resolved));
             }
             else if (!(element instanceof PsiMethod)) {
-                PsiReference ref;
-                if (usage instanceof MoveRenameUsageInfo) {
-                    ref = usage.getReference();
-                }
-                else {
-                    ref = element.getReference();
-                }
+                PsiReference ref = usage instanceof MoveRenameUsageInfo ? usage.getReference() : element.getReference();
                 if (ref instanceof PsiImportStaticReferenceElement importStaticRef && importStaticRef.multiResolve(false).length > 1) {
                     continue;
                 }
@@ -202,10 +196,13 @@ public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
                 final PsiMethod methodInBaseClass = containingClass.findMethodBySignature(patternMethod, true);
                 if (methodInBaseClass != null && methodInBaseClass.getContainingClass() != containingClass && methodInBaseClass.isFinal()) {
                     result.add(new UnresolvableCollisionUsageInfo(methodInBaseClass, methodToRename) {
+                        @Nonnull
                         @Override
-                        public String getDescription() {
-                            return "Renaming method will override final " +
-                                "\"" + RefactoringUIUtil.getDescription(methodInBaseClass, true) + "\"";
+                        public LocalizeValue getDescription() {
+                            return LocalizeValue.localizeTODO(
+                                "Renaming method will override final " +
+                                    "\"" + RefactoringUIUtil.getDescription(methodInBaseClass, true) + "\""
+                            );
                         }
                     });
                 }
@@ -240,10 +237,13 @@ public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
                         final PsiMember resolveResultElement = (PsiMember) resolveResult.getElement();
                         if (resolveResult.isValidResult() && resolveResultElement != null) {
                             result.add(new UnresolvableCollisionUsageInfo(refExpr, methodToRename) {
+                                @Nonnull
                                 @Override
-                                public String getDescription() {
-                                    return "Method call would be linked to " +
-                                        "\"" + RefactoringUIUtil.getDescription(resolveResultElement, true) + "\" after rename";
+                                public LocalizeValue getDescription() {
+                                    return LocalizeValue.localizeTODO(
+                                        "Method call would be linked to " +
+                                            "\"" + RefactoringUIUtil.getDescription(resolveResultElement, true) + "\" after rename"
+                                    );
                                 }
                             });
                             break;

@@ -24,57 +24,80 @@ import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.HelpID;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 public class ReplaceConstructorWithBuilderHandler implements RefactoringActionHandler {
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
-    int offset = editor.getCaretModel().getOffset();
-    PsiElement element = file.findElementAt(offset);
-    PsiClass psiClass = getParentNamedClass(element);
-    if (psiClass == null) {
-      showErrorMessage("The caret should be positioned inside a class which constructors are to be replaced with builder.", project, editor);
-      return;
+    @Override
+    @RequiredUIAccess
+    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+        int offset = editor.getCaretModel().getOffset();
+        PsiElement element = file.findElementAt(offset);
+        PsiClass psiClass = getParentNamedClass(element);
+        if (psiClass == null) {
+            showErrorMessage(
+                LocalizeValue.localizeTODO(
+                    "The caret should be positioned inside a class which constructors are to be replaced with builder."
+                ),
+                project,
+                editor
+            );
+            return;
+        }
+
+        PsiMethod[] constructors = psiClass.getConstructors();
+        if (constructors.length == 0) {
+            showErrorMessage(
+                LocalizeValue.localizeTODO("Current class doesn't have constructors to replace with builder."),
+                project,
+                editor
+            );
+            return;
+        }
+
+        new ReplaceConstructorWithBuilderDialog(project, constructors).show();
     }
 
-    PsiMethod[] constructors = psiClass.getConstructors();
-    if (constructors.length == 0) {
-      showErrorMessage("Current class doesn't have constructors to replace with builder.", project, editor);
-      return;
+    @Nullable
+    @RequiredReadAction
+    public static PsiClass getParentNamedClass(PsiElement element) {
+        if (element != null
+            && element.getParent() instanceof PsiJavaCodeReferenceElement codeRef
+            && codeRef.resolve() instanceof PsiClass psiClass) {
+            return psiClass;
+        }
+        PsiClass psiClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
+        if (psiClass instanceof PsiAnonymousClass) {
+            return getParentNamedClass(psiClass);
+        }
+        return psiClass;
     }
 
-    new ReplaceConstructorWithBuilderDialog(project, constructors).show();
-  }
-
-  @Nullable
-  public static PsiClass getParentNamedClass(PsiElement element) {
-    if (element != null) {
-      PsiElement parent = element.getParent();
-      if (parent instanceof PsiJavaCodeReferenceElement) {
-        PsiElement resolve = ((PsiJavaCodeReferenceElement)parent).resolve();
-        if (resolve instanceof PsiClass) return (PsiClass)resolve;
-      }
+    @Override
+    @RequiredUIAccess
+    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+        throw new UnsupportedOperationException();
     }
-    PsiClass psiClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
-    if (psiClass instanceof PsiAnonymousClass) {
-      return getParentNamedClass(psiClass);
+
+    @RequiredUIAccess
+    private static void showErrorMessage(@Nonnull LocalizeValue message, Project project, Editor editor) {
+        CommonRefactoringUtil.showErrorHint(
+            project,
+            editor,
+            message,
+            ReplaceConstructorWithBuilderProcessor.REFACTORING_NAME,
+            HelpID.REPLACE_CONSTRUCTOR_WITH_BUILDER
+        );
     }
-    return psiClass;
-  }
-
-  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
-    throw new UnsupportedOperationException();
-  }
-
-  private static void showErrorMessage(String message, Project project, Editor editor) {
-    CommonRefactoringUtil.showErrorHint(project, editor, message, ReplaceConstructorWithBuilderProcessor.REFACTORING_NAME,  HelpID.REPLACE_CONSTRUCTOR_WITH_BUILDER);
-  }
 }

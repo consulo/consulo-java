@@ -82,8 +82,8 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
 
     @Nonnull
     @Override
-    protected String getCommandName() {
-        return myCommandName.get();
+    protected LocalizeValue getCommandName() {
+        return myCommandName;
     }
 
     private void setOptions(MoveMembersOptions dialog) {

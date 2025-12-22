@@ -20,6 +20,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.findUsage.DescriptiveNameUtil;
 import consulo.language.psi.PsiElement;
@@ -64,11 +65,11 @@ public class TurnRefsToSuperProcessor extends TurnRefsToSuperProcessorBase {
     @Nonnull
     @Override
     @RequiredReadAction
-    protected String getCommandName() {
+    protected LocalizeValue getCommandName() {
         return RefactoringLocalize.turnRefsToSuperCommand(
             DescriptiveNameUtil.getDescriptiveName(myClass),
             DescriptiveNameUtil.getDescriptiveName(mySuper)
-        ).get();
+        );
     }
 
     @Nonnull
@@ -106,7 +107,7 @@ public class TurnRefsToSuperProcessor extends TurnRefsToSuperProcessorBase {
     protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
         if (!myProject.getApplication().isUnitTestMode() && refUsages.get().length == 0) {
             LocalizeValue message = RefactoringLocalize.noUsagesCanBeReplaced(myClass.getQualifiedName(), mySuper.getQualifiedName());
-            Messages.showInfoMessage(myProject, message.get(), TurnRefsToSuperHandler.REFACTORING_NAME);
+            Messages.showInfoMessage(myProject, message.get(), TurnRefsToSuperHandler.REFACTORING_NAME.get());
             return false;
         }
 
@@ -120,11 +121,11 @@ public class TurnRefsToSuperProcessor extends TurnRefsToSuperProcessorBase {
     }
 
     @Override
+    @RequiredWriteAction
     protected void performRefactoring(@Nonnull UsageInfo[] usages) {
         try {
             PsiClass aSuper = mySuper;
             processTurnToSuperRefs(usages, aSuper);
-
         }
         catch (IncorrectOperationException e) {
             LOG.error(e);
@@ -146,7 +147,7 @@ public class TurnRefsToSuperProcessor extends TurnRefsToSuperProcessorBase {
 
         if (member instanceof PsiField field) {
             PsiClass containingClass = field.getContainingClass();
-            LanguageLevel languageLevel = PsiUtil.getLanguageLevel(member);
+            LanguageLevel languageLevel = PsiUtil.getLanguageLevel(field);
             if (manager.areElementsEquivalent(
                 containingClass,
                 JavaPsiFacade.getInstance(manager.getProject()).getElementFactory().getArrayClass(languageLevel)

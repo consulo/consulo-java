@@ -196,10 +196,13 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
                 for (PsiTypeParameter typeParameter : owner.getTypeParameters()) {
                     if (Comparing.equal(newName, typeParameter.getName())) {
                         result.add(new UnresolvableCollisionUsageInfo(typeParam, typeParameter) {
+                            @Nonnull
                             @Override
-                            public String getDescription() {
-                                return "There is already type parameter in " +
-                                    RefactoringUIUtil.getDescription(typeParam, false) + " with name " + newName;
+                            public LocalizeValue getDescription() {
+                                return LocalizeValue.localizeTODO(
+                                    "There is already type parameter in " +
+                                        RefactoringUIUtil.getDescription(typeParam, false) + " with name " + newName
+                                );
                             }
                         });
                     }
@@ -231,7 +234,7 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
             if (typeParam.getOwner() instanceof PsiClass ownerClass) {
                 for (PsiClass superClass : ownerClass.getSupers()) {
                     if (newName.equals(superClass.getName())) {
-                        ClassCollisionsDetector classCollisionsDetector = new ClassCollisionsDetector(aClass);
+                        ClassCollisionsDetector classCollisionsDetector = new ClassCollisionsDetector(typeParam);
                         for (PsiReference reference : ReferencesSearch.search(superClass, new LocalSearchScope(superClass))) {
                             classCollisionsDetector.addClassCollisions(reference.getElement(), newName, result);
                         }
@@ -244,7 +247,7 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
                                 if (refElement instanceof PsiReferenceExpression refExpr && refExpr.isQualified()) {
                                     return true;
                                 }
-                                MemberHidesOuterMemberUsageInfo info = new MemberHidesOuterMemberUsageInfo(refElement, aClass);
+                                MemberHidesOuterMemberUsageInfo info = new MemberHidesOuterMemberUsageInfo(refElement, typeParam);
                                 result.add(info);
                                 return true;
                             });
