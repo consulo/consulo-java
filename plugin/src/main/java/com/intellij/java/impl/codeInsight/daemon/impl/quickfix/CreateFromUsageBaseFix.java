@@ -432,14 +432,14 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
                                       Template template,
                                       @Nonnull Project project,
                                       TemplateEditingListener listener) {
-    startTemplate(editor, template, project, listener, null);
+    startTemplate(editor, template, project, listener, LocalizeValue.empty());
   }
 
   public static void startTemplate(@Nonnull final Editor editor,
-                                   final Template template,
+                                   @Nonnull Template template,
                                    @Nonnull final Project project,
-                                   final TemplateEditingListener listener,
-                                   final LocalizeValue commandName) {
+                                   @Nullable TemplateEditingListener listener,
+                                   @Nonnull LocalizeValue commandName) {
     Runnable runnable = new Runnable() {
       @Override
       public void run() {
