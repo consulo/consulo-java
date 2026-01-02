@@ -24,15 +24,15 @@ import java.io.Serializable;
  * @author yole
  */
 public class ReferenceTransferableData implements TextBlockTransferableData, Cloneable, Serializable {
-  private final ReferenceData[] myReferenceDatas;
+  private final JavaReferenceData[] myReferenceDatas;
 
-  public ReferenceTransferableData(ReferenceData[] referenceDatas) {
+  public ReferenceTransferableData(JavaReferenceData[] referenceDatas) {
     myReferenceDatas = referenceDatas;
   }
 
   @Override
   public DataFlavor getFlavor() {
-    return ReferenceData.getDataFlavor();
+    return JavaReferenceData.getDataFlavor();
   }
 
   @Override
@@ -42,7 +42,7 @@ public class ReferenceTransferableData implements TextBlockTransferableData, Clo
 
   @Override
   public int getOffsets(int[] offsets, int index) {
-    for (ReferenceData data : myReferenceDatas) {
+    for (JavaReferenceData data : myReferenceDatas) {
       offsets[index++] = data.startOffset;
       offsets[index++] = data.endOffset;
     }
@@ -51,7 +51,7 @@ public class ReferenceTransferableData implements TextBlockTransferableData, Clo
 
   @Override
   public int setOffsets(int[] offsets, int index) {
-    for (ReferenceData data : myReferenceDatas) {
+    for (JavaReferenceData data : myReferenceDatas) {
       data.startOffset = offsets[index++];
       data.endOffset = offsets[index++];
     }
@@ -60,14 +60,14 @@ public class ReferenceTransferableData implements TextBlockTransferableData, Clo
 
   @Override
   public ReferenceTransferableData clone() {
-    ReferenceData[] newReferenceData = new ReferenceData[myReferenceDatas.length];
+    JavaReferenceData[] newReferenceData = new JavaReferenceData[myReferenceDatas.length];
     for (int i = 0; i < myReferenceDatas.length; i++) {
-      newReferenceData[i] = (ReferenceData) myReferenceDatas[i].clone();
+      newReferenceData[i] = (JavaReferenceData) myReferenceDatas[i].clone();
     }
     return new ReferenceTransferableData(newReferenceData);
   }
 
-  public ReferenceData[] getData() {
+  public JavaReferenceData[] getData() {
     return myReferenceDatas;
   }
 }

@@ -70,7 +70,7 @@ public abstract class CopyPasteReferenceProcessor<TRef extends PsiElement> exten
             return Collections.emptyList();
         }
 
-        ArrayList<ReferenceData> array = new ArrayList<>();
+        ArrayList<JavaReferenceData> array = new ArrayList<>();
         for (int j = 0; j < startOffsets.length; j++) {
             int startOffset = startOffsets[j];
             for (PsiElement element : CollectHighlightsUtil.getElementsInRange(file, startOffset, endOffsets[j])) {
@@ -82,10 +82,10 @@ public abstract class CopyPasteReferenceProcessor<TRef extends PsiElement> exten
             return Collections.emptyList();
         }
 
-        return Collections.singletonList(new ReferenceTransferableData(array.toArray(new ReferenceData[array.size()])));
+        return Collections.singletonList(new ReferenceTransferableData(array.toArray(new JavaReferenceData[array.size()])));
     }
 
-    protected abstract void addReferenceData(PsiFile file, int startOffset, PsiElement element, ArrayList<ReferenceData> to);
+    protected abstract void addReferenceData(PsiFile file, int startOffset, PsiElement element, ArrayList<JavaReferenceData> to);
 
     @Nonnull
     @Override
@@ -93,7 +93,7 @@ public abstract class CopyPasteReferenceProcessor<TRef extends PsiElement> exten
         ReferenceTransferableData referenceData = null;
         if (CodeInsightSettings.getInstance().ADD_IMPORTS_ON_PASTE != CodeInsightSettings.NO) {
             try {
-                DataFlavor flavor = ReferenceData.getDataFlavor();
+                DataFlavor flavor = JavaReferenceData.getDataFlavor();
                 if (flavor != null) {
                     referenceData = (ReferenceTransferableData)content.getTransferData(flavor);
                 }
@@ -131,7 +131,7 @@ public abstract class CopyPasteReferenceProcessor<TRef extends PsiElement> exten
 
         PsiDocumentManager.getInstance(project).commitAllDocuments();
         assert values.size() == 1;
-        ReferenceData[] referenceData = values.get(0).getData();
+        JavaReferenceData[] referenceData = values.get(0).getData();
         TRef[] refs = findReferencesToRestore(file, bounds, referenceData);
         if (CodeInsightSettings.getInstance().ADD_IMPORTS_ON_PASTE == CodeInsightSettings.ASK) {
             askReferencesToRestore(project, refs, referenceData);
@@ -143,13 +143,13 @@ public abstract class CopyPasteReferenceProcessor<TRef extends PsiElement> exten
     @RequiredReadAction
     protected static void addReferenceData(
         PsiElement element,
-        ArrayList<ReferenceData> array,
+        ArrayList<JavaReferenceData> array,
         int startOffset,
         String qClassName,
         @Nullable String staticMemberName
     ) {
         TextRange range = element.getTextRange();
-        array.add(new ReferenceData(
+        array.add(new JavaReferenceData(
             range.getStartOffset() - startOffset,
             range.getEndOffset() - startOffset,
             qClassName,
@@ -157,7 +157,7 @@ public abstract class CopyPasteReferenceProcessor<TRef extends PsiElement> exten
         ));
     }
 
-    protected abstract TRef[] findReferencesToRestore(PsiFile file, RangeMarker bounds, ReferenceData[] referenceData);
+    protected abstract TRef[] findReferencesToRestore(PsiFile file, RangeMarker bounds, JavaReferenceData[] referenceData);
 
     @RequiredReadAction
     protected PsiElement resolveReferenceIgnoreOverriding(PsiPolyVariantReference reference) {
@@ -171,10 +171,10 @@ public abstract class CopyPasteReferenceProcessor<TRef extends PsiElement> exten
         return referent;
     }
 
-    protected abstract void restoreReferences(ReferenceData[] referenceData, TRef[] refs);
+    protected abstract void restoreReferences(JavaReferenceData[] referenceData, TRef[] refs);
 
     @RequiredUIAccess
-    private static void askReferencesToRestore(Project project, PsiElement[] refs, ReferenceData[] referenceData) {
+    private static void askReferencesToRestore(Project project, PsiElement[] refs, JavaReferenceData[] referenceData) {
         PsiManager manager = PsiManager.getInstance(project);
 
         ArrayList<Object> array = new ArrayList<>();
@@ -183,7 +183,7 @@ public abstract class CopyPasteReferenceProcessor<TRef extends PsiElement> exten
             PsiElement ref = refs[i];
             if (ref != null) {
                 LOG.assertTrue(ref.isValid());
-                ReferenceData data = referenceData[i];
+                JavaReferenceData data = referenceData[i];
                 PsiClass refClass = JavaPsiFacade.getInstance(manager.getProject()).findClass(data.qClassName, ref.getResolveScope());
                 if (refClass == null) {
                     continue;
