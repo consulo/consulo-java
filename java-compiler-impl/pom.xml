@@ -88,17 +88,17 @@
         <dependency>
             <groupId>consulo.internal</groupId>
             <artifactId>instrumentation-util</artifactId>
-            <version>2.3-SNAPSHOT</version>
+            <version>2.4</version>
         </dependency>
         <dependency>
             <groupId>consulo.internal</groupId>
             <artifactId>instrumentation-util8</artifactId>
-            <version>2.3-SNAPSHOT</version>
+            <version>2.4</version>
         </dependency>
         <dependency>
             <groupId>consulo.internal</groupId>
             <artifactId>notnull-compiler</artifactId>
-            <version>2.2-SNAPSHOT</version>
+            <version>2.4</version>
         </dependency>
 
         <dependency>
