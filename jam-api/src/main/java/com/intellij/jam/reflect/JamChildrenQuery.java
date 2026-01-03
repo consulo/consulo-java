@@ -69,7 +69,7 @@ public abstract class JamChildrenQuery<Jam extends JamElement> {
     if (data == null) {
       parent.putUserData(myCacheKey, data = CachedValuesManager.getManager(parent.getProject()).createCachedValue(new CachedValueProvider<List<Jam>>() {
         public Result<List<Jam>> compute() {
-          return Result.create(findChildren(parent), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
+          return Result.create(findChildren(parent), PsiModificationTracker.MODIFICATION_COUNT);
         }
       }, false));
     }

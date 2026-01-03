@@ -59,7 +59,7 @@ public abstract class JamSupportMetaData<T extends CommonModelElement> implement
     if (myElement != null) {
       final List<Object> deps = new SmartList<Object>();
       deps.add(getDeclaration());
-      deps.add(PsiModificationTracker.OUT_OF_CODE_BLOCK_MODIFICATION_COUNT);
+      deps.add(PsiModificationTracker.MODIFICATION_COUNT);
       for (final DomElement domElement : ModelMergerUtil.getImplementations(myElement, DomElement.class)) {
         if (domElement.isValid()) {
           deps.add(DomUtil.getFileElement(domElement));
@@ -68,7 +68,7 @@ public abstract class JamSupportMetaData<T extends CommonModelElement> implement
       return deps.toArray();
     }
 
-    return new Object[]{getDeclaration(), PsiModificationTracker.OUT_OF_CODE_BLOCK_MODIFICATION_COUNT};
+    return new Object[]{getDeclaration(), PsiModificationTracker.MODIFICATION_COUNT};
   }
 
   @NonNls

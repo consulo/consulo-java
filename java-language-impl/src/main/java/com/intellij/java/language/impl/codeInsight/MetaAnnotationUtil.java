@@ -80,7 +80,7 @@ public class MetaAnnotationUtil {
         GlobalSearchScope effectiveSearchScope = getAllAnnotationFilesScope(project).intersectWith(moduleScope);
         return getAnnotationTypesWithChildren(annotationClass, effectiveSearchScope);
       });
-      return CachedValueProvider.Result.create(factoryMap, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
+      return CachedValueProvider.Result.create(factoryMap, PsiModificationTracker.MODIFICATION_COUNT);
     });
 
     return map.get(pair(annotationName, includeTests));
@@ -121,7 +121,7 @@ public class MetaAnnotationUtil {
       } else {
         classes = getChildren(psiClass, scope);
       }
-      return new CachedValueProvider.Result<>(classes, PsiModificationTracker.OUT_OF_CODE_BLOCK_MODIFICATION_COUNT);
+      return new CachedValueProvider.Result<>(classes, PsiModificationTracker.MODIFICATION_COUNT);
     }, false);
   }
 
@@ -146,7 +146,7 @@ public class MetaAnnotationUtil {
       }
 
       scope = GlobalSearchScope.filesWithLibrariesScope(project, allAnnotationFiles);
-      return CachedValueProvider.Result.createSingleDependency(scope, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
+      return CachedValueProvider.Result.createSingleDependency(scope, PsiModificationTracker.MODIFICATION_COUNT);
     });
   }
 
@@ -209,7 +209,7 @@ public class MetaAnnotationUtil {
     return LanguageCachedValueUtil.getCachedValue(subjectAnnotation, () ->
     {
       ConcurrentMap<String, PsiAnnotation> metaAnnotationsMap = ConcurrentFactoryMap.createMap(anno -> findMetaAnnotation(subjectAnnotation, anno, new HashSet<>()));
-      return new CachedValueProvider.Result<>(metaAnnotationsMap, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
+      return new CachedValueProvider.Result<>(metaAnnotationsMap, PsiModificationTracker.MODIFICATION_COUNT);
     }).get(annotationToFind);
   }
 

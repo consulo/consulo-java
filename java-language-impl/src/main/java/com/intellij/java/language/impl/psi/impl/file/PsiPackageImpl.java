@@ -333,7 +333,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
     }
 
     private class PackageAnnotationValueProvider implements CachedValueProvider<PsiModifierList> {
-        private final Object[] OOCB_DEPENDENCY = {PsiModificationTracker.OUT_OF_CODE_BLOCK_MODIFICATION_COUNT};
+        private final Object[] OOCB_DEPENDENCY = {PsiModificationTracker.MODIFICATION_COUNT};
 
         @Override
         @RequiredReadAction

@@ -459,9 +459,9 @@ public class PsiSuperMethodImplUtil {
             }
 
             if (!method.isPhysical() && !(method instanceof SyntheticElement) && !(method instanceof LightElement)) {
-                return CachedValueProvider.Result.create(result, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT, method);
+                return CachedValueProvider.Result.create(result, PsiModificationTracker.MODIFICATION_COUNT, method);
             }
-            return CachedValueProvider.Result.create(result, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
+            return CachedValueProvider.Result.create(result, PsiModificationTracker.MODIFICATION_COUNT);
         };
 
     @Nonnull

@@ -371,7 +371,7 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
                 this,
                 () -> {
                     MethodSignature signature = MethodSignatureBackedByPsiMethod.create(this, PsiSubstitutor.EMPTY);
-                    return CachedValueProvider.Result.create(signature, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
+                    return CachedValueProvider.Result.create(signature, PsiModificationTracker.MODIFICATION_COUNT);
                 }
             );
         }

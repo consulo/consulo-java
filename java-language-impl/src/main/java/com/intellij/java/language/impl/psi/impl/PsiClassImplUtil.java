@@ -409,7 +409,7 @@ public class PsiClassImplUtil {
         @Override
         public CachedValueProvider.Result<Map<GlobalSearchScope, MembersMap>> compute(@Nonnull final PsiClass myClass) {
             final Map<GlobalSearchScope, MembersMap> map = ConcurrentFactoryMap.createMap(scope -> new MembersMap(myClass, scope));
-            return CachedValueProvider.Result.create(map, PsiModificationTracker.OUT_OF_CODE_BLOCK_MODIFICATION_COUNT);
+            return CachedValueProvider.Result.create(map, PsiModificationTracker.MODIFICATION_COUNT);
         }
     }
 

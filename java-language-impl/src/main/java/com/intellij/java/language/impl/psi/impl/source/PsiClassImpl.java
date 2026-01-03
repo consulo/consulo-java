@@ -121,7 +121,7 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
       public Result<PsiClass> compute() {
         final JavaPsiImplementationHelper helper = JavaPsiImplementationHelper.getInstance(getProject());
         final PsiClass result = helper != null ? helper.getOriginalClass(PsiClassImpl.this) : PsiClassImpl.this;
-        return Result.create(result, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
+        return Result.create(result, PsiModificationTracker.MODIFICATION_COUNT);
       }
     });
   }

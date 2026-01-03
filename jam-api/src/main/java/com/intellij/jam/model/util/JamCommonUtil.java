@@ -370,7 +370,7 @@ public class JamCommonUtil {
       cachedValue = CachedValuesManager.getManager(module.getProject()).createCachedValue(
         () -> {
           final Collection<PsiClass> classes = getAnnotationTypesWithChildren(annotationName, module);
-          return new CachedValueProvider.Result<>(classes, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
+          return new CachedValueProvider.Result<>(classes, PsiModificationTracker.MODIFICATION_COUNT);
         },
         false
       );
@@ -409,7 +409,7 @@ public class JamCommonUtil {
         } else {
           classes = getChildren(psiClass, scope);
         }
-        return new CachedValueProvider.Result<>(classes, PsiModificationTracker.OUT_OF_CODE_BLOCK_MODIFICATION_COUNT);
+        return new CachedValueProvider.Result<>(classes, PsiModificationTracker.MODIFICATION_COUNT);
       }, false);
 
       module.putUserData(key, cachedValue);
@@ -558,7 +558,7 @@ public class JamCommonUtil {
           }
         }
       }
-      return new CachedValueProvider.Result<>(result, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
+      return new CachedValueProvider.Result<>(result, PsiModificationTracker.MODIFICATION_COUNT);
     }, false);
   }
 

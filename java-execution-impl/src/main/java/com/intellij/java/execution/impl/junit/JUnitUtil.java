@@ -233,7 +233,7 @@ public class JUnitUtil {
 
     return LanguageCachedValueUtil.getCachedValue(
       psiClass,
-      () -> CachedValueProvider.Result.create(hasTestOrSuiteMethods(psiClass), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT)
+      () -> CachedValueProvider.Result.create(hasTestOrSuiteMethods(psiClass), PsiModificationTracker.MODIFICATION_COUNT)
     );
   }
 
@@ -342,7 +342,7 @@ public class JUnitUtil {
             }
           }
         }
-        return CachedValueProvider.Result.create(hasAnnotation, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
+        return CachedValueProvider.Result.create(hasAnnotation, PsiModificationTracker.MODIFICATION_COUNT);
       });
     }
 

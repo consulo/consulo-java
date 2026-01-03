@@ -193,7 +193,7 @@ public class LambdaUtil {
         @Nonnull
         @Override
         public Result<MethodSignature> compute() {
-          return Result.create(calcFunction(psiClass), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
+          return Result.create(calcFunction(psiClass), PsiModificationTracker.MODIFICATION_COUNT);
         }
       });
     }

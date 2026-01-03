@@ -108,7 +108,7 @@ class ScopedClassHierarchy {
             @Override
             public Result<Map<GlobalSearchScope, ScopedClassHierarchy>> compute() {
                 Map<GlobalSearchScope, ScopedClassHierarchy> result = ConcurrentFactoryMap.createMap(it -> new ScopedClassHierarchy(psiClass, it));
-                return Result.create(result, PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
+                return Result.create(result, PsiModificationTracker.MODIFICATION_COUNT);
             }
         }).get(resolveScope);
     }

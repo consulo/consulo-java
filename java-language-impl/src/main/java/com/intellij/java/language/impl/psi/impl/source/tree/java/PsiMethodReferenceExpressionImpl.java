@@ -149,7 +149,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
   public PsiMember getPotentiallyApplicableMember() {
     return LanguageCachedValueUtil.getCachedValue(this,
                                                   () -> CachedValueProvider.Result.create(getPotentiallyApplicableMemberInternal(),
-                                                                                          PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT,
+                                                                                          PsiModificationTracker.MODIFICATION_COUNT,
                                                                                           this));
   }
 
