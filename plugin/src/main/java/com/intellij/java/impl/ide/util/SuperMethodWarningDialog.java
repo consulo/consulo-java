@@ -99,7 +99,7 @@ class SuperMethodWarningDialog extends DialogWrapper {
             }
         }
         labelsPanel.add(new JLabel(JavaLocalize.promptDoYouWantToActionVerbTheMethodFromClass(
-            myActionString == LocalizeValue.empty() ? RefactoringLocalize.toRefactor() : myActionString,
+            myActionString.orIfEmpty(RefactoringLocalize.toRefactor()),
             myClassNames.length > 1 ? 2 : 1
         ).get()));
         panel.add(labelsPanel, BorderLayout.CENTER);

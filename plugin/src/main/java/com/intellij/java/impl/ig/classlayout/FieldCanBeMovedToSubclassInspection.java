@@ -40,7 +40,7 @@ public abstract class FieldCanBeMovedToSubclassInspection extends BaseGlobalInsp
   @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
-    return LocalizeValue.of();
+    return LocalizeValue.empty();
     //return InspectionGadgetsBundle.message("field.can.be.moved.so.subclass.display.name");
   }
 

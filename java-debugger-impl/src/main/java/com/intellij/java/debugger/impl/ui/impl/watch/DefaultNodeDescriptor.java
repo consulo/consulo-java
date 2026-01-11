@@ -13,37 +13,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * @author Eugene Zhuravlev
- */
 package com.intellij.java.debugger.impl.ui.impl.watch;
 
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
+import jakarta.annotation.Nonnull;
 
-
+/**
+ * @author Eugene Zhuravlev
+ */
 public final class DefaultNodeDescriptor extends NodeDescriptorImpl{
   private static final Logger LOG = Logger.getInstance(DefaultNodeDescriptor.class);
-  public boolean equals(Object obj) {
-    return obj instanceof DefaultNodeDescriptor;
-  }
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof DefaultNodeDescriptor;
+    }
 
-  public int hashCode() {
-    return 0;
-  }
+    @Override
+    public int hashCode() {
+        return 0;
+    }
 
-  public boolean isExpandable() {
-    return true;
-  }
+    @Override
+    public boolean isExpandable() {
+        return true;
+    }
 
-  public void setContext(EvaluationContextImpl context) {
-  }
+    @Override
+    public void setContext(EvaluationContextImpl context) {
+    }
 
-  protected LocalizeValue calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener labelListener) {
-    LOG.assertTrue(false);
-    return LocalizeValue.of();
-  }
+    @Nonnull
+    @Override
+    protected LocalizeValue calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener labelListener) {
+        LOG.assertTrue(false);
+        return LocalizeValue.empty();
+    }
 }

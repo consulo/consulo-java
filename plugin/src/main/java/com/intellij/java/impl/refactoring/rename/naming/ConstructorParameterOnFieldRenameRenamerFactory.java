@@ -34,7 +34,7 @@ public class ConstructorParameterOnFieldRenameRenamerFactory implements Automati
 
   @Nonnull
   public LocalizeValue getOptionName() {
-    return LocalizeValue.of();
+    return LocalizeValue.empty();
   }
 
   public boolean isEnabled() {

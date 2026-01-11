@@ -38,7 +38,7 @@ public class CreateDefaultBranchFix extends BaseSwitchFix {
     @Nonnull
     @Override
     public LocalizeValue getText() {
-        return myMessage == LocalizeValue.empty() ? getName() : myMessage;
+        return myMessage.isEmpty() ? getName() : myMessage;
     }
 
     @Nonnull

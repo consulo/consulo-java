@@ -101,6 +101,7 @@ public abstract class GenerateGetterSetterHandlerBase extends GenerateMembersHan
                         return false;
                     }
 
+                    @Nonnull
                     @Override
                     public LocalizeValue getDisplayName() {
                         return LocalizeValue.localizeTODO(StringUtil.capitalizeWords(

@@ -76,7 +76,7 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
         int index = parameterList.getParameterIndex(psiParameter);
 
         LocalizeValue errorMessage = getCannotInlineMessage(psiParameter, method);
-        if (errorMessage != LocalizeValue.empty()) {
+        if (errorMessage.isNotEmpty()) {
             CommonRefactoringUtil.showErrorHint(
                 project,
                 editor,

@@ -257,7 +257,7 @@ public class AnnotationsHighlightUtil {
             }
 
             LocalizeValue explanation = doCheckRepeatableAnnotation(metaAnno);
-            if (explanation != LocalizeValue.empty()) {
+            if (explanation.isNotEmpty()) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(element)
                     .descriptionAndTooltip(JavaCompilationErrorLocalize.annotationDuplicateExplained(explanation));
@@ -676,7 +676,7 @@ public class AnnotationsHighlightUtil {
                 psiClass,
                 JavaCompilationErrorLocalize.lambdaNotAFunctionalInterface(psiClass.getName())
             );
-            if (errorMessage != LocalizeValue.empty()) {
+            if (errorMessage.isNotEmpty()) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(annotation)
                     .descriptionAndTooltip(errorMessage);
@@ -694,7 +694,7 @@ public class AnnotationsHighlightUtil {
         }
 
         LocalizeValue description = doCheckRepeatableAnnotation(annotation);
-        if (description != LocalizeValue.empty()) {
+        if (description.isNotEmpty()) {
             PsiAnnotationMemberValue containerRef = PsiImplUtil.findAttributeValue(annotation, null);
             if (containerRef != null) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)

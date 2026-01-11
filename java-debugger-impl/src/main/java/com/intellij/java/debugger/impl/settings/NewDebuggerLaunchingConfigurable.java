@@ -53,14 +53,11 @@ public class NewDebuggerLaunchingConfigurable extends SimpleConfigurableByProper
                 return LocalizeValue.empty();
             }
 
-            switch (value) {
-                case DebuggerSettings.SOCKET_TRANSPORT:
-                    return JavaDebuggerLocalize.transportNameSocket();
-                case DebuggerSettings.SHMEM_TRANSPORT:
-                    return JavaDebuggerLocalize.transportNameSharedMemory();
-                default:
-                    return LocalizeValue.of(String.valueOf(value));
-            }
+            return switch (value) {
+                case DebuggerSettings.SOCKET_TRANSPORT -> JavaDebuggerLocalize.transportNameSocket();
+                case DebuggerSettings.SHMEM_TRANSPORT -> JavaDebuggerLocalize.transportNameSharedMemory();
+                default -> LocalizeValue.of(String.valueOf(value));
+            };
         });
         layout.add(LabeledBuilder.sided(JavaDebuggerLocalize.labelDebuggerLaunchingConfigurableDebuggerTransport(), transportBox));
         propertyBuilder.add(transportBox, () -> settings.DEBUGGER_TRANSPORT, it -> settings.DEBUGGER_TRANSPORT = it);

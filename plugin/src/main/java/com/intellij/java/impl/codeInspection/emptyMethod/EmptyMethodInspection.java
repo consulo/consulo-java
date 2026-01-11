@@ -150,7 +150,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool implements O
             }
         }
 
-        if (message != LocalizeValue.empty()) {
+        if (message.isNotEmpty()) {
             List<LocalQuickFix> fixes = new ArrayList<>();
             fixes.add(getFix(processor, needToDeleteHierarchy));
             SpecialAnnotationsUtilBase.createAddToSpecialAnnotationFixes(

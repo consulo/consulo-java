@@ -52,16 +52,16 @@ public class AnnotateOverriddenMethodsIntention extends MutablyNamedIntention {
         return new AnnotateOverriddenMethodsPredicate();
     }
 
+    @Nonnull
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
         PsiAnnotation annotation = (PsiAnnotation) element;
         String qualifiedName = annotation.getQualifiedName();
         if (qualifiedName == null) {
-            return LocalizeValue.of();
+            return LocalizeValue.empty();
         }
         String annotationName = ClassUtil.extractClassName(qualifiedName);
-        PsiElement grandParent = element.getParent().getParent();
-        if (grandParent instanceof PsiMethod) {
+        if (element.getParent().getParent() instanceof PsiMethod) {
             return IntentionPowerPackLocalize.annotateOverriddenMethodsIntentionMethodName(annotationName);
         }
         else {

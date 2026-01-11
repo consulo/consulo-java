@@ -33,7 +33,7 @@ public class DeleteElementFix extends LocalQuickFixAndIntentionActionOnPsiElemen
 
   public DeleteElementFix(@Nonnull PsiElement element) {
     super(element);
-    myText = LocalizeValue.of();
+    myText = LocalizeValue.empty();
   }
 
   public DeleteElementFix(@Nonnull PsiElement element, @Nonnull LocalizeValue text) {
@@ -44,7 +44,7 @@ public class DeleteElementFix extends LocalQuickFixAndIntentionActionOnPsiElemen
   @Nonnull
   @Override
   public LocalizeValue getText() {
-    return myText == LocalizeValue.of() ? JavaQuickFixLocalize.deleteElementFixText() : myText;
+    return myText.orIfEmpty(JavaQuickFixLocalize.deleteElementFixText());
   }
 
   @Override

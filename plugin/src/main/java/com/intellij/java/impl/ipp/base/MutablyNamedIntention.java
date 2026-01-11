@@ -22,15 +22,15 @@ import consulo.project.Project;
 import jakarta.annotation.Nonnull;
 
 public abstract class MutablyNamedIntention extends Intention {
-    private LocalizeValue myMText = LocalizeValue.of();
+    private LocalizeValue myMText = LocalizeValue.empty();
 
     @Nonnull
     protected abstract LocalizeValue getTextForElement(PsiElement element);
 
-    @Override
     @Nonnull
+    @Override
     public final LocalizeValue getText() {
-        return myMText == LocalizeValue.of() ? getNeutralText() : myMText;
+        return myMText.isEmpty() ? getNeutralText() : myMText;
     }
 
     @Nonnull
@@ -43,6 +43,6 @@ public abstract class MutablyNamedIntention extends Intention {
             return false;
         }
         myMText = getTextForElement(element);
-        return myMText != LocalizeValue.of();
+        return myMText.isNotEmpty();
     }
 }

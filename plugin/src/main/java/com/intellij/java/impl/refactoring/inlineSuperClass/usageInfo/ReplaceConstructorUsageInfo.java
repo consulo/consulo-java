@@ -100,12 +100,7 @@ public class ReplaceConstructorUsageInfo extends FixableUsageInfo {
     }
 
     private void appendConflict(@Nonnull LocalizeValue conflict) {
-        if (myConflict == LocalizeValue.empty()) {
-            myConflict = conflict;
-        }
-        else {
-            myConflict = LocalizeValue.join(myConflict, LocalizeValue.of("\n"), conflict);
-        }
+        myConflict = myConflict.isEmpty() ? conflict : LocalizeValue.join(myConflict, LocalizeValue.of("\n"), conflict);
     }
 
     @Override

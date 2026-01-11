@@ -249,6 +249,7 @@ public class GenerateToStringActionHandlerImpl implements GenerateToStringAction
                             return res;
                         }
 
+                        @Nonnull
                         @Override
                         public LocalizeValue getDisplayName() {
                             return LocalizeValue.localizeTODO("toString() Generation Settings");

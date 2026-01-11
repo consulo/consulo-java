@@ -392,7 +392,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
             functionalInterfaceType = expression.getFunctionalInterfaceType();
             if (functionalInterfaceType != null) {
                 LocalizeValue notFunctionalMessage = LambdaHighlightingUtil.checkInterfaceFunctional(functionalInterfaceType);
-                if (notFunctionalMessage != LocalizeValue.empty()) {
+                if (notFunctionalMessage.isNotEmpty()) {
                     myHolder.add(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                         .range(expression)
                         .descriptionAndTooltip(notFunctionalMessage)
@@ -1760,7 +1760,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
         if (!myHolder.hasErrorResults() && functionalInterfaceType != null) {
             LocalizeValue errorMessage = PsiMethodReferenceUtil.checkMethodReferenceContext(expression);
-            if (errorMessage != LocalizeValue.empty()) {
+            if (errorMessage.isNotEmpty()) {
                 HighlightInfo.Builder info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(expression)
                     .descriptionAndTooltip(errorMessage);
@@ -1785,7 +1785,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
             }
             else {
                 LocalizeValue wildcardMessage = PsiMethodReferenceUtil.checkTypeArguments(typeElem, psiType);
-                if (wildcardMessage != LocalizeValue.empty()) {
+                if (wildcardMessage.isNotEmpty()) {
                     add(
                         HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                             .range(typeElem)
@@ -1805,7 +1805,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
         if (!myHolder.hasErrorResults()) {
             LocalizeValue badReturnTypeMessage = PsiMethodReferenceUtil.checkReturnType(expression, result, functionalInterfaceType);
-            if (badReturnTypeMessage != LocalizeValue.empty()) {
+            if (badReturnTypeMessage.isNotEmpty()) {
                 myHolder.add(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(expression)
                     .descriptionAndTooltip(badReturnTypeMessage)

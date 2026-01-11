@@ -135,7 +135,7 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
     @Override
     public LocalizeValue getText() {
         LocalizeValue shortText = myShortName;
-        if (shortText != LocalizeValue.of()) {
+        if (shortText.isNotEmpty()) {
             return shortText;
         }
         return JavaQuickFixLocalize.changeMethodSignatureFromUsageText(

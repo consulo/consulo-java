@@ -510,7 +510,7 @@ public class JavaDebugProcess extends XDebugProcess {
     @Override
     public LocalizeValue getCurrentStateMessage() {
         LocalizeValue description = myJavaSession.getStateDescription();
-        return description != LocalizeValue.empty() ? description : super.getCurrentStateMessage();
+        return description.isNotEmpty() ? description : super.getCurrentStateMessage();
     }
 
     @Nullable

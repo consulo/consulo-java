@@ -206,7 +206,7 @@ public class ExtractEnumProcessor {
         @Override
         public LocalizeValue getConflictMessage() {
             return LocalizeValue.localizeTODO(
-                "Unable to migrate statement to enum constant." + (myDescription != LocalizeValue.empty() ? " " + myDescription : "")
+                "Unable to migrate statement to enum constant." + myDescription.map(text -> " " + text)
             );
         }
     }

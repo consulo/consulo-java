@@ -65,7 +65,7 @@ public class CreateGetterOrSetterFix implements SyntheticIntentionAction, LowPri
             return JavaQuickFixLocalize.createSetterForField(myField.getName());
         }
         else {
-            return LocalizeValue.of();
+            return LocalizeValue.empty();
         }
     }
 

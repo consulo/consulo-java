@@ -51,11 +51,10 @@ public class SuppressFix extends AbstractBatchSuppressByNoInspectionCommentFix {
     super(ID, false);
   }
 
-  @Override
   @Nonnull
+  @Override
   public LocalizeValue getText() {
-    LocalizeValue text = super.getText();
-    return text == LocalizeValue.of() ? LocalizeValue.localizeTODO("Suppress for member") : text;
+    return super.getText().orIfEmpty(LocalizeValue.localizeTODO("Suppress for member"));
   }
 
   @Override

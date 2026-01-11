@@ -82,7 +82,7 @@ public class CreatePropertyFromUsageFix extends CreateFromUsageBaseFix implement
     String propertyName = PropertyUtil.getPropertyName(methodName);
     if (propertyName == null || propertyName.length() == 0) return false;
 
-    LocalizeValue getterOrSetter = LocalizeValue.of();
+    LocalizeValue getterOrSetter = LocalizeValue.empty();
     if (methodName.startsWith(GET_PREFIX) || methodName.startsWith(IS_PREFIX)) {
       if (myMethodCall.getArgumentList().getExpressions().length != 0) return false;
       getterOrSetter = JavaQuickFixLocalize.createGetter();

@@ -882,7 +882,7 @@ public final class TrackingRunner extends DataFlowRunner {
                 }
             }
             LocalizeValue explanation = LocalizeValue.ofNullable(constraint.getAssignabilityExplanation(wanted, isInstance, name.get()));
-            if (explanation != LocalizeValue.empty()) {
+            if (explanation.isNotEmpty()) {
                 if (constraint.equals(wanted)) {
                     explanation = JavaAnalysisLocalize.dfaFindCauseTypeKnown(name, constraint.toShortString());
                 }
@@ -897,7 +897,7 @@ public final class TrackingRunner extends DataFlowRunner {
             isInstance,
             JavaAnalysisLocalize.dfaFindCauseObjectKindGeneric().get()
         ));
-        while (explanation != LocalizeValue.empty()) {
+        while (explanation.isNotEmpty()) {
             MemoryStateChange causeLocation = fact.myChange;
             if (causeLocation == null) {
                 break;
@@ -913,7 +913,7 @@ public final class TrackingRunner extends DataFlowRunner {
                 isInstance,
                 JavaAnalysisLocalize.dfaFindCauseObjectKindGeneric().get()
             ));
-            if (prevExplanation == LocalizeValue.empty()) {
+            if (prevExplanation.isEmpty()) {
                 if (causeLocation.myInstruction instanceof AssignInstruction assignInsn && causeLocation.myTopOfStack == operandValue) {
                     PsiExpression rExpression = assignInsn.getRExpression();
                     if (rExpression != null) {
@@ -1258,7 +1258,7 @@ public final class TrackingRunner extends DataFlowRunner {
         MemoryStateChange factDef = info.myFact == nullability ? info.myChange : null;
         if (nullability == DfaNullability.NOT_NULL) {
             LocalizeValue explanation = getObviouslyNonNullExplanation(expression);
-            if (explanation != LocalizeValue.empty()) {
+            if (explanation.isNotEmpty()) {
                 return new CauseItem(JavaAnalysisLocalize.dfaFindCauseObviouslyNonNullExpression(explanation), expression);
             }
             if (factDef != null) {

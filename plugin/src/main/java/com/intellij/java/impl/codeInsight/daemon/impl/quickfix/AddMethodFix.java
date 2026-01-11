@@ -102,7 +102,7 @@ public class AddMethodFix extends LocalQuickFixAndIntentionActionOnPsiElement {
             && myMethodPrototype.isValid()
             && myClass.isValid()
             && myClass.getManager().isInProject(myClass)
-            && myText != LocalizeValue.empty()
+            && myText.isNotEmpty()
             && MethodSignatureUtil.findMethodBySignature(myClass, myMethodPrototype, false) == null;
     }
 

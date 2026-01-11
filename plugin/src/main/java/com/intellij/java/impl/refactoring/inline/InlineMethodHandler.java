@@ -103,7 +103,7 @@ public class InlineMethodHandler extends JavaInlineActionHandler {
 
         if (reference != null) {
             LocalizeValue errorMessage = InlineMethodProcessor.checkCalledInSuperOrThisExpr(methodBody, reference.getElement());
-            if (errorMessage != LocalizeValue.empty()) {
+            if (errorMessage.isNotEmpty()) {
                 CommonRefactoringUtil.showErrorHint(project, editor, errorMessage, REFACTORING_NAME, HelpID.INLINE_METHOD);
                 return;
             }

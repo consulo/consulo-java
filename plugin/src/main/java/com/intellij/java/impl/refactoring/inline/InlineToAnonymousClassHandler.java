@@ -147,7 +147,7 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler {
         )) {
             return;
         }
-        if (errorMessage.get() != LocalizeValue.empty()) {
+        if (errorMessage.get().isNotEmpty()) {
             CommonRefactoringUtil.showErrorHint(project, editor, errorMessage.get(), title, null);
             return;
         }

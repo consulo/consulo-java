@@ -20,15 +20,16 @@ public class One extends BaseInspection {
         return null;
     }
 
+    @Nonnull
+    @Override
     public LocalizeValue getDisplayName() {
-        return LocalizeValue.of();
+        return LocalizeValue.empty();
     }
 
     private static class Inner {
         private static boolean test() {
             return false;
         }
-
     }
 }
 class TestVariableScope {

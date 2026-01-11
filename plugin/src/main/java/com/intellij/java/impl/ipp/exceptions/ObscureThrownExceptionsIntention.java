@@ -97,13 +97,14 @@ public class ObscureThrownExceptionsIntention extends MutablyNamedIntention {
         return aClass1;
     }
 
+    @Nonnull
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
         PsiReferenceList referenceList = (PsiReferenceList) element;
         PsiClassType[] types = referenceList.getReferencedTypes();
         PsiClass commonSuperClass = findCommonSuperClass(types);
         if (commonSuperClass == null) {
-            return LocalizeValue.of();
+            return LocalizeValue.empty();
         }
         return IntentionPowerPackLocalize.obscureThrownExceptionsIntentionName(commonSuperClass.getName());
     }

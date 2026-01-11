@@ -27,11 +27,12 @@ import jakarta.annotation.Nullable;
  * @author Danila Ponomarenko
  */
 public abstract class BaseBracesIntention extends MutablyNamedIntention {
+    @Nonnull
     @Override
     protected final LocalizeValue getTextForElement(PsiElement element) {
         PsiElement body = getSurroundingStatement(element);
         if (body == null) {
-            return LocalizeValue.of();
+            return LocalizeValue.empty();
         }
 
         return getMessageKey(getKeyword(body.getParent(), body));

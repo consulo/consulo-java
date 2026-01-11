@@ -3831,7 +3831,7 @@ public class HighlightUtil extends HighlightUtilBase {
                         if (pusher instanceof JavaLanguageLevelPusher languageLevelPusher) {
                             LocalizeValue newMessage =
                                 languageLevelPusher.getInconsistencyLanguageLevelMessage(message, element, level, file);
-                            if (newMessage != LocalizeValue.empty()) {
+                            if (newMessage.isNotEmpty()) {
                                 return newMessage;
                             }
                         }

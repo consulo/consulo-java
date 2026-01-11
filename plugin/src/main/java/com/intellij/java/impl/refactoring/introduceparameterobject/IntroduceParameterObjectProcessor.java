@@ -187,7 +187,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
         for (UsageInfo usageInfo : refUsages.get()) {
             if (usageInfo instanceof FixableUsageInfo fixableUsageInfo) {
                 LocalizeValue conflictMessage = fixableUsageInfo.getConflictMessage();
-                if (conflictMessage != LocalizeValue.empty()) {
+                if (conflictMessage.isNotEmpty()) {
                     conflicts.putValue(fixableUsageInfo.getElement(), conflictMessage);
                 }
             }

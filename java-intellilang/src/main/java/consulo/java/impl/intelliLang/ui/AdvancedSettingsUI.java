@@ -83,6 +83,7 @@ public class AdvancedSettingsUI implements SearchableConfigurable {
     myPanel = null;
   }
 
+  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return LocalizeValue.localizeTODO("Advanced");
