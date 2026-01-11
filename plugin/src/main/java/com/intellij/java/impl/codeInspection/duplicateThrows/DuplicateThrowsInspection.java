@@ -103,7 +103,7 @@ public class DuplicateThrowsInspection extends BaseLocalInspectionTool {
                                 type = otherType;
                             }
                         }
-                        if (problem != LocalizeValue.empty()) {
+                        if (problem.isNotEmpty()) {
                             holder.newProblem(problem)
                                 .range(ref)
                                 .withFixes(new DeleteThrowsFix(method, type))

@@ -52,10 +52,10 @@ public class DummyEntryPointsTool extends UnusedDeclarationInspection {
         return InspectionLocalize.inspectionDeadCodeEntryPointsDisplayName();
     }
 
-    @Override
     @Nonnull
+    @Override
     public LocalizeValue getGroupDisplayName() {
-        return LocalizeValue.of();
+        return LocalizeValue.empty();
     }
 
     @Override

@@ -65,15 +65,12 @@ public class ReplaceWithSubtypeUsageInfo extends FixableUsageInfo {
     @RequiredReadAction
     public LocalizeValue getConflictMessage() {
         if (!TypeConversionUtil.isAssignable(myOriginalType, myTargetClassType)) {
-            LocalizeValue conflict = LocalizeValue.localizeTODO("No consistent substitution found for " + getElement().getText() + ". " +
-                "Expected \'" + myOriginalType.getPresentableText() + "\' " +
-                "but found \'" + myTargetClassType.getPresentableText() + "\'.");
-            if (myConflict == LocalizeValue.empty()) {
-                myConflict = conflict;
-            }
-            else {
-                myConflict = LocalizeValue.join(myConflict, LocalizeValue.of("\n"), conflict);
-            }
+            LocalizeValue conflict = LocalizeValue.localizeTODO(
+                "No consistent substitution found for " + getElement().getText() + ". " +
+                    "Expected \'" + myOriginalType.getPresentableText() + "\' " +
+                    "but found \'" + myTargetClassType.getPresentableText() + "\'."
+            );
+            myConflict = myConflict.isEmpty() ? conflict : LocalizeValue.join(myConflict, LocalizeValue.of("\n"), conflict);
         }
         return myConflict;
     }

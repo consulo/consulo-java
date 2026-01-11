@@ -258,7 +258,7 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
         LocalizeValue message = validateInputData();
 
         if (message != null) {
-            if (message != LocalizeValue.empty()) {
+            if (message.isNotEmpty()) {
                 CommonRefactoringUtil.showErrorMessage(
                     MoveMembersImpl.REFACTORING_NAME,
                     message,

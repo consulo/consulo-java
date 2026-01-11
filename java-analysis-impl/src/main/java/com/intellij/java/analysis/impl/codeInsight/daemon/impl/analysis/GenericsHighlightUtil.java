@@ -178,7 +178,7 @@ public class GenericsHighlightUtil {
                 description = JavaCompilationErrorLocalize.typeParameterCountMismatch(refParametersNum, targetParametersNum);
             }
 
-            if (description != LocalizeValue.empty()) {
+            if (description.isNotEmpty()) {
                 HighlightInfo.Builder hlBuilder = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(referenceParameterList)
                     .descriptionAndTooltip(description);
@@ -1764,10 +1764,10 @@ public class GenericsHighlightUtil {
                 PsiSubstitutor substitutor = resolveResult.getSubstitutor();
 
                 message = isSuperTypeAccessible(substitutor.substitute(method.getReturnType()), classes, false, resolveScope, facade);
-                if (message == LocalizeValue.empty()) {
+                if (message.isEmpty()) {
                     for (PsiType type : method.getSignature(substitutor).getParameterTypes()) {
                         message = isSuperTypeAccessible(type, classes, false, resolveScope, facade);
-                        if (message != LocalizeValue.empty()) {
+                        if (message.isNotEmpty()) {
                             break;
                         }
                     }
@@ -1784,7 +1784,7 @@ public class GenericsHighlightUtil {
             );
         }
 
-        if (message != LocalizeValue.empty()) {
+        if (message.isNotEmpty()) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .descriptionAndTooltip(message)
                 .range(ref.getTextRange());
@@ -1804,7 +1804,7 @@ public class GenericsHighlightUtil {
         for (PsiClassType superType : aClass.getSuperTypes()) {
             LocalizeValue notAccessibleErrorMessage =
                 isSuperTypeAccessible(superType, new HashSet<>(), checkParameters, resolveScope, factory);
-            if (notAccessibleErrorMessage != LocalizeValue.empty()) {
+            if (notAccessibleErrorMessage.isNotEmpty()) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .descriptionAndTooltip(notAccessibleErrorMessage)
                     .range(range);
@@ -1843,7 +1843,7 @@ public class GenericsHighlightUtil {
                 if (superType instanceof PsiClassType classType) {
                     for (PsiType psiType : classType.getParameters()) {
                         LocalizeValue notAccessibleMessage = isSuperTypeAccessible(psiType, classes, true, resolveScope, factory);
-                        if (notAccessibleMessage != LocalizeValue.empty()) {
+                        if (notAccessibleMessage.isNotEmpty()) {
                             return notAccessibleMessage;
                         }
                     }
@@ -1851,7 +1851,7 @@ public class GenericsHighlightUtil {
 
                 for (PsiClassType type : aClass.getSuperTypes()) {
                     LocalizeValue notAccessibleMessage = isSuperTypeAccessible(type, classes, !isInLibrary, resolveScope, factory);
-                    if (notAccessibleMessage != LocalizeValue.empty()) {
+                    if (notAccessibleMessage.isNotEmpty()) {
                         return notAccessibleMessage;
                     }
                 }

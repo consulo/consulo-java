@@ -307,7 +307,7 @@ public class DebuggerSession implements AbstractDebuggerSession {
             case DISPOSED:
                 return JavaDebuggerLocalize.statusDebugStopped();
         }
-        return LocalizeValue.of();
+        return LocalizeValue.empty();
     }
 
     /* Stepping */

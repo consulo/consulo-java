@@ -103,7 +103,7 @@ public abstract class ContractInspection extends AbstractBaseJavaLocalInspection
                     else {
                         error = MutationSignature.checkSignature(mutationContract, method);
                     }
-                    if (error != LocalizeValue.empty()) {
+                    if (error.isNotEmpty()) {
                         PsiAnnotationMemberValue value = annotation.findAttributeValue(MutationSignature.ATTR_MUTATES);
                         assert value != null;
                         holder.newProblem(error)
@@ -168,7 +168,7 @@ public abstract class ContractInspection extends AbstractBaseJavaLocalInspection
                 }
             }
             LocalizeValue problem = contract.getReturnValue().getMethodCompatibilityProblem(method);
-            if (problem != LocalizeValue.empty()) {
+            if (problem.isNotEmpty()) {
                 return ParseException.forReturnValue(problem, text, clauseIndex);
             }
             if (possibleContracts != null) {

@@ -465,7 +465,7 @@ class IntroduceConstantDialog extends DialogWrapper {
                 newClass.getQualifiedName()
             );
         }
-        if (errorString != LocalizeValue.empty()) {
+        if (errorString.isNotEmpty()) {
             CommonRefactoringUtil.showErrorMessage(
                 IntroduceFieldHandler.REFACTORING_NAME,
                 errorString,

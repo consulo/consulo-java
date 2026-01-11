@@ -98,7 +98,7 @@ public class EditContractIntention extends BaseIntentionAction implements LowPri
                 }
                 else {
                     LocalizeValue mutatesError = getMutatesErrorMessage(mutatesText.getText(), method);
-                    if (mutatesError != LocalizeValue.empty()) {
+                    if (mutatesError.isNotEmpty()) {
                         builder.setOkActionEnabled(false);
                         builder.setErrorText(mutatesError.get(), mutatesText);
                     }

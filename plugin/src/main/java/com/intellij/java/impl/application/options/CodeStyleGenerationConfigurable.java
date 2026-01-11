@@ -30,6 +30,7 @@ import consulo.ui.ex.awt.ToolbarDecorator;
 import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.annotation.RequiredUIAccess;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -77,6 +78,7 @@ public class CodeStyleGenerationConfigurable implements Configurable {
         return myPanel;
     }
 
+    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return ApplicationLocalize.titleCodeGeneration();

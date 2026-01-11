@@ -79,8 +79,8 @@ public class VariableAccessFromInnerClassFix implements SyntheticIntentionAction
             case COPY_TO_FINAL:
                 return JavaQuickFixLocalize.makeFinalCopyToTemp(myVariable.getName());
             default:
-                return LocalizeValue.of();
-        }
+                return LocalizeValue.empty();
+    }
     }
 
     @Override

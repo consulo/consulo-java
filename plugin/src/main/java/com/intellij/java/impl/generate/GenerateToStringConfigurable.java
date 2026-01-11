@@ -22,6 +22,7 @@ import consulo.configurable.ConfigurationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import jakarta.annotation.Nonnull;
 import org.jetbrains.java.generate.GenerateToStringContext;
 
 import javax.swing.*;
@@ -39,6 +40,7 @@ public class GenerateToStringConfigurable implements Configurable {
         myProject = project;
     }
 
+    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return LocalizeValue.localizeTODO("Settings");

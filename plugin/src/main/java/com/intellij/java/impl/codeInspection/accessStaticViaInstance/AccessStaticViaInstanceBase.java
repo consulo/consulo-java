@@ -38,10 +38,10 @@ import java.util.ArrayList;
 public abstract class AccessStaticViaInstanceBase extends BaseJavaBatchLocalInspectionTool {
   @NonNls public static final String ACCESS_STATIC_VIA_INSTANCE = "AccessStaticViaInstance";
 
-  @Override
   @Nonnull
+  @Override
   public LocalizeValue getGroupDisplayName() {
-    return LocalizeValue.of();
+    return LocalizeValue.empty();
   }
 
   @Override

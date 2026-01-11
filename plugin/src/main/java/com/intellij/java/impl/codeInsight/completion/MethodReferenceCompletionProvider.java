@@ -80,27 +80,23 @@ public class MethodReferenceCompletionProvider implements CompletionProvider {
                         @RequiredReadAction
                         public void accept(LookupElement lookupElement) {
                             if (lookupElement.getPsiElement() instanceof PsiMethod method) {
-                                PsiMethodReferenceExpression referenceExpression = createMethodReferenceExpression(method);
-                                if (referenceExpression == null) {
+                                PsiMethodReferenceExpression refExpr = createMethodReferenceExpression(method);
+                                if (refExpr == null) {
                                     return;
                                 }
 
-                                PsiType added = map.put(referenceExpression, functionalType);
+                                PsiType added = map.put(refExpr, functionalType);
                                 try {
-                                    PsiElement resolve = referenceExpression.resolve();
+                                    PsiElement resolve = refExpr.resolve();
                                     if (resolve != null
                                         && PsiEquivalenceUtil.areElementsEquivalent(method, resolve)
-                                        && PsiMethodReferenceUtil.checkMethodReferenceContext(
-                                        referenceExpression,
-                                        resolve,
-                                        functionalType
-                                    ) == LocalizeValue.empty()) {
+                                        && PsiMethodReferenceUtil.checkMethodReferenceContext(refExpr, resolve, functionalType).isEmpty()) {
                                         result.addElement(new JavaMethodReferenceElement(method, refPlace));
                                     }
                                 }
                                 finally {
                                     if (added == null) {
-                                        map.remove(referenceExpression);
+                                        map.remove(refExpr);
                                     }
                                 }
                             }

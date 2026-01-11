@@ -39,8 +39,7 @@ public abstract class QualifyThisOrSuperArgumentFix implements SyntheticIntentio
   protected static final Logger LOG = Logger.getInstance(QualifyThisOrSuperArgumentFix.class);
   protected final PsiExpression myExpression;
   protected final PsiClass myPsiClass;
-  private LocalizeValue myText = LocalizeValue.of();
-
+  private LocalizeValue myText = LocalizeValue.empty();
 
   public QualifyThisOrSuperArgumentFix(@Nonnull PsiExpression expression, @Nonnull PsiClass psiClass) {
     myExpression = expression;

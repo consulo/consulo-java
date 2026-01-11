@@ -30,6 +30,7 @@ import consulo.project.Project;
 import consulo.ui.ex.awt.NamedItemsListEditor;
 import consulo.util.collection.HashingStrategy;
 import consulo.util.lang.Comparing;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
@@ -102,6 +103,7 @@ public class TemplatesPanel extends NamedItemsListEditor<TemplateResource> {
     myTemplatesManager = templatesManager;
   }
 
+  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return LocalizeValue.localizeTODO("Templates");

@@ -145,7 +145,7 @@ public class EqualsAndHashcode extends BaseJavaBatchLocalInspectionTool {
     @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
-        return LocalizeValue.of();
+        return LocalizeValue.empty();
     }
 
     @Nonnull

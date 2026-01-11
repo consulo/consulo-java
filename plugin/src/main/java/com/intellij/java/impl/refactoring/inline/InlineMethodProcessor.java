@@ -240,7 +240,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
                 }
 
                 LocalizeValue errorMessage = checkCalledInSuperOrThisExpr(myMethod.getBody(), element);
-                if (errorMessage != LocalizeValue.empty()) {
+                if (errorMessage.isNotEmpty()) {
                     conflicts.putValue(element, errorMessage);
                 }
             }

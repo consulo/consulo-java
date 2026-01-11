@@ -551,7 +551,7 @@ public class HighlightMethodUtil {
                     LocalizeValue toolTip;
                     if (parent instanceof PsiClass) {
                         toolTip = buildOneLineMismatchDescription(list, candidateInfo, elementToHighlight);
-                        if (toolTip == LocalizeValue.empty()) {
+                        if (toolTip.isEmpty()) {
                             toolTip = createMismatchedArgumentsHtmlTooltip(candidateInfo, list);
                         }
                     }
@@ -1829,14 +1829,14 @@ public class HighlightMethodUtil {
                 continue;
             }
 
-            if (description == LocalizeValue.empty()) {
+            if (description.isEmpty()) {
                 highlightInfo = checkMethodIncompatibleThrows(signature, superSignatures, false, aClass);
                 if (highlightInfo != null) {
                     description = highlightInfo.getDescription();
                 }
             }
 
-            if (description == LocalizeValue.empty()) {
+            if (description.isEmpty()) {
                 HighlightInfo.Builder hlBuilder = checkMethodWeakerPrivileges(signature, superSignatures, false, containingFile);
                 highlightInfo = hlBuilder == null ? null : hlBuilder.create();
                 if (highlightInfo != null) {
@@ -1844,12 +1844,12 @@ public class HighlightMethodUtil {
                 }
             }
 
-            if (description != LocalizeValue.empty()) {
+            if (description.isNotEmpty()) {
                 break;
             }
         }
 
-        if (description != LocalizeValue.empty()) {
+        if (description.isNotEmpty()) {
             // show error info at the class level
             HighlightInfo.Builder hlBuilder = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(HighlightNamesUtil.getClassDeclarationTextRange(aClass))

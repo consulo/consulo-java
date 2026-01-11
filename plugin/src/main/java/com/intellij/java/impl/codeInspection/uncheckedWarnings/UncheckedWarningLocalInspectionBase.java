@@ -281,7 +281,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
             }
             JavaResolveResult result = expression.advancedResolve(false);
             LocalizeValue description = getUncheckedCallDescription(expression, result);
-            if (description != LocalizeValue.empty()) {
+            if (description.isNotEmpty()) {
                 PsiElement referenceNameElement = expression.getReferenceNameElement();
                 registerProblem(description, expression, referenceNameElement != null ? referenceNameElement : expression, myGenerifyFixes);
             }
@@ -293,7 +293,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
             super.visitCallExpression(callExpression);
             JavaResolveResult result = callExpression.resolveMethodGenerics();
             LocalizeValue description = getUncheckedCallDescription(callExpression, result);
-            if (description != LocalizeValue.empty()) {
+            if (description.isNotEmpty()) {
                 if (IGNORE_UNCHECKED_CALL) {
                     return;
                 }
