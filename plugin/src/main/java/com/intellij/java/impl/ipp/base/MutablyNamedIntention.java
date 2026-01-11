@@ -30,7 +30,7 @@ public abstract class MutablyNamedIntention extends Intention {
     @Nonnull
     @Override
     public final LocalizeValue getText() {
-        return myMText.isEmpty() ? getNeutralText() : myMText;
+        return myMText.orIfEmpty(getNeutralText());
     }
 
     @Nonnull

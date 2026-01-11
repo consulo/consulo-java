@@ -29,7 +29,8 @@ import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import consulo.ui.ex.awt.ToolbarDecorator;
 import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.awt.JBUI;
-import consulo.ui.annotation.RequiredUIAccess;import jakarta.annotation.Nonnull;
+import consulo.ui.annotation.RequiredUIAccess;
+import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
