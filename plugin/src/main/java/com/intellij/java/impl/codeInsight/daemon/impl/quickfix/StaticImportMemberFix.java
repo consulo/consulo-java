@@ -62,7 +62,7 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Synt
             text = text.map(s -> s + " '" + getMemberPresentableText(candidates.get(0)) + "'");
         }
         else {
-            text = text.map(s -> s + "...");
+            text = text.map(s -> s + "…");
         }
         return text;
     }
