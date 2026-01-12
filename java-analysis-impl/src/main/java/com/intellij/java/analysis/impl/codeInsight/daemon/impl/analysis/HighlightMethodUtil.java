@@ -762,10 +762,9 @@ public class HighlightMethodUtil {
                     );
 
                     return LocalizeValue.of("<html><body>" +
-                        message.map((localizeManager, s) -> XmlStringUtil.escapeString(s)) +
+                        message.map(s -> XmlStringUtil.escapeString(s)) +
                         " <a href=\"#assignment/" +
-                        createMismatchedArgumentsHtmlTooltip(candidateInfo, list)
-                            .map((localizeManager, s) -> XmlStringUtil.escapeString(s))
+                        createMismatchedArgumentsHtmlTooltip(candidateInfo, list).map(s -> XmlStringUtil.escapeString(s))
                         + "\"" + (StyleManager.get().getCurrentStyle().isDark() ? " color=\"7AB4C9\" " : "") + ">" +
                         DaemonLocalize.inspectionExtendedDescription() + "</a></body></html>"
                     );
@@ -853,7 +852,7 @@ public class HighlightMethodUtil {
                         return HighlightInfo.newHighlightInfo(highlightInfoType)
                             .range(elementToHighlight)
                             .description(description)
-                            .escapedToolTip(description.map((localizeManager, s) -> XmlStringUtil.escapeString(s)))
+                            .escapedToolTip(description.map(s -> XmlStringUtil.escapeString(s)))
                             .registerFix(QuickFixFactory.getInstance().createAccessStaticViaInstanceFix(referenceToMethod, resolveResult));
                     }
                 }
@@ -875,7 +874,7 @@ public class HighlightMethodUtil {
         HighlightInfo.Builder hlBuilder = HighlightInfo.newHighlightInfo(highlightInfoType)
             .range(elementToHighlight)
             .description(description)
-            .escapedToolTip(description.map((localizeManager, s) -> XmlStringUtil.escapeString(s)));
+            .escapedToolTip(description.map(s -> XmlStringUtil.escapeString(s)));
         registerMethodCallIntentions(hlBuilder, methodCall, list, resolveHelper);
         if (element != null && !resolveResult.isStaticsScopeCorrect()) {
             HighlightUtil.registerStaticProblemQuickFixAction(element, hlBuilder, referenceToMethod);
@@ -972,7 +971,7 @@ public class HighlightMethodUtil {
             if (candidates.length == 0) {
                 return null;
             }
-            toolTip = description.map((localizeManager, s) -> XmlStringUtil.escapeString(s));
+            toolTip = description.map(s -> XmlStringUtil.escapeString(s));
         }
         HighlightInfo.Builder hlBuilder = HighlightInfo.newHighlightInfo(highlightInfoType)
             .range(elementToHighlight)

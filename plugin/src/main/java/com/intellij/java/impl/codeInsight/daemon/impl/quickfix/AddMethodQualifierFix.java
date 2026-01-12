@@ -64,7 +64,7 @@ public class AddMethodQualifierFix implements SyntheticIntentionAction {
     }
     LocalizeValue text = JavaQuickFixLocalize.addMethodQualifierFixText(candidates.size() > 1 ? "" : candidates.get(0).getName());
     if (candidates.size() > 1) {
-      text = text.map((localizeManager, s) -> s + "...");
+      text = text.map(s -> s + "...");
     }
     return text;
   }
