@@ -59,10 +59,10 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Synt
     public LocalizeValue getText() {
         LocalizeValue text = getBaseText();
         if (candidates != null && candidates.size() == 1) {
-            text = text.map((localizeManager, s) -> s + " '" + getMemberPresentableText(candidates.get(0)) + "'");
+            text = text.map(s -> s + " '" + getMemberPresentableText(candidates.get(0)) + "'");
         }
         else {
-            text = text.map((localizeManager, s) -> s + "...");
+            text = text.map(s -> s + "…");
         }
         return text;
     }
