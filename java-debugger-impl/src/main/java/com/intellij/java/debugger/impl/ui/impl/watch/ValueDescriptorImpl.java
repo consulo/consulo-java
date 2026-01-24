@@ -25,6 +25,7 @@ import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.impl.engine.JavaValue;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
+import com.intellij.java.debugger.impl.memory.utils.NamesUtils;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
@@ -416,6 +417,24 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
         }
 
         return getDescriptorEvaluation(context);
+    }
+
+    protected static class NeedMarkException extends EvaluateException {
+        private final String myMarkName;
+
+        public NeedMarkException(ObjectReference reference) {
+            super(LocalizeValue.empty());
+            myMarkName = NamesUtils.getUniqueName(reference).replace("@", "");
+        }
+
+        @Override
+        public Throwable fillInStackTrace() {
+            return this;
+        }
+
+        public String getMarkName() {
+            return myMarkName;
+        }
     }
 
     private static class DebuggerTreeNodeMock implements DebuggerTreeNode {

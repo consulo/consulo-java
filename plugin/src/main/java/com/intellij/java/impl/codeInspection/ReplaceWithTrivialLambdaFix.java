@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import com.intellij.java.impl.refactoring.util.LambdaRefactoringUtil;
+import com.intellij.java.analysis.impl.refactoring.util.LambdaRefactoringUtil;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiLambdaExpression;
 import com.intellij.java.language.psi.PsiMethodReferenceExpression;

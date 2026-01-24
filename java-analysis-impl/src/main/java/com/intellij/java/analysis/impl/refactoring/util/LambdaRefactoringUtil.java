@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.java.impl.refactoring.util;
+package com.intellij.java.analysis.impl.refactoring.util;
 
 import com.intellij.java.analysis.impl.codeInspection.RedundantLambdaCodeBlockInspection;
-import com.intellij.java.impl.refactoring.introduceField.ElementToWorkOn;
-import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableHandler;
+import com.intellij.java.analysis.impl.codeInspection.SideEffectChecker;
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.FunctionalInterfaceParameterizationUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
@@ -27,24 +26,17 @@ import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.analysis.impl.codeInspection.SideEffectChecker;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.application.Application;
-import consulo.codeEditor.Editor;
 import consulo.component.util.text.UniqueNameGenerator;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
-import consulo.ui.ex.awt.Messages;
-import consulo.ui.ex.awt.UIUtil;
 import consulo.util.lang.StringUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -365,39 +357,6 @@ public class LambdaRefactoringUtil {
     PsiExpression singleExpression = RedundantLambdaCodeBlockInspection.isCodeBlockRedundant(body);
     if (singleExpression != null) {
       body.replace(singleExpression);
-    }
-  }
-
-  /**
-   * Works for expression lambdas/one statement code block lambdas to ensures equivalent method ref -> lambda transformation.
-   */
-  public static void removeSideEffectsFromLambdaBody(Editor editor, PsiLambdaExpression lambdaExpression) {
-    if (lambdaExpression != null && lambdaExpression.isValid()) {
-      PsiElement body = lambdaExpression.getBody();
-      PsiExpression methodCall = LambdaUtil.extractSingleExpressionFromBody(body);
-      PsiExpression qualifierExpression = null;
-      if (methodCall instanceof PsiMethodCallExpression methodCallExpression) {
-        qualifierExpression = methodCallExpression.getMethodExpression().getQualifierExpression();
-      } else if (methodCall instanceof PsiNewExpression newExpression) {
-        qualifierExpression = newExpression.getQualifier();
-      }
-
-      if (qualifierExpression != null) {
-        List<PsiElement> sideEffects = new ArrayList<>();
-        SideEffectChecker.checkSideEffects(qualifierExpression, sideEffects);
-        if (!sideEffects.isEmpty()) {
-          if (Application.get().isUnitTestMode() || Messages.showYesNoDialog(
-            lambdaExpression.getProject(),
-            "There are possible side effects found in method reference qualifier.\nIntroduce local variable?",
-            "Side Effects Detected",
-            UIUtil.getQuestionIcon()
-          ) == Messages.YES) {
-            //ensure introduced before lambda
-            qualifierExpression.putUserData(ElementToWorkOn.PARENT, lambdaExpression);
-            new IntroduceVariableHandler().invoke(qualifierExpression.getProject(), editor, qualifierExpression);
-          }
-        }
-      }
     }
   }
 
