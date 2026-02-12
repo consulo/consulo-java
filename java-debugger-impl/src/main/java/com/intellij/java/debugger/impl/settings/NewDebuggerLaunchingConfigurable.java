@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 
 /**
  * @author VISTALL
- * @since 04/06/2024
+ * @since 2024-06-04
  */
 public class NewDebuggerLaunchingConfigurable extends SimpleConfigurableByProperties implements Configurable {
     private final Supplier<DebuggerSettings> mySettingsSupplier;
@@ -39,16 +39,15 @@ public class NewDebuggerLaunchingConfigurable extends SimpleConfigurableByProper
         return JavaLanguageLocalize.javaLanguageDisplayName();
     }
 
-    @RequiredUIAccess
     @Nonnull
     @Override
-    protected Component createLayout(@Nonnull PropertyBuilder propertyBuilder,
-                                     @Nonnull Disposable disposable) {
+    @RequiredUIAccess
+    protected Component createLayout(@Nonnull PropertyBuilder propertyBuilder, @Nonnull Disposable disposable) {
         DebuggerSettings settings = mySettingsSupplier.get();
 
         VerticalLayout layout = VerticalLayout.create();
         ComboBox<Integer> transportBox = ComboBox.create(DebuggerSettings.SOCKET_TRANSPORT, DebuggerSettings.SHMEM_TRANSPORT);
-        transportBox.setTextRender(value -> {
+        transportBox.setTextRenderer(value -> {
             if (value == null) {
                 return LocalizeValue.empty();
             }
