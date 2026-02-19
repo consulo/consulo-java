@@ -21,7 +21,7 @@
  */
 package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
-import consulo.ide.impl.idea.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.usage.UsageViewBundle;
@@ -30,47 +30,53 @@ import consulo.usage.UsageViewUtil;
 import jakarta.annotation.Nonnull;
 
 public class MoveMultipleElementsViewDescriptor implements UsageViewDescriptor {
-  private final PsiElement[] myPsiElements;
-  private String myProcessedElementsHeader;
-  private final String myCodeReferencesText;
+    private final PsiElement[] myPsiElements;
+    private String myProcessedElementsHeader;
+    private final String myCodeReferencesText;
 
-  public MoveMultipleElementsViewDescriptor(PsiElement[] psiElements,
-                                            String targetName) {
-    myPsiElements = psiElements;
-    if (psiElements.length == 1) {
-      myProcessedElementsHeader = StringUtil.capitalize(
-        RefactoringLocalize.moveSingleElementElementsHeader(UsageViewUtil.getType(psiElements[0]), targetName).get()
-      );
-      myCodeReferencesText =
-        RefactoringLocalize.referencesInCodeTo01(UsageViewUtil.getType(psiElements[0]), UsageViewUtil.getLongName(psiElements[0])).get();
-    } else {
-      if (psiElements.length > 0) {
-        myProcessedElementsHeader = StringUtil.capitalize(RefactoringLocalize.moveSingleElementElementsHeader(
-          StringUtil.pluralize(UsageViewUtil.getType(psiElements[0])), targetName
-        ).get());
-      }
-      myCodeReferencesText = RefactoringLocalize.referencesFoundInCode().get();
+    public MoveMultipleElementsViewDescriptor(
+        PsiElement[] psiElements,
+        String targetName
+    ) {
+        myPsiElements = psiElements;
+        if (psiElements.length == 1) {
+            PsiElement firstElem = psiElements[0];
+            myProcessedElementsHeader =
+                RefactoringLocalize.moveSingleElementElementsHeader(UsageViewUtil.getType(firstElem), targetName).capitalize().get();
+            myCodeReferencesText = RefactoringLocalize.referencesInCodeTo01(
+                UsageViewUtil.getType(firstElem),
+                UsageViewUtil.getLongName(firstElem)
+            ).get();
+        }
+        else {
+            if (psiElements.length > 0) {
+                myProcessedElementsHeader = RefactoringLocalize.moveSingleElementElementsHeader(
+                    StringUtil.pluralize(UsageViewUtil.getType(psiElements[0])),
+                    targetName
+                ).capitalize().get();
+            }
+            myCodeReferencesText = RefactoringLocalize.referencesFoundInCode().get();
+        }
     }
-  }
 
-  @Override
-  @Nonnull
-  public PsiElement[] getElements() {
-    return myPsiElements;
-  }
+    @Override
+    @Nonnull
+    public PsiElement[] getElements() {
+        return myPsiElements;
+    }
 
-  @Override
-  public String getProcessedElementsHeader() {
-    return myProcessedElementsHeader;
-  }
+    @Override
+    public String getProcessedElementsHeader() {
+        return myProcessedElementsHeader;
+    }
 
-  @Override
-  public String getCodeReferencesText(int usagesCount, int filesCount) {
-    return myCodeReferencesText + UsageViewBundle.getReferencesString(usagesCount, filesCount);
-  }
+    @Override
+    public String getCodeReferencesText(int usagesCount, int filesCount) {
+        return myCodeReferencesText + UsageViewBundle.getReferencesString(usagesCount, filesCount);
+    }
 
-  @Override
-  public String getCommentReferencesText(int usagesCount, int filesCount) {
-    return RefactoringLocalize.commentsElementsHeader(UsageViewBundle.getOccurencesString(usagesCount, filesCount)).get();
-  }
+    @Override
+    public String getCommentReferencesText(int usagesCount, int filesCount) {
+        return RefactoringLocalize.commentsElementsHeader(UsageViewBundle.getOccurencesString(usagesCount, filesCount)).get();
+    }
 }
