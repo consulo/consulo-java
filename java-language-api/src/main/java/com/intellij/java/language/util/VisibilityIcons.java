@@ -20,7 +20,8 @@
 package com.intellij.java.language.util;
 
 public class VisibilityIcons {
-  private VisibilityIcons() {}
+    private VisibilityIcons() {
+    }
 
 //  public static void setVisibilityIcon(PsiModifierList modifierList, RowIcon baseIcon) {
 //    if (modifierList != null) {
@@ -37,12 +38,12 @@ public class VisibilityIcons {
 //        setVisibilityIcon(PsiUtil.ACCESS_LEVEL_PACKAGE_LOCAL, baseIcon);
 //      }
 //      else {
-//        Icon emptyIcon = new EmptyIcon(PlatformIcons.PUBLIC_ICON.getIconWidth(), PlatformIcons.PUBLIC_ICON.getIconHeight());
+//        Icon emptyIcon = new EmptyIcon(PlatformIconGroup.nodesC_public().getIconWidth(), PlatformIconGroup.nodesC_public().getIconHeight());
 //        baseIcon.setIcon(emptyIcon, 1);
 //      }
 //    }
-//    else if (PlatformIcons.PUBLIC_ICON != null) {
-//        Icon emptyIcon = new EmptyIcon(PlatformIcons.PUBLIC_ICON.getIconWidth(), PlatformIcons.PUBLIC_ICON.getIconHeight());
+//    else if (PlatformIconGroup.nodesC_public() != null) {
+//        Icon emptyIcon = new EmptyIcon(PlatformIconGroup.nodesC_public().getIconWidth(), PlatformIconGroup.nodesC_public().getIconHeight());
 //        baseIcon.setIcon(emptyIcon, 1);
 //      }
 //  }
@@ -51,20 +52,20 @@ public class VisibilityIcons {
 //    Icon icon;
 //    switch (accessLevel) {
 //      case PsiUtil.ACCESS_LEVEL_PUBLIC:
-//        icon = PlatformIcons.PUBLIC_ICON;
+//        icon = PlatformIconGroup.nodesC_public();
 //        break;
 //      case PsiUtil.ACCESS_LEVEL_PROTECTED:
-//        icon = PlatformIcons.PROTECTED_ICON;
+//        icon = PlatformIconGroup.nodesC_protected();
 //        break;
 //      case PsiUtil.ACCESS_LEVEL_PACKAGE_LOCAL:
-//        icon = PlatformIcons.PACKAGE_LOCAL_ICON;
+//        icon = PlatformIconGroup.nodesC_plocal();
 //        break;
 //      case PsiUtil.ACCESS_LEVEL_PRIVATE:
-//        icon = PlatformIcons.PRIVATE_ICON;
+//        icon = PlatformIconGroup.nodesC_private();
 //        break;
 //      default:
-//        if (PlatformIcons.PUBLIC_ICON != null) {
-//          icon = new EmptyIcon(PlatformIcons.PUBLIC_ICON.getIconWidth(), PlatformIcons.PUBLIC_ICON.getIconHeight());
+//        if (PlatformIconGroup.nodesC_public() != null) {
+//          icon = new EmptyIcon(PlatformIconGroup.nodesC_public().getIconWidth(), PlatformIconGroup.nodesC_public().getIconHeight());
 //        }
 //        else {
 //          return;
