@@ -659,11 +659,12 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
         for (PsiElement violation : violations) {
             holder.newProblem(message)
                 .range(violation)
-                .withFix(createMutabilityViolationFix(violation, holder.isOnTheFly()))
+                .withOptionalFix(createMutabilityViolationFix(violation, holder.isOnTheFly()))
                 .create();
         }
     }
 
+    @Nullable
     protected LocalQuickFix createMutabilityViolationFix(PsiElement violation, boolean onTheFly) {
         return null;
     }
