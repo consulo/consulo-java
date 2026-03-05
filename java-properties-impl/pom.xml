@@ -21,7 +21,7 @@
     <parent>
         <groupId>consulo</groupId>
         <artifactId>arch.ide-api-provided</artifactId>
-        <version>3-SNAPSHOT</version>
+        <version>4-SNAPSHOT</version>
         <relativePath/>
     </parent>
 
@@ -38,7 +38,7 @@
 
     <groupId>consulo.plugin</groupId>
     <artifactId>consulo.java-java.properties.impl</artifactId>
-    <version>3-SNAPSHOT</version>
+    <version>4-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <build>

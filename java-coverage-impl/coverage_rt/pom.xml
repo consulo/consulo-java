@@ -33,7 +33,7 @@
 
 	<groupId>consulo.plugin</groupId>
 	<artifactId>consulo.java-java.coverage.rt</artifactId>
-	<version>3-SNAPSHOT</version>
+	<version>4-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<build>
