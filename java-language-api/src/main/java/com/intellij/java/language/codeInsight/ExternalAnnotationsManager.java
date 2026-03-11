@@ -32,7 +32,7 @@ import jakarta.annotation.Nullable;
 import java.util.List;
 
 /**
- * @authot anna
+ * @author anna
  * @since 26-Jun-2007
  */
 @ServiceAPI(ComponentScope.PROJECT)

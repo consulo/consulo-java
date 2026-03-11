@@ -1,9 +1,11 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.language.annoPackages;
 
+import com.intellij.java.language.codeInsight.ContextNullabilityInfo;
 import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.language.codeInsight.NullabilityAnnotationInfo;
 import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiAnnotationOwner;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
@@ -40,6 +42,30 @@ public interface AnnotationPackageSupport {
         boolean superPackage
     ) {
         return null;
+    }
+
+    /**
+     * Returns a partially applied function that returns nullability by a container annotation, depending on context
+     *
+     * @param anno         annotation to check
+     * @param types        target types
+     * @param superPackage if true, then the annotation is applied to the super-package
+     * @return {@code ContextNullabilityInfo} which returns nullability by a container annotation for a given context
+     */
+    @Nonnull
+    default ContextNullabilityInfo getNullabilityByContainerAnnotation(@Nonnull PsiAnnotation anno,
+                                                                       @Nonnull PsiAnnotation.TargetType[] types,
+                                                                       boolean superPackage) {
+        return ContextNullabilityInfo.constant(null);
+    }
+
+    /**
+     * @param owner annotation owner of container (method, class, or package statement)
+     * @return list of conflicting annotations which denote different nullability; empty list if no conflicts were found
+     */
+    @Nonnull
+    default List<PsiAnnotation> getConflictingContainerAnnotations(@Nonnull PsiAnnotationOwner owner) {
+        return Collections.emptyList();
     }
 
     /**

@@ -472,7 +472,7 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
     @Override
     public final String getVersionString(String sdkHome) {
         OwnJdkVersionDetector.JdkVersionInfo jdkInfo = OwnJdkVersionDetector.getInstance().detectJdkVersionInfo(sdkHome);
-        return jdkInfo != null ? OwnJdkVersionDetector.formatVersionString(jdkInfo.version) : null;
+        return jdkInfo != null ? OwnJdkVersionDetector.formatVersionString(jdkInfo.version()) : null;
     }
 
     private static List<VirtualFile> findClasses(File file, boolean isJre) {

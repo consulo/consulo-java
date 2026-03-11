@@ -54,7 +54,7 @@ public class JreVersionDetector {
       }
       myLastAlternativeJrePath = configuration.getAlternativeJrePath();
       OwnJdkVersionDetector.JdkVersionInfo jdkInfo = OwnJdkVersionDetector.getInstance().detectJdkVersionInfo(myLastAlternativeJrePath);
-      myLastIsJre50 = jdkInfo != null && jdkInfo.version.feature >= 5;
+      myLastIsJre50 = jdkInfo != null && jdkInfo.version().feature >= 5;
       return myLastIsJre50;
     }
     return false;

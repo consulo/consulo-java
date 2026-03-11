@@ -2,11 +2,11 @@
 package com.intellij.java.impl.openapi.projectRoots;
 
 import com.intellij.java.language.projectRoots.OwnJdkVersionDetector;
-import com.intellij.java.language.util.Bitness;
 import consulo.annotation.component.ServiceImpl;
 import consulo.application.Application;
 import consulo.application.util.JavaVersion;
 import consulo.logging.Logger;
+import consulo.platform.CpuArchitecture;
 import consulo.platform.Platform;
 import consulo.process.io.BaseOutputReader;
 import consulo.util.io.CharsetToolkit;
@@ -48,7 +48,7 @@ public class OwnJdkVersionDetectorImpl extends OwnJdkVersionDetector {
                     JavaVersion version = JavaVersion.parse(versionString);
                     String arch = StringUtil.unquoteString(p.getProperty("OS_ARCH", ""));
                     boolean x64 = "x86_64".equals(arch) || "amd64".equals(arch);
-                    return new JdkVersionInfo(version, x64 ? Bitness.x64 : Bitness.x32);
+                    return new JdkVersionInfo(version, x64 ? CpuArchitecture.X86_64 : CpuArchitecture.X86);
                 }
             }
             catch (IOException | IllegalArgumentException e) {
@@ -66,7 +66,7 @@ public class OwnJdkVersionDetectorImpl extends OwnJdkVersionDetector {
                     if (versionString != null) {
                         JavaVersion version = JavaVersion.parse(versionString);
                         boolean x64 = Platform.current().os().isMac() || new File(rtFile.getParent(), "amd64").isDirectory();
-                        return new JdkVersionInfo(version, x64 ? Bitness.x64 : Bitness.x32);
+                        return new JdkVersionInfo(version, x64 ? CpuArchitecture.X86_64 : CpuArchitecture.X86);
                     }
                 }
             }
@@ -95,7 +95,7 @@ public class OwnJdkVersionDetectorImpl extends OwnJdkVersionDetector {
                     JavaVersion version = rt != null && rt.feature == base.feature && rt.minor == base.minor ? rt : base;
                     boolean x64 =
                         reader.myLines.stream().anyMatch(s -> s.contains("64-Bit") || s.contains("x86_64") || s.contains("amd64"));
-                    return new JdkVersionInfo(version, x64 ? Bitness.x64 : Bitness.x32);
+                    return new JdkVersionInfo(version, x64 ? CpuArchitecture.X86_64 : CpuArchitecture.X86);
                 }
             }
             catch (IOException | IllegalArgumentException e) {

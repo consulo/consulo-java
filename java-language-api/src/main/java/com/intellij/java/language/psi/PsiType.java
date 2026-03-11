@@ -15,6 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
+import com.intellij.java.language.codeInsight.TypeNullability;
 import com.intellij.java.language.jvm.types.JvmType;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.psi.PsiManager;
@@ -23,6 +24,7 @@ import consulo.project.Project;
 import consulo.util.collection.ArrayFactory;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Representation of Java type (primitive type, array or class type).
@@ -87,6 +89,19 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType 
         catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    /**
+     * Returns a type with the specified nullability. May return the original type if nullability update
+     * cannot be performed (e.g., for primitive type)
+     *
+     * @param nullability wanted nullability
+     * @return the type with the specified nullability, or the original type if nullability cannot be updated.
+     */
+    @NotNull
+    public PsiType withNullability(@NotNull TypeNullability nullability) {
+        return this;
     }
 
     /**
@@ -170,6 +185,13 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType 
      * @return true if the string is equivalent to the type, false otherwise
      */
     public abstract boolean equalsToText(@Nonnull String text);
+
+    /**
+     * @return nullability of this type
+     */
+    public @Nonnull TypeNullability getNullability() {
+        return TypeNullability.UNKNOWN;
+    }
 
     /**
      * Returns the class type for qualified class name.
