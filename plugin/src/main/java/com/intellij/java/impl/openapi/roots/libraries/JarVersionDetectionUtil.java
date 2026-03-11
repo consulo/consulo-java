@@ -23,6 +23,7 @@ import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
+import consulo.util.io.JarUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import consulo.logging.Logger;
@@ -30,7 +31,6 @@ import consulo.module.Module;
 import consulo.module.content.layer.orderEntry.LibraryOrderEntry;
 import consulo.module.content.ModuleRootManager;
 import consulo.module.content.layer.orderEntry.OrderEntry;
-import consulo.ide.impl.idea.openapi.util.io.JarUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.archive.ArchiveFileSystem;
 
