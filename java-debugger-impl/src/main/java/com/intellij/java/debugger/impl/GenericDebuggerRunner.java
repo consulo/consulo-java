@@ -25,7 +25,6 @@ import com.intellij.java.execution.configurations.*;
 import com.intellij.java.execution.runners.JavaPatchableProgramRunner;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Application;
-import consulo.document.FileDocumentManager;
 import consulo.execution.DefaultExecutionResult;
 import consulo.execution.ExecutionResult;
 import consulo.execution.configuration.*;
@@ -53,12 +52,6 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
     @Nonnull
     public String getRunnerId() {
         return DebuggingRunnerData.DEBUGGER_RUNNER_ID;
-    }
-
-    @Override
-    protected RunContentDescriptor doExecute(@Nonnull RunProfileState state, @Nonnull ExecutionEnvironment env) throws ExecutionException {
-        FileDocumentManager.getInstance().saveAllDocuments();
-        return createContentDescriptor(state, env);
     }
 
     @Nullable

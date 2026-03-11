@@ -82,9 +82,8 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
         runCustomPatchers(javaParameters, DefaultRunExecutor.getRunExecutorInstance(), runProfile);
     }
 
+    @Override
     protected RunContentDescriptor doExecute(@Nonnull RunProfileState state, @Nonnull ExecutionEnvironment env) throws ExecutionException {
-        FileDocumentManager.getInstance().saveAllDocuments();
-
         ExecutionResult executionResult;
         boolean shouldAddDefaultActions = true;
         if (state instanceof JavaCommandLine javaCommandLine) {
@@ -97,7 +96,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
                 ProcessHandler handler = executionResult != null ? executionResult.getProcessHandler() : null;
                 if (handler != null) {
                     proxy.attach(handler);
-                    handler.addProcessListener(new ProcessAdapter() {
+                    handler.addProcessListener(new ProcessListener() {
                         @Override
                         public void processTerminated(@Nonnull ProcessEvent event) {
                             proxy.destroy();
